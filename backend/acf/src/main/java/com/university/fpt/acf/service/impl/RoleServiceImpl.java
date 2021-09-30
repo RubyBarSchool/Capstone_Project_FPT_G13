@@ -17,6 +17,7 @@ public class RoleServiceImpl implements RoleService {
     private RoleRepository roleRepository;
     @Override
     public Role saveRole(Role role) {
-        return null;
+        log.info("Saving new role to database");
+        return roleRepository.save(role);
     }
 }

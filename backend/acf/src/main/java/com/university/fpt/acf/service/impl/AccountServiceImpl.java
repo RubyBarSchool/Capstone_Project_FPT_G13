@@ -34,14 +34,14 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     private PasswordEncoder passwordEncoder;
 
     @Override
-    public Account saveUser(Account account) {
+    public Account saveAccount(Account account) {
         log.info("Saving new user to database");
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         return accountRepository.save(account);
     }
 
     @Override
-    public void addRoleToUser(String username, String roleName) {
+    public void addRoleToAccount(String username, String roleName) {
         log.info("Adding role {} to user {}",roleName,username);
         Account user = accountRepository.findByUsername(username);
         Role role = roleRepository.findByName(roleName);
@@ -49,13 +49,13 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
     }
 
     @Override
-    public Account getUser(String username) {
+    public Account getAccount(String username) {
         log.info("Fetching user {}",username);
         return accountRepository.findByUsername(username);
     }
 
     @Override
-    public List<Account> getUsers() {
+    public List<Account> getAccounts() {
         log.info("Fetching all users");
         return accountRepository.findAll();
     }
