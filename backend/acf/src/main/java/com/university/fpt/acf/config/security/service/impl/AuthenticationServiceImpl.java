@@ -13,8 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.ServletException;
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -73,5 +73,6 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         account.getRoles().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority(role.getCode()));
         });
-        return new org.springframework.security.core.userdetails.User(account.getUsername(), account.getPassword(), authorities);    }
+        return new org.springframework.security.core.userdetails.User(account.getUsername(),
+                account.getPassword(), authorities);}
 }
