@@ -1,7 +1,6 @@
-package com.university.fpt.acf.service;
+package com.university.fpt.acf.config.security.service;
 
-import com.university.fpt.acf.entity.Account;
-import com.university.fpt.acf.entity.Role;
+import com.university.fpt.acf.config.security.entity.Account;
 
 import java.util.List;
 

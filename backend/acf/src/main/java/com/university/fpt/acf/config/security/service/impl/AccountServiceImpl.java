@@ -1,10 +1,10 @@
-package com.university.fpt.acf.service.impl;
+package com.university.fpt.acf.config.security.service.impl;
 
-import com.university.fpt.acf.entity.Account;
-import com.university.fpt.acf.entity.Role;
-import com.university.fpt.acf.repository.AccountRepository;
-import com.university.fpt.acf.repository.RoleRepository;
-import com.university.fpt.acf.service.AccountService;
+import com.university.fpt.acf.config.security.entity.Account;
+import com.university.fpt.acf.config.security.entity.Role;
+import com.university.fpt.acf.config.security.repository.AccountRepository;
+import com.university.fpt.acf.config.security.repository.RoleRepository;
+import com.university.fpt.acf.config.security.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -71,7 +71,7 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         account.getRoles().forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
+            authorities.add(new SimpleGrantedAuthority(role.getCode()));
         });
         return new org.springframework.security.core.userdetails.User(account.getUsername(), account.getPassword(), authorities);    }
 }

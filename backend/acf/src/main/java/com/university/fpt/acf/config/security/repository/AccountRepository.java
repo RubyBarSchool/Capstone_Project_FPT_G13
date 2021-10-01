@@ -1,6 +1,6 @@
-package com.university.fpt.acf.repository;
+package com.university.fpt.acf.config.security.repository;
 
-import com.university.fpt.acf.entity.Account;
+import com.university.fpt.acf.config.security.entity.Account;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.university.fpt.acf.entity;
+package com.university.fpt.acf.config.security.entity;
 
 import com.university.fpt.acf.common.entity.EntityCommon;
 import lombok.AllArgsConstructor;

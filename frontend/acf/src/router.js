@@ -1,34 +1,36 @@
 import Vue from 'vue';
 import Router from 'vue-router';
+import Home from './pages/Home.vue';
+import Login from './pages/Login.vue';
 
 Vue.use(Router);
 
 export const router = new Router({
-    routes: [
-        // {
-        //     path: '/',
-        //     name: 'home',
-        //     component: Home
-        // },
-        // {
-        //     path: '/home',
-        //     component: Home
-        // },
-        // {
-        //     path: '/login',
-        //     component: Login
-        // },
+    routes: [{
+            path: '/',
+            name: 'home',
+            component: Home
+        },
+        {
+            path: '/home',
+            component: Home
+        },
+        {
+            path: '/login',
+            component: Login
+        },
         // {
         //     path: '/register',
         //     component: Register
         // },
-        // {
-        //     path: '/profile',
-        //     name: 'profile',
-        //     // lazy-loaded
-        //     component: () =>
-        //         import ('./views/Profile.vue')
-        // },
+        {
+            path: '/profile',
+            name: 'profile',
+            // lazy-loaded
+            component: () =>
+                import ('./pages/Profile.vue')
+        }
+        //,
         // {
         //     path: '/admin',
         //     name: 'admin',
@@ -53,19 +55,19 @@ export const router = new Router({
     ]
 });
 
-// router.beforeEach((to, from, next) => {
-//     const publicPages = ['/login', '/register', '/home'];
-//     const authRequired = !publicPages.includes(to.path);
-//     const loggedIn = localStorage.getItem('user');
+router.beforeEach((to, from, next) => {
+    const publicPages = ['/login', '/register', '/home'];
+    const authRequired = !publicPages.includes(to.path);
+    const loggedIn = localStorage.getItem('user');
 
-//     // trying to access a restricted page + not logged in
-//     // redirect to login page
-//     if (authRequired && !loggedIn) {
-//         next('/login');
-//     } else {
-//         next();
-//     }
-// });
+    // trying to access a restricted page + not logged in
+    // redirect to login page
+    if (authRequired && !loggedIn) {
+        next('/login');
+    } else {
+        next();
+    }
+});
 
 // Router.beforeEach(async (to, from, next) => {
 //     if (getToken()) {

@@ -6,12 +6,17 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -27,18 +32,20 @@ import java.util.Map;
 import static java.util.Arrays.stream;
 
 @Slf4j
+@Component
 public class CustomAuthorizationFilter extends OncePerRequestFilter {
+
+    @Value("${acf.app.jwtSecret}")
+    private String jwtSecret;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         log.info("doFilterInternal in CustomAuthorizationFilter");
-        if(request.getServletPath().equals("/api/login") || request.getServletPath().equals("/token/refresh")){
-            filterChain.doFilter(request,response);
-        }else{
             String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
             if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
                 try{
                     String token = authorizationHeader.substring("Bearer ".length());
-                    Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+                    Algorithm algorithm = Algorithm.HMAC256(this.jwtSecret.getBytes());
                     JWTVerifier jwtVerifier = JWT.require(algorithm).build();
                     DecodedJWT decodedJWT = jwtVerifier.verify(token);
                     String username = decodedJWT.getSubject();
@@ -64,6 +71,5 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
             }else{
                 filterChain.doFilter(request,response);
             }
-        }
     }
 }

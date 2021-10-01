@@ -1,8 +1,8 @@
-package com.university.fpt.acf.service.impl;
+package com.university.fpt.acf.config.security.service.impl;
 
-import com.university.fpt.acf.entity.Role;
-import com.university.fpt.acf.repository.RoleRepository;
-import com.university.fpt.acf.service.RoleService;
+import com.university.fpt.acf.config.security.entity.Role;
+import com.university.fpt.acf.config.security.repository.RoleRepository;
+import com.university.fpt.acf.config.security.service.RoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
