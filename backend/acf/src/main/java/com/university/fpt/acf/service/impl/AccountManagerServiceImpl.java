@@ -103,7 +103,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
 
     @Override
     public List<GetAllAccountVO> getAllAccoutsBySearch(SearchAccountForm searchAccountForm) {
-        Page<Account> accounts = (Page<Account>) accountManagerRepository.findByContent(searchAccountForm.getName(), PageRequest.of(searchAccountForm.getPageIndex(),searchAccountForm.getPageSize()));
+        Page<Account> accounts = (Page<Account>) accountManagerRepository.findByUsername(searchAccountForm.getName(), PageRequest.of(searchAccountForm.getPageIndex(),searchAccountForm.getPageSize()));
         List<GetAllAccountVO> getAllAccountVOS = new ArrayList<>();
         for(Account i : accounts){
             GetAllAccountVO getAllAccountVO = new GetAllAccountVO();

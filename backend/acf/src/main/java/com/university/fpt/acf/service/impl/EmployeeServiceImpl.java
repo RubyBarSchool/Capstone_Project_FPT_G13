@@ -19,7 +19,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
     @Override
     public List<GetAllEmployeeVO> getAllEmployee(SearchAccountForm searchAccountForm) {
-        Page<Employee> employees =(Page<Employee>) employeeRepository.findByContent(searchAccountForm.getName(), PageRequest.of(searchAccountForm.getPageIndex(),searchAccountForm.getPageSize()));
+        Page<Employee> employees =(Page<Employee>) employeeRepository.findByFullName(searchAccountForm.getName(), PageRequest.of(searchAccountForm.getPageIndex(),searchAccountForm.getPageSize()));
         List<GetAllEmployeeVO> getAllAccountVOS = new ArrayList<>();
         for(Employee i : employees){
             GetAllEmployeeVO getAllEmployeeVO = new GetAllEmployeeVO();
