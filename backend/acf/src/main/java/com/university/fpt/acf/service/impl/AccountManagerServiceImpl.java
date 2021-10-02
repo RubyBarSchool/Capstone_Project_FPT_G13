@@ -2,27 +2,119 @@ package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.config.security.AccountSercurity;
 import com.university.fpt.acf.config.security.entity.Account;
+import com.university.fpt.acf.config.security.entity.Role;
+import com.university.fpt.acf.entity.Employee;
+import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.repository.AccountManagerRepository;
+import com.university.fpt.acf.repository.EmployeeRepository;
 import com.university.fpt.acf.service.AccountManagerService;
+import com.university.fpt.acf.vo.GetAllAccountVO;
+import com.university.fpt.acf.vo.GetAllEmployeeVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
 public class AccountManagerServiceImpl implements AccountManagerService {
     @Autowired
     private AccountManagerRepository accountManagerRepository;
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     @Override
-    public List<Account> getAllAccounts() {
-        List<Account> accounts = new ArrayList<>();
-        AccountSercurity accountSercurity = new AccountSercurity();
-        String username = accountSercurity.getUserName();
-        accounts = accountManagerRepository.findAll();
+    public List<GetAllAccountVO> getAllAccounts(GetAllAccountForm getAllAccountForm) {
+        Page<Account> pageListAccount = accountManagerRepository.findAll(PageRequest.of(getAllAccountForm.getPageIndex(),getAllAccountForm.getPageSize()));
+        List<GetAllAccountVO> accounts = new ArrayList<>();
+        for(Account i : pageListAccount){
+            GetAllAccountVO accountVO = new GetAllAccountVO();
+            accountVO.setId(i.getId());
+            accountVO.setUsername(i.getUsername());
+            accountVO.setPassword(i.getPassword());
+            accountVO.setRoles(i.getRoles());
+            accountVO.setStatus(i.getStatus());
+            accountVO.setTime(i.getModified_date());
+            accounts.add(accountVO);
+        }
         return accounts;
+    }
+
+    @Override
+    public Boolean insertAccount(AddAccountForm addAccountForm) {
+        Account ac = new Account();
+        ac.setPassword(addAccountForm.getPassword());
+        ac.setUsername(addAccountForm.getUsername());
+        ac.setModified_by("");
+        ac.setCreated_by("");
+        List<Role> listRole = new ArrayList<>();
+        for(Long i : addAccountForm.getIdRole()){
+            Role role = new Role();
+            role.setId(i);
+            listRole.add(role);
+        }
+        ac.setRoles(listRole);
+        Employee em = new Employee();
+        em.setId(addAccountForm.getId_employee());
+        ac.setEmployee(em);
+        accountManagerRepository.save(ac);
+        return true;
+    }
+
+    @Override
+    public Boolean updateAccount(UpdateAccountForm updateAccountForm) {
+        Optional<Account> ac = accountManagerRepository.findById(updateAccountForm.getIdAccount());
+        if(!ac.isEmpty()){
+            Account acc = new Account();
+            acc.setId(updateAccountForm.getIdAccount());
+            acc.setPassword(updateAccountForm.getPassword());
+            acc.setUsername(updateAccountForm.getUsername());
+            acc.setModified_by("");
+            acc.setCreated_by("");
+            List<Role> listRole = new ArrayList<>();
+            for(Long i : updateAccountForm.getIdRole()){
+                Role role = new Role();
+                role.setId(i);
+                listRole.add(role);
+            }
+            acc.setRoles(listRole);
+            Employee em = new Employee();
+            em.setId(updateAccountForm.getId_employee());
+            acc.setEmployee(em);
+            accountManagerRepository.save(acc);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean deleteAccount(Long idAccount) {
+        Optional<Account> ac = accountManagerRepository.findById(idAccount);
+        Account account = ac.get();
+        account.setDeleted(true);
+        accountManagerRepository.save(account);
+        return true;
+    }
+
+    @Override
+    public List<GetAllAccountVO> getAllAccoutsBySearch(SearchAccountForm searchAccountForm) {
+        Page<Account> accounts = (Page<Account>) accountManagerRepository.findByContent(searchAccountForm.getName(), PageRequest.of(searchAccountForm.getPageIndex(),searchAccountForm.getPageSize()));
+        List<GetAllAccountVO> getAllAccountVOS = new ArrayList<>();
+        for(Account i : accounts){
+            GetAllAccountVO getAllAccountVO = new GetAllAccountVO();
+            getAllAccountVO.setId(i.getId());
+            getAllAccountVO.setUsername(i.getUsername());
+            getAllAccountVO.setPassword(i.getPassword());
+            getAllAccountVO.setRoles(i.getRoles());
+            getAllAccountVO.setStatus(i.getStatus());
+            getAllAccountVO.setTime(i.getModified_date());
+            getAllAccountVOS.add(getAllAccountVO);
+        }
+        return getAllAccountVOS;
     }
 }
