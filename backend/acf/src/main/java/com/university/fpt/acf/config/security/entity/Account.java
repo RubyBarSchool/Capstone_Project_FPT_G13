@@ -1,6 +1,7 @@
 package com.university.fpt.acf.config.security.entity;
 
 import com.university.fpt.acf.common.entity.EntityCommon;
+import com.university.fpt.acf.entity.Employee;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,4 +21,6 @@ public class Account extends EntityCommon {
     @ManyToMany(fetch = FetchType.EAGER)
     private Collection<Role> roles = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.EAGER)
+    private Employee employee;
 }
