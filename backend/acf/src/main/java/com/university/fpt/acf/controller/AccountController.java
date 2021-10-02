@@ -17,7 +17,7 @@ public class AccountController {
     @Autowired
     private AccountManagerService accountService;
 
-    @PostMapping
+    @PostMapping(path = "/allaccount")
     public ResponseEntity<ResponseCommon> getAllAccount(@RequestBody GetAllAccountForm getAllAccountForm){
         ResponseCommon responseCommon = new ResponseCommon();
         responseCommon.setData(accountService.getAllAccounts(getAllAccountForm));
@@ -46,7 +46,7 @@ public class AccountController {
         responseCommon.setStatus(HttpStatus.OK.value());
         return new ResponseEntity<>(responseCommon,HttpStatus.OK);
     }
-    @PostMapping
+    @PostMapping(path = "/searchaccount")
     public ResponseEntity<ResponseCommon> searchAccount(@RequestBody SearchAccountForm searchAccountForm){
         ResponseCommon responseCommon = new ResponseCommon();
         responseCommon.setData(accountService.searchAccount(searchAccountForm));
