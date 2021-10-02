@@ -23,5 +23,5 @@ public class EntityCommon {
 
     private String modified_by;
 
-    private Boolean deleted;
+    private Boolean deleted = false;
 }
