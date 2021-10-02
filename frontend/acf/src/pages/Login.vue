@@ -88,7 +88,13 @@ export default {
         if (!err) {
                     this.$store.dispatch('auth/login', this.user).then(
             () => {
-              this.$router.push('/profile');
+              let users = JSON.parse(localStorage.getItem('user'));
+              if(users.roles.includes("SP_ADMIN")){
+                this.$router.push('/profile');
+              }else{
+                this.$router.push('/home');
+              }
+              
             },
             error => {
               this.loading = false;

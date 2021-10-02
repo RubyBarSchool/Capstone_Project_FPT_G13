@@ -1,6 +1,6 @@
 <template>
   <div>
-      Hello
+      xin chao man profile
   </div>
 </template>
 
