@@ -1,89 +1,92 @@
 <template>
-  <div class="col-md-12">
-    <div class="card card-container">
-      <img
-        id="profile-img"
-        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-        class="profile-img-card"
-      />
-      <form name="form" @submit.prevent="handleLogin">
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input
-            v-model="user.username"
-            v-validate="'required'"
-            type="text"
-            class="form-control"
-            name="username"
-          />
-          <!-- <div
-            v-if="errors.has('username')"
-            class="alert alert-danger"
-            role="alert"
-          >Username is required!</div> -->
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input
-            v-model="user.password"
-            v-validate="'required'"
-            type="password"
-            class="form-control"
-            name="password"
-          />
-          <!-- <div
-            v-if="errors.has('password')"
-            class="alert alert-danger"
-            role="alert"
-          >Password is required!</div> -->
-        </div>
-        <div class="form-group">
-          <button class="btn btn-primary btn-block" :disabled="loading">
-            <span v-show="loading" class="spinner-border spinner-border-sm"></span>
-            <span>Login</span>
-          </button>
-        </div>
-        <div class="form-group">
-          <div v-if="message" class="alert alert-danger" role="alert">{{message}}</div>
-        </div>
-      </form>
+  <div class="login">
+    <div class="demo">
+      <div class="cont">
+        <a-form
+          id="components-form-demo-normal-login"
+          :form="form"
+          class="login-form"
+          @submit="handleSubmit"
+        >
+          <a-form-item>
+            <img src="../assets/logoProject.png" />
+          </a-form-item>
+          <a-form-item class="input-form">
+            <a-input
+              v-decorator="[
+                'userName',
+                {
+                  rules: [{ required: true, message: 'Hãy nhập tài khoản!' }],
+                },
+              ]"
+              placeholder="Nhập tài khoản"
+            >
+              <a-icon
+                slot="prefix"
+                type="user"
+                style="color: rgba(0, 0, 0, 0.25)"
+              />
+            </a-input>
+          </a-form-item>
+          <a-form-item class="input-form">
+            <a-input-password
+              v-decorator="[
+                'password',
+                {
+                  rules: [{ required: true, message: 'Hãy nhập mật khẩu!' }],
+                },
+              ]"
+              type="password"
+              placeholder="Nhập mật khẩu"
+            >
+              <a-icon
+                slot="prefix"
+                type="lock"
+                style="color: rgba(0, 0, 0, 0.25)"
+              />
+            </a-input-password>
+          </a-form-item>
+          <a-form-item class="input-form">
+            <a-button
+              type="primary"
+              html-type="submit"
+              class="login-form-button"
+            >
+              Đăng nhập
+            </a-button>
+          </a-form-item>
+        </a-form>
+      </div>
     </div>
   </div>
 </template>
-
 <script>
-import User from '../model/user';
-
+import User from "../model/user";
 export default {
-  name: 'Login',
+  name: "Login",
   data() {
     return {
-      user: new User('', ''),
+      user: new User("", ""),
       loading: false,
-      message: ''
+      message: "",
     };
   },
   computed: {
     loggedIn() {
       return this.$store.state.auth.status.loggedIn;
-    }
+    },
   },
-  created() {
-    if (this.loggedIn) {
-      this.$router.push('/profile');
-    }
+  beforeCreate() {
+    this.form = this.$form.createForm(this, { name: "normal_login" });
   },
   methods: {
-    handleLogin() {
-      this.loading = true;
-      this.$validator.validateAll().then(isValid => {
-        if (!isValid) {
-          this.loading = false;
-          return;
-        }
-
-        if (this.user.username && this.user.password) {
-          this.$store.dispatch('auth/login', this.user).then(
+    handleSubmit(e) {
+      e.preventDefault();
+      this.form.validateFields((err, values) => {
+        this.user.username =  values.userName
+        this.user.password = values.password
+        if (!err) {
+                    this.$store.dispatch('auth/login', this.user).then(
             () => {
               this.$router.push('/profile');
             },
@@ -97,42 +100,42 @@ export default {
           );
         }
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
-label {
-  display: block;
-  margin-top: 10px;
+.login {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-image: url(../assets/back.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
 }
-
-.card-container.card {
-  max-width: 350px !important;
-  padding: 40px 40px;
+#components-form-demo-normal-login {
+  background-color: rgba(148, 145, 145, 0.7);
+  border-radius: 10px;
+  height: max-content;
 }
-
-.card {
-  background-color: #f7f7f7;
-  padding: 20px 25px 30px;
-  margin: 0 auto 25px;
-  margin-top: 50px;
-  -moz-border-radius: 2px;
-  -webkit-border-radius: 2px;
-  border-radius: 2px;
-  -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-  -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-  box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+#components-form-demo-normal-login .ant-btn-primary {
+  background-color: black;
+  border: black;
+  width: 100%;
+  margin-bottom: 45px;
 }
-
-.profile-img-card {
-  width: 96px;
-  height: 96px;
-  margin: 0 auto 10px;
-  display: block;
-  -moz-border-radius: 50%;
-  -webkit-border-radius: 50%;
-  border-radius: 50%;
+#components-form-demo-normal-login .input-form {
+  padding-right: 40px;
+  padding-left: 40px;
+}
+img {
+  border-radius: 10px 10px 0 0;
+  width: 327px;
+  height: 175px;
 }
 </style>
