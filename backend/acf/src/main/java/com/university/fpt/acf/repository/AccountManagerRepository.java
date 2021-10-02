@@ -11,6 +11,8 @@ import java.util.List;
 @Repository
 public interface AccountManagerRepository extends JpaRepository<Account,Long> {
 
+
+
     List<Account> findAccountByUsername(String username, Pageable pageable);
 
 

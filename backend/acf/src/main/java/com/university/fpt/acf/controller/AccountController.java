@@ -17,6 +17,7 @@ public class AccountController {
     @Autowired
     private AccountManagerService accountService;
 
+
     @PostMapping(path = "/allaccount")
     public ResponseEntity<ResponseCommon> getAllAccount(@RequestBody GetAllAccountForm getAllAccountForm){
         ResponseCommon responseCommon = new ResponseCommon();
