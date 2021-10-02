@@ -22,4 +22,6 @@ public class EntityCommon {
     private LocalDate modified_date = LocalDate.now() ;
 
     private String modified_by;
+
+    private Boolean deleted;
 }
