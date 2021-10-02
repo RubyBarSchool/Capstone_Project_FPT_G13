@@ -8,5 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface EmployeeRepository extends JpaRepository<Employee,Long> {
-    List<Employee> findByFullName(String fullName, Pageable pageable);
+    List<Employee> findEmployeeByFullName(String fullName, Pageable pageable);
 }

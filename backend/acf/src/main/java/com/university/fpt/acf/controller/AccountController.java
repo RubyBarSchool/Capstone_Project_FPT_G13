@@ -6,7 +6,6 @@ import com.university.fpt.acf.form.GetAllAccountForm;
 import com.university.fpt.acf.form.SearchAccountForm;
 import com.university.fpt.acf.form.UpdateAccountForm;
 import com.university.fpt.acf.service.AccountManagerService;
-import com.university.fpt.acf.vo.GetAllAccountVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,7 @@ public class AccountController {
     @Autowired
     private AccountManagerService accountService;
 
-    @GetMapping
+    @PostMapping
     public ResponseEntity<ResponseCommon> getAllAccount(@RequestBody GetAllAccountForm getAllAccountForm){
         ResponseCommon responseCommon = new ResponseCommon();
         responseCommon.setData(accountService.getAllAccounts(getAllAccountForm));
@@ -39,7 +38,23 @@ public class AccountController {
         responseCommon.setStatus(HttpStatus.OK.value());
         return new ResponseEntity<>(responseCommon,HttpStatus.OK);
     }
-    
+
+    @DeleteMapping()
+    public  ResponseEntity<ResponseCommon> deleteAccount(@RequestParam Long id){
+        ResponseCommon responseCommon = new ResponseCommon();
+        responseCommon.setData(accountService.deleteAccount(id));
+        responseCommon.setStatus(HttpStatus.OK.value());
+        return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+    }
+    @PostMapping
+    public ResponseEntity<ResponseCommon> searchAccount(@RequestBody SearchAccountForm searchAccountForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        responseCommon.setData(accountService.searchAccount(searchAccountForm));
+        responseCommon.setStatus(HttpStatus.OK.value());
+        return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+    }
+
+
 
 
 }

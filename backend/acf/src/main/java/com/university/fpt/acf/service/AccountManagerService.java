@@ -12,5 +12,5 @@ public interface AccountManagerService {
     Boolean insertAccount(AddAccountForm addAccountForm);
     Boolean updateAccount(UpdateAccountForm updateAccountForm);
     Boolean deleteAccount(Long idAccount);
-    List<GetAllAccountVO> getAllAccoutsBySearch(SearchAccountForm searchAccountForm);
+    List<GetAllAccountVO> searchAccount(SearchAccountForm searchAccountForm);
 }

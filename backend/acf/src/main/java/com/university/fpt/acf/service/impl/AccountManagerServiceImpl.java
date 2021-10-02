@@ -25,8 +25,6 @@ import java.util.Optional;
 public class AccountManagerServiceImpl implements AccountManagerService {
     @Autowired
     private AccountManagerRepository accountManagerRepository;
-    @Autowired
-    private EmployeeRepository employeeRepository;
 
     @Override
     public List<GetAllAccountVO> getAllAccounts(GetAllAccountForm getAllAccountForm) {
@@ -50,8 +48,9 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         Account ac = new Account();
         ac.setPassword(addAccountForm.getPassword());
         ac.setUsername(addAccountForm.getUsername());
-        ac.setModified_by("");
-        ac.setCreated_by("");
+        AccountSercurity accountSercurity = new AccountSercurity();
+        ac.setModified_by(accountSercurity.getUserName());
+        ac.setCreated_by(accountSercurity.getUserName());
         List<Role> listRole = new ArrayList<>();
         for(Long i : addAccountForm.getIdRole()){
             Role role = new Role();
@@ -74,8 +73,9 @@ public class AccountManagerServiceImpl implements AccountManagerService {
             acc.setId(updateAccountForm.getIdAccount());
             acc.setPassword(updateAccountForm.getPassword());
             acc.setUsername(updateAccountForm.getUsername());
-            acc.setModified_by("");
-            acc.setCreated_by("");
+            AccountSercurity accountSercurity = new AccountSercurity();
+            acc.setModified_by(accountSercurity.getUserName());
+            acc.setCreated_by(accountSercurity.getUserName());
             List<Role> listRole = new ArrayList<>();
             for(Long i : updateAccountForm.getIdRole()){
                 Role role = new Role();
@@ -102,8 +102,8 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     }
 
     @Override
-    public List<GetAllAccountVO> getAllAccoutsBySearch(SearchAccountForm searchAccountForm) {
-        Page<Account> accounts = (Page<Account>) accountManagerRepository.findByUsername(searchAccountForm.getName(), PageRequest.of(searchAccountForm.getPageIndex(),searchAccountForm.getPageSize()));
+       public List<GetAllAccountVO> searchAccount(SearchAccountForm searchAccountForm) {
+        Page<Account> accounts = (Page<Account>) accountManagerRepository.findAccountByUsername(searchAccountForm.getName(), PageRequest.of(searchAccountForm.getPageIndex(),searchAccountForm.getPageSize()));
         List<GetAllAccountVO> getAllAccountVOS = new ArrayList<>();
         for(Account i : accounts){
             GetAllAccountVO getAllAccountVO = new GetAllAccountVO();
@@ -117,4 +117,6 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         }
         return getAllAccountVOS;
     }
+
+
 }
