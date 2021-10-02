@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/api")
 public class AuthController {
 
     @Autowired
@@ -21,10 +20,5 @@ public class AuthController {
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody ObjectLogin loginRequest) {
         return ResponseEntity.ok(authenticationService.generateJwtResponse(loginRequest));
-    }
-
-    @PostMapping("/hello")
-    public ResponseEntity<?> authenticateUserx() {
-        return ResponseEntity.ok("xinchao");
     }
 }

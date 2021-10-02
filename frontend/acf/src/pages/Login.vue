@@ -83,23 +83,24 @@ export default {
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
-        this.user.username =  values.userName
-        this.user.password = values.password
+        this.user.username = values.userName;
+        this.user.password = values.password;
         if (!err) {
-                    this.$store.dispatch('auth/login', this.user).then(
+          this.$store.dispatch("auth/login", this.user).then(
             () => {
-              let users = JSON.parse(localStorage.getItem('user'));
-              if(users.roles.includes("SP_ADMIN")){
-                this.$router.push('/profile');
-              }else{
-                this.$router.push('/home');
+              let users = JSON.parse(localStorage.getItem("user"));
+              if (users.roles.includes("SP_ADMIN")) {
+                this.$router.push("/profile");
+              } else {
+                this.$router.push("/home");
               }
-              
             },
-            error => {
+            (error) => {
               this.loading = false;
               this.message =
-                (error.response && error.response.data && error.response.data.message) ||
+                (error.response &&
+                  error.response.data &&
+                  error.response.data.message) ||
                 error.message ||
                 error.toString();
             }
