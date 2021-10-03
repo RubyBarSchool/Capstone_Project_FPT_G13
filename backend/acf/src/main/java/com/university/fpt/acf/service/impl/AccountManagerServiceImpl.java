@@ -6,13 +6,13 @@ import com.university.fpt.acf.config.security.entity.Role;
 import com.university.fpt.acf.entity.Employee;
 import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.repository.AccountManagerRepository;
-import com.university.fpt.acf.repository.EmployeeRepository;
 import com.university.fpt.acf.service.AccountManagerService;
 import com.university.fpt.acf.vo.GetAllAccountVO;
-import com.university.fpt.acf.vo.GetAllEmployeeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -26,9 +26,12 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     @Autowired
     private AccountManagerRepository accountManagerRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public List<GetAllAccountVO> getAllAccounts(GetAllAccountForm getAllAccountForm) {
-        Page<Account> pageListAccount = accountManagerRepository.findAll(PageRequest.of(getAllAccountForm.getPageIndex(),getAllAccountForm.getPageSize()));
+        Page<Account> pageListAccount = accountManagerRepository.findAll(PageRequest.of(getAllAccountForm.getPageIndex()-1,getAllAccountForm.getPageSize()));
         List<GetAllAccountVO> accounts = new ArrayList<>();
         for(Account i : pageListAccount){
             GetAllAccountVO accountVO = new GetAllAccountVO();
@@ -48,7 +51,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     @Override
     public Boolean insertAccount(AddAccountForm addAccountForm) {
         Account ac = new Account();
-        ac.setPassword(addAccountForm.getPassword());
+        ac.setPassword(passwordEncoder.encode(addAccountForm.getPassword()));
         ac.setUsername(addAccountForm.getUsername());
         AccountSercurity accountSercurity = new AccountSercurity();
         ac.setModified_by(accountSercurity.getUserName());
@@ -73,7 +76,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         if(!ac.isEmpty()){
             Account acc = new Account();
             acc.setId(updateAccountForm.getIdAccount());
-            acc.setPassword(updateAccountForm.getPassword());
+            acc.setPassword(passwordEncoder.encode(updateAccountForm.getPassword()));
             acc.setUsername(updateAccountForm.getUsername());
             AccountSercurity accountSercurity = new AccountSercurity();
             acc.setModified_by(accountSercurity.getUserName());
@@ -105,7 +108,8 @@ public class AccountManagerServiceImpl implements AccountManagerService {
 
     @Override 
     public List<GetAllAccountVO> searchAccount(SearchAccountForm searchAccountForm) {
-        Page<Account> accounts = (Page<Account>) accountManagerRepository.findAccountByUsername(searchAccountForm.getName(), PageRequest.of(searchAccountForm.getPageIndex(),searchAccountForm.getPageSize()));
+        Pageable pageable = PageRequest.of(searchAccountForm.getPageIndex()-1,searchAccountForm.getPageSize());
+        List<Account> accounts =accountManagerRepository.findByUsernameIsLike("%"+searchAccountForm.getName()+"%",pageable);
         List<GetAllAccountVO> getAllAccountVOS = new ArrayList<>();
         for(Account i : accounts){
             GetAllAccountVO getAllAccountVO = new GetAllAccountVO();

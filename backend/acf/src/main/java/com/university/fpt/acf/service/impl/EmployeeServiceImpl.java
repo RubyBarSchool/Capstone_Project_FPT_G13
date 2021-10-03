@@ -8,6 +8,8 @@ import com.university.fpt.acf.vo.GetAllEmployeeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,9 +21,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeRepository employeeRepository;
     @Override
     public List<GetAllEmployeeVO> getAllEmployee(SearchAccountForm searchAccountForm) {
-        Page<Employee> employees =(Page<Employee>) employeeRepository.findEmployeeByFullName(searchAccountForm.getName(), PageRequest.of(searchAccountForm.getPageIndex(),searchAccountForm.getPageSize()));
+//        Sort sortable = null;
+//        if (sort.equals("ASC")) {
+//            sortable = Sort.by("id").ascending();
+//        }
+//        if (sort.equals("DESC")) {
+//            sortable = Sort.by("id").descending();
+//        }
+//        Pageable pageable = PageRequest.of(searchAccountForm.getPageIndex(), searchAccountForm.getPageSize());
+
+
+        Pageable pageable = PageRequest.of(searchAccountForm.getPageIndex()-1,searchAccountForm.getPageSize());
+        List<Employee> listEmployee =employeeRepository.findByFullNameIsLike("%"+searchAccountForm.getName()+"%",pageable);
         List<GetAllEmployeeVO> getAllAccountVOS = new ArrayList<>();
-        for(Employee i : employees){
+        for(Employee i : listEmployee){
             GetAllEmployeeVO getAllEmployeeVO = new GetAllEmployeeVO();
             getAllEmployeeVO.setId(i.getId());
             getAllEmployeeVO.setName(i.getFullName());

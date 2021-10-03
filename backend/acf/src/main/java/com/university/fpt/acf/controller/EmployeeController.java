@@ -18,7 +18,7 @@ public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
     @PostMapping
-    public ResponseEntity<ResponseCommon> getAllAccount(@RequestBody SearchAccountForm searchAccountForm){
+    public ResponseEntity<ResponseCommon> getAllEmployee(@RequestBody SearchAccountForm searchAccountForm){
         ResponseCommon responseCommon = new ResponseCommon();
         responseCommon.setData(employeeService.getAllEmployee(searchAccountForm));
         responseCommon.setStatus(HttpStatus.OK.value());
