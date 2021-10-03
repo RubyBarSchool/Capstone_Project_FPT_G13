@@ -33,12 +33,14 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         for(Account i : pageListAccount){
             GetAllAccountVO accountVO = new GetAllAccountVO();
             accountVO.setId(i.getId());
+            System.out.println("idAccount"+ accountVO.getId());
             accountVO.setUsername(i.getUsername());
             accountVO.setPassword(i.getPassword());
             accountVO.setRoles(i.getRoles());
             accountVO.setStatus(i.getStatus());
             accountVO.setTime(i.getModified_date());
             accounts.add(accountVO);
+
         }
         return accounts;
     }
