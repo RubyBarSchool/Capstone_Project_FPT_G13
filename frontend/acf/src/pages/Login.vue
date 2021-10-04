@@ -90,7 +90,7 @@ export default {
             () => {
               let users = JSON.parse(localStorage.getItem("user"));
               if (users.roles.includes("SP_ADMIN")) {
-                this.$router.push("/demoaxios");
+                this.$router.push("/profile");
               } else {
                 this.$router.push("/home");
               }

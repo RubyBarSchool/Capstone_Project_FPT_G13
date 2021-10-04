@@ -1,40 +1,37 @@
 <template>
-  <div>
-      xin chao man profile
-  </div>
+  <div>xin chao man profile</div>
 </template>
 
 <script>
 import DemoAxios from "../service/demoaxios";
 export default {
-  name: 'Profile',
+  name: "Profile",
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
     loggedIn() {
       return this.$store.state.auth.status.loggedIn;
-    }
+    },
   },
   created() {
-      this.retrieveTutorials();
+    this.retrieveTutorials();
   },
   methods: {
-retrieveTutorials() {
-    let form = {
-        "pageIndex" : 0,
-        "pageSize" : 10
-    }
+    retrieveTutorials() {
+      let form = {
+        pageIndex: 0,
+        pageSize: 10,
+      };
       DemoAxios.getAll(form)
-        .then(response => {
+        .then((response) => {
           console.log(response.data);
         })
-        .catch(e => {
+        .catch((e) => {
           console.log(e);
         });
     },
-  }
+  },
 };
 </script>
 
