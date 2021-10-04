@@ -211,36 +211,43 @@ export default {
     handleCancel() {
       this.visible = false;
     },
-    async getAllAccount() {
-      var xx = {
+
+    getAllAccount() {
+      let form = {
         pageIndex: 1,
         pageSize: 10,
       };
-      var post = await rolesystem.getAllAccount(xx);
-      post = post.data.data;
-      for (var x = 0; x < post.length; x++) {
-        let datasource = {
-          key: "",
-          username: "",
-          time: "",
-          status: "",
-          roles: [],
-          password: "",
-          id: "",
-        };
-        datasource.key = post[x].id;
-        datasource.id = post[x].id;
-        datasource.username = post[x].username;
-        datasource.time = post[x].time;
-        datasource.status = post[x].status;
-        datasource.password = post[x].password;
-        for (var z = 0; z < post[x].roles.length; z++) {
-          datasource.roles.push(post[x].roles[z].name);
-        }
-        this.data.push(datasource);
-      }
-      console.log(this.data);
+      rolesystem
+        .getAllAccount(form)
+        .then((response) => {
+          response = response.data.data;
+          for (var x = 0; x < response.length; x++) {
+            let datasource = {
+              key: "",
+              username: "",
+              time: "",
+              status: "",
+              roles: [],
+              password: "",
+              id: "",
+            };
+            datasource.key = response[x].id;
+            datasource.id = response[x].id;
+            datasource.username = response[x].username;
+            datasource.time = response[x].time;
+            datasource.status = response[x].status;
+            datasource.password = response[x].password;
+            for (var z = 0; z < response[x].roles.length; z++) {
+              datasource.roles.push(response[x].roles[z].name);
+            }
+            this.data.push(datasource);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
+    
     submit() {
       this.dataSearch.name = this.name;
       this.dataSearch.pageIndex = 1;
@@ -248,30 +255,36 @@ export default {
       this.getDataSearchxx();
     },
     async getDataSearchxx() {
-      this.data = [];
-      let post = await rolesystem.searchAccount(this.dataSearch);
-      post = post.data.data;
-      for (var x = 0; x < post.length; x++) {
-        let datasource = {
-          key: "",
-          username: "",
-          time: "",
-          status: "",
-          roles: [],
-          password: "",
-          id: "",
-        };
-        datasource.key = post[x].id;
-        datasource.id = post[x].id;
-        datasource.username = post[x].username;
-        datasource.time = post[x].time;
-        datasource.status = post[x].status;
-        datasource.password = post[x].password;
-        for (var z = 0; z < post[x].roles.length; z++) {
-          datasource.roles.push(post[x].roles[z].name);
-        }
-        this.data.push(datasource);
-      }
+      rolesystem
+        .searchAccount(this.dataSearch)
+        .then((response) => {
+          this.data = [];
+          response = response.data.data;
+          for (var x = 0; x < response.length; x++) {
+            let datasource = {
+              key: "",
+              username: "",
+              time: "",
+              status: "",
+              roles: [],
+              password: "",
+              id: "",
+            };
+            datasource.key = response[x].id;
+            datasource.id = response[x].id;
+            datasource.username = response[x].username;
+            datasource.time = response[x].time;
+            datasource.status = response[x].status;
+            datasource.password = response[x].password;
+            for (var z = 0; z < response[x].roles.length; z++) {
+              datasource.roles.push(response[x].roles[z].name);
+            }
+            this.data.push(datasource);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
   },
 };
