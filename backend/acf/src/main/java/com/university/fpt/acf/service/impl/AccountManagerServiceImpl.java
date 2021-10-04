@@ -7,6 +7,7 @@ import com.university.fpt.acf.entity.Employee;
 import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.repository.AccountManagerRepository;
 import com.university.fpt.acf.service.AccountManagerService;
+import com.university.fpt.acf.util.AccountValidate.AddAccountValidate;
 import com.university.fpt.acf.vo.GetAllAccountVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,7 +26,6 @@ import java.util.Optional;
 public class AccountManagerServiceImpl implements AccountManagerService {
     @Autowired
     private AccountManagerRepository accountManagerRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -51,6 +51,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     @Override
     public Boolean insertAccount(AddAccountForm addAccountForm) {
         Account ac = new Account();
+//        if(addAccountValidate.checkExitAccount(addAccountForm.getUsername(),))
         ac.setPassword(passwordEncoder.encode(addAccountForm.getPassword()));
         ac.setUsername(addAccountForm.getUsername());
         AccountSercurity accountSercurity = new AccountSercurity();
