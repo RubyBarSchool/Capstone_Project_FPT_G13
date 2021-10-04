@@ -12,7 +12,6 @@ import java.util.Collection;
 public class GetAllAccountVO {
     private Long id;
     private String username;
-    private String password;
     private Collection<Role> roles = new ArrayList<>();
     private Boolean status;
     private LocalDate time;
