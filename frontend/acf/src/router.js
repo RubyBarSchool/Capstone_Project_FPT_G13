@@ -25,6 +25,13 @@ export const router = new Router({
             // lazy-loaded
             component: () =>
                 import ('./pages/Profile.vue')
+        },
+        {
+            path: '/demoaxios',
+            name: 'DemoAxios',
+            // lazy-loaded
+            component: () =>
+                import ('./pages/DemoAxios.vue')
         }
     ]
 });
