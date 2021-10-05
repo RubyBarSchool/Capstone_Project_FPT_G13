@@ -8,6 +8,7 @@ import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.repository.AccountManagerRepository;
 import com.university.fpt.acf.service.AccountManagerService;
 import com.university.fpt.acf.util.AccountValidate.AddAccountValidate;
+import com.university.fpt.acf.vo.GetAccountDetailVO;
 import com.university.fpt.acf.vo.GetAllAccountVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -35,15 +36,19 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     public List<GetAllAccountVO> getAllAccounts(GetAllAccountForm getAllAccountForm) {
         Page<Account> pageListAccount = accountManagerRepository.findAll(PageRequest.of(getAllAccountForm.getPageIndex()-1,getAllAccountForm.getPageSize()));
         List<GetAllAccountVO> accounts = new ArrayList<>();
-        for(Account i : pageListAccount){
-            GetAllAccountVO accountVO = new GetAllAccountVO();
-            accountVO.setId(i.getId());
-            accountVO.setUsername(i.getUsername());
-            accountVO.setRoles(i.getRoles());
-            accountVO.setStatus(i.getStatus());
-            accountVO.setTime(i.getModified_date());
-            accounts.add(accountVO);
-
+        try{
+            for(Account i : pageListAccount){
+                GetAllAccountVO accountVO = new GetAllAccountVO();
+                accountVO.setId(i.getId());
+                accountVO.setUsername(i.getUsername());
+                accountVO.setRoles(i.getRoles());
+                accountVO.setStatus(i.getStatus());
+                accountVO.setTime(i.getModified_date());
+                accounts.add(accountVO);
+            }
+            return accounts;
+        }catch (Exception e){
+            e.getMessage();
         }
         return accounts;
     }
@@ -122,6 +127,25 @@ public class AccountManagerServiceImpl implements AccountManagerService {
             getAllAccountVOS.add(getAllAccountVO);
         }
         return getAllAccountVOS;
+    }
+
+    @Override
+    public GetAccountDetailVO getAccountById(Long id) {
+        try{
+            Optional<Account> ac = accountManagerRepository.findById(id);
+            GetAccountDetailVO account = new GetAccountDetailVO();
+            account.setId(ac.get().getId());
+            account.setUsername(ac.get().getUsername());
+            account.setRoles(ac.get().getRoles());
+            account.setStatus(ac.get().getStatus());
+            account.setTime(ac.get().getModified_date());
+            account.setEmployee(ac.get().getEmployee());
+            return account;
+        }catch (Exception e){
+            e.getMessage();
+        }
+        return null;
+
     }
 
 

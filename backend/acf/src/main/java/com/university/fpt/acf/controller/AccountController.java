@@ -25,13 +25,21 @@ public class AccountController {
         return new ResponseEntity<>(responseCommon,HttpStatus.OK);
     }
     @PostMapping()
+    public ResponseEntity<ResponseCommon> GetAccountByID(@RequestParam Long id){
+        ResponseCommon responseCommon = new ResponseCommon();
+        responseCommon.setData(accountService.getAccountById(id));
+        responseCommon.setStatus(HttpStatus.OK.value());
+        return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+    }
+
+    @PostMapping("/addAccount")
     public  ResponseEntity<ResponseCommon> addAccount(@RequestBody AddAccountForm addAccountForm){
         ResponseCommon responseCommon = new ResponseCommon();
         responseCommon.setData(accountService.insertAccount(addAccountForm));
         responseCommon.setStatus(HttpStatus.OK.value());
         return new ResponseEntity<>(responseCommon,HttpStatus.OK);
     }
-    @PutMapping()
+    @PutMapping("/updateAccount")
     public  ResponseEntity<ResponseCommon> updateAccount(@RequestBody UpdateAccountForm updateAccountForm){
         ResponseCommon responseCommon = new ResponseCommon();
         responseCommon.setData(accountService.updateAccount(updateAccountForm));
@@ -39,7 +47,7 @@ public class AccountController {
         return new ResponseEntity<>(responseCommon,HttpStatus.OK);
     }
 
-    @DeleteMapping()
+    @DeleteMapping("/deleteAccount")
     public  ResponseEntity<ResponseCommon> deleteAccount(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();
         responseCommon.setData(accountService.deleteAccount(id));
