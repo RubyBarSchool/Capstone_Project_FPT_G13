@@ -102,9 +102,40 @@
           {{ status ? "Công khai" : "Nháp" }}
         </a-tag>
       </span>
-      <span slot="hanhdong">
+      <span slot="hanhdong" slot-scope="record">
         <!-- event edit -->
-        <a-button type="primary" @click="showModal" icon="edit"> Sửa </a-button>
+        <a-button
+          type="primary"
+          @click="showModal"
+          icon="edit"
+          v-model="record.id"
+        >
+          Sửa
+        </a-button>
+
+        <a-modal v-model="visible" title="Chỉnh sửa tài khoản" on-ok="handleOk">
+          <template slot="footer">
+            <a-button key="back" @click="handleCancel"> Hủy </a-button>
+            <a-button
+              key="submit"
+              type="primary"
+              :loading="loading"
+              @click="handleOk"
+            >
+              Lưu
+            </a-button>
+          </template>
+          <a-form-model :layout="form.layout" :model="form">
+            <a-form-model-item label="Tài khoản">
+              <a-input :value="record.username" disabled />
+            </a-form-model-item>
+            <a-form-model-item label="Chức vụ">
+              <a-select :value="record.roles">
+                <a-select-option :value="record.roles" v-for="(rol,index) in dataRoles" :key="index"> {{rol.roleName}} </a-select-option>
+              </a-select>
+            </a-form-model-item>
+          </a-form-model>
+        </a-modal>
         <a-divider type="vertical" />
         <!-- event xóa -->
         <a-popconfirm
@@ -184,6 +215,7 @@ import rolesystem from "@/service/rolesystem.js";
 import employeeService from "@/service/employeeService.js";
 import roleService from "@/service/roleService.js";
 
+
 export default {
   name: "Profile",
   data() {
@@ -217,6 +249,13 @@ export default {
         message: "",
         status: 0,
       },
+      dataUpdateAccount: {
+        idAccount: 0,
+        idRole: [0],
+        id_employee: 0,
+        password: "",
+        username: "",
+      },
       form: {
         name: "",
         pass: "",
@@ -238,6 +277,7 @@ export default {
     this.getAllAccount();
     this.getAllEmployee();
     this.getAllRole();
+
   },
   methods: {
     showModal() {
@@ -323,6 +363,7 @@ export default {
           console.log(e);
         });
     },
+    
 
     submitSearch() {
       this.dataSearch.name = this.name;
@@ -333,6 +374,46 @@ export default {
     async getDataSearchxx() {
       rolesystem
         .searchAccount(this.dataSearch)
+        .then((response) => {
+          this.data = [];
+          response = response.data.data;
+          for (var x = 0; x < response.length; x++) {
+            let datasource = {
+              key: "",
+              username: "",
+              time: "",
+              status: "",
+              roles: [],
+              password: "",
+              id: "",
+            };
+            datasource.key = response[x].id;
+            datasource.id = response[x].id;
+            datasource.username = response[x].username;
+            datasource.time = response[x].time;
+            datasource.status = response[x].status;
+            datasource.password = response[x].password;
+            for (var z = 0; z < response[x].roles.length; z++) {
+              datasource.roles.push(response[x].roles[z].name);
+            }
+            this.data.push(datasource);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    submitUpdateAccount() {
+      this.dataUpdateAccount.idAccount = this.id;
+      this.dataUpdateAccount.idRole = 1;
+      this.dataUpdateAccount.id_employee = 10;
+      // this.dataUpdateAccount.password = 10;
+      this.dataUpdateAccount.username = this.username;
+      this.getDataSearchxx();
+    },
+    async getDataUpdateAccount() {
+      rolesystem
+        .updateAccount(this.id, this.updateAccount)
         .then((response) => {
           this.data = [];
           response = response.data.data;
