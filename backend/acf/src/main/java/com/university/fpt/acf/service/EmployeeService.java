@@ -9,4 +9,5 @@ import java.util.List;
 
 public interface EmployeeService  {
     List<GetAllEmployeeVO> getAllEmployee(SearchAccountForm searchAccountForm);
+    List<String> getFullNameEmployeeNotAccount();
 }

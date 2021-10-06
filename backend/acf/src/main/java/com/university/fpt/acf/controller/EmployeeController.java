@@ -7,10 +7,7 @@ import com.university.fpt.acf.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = "/spadmin/employee")
@@ -21,6 +18,13 @@ public class EmployeeController {
     public ResponseEntity<ResponseCommon> getAllEmployee(@RequestBody SearchAccountForm searchAccountForm){
         ResponseCommon responseCommon = new ResponseCommon();
         responseCommon.setData(employeeService.getAllEmployee(searchAccountForm));
+        responseCommon.setStatus(HttpStatus.OK.value());
+        return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+    }
+    @GetMapping("/fullnameEmNotAccount")
+    public ResponseEntity<ResponseCommon> GetAllFullNameNotAccount(){
+        ResponseCommon responseCommon = new ResponseCommon();
+        responseCommon.setData(employeeService.getFullNameEmployeeNotAccount());
         responseCommon.setStatus(HttpStatus.OK.value());
         return new ResponseEntity<>(responseCommon,HttpStatus.OK);
     }

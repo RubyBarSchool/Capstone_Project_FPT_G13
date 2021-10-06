@@ -42,4 +42,10 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return  getAllAccountVOS;
     }
+
+    @Override
+    public List<String> getFullNameEmployeeNotAccount() {
+        List<String > list = employeeRepository.getTop10EmployeeNotAccount();
+        return list ;
+    }
 }

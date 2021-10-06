@@ -6,6 +6,7 @@ import com.university.fpt.acf.config.security.entity.Role;
 import com.university.fpt.acf.entity.Employee;
 import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.repository.AccountManagerRepository;
+import com.university.fpt.acf.repository.EmployeeRepository;
 import com.university.fpt.acf.service.AccountManagerService;
 import com.university.fpt.acf.util.AccountValidate.AddAccountValidate;
 import com.university.fpt.acf.vo.GetAccountDetailVO;
@@ -29,6 +30,8 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     private AccountManagerRepository accountManagerRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
 
 
@@ -56,24 +59,27 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     @Override
     public Boolean insertAccount(AddAccountForm addAccountForm) {
         try {
-            Account ac = new Account();
-            ac.setPassword(passwordEncoder.encode(addAccountForm.getPassword()));
-            ac.setUsername(addAccountForm.getUsername());
-            AccountSercurity accountSercurity = new AccountSercurity();
-            ac.setModified_by(accountSercurity.getUserName());
-            ac.setCreated_by(accountSercurity.getUserName());
-            List<Role> listRole = new ArrayList<>();
-            for(Long i : addAccountForm.getIdRole()){
-                Role role = new Role();
-                role.setId(i);
-                listRole.add(role);
+            //check exit Account
+            if(accountManagerRepository.findAccountByUsername(addAccountForm.getUsername()) == null){
+                Account ac = new Account();
+                ac.setPassword(passwordEncoder.encode(addAccountForm.getPassword()));
+                ac.setUsername(addAccountForm.getUsername());
+                AccountSercurity accountSercurity = new AccountSercurity();
+                ac.setModified_by(accountSercurity.getUserName());
+                ac.setCreated_by(accountSercurity.getUserName());
+                List<Role> listRole = new ArrayList<>();
+                for(Long i : addAccountForm.getIdRole()){
+                    Role role = new Role();
+                    role.setId(i);
+                    listRole.add(role);
+                }
+                ac.setRoles(listRole);
+                Employee em = new Employee();
+                em.setId(addAccountForm.getId_employee());
+                ac.setEmployee(em);
+                accountManagerRepository.save(ac);
+                return true;
             }
-            ac.setRoles(listRole);
-            Employee em = new Employee();
-            em.setId(addAccountForm.getId_employee());
-            ac.setEmployee(em);
-            accountManagerRepository.save(ac);
-            return true;
         }catch (Exception ex){
             ex.getMessage();
         }
@@ -88,7 +94,6 @@ public class AccountManagerServiceImpl implements AccountManagerService {
             Account acc = new Account();
             acc.setId(updateAccountForm.getIdAccount());
             acc.setPassword(passwordEncoder.encode(updateAccountForm.getPassword()));
-            acc.setUsername(updateAccountForm.getUsername());
             AccountSercurity accountSercurity = new AccountSercurity();
             acc.setModified_by(accountSercurity.getUserName());
             acc.setCreated_by(accountSercurity.getUserName());
@@ -151,6 +156,21 @@ public class AccountManagerServiceImpl implements AccountManagerService {
 //        }
         return null;
 
+    }
+
+    @Override
+    public String GenerateUsername(String fullname) {
+        if(!fullname.isEmpty()){
+            List<Employee> listEmployee = employeeRepository.findEmployeeByFullNameIsLike("%"+fullname+"%");
+            List<String> listFullname = new ArrayList<>();
+            for(Employee em : listEmployee){
+                listFullname.add(em.getFullName());
+            }
+            AddAccountValidate addAccountValidate = new AddAccountValidate();
+            return addAccountValidate.generateFormatUsernameByFullname(fullname)+
+                    + addAccountValidate.genNumberUsername(fullname,listFullname);
+        }
+        return null;
     }
 
 

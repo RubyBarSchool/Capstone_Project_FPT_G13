@@ -6,6 +6,7 @@ import com.university.fpt.acf.vo.GetAccountDetailVO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -15,8 +16,10 @@ public interface AccountManagerRepository extends JpaRepository<Account,Long> {
 //    @Query("select ac from Account as ac inner join Employee" +
 //            " as em on ac.employee.id = em.id \n" +
 //            "left join Position as p on em.position.id = p.id")
-    GetAccountDetailVO getAccountById(Long id);
+//    GetAccountDetailVO getAccountById(Long id);
     List<Account> findByUsernameIsLike(String username, Pageable pageable);
-
+    Account findAccountByUsername(String userName);
+//    @Query("select em.fullName from Employee em where em.fullName like :fullName")
+//    List<String> getAllFullnameEmployee(@Param("fullName") String fulname);
 
 }

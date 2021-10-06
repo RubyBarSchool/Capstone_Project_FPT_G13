@@ -57,12 +57,13 @@ public class AddAccountValidate {
 //        }
 //        return "";
 //    }
+
     //3. ham generate
     public  String generateFormatUsernameByFullname(String fullname){
         String fullNameEng = this.convertEnglish(fullname);
         String[] list = fullNameEng.split(" ");
         String usernameFormat = list[list.length-1];
-        for(int i =0;i< list.length-2;i++){
+        for(int i =0;i< list.length-1;i++){
                 usernameFormat+=list[i].substring(0,1).toLowerCase(Locale.ROOT);
         }
         return usernameFormat;

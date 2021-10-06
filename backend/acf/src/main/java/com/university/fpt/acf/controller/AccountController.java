@@ -1,15 +1,14 @@
 package com.university.fpt.acf.controller;
 
 import com.university.fpt.acf.common.entity.ResponseCommon;
-import com.university.fpt.acf.form.AddAccountForm;
-import com.university.fpt.acf.form.GetAllAccountForm;
-import com.university.fpt.acf.form.SearchAccountForm;
-import com.university.fpt.acf.form.UpdateAccountForm;
+import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.service.AccountManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping(path = "/spadmin/account")
@@ -61,6 +60,14 @@ public class AccountController {
         responseCommon.setStatus(HttpStatus.OK.value());
         return new ResponseEntity<>(responseCommon,HttpStatus.OK);
     }
+    @PostMapping("/generateUsername")
+    public ResponseEntity<ResponseCommon> generateUsername(@RequestParam String fullname){
+        ResponseCommon responseCommon = new ResponseCommon();
+        responseCommon.setData(accountService.GenerateUsername(fullname));
+        responseCommon.setStatus(HttpStatus.OK.value());
+        return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+    }
+
 
 
 
