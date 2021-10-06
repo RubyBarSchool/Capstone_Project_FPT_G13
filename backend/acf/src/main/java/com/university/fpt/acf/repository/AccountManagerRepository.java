@@ -12,8 +12,9 @@ import java.util.List;
 
 @Repository
 public interface AccountManagerRepository extends JpaRepository<Account,Long> {
-    @Query("select * from acfcapstoneproject.account as ac inner join acfcapstoneproject.employee as em on ac.employee_id = em.id \n" +
-            "left join acfcapstoneproject.position as p on em.position_id = p.id")
+//    @Query("select ac from Account as ac inner join Employee" +
+//            " as em on ac.employee.id = em.id \n" +
+//            "left join Position as p on em.position.id = p.id")
     GetAccountDetailVO getAccountById(Long id);
     List<Account> findByUsernameIsLike(String username, Pageable pageable);
 

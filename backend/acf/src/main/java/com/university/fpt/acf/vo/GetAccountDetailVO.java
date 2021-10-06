@@ -11,7 +11,7 @@ import java.util.Collection;
 public class GetAccountDetailVO {
     private Long id;
     private String username;
-    private Collection<Role> roles = new ArrayList<>();
+    private Collection<Long> idRole = new ArrayList<>();
     private Boolean status;
     private LocalDate time;
     private Employee employee;

@@ -55,25 +55,30 @@ public class AccountManagerServiceImpl implements AccountManagerService {
 
     @Override
     public Boolean insertAccount(AddAccountForm addAccountForm) {
-        Account ac = new Account();
-//        if(addAccountValidate.checkExitAccount(addAccountForm.getUsername(),))
-        ac.setPassword(passwordEncoder.encode(addAccountForm.getPassword()));
-        ac.setUsername(addAccountForm.getUsername());
-        AccountSercurity accountSercurity = new AccountSercurity();
-        ac.setModified_by(accountSercurity.getUserName());
-        ac.setCreated_by(accountSercurity.getUserName());
-        List<Role> listRole = new ArrayList<>();
-        for(Long i : addAccountForm.getIdRole()){
-            Role role = new Role();
-            role.setId(i);
-            listRole.add(role);
+        try {
+            Account ac = new Account();
+            ac.setPassword(passwordEncoder.encode(addAccountForm.getPassword()));
+            ac.setUsername(addAccountForm.getUsername());
+            AccountSercurity accountSercurity = new AccountSercurity();
+            ac.setModified_by(accountSercurity.getUserName());
+            ac.setCreated_by(accountSercurity.getUserName());
+            List<Role> listRole = new ArrayList<>();
+            for(Long i : addAccountForm.getIdRole()){
+                Role role = new Role();
+                role.setId(i);
+                listRole.add(role);
+            }
+            ac.setRoles(listRole);
+            Employee em = new Employee();
+            em.setId(addAccountForm.getId_employee());
+            ac.setEmployee(em);
+            accountManagerRepository.save(ac);
+            return true;
+        }catch (Exception ex){
+            ex.getMessage();
         }
-        ac.setRoles(listRole);
-        Employee em = new Employee();
-        em.setId(addAccountForm.getId_employee());
-        ac.setEmployee(em);
-        accountManagerRepository.save(ac);
-        return true;
+        return false;
+
     }
 
     @Override
@@ -128,22 +133,22 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         }
         return getAllAccountVOS;
     }
-
+// chua xong
     @Override
     public GetAccountDetailVO getAccountById(Long id) {
-        try{
-            Optional<Account> ac = accountManagerRepository.findById(id);
-            GetAccountDetailVO account = new GetAccountDetailVO();
-            account.setId(ac.get().getId());
-            account.setUsername(ac.get().getUsername());
-            account.setRoles(ac.get().getRoles());
-            account.setStatus(ac.get().getStatus());
-            account.setTime(ac.get().getModified_date());
-            account.setEmployee(ac.get().getEmployee());
-            return account;
-        }catch (Exception e){
-            e.getMessage();
-        }
+//        try{
+//            Optional<Account> ac = accountManagerRepository.findById(id);
+//            GetAccountDetailVO account = new GetAccountDetailVO();
+//            account.setId(ac.get().getId());
+//            account.setUsername(ac.get().getUsername());
+////            account.setRoles(ac.get().getRoles());
+//            account.setStatus(ac.get().getStatus());
+//            account.setTime(ac.get().getModified_date());
+//            account.setEmployee(ac.get().getEmployee());
+//            return account;
+//        }catch (Exception e){
+//            e.getMessage();
+//        }
         return null;
 
     }
