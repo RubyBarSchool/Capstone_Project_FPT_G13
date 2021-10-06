@@ -20,11 +20,11 @@ export const router = new Router({
             component: Login
         },
         {
-            path: '/profile',
-            name: 'profile',
+            path: '/admin',
+            name: 'admin',
             // lazy-loaded
             component: () =>
-                import ('./pages/Profile.vue')
+                import ('./pages/Admin.vue')
         },
         {
             path: '/demoaxios',

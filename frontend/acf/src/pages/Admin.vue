@@ -12,20 +12,25 @@
 
         <a-col :span="4">
           <a-select placeholder="Chức vụ" style="width: 150px">
-            <a-select-option value="Quản lý"> Quản lý </a-select-option>
-            <a-select-option value="Nhân viên"> Nhân viên </a-select-option>
+            <a-select-option
+              v-for="item in dataRoles"
+              :key="item.id"
+              :value="item.id"
+            >
+              {{ item.roleName }}
+            </a-select-option>
           </a-select>
         </a-col>
 
         <a-col :span="4">
           <a-select placeholder="Trạng thái" style="width: 150px">
-            <a-select-option value="Nháp"> Nháp </a-select-option>
-            <a-select-option value="Công khai"> Công khai </a-select-option>
+            <a-select-option value="1"> Nháp </a-select-option>
+            <a-select-option value="0"> Công khai </a-select-option>
           </a-select>
         </a-col>
 
         <a-col :span="5">
-          <a-button type="primary" icon="search" @click="submit">
+          <a-button type="primary" icon="search" @click="submitSearch">
             Tìm kiếm
           </a-button>
         </a-col>
@@ -38,36 +43,57 @@
       </a-row>
     </a-input-group>
     <br />
+
     <!-- màn add -->
-    <a-modal v-model="visiblethem" title="Thêm tài khoản" on-ok="handleOk">
+    <a-modal v-model="visiblethem" title="Thêm tài khoản" on-ok="handleAdd">
       <template slot="footer">
         <a-button
           key="submit"
           type="primary"
           :loading="loading"
-          @click="handleOk"
+          @click="handleAdd"
         >
           Lưu
         </a-button>
       </template>
       <a-form-model :layout="form.layout" :model="form">
         <a-form-model-item label="Tài khoản">
-          <a-select value="truongtv012">
-            <a-select-option value="truongtv012"> truongtv012 </a-select-option>
-            <a-select-option value="truongtv123"> truongtv123 </a-select-option>
-          </a-select>
-        </a-form-model-item>
-        <a-form-model-item label="Họ và tên">
-          <a-input value="Trần Vũ Trường" />
+          <a-input value="truongtv012" disabled />
         </a-form-model-item>
         <a-form-model-item label="Mật khẩu">
-          <a-input value="applewatchseries6" />
+          <a-input />
         </a-form-model-item>
         <a-form-model-item label="Chức vụ">
-          <a-input value="Nhân viên" />
+          <a-select>
+            <a-select-option
+              v-for="item in dataRoles"
+              :key="item.id"
+              :value="item.id"
+            >
+              {{ item.roleName }}
+            </a-select-option>
+          </a-select>
+        </a-form-model-item>
+        <a-form-model-item label="Nhân viên">
+          <a-select
+            show-search
+            placeholder="Nhập tên nhân viên"
+            option-filter-prop="children"
+            :filter-option="filterOption"
+          >
+            <a-select-option
+              v-for="item in dataEmployees"
+              :key="item.id"
+              :value="item.id"
+            >
+              {{ item.name }}
+            </a-select-option>
+          </a-select>
         </a-form-model-item>
       </a-form-model>
     </a-modal>
+    <!-- màn add -->
+
     <a-table :columns="columns" :data-source="data">
       <p slot="id" slot-scope="id">{{ id }}</p>
       <span slot="customTitle"> ID</span>
@@ -77,10 +103,10 @@
         </a-tag>
       </span>
       <span slot="hanhdong">
-        <!-- màn edit -->
+        <!-- event edit -->
         <a-button type="primary" @click="showModal" icon="edit"> Sửa </a-button>
         <a-divider type="vertical" />
-        <!-- màn xóa -->
+        <!-- event xóa -->
         <a-popconfirm
           title="Bạn có chắc chắn muốn xóa?"
           ok-text="Đồng ý"
@@ -90,14 +116,16 @@
         </a-popconfirm>
       </span>
     </a-table>
-    <a-modal v-model="visible" title="Chỉnh sửa tài khoản" on-ok="handleOk">
+
+    <!-- popup edit -->
+    <a-modal v-model="visible" title="Chỉnh sửa tài khoản" on-ok="handleEdit">
       <template slot="footer">
         <a-button key="back" @click="handleCancel"> Hủy </a-button>
         <a-button
           key="submit"
           type="primary"
           :loading="loading"
-          @click="handleOk"
+          @click="handleEdit"
         >
           Lưu
         </a-button>
@@ -106,17 +134,18 @@
         <a-form-model-item label="Tài khoản">
           <a-input value="truongtv" disabled />
         </a-form-model-item>
-        <a-form-model-item label="Mật khẩu">
-          <a-input value="sfdsfsdfs" />
-        </a-form-model-item>
         <a-form-model-item label="Chức vụ">
           <a-select value="quanly">
             <a-select-option value="nhanvien"> Nhân viên </a-select-option>
             <a-select-option value="quanly"> Quản lý </a-select-option>
           </a-select>
         </a-form-model-item>
+        <a-form-model-item label="Trạng thái">
+          <a-input value="Nháp" />
+        </a-form-model-item>
       </a-form-model>
     </a-modal>
+    <!-- popup edit -->
   </div>
 </template>
 
@@ -152,6 +181,8 @@ const columns = [
 ];
 
 import rolesystem from "@/service/rolesystem.js";
+import employeeService from "@/service/employeeService.js";
+import roleService from "@/service/roleService.js";
 
 export default {
   name: "Profile",
@@ -159,6 +190,8 @@ export default {
     return {
       name: "",
       data: [],
+      dataEmployees: [],
+      dataRoles: [],
       columns,
       visible: false,
       visiblethem: false,
@@ -166,13 +199,23 @@ export default {
       layout: "horizontal",
       allAccountList: {
         name: "",
-        pageIndex: "",
-        pageSize: "",
+        pageIndex: "1",
+        pageSize: "10",
       },
       dataSearch: {
         name: "",
-        pageIndex: "",
-        pageSize: "",
+        pageIndex: "1",
+        pageSize: "10",
+      },
+      dataEmployee: {
+        name: "",
+        pageIndex: "1",
+        pageSize: "10",
+      },
+      dataRole: {
+        data: {},
+        message: "",
+        status: 0,
       },
       form: {
         name: "",
@@ -193,6 +236,8 @@ export default {
   },
   created() {
     this.getAllAccount();
+    this.getAllEmployee();
+    this.getAllRole();
   },
   methods: {
     showModal() {
@@ -201,15 +246,46 @@ export default {
     showModalThem() {
       this.visiblethem = true;
     },
-    handleOk() {
-      this.loading = true;
-      setTimeout(() => {
-        this.visible = false;
-        this.loading = false;
-      }, 1500);
+    handleAdd() {},
+
+    handleEdit() {},
+    // handleBlur() {
+    //   console.log("blur");
+    // },
+    // handleFocus() {
+    //   console.log("focus");
+    // },
+    filterOption(input, option) {
+      return (
+        option.componentOptions.children[0].text
+          .toLowerCase()
+          .indexOf(input.toLowerCase()) >= 0
+      );
     },
     handleCancel() {
       this.visible = false;
+    },
+
+    getAllEmployee() {
+      employeeService
+        .getAllEmployee(this.dataEmployee)
+        .then((response) => {
+          this.dataEmployees = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
+    getAllRole() {
+      roleService
+        .getAllRole(this.dataRole)
+        .then((response) => {
+          this.dataRoles = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
 
     getAllAccount() {
@@ -247,8 +323,8 @@ export default {
           console.log(e);
         });
     },
-    
-    submit() {
+
+    submitSearch() {
       this.dataSearch.name = this.name;
       this.dataSearch.pageIndex = 1;
       this.dataSearch.pageSize = 10;
