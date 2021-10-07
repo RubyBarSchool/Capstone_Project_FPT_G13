@@ -10,16 +10,12 @@
       "
     >
       <template slot="name" slot-scope="text, record">
-        {{record.id}}{{record.name}}
+        <a>{{record.id}}{{record.name}}</a>
       </template>
       <template slot="action" slot-scope="text, record">
-        <a-popconfirm
-          v-if="dataSourceTable.length"
-          title="Sure to delete?"
-          @confirm="() => onDelete(record.id)"
-        >
-          <a href="javascript:;">Delete</a>
-        </a-popconfirm>
+        <a-button type="primary" @click="check(record)">
+        Check
+      </a-button>
       </template>
     </a-table>
   </div>
@@ -38,12 +34,13 @@ export default {
           key: "id",
         },
         {
-          title: "name",
+          title: "Name",
           dataIndex: "name",
           key: "name",
           width: "30%",
           scopedSlots: { customRender: "name" },
         },
+        
         {
           title: "Action",
           dataIndex: "action",
@@ -62,6 +59,9 @@ export default {
     this.retrieveTutorials();
   },
   methods: {
+    check(record){
+      console.log(record)
+    },
     retrieveTutorials() {
       let form = {
         name: "",

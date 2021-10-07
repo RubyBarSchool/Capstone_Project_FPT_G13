@@ -84,8 +84,6 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         }catch (Exception ex){
             ex.getMessage();
         }
-        return false;
-
     }
 
     @Override
