@@ -58,6 +58,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
 
     @Override
     public Boolean insertAccount(AddAccountForm addAccountForm) {
+        AddAccountValidate validate = new AddAccountValidate();
         try {
             //check exit Account
             if(accountManagerRepository.findAccountByUsername(addAccountForm.getUsername()) == null){
@@ -89,54 +90,70 @@ public class AccountManagerServiceImpl implements AccountManagerService {
 
     @Override
     public Boolean updateAccount(UpdateAccountForm updateAccountForm) {
-        Optional<Account> ac = accountManagerRepository.findById(updateAccountForm.getIdAccount());
-        if(!ac.isEmpty()){
-            Account acc = new Account();
-            acc.setId(updateAccountForm.getIdAccount());
-            acc.setPassword(passwordEncoder.encode(updateAccountForm.getPassword()));
-            AccountSercurity accountSercurity = new AccountSercurity();
-            acc.setModified_by(accountSercurity.getUserName());
-            acc.setCreated_by(accountSercurity.getUserName());
-            List<Role> listRole = new ArrayList<>();
-            for(Long i : updateAccountForm.getIdRole()){
-                Role role = new Role();
-                role.setId(i);
-                listRole.add(role);
+        try{
+            Optional<Account> ac = accountManagerRepository.findById(updateAccountForm.getIdAccount());
+            if(!ac.isEmpty()){
+                Account acc = new Account();
+                acc.setId(updateAccountForm.getIdAccount());
+                acc.setPassword(passwordEncoder.encode(updateAccountForm.getPassword()));
+                AccountSercurity accountSercurity = new AccountSercurity();
+                acc.setModified_by(accountSercurity.getUserName());
+                acc.setCreated_by(accountSercurity.getUserName());
+                List<Role> listRole = new ArrayList<>();
+                for(Long i : updateAccountForm.getIdRole()){
+                    Role role = new Role();
+                    role.setId(i);
+                    listRole.add(role);
+                }
+                acc.setRoles(listRole);
+                Employee em = new Employee();
+                em.setId(updateAccountForm.getId_employee());
+                acc.setEmployee(em);
+                accountManagerRepository.save(acc);
+                return true;
             }
-            acc.setRoles(listRole);
-            Employee em = new Employee();
-            em.setId(updateAccountForm.getId_employee());
-            acc.setEmployee(em);
-            accountManagerRepository.save(acc);
-            return true;
+
+        }catch (Exception e){
+            e.getMessage();
         }
         return false;
     }
 
     @Override
     public Boolean deleteAccount(Long idAccount) {
-        Optional<Account> ac = accountManagerRepository.findById(idAccount);
-        Account account = ac.get();
-        account.setDeleted(true);
-        accountManagerRepository.save(account);
-        return true;
+        try{
+            Optional<Account> ac = accountManagerRepository.findById(idAccount);
+            Account account = ac.get();
+            account.setDeleted(true);
+            accountManagerRepository.save(account);
+            return true;
+        }catch (Exception e){
+            e.getMessage();
+        }
+        return false;
     }
 
     @Override 
     public List<GetAllAccountVO> searchAccount(SearchAccountForm searchAccountForm) {
-        Pageable pageable = PageRequest.of(searchAccountForm.getPageIndex()-1,searchAccountForm.getPageSize());
-        List<Account> accounts =accountManagerRepository.findByUsernameIsLike("%"+searchAccountForm.getName()+"%",pageable);
         List<GetAllAccountVO> getAllAccountVOS = new ArrayList<>();
-        for(Account i : accounts){
-            GetAllAccountVO getAllAccountVO = new GetAllAccountVO();
-            getAllAccountVO.setId(i.getId());
-            getAllAccountVO.setUsername(i.getUsername());
-            getAllAccountVO.setRoles(i.getRoles());
-            getAllAccountVO.setStatus(i.getStatus());
-            getAllAccountVO.setTime(i.getModified_date());
-            getAllAccountVOS.add(getAllAccountVO);
+        try{
+            Pageable pageable = PageRequest.of(searchAccountForm.getPageIndex()-1,searchAccountForm.getPageSize());
+            List<Account> accounts =accountManagerRepository.findByUsernameIsLike("%"+searchAccountForm.getName()+"%",pageable);
+            for(Account i : accounts){
+                GetAllAccountVO getAllAccountVO = new GetAllAccountVO();
+                getAllAccountVO.setId(i.getId());
+                getAllAccountVO.setUsername(i.getUsername());
+                getAllAccountVO.setRoles(i.getRoles());
+                getAllAccountVO.setStatus(i.getStatus());
+                getAllAccountVO.setTime(i.getModified_date());
+                getAllAccountVOS.add(getAllAccountVO);
+            }
+            return getAllAccountVOS;
+        }catch (Exception e){
+            e.getMessage();
         }
         return getAllAccountVOS;
+
     }
 // chua xong
     @Override
@@ -160,15 +177,19 @@ public class AccountManagerServiceImpl implements AccountManagerService {
 
     @Override
     public String GenerateUsername(String fullname) {
-        if(!fullname.isEmpty()){
-            List<Employee> listEmployee = employeeRepository.findEmployeeByFullNameIsLike("%"+fullname+"%");
-            List<String> listFullname = new ArrayList<>();
-            for(Employee em : listEmployee){
-                listFullname.add(em.getFullName());
+        try{
+            if(!fullname.isEmpty()){
+                List<Employee> listEmployee = employeeRepository.findEmployeeByFullNameIsLike("%"+fullname+"%");
+                List<String> listFullname = new ArrayList<>();
+                for(Employee em : listEmployee){
+                    listFullname.add(em.getFullName());
+                }
+                AddAccountValidate addAccountValidate = new AddAccountValidate();
+                return addAccountValidate.generateFormatUsernameByFullname(fullname)+
+                        + addAccountValidate.genNumberUsername(fullname,listFullname);
             }
-            AddAccountValidate addAccountValidate = new AddAccountValidate();
-            return addAccountValidate.generateFormatUsernameByFullname(fullname)+
-                    + addAccountValidate.genNumberUsername(fullname,listFullname);
+        }catch (Exception e){
+            e.getMessage();
         }
         return null;
     }

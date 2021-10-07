@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 @Validated
 public class AddAccountValidate {
-    // 1. check tồn tại
+    // check tồn tại
     public boolean checkExitAccount(String username, List<String> listUsername){
         for(String us : listUsername){
             if(us.equals(username)){
@@ -20,7 +20,23 @@ public class AddAccountValidate {
         return false;
 
     }
-    //2. check password
+    //check form phone
+    public  boolean checkFormPhone(String phone){
+        String regex ="^[0-9]{10}$";
+        if(phone.matches(regex)){
+            return true;
+        }
+        return false;
+    }
+    // check form email
+    public  boolean checkFormEmail(String email){
+        String regexEmail ="^[A-Za-z0-9]+[A-Za-z0-9]*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)$";
+        if(email.matches(regexEmail)){
+            return true;
+        }
+        return false;
+    }
+    //check password
     public boolean checkPassword(String password){
         String regex ="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}";
         if(password.matches(regex)){
@@ -28,7 +44,8 @@ public class AddAccountValidate {
         }
         return false;
     }
-    //2. ham convert VietNamese -> English
+
+    //ham convert VietNamese -> English
     private static String convertEnglish(String str) {
         str = str.replaceAll("à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ", "a");
         str = str.replaceAll("è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ", "e");
@@ -58,7 +75,7 @@ public class AddAccountValidate {
 //        return "";
 //    }
 
-    //3. ham generate
+    //ham generate username by fullname
     public  String generateFormatUsernameByFullname(String fullname){
         String fullNameEng = this.convertEnglish(fullname);
         String[] list = fullNameEng.split(" ");
@@ -68,7 +85,7 @@ public class AddAccountValidate {
         }
         return usernameFormat;
     }
-    //4. Ham checkNumberUsername
+    //Ham checkNumberUsername
     public Integer genNumberUsername(String username,List<String> listUsername){
         int number =0;
         for(String us: listUsername){
