@@ -58,10 +58,10 @@
       </template>
       <a-form-model :layout="form.layout" :model="form">
         <a-form-model-item label="Tài khoản">
-          <a-input value="truongtv012" disabled />
+          <a-input v-model="accountid" disabled />
         </a-form-model-item>
         <a-form-model-item label="Mật khẩu">
-          <a-input />
+          <a-input v-model="password"/>
         </a-form-model-item>
         <a-form-model-item label="Chức vụ">
           <a-select>
@@ -266,7 +266,10 @@ export default {
         resource: "",
         desc: "",
       },
+      accountid: "",
+      password: "",
     };
+    
   },
   computed: {
     loggedIn() {
@@ -289,12 +292,6 @@ export default {
     handleAdd() {},
 
     handleEdit() {},
-    // handleBlur() {
-    //   console.log("blur");
-    // },
-    // handleFocus() {
-    //   console.log("focus");
-    // },
     filterOption(input, option) {
       return (
         option.componentOptions.children[0].text

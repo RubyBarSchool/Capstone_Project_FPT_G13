@@ -1,6 +1,6 @@
 import http from "./http-common";
 
-class RoleService {
+class AccounService {
     getAllAccount(user) {
         return http.post(`/spadmin/account/allaccount`, user);
     }
@@ -18,4 +18,4 @@ class RoleService {
     }
 }
 
-export default new RoleService();
+export default new AccounService();
