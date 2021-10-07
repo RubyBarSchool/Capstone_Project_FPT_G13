@@ -44,7 +44,11 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                 GetAllAccountVO accountVO = new GetAllAccountVO();
                 accountVO.setId(i.getId());
                 accountVO.setUsername(i.getUsername());
-                accountVO.setRoles(i.getRoles());
+                List<String> listRoleName = new ArrayList<>();
+                for(Role r: i.getRoles()){
+                    listRoleName.add(r.getName());
+                }
+                accountVO.setRoles(listRoleName);
                 accountVO.setStatus(i.getStatus());
                 accountVO.setTime(i.getModified_date());
                 accounts.add(accountVO);
@@ -141,7 +145,11 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                 GetAllAccountVO getAllAccountVO = new GetAllAccountVO();
                 getAllAccountVO.setId(i.getId());
                 getAllAccountVO.setUsername(i.getUsername());
-                getAllAccountVO.setRoles(i.getRoles());
+                List<String> listRoleName = new ArrayList<>();
+                for(Role r: i.getRoles()){
+                    listRoleName.add(r.getName());
+                }
+                getAllAccountVO.setRoles(listRoleName);
                 getAllAccountVO.setStatus(i.getStatus());
                 getAllAccountVO.setTime(i.getModified_date());
                 getAllAccountVOS.add(getAllAccountVO);
