@@ -3,10 +3,7 @@
     <!-- menu trên -->
     <a-row :gutter="[8, 8]">
       <a-col :span="4"
-        ><a-input
-          placeholder="Tên tài khoản"
-          style="width: 150px"
-         
+        ><a-input placeholder="Tên tài khoản" style="width: 150px"
       /></a-col>
       <a-col :span="4">
         <a-select placeholder="Chức vụ" style="width: 150px">
@@ -54,7 +51,7 @@
         {{ record.username }}
       </template>
       <template slot="roles" slot-scope="text, record">
-        <div v-for="item in record.roles" :key="item.id">
+        <div v-for="(item, index) in record.roles" :key="index">
           {{ item.name }}
         </div>
       </template>
@@ -66,13 +63,17 @@
       <template slot="time" slot-scope="text, record">
         {{ record.time }}
       </template>
-      <template slot="action">
+      <template slot="action" slot-scope="text, record">
         <a-row>
           <a-col :span="8">
             <a-button type="dashed" icon="user" @click="showModalProfile" />
           </a-col>
           <a-col :span="8">
-            <a-button type="dashed" icon="edit" @click="showModalEdit" />
+            <a-button
+              type="dashed"
+              icon="edit"
+              @click="showModalEdit(record.username, record.roles)"
+            />
           </a-col>
           <a-col :span="8">
             <a-button type="dashed" icon="delete" @click="showModalDelete" />
@@ -94,7 +95,6 @@
       title="Thông tin tài khoản"
       @ok="handleProfile"
     >
-      <p>Họ và tên</p>
     </a-modal>
     <!-- popup profile-->
 
@@ -139,23 +139,36 @@
     <!-- popup add -->
 
     <!-- popup edit-->
-    <a-modal v-model="visibleEdit" title="Chỉnh sửa tài khoản" @ok="handleEdit">
-      <a-form-model-item label="Tài khoản">
-        <a-input disabled />
-      </a-form-model-item>
-      <a-form-model-item label="Chức vụ">
-        <a-select>
-          <a-select-option
-            v-for="item in dataRoles"
-            :key="item.id"
-            :value="item.id"
+    <a-modal
+      v-model="visibleEdit"
+      title="Chỉnh sửa tài khoản"
+    >
+      <template slot="footer">
+        <a-button key="back" @click="handleCancelEdit"> Hủy </a-button>
+        <a-button key="submit" type="primary" @click="submitEdit"> Lưu </a-button>
+      </template>
+      <a-form-model>
+        <a-form-model-item label="Tài khoản">
+          <a-input :value="dataEdit.username" disabled />
+        </a-form-model-item>
+        <a-form-model-item label="Chức vụ">
+          <a-select
+            mode="multiple"
+            v-model="dataEdit.roleIDs"
+            style="width: 100%"
           >
-            {{ item.roleName }}
-          </a-select-option>
-        </a-select>
-      </a-form-model-item>
+            <a-select-option
+              v-for="(rol, index) in dataRoles"
+              :value="rol.id"
+              :key="index"
+            >
+              {{ rol.name }}
+            </a-select-option>
+          </a-select>
+        </a-form-model-item>
+      </a-form-model>
     </a-modal>
-    <!-- popup edit -->
+    <!-- popup edit-->
   </div>
 </template>
  <script>
@@ -166,6 +179,7 @@ export default {
   name: "AdminV2",
   data() {
     return {
+      name: "",
       dataSourceTable: [],
       dataRoles: [],
       dataRole: {
@@ -178,6 +192,10 @@ export default {
         name: "",
         pageIndex: "1",
         pageSize: "10",
+      },
+      dataEdit: {
+        username: "",
+        roleIDs: [],
       },
       columns: [
         {
@@ -237,7 +255,6 @@ export default {
   created() {
     this.getAllAccount();
     this.getAllRole();
-    this.getAllEmployee();
   },
   methods: {
     getAllAccount() {
@@ -285,20 +302,24 @@ export default {
       );
     },
     showModalAdd() {
+      this.getAllRole();
+      this.getAllEmployee();
       this.visibleAdd = true;
     },
     handleAdd(e) {
       console.log(e);
       this.visibleAdd = false;
     },
-    showModalEdit() {
+    showModalEdit(username, roles) {
       this.visibleEdit = true;
-    },
-    handleEdit(e) {
-      console.log(e);
-      this.visibleEdit = false;
+      this.dataEdit.username = username;
+      this.dataEdit.roleIDs = [];
+      for (var i = 0; i < roles.length; i++) {
+        this.dataEdit.roleIDs.push(roles[i].id);
+      }
     },
     showModalProfile() {
+      this.getAllAccount();
       this.visibleProfile = true;
     },
     handleProfile(e) {
@@ -324,6 +345,12 @@ export default {
       console.log(e);
       this.visibleDelete = false;
     },
+    handleCancelEdit() {
+      this.visibleEdit = false;
+    },
+    submitEdit(){
+      console.log("List: ", this.dataEdit)
+    }
   },
 };
 </script>
