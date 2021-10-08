@@ -9,9 +9,7 @@ import com.university.fpt.acf.repository.AccountManagerRepository;
 import com.university.fpt.acf.repository.EmployeeRepository;
 import com.university.fpt.acf.service.AccountManagerService;
 import com.university.fpt.acf.util.AccountValidate.AddAccountValidate;
-import com.university.fpt.acf.vo.GetAccountDetailVO;
-import com.university.fpt.acf.vo.GetAllAccountVO;
-import com.university.fpt.acf.vo.RoleAccountVO;
+import com.university.fpt.acf.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -34,34 +32,38 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-
-
     @Override
-    public List<GetAllAccountVO> getAllAccounts(GetAllAccountForm getAllAccountForm) {
-        Page<Account> pageListAccount = accountManagerRepository.findAll(PageRequest.of(getAllAccountForm.getPageIndex()-1,getAllAccountForm.getPageSize()));
-        List<GetAllAccountVO> accounts = new ArrayList<>();
-        try{
-            for(Account i : pageListAccount){
-                GetAllAccountVO accountVO = new GetAllAccountVO();
-                accountVO.setId(i.getId());
-                accountVO.setUsername(i.getUsername());
+    public List<GetAllAccountResponseVO> getAllAccounts(GetAllAccountForm getAllAccountForm) {
+            Pageable pageable= PageRequest.of(getAllAccountForm.getPageIndex()-1,getAllAccountForm.getPageSize());
+            List<GetAllAccountVO> listAcc = accountManagerRepository.getAllAccount(pageable);
+            List<GetAllAccountResponseVO> result = new ArrayList<>();
+            for(int i=0;i<listAcc.size();i++){
                 List<RoleAccountVO> listRole = new ArrayList<>();
-                for(Role r: i.getRoles()){
+                int j=i+1;
+                if(listAcc.get(i).getId()==listAcc.get(j).getId()){
                     RoleAccountVO role = new RoleAccountVO();
-                    role.setId(r.getId());
-                    role.setName(r.getName());
+                    role.setId(listAcc.get(i).getIdRole());
+                    role.setName(listAcc.get(i).getNameRole());
                     listRole.add(role);
+                }else {
+                    GetAllAccountResponseVO getAcc = new GetAllAccountResponseVO();
+                    getAcc.setId(listAcc.get(i).getId());
+                    getAcc.setUsername(listAcc.get(i).getUsername());
+                    if(listRole.size()==0){
+                        RoleAccountVO role = new RoleAccountVO();
+                        role.setId(listAcc.get(i).getIdRole());
+                        role.setName(listAcc.get(i).getNameRole());
+                        listRole.add(role);
+                    }else{
+                        getAcc.setRoles(listRole);
+                    }
+                    getAcc.setStatus(listAcc.get(i).getStatus());
+                    getAcc.setTime(listAcc.get(i).getTime());
+                    result.add(getAcc);
+
                 }
-                accountVO.setRoles(listRole);
-                accountVO.setStatus(i.getStatus());
-                accountVO.setTime(i.getModified_date());
-                accounts.add(accountVO);
             }
-            return accounts;
-        }catch (Exception e){
-            e.getMessage();
-        }
-        return accounts;
+            return result;
     }
 
     @Override
@@ -141,13 +143,13 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     }
 
     @Override 
-    public List<GetAllAccountVO> searchAccount(SearchAccountForm searchAccountForm) {
-        List<GetAllAccountVO> getAllAccountVOS = new ArrayList<>();
+    public List<GetAllAccountResponseVO> searchAccount(SearchAccountForm searchAccountForm) {
+        List<GetAllAccountResponseVO> getAllAccountVOS = new ArrayList<>();
         try{
             Pageable pageable = PageRequest.of(searchAccountForm.getPageIndex()-1,searchAccountForm.getPageSize());
             List<Account> accounts =accountManagerRepository.findByUsernameIsLike("%"+searchAccountForm.getName()+"%",pageable);
             for(Account i : accounts){
-                GetAllAccountVO getAllAccountVO = new GetAllAccountVO();
+                GetAllAccountResponseVO getAllAccountVO = new GetAllAccountResponseVO();
                 getAllAccountVO.setId(i.getId());
                 getAllAccountVO.setUsername(i.getUsername());
                 List<RoleAccountVO> listRoleName = new ArrayList<>();
@@ -169,14 +171,28 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         return getAllAccountVOS;
 
     }
-// chua xong
-    @Override
-    public GetAccountDetailVO getAccountById(Long id) {
-        try{
-          List<Account> ac = (List<Account>) accountManagerRepository.getAccountById(id);
-            GetAccountDetailVO account = new GetAccountDetailVO();
 
-            return account;
+    @Override
+    public GetAccountDetailResponeVO getAccountById(Long id) {
+        try{
+            List<GetAccountDetailVO> ac = accountManagerRepository.getAccountById(id);
+            GetAccountDetailResponeVO result = new GetAccountDetailResponeVO();
+            List<RoleAccountVO> listRole = new ArrayList<>();
+            for(GetAccountDetailVO acd : ac){
+               RoleAccountVO role = new RoleAccountVO();
+               role.setId(acd.getIdRole());
+               role.setName(acd.getNameRole());
+               listRole.add(role);
+            }
+            result.setId(ac.get(0).getId());
+            result.setUsername(ac.get(0).getUsername());
+            result.setFullname(ac.get(0).getFullname());
+            result.setImage(ac.get(0).getImage());
+            result.setGender(ac.get(0).getGender());
+            result.setDob(ac.get(0).getDob());
+            result.setPhone(ac.get(0).getPhone());
+            result.setRoles(listRole);
+            return result;
         }catch (Exception e){
             e.getMessage();
         }
