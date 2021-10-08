@@ -45,7 +45,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<String> getFullNameEmployeeNotAccount() {
-        List<String > list = employeeRepository.getTop10EmployeeNotAccount();
+        Pageable pageable = PageRequest.of(0,10);
+        List<String > list = employeeRepository.getTop10EmployeeNotAccount(pageable);
         return list ;
     }
 }

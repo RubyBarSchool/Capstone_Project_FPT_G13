@@ -10,32 +10,6 @@ import java.util.regex.Pattern;
 
 @Validated
 public class AddAccountValidate {
-    // check tồn tại
-    public boolean checkExitAccount(String username, List<String> listUsername){
-        for(String us : listUsername){
-            if(us.equals(username)){
-                return true;
-            }
-        }
-        return false;
-
-    }
-    //check form phone
-    public  boolean checkFormPhone(String phone){
-        String regex ="^[0-9]{10}$";
-        if(phone.matches(regex)){
-            return true;
-        }
-        return false;
-    }
-    // check form email
-    public  boolean checkFormEmail(String email){
-        String regexEmail ="^[A-Za-z0-9]+[A-Za-z0-9]*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)$";
-        if(email.matches(regexEmail)){
-            return true;
-        }
-        return false;
-    }
     //check password
     public boolean checkPassword(String password){
         String regex ="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}";
@@ -79,7 +53,7 @@ public class AddAccountValidate {
     public  String generateFormatUsernameByFullname(String fullname){
         String fullNameEng = this.convertEnglish(fullname);
         String[] list = fullNameEng.split(" ");
-        String usernameFormat = list[list.length-1];
+        String usernameFormat = list[list.length-1].toLowerCase(Locale.ROOT);
         for(int i =0;i< list.length-1;i++){
                 usernameFormat+=list[i].substring(0,1).toLowerCase(Locale.ROOT);
         }
@@ -89,7 +63,7 @@ public class AddAccountValidate {
     public Integer genNumberUsername(String username,List<String> listUsername){
         int number =0;
         for(String us: listUsername){
-            if(username.contains(us)){
+            if(convertEnglish(username).contains(convertEnglish(us))){
                 number++;
             }
         }
