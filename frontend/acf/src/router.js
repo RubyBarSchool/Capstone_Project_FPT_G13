@@ -27,6 +27,13 @@ export const router = new Router({
                 import ('./pages/Admin.vue')
         },
         {
+            path: '/adminv3',
+            name: 'adminv3',
+            // lazy-loaded
+            component: () =>
+                import ('./pages/Adminv3.vue')
+        },
+        {
             path: '/demoaxios',
             name: 'DemoAxios',
             // lazy-loaded
