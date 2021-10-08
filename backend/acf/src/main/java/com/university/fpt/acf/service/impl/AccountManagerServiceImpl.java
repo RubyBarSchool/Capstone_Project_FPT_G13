@@ -11,6 +11,7 @@ import com.university.fpt.acf.service.AccountManagerService;
 import com.university.fpt.acf.util.AccountValidate.AddAccountValidate;
 import com.university.fpt.acf.vo.GetAccountDetailVO;
 import com.university.fpt.acf.vo.GetAllAccountVO;
+import com.university.fpt.acf.vo.RoleAccountVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -44,11 +45,14 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                 GetAllAccountVO accountVO = new GetAllAccountVO();
                 accountVO.setId(i.getId());
                 accountVO.setUsername(i.getUsername());
-                List<String> listRoleName = new ArrayList<>();
+                List<RoleAccountVO> listRole = new ArrayList<>();
                 for(Role r: i.getRoles()){
-                    listRoleName.add(r.getName());
+                    RoleAccountVO role = new RoleAccountVO();
+                    role.setId(r.getId());
+                    role.setName(r.getName());
+                    listRole.add(role);
                 }
-                accountVO.setRoles(listRoleName);
+                accountVO.setRoles(listRole);
                 accountVO.setStatus(i.getStatus());
                 accountVO.setTime(i.getModified_date());
                 accounts.add(accountVO);
@@ -146,9 +150,12 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                 GetAllAccountVO getAllAccountVO = new GetAllAccountVO();
                 getAllAccountVO.setId(i.getId());
                 getAllAccountVO.setUsername(i.getUsername());
-                List<String> listRoleName = new ArrayList<>();
+                List<RoleAccountVO> listRoleName = new ArrayList<>();
                 for(Role r: i.getRoles()){
-                    listRoleName.add(r.getName());
+                    RoleAccountVO role = new RoleAccountVO();
+                    role.setId(r.getId());
+                    role.setName(r.getName());
+                    listRoleName.add(role);
                 }
                 getAllAccountVO.setRoles(listRoleName);
                 getAllAccountVO.setStatus(i.getStatus());
@@ -165,19 +172,14 @@ public class AccountManagerServiceImpl implements AccountManagerService {
 // chua xong
     @Override
     public GetAccountDetailVO getAccountById(Long id) {
-//        try{
-//            Optional<Account> ac = accountManagerRepository.findById(id);
-//            GetAccountDetailVO account = new GetAccountDetailVO();
-//            account.setId(ac.get().getId());
-//            account.setUsername(ac.get().getUsername());
-////            account.setRoles(ac.get().getRoles());
-//            account.setStatus(ac.get().getStatus());
-//            account.setTime(ac.get().getModified_date());
-//            account.setEmployee(ac.get().getEmployee());
-//            return account;
-//        }catch (Exception e){
-//            e.getMessage();
-//        }
+        try{
+          List<Account> ac = (List<Account>) accountManagerRepository.getAccountById(id);
+            GetAccountDetailVO account = new GetAccountDetailVO();
+
+            return account;
+        }catch (Exception e){
+            e.getMessage();
+        }
         return null;
 
     }

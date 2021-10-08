@@ -9,11 +9,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 @Data
 public class GetAccountDetailVO {
-    private Long id;
     private String username;
-    private Collection<Long> idRole = new ArrayList<>();
-    private Boolean status;
-    private LocalDate time;
-    private Employee employee;
+    private Collection<String> roleName = new ArrayList<>();
+    private String image;
+    private  LocalDate dob;
+    private String phone;
+    private String email;
+    private String gender;
 
 }

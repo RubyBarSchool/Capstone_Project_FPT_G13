@@ -12,7 +12,7 @@ import java.util.Collection;
 public class GetAllAccountVO {
     private Long id;
     private String username;
-    private Collection<String> roles = new ArrayList<>();
+    private Collection<RoleAccountVO> roles = new ArrayList<>();
     private Boolean status;
     private LocalDate time;
 }

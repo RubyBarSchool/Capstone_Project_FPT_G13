@@ -13,13 +13,10 @@ import java.util.List;
 
 @Repository
 public interface AccountManagerRepository extends JpaRepository<Account,Long> {
-//    @Query("select ac from Account as ac inner join Employee" +
-//            " as em on ac.employee.id = em.id \n" +
-//            "left join Position as p on em.position.id = p.id")
-//    GetAccountDetailVO getAccountById(Long id);
+    @Query("select a.username,a.id,e.fullName,e.phone,e.dob,e.gender from Employee e " +
+            "inner join Account a on e.id = a.employee.id where a.id =?1")
+    GetAccountDetailVO getAccountById(Long id);
     List<Account> findByUsernameIsLike(String username, Pageable pageable);
     Account findAccountByUsername(String userName);
-//    @Query("select em.fullName from Employee em where em.fullName like :fullName")
-//    List<String> getAllFullnameEmployee(@Param("fullName") String fulname);
 
 }
