@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -34,41 +35,34 @@ public class AccountManagerServiceImpl implements AccountManagerService {
 
     @Override
     public List<GetAllAccountResponseVO> getAllAccounts(GetAllAccountForm getAllAccountForm) {
-            Pageable pageable= PageRequest.of(getAllAccountForm.getPageIndex()-1,getAllAccountForm.getPageSize());
+
+            Pageable pageable= PageRequest.of(getAllAccountForm.getPageIndex()-1,getAllAccountForm.getPageSize(), Sort.by("id").ascending());
             List<GetAllAccountVO> listAcc = accountManagerRepository.getAllAccount(pageable);
             List<GetAllAccountResponseVO> result = new ArrayList<>();
-            for(int i=0;i<listAcc.size()-2;i++){
-                List<RoleAccountVO> listRole = new ArrayList<>();
-                int j=i+1;
-                if(listAcc.get(i).getId()==listAcc.get(j).getId()){
-                    RoleAccountVO role = new RoleAccountVO();
-                    role.setId(listAcc.get(i).getIdRole());
-                    role.setName(listAcc.get(i).getNameRole());
-                    listRole.add(role);
-                }else {
-                    GetAllAccountResponseVO getAcc = new GetAllAccountResponseVO();
-                    getAcc.setId(listAcc.get(i).getId());
-                    getAcc.setUsername(listAcc.get(i).getUsername());
-                    if(listRole.size()==0){
-                        RoleAccountVO role = new RoleAccountVO();
-                        role.setId(listAcc.get(i).getIdRole());
-                        role.setName(listAcc.get(i).getNameRole());
-                        listRole.add(role);
-                    }else{
-                        getAcc.setRoles(listRole);
+            GetAllAccountResponseVO accountResponseVO = new GetAllAccountResponseVO();
+            for(int i = 0 ; i< listAcc.size() ; i++){
+                if(!listAcc.get(i).getId().equals(accountResponseVO.getId())){
+                    if(i!=0){
+                        result.add(accountResponseVO);
                     }
-                    getAcc.setStatus(listAcc.get(i).getStatus());
-                    getAcc.setTime(listAcc.get(i).getTime());
-                    result.add(getAcc);
-
+                        accountResponseVO = new GetAllAccountResponseVO();
+                        accountResponseVO.setId(listAcc.get(i).getId());
+                        accountResponseVO.setStatus(listAcc.get(i).getStatus());
+                        accountResponseVO.setTime(listAcc.get(i).getTime());
+                        accountResponseVO.setUsername(listAcc.get(i).getUsername());
+                        accountResponseVO.getRoles().add(new RoleAccountVO(listAcc.get(i).getIdRole(),listAcc.get(i).getNameRole()));
+                }else{
+                        accountResponseVO.getRoles().add(new RoleAccountVO(listAcc.get(i).getIdRole(),listAcc.get(i).getNameRole()));
                 }
+            }
+            if(!accountResponseVO.getRoles().isEmpty()){
+                result.add(accountResponseVO);
             }
             return result;
     }
 
     @Override
     public Boolean insertAccount(AddAccountForm addAccountForm) {
-        AddAccountValidate validate = new AddAccountValidate();
         try {
             //check exit Account
             if(accountManagerRepository.findAccountByUsername(addAccountForm.getUsername()) == null){
