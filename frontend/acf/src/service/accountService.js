@@ -14,7 +14,7 @@ class AccounService {
         return http.put(`/spadmin/account/${id}`, data);
     }
     getAccountByID(id) {
-        return http.post(`/spadmin/account`, id);
+        return http.post(`/spadmin/account/getAcc`, id);
     }
 }
 

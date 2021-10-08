@@ -3,7 +3,10 @@
     <!-- menu trên -->
     <a-row :gutter="[8, 8]">
       <a-col :span="4"
-        ><a-input placeholder="Tên tài khoản" style="width: 150px" v-model="name"
+        ><a-input
+          placeholder="Tên tài khoản"
+          style="width: 150px"
+          v-model="name"
       /></a-col>
       <a-col :span="4">
         <a-select placeholder="Chức vụ" style="width: 150px">
@@ -29,7 +32,9 @@
         </a-select>
       </a-col>
       <a-col :span="4" style="width: 150px">
-        <a-button type="primary" icon="search" @click="submitSearch"> Tìm kiếm </a-button>
+        <a-button type="primary" icon="search" @click="submitSearch">
+          Tìm kiếm
+        </a-button>
       </a-col>
       <a-col :span="4" style="width: 150px">
         <a-button type="primary" icon="usergroup-add" @click="showModalAdd">
@@ -66,13 +71,13 @@
       <template slot="action" slot-scope="text, record">
         <a-row>
           <a-col :span="8">
-            <a-button type="dashed" icon="user" @click="showModalProfile" />
+            <a-button type="dashed" icon="user"/>
           </a-col>
           <a-col :span="8">
             <a-button
               type="dashed"
               icon="edit"
-              @click="showModalEdit(record.username, record.roles)"
+              @click="showModalEdit(record.username, record.roles, record.id)"
             />
           </a-col>
           <a-col :span="8">
@@ -90,13 +95,8 @@
     </a-table>
 
     <!-- popup profile-->
-    <a-modal
-      v-model="visibleProfile"
-      title="Thông tin tài khoản"
-      @ok="handleProfile"
-    >
-    <p>Name:</p>
-    <p>Add:</p>
+    <a-modal v-model="visibleProfile" title="Thông tin tài khoản">
+      <p>lehoanganh</p>
     </a-modal>
     <!-- popup profile-->
 
@@ -141,13 +141,12 @@
     <!-- popup add -->
 
     <!-- popup edit-->
-    <a-modal
-      v-model="visibleEdit"
-      title="Chỉnh sửa tài khoản"
-    >
+    <a-modal v-model="visibleEdit" title="Chỉnh sửa tài khoản">
       <template slot="footer">
         <a-button key="back" @click="handleCancelEdit"> Hủy </a-button>
-        <a-button key="submit" type="primary" @click="submitEdit"> Lưu </a-button>
+        <a-button key="submit" type="primary" @click="submitEdit">
+          Lưu
+        </a-button>
       </template>
       <a-form-model>
         <a-form-model-item label="Tài khoản">
@@ -199,6 +198,7 @@ export default {
       dataEdit: {
         username: "",
         roleIDs: [],
+        id: ""
       },
       dataSearch: {
         name: "",
@@ -318,21 +318,14 @@ export default {
       console.log(e);
       this.visibleAdd = false;
     },
-    showModalEdit(username, roles) {
+    showModalEdit(username, roles, id) {
       this.visibleEdit = true;
+      this.dataEdit.id= id;
       this.dataEdit.username = username;
       this.dataEdit.roleIDs = [];
       for (var i = 0; i < roles.length; i++) {
         this.dataEdit.roleIDs.push(roles[i].id);
       }
-    },
-    showModalProfile() {
-      this.getAllAccount();
-      this.visibleProfile = true;
-    },
-    handleProfile(e) {
-      console.log(e);
-      this.visibleProfile = false;
     },
     showModalDelete() {
       this.visibleDelete = true;
@@ -356,8 +349,26 @@ export default {
     handleCancelEdit() {
       this.visibleEdit = false;
     },
-    submitEdit(){
-      console.log("List: ", this.dataEdit)
+    submitEdit() {
+      console.log("List: ", this.dataEdit);
+      // this.dataUpdateAccount.idAccount = this.dataEdit.id;
+      // this.dataUpdateAccount.idRole = this.dataEdit.roleIDs;
+      // this.dataUpdateAccount.id_employee = 10;
+      // this.dataUpdateAccount.username = this.dataEdit.username;
+      // this.getDataUpdateAccount(this.data.id);
+    },
+    getDataUpdateAccount(id) {
+      accounService
+        .updateAccount(id, this.dataUpdateAccount)
+        .then((response) => {
+            for(var i=0; i<this.dataUpdateAccount.length;i++){
+                if(this.dataUpdateAccount.id==response.data.data.idAccount)
+                this.data[i] = response.data.data;
+            }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     submitSearch() {
       this.dataSearch.name = this.name;
