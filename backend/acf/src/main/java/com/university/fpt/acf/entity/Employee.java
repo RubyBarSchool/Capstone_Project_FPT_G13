@@ -18,6 +18,7 @@ public class Employee extends EntityCommon {
     private Boolean gender;
     private LocalDate dob;
     private String countryside;
+    private String email;
     private String nation;
     private String phone;
     private Long salary;
