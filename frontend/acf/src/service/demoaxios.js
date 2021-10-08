@@ -21,6 +21,7 @@ class demoaxios {
     delete(id) {
         return http.delete(`/tutorials/${id}`);
         //abc/1
+        //path variable
     }
 
     deleteAll() {
@@ -30,6 +31,7 @@ class demoaxios {
     findByTitle(title) {
         return http.get(`/tutorials?title=${title}`);
         //abc?id=1
+        //query param
     }
 }
 

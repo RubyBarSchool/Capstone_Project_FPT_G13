@@ -10,12 +10,13 @@ class AccounService {
     createAccount(form) {
         return http.post("/spadmin/account", form);
     }
-    updateAccount(id, data) {
-        return http.put(`/spadmin/account/${id}`, data);
+    updateAccount(data) {
+        return http.put(`/spadmin/account/update`, data);
     }
     getAccountByID(id) {
         return http.post(`/spadmin/account/getAcc`, id);
     }
+    
 }
 
 export default new AccounService();

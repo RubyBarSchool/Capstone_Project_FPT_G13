@@ -71,7 +71,7 @@
       <template slot="action" slot-scope="text, record">
         <a-row>
           <a-col :span="8">
-            <a-button type="dashed" icon="user"/>
+            <a-button type="dashed" icon="user" />
           </a-col>
           <a-col :span="8">
             <a-button
@@ -173,7 +173,7 @@
   </div>
 </template>
  <script>
-import accounService from "@/service/accountService.js";
+import accountService from "@/service/accountService.js";
 import roleService from "@/service/roleService.js";
 import employeeService from "@/service/employeeService.js";
 
@@ -184,6 +184,11 @@ export default {
       name: "",
       dataSourceTable: [],
       dataRoles: [],
+      dataUpdateAccount: {
+        idAccount: "",
+        idRole: [""],
+        status: "",
+      },
       dataRole: {
         data: {},
         message: "",
@@ -198,7 +203,7 @@ export default {
       dataEdit: {
         username: "",
         roleIDs: [],
-        id: ""
+        id: "",
       },
       dataSearch: {
         name: "",
@@ -270,7 +275,7 @@ export default {
         pageIndex: 1,
         pageSize: 10,
       };
-      accounService
+      accountService
         .getAllAccount(form)
         .then((response) => {
           this.dataSourceTable = response.data.data;
@@ -320,7 +325,7 @@ export default {
     },
     showModalEdit(username, roles, id) {
       this.visibleEdit = true;
-      this.dataEdit.id= id;
+      this.dataEdit.id = id;
       this.dataEdit.username = username;
       this.dataEdit.roleIDs = [];
       for (var i = 0; i < roles.length; i++) {
@@ -350,26 +355,30 @@ export default {
       this.visibleEdit = false;
     },
     submitEdit() {
-      console.log("List: ", this.dataEdit);
-      // this.dataUpdateAccount.idAccount = this.dataEdit.id;
-      // this.dataUpdateAccount.idRole = this.dataEdit.roleIDs;
-      // this.dataUpdateAccount.id_employee = 10;
-      // this.dataUpdateAccount.username = this.dataEdit.username;
-      // this.getDataUpdateAccount(this.data.id);
+      this.dataUpdateAccount.idAccount = this.dataEdit.id;
+      this.dataUpdateAccount.idRole = this.dataEdit.roleIDs;
+      this.dataUpdateAccount.status = true;
+      this.getDataUpdateAccount();
+      this.visibleEdit = false;
+      this.$notification["success"]({
+        message: 'Thông báo',
+        description: 'Sửa thành công',
+      });
     },
-    getDataUpdateAccount(id) {
-      accounService
-        .updateAccount(id, this.dataUpdateAccount)
+    getDataUpdateAccount() {
+      accountService
+        .updateAccount(this.dataUpdateAccount)
         .then((response) => {
-            for(var i=0; i<this.dataUpdateAccount.length;i++){
-                if(this.dataUpdateAccount.id==response.data.data.idAccount)
-                this.data[i] = response.data.data;
-            }
+          if (response.data.data) {
+            this.getAllAccount();
+            
+          }
         })
         .catch((e) => {
           console.log(e);
         });
     },
+    
     submitSearch() {
       this.dataSearch.name = this.name;
       this.dataSearch.pageIndex = 1;
@@ -377,7 +386,7 @@ export default {
       this.getDataSearch();
     },
     async getDataSearch() {
-      accounService
+      accountService
         .searchAccount(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
