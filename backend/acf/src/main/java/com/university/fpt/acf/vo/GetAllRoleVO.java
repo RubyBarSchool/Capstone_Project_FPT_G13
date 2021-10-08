@@ -6,8 +6,8 @@ import java.time.LocalDate;
 
 @Data
 public class GetAllRoleVO {
-    private Long idRole;
+    private Long id;
     private String code;
-    private String roleName;
+    private String name;
     private LocalDate time;
 }

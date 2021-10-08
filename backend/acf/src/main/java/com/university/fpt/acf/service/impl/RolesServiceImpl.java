@@ -21,9 +21,9 @@ public class RolesServiceImpl implements RolesService {
         List<GetAllRoleVO> listRolesOutput = new ArrayList<>();
         for(Role i : roles){
             GetAllRoleVO roleVO = new GetAllRoleVO();
-            roleVO.setIdRole(i.getId());
+            roleVO.setId(i.getId());
             roleVO.setCode(i.getCode());
-            roleVO.setRoleName(i.getName());
+            roleVO.setName(i.getName());
             roleVO.setTime(i.getModified_date());
             listRolesOutput.add(roleVO);
         }
