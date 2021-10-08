@@ -19,6 +19,7 @@ public interface AccountManagerRepository extends JpaRepository<Account,Long> {
             "inner join a.roles r where a.id = ?1")
     List<GetAccountDetailVO> getAccountById(Long id);
     List<Account> findByUsernameIsLike(String username, Pageable pageable);
+    Account findAccountById(Long id);
     Account findAccountByUsername(String userName);
 
     @Query("select new com.university.fpt.acf.vo.GetAllAccountVO(a.id,a.username,r.id,r.name,a.status,a.modified_date)  from Account a inner join a.roles r")

@@ -8,8 +8,7 @@ import java.util.Collection;
 @Data
 public class UpdateAccountForm {
     private Long idAccount;
-    private  String username;
-    private String password;
+    private Boolean status;
     private Collection<Long> idRole = new ArrayList<>();
-    private Long id_employee;
+
 }

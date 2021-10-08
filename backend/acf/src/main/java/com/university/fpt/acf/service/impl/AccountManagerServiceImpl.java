@@ -37,7 +37,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
             Pageable pageable= PageRequest.of(getAllAccountForm.getPageIndex()-1,getAllAccountForm.getPageSize());
             List<GetAllAccountVO> listAcc = accountManagerRepository.getAllAccount(pageable);
             List<GetAllAccountResponseVO> result = new ArrayList<>();
-            for(int i=0;i<listAcc.size();i++){
+            for(int i=0;i<listAcc.size()-2;i++){
                 List<RoleAccountVO> listRole = new ArrayList<>();
                 int j=i+1;
                 if(listAcc.get(i).getId()==listAcc.get(j).getId()){
@@ -100,28 +100,22 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     @Override
     public Boolean updateAccount(UpdateAccountForm updateAccountForm) {
         try{
-            Optional<Account> ac = accountManagerRepository.findById(updateAccountForm.getIdAccount());
-            if(!ac.isEmpty()){
-                Account acc = new Account();
-                acc.setId(updateAccountForm.getIdAccount());
-                acc.setPassword(passwordEncoder.encode(updateAccountForm.getPassword()));
+            Account ac = accountManagerRepository.findAccountById(updateAccountForm.getIdAccount());
+            if(ac!=null){
+                ac.setStatus(updateAccountForm.getStatus());
                 AccountSercurity accountSercurity = new AccountSercurity();
-                acc.setModified_by(accountSercurity.getUserName());
-                acc.setCreated_by(accountSercurity.getUserName());
+                ac.setModified_by(accountSercurity.getUserName());
+                ac.setCreated_by(accountSercurity.getUserName());
                 List<Role> listRole = new ArrayList<>();
                 for(Long i : updateAccountForm.getIdRole()){
                     Role role = new Role();
                     role.setId(i);
                     listRole.add(role);
                 }
-                acc.setRoles(listRole);
-                Employee em = new Employee();
-                em.setId(updateAccountForm.getId_employee());
-                acc.setEmployee(em);
-                accountManagerRepository.save(acc);
+                ac.setRoles(listRole);
+                accountManagerRepository.save(ac);
                 return true;
             }
-
         }catch (Exception e){
             e.getMessage();
         }
@@ -131,8 +125,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     @Override
     public Boolean deleteAccount(Long idAccount) {
         try{
-            Optional<Account> ac = accountManagerRepository.findById(idAccount);
-            Account account = ac.get();
+            Account account = accountManagerRepository.findAccountById(idAccount);
             account.setDeleted(true);
             accountManagerRepository.save(account);
             return true;
