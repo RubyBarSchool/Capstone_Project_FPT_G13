@@ -11,7 +11,6 @@ class demoaxios {
 
     create(data) {
         return http.post("/tutorials", data);
-
     }
 
     update(id, data) {

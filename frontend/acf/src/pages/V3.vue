@@ -71,7 +71,11 @@
       <template slot="action" slot-scope="text, record">
         <a-row>
           <a-col :span="8">
-            <a-button type="dashed" icon="user" />
+            <a-button
+              type="dashed"
+              icon="user"
+              @click="getAccountByID(record.id)"
+            />
           </a-col>
           <a-col :span="8">
             <a-button
@@ -81,22 +85,28 @@
             />
           </a-col>
           <a-col :span="8">
-            <a-button type="dashed" icon="delete" @click="showModalDelete" />
-            <!-- <a-popconfirm
+            <a-popconfirm
               v-if="dataSourceTable.length"
-              title="Sure to delete?"
+              title="Bạn có chắc chắn muốn xóa không?"
               @confirm="() => onDelete(record.id)"
             >
               <a-button type="dashed" icon="delete" />
-            </a-popconfirm> -->
+            </a-popconfirm>
           </a-col>
         </a-row>
       </template>
     </a-table>
 
     <!-- popup profile-->
-    <a-modal v-model="visibleProfile" title="Thông tin tài khoản">
-      <p>lehoanganh</p>
+    <a-modal v-model="visibleProfile" title="Thông tin tài khoản" class="profile">
+      <img src="../assets/logoProject.png">
+      <h3>{{ dataAccByID.fullname }}</h3>
+      <h3>{{ dataAccByID.dob }}</h3>
+      <h3>{{ dataAccByID.phone }}</h3>
+      <h3>{{ dataAccByID.gender ? "Nam" : "Nữ" }}</h3>
+      <h3 v-for="(rol, index) in dataAccByID.roles" :value="rol.id" :key="index">
+        {{ rol.name }}
+      </h3>
     </a-modal>
     <!-- popup profile-->
 
@@ -109,13 +119,17 @@
         <a-input />
       </a-form-model-item>
       <a-form-model-item label="Chức vụ">
-        <a-select style="width: 472px">
+        <a-select
+          mode="multiple"
+          v-model="dataEdit.roleIDs"
+          style="width: 100%"
+        >
           <a-select-option
-            v-for="item in dataRoles"
-            :key="item.id"
-            :value="item.id"
+            v-for="(rol, index) in dataRoles"
+            :value="rol.id"
+            :key="index"
           >
-            {{ item.roleName }}
+            {{ rol.name }}
           </a-select-option>
         </a-select>
       </a-form-model-item>
@@ -209,6 +223,22 @@ export default {
         name: "",
         pageIndex: "1",
         pageSize: "10",
+      },
+      dataAdd: {
+        idRole: [0],
+        id_employee: 0,
+        password: "",
+        username: "",
+      },
+      dataAccByID: {
+        id: "",
+        name: "",
+        roles: [],
+        image: "",
+        fullname: "",
+        dob: "",
+        phone: "",
+        gender: "",
       },
       columns: [
         {
@@ -332,24 +362,9 @@ export default {
         this.dataEdit.roleIDs.push(roles[i].id);
       }
     },
-    showModalDelete() {
-      this.visibleDelete = true;
-      this.$confirm({
-        title: "Bạn có chắc chắn muốn xóa không?",
-        okText: "Yes",
-        okType: "danger",
-        cancelText: "No",
-        onOk() {
-          console.log("OK");
-        },
-        onCancel() {
-          console.log("Cancel");
-        },
-      });
-    },
-    handleDelete(e) {
-      console.log(e);
-      this.visibleDelete = false;
+    onDelete(id) {
+      const dataSource = [...this.dataSourceTable];
+      this.dataSourceTable = dataSource.filter((item) => item.id !== id);
     },
     handleCancelEdit() {
       this.visibleEdit = false;
@@ -395,9 +410,29 @@ export default {
           console.log(e);
         });
     },
+    getAccountByID(id) {
+      accounService
+        .getAccountByID(id)
+        .then((response) => {
+          this.dataAccByID = response.data.data;
+          console.log("Data account by id:", this.dataAccByID.fullname);
+          this.visibleProfile = true;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
   },
 };
 </script>
 
 <style>
+img {
+  width: 150px;
+  height: 150px;
+  border-radius: 78px;
+}
+.profile{
+  text-align: center;
+}
 </style>
