@@ -1,4 +1,4 @@
-package com.university.fpt.acf.config.security.swagger;
+package com.university.fpt.acf.config.swagger;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
