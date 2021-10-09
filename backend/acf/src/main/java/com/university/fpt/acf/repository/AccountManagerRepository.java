@@ -16,17 +16,17 @@ import java.util.List;
 public interface AccountManagerRepository extends JpaRepository<Account,Long> {
     @Query("select new com.university.fpt.acf.vo.GetAccountDetailVO(a.id,a.username,r.id,r.name,e.image,e.fullName,e.dob,e.phone,e.gender) from Account a " +
             " inner join a.employee e " +
-            "inner join a.roles r where a.id = ?1")
+            "inner join a.roles r where a.id = ?1 and a.deleted = false ")
     List<GetAccountDetailVO> getAccountById(Long id);
     @Query("select new com.university.fpt.acf.vo.GetAllAccountVO(a.id,a.username,r.id,r.name,a.status,a.modified_date)  " +
-            "from Account a left join a.roles r where a.username LIKE :username")
+            "from Account a left join a.roles r where a.username LIKE :username and a.deleted = false")
     List<GetAllAccountVO> findByUsernameIsLike(@Param("username") String username, Pageable pageable);
     Account findAccountById(Long id);
     Account findAccountByUsername(String userName);
     @Query("select new com.university.fpt.acf.vo.GetAllAccountVO(a.id,a.username,r.id,r.name,a.status,a.modified_date)  " +
-            "from Account a left join a.roles r")
+            "from Account a left join a.roles r where a.deleted = false")
     List<GetAllAccountVO> getAllAccount(Pageable pageable);
-    @Query("select a.username from Account a where a.username like :username")
+    @Query("select a.username from Account a where a.username like :username and a.deleted = false")
     List<String> getAllUsernameIsLike(@Param("username") String username);
 
 }
