@@ -11,17 +11,15 @@ import com.university.fpt.acf.service.AccountManagerService;
 import com.university.fpt.acf.util.AccountValidate.AddAccountValidate;
 import com.university.fpt.acf.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 @Service
 @Transactional
@@ -30,12 +28,9 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     private AccountManagerRepository accountManagerRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Autowired
-    private EmployeeRepository employeeRepository;
 
     @Override
     public List<GetAllAccountResponseVO> getAllAccounts(GetAllAccountForm getAllAccountForm) {
-
             Pageable pageable= PageRequest.of(getAllAccountForm.getPageIndex()-1,getAllAccountForm.getPageSize(), Sort.by("id").ascending());
             List<GetAllAccountVO> listAcc = accountManagerRepository.getAllAccount(pageable);
             List<GetAllAccountResponseVO> result = new ArrayList<>();

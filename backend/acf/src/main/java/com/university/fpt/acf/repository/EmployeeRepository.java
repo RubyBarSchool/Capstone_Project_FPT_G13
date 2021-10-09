@@ -10,8 +10,7 @@ import java.util.List;
 
 public interface EmployeeRepository extends JpaRepository<Employee,Long> {
     List<Employee> findByFullNameIsLike(String fullName, Pageable pageable);
-    List<Employee> findEmployeeByFullNameIsLike(String fullName);
-    @Query("select e.fullName,a.username from Employee e  left join Account a on e.id = a.employee.id  where a.username " +
+    @Query("select e.fullName from Employee e  left join Account a on e.id = a.employee.id  where a.username " +
             "is null order by e.fullName asc  ")
     List<String> getTop10EmployeeNotAccount(Pageable pageable);
 }
