@@ -77,6 +77,7 @@ export default {
     },
   },
   beforeCreate() {
+    localStorage.removeItem("user");
     this.form = this.$form.createForm(this, { name: "normal_login" });
   },
   methods: {
