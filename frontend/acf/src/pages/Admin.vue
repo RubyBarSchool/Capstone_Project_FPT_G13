@@ -72,6 +72,7 @@
         <a-row>
           <a-col :span="8">
             <a-button
+              id="user"
               type="dashed"
               icon="user"
               @click="getAccountByID(record.id)"
@@ -79,18 +80,26 @@
           </a-col>
           <a-col :span="8">
             <a-button
+              id="edit"
               type="dashed"
               icon="edit"
-              @click="showModalEdit(record.username, record.roles, record.id)"
+              @click="
+                showModalEdit(
+                  record.username,
+                  record.roles,
+                  record.id,
+                  record.status
+                )
+              "
             />
           </a-col>
           <a-col :span="8">
             <a-popconfirm
               v-if="dataSourceTable.length"
               title="Bạn có chắc chắn muốn xóa không?"
-              @confirm="() => onDelete(record.id)"
+              @confirm="deleteAccount(record.id)"
             >
-              <a-button type="dashed" icon="delete" />
+              <a-button id="delete" type="dashed" icon="delete" />
             </a-popconfirm>
           </a-col>
         </a-row>
@@ -98,20 +107,48 @@
     </a-table>
 
     <!-- popup profile-->
-    <a-modal v-model="visibleProfile" title="Thông tin tài khoản" class="profile">
-      <img src="../assets/logoProject.png">
-      <h3>{{ dataAccByID.fullname }}</h3>
-      <h3>{{ dataAccByID.dob }}</h3>
-      <h3>{{ dataAccByID.phone }}</h3>
-      <h3>{{ dataAccByID.gender ? "Nam" : "Nữ" }}</h3>
-      <h3 v-for="(rol, index) in dataAccByID.roles" :value="rol.id" :key="index">
-        {{ rol.name }}
-      </h3>
+    <a-modal
+      v-model="visibleProfile"
+      title="Thông tin tài khoản"
+      class="profile"
+    >
+      <template slot="footer">
+        <a-button key="a" hidden></a-button>
+        <a-button key="b" hidden></a-button>
+      </template>
+      <div class="av">
+        <img src="../assets/logoProject.png" />
+        <h2>
+          <b>{{ dataAccByID.fullname }}</b>
+        </h2>
+      </div>
+      <h4>
+        <a-icon type="calendar" style="font-size: 18px" /> Sinh ngày: 
+        <span class="a">{{ dataAccByID.dob }}</span>
+      </h4>
+      <h4>
+        <a-icon type="phone" style="font-size: 18px" /> Số điện thoại: 
+        <span class="a">{{ dataAccByID.phone }}</span>
+      </h4>
+      <h4>
+        <span style="font-size: 14px">⚥</span> Giới tính: 
+        {{ dataAccByID.gender ? "Nam" : "Nữ" }}
+      </h4>
+      <h4><a-icon type="solution" style="font-size: 18px" /><span class="a"> Chức vụ: </span></h4>
+      <h4
+        v-for="(rol, index) in dataAccByID.roles"
+        :value="rol.id"
+        :key="index"
+      >
+        <ul>
+          <li>{{ rol.name }}</li>
+        </ul>
+      </h4>
     </a-modal>
     <!-- popup profile-->
 
     <!-- popup add-->
-    <a-modal v-model="visibleAdd" title="Thêm tài khoản" @ok="handleAdd">
+    <a-modal v-model="visibleAdd" title="Thêm tài khoản">
       <a-form-model-item label="Tài khoản">
         <a-input disabled />
       </a-form-model-item>
@@ -140,7 +177,6 @@
           option-filter-prop="children"
           style="width: 472px"
           :filter-option="filterOption"
-          @change="handleChange"
         >
           <a-select-option
             v-for="item in dataEmployees"
@@ -164,7 +200,7 @@
       </template>
       <a-form-model>
         <a-form-model-item label="Tài khoản">
-          <a-input :value="dataEdit.username" disabled />
+          <a-input v-model="dataEdit.username" disabled />
         </a-form-model-item>
         <a-form-model-item label="Chức vụ">
           <a-select
@@ -180,6 +216,12 @@
               {{ rol.name }}
             </a-select-option>
           </a-select>
+        </a-form-model-item>
+        <a-form-model-item label="Trạng thái">
+          <a-radio-group name="radioGroup" v-model="dataEdit.status">
+            <a-radio :value="false"> Nháp </a-radio>
+            <a-radio :value="true"> Công khai </a-radio>
+          </a-radio-group>
         </a-form-model-item>
       </a-form-model>
     </a-modal>
@@ -218,6 +260,7 @@ export default {
         username: "",
         roleIDs: [],
         id: "",
+        status: 0,
       },
       dataSearch: {
         name: "",
@@ -334,9 +377,6 @@ export default {
           console.log(e);
         });
     },
-    handleChange(value) {
-      console.log(`selected ${value}`);
-    },
     filterOption(input, option) {
       return (
         option.componentOptions.children[0].text
@@ -349,22 +389,15 @@ export default {
       this.getAllEmployee();
       this.visibleAdd = true;
     },
-    handleAdd(e) {
-      console.log(e);
-      this.visibleAdd = false;
-    },
-    showModalEdit(username, roles, id) {
-      this.visibleEdit = true;
+    showModalEdit(username, roles, id, status) {
       this.dataEdit.id = id;
       this.dataEdit.username = username;
       this.dataEdit.roleIDs = [];
       for (var i = 0; i < roles.length; i++) {
         this.dataEdit.roleIDs.push(roles[i].id);
       }
-    },
-    onDelete(id) {
-      const dataSource = [...this.dataSourceTable];
-      this.dataSourceTable = dataSource.filter((item) => item.id !== id);
+      this.dataEdit.status = status;
+      this.visibleEdit = true;
     },
     handleCancelEdit() {
       this.visibleEdit = false;
@@ -372,28 +405,25 @@ export default {
     submitEdit() {
       this.dataUpdateAccount.idAccount = this.dataEdit.id;
       this.dataUpdateAccount.idRole = this.dataEdit.roleIDs;
-      this.dataUpdateAccount.status = true;
-      this.getDataUpdateAccount();
+      this.dataUpdateAccount.status = this.dataEdit.status;
       this.visibleEdit = false;
-      this.$notification["success"]({
-        message: 'Thông báo',
-        description: 'Sửa thành công',
-      });
+      this.getDataUpdateAccount();
     },
     getDataUpdateAccount() {
       accountService
         .updateAccount(this.dataUpdateAccount)
         .then((response) => {
           if (response.data.data) {
+            var task = "success";
+            var text = "Sửa";
+            this.notifi(task, text);
             this.getAllAccount();
-            
           }
         })
         .catch((e) => {
           console.log(e);
         });
     },
-    
     submitSearch() {
       this.dataSearch.name = this.name;
       this.dataSearch.pageIndex = 1;
@@ -411,12 +441,32 @@ export default {
         });
     },
     getAccountByID(id) {
-      accounService
+      accountService
         .getAccountByID(id)
         .then((response) => {
           this.dataAccByID = response.data.data;
-          console.log("Data account by id:", this.dataAccByID.fullname);
           this.visibleProfile = true;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    notifi(task, text) {
+      this.$notification[task]({
+        message: "Thông báo",
+        description: text + " thành công",
+      });
+    },
+    deleteAccount(id) {
+      accountService
+        .deleteAccount(id)
+        .then((response) => {
+          if (response.data.data) {
+            var task = "success";
+            var text = "Xóa";
+            this.notifi(task, text);
+            this.getAllAccount();
+          }
         })
         .catch((e) => {
           console.log(e);
@@ -428,11 +478,31 @@ export default {
 
 <style>
 img {
-  width: 150px;
-  height: 150px;
+  width: 127px;
+  height: 127px;
   border-radius: 78px;
 }
-.profile{
+.av {
   text-align: center;
+}
+#delete:hover {
+  background-color: #f56c6c;
+  color: white;
+}
+#edit:hover {
+  background-color: #64d9d6;
+  color: white;
+}
+#user:hover {
+  background-color: #13ce66;
+  color: white;
+}
+span.a {
+  display: inline;
+}
+.profile h4 {
+  width: 300px;
+  margin: 15px;
+  margin-left: auto;
 }
 </style>

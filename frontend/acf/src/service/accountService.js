@@ -7,9 +7,6 @@ class AccounService {
     searchAccount(name) {
         return http.post("/spadmin/account/searchaccount", name);
     }
-    addAccount(form) {
-        return http.post("/spadmin/account/add", form);
-    }
     updateAccount(data) {
         return http.put(`/spadmin/account/update`, data);
     }
@@ -20,7 +17,7 @@ class AccounService {
         return http.post(`/spadmin/account/generateUsername`, fullname);
     }
     deleteAccount(id) {
-        return http.delete(`/spadmin/account/delete`, id);
+        return http.delete(`/spadmin/account/delete?id=${id}`);
     }
     
 }
