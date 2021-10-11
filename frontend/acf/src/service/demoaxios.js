@@ -32,6 +32,20 @@ class demoaxios {
         //abc?id=1
         //query param
     }
+
+    upload(file) {
+        let formData = new FormData();
+        formData.append("file", file);
+        return http.post("files/upload", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            },
+        });
+    }
+
+    getFiles() {
+        return http.get("/files");
+    }
 }
 
 export default new demoaxios();
