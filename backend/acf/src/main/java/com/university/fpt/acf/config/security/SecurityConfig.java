@@ -54,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll();
         http.authorizeRequests().antMatchers("/signin").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.GET,"/spadmin/**").
+        http.authorizeRequests().antMatchers("/spadmin/**").
                 hasAnyAuthority("SP_ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.GET,"/files/**").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
