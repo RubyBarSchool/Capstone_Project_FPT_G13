@@ -14,12 +14,12 @@ class AccounService {
         return http.post(`/spadmin/account/getAcc?id=${id}`);
     }
     generateUsername(fullname) {
-        return http.post(`/spadmin/account/generateUsername`, fullname);
+        return http.post(`/spadmin/account/generateUsername?fullname=${fullname}`);
     }
     deleteAccount(id) {
         return http.delete(`/spadmin/account/delete?id=${id}`);
     }
-    
+
 }
 
 export default new AccounService();
