@@ -10,5 +10,5 @@ import java.util.List;
 
 public interface EmployeeService  {
     List<GetAllEmployeeVO> getAllEmployee(SearchEmployeeForm searchEmployeeForm);
-    List<String> getFullNameEmployeeNotAccount();
+    List<GetAllEmployeeVO> getFullNameEmployeeNotAccount();
 }

@@ -127,7 +127,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     @Override 
     public List<GetAllAccountResponseVO> searchAccount(SearchAccountForm searchAccountForm) {
         Pageable pageable= PageRequest.of(searchAccountForm.getPageIndex()-1,searchAccountForm.getPageSize(), Sort.by("id").ascending());
-        List<GetAllAccountVO> listAcc = accountManagerRepository.findByUsernameIsLike("%"+searchAccountForm.getName()+"%6",pageable);
+        List<GetAllAccountVO> listAcc = accountManagerRepository.findByUsernameIsLike("%"+searchAccountForm.getName()+"%",pageable);
         List<GetAllAccountResponseVO> result = new ArrayList<>();
         GetAllAccountResponseVO accountResponseVO = new GetAllAccountResponseVO();
         for(int i = 0 ; i< listAcc.size() ; i++){
