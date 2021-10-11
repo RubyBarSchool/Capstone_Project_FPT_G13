@@ -56,6 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/signin").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET,"/spadmin/**").
                 hasAnyAuthority("SP_ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.GET,"/files/**").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilterBefore(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
     }

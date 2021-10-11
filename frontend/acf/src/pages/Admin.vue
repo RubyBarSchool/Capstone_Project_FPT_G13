@@ -411,7 +411,7 @@ export default {
         });
     },
     getAccountByID(id) {
-      accounService
+      accountService
         .getAccountByID(id)
         .then((response) => {
           this.dataAccByID = response.data.data;
