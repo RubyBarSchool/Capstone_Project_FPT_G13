@@ -255,7 +255,7 @@ import roleService from "@/service/roleService.js";
 import employeeService from "@/service/employeeService.js";
 
 export default {
-  name: "Admin",
+  name: "AdminMinh",
   data() {
     return {
       name: "",
@@ -441,10 +441,6 @@ export default {
       this.dataAdd.password = this.dataAddInput.passwordInput;
       this.getDataAddAccount();
       this.visibleAdd = false;
-      this.$notification["success"]({
-        message: "Thông báo",
-        description: "Thêm tài khoản thành công",
-      });
     },
     handleCancelAdd() {
       this.visibleAdd = false;
@@ -454,6 +450,10 @@ export default {
         .addAccount(this.dataAdd)
         .then((response) => {
           if (response.data.data) {
+            // var task = "success";
+            // var text = "Sửa";
+            // this.notifi(task, text);
+            console.log(response.data.data);
             this.getAllAccount();
           }
         })

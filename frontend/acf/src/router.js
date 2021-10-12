@@ -33,6 +33,13 @@ export const router = new Router({
             component: () =>
                 import ('./pages/DemoAxios.vue')
         },
+        {
+            path: '/adminh',
+            name: 'adminh',
+            // lazy-loaded
+            component: () =>
+                import ('./pages/AdminMinh.vue')
+        },
     ]
 });
 

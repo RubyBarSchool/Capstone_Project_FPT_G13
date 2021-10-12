@@ -19,6 +19,9 @@ class AccounService {
     deleteAccount(id) {
         return http.delete(`/spadmin/account/delete?id=${id}`);
     }
+    addAccount(form){
+        return http.post(`/spadmin/account/add`, form);
+    }
 
 }
 
