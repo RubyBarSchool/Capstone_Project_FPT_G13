@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
-@Repository
 public interface AccountManagerRepository extends JpaRepository<Account,Long> {
     @Query("select new com.university.fpt.acf.vo.GetAccountDetailVO(a.id,a.username,r.id,r.name,e.image,e.fullName,e.dob,e.phone,e.gender) from Account a " +
             " inner join a.employee e " +
             "inner join a.roles r where a.id=:id and a.deleted = false ")
     List<GetAccountDetailVO> getAccountById(@Param("id") Long id);
+
     @Query("select new com.university.fpt.acf.vo.GetAllAccountVO(a.id,a.username,r.id,r.name,a.status,a.modified_date)  " +
             "from Account a left join a.roles r where a.username LIKE :username and a.deleted = false ")
     List<GetAllAccountVO> findByUsernameIsLike(@Param("username") String username, Pageable pageable);

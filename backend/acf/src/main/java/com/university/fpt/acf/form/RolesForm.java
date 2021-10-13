@@ -1,15 +1,14 @@
-package com.university.fpt.acf.vo;
+package com.university.fpt.acf.form;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetAllRoleVO {
-    private Long id;
+public class RolesForm {
     private String name;
+    private Integer pageIndex;
+    private Integer pageSize;
 }

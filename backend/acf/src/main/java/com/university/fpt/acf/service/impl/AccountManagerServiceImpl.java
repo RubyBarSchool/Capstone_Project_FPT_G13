@@ -5,6 +5,7 @@ import com.university.fpt.acf.config.security.entity.Account;
 import com.university.fpt.acf.config.security.entity.Role;
 import com.university.fpt.acf.entity.Employee;
 import com.university.fpt.acf.form.*;
+import com.university.fpt.acf.repository.AccountCustomRepository;
 import com.university.fpt.acf.repository.AccountManagerRepository;
 import com.university.fpt.acf.repository.EmployeeRepository;
 import com.university.fpt.acf.service.AccountManagerService;
@@ -26,6 +27,12 @@ import java.util.List;
 public class AccountManagerServiceImpl implements AccountManagerService {
     @Autowired
     private AccountManagerRepository accountManagerRepository;
+
+    @Autowired
+    private AccountCustomRepository accountCustomRepository;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -60,7 +67,6 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     public Boolean insertAccount(AddAccountForm addAccountForm) {
         try {
             //check exit Account
-            if(accountManagerRepository.findAccountByUsername(addAccountForm.getUsername()) == null){
                 Account ac = new Account();
                 ac.setPassword(passwordEncoder.encode(addAccountForm.getPassword()));
                 ac.setUsername(addAccountForm.getUsername());
@@ -68,18 +74,17 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                 ac.setModified_by(accountSercurity.getUserName());
                 ac.setCreated_by(accountSercurity.getUserName());
                 List<Role> listRole = new ArrayList<>();
-                for(Long i : addAccountForm.getIdRole()){
+                for(Long i : addAccountForm.getListRole()){
                     Role role = new Role();
                     role.setId(i);
                     listRole.add(role);
                 }
                 ac.setRoles(listRole);
                 Employee em = new Employee();
-                em.setId(addAccountForm.getId_employee());
+                em.setId(addAccountForm.getEmployee());
                 ac.setEmployee(em);
                 accountManagerRepository.save(ac);
                 return true;
-            }
         }catch (Exception ex){
             ex.getMessage();
         }
@@ -89,14 +94,14 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     @Override
     public Boolean updateAccount(UpdateAccountForm updateAccountForm) {
         try{
-            Account ac = accountManagerRepository.findAccountById(updateAccountForm.getIdAccount());
+            Account ac = accountManagerRepository.findAccountById(updateAccountForm.getId());
             if(ac!=null){
                 ac.setStatus(updateAccountForm.getStatus());
                 AccountSercurity accountSercurity = new AccountSercurity();
                 ac.setModified_by(accountSercurity.getUserName());
                 ac.setCreated_by(accountSercurity.getUserName());
                 List<Role> listRole = new ArrayList<>();
-                for(Long i : updateAccountForm.getIdRole()){
+                for(Long i : updateAccountForm.getListRole()){
                     Role role = new Role();
                     role.setId(i);
                     listRole.add(role);
@@ -126,8 +131,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
 
     @Override 
     public List<GetAllAccountResponseVO> searchAccount(SearchAccountForm searchAccountForm) {
-        Pageable pageable= PageRequest.of(searchAccountForm.getPageIndex()-1,searchAccountForm.getPageSize(), Sort.by("id").ascending());
-        List<GetAllAccountVO> listAcc = accountManagerRepository.findByUsernameIsLike("%"+searchAccountForm.getName()+"%",pageable);
+        List<GetAllAccountVO> listAcc = accountCustomRepository.getAllAccount(searchAccountForm);
         List<GetAllAccountResponseVO> result = new ArrayList<>();
         GetAllAccountResponseVO accountResponseVO = new GetAllAccountResponseVO();
         for(int i = 0 ; i< listAcc.size() ; i++){
@@ -180,14 +184,16 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     }
 
     @Override
-    public String GenerateUsername(String fullname) {
+    public String GenerateUsername(Long id) {
         try{
-            if(!fullname.isEmpty()){
-                AddAccountValidate addAccountValidate = new AddAccountValidate();
-                String usernameGen = addAccountValidate.generateFormatUsernameByFullname(fullname);
-                List<String> list = accountManagerRepository.getAllUsernameIsLike(usernameGen);
-                return usernameGen+ addAccountValidate.genNumberUsername(usernameGen,list);
-            }
+                String fullname = employeeRepository.getFullNameById(id);
+                if(fullname !=null && !fullname.isEmpty()){
+                    AddAccountValidate addAccountValidate = new AddAccountValidate();
+                    String usernameGen = addAccountValidate.generateFormatUsernameByFullname(fullname);
+                    List<String> list = accountManagerRepository.getAllUsernameIsLike(usernameGen);
+                    Integer number = addAccountValidate.genNumberUsername(usernameGen,list);
+                    return usernameGen + ((number==0)?"":number);
+                }
         }catch (Exception e){
             e.getMessage();
         }

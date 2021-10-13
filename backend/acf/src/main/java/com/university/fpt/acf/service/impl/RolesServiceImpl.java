@@ -1,12 +1,18 @@
 package com.university.fpt.acf.service.impl;
 
+import com.university.fpt.acf.config.security.AccountSercurity;
 import com.university.fpt.acf.config.security.entity.Role;
+import com.university.fpt.acf.entity.File;
+import com.university.fpt.acf.form.RolesForm;
+import com.university.fpt.acf.repository.RolesCustomRepository;
 import com.university.fpt.acf.repository.RolesRepository;
 import com.university.fpt.acf.service.RolesService;
 import com.university.fpt.acf.vo.GetAllRoleVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,19 +20,18 @@ import java.util.List;
 public class RolesServiceImpl implements RolesService {
     @Autowired
     private RolesRepository rolesRepository;
+    @Autowired
+    private RolesCustomRepository rolesCustomRepository;
+
 
     @Override
-    public List<GetAllRoleVO> getAllRole() {
-        List<Role> roles =  rolesRepository.findAll();
-        List<GetAllRoleVO> listRolesOutput = new ArrayList<>();
-        for(Role i : roles){
-            GetAllRoleVO roleVO = new GetAllRoleVO();
-            roleVO.setId(i.getId());
-            roleVO.setCode(i.getCode());
-            roleVO.setName(i.getName());
-            roleVO.setTime(i.getModified_date());
-            listRolesOutput.add(roleVO);
+    public List<GetAllRoleVO> getRoles(RolesForm rolesForm) {
+        List<GetAllRoleVO> getAllRoleVOS = new ArrayList<>();
+        try {
+            getAllRoleVOS = rolesCustomRepository.getRoles(rolesForm);
+        } catch (Exception e) {
+            throw new RuntimeException("Error role repository " + e.getMessage());
         }
-        return listRolesOutput;
+        return  getAllRoleVOS;
     }
 }

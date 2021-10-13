@@ -40,6 +40,13 @@ export const router = new Router({
             component: () =>
                 import ('./pages/AdminMinh.vue')
         },
+        {
+            path: '/adtruong',
+            name: 'AdminTruong',
+            // lazy-loaded
+            component: () =>
+                import ('./pages/AdminTruong.vue')
+        },
     ]
 });
 

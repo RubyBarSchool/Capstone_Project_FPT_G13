@@ -1,14 +1,18 @@
 package com.university.fpt.acf.form;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UpdateAccountForm {
-    private Long idAccount;
+    private Long id;
     private Boolean status;
-    private Collection<Long> idRole = new ArrayList<>();
+    private Collection<Long> listRole = new ArrayList<>();
 
 }

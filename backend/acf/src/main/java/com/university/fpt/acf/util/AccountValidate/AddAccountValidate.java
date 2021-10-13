@@ -61,11 +61,9 @@ public class AddAccountValidate {
     }
     //Ham checkNumberUsername
     public Integer genNumberUsername(String username,List<String> listUsername){
-        int number =0;
+        int number =-1;
         for(String us: listUsername){
-            if(convertEnglish(username).contains(convertEnglish(us))){
-                number++;
-            }
+            number++;
         }
         return number+1;
     }

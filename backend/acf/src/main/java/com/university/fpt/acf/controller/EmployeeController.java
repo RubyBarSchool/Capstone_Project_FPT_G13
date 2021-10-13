@@ -22,10 +22,10 @@ public class EmployeeController {
         responseCommon.setStatus(HttpStatus.OK.value());
         return new ResponseEntity<>(responseCommon,HttpStatus.OK);
     }
-    @GetMapping("/fullnameEmNotAccount")
-    public ResponseEntity<ResponseCommon> GetAllFullNameNotAccount(){
+    @PostMapping("/fullnameEmNotAccount")
+    public ResponseEntity<ResponseCommon> GetAllFullNameNotAccount(@RequestBody SearchEmployeeForm searchEmployeeForm){
         ResponseCommon responseCommon = new ResponseCommon();
-        responseCommon.setData(employeeService.getFullNameEmployeeNotAccount());
+        responseCommon.setData(employeeService.getFullNameEmployeeNotAccount(searchEmployeeForm));
         responseCommon.setStatus(HttpStatus.OK.value());
         return new ResponseEntity<>(responseCommon,HttpStatus.OK);
     }

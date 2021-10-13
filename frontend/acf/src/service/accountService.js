@@ -13,13 +13,13 @@ class AccounService {
     getAccountByID(id) {
         return http.post(`/spadmin/account/getAcc?id=${id}`);
     }
-    generateUsername(fullname) {
-        return http.post(`/spadmin/account/generateUsername?fullname=${fullname}`);
+    generateUsername(id) {
+        return http.get(`/spadmin/account/generateUsername?id=${id}`);
     }
     deleteAccount(id) {
         return http.delete(`/spadmin/account/delete?id=${id}`);
     }
-    addAccount(form){
+    addAccount(form) {
         return http.post(`/spadmin/account/add`, form);
     }
 

@@ -59,13 +59,12 @@ service.interceptors.response.use(
             setTimeout(() => {
                 router.push('login');
             }, 1000)
+        } else {
+            // localStorage.removeItem('user')
+            // setTimeout(() => {
+            //     router.push('login');
+            // }, 1000)
         }
-        //  else {
-        //     Notify.create({
-        //         message: this.$t('Network error') + '!',
-        //         position: 'bottom-right'
-        //     })
-        // }
         return Promise.reject(error)
 
     })

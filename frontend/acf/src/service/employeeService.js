@@ -5,7 +5,7 @@ class EmployeeService {
         return http.post(`/spadmin/employee`, form);
     }
     getAllEmployeeNotAccount(form) {
-        return http.get(`/spadmin/employee/fullnameEmNotAccount`, form);
+        return http.post(`/spadmin/employee/fullnameEmNotAccount`, form);
     }
 }
 

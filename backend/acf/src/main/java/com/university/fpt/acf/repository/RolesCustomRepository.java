@@ -1,11 +1,10 @@
-package com.university.fpt.acf.service;
+package com.university.fpt.acf.repository;
 
-import com.university.fpt.acf.config.security.entity.Role;
 import com.university.fpt.acf.form.RolesForm;
 import com.university.fpt.acf.vo.GetAllRoleVO;
 
 import java.util.List;
 
-public interface RolesService {
+public interface RolesCustomRepository {
     List<GetAllRoleVO> getRoles(RolesForm rolesForm);
 }
