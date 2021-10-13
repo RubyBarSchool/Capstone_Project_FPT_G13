@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
+@Repository
 public interface AccountManagerRepository extends JpaRepository<Account,Long> {
     @Query("select new com.university.fpt.acf.vo.GetAccountDetailVO(a.id,a.username,r.id,r.name,e.image,e.fullName,e.dob,e.phone,e.gender) from Account a " +
             " inner join a.employee e " +
