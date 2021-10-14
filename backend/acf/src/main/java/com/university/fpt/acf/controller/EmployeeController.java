@@ -15,13 +15,14 @@ import org.springframework.web.bind.annotation.*;
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
-    @PostMapping
-    public ResponseEntity<ResponseCommon> getAllEmployee(@RequestBody SearchEmployeeForm searchEmployeeForm){
-        ResponseCommon responseCommon = new ResponseCommon();
-        responseCommon.setData(employeeService.getAllEmployee(searchEmployeeForm));
-        responseCommon.setStatus(HttpStatus.OK.value());
-        return new ResponseEntity<>(responseCommon,HttpStatus.OK);
-    }
+    // chua fix
+//    @PostMapping
+//    public ResponseEntity<ResponseCommon> getAllEmployee(@RequestBody SearchEmployeeForm searchEmployeeForm){
+//        ResponseCommon responseCommon = new ResponseCommon();
+//        responseCommon.setData(employeeService.getAllEmployee(searchEmployeeForm));
+//        responseCommon.setStatus(HttpStatus.OK.value());
+//        return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+//    }
     @PostMapping("/fullnameEmNotAccount")
     public ResponseEntity<ResponseCommon> GetAllFullNameNotAccount(@RequestBody SearchEmployeeForm searchEmployeeForm){
         ResponseCommon responseCommon = new ResponseCommon();

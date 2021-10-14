@@ -39,17 +39,17 @@ public class AccountController {
             responseCommon.setData(getAllAccountResponseVOS);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
 
-    @PostMapping(path = "/allaccount")
-    public ResponseEntity<ResponseCommon> getAllAccount(@RequestBody GetAllAccountForm getAllAccountForm){
-        ResponseCommon responseCommon = new ResponseCommon();
-        responseCommon.setData(accountService.getAllAccounts(getAllAccountForm));
-        responseCommon.setStatus(HttpStatus.OK.value());
-        return new ResponseEntity<>(responseCommon,HttpStatus.OK);
-    }
+//    @PostMapping(path = "/allaccount")
+//    public ResponseEntity<ResponseCommon> getAllAccount(@RequestBody GetAllAccountForm getAllAccountForm){
+//        ResponseCommon responseCommon = new ResponseCommon();
+//        responseCommon.setData(accountService.getAllAccounts(getAllAccountForm));
+//        responseCommon.setStatus(HttpStatus.OK.value());
+//        return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+//    }
     @PostMapping("/getAcc")
     public ResponseEntity<ResponseCommon> GetAccountByID(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();

@@ -20,21 +20,21 @@ import java.util.List;
 public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
-    @Override
-    public List<GetAllEmployeeVO> getAllEmployee(SearchEmployeeForm searchEmployeeForm) {
-
-
-        Pageable pageable = PageRequest.of(searchEmployeeForm.getPageIndex()-1,searchEmployeeForm.getPageSize());
-        List<Employee> listEmployee =employeeRepository.findByFullNameIsLike("%"+searchEmployeeForm.getName()+"%",pageable);
-        List<GetAllEmployeeVO> getAllAccountVOS = new ArrayList<>();
-        for(Employee i : listEmployee){
-            GetAllEmployeeVO getAllEmployeeVO = new GetAllEmployeeVO();
-            getAllEmployeeVO.setId(i.getId());
-            getAllEmployeeVO.setName(i.getFullName());
-            getAllAccountVOS.add(getAllEmployeeVO);
-        }
-        return  getAllAccountVOS;
-    }
+//    @Override
+//    public List<GetAllEmployeeVO> getAllEmployee(SearchEmployeeForm searchEmployeeForm) {
+//
+//
+//        Pageable pageable = PageRequest.of(searchEmployeeForm.getPageIndex()-1,searchEmployeeForm.getPageSize());
+//        List<Employee> listEmployee =employeeRepository.findByFullNameIsLike("%"+searchEmployeeForm.getName()+"%",pageable);
+//        List<GetAllEmployeeVO> getAllAccountVOS = new ArrayList<>();
+//        for(Employee i : listEmployee){
+//            GetAllEmployeeVO getAllEmployeeVO = new GetAllEmployeeVO();
+//            getAllEmployeeVO.setId(i.getId());
+//            getAllEmployeeVO.setName(i.getFullName());
+//            getAllAccountVOS.add(getAllEmployeeVO);
+//        }
+//        return  getAllAccountVOS;
+//    }
 
     @Override
     public List<GetAllEmployeeVO> getFullNameEmployeeNotAccount(SearchEmployeeForm searchEmployeeForm) {
