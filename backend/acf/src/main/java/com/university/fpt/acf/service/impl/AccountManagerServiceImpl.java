@@ -18,6 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,13 +93,17 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     }
 
     @Override
-    public Boolean updateAccount(UpdateAccountForm updateAccountForm) {
+    public Boolean updateAccount(UpdateAccountForm updateAccountForm)  {
         try{
+            AccountSercurity accountSercurity = new AccountSercurity();
             Account ac = accountManagerRepository.findAccountById(updateAccountForm.getId());
+            if(ac.getUsername().equals(accountSercurity.getUserName())){
+                throw new Exception("Account is available");
+            }
             if(ac!=null){
                 ac.setStatus(updateAccountForm.getStatus());
-                AccountSercurity accountSercurity = new AccountSercurity();
                 ac.setModified_by(accountSercurity.getUserName());
+                ac.setModified_date(LocalDate.now());
                 ac.setCreated_by(accountSercurity.getUserName());
                 List<Role> listRole = new ArrayList<>();
                 for(Long i : updateAccountForm.getListRole()){
@@ -119,7 +124,13 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     @Override
     public Boolean deleteAccount(Long idAccount) {
         try{
+            AccountSercurity accountSercurity = new AccountSercurity();
             Account account = accountManagerRepository.findAccountById(idAccount);
+            if(account.getUsername().equals(accountSercurity.getUserName())){
+                throw new Exception("Account is available");
+            }
+            account.setModified_by(accountSercurity.getUserName());
+            account.setModified_date(LocalDate.now());
             account.setDeleted(true);
             accountManagerRepository.save(account);
             return true;
