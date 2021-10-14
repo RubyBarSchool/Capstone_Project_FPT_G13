@@ -9,7 +9,7 @@
           @submit="handleSubmit"
         >
           <a-form-item>
-            <img src="../assets/logoProject.png" />
+            <img src="../assets/logo_login.jpg" />
           </a-form-item>
           <a-form-item class="input-form">
             <a-input

@@ -123,7 +123,7 @@
         <a-button key="b" hidden></a-button>
       </template>
       <div class="av">
-        <img src="../assets/logoProject.png" />
+        <!-- <img src="../assets/logoProject.png" /> -->
         <h2>
           <b>{{ dataAccByID.fullname }}</b>
         </h2>

@@ -24,10 +24,10 @@ export default {
 .logo {
   height: 100px;
   width: 197px;
-  background-image: url('../assets/logoProject.png');
+  background-image: url('../assets/logo_menu.png');
 }
 .ant-layout-sider-children {
-    background-color: black;
+    background-color: #000000;
     height: 722px;
 }
 </style>
