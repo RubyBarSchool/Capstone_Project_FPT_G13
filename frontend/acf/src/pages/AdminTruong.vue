@@ -459,7 +459,7 @@ export default {
             var task = "success";
             var text = "Sửa";
             this.notifi(task, text);
-            this.getAllAccount();
+             this.submitSearch();
           }
         })
         .catch((e) => {
