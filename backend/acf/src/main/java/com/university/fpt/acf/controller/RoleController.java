@@ -19,7 +19,7 @@ public class RoleController {
     @Autowired
     private RolesService rolesService;
     @PostMapping
-    public ResponseEntity<ResponseCommon> getAllRoles(@RequestBody RolesForm rolesForm){
+    public ResponseEntity<ResponseCommon> searchRoles(@RequestBody RolesForm rolesForm){
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
         List<GetAllRoleVO> getAllRoleVOList = new ArrayList<>();

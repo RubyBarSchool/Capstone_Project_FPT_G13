@@ -1,8 +1,6 @@
 package com.university.fpt.acf.repository;
 
 import com.university.fpt.acf.config.security.entity.Account;
-import com.university.fpt.acf.entity.Employee;
-import com.university.fpt.acf.form.Demo;
 import com.university.fpt.acf.vo.GetAccountDetailVO;
 import com.university.fpt.acf.vo.GetAllAccountVO;
 import org.springframework.data.domain.Pageable;
