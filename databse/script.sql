@@ -1,24 +1,10 @@
-/*
-SQLyog Community v13.1.7 (64 bit)
-MySQL - 8.0.23 : Database - acfcapstoneproject
-*********************************************************************
-*/
 
-/*!40101 SET NAMES utf8 */;
 
-/*!40101 SET SQL_MODE=''*/;
-
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-CREATE DATABASE /*!32312 IF NOT EXISTS*/`acfcapstoneproject` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+CREATE DATABASE `acfcapstoneproject` ;
 
 USE `acfcapstoneproject`;
 
 /*Table structure for table `position` */
-
-DROP TABLE IF EXISTS `position`;
 
 CREATE TABLE `position` (
   `id` BIGINT NOT NULL,
@@ -35,7 +21,7 @@ CREATE TABLE `position` (
 /*Data for the table `position` */
 /*Table structure for table `employee` */
 
-DROP TABLE IF EXISTS `employee`;
+
 
 CREATE TABLE `employee` (
   `id` BIGINT NOT NULL,
@@ -78,8 +64,6 @@ INSERT  INTO `employee`(`id`,`created_by`,`created_date`,`modified_by`,`modified
 
 /*Table structure for table `account` */
 
-DROP TABLE IF EXISTS `account`;
-
 CREATE TABLE `account` (
   `id` BIGINT NOT NULL,
   `created_by` VARCHAR(255) DEFAULT NULL,
@@ -100,24 +84,13 @@ CREATE TABLE `account` (
 
 INSERT  INTO `account`(`id`,`created_by`,`created_date`,`modified_by`,`modified_date`,`password`,`username`,`employee_id`,`deleted`,`status`) VALUES 
 (1,'truongtv','2021-10-02','truongtv','2021-10-02','$2a$10$3KCn7pg6MWSMrWoN30qj1uENjGhHDLYQK1tmjDs1mEg2cV3VtTa.e','truongtv',6,'\0',''),
-(4,'truongtv','2021-10-02','truongtv','2021-10-02','$2a$10$3KCn7pg6MWSMrWoN30qj1uENjGhHDLYQK1tmjDs1mEg2cV3VtTa.e','ngoclt',7,'',''),
+(4,'truongtv','2021-10-02','truongtv','2021-10-02','$2a$10$3KCn7pg6MWSMrWoN30qj1uENjGhHDLYQK1tmjDs1mEg2cV3VtTa.e','ngoclt',7,'\0',''),
 (11,'truongtv','2021-10-08','truongtv','2021-10-08','$2a$10$nQ2ETrwIAjgtSuwNHjFdTuY8PCQpm5L6cIJ198qVAs25oTtOl9rs2','anhlh',8,'\0',''),
-(12,'truongtv','2021-10-06','truongtv','2021-10-06','$2a$10$3KCn7pg6MWSMrWoN30qj1uENjGhHDLYQK1tmjDs1mEg2cV3VtTa.e','minhtb',9,'',''),
-(13,'truongtv','2021-10-08','truongtv','2021-10-08','$2a$10$nQ2ETrwIAjgtSuwNHjFdTuY8PCQpm5L6cIJ198qVAs25oTtOl9rs2','phongnhl',10,'',''),
-(15,'truongtv','2021-10-09','truongtv','2021-10-09','$2a$10$DoDtU9rRIUwONUJ4LaPVg.LDvikZVlrt9ZLuVyJUzfg/DY5Wp1qvC','Lê Thị Ngọc',7,'','\0'),
-(16,'truongtv','2021-10-09','truongtv','2021-10-09','$2a$10$IbwEaArjSC6Z42oA0Ye9we9Two4BiQ2kUv2EnttNdSAZf3yhxUQEC','Trần Vũ Trường',6,'','\0'),
-(40,'truongtv','2021-10-13','truongtv','2021-10-13','$2a$10$6TQxiuHs6pEYIfbEIZIAKOq5QRDWRJYcPFYe3YPd8kIIVSIbFhVr.','truongtv1',17,'',''),
-(41,'truongtv','2021-10-13','truongtv','2021-10-13','$2a$10$7hxc2fH1hEzUo255aimqB.d8VaSbaxPTQzs/1pILpoHNrhknOXLMm','manhtb',19,'',''),
-(42,'truongtv','2021-10-14','truongtv','2021-10-14','$2a$10$0PnaJRaZGCM9c3z0aLp1wu5SQE8Gf5n/yO6e8X.ogBx.bHiHGDHxm','anhlh1',20,'','\0'),
-(43,'truongtv','2021-10-14','truongtv','2021-10-14','$2a$10$TEcrSK1YKDNCS96.gc70jeuavlHzPxjDZVm/5b/K.PqX3xRfbg1Ai','alh',22,'',''),
-(44,'truongtv','2021-10-14','truongtv','2021-10-14','$2a$10$b4eq.zTXQYFF/YuQrCeXaO4ENmmG07KgAwncyYJtVV7WOPhrBXSNG','trungtv',18,'','\0'),
-(45,'truongtv','2021-10-14','truongtv','2021-10-14','$2a$10$Ktjl3/6pzMxPVQSRtPHw4eoAqcVCYJuGorfQ/3Xx2OE7tjrYCVBba','trongtv',21,'','');
+(12,'truongtv','2021-10-06','truongtv','2021-10-06','$2a$10$3KCn7pg6MWSMrWoN30qj1uENjGhHDLYQK1tmjDs1mEg2cV3VtTa.e','minhtb',9,'\0',''),
+(13,'truongtv','2021-10-08','truongtv','2021-10-08','$2a$10$nQ2ETrwIAjgtSuwNHjFdTuY8PCQpm5L6cIJ198qVAs25oTtOl9rs2','phongnhl',10,'\0','');
 
 
 /*Table structure for table `role` */
-
-DROP TABLE IF EXISTS `role`;
-
 CREATE TABLE `role` (
   `id` BIGINT NOT NULL,
   `created_by` VARCHAR(255) DEFAULT NULL,
@@ -139,7 +112,7 @@ INSERT  INTO `role`(`id`,`created_by`,`created_date`,`modified_by`,`modified_dat
 
 /*Table structure for table `account_roles` */
 
-DROP TABLE IF EXISTS `account_roles`;
+
 
 CREATE TABLE `account_roles` (
   `account_id` BIGINT NOT NULL,
@@ -154,27 +127,14 @@ CREATE TABLE `account_roles` (
 
 INSERT  INTO `account_roles`(`account_id`,`roles_id`) VALUES 
 (13,2),
-(15,3),
-(16,3),
 (11,5),
 (4,5),
 (4,3),
 (1,3),
 (1,2),
-(1,5),
-(41,3),
-(41,2),
-(40,5),
-(40,2),
-(42,5),
-(43,2),
-(43,5),
-(44,3),
-(45,5);
+(1,5);
 
 /*Table structure for table `advace_salary` */
-
-DROP TABLE IF EXISTS `advace_salary`;
 
 CREATE TABLE `advace_salary` (
   `id` BIGINT NOT NULL,
@@ -196,9 +156,6 @@ CREATE TABLE `advace_salary` (
 
 
 /*Table structure for table `file` */
-
-DROP TABLE IF EXISTS `file`;
-
 CREATE TABLE `file` (
   `id` VARCHAR(255) NOT NULL,
   `created_by` VARCHAR(255) DEFAULT NULL,
@@ -224,8 +181,6 @@ INSERT  INTO `file`(`id`,`created_by`,`created_date`,`deleted`,`modified_by`,`mo
 
 /*Table structure for table `hibernate_sequence` */
 
-DROP TABLE IF EXISTS `hibernate_sequence`;
-
 CREATE TABLE `hibernate_sequence` (
   `next_val` BIGINT DEFAULT NULL
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -236,8 +191,6 @@ INSERT  INTO `hibernate_sequence`(`next_val`) VALUES
 (46);
 
 /*Table structure for table `history_salary` */
-
-DROP TABLE IF EXISTS `history_salary`;
 
 CREATE TABLE `history_salary` (
   `id` BIGINT NOT NULL,
@@ -258,8 +211,6 @@ CREATE TABLE `history_salary` (
 /*Data for the table `history_salary` */
 
 /*Table structure for table `persona_leave_application` */
-
-DROP TABLE IF EXISTS `persona_leave_application`;
 
 CREATE TABLE `persona_leave_application` (
   `id` BIGINT NOT NULL,
@@ -285,8 +236,6 @@ CREATE TABLE `persona_leave_application` (
 
 
 /*Table structure for table `time_keep` */
-
-DROP TABLE IF EXISTS `time_keep`;
 
 CREATE TABLE `time_keep` (
   `id` BIGINT NOT NULL,
