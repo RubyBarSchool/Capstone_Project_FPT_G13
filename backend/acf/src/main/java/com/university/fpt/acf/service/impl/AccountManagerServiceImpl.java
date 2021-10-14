@@ -144,9 +144,13 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                 accountResponseVO.setStatus(listAcc.get(i).getStatus());
                 accountResponseVO.setTime(listAcc.get(i).getTime());
                 accountResponseVO.setUsername(listAcc.get(i).getUsername());
-                accountResponseVO.getRoles().add(new RoleAccountVO(listAcc.get(i).getIdRole(),listAcc.get(i).getNameRole()));
+                if(listAcc.get(i).getIdRole()!=null){
+                    accountResponseVO.getRoles().add(new RoleAccountVO(listAcc.get(i).getIdRole(),listAcc.get(i).getNameRole()));
+                }
             }else{
-                accountResponseVO.getRoles().add(new RoleAccountVO(listAcc.get(i).getIdRole(),listAcc.get(i).getNameRole()));
+                if(listAcc.get(i).getIdRole()!=null){
+                    accountResponseVO.getRoles().add(new RoleAccountVO(listAcc.get(i).getIdRole(),listAcc.get(i).getNameRole()));
+                }
             }
         }
         if(!accountResponseVO.getRoles().isEmpty()){

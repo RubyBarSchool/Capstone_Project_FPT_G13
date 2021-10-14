@@ -445,6 +445,7 @@ export default {
       }
       this.dataEdit.status = status;
       this.visibleEdit = true;
+      console.log("dataedit",this.dataEdit);
       this.dataRole.name = "";
       this.getAllRole();
       this.dataEmployee.name = "";
