@@ -489,6 +489,21 @@ export default {
           console.log(e);
         });
     },
+    deleteAccount(id) {
+      accountService
+        .deleteAccount(id)
+        .then((response) => {
+          if (response.data.data) {
+            var task = "success";
+            var text = "Xóa";
+            this.notifi(task, text);
+            this.submitSearch();
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     notifi(task, text) {
       this.$notification[task]({
         message: "Thông báo",
