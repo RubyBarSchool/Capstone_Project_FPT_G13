@@ -3,9 +3,8 @@ import App from './App.vue'
 // import * as VeeValidate from 'vee-validate';
 import Vuex from 'vuex';
 import { router } from './router';
-// import 'bootstrap';
-// import 'bootstrap/dist/css/bootstrap.min.css';
-
+import 'bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import store from './store';
 import Antd from 'ant-design-vue';
 import 'ant-design-vue/dist/antd.css';

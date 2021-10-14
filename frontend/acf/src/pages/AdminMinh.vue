@@ -560,7 +560,6 @@ img {
   height: 127px;
   border-radius: 78px;
 }
-
 .av {
   text-align: center;
 }
