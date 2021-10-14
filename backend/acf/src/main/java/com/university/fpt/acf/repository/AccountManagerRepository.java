@@ -30,8 +30,8 @@ public interface AccountManagerRepository extends JpaRepository<Account,Long> {
     @Query("select a.username from Account a where a.username like :username and a.deleted = false")
     List<String> getAllUsernameIsLike(@Param("username") String username);
 // -----------------------------------------------------------------------------
-    @Query("select new com.university.fpt.acf.vo.GetAllAccountVO(a.id,a.username,r.id,r.name,a.status,a.modified_date)  " +
-        "from Account a left join a.roles r where a.username LIKE ?1 and a.deleted = false "
-    )
-    List<GetAllAccountVO> searchAccountDemo(@RequestBody Demo demo, Pageable pageable);
+//    @Query("select new com.university.fpt.acf.vo.GetAllAccountVO(a.id,a.username,r.id,r.name,a.status,a.modified_date)  " +
+//        "from Account a left join a.roles r where a.username LIKE ?1 and a.deleted = false "
+//    )
+//    List<GetAllAccountVO> searchAccountDemo(@RequestBody Demo demo, Pageable pageable);
 }
