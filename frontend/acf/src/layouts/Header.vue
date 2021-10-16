@@ -3,14 +3,39 @@
     <a-layout-header>
       <a-row type="flex">
         <a-col flex="auto"></a-col>
-        <a-col flex="150px">
-          <span style="margin-right: 24px">
+        <a-col flex="250px">
+          <span style="margin-right: 80px">
             <a-badge :count="5"
               ><a-icon :style="{ fontSize: '30px' }" type="bell" />
-            </a-badge> 
-            <a-avatar :size="60" :style="{ margin: '5px' }" src="https://img.icons8.com/bubbles/100/000000/user.png" />
-            <!-- <p>{{loadUser}}</p>        -->
-          </span>          
+            </a-badge>
+            <a-dropdown>
+              <a class="ant-dropdown-link">
+                  <a-avatar
+                    :size="55"
+                    style="margin: 5px"
+                    src="https://img.icons8.com/bubbles/100/000000/user.png"
+                  />
+                  {{ loadUser }}
+              </a>
+              <a-menu slot="overlay">
+                <a-menu-item key="1">
+                  <a-icon type="user" />1st menu item
+                </a-menu-item>
+                <a-menu-item key="2">
+                  <a-icon type="user" />2nd menu item
+                </a-menu-item>
+                <a-menu-item key="3">
+                  <a-icon type="user" />3rd item
+                </a-menu-item>
+                <a-menu-item key="4">
+                  <a-icon type="user" />4rd item
+                </a-menu-item>
+                <a-menu-item key="5">
+                  <a-icon type="user" />Logout
+                </a-menu-item>
+              </a-menu>
+            </a-dropdown>
+          </span>
         </a-col>
       </a-row>
     </a-layout-header>
@@ -22,13 +47,14 @@ export default {
   name: "Header",
   data() {
     return {
-      user:""
-    }},
-    computed: {
-      loadUser(){
-        return JSON.parse(localStorage.getItem('user')).username;
-      },
+      user: "",
+    };
+  },
+  computed: {
+    loadUser() {
+      return JSON.parse(localStorage.getItem("user")).username;
     },
+  },
 };
 </script>
 <style scoped>

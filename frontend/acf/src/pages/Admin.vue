@@ -294,13 +294,10 @@
 import accountService from "@/service/accountService.js";
 import roleService from "@/service/roleService.js";
 import employeeService from "@/service/employeeService.js";
-import Menu from "@/layouts/Menu.vue";
+
 
 export default {
   name: "Admin",
-  components: {
-    Menu,
-  },
   data() {
     return {
       name: "",
