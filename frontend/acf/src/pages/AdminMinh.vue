@@ -552,8 +552,8 @@ export default {
         message: "Thông báo",
         description: text + " thành công",
       });
-    },
-  },
+    }
+  }
 };
 </script>
 
@@ -635,4 +635,9 @@ h6 {
   margin-top: 20px;
 }
 /* profile */
+/* table */
+.ant-table-thead tr th, .ant-table-tbody tr td{
+padding: 5px 2px;
+}
+/* table */
 </style>
