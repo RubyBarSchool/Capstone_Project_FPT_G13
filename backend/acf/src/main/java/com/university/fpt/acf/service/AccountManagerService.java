@@ -12,6 +12,7 @@ public interface AccountManagerService {
     Boolean updateAccount(UpdateAccountForm updateAccountForm);
     Boolean deleteAccount(Long idAccount);
     List<GetAllAccountResponseVO> searchAccount(SearchAccountForm searchAccountForm);
+    int getTotalSearchAccount(SearchAccountForm searchAccountForm);
     GetAccountDetailResponeVO getAccountById(Long id);
     String GenerateUsername(Long id);
 }

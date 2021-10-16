@@ -13,4 +13,5 @@ public class SearchAccountForm {
     private List<LocalDate> date;
     private Integer pageIndex;
     private Integer pageSize;
+    private Integer total;
 }

@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface AccountCustomRepository {
     List<GetAllAccountVO> getAllAccount(SearchAccountForm searchAccountForm);
+    int getTotalAllAccount(SearchAccountForm searchAccountForm);
 }

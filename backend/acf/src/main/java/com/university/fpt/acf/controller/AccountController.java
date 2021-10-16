@@ -24,9 +24,12 @@ public class AccountController {
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
         List<GetAllAccountResponseVO> getAllAccountResponseVOS = new ArrayList<>();
+        Integer total = 0;
         try {
             getAllAccountResponseVOS = accountService.searchAccount(searchAccountForm);
+            total = accountService.getTotalSearchAccount(searchAccountForm);
             responseCommon.setData(getAllAccountResponseVOS);
+            responseCommon.setTotal(total);
             message = "Get accounts successfully";
             if(getAllAccountResponseVOS.isEmpty()){
                 message = "Get accounts not found";

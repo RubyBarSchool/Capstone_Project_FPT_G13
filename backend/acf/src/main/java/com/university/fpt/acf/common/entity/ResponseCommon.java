@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 @NoArgsConstructor
 public class ResponseCommon {
     private Object data;
+    private Integer total;
     private String message;
     private Integer status;
 }

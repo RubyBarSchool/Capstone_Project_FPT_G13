@@ -58,4 +58,31 @@ public class AccountCustomRepositoryImpl extends CommonRepository implements Acc
         }
         return resultList;
     }
+
+    @Override
+    public int getTotalAllAccount(SearchAccountForm searchAccountForm) {
+        StringBuilder sqlAcc = new StringBuilder("");
+        Map<String, Object> paramsAcc = new HashMap<>();
+        sqlAcc.append(" select COUNT(*) from Account a left join a.roles r where a.deleted = false ");
+        if(searchAccountForm.getName() != null && !searchAccountForm.getName().isEmpty()){
+            sqlAcc.append(" and LOWER(a.username) like :name ");
+            paramsAcc.put("name","%"+searchAccountForm.getName().toLowerCase()+"%");
+        }
+        if(searchAccountForm.getListStatus() != null && !searchAccountForm.getListStatus().isEmpty()){
+            sqlAcc.append(" and a.status in :status ");
+            paramsAcc.put("status",searchAccountForm.getListStatus());
+        }
+        if(searchAccountForm.getDate() != null && !searchAccountForm.getDate().isEmpty()){
+            sqlAcc.append(" and  a.modified_date BETWEEN :dateStart and :dateEnd");
+            paramsAcc.put("dateStart",searchAccountForm.getDate().get(0));
+            paramsAcc.put("dateEnd",searchAccountForm.getDate().get(1));
+        }
+        if(searchAccountForm.getListRole() != null && !searchAccountForm.getListRole().isEmpty()){
+            sqlAcc.append(" and r.id in :roles ");
+            paramsAcc.put("roles",searchAccountForm.getListRole());
+        }
+        sqlAcc.append(" GROUP BY a.id ");
+        TypedQuery<Long> queryAcc = super.createQuery(sqlAcc.toString(),paramsAcc, Long.class);
+        return queryAcc.getResultList().size();
+    }
 }

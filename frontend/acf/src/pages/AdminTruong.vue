@@ -59,11 +59,14 @@
           <a-table
             :columns="columns"
             :data-source="dataSourceTable"
+             :pagination="pagination"
+
             :rowKey="
               (record, index) => {
                 return index;
               }
             "
+          @change="handleTableChange"
           >
             <template slot="username" slot-scope="text, record">
               {{ record.username }}
@@ -118,6 +121,8 @@
               </a-row>
             </template>
           </a-table>
+
+
 
           <!-- popup profile-->
           <a-modal v-model="visibleProfile" class="profile">
@@ -312,6 +317,11 @@ export default {
   },
   data() {
     return {
+      pagination: {
+        current: 1,
+        pageSize: 10,
+        total : 0,
+      },
       dataSearch: {
         name: "",
         listRole: [],
@@ -319,6 +329,7 @@ export default {
         date: [],
         pageIndex: 1,
         pageSize: 10,
+        total: 0,
       },
       dataSourceTable: [],
       dataRoles: [],
@@ -411,6 +422,21 @@ export default {
     this.getAllRole();
   },
   methods: {
+    handleTableChange(pagination) {
+      this.dataSearch.pageIndex = pagination.current
+      this.pagination = pagination
+      adminTruongService
+        .searchAccount(this.dataSearch)
+        .then((response) => {
+          this.dataSourceTable = response.data.data;
+          this.dataSearch.total = response.data.total;
+          this.pagination.total = response.data.total;
+          console.log("datasearch",this.dataSearch)
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     generateUsername() {
       accountService
         .generateUsername(this.dataAdd.employee)
@@ -512,10 +538,13 @@ export default {
       this.visibleEdit = false;
     },
     submitSearch() {
+      this.dataSearch.total = 0;
       adminTruongService
         .searchAccount(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
+          this.dataSearch.total = response.data.total;
+          this.pagination.total = response.data.total;
         })
         .catch((e) => {
           console.log(e);

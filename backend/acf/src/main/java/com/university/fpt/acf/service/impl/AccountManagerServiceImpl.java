@@ -171,6 +171,14 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     }
 
     @Override
+    public int getTotalSearchAccount(SearchAccountForm searchAccountForm) {
+        if(searchAccountForm.getTotal() != null && searchAccountForm.getTotal().intValue() != 0){
+            return searchAccountForm.getTotal();
+        }
+        return  accountCustomRepository.getTotalAllAccount(searchAccountForm);
+    }
+
+    @Override
     public GetAccountDetailResponeVO getAccountById(Long id) {
         try{
             List<GetAccountDetailVO> ac = accountManagerRepository.getAccountById(id);
