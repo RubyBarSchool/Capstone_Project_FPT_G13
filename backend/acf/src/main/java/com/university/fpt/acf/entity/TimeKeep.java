@@ -14,7 +14,8 @@ import java.time.LocalDate;
 public class TimeKeep  extends EntityCommon {
 
     private LocalDate date;
-    private Boolean accept;
+    private String type;
+    private String note;
 
     @ManyToOne
     @EqualsAndHashCode.Exclude

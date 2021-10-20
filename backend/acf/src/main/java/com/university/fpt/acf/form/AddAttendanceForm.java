@@ -4,11 +4,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class SearchEmployeeForm {
-    private String name;
-    private Integer pageIndex;
-    private Integer pageSize;
+public class AddAttendanceForm {
+    private LocalDate date;
+    private String type;
+    private List<Long> id;
 }

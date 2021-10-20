@@ -1,8 +1,10 @@
 package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.entity.Employee;
+import com.university.fpt.acf.form.EmployeeNotAttendanceForm;
 import com.university.fpt.acf.form.SearchAccountForm;
 import com.university.fpt.acf.form.SearchEmployeeForm;
+import com.university.fpt.acf.repository.EmployeeCustomRepository;
 import com.university.fpt.acf.repository.EmployeeRepository;
 import com.university.fpt.acf.service.EmployeeService;
 import com.university.fpt.acf.vo.GetAllEmployeeVO;
@@ -20,6 +22,9 @@ import java.util.List;
 public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Autowired
+    private EmployeeCustomRepository employeeCustomRepository;
 //    @Override
 //    public List<GetAllEmployeeVO> getAllEmployee(SearchEmployeeForm searchEmployeeForm) {
 //
@@ -41,5 +46,27 @@ public class EmployeeServiceImpl implements EmployeeService {
         Pageable pageable = PageRequest.of(searchEmployeeForm.getPageIndex()-1,searchEmployeeForm.getPageSize());
         List<GetAllEmployeeVO > list = employeeRepository.getTop10EmployeeNotAccount("%"+searchEmployeeForm.getName().toLowerCase()+"%",pageable);
         return list ;
+    }
+
+    @Override
+    public List<GetAllEmployeeVO> getAllEmployeeNotAttendance(EmployeeNotAttendanceForm employeeNotAttendanceForm) {
+        List<GetAllEmployeeVO> employeeVOS = new ArrayList<>();
+        try{
+            employeeVOS.addAll(employeeCustomRepository.getAllEmployeeNotAttendance(employeeNotAttendanceForm));
+        }catch (Exception ex){
+            throw new RuntimeException("Could not initialize folder for upload!");
+        }
+        return employeeVOS;
+    }
+
+    @Override
+    public int getTotalEmployeeNotAttendance(EmployeeNotAttendanceForm employeeNotAttendanceForm) {
+        int size = 0;
+        try {
+            size = employeeCustomRepository.getTotalEmployeeNotAttendance(employeeNotAttendanceForm);
+        }catch (Exception e){
+            throw new RuntimeException("Could not initialize folder for upload!");
+        }
+        return size;
     }
 }

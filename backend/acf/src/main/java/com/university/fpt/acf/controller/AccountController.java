@@ -32,7 +32,7 @@ public class AccountController {
             responseCommon.setData(getAllAccountResponseVOS);
             responseCommon.setTotal(total);
             message = "Get accounts successfully";
-            if(getAllAccountResponseVOS.isEmpty()){
+            if(total.intValue()==0){
                 message = "Get accounts not found";
             }
             responseCommon.setStatus(HttpStatus.OK.value());

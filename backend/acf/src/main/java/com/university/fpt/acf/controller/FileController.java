@@ -43,6 +43,27 @@ public class FileController {
         }
     }
 
+
+    @PostMapping("/readexcel")
+    public ResponseEntity<ResponseCommon> readExcel(@RequestParam("file") MultipartFile file) {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        try {
+            fileStorageService.save(file);
+            message = "Uploaded the file successfully: " + file.getOriginalFilename();
+            responseCommon.setData(true);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+            responseCommon.setData(false);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+
 //    @GetMapping("/files")
 //    public ResponseEntity<List<FileInfo>> getListFiles() {
 //        List<FileInfo> fileInfos = fileStorageService.loadAll().map(path -> {

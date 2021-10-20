@@ -1,5 +1,6 @@
 package com.university.fpt.acf.service;
 
+import com.university.fpt.acf.form.EmployeeNotAttendanceForm;
 import com.university.fpt.acf.form.SearchAccountForm;
 import com.university.fpt.acf.form.SearchEmployeeForm;
 import com.university.fpt.acf.repository.EmployeeRepository;
@@ -11,4 +12,6 @@ import java.util.List;
 public interface EmployeeService  {
     //List<GetAllEmployeeVO> getAllEmployee(SearchEmployeeForm searchEmployeeForm);
     List<GetAllEmployeeVO> getFullNameEmployeeNotAccount(SearchEmployeeForm searchEmployeeForm);
+    List<GetAllEmployeeVO> getAllEmployeeNotAttendance(EmployeeNotAttendanceForm employeeNotAttendanceForm);
+    int getTotalEmployeeNotAttendance(EmployeeNotAttendanceForm employeeNotAttendanceForm);
 }
