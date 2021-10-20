@@ -91,7 +91,7 @@ export default {
             () => {
               let users = JSON.parse(localStorage.getItem("user"));
               if (users.roles.includes("SP_ADMIN")) {
-                this.$router.push("/adtruong");
+                this.$router.push("/admin");
               } else {
                 this.$router.push("/home");
               }

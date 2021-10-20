@@ -44,7 +44,12 @@
                 <a-select-option value="false"> Nháp </a-select-option>
                 <a-select-option value="true"> Công khai </a-select-option>
               </a-select>
-              <a-range-picker v-model="dataSearch.date" :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']" :show-time="{ format: 'DD/MM/YYYY' }" format="DD/MM/YYYY"/>
+              <a-range-picker
+                v-model="dataSearch.date"
+                :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+                :show-time="{ format: 'DD/MM/YYYY' }"
+                format="DD/MM/YYYY"
+              />
               <a-button type="primary" icon="search" @click="submitSearch">
                 Tìm kiếm
               </a-button>
@@ -59,11 +64,13 @@
           <a-table
             :columns="columns"
             :data-source="dataSourceTable"
+            :pagination="pagination"
             :rowKey="
               (record, index) => {
                 return index;
               }
             "
+            @change="handleTableChange"
           >
             <template slot="username" slot-scope="text, record">
               {{ record.username }}
@@ -79,7 +86,13 @@
               </a-tag>
             </template>
             <template slot="time" slot-scope="text, record">
-              {{ new Date(record.time).toLocaleDateString('en-GB', {year: 'numeric', month: '2-digit', day: '2-digit'}) }}
+              {{
+                new Date(record.time).toLocaleDateString("en-GB", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                })
+              }}
             </template>
             <template slot="action" slot-scope="text, record">
               <a-row>
@@ -165,7 +178,16 @@
                     <div class="col-sm-6">
                       <p class="m-b-10 f-w-600">Ngày Sinh</p>
                       <h6 class="text-muted f-w-400">
-                        {{ dataAccountDetail.dob }}
+                        {{
+                          new Date(dataAccountDetail.dob).toLocaleDateString(
+                            "en-GB",
+                            {
+                              year: "numeric",
+                              month: "2-digit",
+                              day: "2-digit",
+                            }
+                          )
+                        }}
                       </h6>
                     </div>
                   </div>
@@ -312,6 +334,11 @@ export default {
   },
   data() {
     return {
+      pagination: {
+        current: 1,
+        pageSize: 10,
+        total: 0,
+      },
       dataSearch: {
         name: "",
         listRole: [],
@@ -319,6 +346,7 @@ export default {
         date: [],
         pageIndex: 1,
         pageSize: 10,
+        total: 0,
       },
       dataSourceTable: [],
       dataRoles: [],
@@ -411,6 +439,21 @@ export default {
     this.getAllRole();
   },
   methods: {
+    handleTableChange(pagination) {
+      this.dataSearch.pageIndex = pagination.current;
+      this.pagination = pagination;
+      adminTruongService
+        .searchAccount(this.dataSearch)
+        .then((response) => {
+          this.dataSourceTable = response.data.data;
+          this.dataSearch.total = response.data.total;
+          this.pagination.total = response.data.total;
+          console.log("datasearch", this.dataSearch);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     generateUsername() {
       accountService
         .generateUsername(this.dataAdd.employee)
@@ -512,10 +555,13 @@ export default {
       this.visibleEdit = false;
     },
     submitSearch() {
+      this.dataSearch.total = 0;
       adminTruongService
         .searchAccount(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
+          this.dataSearch.total = response.data.total;
+          this.pagination.total = response.data.total;
         })
         .catch((e) => {
           console.log(e);

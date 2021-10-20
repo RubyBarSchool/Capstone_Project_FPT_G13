@@ -34,18 +34,18 @@ export const router = new Router({
                 import ('./pages/DemoAxios.vue')
         },
         {
-            path: '/adminh',
-            name: 'adminh',
+            path: '/userMinh',
+            name: 'UserMinh',
             // lazy-loaded
             component: () =>
-                import ('./pages/AdminMinh.vue')
+                import ('./pages/UserMinh.vue')
         },
         {
-            path: '/adtruong',
-            name: 'AdminTruong',
+            path: '/userHA',
+            name: 'UserHA',
             // lazy-loaded
             component: () =>
-                import ('./pages/AdminTruong.vue')
+                import ('./pages/UserHA.vue')
         },
     ]
 });
