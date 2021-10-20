@@ -44,7 +44,7 @@
                 <a-select-option value="false"> Nháp </a-select-option>
                 <a-select-option value="true"> Công khai </a-select-option>
               </a-select>
-              <a-range-picker v-model="dataSearch.date" />
+              <a-range-picker v-model="dataSearch.date" :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"/>
               <a-button type="primary" icon="search" @click="submitSearch">
                 Tìm kiếm
               </a-button>
