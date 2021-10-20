@@ -44,7 +44,7 @@
                 <a-select-option value="false"> Nháp </a-select-option>
                 <a-select-option value="true"> Công khai </a-select-option>
               </a-select>
-              <a-range-picker v-model="dataSearch.date" :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"/>
+              <a-range-picker v-model="dataSearch.date" :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']" :show-time="{ format: 'DD/MM/YYYY' }" format="DD/MM/YYYY"/>
               <a-button type="primary" icon="search" @click="submitSearch">
                 Tìm kiếm
               </a-button>
@@ -79,7 +79,7 @@
               </a-tag>
             </template>
             <template slot="time" slot-scope="text, record">
-              {{ new Date(record.time).toLocaleDateString()}}
+              {{ new Date(record.time).toLocaleDateString('en-GB', {year: 'numeric', month: '2-digit', day: '2-digit'}) }}
             </template>
             <template slot="action" slot-scope="text, record">
               <a-row>
