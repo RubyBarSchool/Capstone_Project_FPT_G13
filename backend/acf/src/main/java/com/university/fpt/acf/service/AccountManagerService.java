@@ -7,7 +7,6 @@ import com.university.fpt.acf.vo.*;
 import java.util.List;
 
 public interface AccountManagerService {
-    List<GetAllAccountResponseVO> getAllAccounts(GetAllAccountForm getAllAccountForm);
     Boolean insertAccount(AddAccountForm addAccountForm);
     Boolean updateAccount(UpdateAccountForm updateAccountForm);
     Boolean deleteAccount(Long idAccount);

@@ -37,59 +37,46 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Override
-    public List<GetAllAccountResponseVO> getAllAccounts(GetAllAccountForm getAllAccountForm) {
-            Pageable pageable= PageRequest.of(getAllAccountForm.getPageIndex()-1,getAllAccountForm.getPageSize(), Sort.by("id").ascending());
-            List<GetAllAccountVO> listAcc = accountManagerRepository.getAllAccount(pageable);
-            List<GetAllAccountResponseVO> result = new ArrayList<>();
-            GetAllAccountResponseVO accountResponseVO = new GetAllAccountResponseVO();
-            for(int i = 0 ; i< listAcc.size() ; i++){
-                if(!listAcc.get(i).getId().equals(accountResponseVO.getId())){
-                    if(i!=0){
-                        result.add(accountResponseVO);
-                    }
-                        accountResponseVO = new GetAllAccountResponseVO();
-                        accountResponseVO.setId(listAcc.get(i).getId());
-                        accountResponseVO.setStatus(listAcc.get(i).getStatus());
-                        accountResponseVO.setTime(listAcc.get(i).getTime());
-                        accountResponseVO.setUsername(listAcc.get(i).getUsername());
-                        accountResponseVO.getRoles().add(new RoleAccountVO(listAcc.get(i).getIdRole(),listAcc.get(i).getNameRole()));
-                }else{
-                        accountResponseVO.getRoles().add(new RoleAccountVO(listAcc.get(i).getIdRole(),listAcc.get(i).getNameRole()));
-                }
-            }
-            if(!accountResponseVO.getRoles().isEmpty()){
-                result.add(accountResponseVO);
-            }
-            return result;
-    }
 
     @Override
     public Boolean insertAccount(AddAccountForm addAccountForm) {
+        Boolean insert = false;
         try {
-            //check exit Account
-                Account ac = new Account();
-                ac.setPassword(passwordEncoder.encode(addAccountForm.getPassword()));
-                ac.setUsername(addAccountForm.getUsername());
-                AccountSercurity accountSercurity = new AccountSercurity();
-                ac.setModified_by(accountSercurity.getUserName());
-                ac.setCreated_by(accountSercurity.getUserName());
-                List<Role> listRole = new ArrayList<>();
-                for(Long i : addAccountForm.getListRole()){
-                    Role role = new Role();
-                    role.setId(i);
-                    listRole.add(role);
+            //check exit Employee
+            String checkEmployeeExit = accountManagerRepository.checkEmplyeeInAccountExit(addAccountForm.getEmployee());
+            // check username gender
+            if (checkEmployeeExit == null || checkEmployeeExit.isEmpty()) {
+                String generateUserByIdEmployee = this.GenerateUsername(addAccountForm.getEmployee());
+                if (generateUserByIdEmployee.equals(addAccountForm.getUsername())) {
+                    Account ac = new Account();
+                    ac.setPassword(passwordEncoder.encode(addAccountForm.getPassword()));
+                    ac.setUsername(addAccountForm.getUsername());
+                    AccountSercurity accountSercurity = new AccountSercurity();
+                    ac.setModified_by(accountSercurity.getUserName());
+                    ac.setCreated_by(accountSercurity.getUserName());
+                    List<Role> listRole = new ArrayList<>();
+                    for (Long i : addAccountForm.getListRole()) {
+                        Role role = new Role();
+                        role.setId(i);
+                        listRole.add(role);
+                    }
+                    ac.setRoles(listRole);
+                    Employee em = new Employee();
+                    em.setId(addAccountForm.getEmployee());
+                    ac.setEmployee(em);
+                    accountManagerRepository.save(ac);
+                    insert = true;
+                } else {
+                    throw new Exception("Username not correct!");
                 }
-                ac.setRoles(listRole);
-                Employee em = new Employee();
-                em.setId(addAccountForm.getEmployee());
-                ac.setEmployee(em);
-                accountManagerRepository.save(ac);
-                return true;
-        }catch (Exception ex){
-            ex.getMessage();
+            } else {
+                throw new Exception("Employee has account exit!");
+            }
+        }catch (Exception e){
+            e.getMessage();
         }
-        return false;
+
+        return insert;
     }
 
     @Override
@@ -216,6 +203,8 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                     List<String> list = accountManagerRepository.getAllUsernameIsLike(usernameGen);
                     Integer number = addAccountValidate.genNumberUsername(usernameGen,list);
                     return usernameGen + ((number==0)?"":number);
+                }else {
+                    throw new Exception("Username not exist");
                 }
         }catch (Exception e){
             e.getMessage();

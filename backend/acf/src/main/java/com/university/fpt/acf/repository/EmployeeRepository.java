@@ -14,7 +14,6 @@ import java.util.List;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee,Long> {
-    List<Employee> findByFullNameIsLike(String fullName, Pageable pageable);
 
     @Query("select e.fullName from Employee e " +
             " where e.id = :id and e.deleted = false ")
