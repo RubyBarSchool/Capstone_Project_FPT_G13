@@ -82,7 +82,7 @@
               </a-tag>
             </template>
             <template slot="time" slot-scope="text, record">
-              {{ record.time }}
+              {{ new Date(record.time).toLocaleDateString()}}
             </template>
             <template slot="action" slot-scope="text, record">
               <a-row>
