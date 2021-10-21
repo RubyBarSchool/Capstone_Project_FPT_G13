@@ -3,8 +3,7 @@ package com.university.fpt.acf.controller;
 import com.university.fpt.acf.common.entity.ResponseCommon;
 import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.service.EmployeeService;
-import com.university.fpt.acf.vo.EmployeeDetailVO;
-import com.university.fpt.acf.vo.GetAllEmployeeVO;
+import com.university.fpt.acf.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,32 @@ import java.util.List;
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
-
+    @PostMapping("/search")
+    public ResponseEntity<ResponseCommon> searchEmployee(@RequestBody SearchAllEmployeeForm searchAllEmployeeForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<SearchEmployeeVO> getAllEmployee = new ArrayList<>();
+        try {
+            getAllEmployee = employeeService.searchEmployee(searchAllEmployeeForm);
+            responseCommon.setData(getAllEmployee);
+            message = "Get employee successfully";
+            if(getAllEmployee.isEmpty()){
+                message = "Get employee not found";
+            }
+            total = employeeService.getTotalEmployee(searchAllEmployeeForm);
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = "Could not get employee !";
+            responseCommon.setData(getAllEmployee);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
     @PostMapping("/fullnameEmNotAccount")
     public ResponseEntity<ResponseCommon> GetAllFullNameNotAccount(@RequestBody SearchEmployeeForm searchEmployeeForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -122,31 +146,4 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
-
-//    @PostMapping("/getAllEmployee")
-//    public ResponseEntity<ResponseCommon> GetAllEmployee(@RequestBody SearchEmployeeForm searchEmployeeForm){
-//
-//        ResponseCommon responseCommon = new ResponseCommon();
-//        String message = "";
-//        List<GetAllEmployeeVO>  employeeVOS= new ArrayList<>();
-//        try {
-//            employeeVOS.addAll(employeeService.getAllEmployee(searchEmployeeForm));
-//            responseCommon.setData(employeeVOS);
-//            responseCommon.setTotal(employeeService.getTotalEmployee(searchEmployeeForm));
-//            message = "Get all Employee successfully";
-//            if(employeeVOS.isEmpty()){
-//                message = "Get all Employee not found";
-//            }
-//            responseCommon.setStatus(HttpStatus.OK.value());
-//            responseCommon.setMessage(message);
-//            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
-//        } catch (Exception e) {
-//            message = "Could not get all employee !";
-//            responseCommon.setData(false);
-//            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
-//            responseCommon.setMessage(message);
-//            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
-//        }
-//    }
 }

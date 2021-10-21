@@ -10,6 +10,8 @@ import com.university.fpt.acf.service.EmployeeService;
 import com.university.fpt.acf.util.EmployeeValidate.EmployeeValidate;
 import com.university.fpt.acf.vo.EmployeeDetailVO;
 import com.university.fpt.acf.vo.GetAllEmployeeVO;
+import com.university.fpt.acf.vo.PositionResponseVO;
+import com.university.fpt.acf.vo.SearchEmployeeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,21 +30,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private EmployeeCustomRepository employeeCustomRepository;
-//    @Override
-//    public List<GetAllEmployeeVO> getAllEmployee(SearchEmployeeForm searchEmployeeForm) {
-//
-//
-//        Pageable pageable = PageRequest.of(searchEmployeeForm.getPageIndex()-1,searchEmployeeForm.getPageSize());
-//        List<Employee> listEmployee =employeeRepository.findEmployeeByFullNameIsLike("%"+searchEmployeeForm.getName()+"%",pageable);
-//        List<GetAllEmployeeVO> getAllAccountVOS = new ArrayList<>();
-//        for(Employee i : listEmployee){
-//            GetAllEmployeeVO getAllEmployeeVO = new GetAllEmployeeVO();
-//            getAllEmployeeVO.setId(i.getId());
-//            getAllEmployeeVO.setName(i.getFullName());
-//            getAllAccountVOS.add(getAllEmployeeVO);
-//        }
-//        return  getAllAccountVOS;
-//    }
+    @Override
+    public List<SearchEmployeeVO> searchEmployee(SearchAllEmployeeForm searchAllEmployeeForm) {
+        List<SearchEmployeeVO> getAlPositionVOS = new ArrayList<>();
+        try {
+            getAlPositionVOS = employeeCustomRepository.searchEmployee(searchAllEmployeeForm);
+        } catch (Exception e) {
+            throw new RuntimeException("Error position repository " + e.getMessage());
+        }
+        return  getAlPositionVOS;
+    }
+
+    @Override
+    public int getTotalEmployee(SearchAllEmployeeForm searchAllEmployeeForm) {
+        int size = 0;
+        try {
+            size = employeeCustomRepository.getTotalEmployee(searchAllEmployeeForm);
+        }catch (Exception e){
+            throw new RuntimeException("Could not initialize folder for upload!");
+        }
+        return size;
+    }
 
     @Override
     public List<GetAllEmployeeVO> getFullNameEmployeeNotAccount(SearchEmployeeForm searchEmployeeForm) {

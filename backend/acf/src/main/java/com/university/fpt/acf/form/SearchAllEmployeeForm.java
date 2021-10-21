@@ -9,5 +9,5 @@ public class SearchAllEmployeeForm {
     private Boolean statusDelete;
     private Integer pageIndex;
     private Integer pageSize;
-    private Integer total;
+
 }
