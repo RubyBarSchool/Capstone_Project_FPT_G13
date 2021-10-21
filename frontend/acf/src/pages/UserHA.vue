@@ -17,7 +17,11 @@
               <a-input placeholder="Tên nhân viên" style="width: 150px" />
               <a-input placeholder="Chức vụ" style="width: 150px" />
               <a-input placeholder="Trạng thái" style="width: 150px" />
-              <a-range-picker />
+              <a-range-picker
+                :placeholder="['Ngày bắt đầu', 'Ngày kết thúc', 'Chọn', 'Lưu']"
+                :show-time="{ format: 'DD/MM/YYYY' }"
+                format="DD/MM/YYYY"
+              />
               <a-button type="primary" icon="search"> Tìm kiếm </a-button>
             </a-col>
             <a-col flex="100px">
@@ -87,6 +91,7 @@
 <script>
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
+
 
 export default {
   name: "UserHA",

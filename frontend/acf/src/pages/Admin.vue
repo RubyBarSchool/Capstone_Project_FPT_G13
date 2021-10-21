@@ -46,7 +46,7 @@
               </a-select>
               <a-range-picker
                 v-model="dataSearch.date"
-                :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+                :placeholder="['Ngày bắt đầu', 'Ngày kết thúc', 'Chọn', 'Lưu']"
                 :show-time="{ format: 'DD/MM/YYYY' }"
                 format="DD/MM/YYYY"
               />
