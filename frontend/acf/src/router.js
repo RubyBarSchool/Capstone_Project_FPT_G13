@@ -60,6 +60,20 @@ export const router = new Router({
             // lazy-loaded
             component: () =>
                 import ('./pages/ViewAttendance.vue')
+        },
+        {
+            path: '/positionHA',
+            name: 'PositionHA',
+            // lazy-loaded
+            component: () =>
+                import ('./pages/PositionHA.vue')
+        },
+        {
+            path: '/positionMinh',
+            name: 'PositionMinh',
+            // lazy-loaded
+            component: () =>
+                import ('./pages/PositionMinh.vue')
         }
     ]
 });
