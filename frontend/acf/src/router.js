@@ -47,6 +47,20 @@ export const router = new Router({
             component: () =>
                 import ('./pages/UserHA.vue')
         },
+        {
+            path: '/attendance',
+            name: 'Attendance',
+            // lazy-loaded
+            component: () =>
+                import ('./pages/Attendance.vue')
+        },
+        {
+            path: '/viewattendance',
+            name: 'ViewAttendance',
+            // lazy-loaded
+            component: () =>
+                import ('./pages/ViewAttendance.vue')
+        }
     ]
 });
 
