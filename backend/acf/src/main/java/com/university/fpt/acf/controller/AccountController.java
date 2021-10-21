@@ -111,7 +111,7 @@ public class AccountController {
                 message="Update sucessfuly!";
             }
             responseCommon.setMessage(message);
-            responseCommon.setData(accountService.updateAccount(updateAccountForm));
+            responseCommon.setData(checkUpdate);
             responseCommon.setStatus(HttpStatus.OK.value());
             return new ResponseEntity<>(responseCommon,HttpStatus.OK);
         }catch (Exception e){
@@ -155,16 +155,16 @@ public class AccountController {
         String genUsername="";
         try {
             genUsername = accountService.GenerateUsername(id);
-            if(genUsername.isEmpty()){
+            message="GenerateUsername sucessfuly";
+            if(genUsername==null ||  genUsername.isEmpty()){
                 message ="Dont GenerateUsername";
-            }else {
-                message="GenerateUsername sucessfuly";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(accountService.GenerateUsername(id));
             responseCommon.setStatus(HttpStatus.OK.value());
             return new ResponseEntity<>(responseCommon,HttpStatus.OK);
         }catch (Exception e){
+
             message = "Can't generateUsername!";
             responseCommon.setData(genUsername);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());

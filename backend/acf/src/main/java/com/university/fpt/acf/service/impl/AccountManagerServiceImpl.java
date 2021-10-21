@@ -197,17 +197,15 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     public String GenerateUsername(Long id) {
         try{
                 String fullname = employeeRepository.getFullNameById(id);
-                if(fullname !=null && !fullname.isEmpty()){
+                if(fullname !=null && !fullname.isEmpty()) {
                     AddAccountValidate addAccountValidate = new AddAccountValidate();
                     String usernameGen = addAccountValidate.generateFormatUsernameByFullname(fullname);
                     List<String> list = accountManagerRepository.getAllUsernameIsLike(usernameGen);
-                    Integer number = addAccountValidate.genNumberUsername(usernameGen,list);
-                    return usernameGen + ((number==0)?"":number);
-                }else {
-                    throw new Exception("Username not exist");
+                    Integer number = addAccountValidate.genNumberUsername(usernameGen, list);
+                    return usernameGen + ((number == 0) ? "" : number);
                 }
         }catch (Exception e){
-            e.getMessage();
+            throw new RuntimeException("Username not correct!");
         }
         return null;
     }

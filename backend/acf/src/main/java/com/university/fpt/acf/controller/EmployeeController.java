@@ -1,10 +1,9 @@
 package com.university.fpt.acf.controller;
 
 import com.university.fpt.acf.common.entity.ResponseCommon;
-import com.university.fpt.acf.form.GetAllAccountForm;
-import com.university.fpt.acf.form.SearchAccountForm;
-import com.university.fpt.acf.form.SearchEmployeeForm;
+import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.service.EmployeeService;
+import com.university.fpt.acf.vo.EmployeeDetailVO;
 import com.university.fpt.acf.vo.GetAllEmployeeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/spadmin/employee")
+@RequestMapping(path = "/admin/employee")
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
@@ -34,6 +33,103 @@ public class EmployeeController {
         responseCommon.setStatus(HttpStatus.OK.value());
         return new ResponseEntity<>(responseCommon,HttpStatus.OK);
     }
+    @GetMapping("/getEmployee")
+    public ResponseEntity<ResponseCommon> GetEmployeeDetailById(@RequestParam Long id){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message="";
+        EmployeeDetailVO em = new EmployeeDetailVO();
+        try{
+            em = employeeService.getEmployeeDetailById(id);
+            if(em==null){
+                message ="Dont find Employee";
+            }
+                message ="Sucessfuly";
+                responseCommon.setMessage(message);
+                responseCommon.setData(em);
+                responseCommon.setStatus(HttpStatus.OK.value());
+                return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+
+        }catch (Exception e){
+            message=e.getMessage();
+            responseCommon.setMessage(message);
+            responseCommon.setData(em);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+    @PostMapping("/add")
+    public  ResponseEntity<ResponseCommon> addEmployee(@RequestBody AddEmployeeForm addEmployeeForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message="";
+        Boolean checkAdd = false;
+        try {
+            checkAdd =employeeService.AddEmployee(addEmployeeForm);
+            if(checkAdd==false){
+                message="Add employee fail!";
+            }else{
+                message="Add employee sucessfuly!";
+            }
+            responseCommon.setMessage(message);
+            responseCommon.setData(checkAdd);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+        }catch (Exception e){
+            message = e.getMessage();
+            responseCommon.setData(checkAdd);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
+    @PutMapping("/update")
+    public  ResponseEntity<ResponseCommon> updateEmployee(@RequestBody UpdateEmployeeForm updateEmployeeForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message="";
+        Boolean checkUpdate = false;
+        try{
+            checkUpdate =employeeService.UpdateEmployee(updateEmployeeForm);
+            if(checkUpdate==false){
+                message="Update account fail!";
+            }else{
+                message="Update sucessfuly!";
+            }
+            responseCommon.setMessage(message);
+            responseCommon.setData(checkUpdate);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+        }catch (Exception e){
+            message = "Can't update account!";
+            responseCommon.setData(checkUpdate);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
+    @DeleteMapping("/delete")
+    public  ResponseEntity<ResponseCommon> deleteEmployee(@RequestParam Long id){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message="";
+        Boolean checkDelete = false;
+        try{
+            checkDelete = employeeService.DeleteEmployee(id);
+            if(checkDelete==false){
+                message="Delete employee fail!";
+            }else{
+                message="Delete employee sucessfuly";
+            }
+            responseCommon.setMessage(message);
+            responseCommon.setData(checkDelete);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+        }catch (Exception e){
+            message = "Can't delete employee!";
+            responseCommon.setData(checkDelete);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
+
 
 //    @PostMapping("/getAllEmployee")
 //    public ResponseEntity<ResponseCommon> GetAllEmployee(@RequestBody SearchEmployeeForm searchEmployeeForm){

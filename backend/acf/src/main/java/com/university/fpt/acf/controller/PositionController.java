@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/position")
+@RequestMapping(path = "/admin/position")
 public class PositionController {
     @Autowired
     private PositionService positionService;

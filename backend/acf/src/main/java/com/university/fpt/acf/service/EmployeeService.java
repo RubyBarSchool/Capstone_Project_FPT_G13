@@ -1,9 +1,8 @@
 package com.university.fpt.acf.service;
 
-import com.university.fpt.acf.form.EmployeeNotAttendanceForm;
-import com.university.fpt.acf.form.SearchAccountForm;
-import com.university.fpt.acf.form.SearchEmployeeForm;
+import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.repository.EmployeeRepository;
+import com.university.fpt.acf.vo.EmployeeDetailVO;
 import com.university.fpt.acf.vo.GetAllEmployeeVO;
 
 
@@ -14,4 +13,8 @@ public interface EmployeeService  {
     List<GetAllEmployeeVO> getFullNameEmployeeNotAccount(SearchEmployeeForm searchEmployeeForm);
     List<GetAllEmployeeVO> getAllEmployeeNotAttendance(EmployeeNotAttendanceForm employeeNotAttendanceForm);
     int getTotalEmployeeNotAttendance(EmployeeNotAttendanceForm employeeNotAttendanceForm);
+    EmployeeDetailVO getEmployeeDetailById(Long id);
+    Boolean AddEmployee(AddEmployeeForm addEmployeeForm);
+    Boolean UpdateEmployee(UpdateEmployeeForm updateEmployeeForm);
+    Boolean DeleteEmployee(Long id);
 }
