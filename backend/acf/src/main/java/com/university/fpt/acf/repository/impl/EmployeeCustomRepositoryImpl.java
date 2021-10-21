@@ -38,7 +38,7 @@ public class EmployeeCustomRepositoryImpl extends CommonRepository implements Em
 
         }
         TypedQuery<GetAllEmployeeVO> query = super.createQuery(sql.toString(),params, GetAllEmployeeVO.class);
-        query.setFirstResult(employeeNotAttendanceForm.getPageIndex()-1);
+        query.setFirstResult((employeeNotAttendanceForm.getPageIndex()-1)*employeeNotAttendanceForm.getPageSize());
         query.setMaxResults(employeeNotAttendanceForm.getPageSize());
         List<GetAllEmployeeVO> resultList = query.getResultList();
         return resultList;

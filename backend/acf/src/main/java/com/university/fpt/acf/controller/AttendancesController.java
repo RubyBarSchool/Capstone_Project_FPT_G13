@@ -3,8 +3,10 @@ package com.university.fpt.acf.controller;
 
 import com.university.fpt.acf.common.entity.ResponseCommon;
 import com.university.fpt.acf.form.AddAccountForm;
+import com.university.fpt.acf.form.AddAttendanceForm;
 import com.university.fpt.acf.form.EmployeeNotAttendanceForm;
 import com.university.fpt.acf.form.SearchAccountForm;
+import com.university.fpt.acf.service.AttendancesService;
 import com.university.fpt.acf.service.EmployeeService;
 import com.university.fpt.acf.vo.GetAllAccountResponseVO;
 import com.university.fpt.acf.vo.GetAllEmployeeVO;
@@ -26,41 +28,18 @@ public class AttendancesController {
     @Autowired
     private EmployeeService employeeService;
 
-//    @PostMapping(path = "/search")
-//    public ResponseEntity<ResponseCommon> searchAttendances(@RequestBody AttendanceFrom attendanceFrom){
-//        ResponseCommon responseCommon = new ResponseCommon();
-//        String message = "";
-//        List<GetAllAccountResponseVO> getAllAccountResponseVOS = new ArrayList<>();
-//        Integer total = 0;
-//        try {
-//            getAllAccountResponseVOS = accountService.searchAccount(searchAccountForm);
-//            total = accountService.getTotalSearchAccount(searchAccountForm);
-//            responseCommon.setData(getAllAccountResponseVOS);
-//            responseCommon.setTotal(total);
-//            message = "Get accounts successfully";
-//            if(getAllAccountResponseVOS.isEmpty()){
-//                message = "Get accounts not found";
-//            }
-//            responseCommon.setStatus(HttpStatus.OK.value());
-//            responseCommon.setMessage(message);
-//            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
-//        } catch (Exception e) {
-//            message = "Could not get accounts !";
-//            responseCommon.setData(getAllAccountResponseVOS);
-//            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
-//            responseCommon.setMessage(message);
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
-//        }
-//    }
+    @Autowired
+    private AttendancesService attendancesService;
 
 
-//    @PostMapping("/add")
-//    public  ResponseEntity<ResponseCommon> addAccount(@RequestBody AddAccountForm addAccountForm){
-//        ResponseCommon responseCommon = new ResponseCommon();
+    @PostMapping
+    public  ResponseEntity<ResponseCommon> addAccount(@RequestBody AddAttendanceForm addAccountForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        attendancesService.saveAttendance(addAccountForm);
 //        responseCommon.setData(accountService.insertAccount(addAccountForm));
-//        responseCommon.setStatus(HttpStatus.OK.value());
-//        return new ResponseEntity<>(responseCommon,HttpStatus.OK);
-//    }
+        responseCommon.setStatus(HttpStatus.OK.value());
+        return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+    }
 
 
     @PostMapping(path = "/getemployee")

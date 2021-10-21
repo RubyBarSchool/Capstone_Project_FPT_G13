@@ -14,49 +14,47 @@
           <div class="container">
             <div class="row">
               <div class="col">
-                <div
-                  :style="{
-                    width: '500px',
-                    border: '1px solid #d9d9d9',
-                    borderRadius: '4px',
-                  }"
+                <a-date-picker
+                  :open="true"
+                  v-model="dataGetEmployee.date"
+                  @change="onChangeDate"
+                  format="YYYY-MM-DD"
+                  valueFormat="YYYY-MM-DD"
                 >
-                  <a-calendar
-                    :fullscreen="false"
-                    @panelChange="onPanelChange"
-                  />
-                </div>
+                  <a-icon slot="suffixIcon" type="smile" />
+                </a-date-picker>
               </div>
               <div class="col">
-                <a-form-model-item label="Date">
-                  <a-input />
-                </a-form-model-item>
                 <a-form-model-item label="Attendance type">
-                  <a-dropdown class="attendancetype">
-                    <a-menu slot="overlay">
-                      <a-menu-item key="1">
-                        <a-icon type="user" />1st menu item
-                      </a-menu-item>
-                      <a-menu-item key="2">
-                        <a-icon type="user" />2nd menu item
-                      </a-menu-item>
-                      <a-menu-item key="3">
-                        <a-icon type="user" />3rd item
-                      </a-menu-item>
-                    </a-menu>
-                    <a-button style="margin-left: 8px"> Fullday </a-button>
-                  </a-dropdown>
+                  <a-select v-model="typeAttendance" style="width: 120px">
+                    <a-select-option key="1"> Cả ngày </a-select-option>
+                    <a-select-option key="1/2"> Nửa ngày </a-select-option>
+                    <a-select-option key="0"> Nghỉ </a-select-option>
+                  </a-select>
                 </a-form-model-item>
+
+                <!-- Table content -->
                 <a-table
                   :columns="columns"
-                  :data-source="data"
+                  :data-source="dataTable"
+                  :pagination="pagination"
+                  :rowKey="
+                    (record, index) => {
+                      return record.id;
+                    }
+                  "
                   :row-selection="rowSelection"
-                  :expanded-row-keys.sync="expandedRowKeys"
-                />
+                  @change="handleTableChange"
+                >
+                </a-table>
+                <!-- Table content -->
+
                 <a-row type="flex">
                   <a-col flex="442px"></a-col>
                   <a-col flex="auto">
-                    <a-button type="primary"> Save Attendance </a-button>
+                    <a-button type="primary" :disabled="disableSave" @click="saveAttendance">
+                      Save Attendance
+                    </a-button>
                     <a-button type="primary"> Reset </a-button>
                   </a-col>
                 </a-row>
@@ -70,39 +68,9 @@
   </div>
 </template>
  <script>
-const columns = [
-  {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-  },
-];
-
-const data = [
-  {
-    key: 1,
-    name: "John Brown sr",
-  },
-  {
-    key: 2,
-    name: "Joe Black",
-  },
-];
-
-const rowSelection = {
-  onChange: (selectedRowKeys, selectedRows) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-  },
-  onSelect: (record, selected, selectedRows) => {
-    console.log(record, selected, selectedRows);
-  },
-  onSelectAll: (selected, selectedRows, changeRows) => {
-    console.log(selected, selectedRows, changeRows);
-  },
-};
-
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
+import attendanceService from "@/service/attendanceService.js";
 
 export default {
   name: "Attendance",
@@ -112,13 +80,97 @@ export default {
   },
   data() {
     return {
-      data,
-      columns,
-      rowSelection,
-      expandedRowKeys: [],
+      pagination: {
+        current: 1,
+        pageSize: 10,
+        total: 0,
+      },
+      dataGetEmployee: {
+        date: "",
+        pageIndex: 1,
+        pageSize: 10,
+      },
+      dataTable: [],
+      typeAttendance: "1",
+      columns: [
+        {
+          title: "ID",
+          width: 100,
+          dataIndex: "id",
+          key: "id",
+          fixed: "left",
+        },
+        {
+          title: "Tên nhân viên",
+          dataIndex: "name",
+          key: "name``",
+          width: 150,
+        },
+      ],
+      dataForm: {
+        date: "",
+        type: "",
+        id: [],
+      },
+      disableSave: true,
     };
   },
+  computed: {
+    rowSelection() {
+      return {
+        onChange: (selectedRowKeys) => {
+          if(selectedRowKeys.length!=0){
+            this.disableSave = false;
+          }else{
+            this.disableSave = true;
+          }
+          this.dataForm.id = selectedRowKeys;
+        },
+      };
+    },
+  },
+  created() {
+    this.getDate();
+    this.onChangeDate();
+  },
   methods: {
+    saveAttendance() {
+      this.dataForm.date = this.dataGetEmployee.date;
+      this.dataForm.type = this.typeAttendance;
+      attendanceService
+        .addAttendance(this.dataForm)
+        .then((response) => {
+          console.log(response)
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    handleTableChange(pagination) {
+      this.dataGetEmployee.pageIndex = pagination.current;
+      this.pagination = pagination;
+      this.onChangeDate();
+    },
+    getDate() {
+      var datex = new Date();
+      this.dataGetEmployee.date =
+        datex.getFullYear() +
+        "-" +
+        (datex.getMonth() + 1) +
+        "-" +
+        datex.getDate();
+    },
+    onChangeDate() {
+      attendanceService
+        .getEmployee(this.dataGetEmployee)
+        .then((response) => {
+          this.dataTable = response.data.data;
+          this.pagination.total = response.data.total;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     onPanelChange(value, mode) {
       console.log(value, mode);
     },
