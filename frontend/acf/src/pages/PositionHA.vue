@@ -1,5 +1,5 @@
 <template>
-  <div class="PositionHA">
+  <div class="PositionMinh">
     <a-layout :style="{ background: 'white' }">
       <Header />
       <a-layout-content :style="{ margin: '24px 16px 0' }">
@@ -114,7 +114,7 @@ import Footer from "@/layouts/Footer.vue";
 import positionService from "../service/positionService";
 
 export default {
-  name: "PositionHA",
+  name: "PositionMinh",
   components: {
     Header,
     Footer,
