@@ -1,13 +1,12 @@
 <template>
   <div class="admin">
-    <a-layout>
+    <a-layout :style="{ background: 'white' }">
       <Header />
       <a-layout-content :style="{ margin: '24px 16px 0' }">
         <div
           :style="{
-            padding: '24px',
-            background: '#fff',
             minHeight: '360px',
+            background: 'white',
             height: '560px',
           }"
         >
@@ -46,7 +45,7 @@
               </a-select>
               <a-range-picker
                 v-model="dataSearch.date"
-                :placeholder="['Ngày bắt đầu', 'Ngày kết thúc', 'Chọn', 'Lưu']"
+                :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
                 :show-time="{ format: 'DD/MM/YYYY' }"
                 format="DD/MM/YYYY"
               />
@@ -60,77 +59,81 @@
               </a-button>
             </a-col>
           </a-row>
+          
           <!-- table content -->
-          <a-table
-            :columns="columns"
-            :data-source="dataSourceTable"
-            :pagination="pagination"
-            :rowKey="
-              (record, index) => {
-                return index;
-              }
-            "
-            @change="handleTableChange"
-          >
-            <template slot="username" slot-scope="text, record">
-              {{ record.username }}
-            </template>
-            <template slot="roles" slot-scope="text, record">
-              <div v-for="(item, index) in record.roles" :key="index">
-                {{ item.name }}
-              </div>
-            </template>
-            <template slot="status" slot-scope="text, record">
-              <a-tag :color="record.status ? 'green' : 'blue'">
-                {{ record.status ? "Công khai" : "Nháp" }}
-              </a-tag>
-            </template>
-            <template slot="time" slot-scope="text, record">
-              {{
-                new Date(record.time).toLocaleDateString("en-GB", {
-                  year: "numeric",
-                  month: "2-digit",
-                  day: "2-digit",
-                })
-              }}
-            </template>
-            <template slot="action" slot-scope="text, record">
-              <a-row>
-                <a-col :span="8">
-                  <a-button
-                    id="user"
-                    type="dashed"
-                    icon="user"
-                    @click="getAccountByID(record.id)"
-                  />
-                </a-col>
-                <a-col :span="8">
-                  <a-button
-                    id="edit"
-                    type="dashed"
-                    icon="edit"
-                    @click="
-                      showModalEdit(
-                        record.id,
-                        record.username,
-                        record.roles,
-                        record.status
-                      )
-                    "
-                  />
-                </a-col>
-                <a-col :span="8">
-                  <a-popconfirm
-                    v-if="dataSourceTable.length"
-                    title="Bạn có chắc chắn muốn xóa không?"
-                    @confirm="deleteAccount(record.id)"
-                  >
-                    <a-button id="delete" type="dashed" icon="delete" />
-                  </a-popconfirm>
-                </a-col>
-              </a-row>
-            </template>
-          </a-table>
+          <div :style="{ 'padding-top': '10px'}">
+            <a-table
+              :columns="columns"
+              :data-source="dataSourceTable"
+              :pagination="pagination"
+              :rowKey="
+                (record, index) => {
+                  return index;
+                }
+              "
+              @change="handleTableChange"
+            >
+              <template slot="username" slot-scope="text, record">
+                {{ record.username }}
+              </template>
+              <template slot="roles" slot-scope="text, record">
+                <div v-for="(item, index) in record.roles" :key="index">
+                  {{ item.name }}
+                </div>
+              </template>
+              <template slot="status" slot-scope="text, record">
+                <a-tag :color="record.status ? 'green' : 'blue'">
+                  {{ record.status ? "Công khai" : "Nháp" }}
+                </a-tag>
+              </template>
+              <template slot="time" slot-scope="text, record">
+                {{
+                  new Date(record.time).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
+              </template>
+              <template slot="action" slot-scope="text, record">
+                <a-row>
+                  <a-col :span="8">
+                    <a-button
+                      id="user"
+                      type="dashed"
+                      icon="user"
+                      @click="getAccountByID(record.id)"
+                    />
+                  </a-col>
+                  <a-col :span="8">
+                    <a-button
+                      id="edit"
+                      type="dashed"
+                      icon="edit"
+                      @click="
+                        showModalEdit(
+                          record.id,
+                          record.username,
+                          record.roles,
+                          record.status
+                        )
+                      "
+                    />
+                  </a-col>
+                  <a-col :span="8">
+                    <a-popconfirm
+                      v-if="dataSourceTable.length"
+                      title="Bạn có chắc chắn muốn xóa không?"
+                      @confirm="deleteAccount(record.id)"
+                    >
+                      <a-button id="delete" type="dashed" icon="delete" />
+                    </a-popconfirm>
+                  </a-col>
+                </a-row>
+              </template>
+            </a-table>
+          </div>
+          <!-- table content -->
 
           <!-- popup profile-->
           <a-modal v-model="visibleProfile" class="profile">
@@ -327,7 +330,7 @@ import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 
 export default {
-  name: "AdminTruong",
+  name: "Admin",
   components: {
     Header,
     Footer,

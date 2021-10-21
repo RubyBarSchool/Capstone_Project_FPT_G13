@@ -4,15 +4,12 @@ class PositionService {
     getAllPosition(form) {
         return http.post(`/admin/position`, form);
     }
-
     addPosition(form) {
         return http.post(`/admin/position/add`, form);
     }
-
     deletePosition(id) {
         return http.delete(`/admin/position/delete?id=${id}`);
     }
-
     updatePosition(data) {
         return http.put(`/admin/position/update`, data);
     }

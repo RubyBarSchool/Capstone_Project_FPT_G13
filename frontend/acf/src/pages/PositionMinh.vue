@@ -1,12 +1,11 @@
 <template>
   <div class="PositionMinh">
-    <a-layout>
+    <a-layout :style="{ background: 'white' }">
       <Header />
       <a-layout-content :style="{ margin: '24px 16px 0' }">
         <div
           :style="{
-            padding: '24px',
-            background: '#fff',
+            background: 'white',
             minHeight: '360px',
             height: '560px',
           }"
@@ -14,13 +13,12 @@
           <!-- menu trên -->
           <a-row type="flex">
             <a-col flex="auto">
-              <a-input placeholder="Tên chức vụ" style="width: 150px" v-model="dataSearch.name"/>
-              <a-input placeholder="Mã code" style="width: 150px" />
-              <a-range-picker
-                :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-                :show-time="{ format: 'DD/MM/YYYY' }"
-                format="DD/MM/YYYY"
+              <a-input
+                placeholder="Tên chức vụ"
+                style="width: 150px"
+                v-model="dataSearch.name"
               />
+              <a-input placeholder="Mã code" style="width: 150px" />
               <a-button type="primary" icon="search"> Tìm kiếm </a-button>
             </a-col>
             <a-col flex="100px">
@@ -30,50 +28,51 @@
             </a-col>
           </a-row>
 
-          <a-table
-            :columns="columns"
-            :data-source="dataSourceTable"
-            :pagination="pagination"
-            :rowKey="
-              (record, index) => {
-                return index;
-              }
-            "
-            @change="handleTableChange"
-          >
-            <template slot="id" slot-scope="text, record">
-              {{ record.id }}
-            </template>
-            <template slot="position" slot-scope="text, record">
+          <!-- table content -->
+          <div :style="{ 'padding-top': '10px' }">
+            <a-table
+              :columns="columns"
+              :data-source="dataSourceTable"
+              :pagination="pagination"
+              :rowKey="
+                (record, index) => {
+                  return index;
+                }
+              "
+              @change="handleTableChange"
+            >
+              <template slot="id" slot-scope="text, record">
+                {{ record.id }}
+              </template>
+              <template slot="position" slot-scope="text, record">
                 {{ record.name }}
-            </template>
-            <template slot="action" slot-scope="text, record">
-              <a-row>
-                <a-col :span="8">
-                  <a-button
-                    id="edit"
-                    type="dashed"
-                    icon="edit"
-                    @click="
-                      showModalEdit(
-                        record.id,
-                        record.name,
-                      )
-                    "
-                  />
-                </a-col>
-                <a-col :span="8">
-                  <a-popconfirm
-                    v-if="dataSourceTable.length"
-                    title="Bạn có chắc chắn muốn xóa không?"
-                    @confirm="deletePosition(record.id)"
-                  >
-                    <a-button id="delete" type="dashed" icon="delete" />
-                  </a-popconfirm>
-                </a-col>
-              </a-row>
-            </template>
-          </a-table>
+              </template>
+              <template slot="action" slot-scope="text, record">
+                <a-row>
+                  <a-col :span="8">
+                    <a-button
+                      id="edit"
+                      type="dashed"
+                      icon="edit"
+                      @click="showModalEdit(record.id, record.name)"
+                    />
+                  </a-col>
+                  <a-col :span="8">
+                    <a-popconfirm
+                      v-if="dataSourceTable.length"
+                      title="Bạn có chắc chắn muốn xóa không?"
+                      @confirm="deletePosition(record.id)"
+                    >
+                      <a-button id="delete" type="dashed" icon="delete" />
+                    </a-popconfirm>
+                  </a-col>
+                </a-row>
+              </template>
+            </a-table>
+          </div>
+
+          <!-- table content -->
+
           <!-- popup add-->
           <a-modal v-model="visibleAdd" title="Thêm chức vụ">
             <template slot="footer">
@@ -84,7 +83,7 @@
             </template>
             <a-form-model>
               <a-form-model-item label="Tên chức vụ">
-                <a-input v-model="dataAdd.name"/>
+                <a-input v-model="dataAdd.name" />
               </a-form-model-item>
             </a-form-model>
           </a-modal>
@@ -98,7 +97,7 @@
             </template>
             <a-form-model>
               <a-form-model-item label="Tài khoản">
-                <a-input v-model="dataEdit.name"/>
+                <a-input v-model="dataEdit.name" />
               </a-form-model-item>
             </a-form-model>
           </a-modal>
@@ -136,13 +135,13 @@ export default {
       dataSourceTable: [],
       dataAdd: {
         code: "",
-        name: ""
+        name: "",
       },
       dataPosition: [],
       dataEdit: {
         code: "",
         id: 0,
-        name: ""
+        name: "",
       },
       columns: [
         {

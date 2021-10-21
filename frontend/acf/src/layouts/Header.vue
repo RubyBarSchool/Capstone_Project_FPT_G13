@@ -2,7 +2,12 @@
   <div id="Header">
     <a-layout-header>
       <a-row type="flex">
-        <a-col flex="auto"></a-col>
+        <a-col flex="auto">
+          <img
+            :style="{ width: '140px', 'margin-left': '20px' }"
+            src="../assets/logo_header.png"
+          />
+        </a-col>
         <a-col flex="250px">
           <span style="margin-right: 80px">
             <a-badge :count="5"
@@ -10,12 +15,12 @@
             </a-badge>
             <a-dropdown>
               <a class="ant-dropdown-link">
-                  <a-avatar
-                    :size="55"
-                    style="margin: 5px"
-                    src="https://img.icons8.com/bubbles/100/000000/user.png"
-                  />
-                  {{ loadUser }}
+                <a-avatar
+                  :size="55"
+                  style="margin: 5px"
+                  src="https://img.icons8.com/bubbles/100/000000/user.png"
+                />
+                {{ loadUser }}
               </a>
               <a-menu slot="overlay">
                 <a-menu-item key="1">
@@ -59,7 +64,10 @@ export default {
 </script>
 <style scoped>
 .ant-layout-header {
-  background: rgb(255, 255, 255);
-  padding: 0;
+  background-color: white;
+  /* padding: 0px; */
+  -webkit-box-shadow: 0px 26px 12px -22px rgba(233, 231, 231, 0.43);
+  -moz-box-shadow: 0px 26px 12px -22px rgba(233, 231, 231, 0.43);
+  box-shadow: 0px 26px 12px -22px rgba(233, 231, 231, 0.43);
 }
 </style>
