@@ -65,9 +65,8 @@ export default {
 <style scoped>
 .ant-layout-header {
   background-color: white;
-
-  -webkit-box-shadow: 0px 11px 32px -1px rgba(0, 0, 0, 0.4);
-  -moz-box-shadow: 0px 11px 32px -1px rgba(0, 0, 0, 0.4);
-  box-shadow: 0px 11px 32px -1px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0px 12px 9px -4px rgb(245, 240, 240);
+  -moz-box-shadow: 0px 12px 9px -4px rgb(245, 240, 240);
+  box-shadow: 0px 12px 9px -4px rgba(245, 240, 240);
 }
 </style>
