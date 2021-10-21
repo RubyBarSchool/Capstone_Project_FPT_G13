@@ -9,7 +9,7 @@ import com.university.fpt.acf.vo.GetAllEmployeeVO;
 import java.util.List;
 
 public interface EmployeeService  {
-    //List<GetAllEmployeeVO> getAllEmployee(SearchEmployeeForm searchEmployeeForm);
+//    List<GetAllEmployeeVO> getAllEmployee(SearchEmployeeForm searchEmployeeForm);
     List<GetAllEmployeeVO> getFullNameEmployeeNotAccount(SearchEmployeeForm searchEmployeeForm);
     List<GetAllEmployeeVO> getAllEmployeeNotAttendance(EmployeeNotAttendanceForm employeeNotAttendanceForm);
     int getTotalEmployeeNotAttendance(EmployeeNotAttendanceForm employeeNotAttendanceForm);

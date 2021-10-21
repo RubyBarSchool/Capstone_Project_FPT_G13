@@ -17,9 +17,9 @@ public class PositionCustomRepositoryImpl extends CommonRepository implements Po
     public List<PositionResponseVO> seachPosition(PositionForm positionForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append(" select new  com.university.fpt.acf.vo.PositionResponseVO(p.id,p.name) from Position p ");
+        sql.append(" select new  com.university.fpt.acf.vo.PositionResponseVO(p.id,p.name) from Position p where p.deleted = false ");
         if(positionForm.getName() != null && !positionForm.getName().isEmpty()){
-            sql.append(" where LOWER(p.name) like :name ");
+            sql.append(" and LOWER(p.name) like :name ");
             params.put("name","%"+positionForm.getName().toLowerCase()+"%");
         }
         sql.append(" ORDER by p.id desc ");

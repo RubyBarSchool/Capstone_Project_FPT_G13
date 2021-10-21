@@ -2,13 +2,13 @@ package com.university.fpt.acf.repository.impl;
 
 import com.university.fpt.acf.common.repository.CommonRepository;
 import com.university.fpt.acf.form.EmployeeNotAttendanceForm;
+import com.university.fpt.acf.form.SearchAllEmployeeForm;
 import com.university.fpt.acf.repository.EmployeeCustomRepository;
-import com.university.fpt.acf.vo.AttendanceVO;
-import com.university.fpt.acf.vo.GetAllAccountVO;
-import com.university.fpt.acf.vo.GetAllEmployeeVO;
+import com.university.fpt.acf.vo.*;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,5 +69,51 @@ public class EmployeeCustomRepositoryImpl extends CommonRepository implements Em
         TypedQuery<Long> query = super.createQuery(sql.toString(),params, Long.class);
         List<Long> resultList = query.getResultList();
         return resultList.size();
+    }
+
+    @Override
+    public List<SearchEmployeeVO> searchEmployee(SearchAllEmployeeForm searchAllEmployeeForm) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append(" SELECT new com.university.fpt.acf.vo.SearchEmployeeVO(e.id,e.image,e.fullName,e.gender,e.dob,e.email,p.id,p.name,e.deleted) " +
+                "FROM Employee e left join e.position p where LOWER(e.fullName) like :name ");
+        params.put("name","%"+searchAllEmployeeForm.getName().toLowerCase()+"%");
+
+        if(searchAllEmployeeForm.getIdPosition() != null){
+            sql.append(" and p.id = :id ");
+            params.put("id",searchAllEmployeeForm.getIdPosition());
+        }
+        if(searchAllEmployeeForm.getStatusDelete() != null){
+            sql.append(" and  e.deleted = :delete");
+            params.put("delete",searchAllEmployeeForm.getStatusDelete());
+        }
+        sql.append(" ORDER by e.id desc");
+        TypedQuery<SearchEmployeeVO> query = super.createQuery(sql.toString(),params, SearchEmployeeVO.class);
+        query.setFirstResult(searchAllEmployeeForm.getPageIndex()-1);
+        query.setMaxResults(searchAllEmployeeForm.getPageSize());
+        List<SearchEmployeeVO> positionList = query.getResultList();
+        return positionList;
+    }
+
+    @Override
+    public int getTotalEmployee(SearchAllEmployeeForm searchAllEmployeeForm) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append(" SELECT COUNT(*) FROM Employee e left join e.position p where LOWER(e.fullName) like :name ");
+        params.put("name","%"+searchAllEmployeeForm.getName().toLowerCase()+"%");
+
+        if(searchAllEmployeeForm.getIdPosition() != null){
+            sql.append(" and p.id = :id ");
+            params.put("id",searchAllEmployeeForm.getIdPosition());
+        }
+        if(searchAllEmployeeForm.getStatusDelete() != null){
+            sql.append(" and  e.deleted = :delete");
+            params.put("delete",searchAllEmployeeForm.getStatusDelete());
+        }
+        sql.append(" ORDER by e.id desc");
+        TypedQuery<SearchEmployeeVO> query = super.createQuery(sql.toString(),params, SearchEmployeeVO.class);
+        query.setFirstResult(searchAllEmployeeForm.getPageIndex()-1);
+        query.setMaxResults(searchAllEmployeeForm.getPageSize());
+        return query.getResultList().size();
     }
 }

@@ -33,7 +33,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 //
 //
 //        Pageable pageable = PageRequest.of(searchEmployeeForm.getPageIndex()-1,searchEmployeeForm.getPageSize());
-//        List<Employee> listEmployee =employeeRepository.findByFullNameIsLike("%"+searchEmployeeForm.getName()+"%",pageable);
+//        List<Employee> listEmployee =employeeRepository.findEmployeeByFullNameIsLike("%"+searchEmployeeForm.getName()+"%",pageable);
 //        List<GetAllEmployeeVO> getAllAccountVOS = new ArrayList<>();
 //        for(Employee i : listEmployee){
 //            GetAllEmployeeVO getAllEmployeeVO = new GetAllEmployeeVO();

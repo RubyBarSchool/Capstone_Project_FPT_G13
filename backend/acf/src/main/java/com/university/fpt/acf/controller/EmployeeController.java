@@ -18,14 +18,7 @@ import java.util.List;
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
-    // chua fix
-//    @PostMapping
-//    public ResponseEntity<ResponseCommon> getAllEmployee(@RequestBody SearchEmployeeForm searchEmployeeForm){
-//        ResponseCommon responseCommon = new ResponseCommon();
-//        responseCommon.setData(employeeService.getAllEmployee(searchEmployeeForm));
-//        responseCommon.setStatus(HttpStatus.OK.value());
-//        return new ResponseEntity<>(responseCommon,HttpStatus.OK);
-//    }
+
     @PostMapping("/fullnameEmNotAccount")
     public ResponseEntity<ResponseCommon> GetAllFullNameNotAccount(@RequestBody SearchEmployeeForm searchEmployeeForm){
         ResponseCommon responseCommon = new ResponseCommon();
