@@ -39,7 +39,7 @@ public class AccountController {
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
-            message = "Could not get accounts !";
+            message = e.getMessage();
             responseCommon.setData(getAllAccountResponseVOS);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
@@ -66,7 +66,7 @@ public class AccountController {
             responseCommon.setStatus(HttpStatus.OK.value());
             return new ResponseEntity<>(responseCommon,HttpStatus.OK);
         }catch (Exception e){
-            message = "Could not get accounts !";
+            message = e.getMessage();
             responseCommon.setData(getAccountDetailResponeVO);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
@@ -91,7 +91,7 @@ public class AccountController {
             responseCommon.setStatus(HttpStatus.OK.value());
             return new ResponseEntity<>(responseCommon,HttpStatus.OK);
         }catch (Exception e){
-            message = "Can't insert account!";
+            message = e.getMessage();
             responseCommon.setData(checkAdd);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
@@ -115,7 +115,7 @@ public class AccountController {
             responseCommon.setStatus(HttpStatus.OK.value());
             return new ResponseEntity<>(responseCommon,HttpStatus.OK);
         }catch (Exception e){
-            message = "Can't update account!";
+            message =e.getMessage();
             responseCommon.setData(checkUpdate);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
@@ -140,7 +140,7 @@ public class AccountController {
             responseCommon.setStatus(HttpStatus.OK.value());
             return new ResponseEntity<>(responseCommon,HttpStatus.OK);
         }catch (Exception e){
-            message = "Can't delete account!";
+            message = e.getMessage();
             responseCommon.setData(checkDelete);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
@@ -164,8 +164,7 @@ public class AccountController {
             responseCommon.setStatus(HttpStatus.OK.value());
             return new ResponseEntity<>(responseCommon,HttpStatus.OK);
         }catch (Exception e){
-
-            message = "Can't generateUsername!";
+            message = e.getMessage();
             responseCommon.setData(genUsername);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);

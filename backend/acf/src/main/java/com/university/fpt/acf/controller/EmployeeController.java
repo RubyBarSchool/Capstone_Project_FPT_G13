@@ -36,7 +36,7 @@ public class EmployeeController {
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
-            message = "Could not get employee !";
+            message = e.getMessage();
             responseCommon.setData(getAllEmployee);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
@@ -115,7 +115,7 @@ public class EmployeeController {
             responseCommon.setStatus(HttpStatus.OK.value());
             return new ResponseEntity<>(responseCommon,HttpStatus.OK);
         }catch (Exception e){
-            message = "Can't update account!";
+            message = e.getMessage();
             responseCommon.setData(checkUpdate);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
@@ -139,7 +139,7 @@ public class EmployeeController {
             responseCommon.setStatus(HttpStatus.OK.value());
             return new ResponseEntity<>(responseCommon,HttpStatus.OK);
         }catch (Exception e){
-            message = "Can't delete employee!";
+            message = e.getMessage();
             responseCommon.setData(checkDelete);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);

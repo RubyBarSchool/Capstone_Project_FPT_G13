@@ -37,7 +37,7 @@ public class PositionController {
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
-            message = "Could not get position !";
+            message = e.getMessage();
             responseCommon.setData(getAllPositionVOList);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
@@ -79,18 +79,22 @@ public class PositionController {
         String message="";
         Boolean checkUpdate = false;
         try{
-            checkUpdate =positionService.updatePosition(updatePositionForm);
-            if(checkUpdate==false){
-                message="Update position fail!";
-            }else{
-                message="Update position sucessfuly!";
+            if(updatePositionForm.getName()==null || updatePositionForm.getName()==""){
+                message="Data is emplty! Dont Add!";
+            }else {
+                checkUpdate =positionService.updatePosition(updatePositionForm);
+                if(checkUpdate==false){
+                    message="Update position fail!";
+                }else{
+                    message="Update position sucessfuly!";
+                }
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkUpdate);
             responseCommon.setStatus(HttpStatus.OK.value());
             return new ResponseEntity<>(responseCommon,HttpStatus.OK);
         }catch (Exception e){
-            message = "Can't update position!";
+            message = e.getMessage();
             responseCommon.setData(checkUpdate);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
@@ -114,7 +118,7 @@ public class PositionController {
             responseCommon.setStatus(HttpStatus.OK.value());
             return new ResponseEntity<>(responseCommon,HttpStatus.OK);
         }catch (Exception e){
-            message = "Can't delete position!";
+            message = e.getMessage();
             responseCommon.setData(checkDelete);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
