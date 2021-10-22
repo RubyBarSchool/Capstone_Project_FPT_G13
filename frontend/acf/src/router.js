@@ -75,6 +75,20 @@ export const router = new Router({
             component: () =>
                 import ('./pages/PositionMinh.vue')
         },
+        {
+            path: '/403page',
+            name: '403Page',
+            // lazy-loaded
+            component: () =>
+                import ('./pages/403Page.vue')
+        },
+        {
+            path: '*',
+            name: 'PageNotFound',
+            // lazy-loaded
+            component: () =>
+                import ('./pages/PageNotFound.vue')
+        }
     ]
 });
 

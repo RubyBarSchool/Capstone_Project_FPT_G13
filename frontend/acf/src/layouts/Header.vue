@@ -23,20 +23,13 @@
                 {{ loadUser }}
               </a>
               <a-menu slot="overlay">
-                <a-menu-item key="1">
-                  <a-icon type="user" />1st menu item
+                <a-menu-item :key="index" v-for="(data, index) in router">
+                  <router-link :to="data.path">
+                    {{ data.name }}
+                  </router-link>
                 </a-menu-item>
-                <a-menu-item key="2">
-                  <a-icon type="user" />2nd menu item
-                </a-menu-item>
-                <a-menu-item key="3">
-                  <a-icon type="user" />3rd item
-                </a-menu-item>
-                <a-menu-item key="4">
-                  <a-icon type="user" />4rd item
-                </a-menu-item>
-                <a-menu-item key="5">
-                  <a-icon type="user" />Logout
+                <a-menu-item :key="router.length" @click="logout" >
+                  Log Out
                 </a-menu-item>
               </a-menu>
             </a-dropdown>
@@ -53,11 +46,52 @@ export default {
   data() {
     return {
       user: "",
+      router: [],
+      routerSPAdmin: [
+        {
+          path: "/admin",
+          name: "Account Manager",
+        },
+      ],
+      routerAdmin: [
+        {
+          path: "/attendance",
+          name: "Attendance",
+        },
+        {
+          path: "/viewattendance",
+          name: "ViewAttendance",
+        },
+      ],
+      routerEmployee: [],
     };
+  },
+  created() {
+    this.reloadPath();
   },
   computed: {
     loadUser() {
       return JSON.parse(localStorage.getItem("user")).username;
+    },
+  },
+  methods: {
+    logout(){
+      localStorage.removeItem('user');
+      this.$router.push('/login');
+    },
+    reloadPath() {
+      let users = JSON.parse(localStorage.getItem("user"));
+      console.log("user", users);
+      if (users.roles.includes("SP_ADMIN")) {
+        this.router.push.apply(this.router, this.routerSPAdmin);
+      }
+      if (users.roles.includes("ADMIN")) {
+        this.router.push.apply(this.router, this.routerAdmin);
+      }
+      if (users.roles.includes("EMPLOYEE")) {
+        this.router.push.apply(this.router, this.routerEmployee);
+      }
+      console.log("path", this.router);
     },
   },
 };

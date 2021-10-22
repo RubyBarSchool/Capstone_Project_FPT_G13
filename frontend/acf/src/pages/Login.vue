@@ -80,7 +80,20 @@ export default {
     localStorage.removeItem("user");
     this.form = this.$form.createForm(this, { name: "normal_login" });
   },
+  created() {
+    this.showMessage();
+  },
   methods: {
+    showMessage() {
+      let message = this.$store.state.message;
+      if (message.type != "") {
+        console.log("here");
+        this.$notification[message.type]({
+          message: message.message,
+          description: message.description,
+        });
+      }
+    },
     handleSubmit(e) {
       e.preventDefault();
       this.form.validateFields((err, values) => {
