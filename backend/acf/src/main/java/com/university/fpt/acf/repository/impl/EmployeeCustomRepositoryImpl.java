@@ -76,9 +76,11 @@ public class EmployeeCustomRepositoryImpl extends CommonRepository implements Em
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
         sql.append(" SELECT new com.university.fpt.acf.vo.SearchEmployeeVO(e.id,e.image,e.fullName,e.gender,e.dob,e.email,p.id,p.name,e.deleted) " +
-                "FROM Employee e left join e.position p where LOWER(e.fullName) like :name ");
-        params.put("name","%"+searchAllEmployeeForm.getName().toLowerCase()+"%");
-
+                "FROM Employee e left join e.position p where 1=1 ");
+        if(searchAllEmployeeForm.getName()!=null && !searchAllEmployeeForm.getName().isEmpty()){
+            sql.append(" and LOWER(e.fullName) like :name");
+            params.put("name","%"+searchAllEmployeeForm.getName().toLowerCase()+"%");
+        }
         if(searchAllEmployeeForm.getIdPosition() != null){
             sql.append(" and p.id = :id ");
             params.put("id",searchAllEmployeeForm.getIdPosition());
@@ -89,7 +91,7 @@ public class EmployeeCustomRepositoryImpl extends CommonRepository implements Em
         }
         sql.append(" ORDER by e.id desc");
         TypedQuery<SearchEmployeeVO> query = super.createQuery(sql.toString(),params, SearchEmployeeVO.class);
-        query.setFirstResult(searchAllEmployeeForm.getPageIndex()-1);
+        query.setFirstResult((searchAllEmployeeForm.getPageIndex()-1)*searchAllEmployeeForm.getPageSize());
         query.setMaxResults(searchAllEmployeeForm.getPageSize());
         List<SearchEmployeeVO> positionList = query.getResultList();
         return positionList;
@@ -99,9 +101,11 @@ public class EmployeeCustomRepositoryImpl extends CommonRepository implements Em
     public int getTotalEmployee(SearchAllEmployeeForm searchAllEmployeeForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append(" SELECT COUNT(*) FROM Employee e left join e.position p where LOWER(e.fullName) like :name ");
-        params.put("name","%"+searchAllEmployeeForm.getName().toLowerCase()+"%");
-
+        sql.append(" SELECT COUNT(*) FROM Employee e left join e.position p where 1=1 ");
+        if(searchAllEmployeeForm.getName()!=null && !searchAllEmployeeForm.getName().isEmpty()){
+            sql.append(" and LOWER(e.fullName) like :name");
+            params.put("name","%"+searchAllEmployeeForm.getName().toLowerCase()+"%");
+        }
         if(searchAllEmployeeForm.getIdPosition() != null){
             sql.append(" and p.id = :id ");
             params.put("id",searchAllEmployeeForm.getIdPosition());
@@ -111,9 +115,7 @@ public class EmployeeCustomRepositoryImpl extends CommonRepository implements Em
             params.put("delete",searchAllEmployeeForm.getStatusDelete());
         }
         sql.append(" ORDER by e.id desc");
-        TypedQuery<SearchEmployeeVO> query = super.createQuery(sql.toString(),params, SearchEmployeeVO.class);
-        query.setFirstResult(searchAllEmployeeForm.getPageIndex()-1);
-        query.setMaxResults(searchAllEmployeeForm.getPageSize());
-        return query.getResultList().size();
+        TypedQuery<Long> query = super.createQuery(sql.toString(),params, Long.class);
+        return query.getFirstResult();
     }
 }

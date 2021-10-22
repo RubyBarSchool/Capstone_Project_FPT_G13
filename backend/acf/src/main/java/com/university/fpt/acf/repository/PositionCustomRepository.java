@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface PositionCustomRepository {
     List<PositionResponseVO> seachPosition(PositionForm positionForm);
+    int totalSearchPosition(PositionForm positionForm);
 }

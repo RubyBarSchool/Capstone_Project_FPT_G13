@@ -24,10 +24,23 @@ public class PositionCustomRepositoryImpl extends CommonRepository implements Po
         }
         sql.append(" ORDER by p.id desc ");
         TypedQuery<PositionResponseVO> query = super.createQuery(sql.toString(),params, PositionResponseVO.class);
-        query.setFirstResult(positionForm.getPageIndex()-1);
+        query.setFirstResult((positionForm.getPageIndex()-1)* positionForm.getPageSize());
         query.setMaxResults(positionForm.getPageSize());
-        List<PositionResponseVO> positionList = query.getResultList();
-        return positionList;
+        return query.getResultList();
 
+    }
+
+    @Override
+    public int totalSearchPosition(PositionForm positionForm) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append(" select p.id from Position p where p.deleted = false ");
+        if(positionForm.getName() != null && !positionForm.getName().isEmpty()){
+            sql.append(" and LOWER(p.name) like :name ");
+            params.put("name","%"+positionForm.getName().toLowerCase()+"%");
+        }
+        sql.append(" ORDER by p.id desc ");
+        TypedQuery<Long> query = super.createQuery(sql.toString(),params, Long.class);
+        return query.getResultList().size();
     }
 }

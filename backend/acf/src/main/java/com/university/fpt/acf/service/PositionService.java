@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface PositionService {
     List<PositionResponseVO> searchPosition(PositionForm positionForm);
+    int totalSearchPosition(PositionForm positionForm);
     Boolean addPosition(AddPositionForm addPositionForm);
     Boolean updatePosition(UpdatePositionForm updatePositionForm);
     Boolean deletePosition(Long id);

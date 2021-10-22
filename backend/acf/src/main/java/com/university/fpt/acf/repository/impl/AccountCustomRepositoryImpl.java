@@ -41,7 +41,7 @@ public class AccountCustomRepositoryImpl extends CommonRepository implements Acc
         }
         sqlAcc.append(" GROUP BY a.id ");
         TypedQuery<Long> queryAcc = super.createQuery(sqlAcc.toString(),paramsAcc, Long.class);
-        queryAcc.setFirstResult(searchAccountForm.getPageIndex()-1);
+        queryAcc.setFirstResult((searchAccountForm.getPageIndex()-1)*searchAccountForm.getPageSize());
         queryAcc.setMaxResults(searchAccountForm.getPageSize());
         List<Long> accList = queryAcc.getResultList();
 

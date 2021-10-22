@@ -36,6 +36,17 @@ public class PositionServiceImpl implements PositionService {
     }
 
     @Override
+    public int totalSearchPosition(PositionForm positionForm) {
+        int total=0;
+        try {
+            total = positionCustomRepository.totalSearchPosition(positionForm);
+        }catch (Exception e){
+            e.getMessage();
+        }
+        return total;
+    }
+
+    @Override
     public Boolean addPosition(AddPositionForm addPositionForm) {
         boolean check = false;
         try{

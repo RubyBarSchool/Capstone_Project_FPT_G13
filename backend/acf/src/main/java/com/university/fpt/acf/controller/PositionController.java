@@ -22,14 +22,17 @@ public class PositionController {
     public ResponseEntity<ResponseCommon> searchPositions(@RequestBody PositionForm positionForm){
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
+        int total=0;
         List<PositionResponseVO> getAllPositionVOList = new ArrayList<>();
         try {
             getAllPositionVOList = positionService.searchPosition(positionForm);
+            total = positionService.totalSearchPosition(positionForm);
             responseCommon.setData(getAllPositionVOList);
             message = "Get position successfully";
-            if(getAllPositionVOList.isEmpty()){
+            if(total==0){
                 message = "Get position not found";
             }
+            responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
@@ -47,18 +50,22 @@ public class PositionController {
         String message="";
         Boolean checkAdd = false;
         try {
-            checkAdd =positionService.addPosition(addPositionForm);
-            if(checkAdd==false){
-                message="Add position fail!";
-            }else{
-                message="Add position sucessfuly!";
+            if(addPositionForm.getName()==null || addPositionForm.getName()==""){
+                message="Data is null! Dont Add!";
+            }else {
+                checkAdd =positionService.addPosition(addPositionForm);
+                if(checkAdd==false){
+                    message="Add position fail!";
+                }else{
+                    message="Add position sucessfuly!";
+                }
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
             responseCommon.setStatus(HttpStatus.OK.value());
             return new ResponseEntity<>(responseCommon,HttpStatus.OK);
         }catch (Exception e){
-            message = "Can't insert position!";
+            message = e.getMessage();
             responseCommon.setData(checkAdd);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
