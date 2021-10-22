@@ -1,14 +1,12 @@
 <template>
   <div class="viewattendance">
-    <a-layout :style="{ background: 'white'}">
+    <a-layout :style="{ background: 'white' }">
       <Header />
       <a-layout-content :style="{ margin: '24px 16px 0' }">
         <div
           :style="{
-            padding: '24px',
             minHeight: '360px',
             background: 'white',
-            height: '560px',
           }"
         >
           <a-row type="flex">
@@ -40,11 +38,13 @@
               <a-button type="primary"> Xuất excel </a-button>
             </a-col>
           </a-row>
-          <a-table
-            :columns="columns"
-            :data-source="data"
-            :expanded-row-keys.sync="expandedRowKeys"
-          />
+          <div :style="{ 'padding-top': '10px' }">
+            <a-table
+              :columns="columns"
+              :data-source="data"
+              :expanded-row-keys.sync="expandedRowKeys"
+            />
+          </div>
         </div>
       </a-layout-content>
       <Footer />
@@ -109,7 +109,11 @@ const data = [
 
 const rowSelection = {
   onChange: (selectedRowKeys, selectedRows) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+    console.log(
+      `selectedRowKeys: ${selectedRowKeys}`,
+      "selectedRows: ",
+      selectedRows
+    );
   },
   onSelect: (record, selected, selectedRows) => {
     console.log(record, selected, selectedRows);

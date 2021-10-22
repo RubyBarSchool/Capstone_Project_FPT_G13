@@ -74,7 +74,7 @@ export const router = new Router({
             // lazy-loaded
             component: () =>
                 import ('./pages/PositionMinh.vue')
-        }
+        },
     ]
 });
 

@@ -8,25 +8,24 @@
             padding: '24px',
             background: 'white',
             minHeight: '360px',
-            height: '560px',
           }"
         >
           <div class="container">
             <div class="row">
               <div class="col">
                 <a-date-picker
+                  
                   :open="true"
                   v-model="dataGetEmployee.date"
                   @change="onChangeDate"
                   format="YYYY-MM-DD"
                   valueFormat="YYYY-MM-DD"
                 >
-                  <a-icon slot="suffixIcon" type="smile" />
                 </a-date-picker>
               </div>
               <div class="col">
                 <a-form-model-item label="Attendance type">
-                  <a-select v-model="typeAttendance" style="width: 120px">
+                  <a-select v-model="typeAttendance" style="width: 100%">
                     <a-select-option key="1"> Cả ngày </a-select-option>
                     <a-select-option key="0.5"> Nửa ngày </a-select-option>
                     <a-select-option key="0"> Nghỉ </a-select-option>
@@ -67,9 +66,9 @@
                       :disabled="disableSave"
                       @click="saveAttendance"
                     >
-                      Save Attendance
+                     Lưu điểm danh 
                     </a-button>
-                    <a-button type="primary" @click="reset"> Reset </a-button>
+                    <a-button type="primary" @click="reset"> Cài lại </a-button>
                   </a-col>
                 </a-row>
               </div>
@@ -77,20 +76,20 @@
           </div>
         </div>
       </a-layout-content>
-      <!-- <Footer /> -->
+      <Footer />
     </a-layout>
   </div>
 </template>
  <script>
 import Header from "@/layouts/Header.vue";
-// import Footer from "@/layouts/Footer.vue";
+import Footer from "@/layouts/Footer.vue";
 import attendanceService from "@/service/attendanceService.js";
 import EditableCell from "@/components/EditableCell.vue";
 export default {
   name: "Attendance",
   components: {
     Header,
-    // Footer,
+    Footer,
     EditableCell,
   },
   data() {
@@ -247,9 +246,7 @@ export default {
 </script>
 
 <style scoped>
-.attendancetype {
-  width: 636px;
-  text-align: left;
-  margin-left: 0px;
+.ant-calendar{
+  border: 1px solid #000;
 }
 </style>

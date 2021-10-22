@@ -7,7 +7,6 @@
           :style="{
             minHeight: '360px',
             background: 'white',
-            height: '560px',
           }"
         >
           <!-- menu trên -->
@@ -59,9 +58,9 @@
               </a-button>
             </a-col>
           </a-row>
-          
+
           <!-- table content -->
-          <div :style="{ 'padding-top': '10px'}">
+          <div :style="{ 'padding-top': '10px' }">
             <a-table
               :columns="columns"
               :data-source="dataSourceTable"

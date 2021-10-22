@@ -7,7 +7,6 @@
           :style="{
             minHeight: '360px',
             background: 'white',
-            height: '560px',
           }"
         >
           <!-- menu trên -->
