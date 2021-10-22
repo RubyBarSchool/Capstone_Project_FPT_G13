@@ -46,13 +46,23 @@
                   :row-selection="rowSelection"
                   @change="handleTableChange"
                 >
+                  <template slot="note" slot-scope="text, record">
+                    <editable-cell
+                      :text="text"
+                      @change="onCellChange(record.id, $event)"
+                    />
+                  </template>
                 </a-table>
                 <!-- Table content -->
 
                 <a-row type="flex">
                   <a-col flex="442px"></a-col>
                   <a-col flex="auto">
-                    <a-button type="primary" :disabled="disableSave" @click="saveAttendance">
+                    <a-button
+                      type="primary"
+                      :disabled="disableSave"
+                      @click="saveAttendance"
+                    >
                       Save Attendance
                     </a-button>
                     <a-button type="primary"> Reset </a-button>
@@ -71,12 +81,13 @@
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 import attendanceService from "@/service/attendanceService.js";
-
+import EditableCell from "@/components/EditableCell.vue";
 export default {
   name: "Attendance",
   components: {
     Header,
     Footer,
+    EditableCell,
   },
   data() {
     return {
@@ -98,7 +109,6 @@ export default {
           width: 100,
           dataIndex: "id",
           key: "id",
-          fixed: "left",
         },
         {
           title: "Tên nhân viên",
@@ -106,25 +116,48 @@ export default {
           key: "name``",
           width: 150,
         },
+        {
+          title: "Ghi chú",
+          dataIndex: "note",
+          key: "note",
+          width: 150,
+          scopedSlots: { customRender: "note" },
+        },
       ],
       dataForm: {
         date: "",
         type: "",
-        id: [],
+        attendance: [],
       },
       disableSave: true,
+      dataNote: [],
     };
   },
   computed: {
     rowSelection() {
       return {
-        onChange: (selectedRowKeys) => {
-          if(selectedRowKeys.length!=0){
+        onChange: (selectedRowKeys, selectedRows) => {
+          this.dataForm.attendance = [];
+          for (let i = 0; i < selectedRows.length; i++) {
+            let data = {
+              id: selectedRows[i].id,
+              note: "",
+            };
+            for (let j = 0; j < this.dataNote.length; j++) {
+              if (this.dataNote[j].id == selectedRows[i].id) {
+                data.note = this.dataNote[j].note;
+                break;
+              }
+            }
+            this.dataForm.attendance.push(data);
+          }
+          if (selectedRowKeys.length != 0) {
             this.disableSave = false;
-          }else{
+          } else {
             this.disableSave = true;
           }
-          this.dataForm.id = selectedRowKeys;
+          console.log("DataNoteChangeSelect", this.dataNote);
+          console.log("DataFormChangeSelect", this.dataForm);
         },
       };
     },
@@ -134,17 +167,44 @@ export default {
     this.onChangeDate();
   },
   methods: {
+    onCellChange(key, value) {
+      for (let i = 0; i < this.dataForm.attendance.length; i++) {
+        if (this.dataForm.attendance[i].id == key) {
+          this.dataForm.attendance[i].note = value;
+          break;
+        }
+      }
+      let check = true;
+      for (let i = 0; i < this.dataNote.length; i++) {
+        if (key == this.dataNote[i].id) {
+          this.dataNote[i].note = value;
+          check = false;
+          break;
+        }
+      }
+      if (check) {
+        var data = {
+          id: key,
+          note: value,
+        };
+        this.dataNote.push(data);
+      }
+      console.log("DataNoteChangeCell", this.dataNote);
+      console.log("DataFormChangeCell", this.dataForm);
+    },
     saveAttendance() {
       this.dataForm.date = this.dataGetEmployee.date;
       this.dataForm.type = this.typeAttendance;
-      attendanceService
-        .addAttendance(this.dataForm)
-        .then((response) => {
-          console.log(response)
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+      console.log("DataNoteSubmit", this.dataNote);
+      console.log("DataFormSubmit", this.dataForm);
+      // attendanceService
+      //   .addAttendance(this.dataForm)
+      //   .then((response) => {
+      //     console.log(response);
+      //   })
+      //   .catch((e) => {
+      //     console.log(e);
+      //   });
     },
     handleTableChange(pagination) {
       this.dataGetEmployee.pageIndex = pagination.current;
