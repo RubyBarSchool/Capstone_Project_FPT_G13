@@ -14,7 +14,7 @@ import java.util.Map;
 @Repository
 public class PositionCustomRepositoryImpl extends CommonRepository implements PositionCustomRepository {
     @Override
-    public List<PositionResponseVO> seachPosition(PositionForm positionForm) {
+    public List<PositionResponseVO>seachPosition(PositionForm positionForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
         sql.append(" select new  com.university.fpt.acf.vo.PositionResponseVO(p.id,p.name) from Position p where p.deleted = false ");
