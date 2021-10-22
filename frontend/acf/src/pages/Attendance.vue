@@ -195,16 +195,14 @@ export default {
     saveAttendance() {
       this.dataForm.date = this.dataGetEmployee.date;
       this.dataForm.type = this.typeAttendance;
-      console.log("DataNoteSubmit", this.dataNote);
-      console.log("DataFormSubmit", this.dataForm);
-      // attendanceService
-      //   .addAttendance(this.dataForm)
-      //   .then((response) => {
-      //     console.log(response);
-      //   })
-      //   .catch((e) => {
-      //     console.log(e);
-      //   });
+      attendanceService
+        .addAttendance(this.dataForm)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     handleTableChange(pagination) {
       this.dataGetEmployee.pageIndex = pagination.current;
