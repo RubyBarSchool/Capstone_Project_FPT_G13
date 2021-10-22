@@ -1,6 +1,6 @@
 <template>
   <div class="attendance">
-    <a-layout :style="{ background: 'white'}">
+    <a-layout :style="{ background: 'white' }">
       <Header />
       <a-layout-content :style="{ margin: '24px 16px 0' }">
         <div
@@ -28,7 +28,7 @@
                 <a-form-model-item label="Attendance type">
                   <a-select v-model="typeAttendance" style="width: 120px">
                     <a-select-option key="1"> Cả ngày </a-select-option>
-                    <a-select-option key="1/2"> Nửa ngày </a-select-option>
+                    <a-select-option key="0.5"> Nửa ngày </a-select-option>
                     <a-select-option key="0"> Nghỉ </a-select-option>
                   </a-select>
                 </a-form-model-item>
@@ -43,7 +43,11 @@
                       return record.id;
                     }
                   "
-                  :row-selection="rowSelection"
+                  :row-selection="{
+                    selectedRowKeys: selectedRowKeys,
+                    selectedRows: selectedRows,
+                    onChange: onSelectChange,
+                  }"
                   @change="handleTableChange"
                 >
                   <template slot="note" slot-scope="text, record">
@@ -65,7 +69,7 @@
                     >
                       Save Attendance
                     </a-button>
-                    <a-button type="primary"> Reset </a-button>
+                    <a-button type="primary" @click="reset"> Reset </a-button>
                   </a-col>
                 </a-row>
               </div>
@@ -73,20 +77,20 @@
           </div>
         </div>
       </a-layout-content>
-      <Footer />
+      <!-- <Footer /> -->
     </a-layout>
   </div>
 </template>
  <script>
 import Header from "@/layouts/Header.vue";
-import Footer from "@/layouts/Footer.vue";
+// import Footer from "@/layouts/Footer.vue";
 import attendanceService from "@/service/attendanceService.js";
 import EditableCell from "@/components/EditableCell.vue";
 export default {
   name: "Attendance",
   components: {
     Header,
-    Footer,
+    // Footer,
     EditableCell,
   },
   data() {
@@ -131,42 +135,48 @@ export default {
       },
       disableSave: true,
       dataNote: [],
+      selectedRowKeys: [],
+      selectedRows: [],
     };
   },
-  computed: {
-    rowSelection() {
-      return {
-        onChange: (selectedRowKeys, selectedRows) => {
-          this.dataForm.attendance = [];
-          for (let i = 0; i < selectedRows.length; i++) {
-            let data = {
-              id: selectedRows[i].id,
-              note: "",
-            };
-            for (let j = 0; j < this.dataNote.length; j++) {
-              if (this.dataNote[j].id == selectedRows[i].id) {
-                data.note = this.dataNote[j].note;
-                break;
-              }
-            }
-            this.dataForm.attendance.push(data);
-          }
-          if (selectedRowKeys.length != 0) {
-            this.disableSave = false;
-          } else {
-            this.disableSave = true;
-          }
-          console.log("DataNoteChangeSelect", this.dataNote);
-          console.log("DataFormChangeSelect", this.dataForm);
-        },
-      };
-    },
-  },
+  computed: {},
   created() {
     this.getDate();
     this.onChangeDate();
   },
   methods: {
+    reset(){
+      this.reloadSelect();
+      this.typeAttendance = "1";
+      this.getDate();
+    },
+    reloadSelect() {
+      this.selectedRowKeys = [];
+      this.selectedRows = [];
+    },
+    onSelectChange(selectedRowKeys, selectedRows) {
+      this.selectedRowKeys = selectedRowKeys;
+      this.selectedRows = selectedRows;
+      this.dataForm.attendance = [];
+      for (let i = 0; i < selectedRows.length; i++) {
+        let data = {
+          id: selectedRows[i].id,
+          note: "",
+        };
+        for (let j = 0; j < this.dataNote.length; j++) {
+          if (this.dataNote[j].id == selectedRows[i].id) {
+            data.note = this.dataNote[j].note;
+            break;
+          }
+        }
+        this.dataForm.attendance.push(data);
+      }
+      if (selectedRowKeys.length != 0) {
+        this.disableSave = false;
+      } else {
+        this.disableSave = true;
+      }
+    },
     onCellChange(key, value) {
       for (let i = 0; i < this.dataForm.attendance.length; i++) {
         if (this.dataForm.attendance[i].id == key) {
@@ -189,8 +199,6 @@ export default {
         };
         this.dataNote.push(data);
       }
-      console.log("DataNoteChangeCell", this.dataNote);
-      console.log("DataFormChangeCell", this.dataForm);
     },
     saveAttendance() {
       this.dataForm.date = this.dataGetEmployee.date;
@@ -199,6 +207,7 @@ export default {
         .addAttendance(this.dataForm)
         .then((response) => {
           console.log(response);
+          this.onChangeDate();
         })
         .catch((e) => {
           console.log(e);
@@ -219,6 +228,7 @@ export default {
         datex.getDate();
     },
     onChangeDate() {
+      this.reloadSelect();
       attendanceService
         .getEmployee(this.dataGetEmployee)
         .then((response) => {

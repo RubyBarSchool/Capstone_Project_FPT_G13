@@ -13,5 +13,5 @@ import java.util.List;
 public class AddAttendanceForm {
     private LocalDate date;
     private String type;
-    private List<Long> id;
+    private List<AttendanceNote> attendance;
 }

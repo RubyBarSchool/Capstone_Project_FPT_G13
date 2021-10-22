@@ -2,6 +2,7 @@ package com.university.fpt.acf.controller;
 
 
 import com.university.fpt.acf.common.entity.ResponseCommon;
+import com.university.fpt.acf.entity.TimeKeep;
 import com.university.fpt.acf.form.AddAccountForm;
 import com.university.fpt.acf.form.AddAttendanceForm;
 import com.university.fpt.acf.form.EmployeeNotAttendanceForm;
@@ -33,12 +34,27 @@ public class AttendancesController {
 
 
     @PostMapping
-    public  ResponseEntity<ResponseCommon> addAccount(@RequestBody AddAttendanceForm addAccountForm){
+    public  ResponseEntity<ResponseCommon> addAttendance(@RequestBody AddAttendanceForm addAccountForm){
         ResponseCommon responseCommon = new ResponseCommon();
-        attendancesService.saveAttendance(addAccountForm);
-//        responseCommon.setData(accountService.insertAccount(addAccountForm));
-        responseCommon.setStatus(HttpStatus.OK.value());
-        return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+        String message = "";
+        try{
+            List<TimeKeep> timeKeeps = attendancesService.saveAttendance(addAccountForm);
+            message = "add attendances successfully";
+            if (timeKeeps.size()==0) {
+                message = "add false";
+                responseCommon.setData(false);
+            }
+            responseCommon.setData(true);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        }catch (Exception e){
+            message = "Could not add attendances !";
+            responseCommon.setData(false);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
     }
 
 
