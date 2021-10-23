@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface RolesCustomRepository {
     List<GetAllRoleVO> getRoles(RolesForm rolesForm);
+    int totalGetRoles(RolesForm rolesForm);
 }

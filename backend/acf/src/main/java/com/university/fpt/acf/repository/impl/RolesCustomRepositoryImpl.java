@@ -26,9 +26,23 @@ public class RolesCustomRepositoryImpl extends CommonRepository implements Roles
         }
         sql.append(" ORDER by r.id desc ");
         TypedQuery<GetAllRoleVO> query = super.createQuery(sql.toString(),params, GetAllRoleVO.class);
-        query.setFirstResult(rolesForm.getPageIndex()-1);
+        query.setFirstResult((rolesForm.getPageIndex()-1)* rolesForm.getPageSize());
         query.setMaxResults(rolesForm.getPageSize());
         List<GetAllRoleVO> roleList = query.getResultList();
         return roleList;
+    }
+
+    @Override
+    public int totalGetRoles(RolesForm rolesForm) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append(" select COUNT(*) from Role r ");
+        if(rolesForm.getName() != null && !rolesForm.getName().isEmpty()){
+            sql.append(" where LOWER(r.name) like :name ");
+            params.put("name","%"+rolesForm.getName().toLowerCase()+"%");
+        }
+        sql.append(" ORDER by r.id desc ");
+        TypedQuery<Long> query = super.createQuery(sql.toString(),params, Long.class);
+        return query.getSingleResult().intValue();
     }
 }

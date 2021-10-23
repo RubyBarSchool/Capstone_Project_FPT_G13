@@ -34,13 +34,13 @@ public class PositionCustomRepositoryImpl extends CommonRepository implements Po
     public int totalSearchPosition(PositionForm positionForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append(" select p.id from Position p where p.deleted = false ");
+        sql.append(" select COUNT(*) from Position p where p.deleted = false ");
         if(positionForm.getName() != null && !positionForm.getName().isEmpty()){
             sql.append(" and LOWER(p.name) like :name ");
             params.put("name","%"+positionForm.getName().toLowerCase()+"%");
         }
         sql.append(" ORDER by p.id desc ");
         TypedQuery<Long> query = super.createQuery(sql.toString(),params, Long.class);
-        return query.getResultList().size();
+        return query.getSingleResult().intValue();
     }
 }

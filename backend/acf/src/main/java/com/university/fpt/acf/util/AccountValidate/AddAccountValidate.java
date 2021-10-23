@@ -38,16 +38,6 @@ public class AddAccountValidate {
         str = str.replaceAll("Đ", "D");
         return str;
     }
-//    public String convertEnglish(String str) {
-//        try {
-//            String temp = Normalizer.normalize(str, Normalizer.Form.NFD);
-//            Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
-//            return pattern.matcher(temp).replaceAll("").toLowerCase().replaceAll(" ", "-").replaceAll("đ", "d");
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//        return "";
-//    }
 
     //ham generate username by fullname
     public  String generateFormatUsernameByFullname(String fullname){

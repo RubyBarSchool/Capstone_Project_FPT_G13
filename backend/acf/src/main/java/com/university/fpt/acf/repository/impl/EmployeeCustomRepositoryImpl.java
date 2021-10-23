@@ -116,6 +116,6 @@ public class EmployeeCustomRepositoryImpl extends CommonRepository implements Em
         }
         sql.append(" ORDER by e.id desc");
         TypedQuery<Long> query = super.createQuery(sql.toString(),params, Long.class);
-        return query.getFirstResult();
+        return query.getSingleResult().intValue();
     }
 }

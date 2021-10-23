@@ -22,14 +22,17 @@ public class RoleController {
     public ResponseEntity<ResponseCommon> searchRoles(@RequestBody RolesForm rolesForm){
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
+        int total;
         List<GetAllRoleVO> getAllRoleVOList = new ArrayList<>();
         try {
             getAllRoleVOList = rolesService.getRoles(rolesForm);
             responseCommon.setData(getAllRoleVOList);
+            total=rolesService.totalGetAllRole(rolesForm);
             message = "Get roles successfully";
-            if(getAllRoleVOList.isEmpty()){
+            if(total==0){
                 message = "Get roles not found";
             }
+            responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);

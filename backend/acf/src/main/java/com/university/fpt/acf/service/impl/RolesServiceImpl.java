@@ -32,6 +32,17 @@ public class RolesServiceImpl implements RolesService {
         } catch (Exception e) {
             throw new RuntimeException("Error role repository " + e.getMessage());
         }
-        return  getAllRoleVOS;
+        return getAllRoleVOS;
+    }
+
+    @Override
+    public int totalGetAllRole(RolesForm rolesForm) {
+        int size = 0;
+        try {
+            size = rolesCustomRepository.totalGetRoles(rolesForm);
+        } catch (Exception e) {
+            throw new RuntimeException("Error role repository " + e.getMessage());
+        }
+        return size;
     }
 }

@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface RolesService {
     List<GetAllRoleVO> getRoles(RolesForm rolesForm);
+    int totalGetAllRole(RolesForm rolesForm);
 }

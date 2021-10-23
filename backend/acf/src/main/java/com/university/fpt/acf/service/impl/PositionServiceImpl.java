@@ -69,7 +69,7 @@ public class PositionServiceImpl implements PositionService {
             }
 
         }catch (Exception e){
-            e.getMessage();
+            throw  new RuntimeException(e.getMessage());
         }
         return check;
     }
@@ -104,7 +104,7 @@ public class PositionServiceImpl implements PositionService {
                 }
             }
         }catch (Exception e){
-            e.getMessage();
+            throw new RuntimeException(e.getMessage());
         }
         return check;
     }
