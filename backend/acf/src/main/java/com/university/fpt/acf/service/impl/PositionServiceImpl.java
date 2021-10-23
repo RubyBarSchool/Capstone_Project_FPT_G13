@@ -113,18 +113,18 @@ public class PositionServiceImpl implements PositionService {
     public Boolean deletePosition(Long id) {
         boolean check = false;
         try{
-            Position p = positionRespository.getPositionById(id);
-            if(p != null){
-                p.setDeleted(true);
-                AccountSercurity accountSercurity = new AccountSercurity();
-                p.setModified_by(accountSercurity.getUserName());
-                positionRespository.save(p);
-                check =true;
-            }else {
-                throw new Exception("Position is not existed");
+            if(positionRespository.checkPositionInEmployeeToDeletePosition(id)==0){
+                Position p = positionRespository.getPositionById(id);
+                if(p != null) {
+                    p.setDeleted(true);
+                    AccountSercurity accountSercurity = new AccountSercurity();
+                    p.setModified_by(accountSercurity.getUserName());
+                    positionRespository.save(p);
+                    check = true;
+                }
             }
         }catch (Exception e){
-            e.getMessage();
+            throw new RuntimeException("Position is not existed");
         }
         return check;
     }

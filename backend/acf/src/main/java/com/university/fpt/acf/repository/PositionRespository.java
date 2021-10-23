@@ -16,5 +16,7 @@ public interface PositionRespository extends JpaRepository<Position,Long> {
     Position getPositionById(@Param("id") Long id);
     @Query("SELECT p.name FROM Position p where p.deleted = true and p.id=:id")
     String checkDeletePositionById(@Param("id") Long id);
+    @Query("SELECT COUNT(e) FROM Employee e where e.position.id = :id")
+    Long checkPositionInEmployeeToDeletePosition(@Param("id") Long id);
 
 }

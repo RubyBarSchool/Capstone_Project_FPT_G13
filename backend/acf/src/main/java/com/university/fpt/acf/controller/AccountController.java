@@ -3,6 +3,7 @@ package com.university.fpt.acf.controller;
 import com.university.fpt.acf.common.entity.ResponseCommon;
 import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.service.AccountManagerService;
+import com.university.fpt.acf.util.AccountValidate.AddAccountValidate;
 import com.university.fpt.acf.vo.GetAccountDetailResponeVO;
 import com.university.fpt.acf.vo.GetAllAccountResponseVO;
 import com.university.fpt.acf.vo.GetAllRoleVO;
@@ -80,11 +81,24 @@ public class AccountController {
         String message="";
         Boolean checkAdd = false;
         try {
-            checkAdd =accountService.insertAccount(addAccountForm);
-            if(checkAdd==false){
-                message="Add account fail!";
+            if(addAccountForm.getUsername()!=null && !addAccountForm.getUsername().isEmpty()){
+                if(addAccountForm.getPassword()!=null&&!addAccountForm.getPassword().isEmpty()){
+                    AddAccountValidate cv = new AddAccountValidate();
+                    if(cv.checkPassword(addAccountForm.getPassword())){
+                        checkAdd =accountService.insertAccount(addAccountForm);
+                        if(checkAdd==false){
+                            message="Add account fail!";
+                        }else{
+                            message="Add sucessfuly!";
+                        }
+                    }else{
+                        message="Password is format wrong";
+                    }
+                }else{
+                    message="Password is Empty!";
+                }
             }else{
-                message="Add sucessfuly!";
+                message="username is empty!";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
