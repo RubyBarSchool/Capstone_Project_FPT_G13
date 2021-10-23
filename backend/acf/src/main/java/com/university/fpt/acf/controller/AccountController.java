@@ -17,7 +17,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(path = "/spadmin/account")
-public class AccountController {6
+public class AccountController {
     @Autowired
     private AccountManagerService accountService;
 
