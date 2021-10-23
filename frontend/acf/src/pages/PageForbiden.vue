@@ -1360,63 +1360,6 @@
           </g>
           <rect x="10.9" y="213.8" class="st16" width="280" height="170" />
         </g>
-        <g class="st0">
-          <g class="st4">
-            <g>
-              <path
-                class="st17"
-                d="M237.4,264c0,5.8-4.7,10.4-10.4,10.4H74.4c-5.8,0-10.4-4.7-10.4-10.4v-20.9c0-5.8,4.7-10.4,10.4-10.4
-                                H227c5.8,0,10.4,4.7,10.4,10.4V264z"
-              />
-              <path
-                class="st18"
-                d="M233.7,262.4c0,4.9-4.5,8.9-10,8.9h-146c-5.5,0-10-4-10-8.9v-17.8c0-4.9,4.5-8.9,10-8.9h146
-                                c5.5,0,10,4,10,8.9V262.4z"
-              />
-            </g>
-            <rect x="70.6" y="242.6" class="st19" width="160.1" height="27" />
-            <text
-              transform="matrix(1 0 0 1 85.4612 263.0171)"
-              class="st9 st20 st21"
-            >
-              404 error
-            </text>
-          </g>
-          <rect x="44.7" y="322.3" class="st22" width="212.1" height="34.4" />
-          <text transform="matrix(1 0 0 1 47.2058 329.1734)" class="st4">
-            <tspan x="0" y="0" class="st23 st24 st25">
-              Lorem ipsum dolor sit amet, consectetur adipiscing
-            </tspan>
-            <tspan x="0.6" y="11.7" class="st23 st24 st25">
-              elit, sed do eiusmod tempor incididunt ut labore et
-            </tspan>
-            <tspan x="6.2" y="23.3" class="st23 st24 st25">
-              dolore magna aliqua. Ut enim ad minim veniam.
-            </tspan>
-          </text>
-          <g class="st4">
-            <path
-              class="st10"
-              d="M277,301.4c0,4.3-3.5,7.8-7.8,7.8H32.1c-4.3,0-7.8-3.5-7.8-7.8v-6.5c0-4.3,3.5-7.8,7.8-7.8h237.1
-                              c4.3,0,7.8,3.5,7.8,7.8V301.4z"
-            />
-            <rect x="34.4" y="292" class="st19" width="232.6" height="18.4" />
-            <text
-              transform="matrix(1 0 0 1 45.1999 303.7364)"
-              class="st9 st26 st27"
-            >
-              sorry, the page not found
-            </text>
-          </g>
-          <rect x="93" y="363.5" class="st22" width="115.4" height="12.3" />
-          <text
-            transform="matrix(1 0 0 1 102.8845 371.104)"
-            class="st28 st29 st30"
-            style="text-decoration: underline"
-          >
-            click to homepage
-          </text>
-        </g>
       </g>
       <g>
         <g>
@@ -1636,31 +1579,34 @@
         </g>
         <text
           opacity="0.6"
-          x="15"
+          x="22"
           y="257"
           fill="#000"
-          font-family="Viga"
+          font-family="Arial"
           font-size="25"
         >
-          There is no way Immma
-          <tspan x="35" y="292">let you pass through!</tspan>
+          Không đời nào Immma
+          <tspan x="35" y="292">cho phép bạn đi qua!</tspan>
           <tspan x="100" y="357" fill="#000" font-size="65">403</tspan>
-          <tspan x="93" y="381.2" fill="#000" font-size="15">
-            Access Forbidden.
-          </tspan>
+          <router-link class="link_404" to="/home">
+            <tspan x="108" y="381.2" fill="#000" font-size="15">
+              Về trang chủ
+            </tspan>
+          </router-link>
         </text>
 
-        <text x="15" y="255" fill="#6BA184" font-family="Viga" font-size="25">
-          There is no way Immma
-          <tspan x="35" y="290">let you pass through!</tspan>
+        <text x="22" y="255" fill="#6BA184" font-family="Arial" font-size="25">
+          Không đời nào Immma
+          <tspan x="35" y="290">cho phép bạn đi qua!</tspan>
           <tspan x="100" y="355" fill="#BF3E73" font-size="65">403</tspan>
-          <tspan x="93" y="380" fill="#6BA184" font-size="15">
-            Access Forbidden.
-          </tspan>
+          <router-link class="link_404" to="/home">
+            <tspan x="108" y="381" fill="#6BA184" font-size="15">
+              Về trang chủ
+            </tspan>
+          </router-link>
         </text>
       </g>
     </svg>
-    <router-link class="link_404" to="/home"> Go to Home </router-link>
   </div>
 </template>
 
@@ -1684,8 +1630,8 @@ export default {
 </script>
 
 <style scoped>
-body {
-  background-color: #f4f3f5;
+.PageForbiden {
+  height: 700px;
 }
 svg {
   transform: scale(0.3, 0.3);
@@ -1775,62 +1721,5 @@ svg {
   fill: none;
   stroke: #7ebe9b;
   stroke-miterlimit: 10;
-}
-.st17 {
-  fill: #e7b84d;
-}
-.st18 {
-  fill: none;
-  stroke: #ffffff;
-  stroke-width: 1.098;
-  stroke-miterlimit: 10;
-}
-.st19 {
-  fill: none;
-}
-.st20 {
-  font-family: "Asap-Medium";
-}
-.st21 {
-  font-size: 28.6973px;
-}
-.st22 {
-  display: inline;
-  fill: none;
-}
-.st23 {
-  fill: #7091a4;
-}
-.st24 {
-  font-family: "BloggerSans";
-}
-.st25 {
-  font-size: 9.72px;
-}
-.st26 {
-  font-family: "Asap-Regular";
-}
-.st27 {
-  font-size: 16.524px;
-}
-.st28 {
-  display: inline;
-  fill: #7ebe9b;
-}
-.st29 {
-  font-family: "Asap-Bold";
-}
-.st30 {
-  font-size: 10.692px;
-}
-.st31 {
-  fill: #9799a2;
-}
-.link_404 {
-  color: #fff !important;
-  padding: 10px 20px;
-  background: #03e046;
-  margin: 20px 0;
-  display: inline-block;
 }
 </style>
