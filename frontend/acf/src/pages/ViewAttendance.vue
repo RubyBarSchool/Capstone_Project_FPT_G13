@@ -11,120 +11,126 @@
         >
           <a-row type="flex">
             <a-col flex="auto">
-              <a-input placeholder="Tên tài khoản" style="width: 150px" />
+              <a-input
+                v-model="dataSearch.name"
+                placeholder="Tên  nhân viên"
+                style="width: 15%"
+              />
+              <!-- :show-time="{ format: 'DD/MM/YYYY' }" -->
               <a-range-picker
+                @change="search"
+                v-model="dataSearch.date"
                 :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-                :show-time="{ format: 'DD/MM/YYYY' }"
                 format="DD/MM/YYYY"
               />
-              <a-dropdown-button>
-                Fullday
-                <a-menu slot="overlay">
-                  <a-menu-item key="1">
-                    <a-icon type="user" />1st menu item
-                  </a-menu-item>
-                  <a-menu-item key="2">
-                    <a-icon type="user" />2nd menu item
-                  </a-menu-item>
-                  <a-menu-item key="3">
-                    <a-icon type="user" />3rd item
-                  </a-menu-item>
-                </a-menu>
-                <a-icon slot="icon" type="calendar" />
-              </a-dropdown-button>
-              <a-button type="primary" icon="search"> Tìm kiếm </a-button>
+              <a-select
+                v-model="dataSearch.type"
+                @change="search"
+                style="width: 10%"
+              >
+                <a-select-option key=""> Tất Cả </a-select-option>
+                <a-select-option key="1"> Cả ngày </a-select-option>
+                <a-select-option key="0.5"> Nửa ngày </a-select-option>
+                <a-select-option key="0"> Nghỉ </a-select-option>
+              </a-select>
+              <a-input
+                v-model="dataSearch.note"
+                placeholder="Ghi Chú"
+                style="width: 15%"
+              />
+              <a-button type="primary" @click="search" icon="search">
+                Tìm kiếm
+              </a-button>
             </a-col>
             <a-col flex="100px">
               <a-button type="primary"> Xuất excel </a-button>
             </a-col>
           </a-row>
-          <div :style="{ 'padding-top': '10px' }">
-            <a-table
-              :columns="columns"
-              :data-source="data"
-              :expanded-row-keys.sync="expandedRowKeys"
-            />
-          </div>
+          <a-table
+            :columns="columns"
+            :data-source="dataSourceTable"
+            :pagination="pagination"
+            :rowKey="
+              (record, index) => {
+                return index;
+              }
+            "
+            @change="handleTableChange"
+          >
+            <template slot="nameEmpl" slot-scope="text, record">
+              {{ record.nameEmpl }}
+            </template>
+            <template slot="type" slot-scope="text, record">
+              <a-tag v-if="record.type == 1" color="green">
+                {{ record.type }}
+              </a-tag>
+              <a-tag v-else-if="record.type == 0.5" color="orange">
+                {{ record.type }}
+              </a-tag>
+              <a-tag v-else color="red">
+                {{ record.type }}
+              </a-tag>
+            </template>
+            <template slot="date" slot-scope="text, record">
+              {{
+                new Date(record.date).toLocaleDateString("en-GB", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                })
+              }}
+            </template>
+            <template slot="action" slot-scope="text, record">
+              <a-row>
+                <a-col :span="8">
+                  <a-button
+                    id="edit"
+                    type="dashed"
+                    icon="edit"
+                    @click="showModalEdit(record)"
+                  />
+                </a-col>
+              </a-row>
+            </template>
+          </a-table>
         </div>
+
+        <a-modal v-model="visibleEdit" title="Chỉnh sửa điểm danh">
+          <template slot="footer">
+            <a-button key="back" @click="handleCancel"> Hủy </a-button>
+            <a-button key="submit" type="primary" @click="submitUpdate">
+              Lưu
+            </a-button>
+          </template>
+          <a-form-model>
+            <a-form-model-item label="Họ Và Tên">
+              <a-input v-model="nameEdit" disabled />
+            </a-form-model-item>
+            <a-form-model-item label="Số công">
+              <a-select v-model="dataEdit.type" style="width: 100%">
+                <a-select-option key="1"> Cả ngày </a-select-option>
+                <a-select-option key="0.5"> Nửa ngày </a-select-option>
+                <a-select-option key="0"> Nghỉ </a-select-option>
+              </a-select>
+            </a-form-model-item>
+            <a-form-model-item label="Note">
+              <a-textarea
+                v-model="dataEdit.note"
+                placeholder="Nhập ghi chú"
+                :auto-size="{ minRows: 2, maxRows: 6 }"
+              />
+            </a-form-model-item>
+          </a-form-model>
+        </a-modal>
       </a-layout-content>
       <Footer />
     </a-layout>
   </div>
 </template>
  <script>
-const columns = [
-  {
-    title: "Date",
-    dataIndex: "date",
-    key: "date",
-  },
-  {
-    title: "Name",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Attendance type(Day)",
-    dataIndex: "attendance",
-    key: "attendance",
-  },
-  {
-    title: "Note",
-    dataIndex: "note",
-    key: "note",
-  },
-  {
-    title: "Action",
-    dataIndex: "action",
-    key: "action",
-  },
-];
-
-const data = [
-  {
-    key: 1,
-    date: "1/1/1111",
-    name: "John Brown sr",
-    attendance: "a",
-    note: "a",
-    action: "a",
-  },
-  {
-    key: 2,
-    date: "1/1/1111",
-    name: "John Brown sr",
-    attendance: "a",
-    note: "a",
-    action: "a",
-  },
-  {
-    key: 3,
-    date: "1/1/1111",
-    name: "John Brown sr",
-    attendance: "a",
-    note: "a",
-    action: "a",
-  },
-];
-
-const rowSelection = {
-  onChange: (selectedRowKeys, selectedRows) => {
-    console.log(
-      `selectedRowKeys: ${selectedRowKeys}`,
-      "selectedRows: ",
-      selectedRows
-    );
-  },
-  onSelect: (record, selected, selectedRows) => {
-    console.log(record, selected, selectedRows);
-  },
-  onSelectAll: (selected, selectedRows, changeRows) => {
-    console.log(selected, selectedRows, changeRows);
-  },
-};
-
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
+import attendanceService from "@/service/attendanceService.js";
 
 export default {
   name: "Attendance",
@@ -134,15 +140,116 @@ export default {
   },
   data() {
     return {
-      data,
-      columns,
-      rowSelection,
-      expandedRowKeys: [],
+      visibleEdit: false,
+      nameEdit:"",
+      dataSourceTable: [],
+      dataSearch: {
+        name: "",
+        date: [],
+        type: "",
+        note: "",
+        pageIndex: 1,
+        pageSize: 10,
+        total: 0,
+      },
+      dataEdit: {
+        id: "",
+        type: "1",
+        note: "",
+      },
+      pagination: {
+        current: 1,
+        pageSize: 10,
+        total: 0,
+      },
+      columns: [
+        {
+          title: "ID",
+          width: 100,
+          dataIndex: "id",
+          key: "id",
+          fixed: "left",
+        },
+        {
+          title: "Họ Và Tên",
+          dataIndex: "nameEmpl",
+          key: "nameEmpl",
+          width: 150,
+          scopedSlots: { customRender: "nameEmpl" },
+        },
+        {
+          title: "Ngày",
+          dataIndex: "date",
+          key: "date",
+          width: 150,
+          scopedSlots: { customRender: "date" },
+        },
+        {
+          title: "Số công",
+          dataIndex: "type",
+          key: "type",
+          width: 150,
+          scopedSlots: { customRender: "type" },
+        },
+        {
+          title: "Ghi chú",
+          dataIndex: "note",
+          key: "note",
+          width: 150,
+        },
+        {
+          title: "Hành động",
+          dataIndex: "action",
+          key: "action",
+          fixed: "right",
+          width: 150,
+          scopedSlots: { customRender: "action" },
+        },
+      ],
     };
   },
+  created() {
+    this.search();
+  },
   methods: {
-    onPanelChange(value, mode) {
-      console.log(value, mode);
+    showModalEdit(record) {
+      this.visibleEdit = true;
+      this.dataEdit.id = record.id;
+      this.dataEdit.type = record.type;
+      this.dataEdit.note = record.note;
+      this.nameEdit = record.nameEmpl;
+    },
+    submitUpdate() {
+      
+    },
+    handleCancel() {
+      this.visibleEdit = false;
+      this.dataEdit.id = "";
+      this.dataEdit.type = "1";
+      this.dataEdit.note = "";
+      this.nameEdit = "";
+    },
+    handleTableChange(pagination) {
+      this.dataSearch.pageIndex = pagination.current;
+      this.pagination = pagination;
+      this.searchAttendance();
+    },
+    searchAttendance() {
+      attendanceService
+        .searchAttendance(this.dataSearch)
+        .then((response) => {
+          this.dataSourceTable = response.data.data;
+          this.dataSearch.total = response.data.total;
+          this.pagination.total = response.data.total;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    search() {
+      this.dataSearch.pageIndex = 1;
+      this.dataSearch.total = 0;
+      this.searchAttendance();
     },
   },
 };

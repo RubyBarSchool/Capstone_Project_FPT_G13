@@ -3,22 +3,18 @@ package com.university.fpt.acf.controller;
 
 import com.university.fpt.acf.common.entity.ResponseCommon;
 import com.university.fpt.acf.entity.TimeKeep;
-import com.university.fpt.acf.form.AddAccountForm;
-import com.university.fpt.acf.form.AddAttendanceForm;
-import com.university.fpt.acf.form.EmployeeNotAttendanceForm;
-import com.university.fpt.acf.form.SearchAccountForm;
+import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.service.AttendancesService;
 import com.university.fpt.acf.service.EmployeeService;
+import com.university.fpt.acf.vo.AttendanceVO;
 import com.university.fpt.acf.vo.GetAllAccountResponseVO;
 import com.university.fpt.acf.vo.GetAllEmployeeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +30,7 @@ public class AttendancesController {
 
 
     @PostMapping
-    public  ResponseEntity<ResponseCommon> addAttendance(@RequestBody AddAttendanceForm addAccountForm){
+    public  ResponseEntity<ResponseCommon> addAttendance(@Valid @RequestBody AddAttendanceForm addAccountForm){
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
         try{
@@ -57,9 +53,33 @@ public class AttendancesController {
         }
     }
 
+    @PutMapping
+    public  ResponseEntity<ResponseCommon> updateAttendance(@Valid @RequestBody UpdateAttendanceForm updateAttendanceForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        try{
+            TimeKeep timeKeeps = attendancesService.updateAttendance(updateAttendanceForm);
+            message = "update attendances successfully";
+            if (timeKeeps.getId()==null) {
+                message = "update false";
+                responseCommon.setData(false);
+            }
+            responseCommon.setData(true);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        }catch (Exception e){
+            message = "Could not update attendances !";
+            responseCommon.setData(false);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
+
 
     @PostMapping(path = "/getemployee")
-    public ResponseEntity<ResponseCommon> searchAttendances(@RequestBody EmployeeNotAttendanceForm employeeNotAttendanceForm) {
+    public ResponseEntity<ResponseCommon> searchAttendances(@Valid @RequestBody EmployeeNotAttendanceForm employeeNotAttendanceForm) {
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
         List<GetAllEmployeeVO> employeeVOS = new ArrayList<>();
@@ -79,6 +99,33 @@ public class AttendancesController {
         } catch (Exception e) {
             message = "Could not get Employee not attendances !";
             responseCommon.setData(employeeVOS);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
+
+    @PostMapping(path = "/search")
+    public ResponseEntity<ResponseCommon> searchAttendance(@Valid @RequestBody AttendanceFrom attendanceFrom) {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        List<AttendanceVO> attendanceVOS = new ArrayList<>();
+        int total = 0;
+        try {
+            attendanceVOS = attendancesService.getAllAttendance(attendanceFrom);
+            total = attendancesService.getTotalAllAttendance(attendanceFrom);
+            responseCommon.setData(attendanceVOS);
+            responseCommon.setTotal(total);
+            message = "Get attendances successfully";
+            if (total==0) {
+                message = "Get attendances not found";
+            }
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = "Could not get  attendances !";
+            responseCommon.setData(attendanceVOS);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);

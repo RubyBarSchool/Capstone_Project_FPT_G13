@@ -11,9 +11,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AttendanceVO {
+    private Long id;
     private LocalDate date;
     private Long idEmpl;
-    private String name;
+    private String nameEmpl;
     private String type;
     private String note;
 

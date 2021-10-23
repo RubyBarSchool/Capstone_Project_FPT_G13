@@ -21,7 +21,7 @@ public class AttendancesCustomRepositoryImpl extends CommonRepository implements
     public List<AttendanceVO> getAllAttendance(AttendanceFrom attendanceFrom) {
         StringBuilder sqlAcc = new StringBuilder("");
         Map<String, Object> paramsAcc = new HashMap<>();
-        sqlAcc.append(" select new com.university.fpt.acf.vo.AttendanceVO(t.date,e.id,e.fullName,t.type,t.note) from TimeKeep t inner join t.employee e where t.deleted = false ");
+        sqlAcc.append(" select new com.university.fpt.acf.vo.AttendanceVO(t.id,t.date,e.id,e.fullName,t.type,t.note) from TimeKeep t inner join t.employee e where 1=1");
         if (attendanceFrom.getName() != null && !attendanceFrom.getName().isEmpty()) {
             sqlAcc.append(" and LOWER(e.fullName) like :name ");
             paramsAcc.put("name", "%" + attendanceFrom.getName().toLowerCase() + "%");
@@ -32,9 +32,14 @@ public class AttendancesCustomRepositoryImpl extends CommonRepository implements
             paramsAcc.put("dateEnd", attendanceFrom.getDate().get(1));
         }
         if(attendanceFrom.getType() != null && !attendanceFrom.getType().isEmpty()){
-            sqlAcc.append(" and t.type  :type ");
+            sqlAcc.append(" and t.type = :type ");
             paramsAcc.put("type",attendanceFrom.getType());
         }
+        if(attendanceFrom.getNote() != null && !attendanceFrom.getNote().isEmpty()){
+            sqlAcc.append(" and LOWER(t.note) like :note ");
+            paramsAcc.put("note","%" +attendanceFrom.getNote()+"%");
+        }
+        sqlAcc.append("ORDER by t.date desc");
         TypedQuery<AttendanceVO> queryAcc = super.createQuery(sqlAcc.toString(), paramsAcc, AttendanceVO.class);
         queryAcc.setFirstResult(attendanceFrom.getPageIndex() - 1);
         queryAcc.setMaxResults(attendanceFrom.getPageSize());
@@ -57,10 +62,14 @@ public class AttendancesCustomRepositoryImpl extends CommonRepository implements
             paramsAcc.put("dateEnd", attendanceFrom.getDate().get(1));
         }
         if(attendanceFrom.getType() != null && !attendanceFrom.getType().isEmpty()){
-            sqlAcc.append(" and t.type  :type ");
+            sqlAcc.append(" and t.type = :type ");
             paramsAcc.put("type",attendanceFrom.getType());
         }
+        if(attendanceFrom.getNote() != null && !attendanceFrom.getNote().isEmpty()){
+            sqlAcc.append(" and LOWER(t.note) like :note ");
+            paramsAcc.put("note","%" +attendanceFrom.getNote()+"%");
+        }
         TypedQuery<Long> queryAcc = super.createQuery(sqlAcc.toString(), paramsAcc, Long.class);
-        return queryAcc.getResultList().size();
+        return queryAcc.getSingleResult().intValue();
     }
 }

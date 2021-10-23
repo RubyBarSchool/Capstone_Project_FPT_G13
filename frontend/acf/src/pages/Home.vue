@@ -1,10 +1,24 @@
 <template>
-  <div>xin chao man home</div>
+  <div class="attendance">
+    <a-layout :style="{ background: 'white' }">
+      <Header />
+      <a-layout-content :style="{ margin: '24px 16px 0' }">
+        
+      </a-layout-content>
+      <Footer />
+    </a-layout>
+  </div>
 </template>
 
 <script>
+import Header from "@/layouts/Header.vue";
+import Footer from "@/layouts/Footer.vue";
 export default {
   name: "Home",
+    components: {
+    Header,
+    Footer,
+  },
   data() {
     return {};
   },

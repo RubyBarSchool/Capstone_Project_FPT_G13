@@ -7,12 +7,19 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AttendanceNote {
-    @NotBlank(message = "id cannot be blank")
+public class UpdateAttendanceForm {
+
+    @NotNull(message = "id cannot be null")
     private Long id;
+
+    @NotBlank(message = "type cannot blank")
+    private String type;
+
     @NotNull(message = "note cannot be null")
     private String note;
+
 }
