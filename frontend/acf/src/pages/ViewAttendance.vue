@@ -141,7 +141,7 @@ export default {
   data() {
     return {
       visibleEdit: false,
-      nameEdit:"",
+      nameEdit: "",
       dataSourceTable: [],
       dataSearch: {
         name: "",
@@ -220,7 +220,24 @@ export default {
       this.nameEdit = record.nameEmpl;
     },
     submitUpdate() {
-      
+      attendanceService
+        .updateAttendance(this.dataEdit)
+        .then((response) => {
+          this.searchAttendance();
+          if(response.data.data){
+            this.notifi("success", "Cập nhật thành công")
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+        this.handleCancel();
+    },
+    notifi(task, text) {
+      this.$notification[task]({
+        message: "Thông báo",
+        description: text + " thành công",
+      });
     },
     handleCancel() {
       this.visibleEdit = false;
