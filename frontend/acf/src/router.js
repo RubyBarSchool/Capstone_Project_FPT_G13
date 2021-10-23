@@ -76,11 +76,11 @@ export const router = new Router({
                 import ('./pages/PositionMinh.vue')
         },
         {
-            path: '/403page',
-            name: '403Page',
+            path: '/pageforbiden',
+            name: 'PageForbiden',
             // lazy-loaded
             component: () =>
-                import ('./pages/403Page.vue')
+                import ('./pages/PageForbiden.vue')
         },
         {
             path: '*',

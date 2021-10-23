@@ -33,7 +33,7 @@ service.interceptors.response.use(
                 router.push('login');
             }, 1000)
         } else if (error.response && error.response.status === 403) {
-            router.push('/403Page').catch(() => {});
+            router.push('/pageforbiden').catch(() => {});
         }
         return Promise.reject(error)
 

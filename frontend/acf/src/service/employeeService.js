@@ -2,10 +2,10 @@ import http from "./http-common";
 
 class EmployeeService {
     getAllEmployee(form) {
-        return http.post(`/spadmin/employee`, form);
+        return http.post(`/admin/employee`, form);
     }
     getAllEmployeeNotAccount(form) {
-        return http.post(`/spadmin/employee/fullnameEmNotAccount`, form);
+        return http.post(`/admin/employee/fullnameEmNotAccount`, form);
     }
 }
 
