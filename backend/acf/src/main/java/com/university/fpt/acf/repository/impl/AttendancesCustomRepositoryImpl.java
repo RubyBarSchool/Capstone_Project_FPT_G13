@@ -41,7 +41,7 @@ public class AttendancesCustomRepositoryImpl extends CommonRepository implements
         }
         sqlAcc.append("ORDER by t.date desc");
         TypedQuery<AttendanceVO> queryAcc = super.createQuery(sqlAcc.toString(), paramsAcc, AttendanceVO.class);
-        queryAcc.setFirstResult(attendanceFrom.getPageIndex() - 1);
+        queryAcc.setFirstResult((attendanceFrom.getPageIndex() - 1)*attendanceFrom.getPageSize());
         queryAcc.setMaxResults(attendanceFrom.getPageSize());
         List<AttendanceVO> resultList = queryAcc.getResultList();
         return resultList;
