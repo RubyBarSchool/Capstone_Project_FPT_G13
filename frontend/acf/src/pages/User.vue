@@ -23,6 +23,7 @@
                 @search="fetchPosition"
                 style="width: 120px"
                 v-model="dataSearch.idPosition"
+                show-search
               >
                 <a-select-option
                   v-for="(position, index) in dataPositions"
@@ -96,11 +97,7 @@
                     id="edit"
                     type="dashed"
                     icon="edit"
-                    @click="
-                      showModalEdit(
-                        record
-                      )
-                    "
+                    @click="showModalEdit(record)"
                   />
                 </a-col>
                 <a-col :span="8">
@@ -109,7 +106,7 @@
                     title="Bạn có chắc chắn muốn xóa không?"
                     @confirm="deleteUser(record.id)"
                   >
-                    <a-button id="delete" type="dashed" icon="delete"/>
+                    <a-button id="delete" type="dashed" icon="delete" />
                   </a-popconfirm>
                 </a-col>
               </a-row>
@@ -151,6 +148,7 @@
                         @search="fetchPosition"
                         style="width: 120px"
                         v-model="dataAdd.idPosition"
+                        show-search
                       >
                         <a-select-option
                           v-for="(position, index) in dataPositions"
@@ -223,6 +221,7 @@
                         @search="fetchPosition"
                         style="width: 120px"
                         v-model="dataEdit.idPosition"
+                        show-search
                       >
                         <a-select-option
                           v-for="(position, index) in dataPositions"
@@ -278,9 +277,7 @@
                   <h6 class="text-white f-w-400">
                     {{ dataUserDetail.fullname }}
                   </h6>
-                  <p
-                    class="text-white f-w-400"
-                  >
+                  <p class="text-white f-w-400">
                     {{ dataUserDetail.positionName }}
                   </p>
                 </div>
@@ -318,7 +315,9 @@
                   <div class="row">
                     <div class="col-sm-6">
                       <p class="m-b-10 f-w-600">Email</p>
-                      <h6 class="text-muted f-w-400">{{dataUserDetail.email}}</h6>
+                      <h6 class="text-muted f-w-400">
+                        {{ dataUserDetail.email }}
+                      </h6>
                     </div>
                     <div class="col-sm-6">
                       <p class="m-b-10 f-w-600">Điện thoại</p>
@@ -331,7 +330,9 @@
                   <div class="row">
                     <div class="col-sm-6">
                       <p class="m-b-10 f-w-600">Địa chỉ</p>
-                      <h6 class="text-muted f-w-400">{{dataUserDetail.address}}</h6>
+                      <h6 class="text-muted f-w-400">
+                        {{ dataUserDetail.address }}
+                      </h6>
                     </div>
                     <div class="col-sm-6">
                       <p class="m-b-10 f-w-600">Dân tộc</p>
@@ -344,7 +345,9 @@
                   <div class="row">
                     <div class="col-sm-6">
                       <p class="m-b-10 f-w-600">Lương</p>
-                      <h6 class="text-muted f-w-400">{{dataUserDetail.salary}}</h6>
+                      <h6 class="text-muted f-w-400">
+                        {{ dataUserDetail.salary }}
+                      </h6>
                     </div>
                   </div>
                 </div>
@@ -362,6 +365,7 @@
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 import userService from "../service/userService";
+// import moment from 'moment';
 
 export default {
   name: "User",
@@ -506,23 +510,23 @@ export default {
           console.log(e);
         });
     },
-        getAllPositionEdit(id,name) {
+    getAllPositionEdit(id, name) {
       userService
         .getAllPosition(this.dataPosition)
         .then((response) => {
           this.dataPositions = response.data.data;
           let check = true;
-          for(let i = 0 ; i < this.dataPositions.length ; i ++){
-            if(this.dataPositions[i].id == id){
+          for (let i = 0; i < this.dataPositions.length; i++) {
+            if (this.dataPositions[i].id == id) {
               check = false;
               break;
             }
           }
-          if(check){
+          if (check) {
             let dataPosition = {
-              id : id,
-              name : name
-            }
+              id: id,
+              name: name,
+            };
             this.dataPositions.push(dataPosition);
           }
         })
@@ -534,12 +538,12 @@ export default {
       this.dataPosition.name = value;
       this.getAllPosition();
     },
-    notifi(task, text) {
-      this.$notification[task]({
-        message: "Thông báo",
-        description: text + " thành công",
-      });
-    },
+    // notifi(task, text) {
+    //   this.$notification[task]({
+    //     message: "Thông báo",
+    //     description: text + " thành công",
+    //   });
+    // },
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;
@@ -549,7 +553,6 @@ export default {
           this.dataSourceTable = response.data.data;
           this.dataSearch.total = response.data.total;
           this.pagination.total = response.data.total;
-          console.log("datasearch", this.dataSearch);
         })
         .catch((e) => {
           console.log(e);
@@ -577,13 +580,20 @@ export default {
       userService
         .addUser(this.dataAdd)
         .then((response) => {
-          if (response.data.data) {
-            this.submitSearch();
-            var task = "success";
-            var text = "Thêm";
-            this.notifi(task, text);
-          }
           this.submitSearch();
+          if (response.data.data) {
+            let type = "success";
+            let message = "Thêm mới";
+            let description =
+              "Thêm mới nhân viên " + this.dataAdd.username + " thành công !!";
+            this.notifi(type, message, description);
+          }else {
+            let type = "error";
+            let message = "Thêm mới";
+            let description = "Thêm mới tài khoản " + this.dataAdd.fullName + " không thành công vì " +response.data.message;
+            this.notifi(type, message, description);
+          }
+          // this.submitSearch();
         })
         .catch((e) => {
           console.log(e);
@@ -604,11 +614,11 @@ export default {
       console.log("radio checked", e.target.value);
     },
     showModalEdit(record) {
-      console.log("data edit",record)
+      console.log("data edit", record);
       this.dataEdit.id = record.id;
       this.dataEdit.fullName = record.fullName;
       this.dataEdit.dob = record.dob;
-      this.dataEdit.idPosition= record.idPosition;
+      this.dataEdit.idPosition = record.idPosition;
       this.dataEdit.gender = record.gender;
       this.dataEdit.email = record.email;
       this.dataEdit.image = record.image;
@@ -618,19 +628,24 @@ export default {
       this.dataEdit.address = this.dataUserDetail.address;
       this.dataEdit.salary = this.dataUserDetail.salary;
       this.visibleEdit = true;
-      console.log("data edit",this.date);
-      this.getAllPositionEdit(record.idPosition,record.positionName);
+      this.getAllPositionEdit(record.idPosition, record.positionName);
     },
     submitUpdate() {
       userService
         .updateUser(this.dataEdit)
         .then((response) => {
+          this.submitSearch();
           if (response.data.data) {
-            this.submitSearch();
-            var task = "success";
-            var text = "Sửa";
-            this.notifi(task, text);
-            this.submitSearch();
+            // this.submitSearch();
+            let type = "success";
+            let message = "Cập nhật";
+            let description = "Sửa thông tin nhân viên " + this.dataEdit.fullName + " thành công !!";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Cập nhật";
+            let description = "Sửa thông tin nhân viên " + this.dataEdit.fullName + " không thành công vì " +response.data.message;
+            this.notifi(type, message, description);
           }
         })
         .catch((e) => {
@@ -638,9 +653,9 @@ export default {
         });
       this.visibleEdit = false;
     },
-    showDetail(id){
-                this.visibleProfile = true;
-                this.getUserByID(id);
+    showDetail(id) {
+      this.visibleProfile = true;
+      this.getUserByID(id);
     },
     getUserByID(id) {
       userService
@@ -666,6 +681,12 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+    },
+    notifi(type, message, description) {
+      this.$notification[type]({
+        message: message,
+        description: description,
+      });
     },
   },
 };
