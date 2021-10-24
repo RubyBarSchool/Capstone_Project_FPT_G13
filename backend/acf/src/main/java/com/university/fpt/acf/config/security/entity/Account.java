@@ -15,7 +15,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Account extends EntityCommon {
-    private Boolean status = false;
+    private Boolean status = true;
     private String username;
     private String password;
 
