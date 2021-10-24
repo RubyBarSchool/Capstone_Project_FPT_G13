@@ -27,25 +27,11 @@ export const router = new Router({
                 import ('./pages/Admin.vue')
         },
         {
-            path: '/demoaxios',
-            name: 'DemoAxios',
+            path: '/user',
+            name: 'User',
             // lazy-loaded
             component: () =>
-                import ('./pages/DemoAxios.vue')
-        },
-        {
-            path: '/userMinh',
-            name: 'UserMinh',
-            // lazy-loaded
-            component: () =>
-                import ('./pages/UserMinh.vue')
-        },
-        {
-            path: '/userHA',
-            name: 'UserHA',
-            // lazy-loaded
-            component: () =>
-                import ('./pages/UserHA.vue')
+                import ('./pages/User.vue')
         },
         {
             path: '/attendance',
@@ -62,18 +48,11 @@ export const router = new Router({
                 import ('./pages/ViewAttendance.vue')
         },
         {
-            path: '/positionHA',
-            name: 'PositionHA',
+            path: '/position',
+            name: 'Position',
             // lazy-loaded
             component: () =>
-                import ('./pages/PositionHA.vue')
-        },
-        {
-            path: '/positionMinh',
-            name: 'PositionMinh',
-            // lazy-loaded
-            component: () =>
-                import ('./pages/PositionMinh.vue')
+                import ('./pages/Position.vue')
         },
         {
             path: '/pageforbiden',

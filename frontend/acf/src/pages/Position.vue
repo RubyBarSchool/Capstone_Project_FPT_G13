@@ -1,5 +1,5 @@
 <template>
-  <div class="PositionMinh">
+  <div class="Position">
     <a-layout :style="{ background: 'white' }">
       <Header />
       <a-layout-content :style="{ margin: '24px 16px 0' }">
@@ -17,8 +17,7 @@
                 style="width: 150px"
                 v-model="dataSearch.name"
               />
-              <a-input placeholder="Mã code" style="width: 150px" />
-              <a-button type="primary" icon="search"> Tìm kiếm </a-button>
+              <a-button type="primary" icon="search" @click="submitSearch"> Tìm kiếm </a-button>
             </a-col>
             <a-col flex="100px">
               <a-button type="primary" icon="user-add" @click="showModalAdd">
@@ -95,7 +94,7 @@
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Tài khoản">
+              <a-form-model-item label="Chức vụ">
                 <a-input v-model="dataEdit.name" />
               </a-form-model-item>
             </a-form-model>
@@ -113,7 +112,7 @@ import Footer from "@/layouts/Footer.vue";
 import positionService from "../service/positionService";
 
 export default {
-  name: "PositionMinh",
+  name: "Position",
   components: {
     Header,
     Footer,
@@ -175,15 +174,10 @@ export default {
     this.submitSearch();
   },
   methods: {
-    // showModalAdd() {
-    //   this.visibleAdd = true;
-    // },
     handleCancel() {
       this.visibleAdd = false;
+      this.visibleEdit = false;
     },
-    // submitAdd() {
-    //   this.visibleAdd = false;
-    // },
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;
@@ -193,7 +187,6 @@ export default {
           this.dataSourceTable = response.data.data;
           this.dataSearch.total = response.data.total;
           this.pagination.total = response.data.total;
-          console.log("datasearch", this.dataSourceTable);
         })
         .catch((e) => {
           console.log(e);
@@ -257,7 +250,7 @@ export default {
     },
     showModalEdit(id, name) {
       this.dataEdit.id = id;
-      this.dataEdit.username = name;
+      this.dataEdit.name = name;
       this.visibleEdit = true;
     },
     submitUpdate() {
