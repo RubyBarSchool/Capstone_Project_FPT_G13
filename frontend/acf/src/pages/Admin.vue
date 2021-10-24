@@ -450,7 +450,6 @@ export default {
           this.dataSourceTable = response.data.data;
           this.dataSearch.total = response.data.total;
           this.pagination.total = response.data.total;
-          console.log("datasearch", this.dataSearch);
         })
         .catch((e) => {
           console.log(e);
@@ -503,13 +502,19 @@ export default {
         .addAccount(this.dataAdd)
         .then((response) => {
           this.dataEmployees = response.data.data;
-          if (response.data.data) {
-            this.submitSearch();
-            var task = "success";
-            var text = "Thêm";
-            this.notifi(task, text);
-          }
           this.submitSearch();
+          if (response.data.data) {
+            let type = "success";
+            let message = "Thêm mới";
+            let description =
+              "Thêm mới tài khoản " + this.dataAdd.username + " thành công !!";
+            this.notifi(type, message, description);
+          }else {
+            let type = "error";
+            let message = "Thêm mới";
+            let description = "Thêm mới tài khoản " + this.dataAdd.username + " không thành công vì " +response.data.message;
+            this.notifi(type, message, description);
+          }
         })
         .catch((e) => {
           console.log(e);
@@ -543,12 +548,17 @@ export default {
       adminTruongService
         .updateAccount(this.dataEdit)
         .then((response) => {
+          this.submitSearch();
           if (response.data.data) {
-            this.submitSearch();
-            var task = "success";
-            var text = "Sửa";
-            this.notifi(task, text);
-            this.submitSearch();
+            let type = "success";
+            let message = "Cập nhật";
+            let description = "Account đang đăng nhập không được xóa";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Cập nhật";
+            let description = "Account đang đăng nhập không được xóa";
+            this.notifi(type, message, description);
           }
         })
         .catch((e) => {
@@ -585,9 +595,16 @@ export default {
         .deleteAccount(id)
         .then((response) => {
           if (response.data.data) {
-            var task = "success";
-            var text = "Xóa";
-            this.notifi(task, text);
+            let type = "success";
+            let message = "Xóa";
+            let description = "Xóa thành công";
+            this.notifi(type, message, description);
+            this.submitSearch();
+          } else {
+            let type = "error";
+            let message = "Xóa";
+            let description = "Account đang đăng nhập không được xóa";
+            this.notifi(type, message, description);
             this.submitSearch();
           }
         })
@@ -595,10 +612,10 @@ export default {
           console.log(e);
         });
     },
-    notifi(task, text) {
-      this.$notification[task]({
-        message: "Thông báo",
-        description: text + " thành công",
+    notifi(type, message, description) {
+      this.$notification[type]({
+        message: message,
+        description: description,
       });
     },
   },
