@@ -148,6 +148,7 @@ export default {
       this.reloadSelect();
       this.typeAttendance = "1";
       this.getDate();
+      this.onChangeDate();
     },
     reloadSelect() {
       this.selectedRowKeys = [];
