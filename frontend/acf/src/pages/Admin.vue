@@ -636,15 +636,15 @@ export default {
 
 <style>
 /* button icon */
-#delete:hover {
+#delete {
   background-color: #f56c6c;
   color: white;
 }
-#edit:hover {
+#edit {
   background-color: #18cfc9;
   color: white;
 }
-#user:hover {
+#user {
   background-color: #13ce66;
   color: white;
 }

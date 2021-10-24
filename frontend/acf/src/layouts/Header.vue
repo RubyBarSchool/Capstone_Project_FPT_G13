@@ -33,7 +33,6 @@
                   Thoát ra 
                   <font-awesome-icon :icon="['fas','sign-out-alt']" :style="{'margin-left':'40px'}"/>
                 </a-menu-item>
-              </a-menu>
             </a-dropdown>
           </span>
         </a-col>
