@@ -33,7 +33,7 @@
                 </a-menu-item>
               </a-menu>
             </a-dropdown> -->
-            <!-- nháp -->
+            <!-- nh�p -->
             <a-dropdown :trigger="['click']">
               <a class="ant-dropdown-link">
                 <a-avatar
@@ -99,6 +99,7 @@ export default {
   methods: {
     logout() {
       localStorage.removeItem("user");
+      this.$store.dispatch("remove");
       this.$router.push("/login");
     },
     reloadPath() {

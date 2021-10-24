@@ -87,11 +87,11 @@ export default {
     showMessage() {
       let message = this.$store.state.message;
       if (message.type != "") {
-        console.log("here");
         this.$notification[message.type]({
           message: message.message,
           description: message.description,
         });
+        this.$store.dispatch("remove");
       }
     },
     handleSubmit(e) {
@@ -109,14 +109,11 @@ export default {
                 this.$router.push("/home");
               }
             },
-            (error) => {
-              this.loading = false;
-              this.message =
-                (error.response &&
-                  error.response.data &&
-                  error.response.data.message) ||
-                error.message ||
-                error.toString();
+            () => {
+              this.$notification['error']({
+                message: 'Sai tài khoản hoặc mật khẩu',
+                description: 'Mời đăng nhập lại',
+              });
             }
           );
         }

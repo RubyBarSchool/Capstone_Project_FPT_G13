@@ -22,11 +22,19 @@ export default new Vuex.Store({
     mutations: {
         changeMessage(state, message) {
             state.message = message
+        },
+        removeMessage(state) {
+            state.message.type = "";
+            state.message.message = "";
+            state.message.description = "";
         }
     },
     actions: {
         handleChangeMessage(context, message) {
             context.commit('changeMessage', message)
+        },
+        remove(context) {
+            context.commit('removeMessage')
         }
     }
 });

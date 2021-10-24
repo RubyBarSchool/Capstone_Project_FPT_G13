@@ -1,6 +1,7 @@
 import axios from "axios";
 import authHeader from './auth-header';
 import { router } from '../router';
+import state from '../store/index'
 const service = axios.create({
     baseURL: "http://localhost:8080/api",
     headers: {
@@ -11,9 +12,6 @@ const service = axios.create({
 service.interceptors.request.use(config => {
     // Do something before request is sent
     let user = JSON.parse(localStorage.getItem('user'))
-    if (user == null || user.roles.lenght === 0) {
-        throw "401"
-    }
     if (user != null) {
         config.headers['Authorization'] = authHeader()
         return config
@@ -27,13 +25,22 @@ service.interceptors.response.use(
         return response;
     },
     error => {
+        console.log("error", error.response)
         if (error.response && error.response.status === 401) {
             localStorage.removeItem('user')
-            setTimeout(() => {
-                router.push('login');
-            }, 1000)
+            let message = {
+                type: "error",
+                message: "Hết hạn tài khoản",
+                description: "Xin hãy đăng nhập lại"
+            }
+            state.dispatch('handleChangeMessage', message)
+            if (router.currentRoute.path !== '/login') {
+                router.push('/login');
+            }
         } else if (error.response && error.response.status === 403) {
-            router.push('/pageforbiden').catch(() => {});
+            if (router.currentRoute.path !== '/pageforbiden') {
+                router.push('/pageforbiden');
+            }
         }
         return Promise.reject(error)
 

@@ -60,9 +60,10 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 }catch (Exception exception){
                     log.info("Error loggin in :{}",exception.getMessage());
                     response.setHeader("error",exception.getMessage());
-                    response.setStatus(HttpStatus.FORBIDDEN.value());
+                    response.setStatus(HttpStatus.UNAUTHORIZED.value());
                     Map<String,String> error = new HashMap<>();
-                    error.put("error_message",exception.getMessage());
+                    error.put("message",exception.getMessage());
+                    error.put("status","401");
                     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
                     new ObjectMapper().writeValue(response.getOutputStream(),error);
                 }
