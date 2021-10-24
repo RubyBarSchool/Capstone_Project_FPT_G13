@@ -43,7 +43,7 @@
                 />
                 {{ loadUser }}
               </a>
-              <a-menu slot="overlay" :style="{'margin': '15px'}">
+              <a-menu slot="overlay" :style="{ margin: '15px' }">
                 <a-menu-item :key="index" v-for="(data, index) in router">
                   <router-link :to="data.path">
                     {{ data.name }}
@@ -83,6 +83,14 @@ export default {
         {
           path: "/viewattendance",
           name: "ViewAttendance",
+        },
+        {
+          path: "/user",
+          name: "Manager User",
+        },
+        {
+          path: "/position",
+          name: "Manager Position",
         },
       ],
       routerEmployee: [],

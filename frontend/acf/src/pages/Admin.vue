@@ -60,7 +60,7 @@
           </a-row>
 
           <!-- table content -->
-          <div :style="{'padding-top': '10px' }">
+          <div :style="{ 'padding-top': '10px' }">
             <a-table
               :columns="columns"
               :data-source="dataSourceTable"
@@ -512,7 +512,7 @@ export default {
           }else {
             let type = "error";
             let message = "Thêm mới";
-            let description = "Thêm mới tài khoản " + this.dataAdd.username + " không thành công vì " +response.data.message;
+            let description = "Thêm mới tài khoản " + this.dataAdd.username + " không thành công vì " + response.data.message;
             this.notifi(type, message, description);
           }
         })
@@ -624,16 +624,16 @@ export default {
 
 <style>
 /* button icon */
-#delete {
-  background-color: red;
+#delete:hover {
+  background-color: #f56c6c;
   color: white;
 }
-#edit {
-  background-color: rgb(17, 196, 228);
+#edit:hover {
+  background-color: #18cfc9;
   color: white;
 }
-#user {
-  background-color: rgb(24, 216, 24);
+#user:hover {
+  background-color: #13ce66;
   color: white;
 }
 
