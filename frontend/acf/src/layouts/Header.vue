@@ -13,27 +13,6 @@
             <a-badge :count="5"
               ><a-icon :style="{ fontSize: '30px' }" type="bell" />
             </a-badge>
-            <!-- <a-dropdown>
-              <a class="ant-dropdown-link">
-                <a-avatar
-                  :size="55"
-                  style="margin: 5px"
-                  src="https://img.icons8.com/bubbles/100/000000/user.png"
-                />
-                {{ loadUser }}
-              </a>
-              <a-menu slot="overlay">
-                <a-menu-item :key="index" v-for="(data, index) in router">
-                  <router-link :to="data.path">
-                    {{ data.name }}
-                  </router-link>
-                </a-menu-item>
-                <a-menu-item :key="router.length" @click="logout">
-                  Log Out
-                </a-menu-item>
-              </a-menu>
-            </a-dropdown> -->
-            <!-- nh�p -->
             <a-dropdown :trigger="['click']">
               <a class="ant-dropdown-link">
                 <a-avatar
@@ -43,7 +22,7 @@
                 />
                 {{ loadUser }}
               </a>
-              <a-menu slot="overlay" :style="{ margin: '15px' }">
+              
                 <a-menu-item :key="index" v-for="(data, index) in router">
                   <router-link :to="data.path">
                     {{ data.name }}
@@ -51,7 +30,8 @@
                 </a-menu-item>
                 <a-menu-divider />
                 <a-menu-item :key="router.length" @click="logout">
-                  Thoát ra
+                  Thoát ra 
+                  <font-awesome-icon :icon="['fas','sign-out-alt']" :style="{'margin-left':'40px'}"/>
                 </a-menu-item>
               </a-menu>
             </a-dropdown>
@@ -136,9 +116,9 @@ export default {
   box-shadow: 0px 7px 13px -4px rgba(230, 230, 230, 1);
 }
 
-#Header {
+/* #Header {
   position: sticky;
   z-index: 1050;
   top: 0;
-}
+} */
 </style>

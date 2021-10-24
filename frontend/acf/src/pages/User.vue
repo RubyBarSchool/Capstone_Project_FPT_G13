@@ -41,12 +41,20 @@
                 <a-select-option value="false"> Đang làm </a-select-option>
                 <a-select-option value="true"> Nghỉ </a-select-option>
               </a-select>
-              <a-button type="primary" icon="search" @click="submitSearch">
+              <a-button type="primary" @click="submitSearch">
+                <font-awesome-icon
+                  :icon="['fas', 'search']"
+                  :style="{ 'margin-right': '5px' }"
+                />
                 Tìm kiếm
               </a-button>
             </a-col>
             <a-col flex="100px">
-              <a-button type="primary" icon="user-add" @click="showModalAdd">
+              <a-button type="primary" @click="showModalAdd">
+                <font-awesome-icon
+                  :icon="['fas', 'user-plus']"
+                  :style="{ 'margin-right': '5px' }"
+                />
                 Thêm
               </a-button>
             </a-col>
@@ -87,18 +95,20 @@
                 <a-col :span="8">
                   <a-button
                     id="user"
-                    type="dashed"
-                    icon="user"
                     @click="showDetail(record.id)"
-                  />
+                    :style="{ 'margin-right': '100px' }"
+                  >
+                    <font-awesome-icon :icon="['fas', 'user']" />
+                  </a-button>
                 </a-col>
                 <a-col :span="8">
                   <a-button
                     id="edit"
-                    type="dashed"
-                    icon="edit"
                     @click="showModalEdit(record)"
-                  />
+                    :style="{ width: '44.25px' }"
+                  >
+                    <font-awesome-icon :icon="['fas', 'edit']" />
+                  </a-button>
                 </a-col>
                 <a-col :span="8">
                   <a-popconfirm
@@ -106,7 +116,10 @@
                     title="Bạn có chắc chắn muốn xóa không?"
                     @confirm="deleteUser(record.id)"
                   >
-                    <a-button id="delete" type="dashed" icon="delete" />
+
+                    <a-button id="delete">
+                      <font-awesome-icon :icon="['fas', 'trash']" />
+                    </a-button>
                   </a-popconfirm>
                 </a-col>
               </a-row>
@@ -628,7 +641,7 @@ export default {
       this.dataEdit.address = this.dataUserDetail.address;
       this.dataEdit.salary = this.dataUserDetail.salary;
       this.visibleEdit = true;
-      this.getAllPositionEdit(record.idPosition, record.positionName);
+
     },
     submitUpdate() {
       userService

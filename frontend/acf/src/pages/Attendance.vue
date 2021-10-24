@@ -114,7 +114,7 @@ export default {
           key: "id",
         },
         {
-          title: "Tên nhân viên",
+          title: "Nhân viên",
           dataIndex: "name",
           key: "name``",
           width: 150,
@@ -247,7 +247,4 @@ export default {
 </script>
 
 <style scoped>
-.ant-calendar{
-  border: 1px solid #000;
-}
 </style>

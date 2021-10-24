@@ -16,7 +16,6 @@
                 placeholder="Tên  nhân viên"
                 style="width: 15%"
               />
-              <!-- :show-time="{ format: 'DD/MM/YYYY' }" -->
               <a-range-picker
                 @change="search"
                 v-model="dataSearch.date"
@@ -38,12 +37,22 @@
                 placeholder="Ghi Chú"
                 style="width: 15%"
               />
-              <a-button type="primary" @click="search" icon="search">
+              <a-button type="primary" @click="search">
+                <font-awesome-icon
+                  :icon="['fas', 'search']"
+                  :style="{ 'margin-right': '5px' }"
+                />
                 Tìm kiếm
               </a-button>
             </a-col>
             <a-col flex="100px">
-              <a-button type="primary"> Xuất excel </a-button>
+              <a-button type="primary">
+                Xuất excel
+                <font-awesome-icon
+                  :icon="['fas', 'download']"
+                  :style="{ 'margin-left': '10px' }"
+                />
+              </a-button>
             </a-col>
           </a-row>
           <a-table
@@ -83,12 +92,9 @@
             <template slot="action" slot-scope="text, record">
               <a-row>
                 <a-col :span="8">
-                  <a-button
-                    id="edit"
-                    type="dashed"
-                    icon="edit"
-                    @click="showModalEdit(record)"
-                  />
+                  <a-button id="edit" @click="showModalEdit(record)">
+                    <font-awesome-icon :icon="['fas', 'edit']" />
+                  </a-button>
                 </a-col>
               </a-row>
             </template>
@@ -198,7 +204,7 @@ export default {
           width: 150,
         },
         {
-          title: "Hành động",
+          title: "",
           dataIndex: "action",
           key: "action",
           fixed: "right",
@@ -224,14 +230,14 @@ export default {
         .updateAttendance(this.dataEdit)
         .then((response) => {
           this.searchAttendance();
-          if(response.data.data){
-            this.notifi("success", "Cập nhật thành công")
+          if (response.data.data) {
+            this.notifi("success", "Cập nhật thành công");
           }
         })
         .catch((e) => {
           console.log(e);
         });
-        this.handleCancel();
+      this.handleCancel();
     },
     notifi(task, text) {
       this.$notification[task]({
