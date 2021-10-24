@@ -27,7 +27,7 @@
             <div class="col-xl-4 col-lg-4 col-md-6 mb-30">
               <div class="footer-widget">
                 <div class="footer-widget-heading">
-                  <h3>Liên kết hữu ích</h3>
+                  <h3>Liên Kết Hữu Ích</h3>
                 </div>
                 <ul>
                   <li><a href="#">Trang Chủ</a></li>

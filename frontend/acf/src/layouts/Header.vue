@@ -13,7 +13,7 @@
             <a-badge :count="5"
               ><a-icon :style="{ fontSize: '30px' }" type="bell" />
             </a-badge>
-            <a-dropdown>
+            <!-- <a-dropdown>
               <a class="ant-dropdown-link">
                 <a-avatar
                   :size="55"
@@ -28,7 +28,29 @@
                     {{ data.name }}
                   </router-link>
                 </a-menu-item>
-                <a-menu-item :key="router.length" @click="logout" >
+                <a-menu-item :key="router.length" @click="logout">
+                  Log Out
+                </a-menu-item>
+              </a-menu>
+            </a-dropdown> -->
+            <!-- nháp -->
+            <a-dropdown :trigger="['click']">
+              <a class="ant-dropdown-link">
+                <a-avatar
+                  :size="55"
+                  style="margin: 5px"
+                  src="https://img.icons8.com/bubbles/100/000000/user.png"
+                />
+                {{ loadUser }}
+              </a>
+              <a-menu slot="overlay">
+                <a-menu-item :key="index" v-for="(data, index) in router">
+                  <router-link :to="data.path">
+                    {{ data.name }}
+                  </router-link>
+                </a-menu-item>
+                <a-menu-divider />
+                <a-menu-item :key="router.length" @click="logout">
                   Log Out
                 </a-menu-item>
               </a-menu>
@@ -75,9 +97,9 @@ export default {
     },
   },
   methods: {
-    logout(){
-      localStorage.removeItem('user');
-      this.$router.push('/login');
+    logout() {
+      localStorage.removeItem("user");
+      this.$router.push("/login");
     },
     reloadPath() {
       let users = JSON.parse(localStorage.getItem("user"));
@@ -104,9 +126,9 @@ export default {
   -moz-box-shadow: 0px 7px 13px -4px rgba(230, 230, 230, 1);
   box-shadow: 0px 7px 13px -4px rgba(230, 230, 230, 1);
 }
-#Header{
+/* #Header {
   position: sticky;
-    z-index: 99999;
-    top: 0;
-}
+  z-index: 1050;
+  top: 0;
+} */
 </style>
