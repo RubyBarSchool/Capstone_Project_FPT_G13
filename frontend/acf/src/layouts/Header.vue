@@ -43,7 +43,7 @@
                 />
                 {{ loadUser }}
               </a>
-              <a-menu slot="overlay">
+              <a-menu slot="overlay" :style="{'margin': '15px'}">
                 <a-menu-item :key="index" v-for="(data, index) in router">
                   <router-link :to="data.path">
                     {{ data.name }}
@@ -51,7 +51,7 @@
                 </a-menu-item>
                 <a-menu-divider />
                 <a-menu-item :key="router.length" @click="logout">
-                  Log Out
+                  Thoát ra
                 </a-menu-item>
               </a-menu>
             </a-dropdown>
@@ -127,9 +127,10 @@ export default {
   -moz-box-shadow: 0px 7px 13px -4px rgba(230, 230, 230, 1);
   box-shadow: 0px 7px 13px -4px rgba(230, 230, 230, 1);
 }
-/* #Header {
+
+#Header {
   position: sticky;
   z-index: 1050;
   top: 0;
-} */
+}
 </style>

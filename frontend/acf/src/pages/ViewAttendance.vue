@@ -278,4 +278,17 @@ export default {
   text-align: left;
   margin-left: 0px;
 }
+/* button icon */
+#delete {
+  background-color: red;
+  color: white;
+}
+#edit {
+  background-color: rgb(17, 196, 228);
+  color: white;
+}
+#user {
+  background-color: rgb(24, 216, 24);
+  color: white;
+}
 </style>

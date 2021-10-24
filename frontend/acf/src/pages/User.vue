@@ -672,6 +672,19 @@ export default {
 </script>
 
 <style>
+/* button icon */
+#delete {
+  background-color: red;
+  color: white;
+}
+#edit {
+  background-color: rgb(17, 196, 228);
+  color: white;
+}
+#user {
+  background-color: rgb(24, 216, 24);
+  color: white;
+}
 /* profile */
 .bg-c-lite-green {
   border-radius: 5px;

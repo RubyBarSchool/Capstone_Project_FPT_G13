@@ -275,16 +275,17 @@ export default {
 </script>
 
 <style>
-#delete:hover {
-  background-color: #f56c6c;
+/* button icon */
+#delete {
+  background-color: red;
   color: white;
 }
-#edit:hover {
-  background-color: #18cfc9;
+#edit {
+  background-color: rgb(17, 196, 228);
   color: white;
 }
-#user:hover {
-  background-color: #13ce66;
+#user {
+  background-color: rgb(24, 216, 24);
   color: white;
 }
 </style>
