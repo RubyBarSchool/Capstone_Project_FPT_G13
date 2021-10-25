@@ -214,7 +214,7 @@
                       <a-input v-model="dataEdit.fullName" />
                     </a-form-model-item>
                     <a-form-model-item label="Ngày Sinh">
-                      <a-date-picker v-model="dataEdit.dob">
+                      <a-date-picker v-model="dataEdit.dob" format="YYYY-MM-DD" valueFormat="YYYY-MM-DD">
                         <a-icon slot="suffixIcon" type="smile" />
                       </a-date-picker>
                     </a-form-model-item>
@@ -378,7 +378,6 @@
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 import userService from "../service/userService";
-// import moment from 'moment';
 
 export default {
   name: "User",
