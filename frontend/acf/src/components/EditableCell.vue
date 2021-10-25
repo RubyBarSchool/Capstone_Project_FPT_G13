@@ -2,12 +2,12 @@
   <div class="editable-cell">
     <div v-if="editable" class="editable-cell-input-wrapper">
       <a-row type="flex">
-        <a-col flex="145px"
+        <a-col flex="135px"
           ><a-input :value="value" @change="handleChange" @pressEnter="check"
         /></a-col>
         <a-col flex="auto"
-          ><h3 id="check" @click="check">
-            <font-awesome-icon :icon="['fas', 'check-circle']" /></h3
+          ><h5 id="check" @click="check" :style="{'margin-left' : '8px'}">
+            <font-awesome-icon :icon="['fas', 'check']" /></h5
         ></a-col>
       </a-row>
     </div>

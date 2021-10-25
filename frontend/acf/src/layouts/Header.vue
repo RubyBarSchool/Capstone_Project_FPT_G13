@@ -95,7 +95,6 @@ export default {
     },
     reloadPath() {
       let users = JSON.parse(localStorage.getItem("user"));
-      console.log("user", users);
       if (users.roles.includes("SP_ADMIN")) {
         this.router.push.apply(this.router, this.routerSPAdmin);
       }
@@ -105,7 +104,6 @@ export default {
       if (users.roles.includes("EMPLOYEE")) {
         this.router.push.apply(this.router, this.routerEmployee);
       }
-      console.log("path", this.router);
     },
   },
 };
