@@ -9,31 +9,41 @@
             minHeight: '360px',
           }"
         >
-          <a-back-top>
-            <div class="ant-back-top-inner">
-              <font-awesome-icon
-                :icon="['fas', 'arrow-alt-circle-up']"
-                :style="{ width: '100px', height: '50px' }"
-              />
-            </div>
-          </a-back-top>
-          <!-- menu trên -->
           <a-row type="flex">
             <a-col flex="auto">
+              <a-carousel autoplay>
+                <div><img src="../assets/1.jpg"></div>
+                <div><img src="../assets/2.jpg"></div>
+                <div><img src="../assets/3.jpg"></div>
+                <div><img src="../assets/4.jpg"></div>
+              </a-carousel>
+            </a-col>
+            <a-col flex="650px">
+              <a-back-top>
+                <div class="ant-back-top-inner">
+                  <font-awesome-icon
+                    :icon="['fas', 'arrow-alt-circle-up']"
+                    :style="{ width: '100px', height: '50px' }"
+                  />
+                </div>
+              </a-back-top>
+              <!-- menu trên -->
               <a-input
                 placeholder="Tên chức vụ"
-                style="width: 150px"
+                :style="{ width: '150px', 'margin-right': '5px' }"
                 v-model="dataSearch.name"
               />
-              <a-button type="primary" @click="submitSearch">
+              <a-button
+                type="primary"
+                @click="submitSearch"
+                :style="{ 'margin-right': '5px' }"
+              >
                 <font-awesome-icon
                   :icon="['fas', 'search']"
                   :style="{ 'margin-right': '5px' }"
                 />
                 Tìm kiếm
               </a-button>
-            </a-col>
-            <a-col flex="100px">
               <a-button type="primary" @click="showModalAdd">
                 <font-awesome-icon
                   :icon="['fas', 'user-plus']"
@@ -41,84 +51,84 @@
                 />
                 Thêm
               </a-button>
+
+              <!-- table content -->
+              <div :style="{ 'padding-top': '10px' }">
+                <a-table
+                  :columns="columns"
+                  :data-source="dataSourceTable"
+                  :pagination="pagination"
+                  :rowKey="
+                    (record, index) => {
+                      return index;
+                    }
+                  "
+                  @change="handleTableChange"
+                >
+                  <template slot="id" slot-scope="text, record">
+                    {{ record.id }}
+                  </template>
+                  <template slot="position" slot-scope="text, record">
+                    {{ record.name }}
+                  </template>
+                  <template slot="action" slot-scope="text, record">
+                    <a-row>
+                      <a-col :span="8">
+                        <a-button
+                          id="edit"
+                          @click="showModalEdit(record.id, record.name)"
+                          :style="{ width: '44.25px', 'margin-right': '100px' }"
+                        >
+                          <font-awesome-icon :icon="['fas', 'edit']" />
+                        </a-button>
+                      </a-col>
+                      <a-col :span="8">
+                        <a-popconfirm
+                          v-if="dataSourceTable.length"
+                          title="Bạn có chắc chắn muốn xóa không?"
+                          @confirm="deletePosition(record.id)"
+                        >
+                          <a-button id="delete">
+                            <font-awesome-icon :icon="['fas', 'trash']" />
+                          </a-button>
+                        </a-popconfirm>
+                      </a-col>
+                    </a-row>
+                  </template>
+                </a-table>
+              </div>
+              <!-- table content -->
+
+              <!-- popup add-->
+              <a-modal v-model="visibleAdd" title="Thêm chức vụ">
+                <template slot="footer">
+                  <a-button key="back" @click="handleCancel"> Hủy </a-button>
+                  <a-button key="submit" type="primary" @click="submitAdd">
+                    Lưu
+                  </a-button>
+                </template>
+                <a-form-model>
+                  <a-form-model-item label="Tên chức vụ">
+                    <a-input v-model="dataAdd.name" />
+                  </a-form-model-item>
+                </a-form-model>
+              </a-modal>
+              <!-- popup add -->
+              <a-modal v-model="visibleEdit" title="Chỉnh sửa chức vụ">
+                <template slot="footer">
+                  <a-button key="back" @click="handleCancel"> Hủy </a-button>
+                  <a-button key="submit" type="primary" @click="submitUpdate">
+                    Lưu
+                  </a-button>
+                </template>
+                <a-form-model>
+                  <a-form-model-item label="Chức vụ">
+                    <a-input v-model="dataEdit.name" />
+                  </a-form-model-item>
+                </a-form-model>
+              </a-modal>
             </a-col>
           </a-row>
-
-          <!-- table content -->
-          <div :style="{ 'padding-top': '10px' }">
-            <a-table
-              :columns="columns"
-              :data-source="dataSourceTable"
-              :pagination="pagination"
-              :rowKey="
-                (record, index) => {
-                  return index;
-                }
-              "
-              @change="handleTableChange"
-            >
-              <template slot="id" slot-scope="text, record">
-                {{ record.id }}
-              </template>
-              <template slot="position" slot-scope="text, record">
-                {{ record.name }}
-              </template>
-              <template slot="action" slot-scope="text, record">
-                <a-row>
-                  <a-col :span="8">
-                    <a-button
-                      id="edit"
-                      @click="showModalEdit(record.id, record.name)"
-                      :style="{ width: '44.25px', 'margin-right': '100px' }"
-                    >
-                      <font-awesome-icon :icon="['fas', 'edit']" />
-                    </a-button>
-                  </a-col>
-                  <a-col :span="8">
-                    <a-popconfirm
-                      v-if="dataSourceTable.length"
-                      title="Bạn có chắc chắn muốn xóa không?"
-                      @confirm="deletePosition(record.id)"
-                    >
-                      <a-button id="delete">
-                        <font-awesome-icon :icon="['fas', 'trash']" />
-                      </a-button>
-                    </a-popconfirm>
-                  </a-col>
-                </a-row>
-              </template>
-            </a-table>
-          </div>
-          <!-- table content -->
-
-          <!-- popup add-->
-          <a-modal v-model="visibleAdd" title="Thêm chức vụ">
-            <template slot="footer">
-              <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitAdd">
-                Lưu
-              </a-button>
-            </template>
-            <a-form-model>
-              <a-form-model-item label="Tên chức vụ">
-                <a-input v-model="dataAdd.name" />
-              </a-form-model-item>
-            </a-form-model>
-          </a-modal>
-          <!-- popup add -->
-          <a-modal v-model="visibleEdit" title="Chỉnh sửa chức vụ">
-            <template slot="footer">
-              <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitUpdate">
-                Lưu
-              </a-button>
-            </template>
-            <a-form-model>
-              <a-form-model-item label="Chức vụ">
-                <a-input v-model="dataEdit.name" />
-              </a-form-model-item>
-            </a-form-model>
-          </a-modal>
         </div>
       </a-layout-content>
       <Footer />
@@ -312,5 +322,20 @@ export default {
 #user {
   background-color: rgb(24, 216, 24);
   color: white;
+}
+
+/* slide image */
+.ant-carousel {
+  width:800px;
+}
+.ant-carousel :deep(.slick-slide) {
+  text-align: center;
+  height: 160px;
+  line-height: 160px;
+  background: #364d79;
+  overflow: hidden;
+}
+.ant-carousel :deep(.slick-slide h3) {
+  color: #fff;
 }
 </style>
