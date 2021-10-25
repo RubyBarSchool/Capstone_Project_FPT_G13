@@ -2,7 +2,7 @@
   <div class="attendance">
     <a-layout :style="{ background: 'white' }">
       <Header />
-      <a-layout-content :style="{ margin: '24px 16px 0' }">
+      <a-layout-content :style="{ margin: '30px 16px 0' }">
         <div
           :style="{
             padding: '24px',
@@ -10,11 +10,18 @@
             minHeight: '360px',
           }"
         >
+           <a-back-top>
+            <div class="ant-back-top-inner">
+              <font-awesome-icon
+                :icon="['fas', 'arrow-alt-circle-up']"
+                :style="{ width: '100px', height: '50px' }"
+              />
+            </div>
+          </a-back-top>
           <div class="container">
             <div class="row">
               <div class="col">
                 <a-date-picker
-                  
                   :open="true"
                   v-model="dataGetEmployee.date"
                   @change="onChangeDate"
@@ -66,7 +73,7 @@
                       :disabled="disableSave"
                       @click="saveAttendance"
                     >
-                     Lưu điểm danh 
+                      Lưu điểm danh
                     </a-button>
                     <a-button type="primary" @click="reset"> Cài lại </a-button>
                   </a-col>
@@ -144,7 +151,7 @@ export default {
     this.onChangeDate();
   },
   methods: {
-    reset(){
+    reset() {
       this.reloadSelect();
       this.typeAttendance = "1";
       this.getDate();
@@ -243,4 +250,9 @@ export default {
 </script>
 
 <style scoped>
+/* back top */
+.ant-back-top-inner {
+  color: rgb(241, 237, 237);
+  text-align: center;
+}
 </style>

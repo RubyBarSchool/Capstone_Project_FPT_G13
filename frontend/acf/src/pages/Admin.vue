@@ -2,13 +2,21 @@
   <div class="admin">
     <a-layout :style="{ background: 'white' }">
       <Header />
-      <a-layout-content :style="{ margin: '24px 16px 0' }">
+      <a-layout-content :style="{ margin: '30px 16px 0' }">
         <div
           :style="{
             minHeight: '360px',
             background: 'white',
           }"
         >
+          <a-back-top>
+            <div class="ant-back-top-inner">
+              <font-awesome-icon
+                :icon="['fas', 'arrow-alt-circle-up']"
+                :style="{ width: '100px', height: '50px' }"
+              />
+            </div>
+          </a-back-top>
           <!-- menu trên -->
           <a-row type="flex">
             <a-col flex="auto">
@@ -639,6 +647,12 @@ export default {
 </script>
 
 <style>
+/* back top */
+.ant-back-top-inner {
+  color: rgb(241, 237, 237);
+  text-align: center;
+}
+
 /* button icon */
 #delete {
   background-color: red;

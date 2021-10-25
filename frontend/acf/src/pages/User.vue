@@ -2,13 +2,21 @@
   <div class="User">
     <a-layout :style="{ background: 'white' }">
       <Header />
-      <a-layout-content :style="{ margin: '24px 16px 0' }">
+      <a-layout-content :style="{ margin: '30px 16px 0' }">
         <div
           :style="{
             minHeight: '360px',
             background: 'white',
           }"
         >
+          <a-back-top>
+            <div class="ant-back-top-inner">
+              <font-awesome-icon
+                :icon="['fas', 'arrow-alt-circle-up']"
+                :style="{ width: '100px', height: '50px' }"
+              />
+            </div>
+          </a-back-top>
           <!-- menu trên -->
           <a-row type="flex">
             <a-col flex="auto">
@@ -59,72 +67,76 @@
               </a-button>
             </a-col>
           </a-row>
-          <a-table
-            :columns="columns"
-            :data-source="dataSourceTable"
-            :pagination="pagination"
-            :rowKey="
-              (record, index) => {
-                return index;
-              }
-            "
-            @change="handleTableChange"
-          >
-            <template slot="image" slot-scope="text, record">
-              {{ record.image }}
-            </template>
-            <template slot="employee" slot-scope="text, record">
-              {{ record.fullName }}
-            </template>
-            <template slot="gender" slot-scope="text, record">
-              {{ record.gender ? "Nam" : "Nữ" }}
-            </template>
-            <template slot="position" slot-scope="text, record">
-              {{ record.positionName }}
-            </template>
-            <template slot="status" slot-scope="text, record">
-              <a-tag :color="record.statusDelete ? 'red' : 'green'">
-                {{ record.statusDelete ? "Nghỉ" : "Đang làm" }}
-              </a-tag>
-            </template>
-            <template slot="email" slot-scope="text, record">
-              {{ record.email }}
-            </template>
-            <template slot="action" slot-scope="text, record">
-              <a-row>
-                <a-col :span="8">
-                  <a-button
-                    id="user"
-                    @click="showDetail(record.id)"
-                    :style="{ 'margin-right': '100px' }"
-                  >
-                    <font-awesome-icon :icon="['fas', 'user']" />
-                  </a-button>
-                </a-col>
-                <a-col :span="8">
-                  <a-button
-                    id="edit"
-                    @click="showModalEdit(record)"
-                    :style="{ width: '44.25px' }"
-                  >
-                    <font-awesome-icon :icon="['fas', 'edit']" />
-                  </a-button>
-                </a-col>
-                <a-col :span="8">
-                  <a-popconfirm
-                    v-if="dataSourceTable.length"
-                    title="Bạn có chắc chắn muốn xóa không?"
-                    @confirm="deleteUser(record.id)"
-                  >
 
-                    <a-button id="delete">
-                      <font-awesome-icon :icon="['fas', 'trash']" />
+          <!-- table content -->
+          <div :style="{ 'padding-top': '10px' }">
+            <a-table
+              :columns="columns"
+              :data-source="dataSourceTable"
+              :pagination="pagination"
+              :rowKey="
+                (record, index) => {
+                  return index;
+                }
+              "
+              @change="handleTableChange"
+            >
+              <template slot="image" slot-scope="text, record">
+                {{ record.image }}
+              </template>
+              <template slot="employee" slot-scope="text, record">
+                {{ record.fullName }}
+              </template>
+              <template slot="gender" slot-scope="text, record">
+                {{ record.gender ? "Nam" : "Nữ" }}
+              </template>
+              <template slot="position" slot-scope="text, record">
+                {{ record.positionName }}
+              </template>
+              <template slot="status" slot-scope="text, record">
+                <a-tag :color="record.statusDelete ? 'red' : 'green'">
+                  {{ record.statusDelete ? "Nghỉ" : "Đang làm" }}
+                </a-tag>
+              </template>
+              <template slot="email" slot-scope="text, record">
+                {{ record.email }}
+              </template>
+              <template slot="action" slot-scope="text, record">
+                <a-row>
+                  <a-col :span="8">
+                    <a-button
+                      id="user"
+                      @click="showDetail(record.id)"
+                      :style="{ 'margin-right': '100px' }"
+                    >
+                      <font-awesome-icon :icon="['fas', 'user']" />
                     </a-button>
-                  </a-popconfirm>
-                </a-col>
-              </a-row>
-            </template>
-          </a-table>
+                  </a-col>
+                  <a-col :span="8">
+                    <a-button
+                      id="edit"
+                      @click="showModalEdit(record)"
+                      :style="{ width: '44.25px' }"
+                    >
+                      <font-awesome-icon :icon="['fas', 'edit']" />
+                    </a-button>
+                  </a-col>
+                  <a-col :span="8">
+                    <a-popconfirm
+                      v-if="dataSourceTable.length"
+                      title="Bạn có chắc chắn muốn xóa không?"
+                      @confirm="deleteUser(record.id)"
+                    >
+                      <a-button id="delete">
+                        <font-awesome-icon :icon="['fas', 'trash']" />
+                      </a-button>
+                    </a-popconfirm>
+                  </a-col>
+                </a-row>
+              </template>
+            </a-table>
+          </div>
+
           <!-- popup add-->
           <a-modal v-model="visibleAdd" title="Thêm nhân viên">
             <template slot="footer">
@@ -146,10 +158,7 @@
                       </a-date-picker>
                     </a-form-model-item>
                     <a-form-model-item label="Giới Tính">
-                      <a-radio-group
-                        v-model="dataAdd.gender"
-                        @change="onChange"
-                      >
+                      <a-radio-group v-model="dataAdd.gender">
                         <a-radio :value="true"> Nam </a-radio>
                         <a-radio :value="false"> Nữ </a-radio>
                       </a-radio-group>
@@ -214,15 +223,16 @@
                       <a-input v-model="dataEdit.fullName" />
                     </a-form-model-item>
                     <a-form-model-item label="Ngày Sinh">
-                      <a-date-picker v-model="dataEdit.dob" format="YYYY-MM-DD" valueFormat="YYYY-MM-DD">
+                      <a-date-picker
+                        v-model="dataEdit.dob"
+                        format="YYYY-MM-DD"
+                        valueFormat="YYYY-MM-DD"
+                      >
                         <a-icon slot="suffixIcon" type="smile" />
                       </a-date-picker>
                     </a-form-model-item>
                     <a-form-model-item label="Giới Tính">
-                      <a-radio-group
-                        v-model="dataEdit.gender"
-                        @change="onChange"
-                      >
+                      <a-radio-group v-model="dataEdit.gender">
                         <a-radio :value="true"> Nam </a-radio>
                         <a-radio :value="false"> Nữ </a-radio>
                       </a-radio-group>
@@ -550,12 +560,6 @@ export default {
       this.dataPosition.name = value;
       this.getAllPosition();
     },
-    // notifi(task, text) {
-    //   this.$notification[task]({
-    //     message: "Thông báo",
-    //     description: text + " thành công",
-    //   });
-    // },
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;
@@ -599,13 +603,16 @@ export default {
             let description =
               "Thêm mới nhân viên " + this.dataAdd.username + " thành công !!";
             this.notifi(type, message, description);
-          }else {
+          } else {
             let type = "error";
             let message = "Thêm mới";
-            let description = "Thêm mới tài khoản " + this.dataAdd.fullName + " không thành công vì " +response.data.message;
+            let description =
+              "Thêm mới tài khoản " +
+              this.dataAdd.fullName +
+              " không thành công vì " +
+              response.data.message;
             this.notifi(type, message, description);
           }
-          // this.submitSearch();
         })
         .catch((e) => {
           console.log(e);
@@ -622,11 +629,7 @@ export default {
       this.dataAdd.salary = "";
       this.dataAdd.image = "";
     },
-    onChange(e) {
-      console.log("radio checked", e.target.value);
-    },
     showModalEdit(record) {
-      console.log("data edit", record);
       this.dataEdit.id = record.id;
       this.dataEdit.fullName = record.fullName;
       this.dataEdit.dob = record.dob;
@@ -640,7 +643,6 @@ export default {
       this.dataEdit.address = this.dataUserDetail.address;
       this.dataEdit.salary = this.dataUserDetail.salary;
       this.visibleEdit = true;
-
     },
     submitUpdate() {
       userService
@@ -648,15 +650,21 @@ export default {
         .then((response) => {
           this.submitSearch();
           if (response.data.data) {
-            // this.submitSearch();
             let type = "success";
             let message = "Cập nhật";
-            let description = "Sửa thông tin nhân viên " + this.dataEdit.fullName + " thành công !!";
+            let description =
+              "Sửa thông tin nhân viên " +
+              this.dataEdit.fullName +
+              " thành công !!";
             this.notifi(type, message, description);
           } else {
             let type = "error";
             let message = "Cập nhật";
-            let description = "Sửa thông tin nhân viên " + this.dataEdit.fullName + " không thành công vì " +response.data.message;
+            let description =
+              "Sửa thông tin nhân viên " +
+              this.dataEdit.fullName +
+              " không thành công vì " +
+              response.data.message;
             this.notifi(type, message, description);
           }
         })
@@ -705,6 +713,12 @@ export default {
 </script>
 
 <style>
+/* back top */
+.ant-back-top-inner {
+  color: rgb(241, 237, 237);
+  text-align: center;
+}
+
 /* button icon */
 #delete {
   background-color: red;
@@ -718,65 +732,52 @@ export default {
   background-color: rgb(24, 216, 24);
   color: white;
 }
+
 /* profile */
 .bg-c-lite-green {
   border-radius: 5px;
   background: linear-gradient(to right, #000000, #000000);
 }
-
 .card-block {
   padding: 1.25rem;
 }
-
 .m-b-25 {
   margin-bottom: 30px;
 }
-
 .img-radius {
   border-radius: 5px;
 }
-
 h6 {
   font-size: 13.5px;
 }
-
 .card-block p {
   line-height: 25px;
 }
-
 .card-block {
   padding: 1.25rem;
 }
-
 .b-b-default {
   border-bottom: 1px solid #e0e0e0;
 }
-
 .m-b-20 {
   margin-bottom: 20px;
 }
-
 .p-b-5 {
   padding-bottom: 5px !important;
 }
-
 .m-b-10 {
   margin-bottom: 10px;
   color: black;
 }
-
 .text-muted {
   color: #919aa3 !important;
 }
-
 .text-white {
   color: white;
 }
-
 .f-w-600 {
   font-weight: 600;
 }
-
 .m-t-40 {
   margin-top: 20px;
 }

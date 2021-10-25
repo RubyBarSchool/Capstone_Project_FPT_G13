@@ -3,6 +3,7 @@
     <a-layout :style="{ background: 'white' }">
       <Header />
       <a-layout-content :style="{ margin: '24px 16px 0' }">
+        <a-back-top />
         
       </a-layout-content>
       <Footer />
@@ -15,7 +16,7 @@ import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 export default {
   name: "Home",
-    components: {
+  components: {
     Header,
     Footer,
   },

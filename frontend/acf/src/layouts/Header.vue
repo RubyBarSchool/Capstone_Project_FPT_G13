@@ -119,12 +119,6 @@ export default {
   box-shadow: 0px 7px 13px -4px rgba(230, 230, 230, 1);
 }
 
-/* #Header {
-  position: sticky;
-  z-index: 1050;
-  top: 0;
-} */
-
 .menu {
   padding: 10px;
   margin: 15px;

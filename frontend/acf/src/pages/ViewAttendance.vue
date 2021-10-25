@@ -2,13 +2,22 @@
   <div class="viewattendance">
     <a-layout :style="{ background: 'white' }">
       <Header />
-      <a-layout-content :style="{ margin: '24px 16px 0' }">
+      <a-layout-content :style="{ margin: '30px 16px 0' }">
         <div
           :style="{
             minHeight: '360px',
             background: 'white',
           }"
         >
+          <a-back-top>
+            <div class="ant-back-top-inner">
+              <font-awesome-icon
+                :icon="['fas', 'arrow-alt-circle-up']"
+                :style="{ width: '100px', height: '50px' }"
+              />
+            </div>
+          </a-back-top>
+          <!-- menu trên -->
           <a-row type="flex">
             <a-col flex="auto">
               <a-input
@@ -55,50 +64,54 @@
               </a-button>
             </a-col>
           </a-row>
-          <a-table
-            :columns="columns"
-            :data-source="dataSourceTable"
-            :pagination="pagination"
-            :rowKey="
-              (record, index) => {
-                return index;
-              }
-            "
-            @change="handleTableChange"
-          >
-            <template slot="nameEmpl" slot-scope="text, record">
-              {{ record.nameEmpl }}
-            </template>
-            <template slot="type" slot-scope="text, record">
-              <a-tag v-if="record.type == 1" color="green">
-                {{ record.type }}
-              </a-tag>
-              <a-tag v-else-if="record.type == 0.5" color="orange">
-                {{ record.type }}
-              </a-tag>
-              <a-tag v-else color="red">
-                {{ record.type }}
-              </a-tag>
-            </template>
-            <template slot="date" slot-scope="text, record">
-              {{
-                new Date(record.date).toLocaleDateString("en-GB", {
-                  year: "numeric",
-                  month: "2-digit",
-                  day: "2-digit",
-                })
-              }}
-            </template>
-            <template slot="action" slot-scope="text, record">
-              <a-row>
-                <a-col :span="8">
-                  <a-button id="edit" @click="showModalEdit(record)">
-                    <font-awesome-icon :icon="['fas', 'edit']" />
-                  </a-button>
-                </a-col>
-              </a-row>
-            </template>
-          </a-table>
+
+          <!-- table content -->
+          <div :style="{ 'padding-top': '10px' }">
+            <a-table
+              :columns="columns"
+              :data-source="dataSourceTable"
+              :pagination="pagination"
+              :rowKey="
+                (record, index) => {
+                  return index;
+                }
+              "
+              @change="handleTableChange"
+            >
+              <template slot="nameEmpl" slot-scope="text, record">
+                {{ record.nameEmpl }}
+              </template>
+              <template slot="type" slot-scope="text, record">
+                <a-tag v-if="record.type == 1" color="green">
+                  {{ record.type }}
+                </a-tag>
+                <a-tag v-else-if="record.type == 0.5" color="orange">
+                  {{ record.type }}
+                </a-tag>
+                <a-tag v-else color="red">
+                  {{ record.type }}
+                </a-tag>
+              </template>
+              <template slot="date" slot-scope="text, record">
+                {{
+                  new Date(record.date).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
+              </template>
+              <template slot="action" slot-scope="text, record">
+                <a-row>
+                  <a-col :span="8">
+                    <a-button id="edit" @click="showModalEdit(record)">
+                      <font-awesome-icon :icon="['fas', 'edit']" />
+                    </a-button>
+                  </a-col>
+                </a-row>
+              </template>
+            </a-table>
+          </div>
         </div>
 
         <a-modal v-model="visibleEdit" title="Chỉnh sửa điểm danh">
@@ -279,6 +292,11 @@ export default {
 </script>
 
 <style scoped>
+/* back top */
+.ant-back-top-inner {
+  color: rgb(241, 237, 237);
+  text-align: center;
+}
 .attendancetype {
   width: 636px;
   text-align: left;
