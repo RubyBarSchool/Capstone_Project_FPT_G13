@@ -177,6 +177,7 @@ ul {
   color: #878787;
 }
 .footer-content {
-  margin: -11px;
+  margin: -30px;
+  margin-top: 19px;
 }
 </style>
