@@ -205,8 +205,7 @@ export default {
       this.dataForm.type = this.typeAttendance;
       attendanceService
         .addAttendance(this.dataForm)
-        .then((response) => {
-          console.log(response);
+        .then(() => {
           this.onChangeDate();
         })
         .catch((e) => {
@@ -238,9 +237,6 @@ export default {
         .catch((e) => {
           console.log(e);
         });
-    },
-    onPanelChange(value, mode) {
-      console.log(value, mode);
     },
   },
 };

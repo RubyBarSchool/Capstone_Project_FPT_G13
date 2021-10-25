@@ -25,7 +25,6 @@ service.interceptors.response.use(
         return response;
     },
     error => {
-        console.log("error", error.response)
         if (error.response && error.response.status === 401) {
             localStorage.removeItem('user')
             let message = {
