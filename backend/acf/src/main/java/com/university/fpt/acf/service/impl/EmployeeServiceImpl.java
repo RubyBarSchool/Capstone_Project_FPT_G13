@@ -144,8 +144,6 @@ public class EmployeeServiceImpl implements EmployeeService {
                 EmployeeValidate validate = new EmployeeValidate();
                 if(e!=null){
                     if(validate.checkFormEmail(updateEmployeeForm.getEmail())&&validate.checkFormPhone(updateEmployeeForm.getPhone())){
-//                        if(employeeRepository.checkExitPhone(updateEmployeeForm.getPhone())==null &&
-//                                employeeRepository.checkExitEmail(updateEmployeeForm.getEmail())== null){
                             e.setFullName(updateEmployeeForm.getFullName());
                             e.setImage(updateEmployeeForm.getImage());
                             e.setDob(updateEmployeeForm.getDob());
@@ -161,14 +159,11 @@ public class EmployeeServiceImpl implements EmployeeService {
                             e.setModified_date(LocalDate.now());
                             employeeRepository.save(e);
                             check =true;
-//                        }else{
-//                            throw new Exception("Phone/ Email is exist!");
-//                        }
                     }else {
                         throw new Exception("Employee is not format Phone/ Email!");
                     }
                 }else {
-                    throw new Exception("Employee is not exist!");
+                    throw new Exception("Employee ko tổn tại hoặc đã bị xóa");
                 }
 
             }

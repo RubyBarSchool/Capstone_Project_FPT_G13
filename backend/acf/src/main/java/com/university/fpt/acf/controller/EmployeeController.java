@@ -7,8 +7,10 @@ import com.university.fpt.acf.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,7 +101,7 @@ public class EmployeeController {
         }
     }
     @PutMapping("/update")
-    public  ResponseEntity<ResponseCommon> updateEmployee(@RequestBody UpdateEmployeeForm updateEmployeeForm){
+    public  ResponseEntity<ResponseCommon> updateEmployee(@Valid @RequestBody UpdateEmployeeForm updateEmployeeForm){
         ResponseCommon responseCommon = new ResponseCommon();
         String message="";
         Boolean checkUpdate = false;
