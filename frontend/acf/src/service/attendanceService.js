@@ -13,6 +13,9 @@ class attendanceService {
     updateAttendance(form) {
         return http.put(`/admin/attendances`, form);
     }
+    priviewExcel(form) {
+        return http.post(`/admin/attendances/priview`, form);
+    }
 }
 
 export default new attendanceService();

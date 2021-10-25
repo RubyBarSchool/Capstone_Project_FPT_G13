@@ -55,7 +55,7 @@
               </a-button>
             </a-col>
             <a-col flex="100px">
-              <a-button type="primary">
+              <a-button type="primary" @click="showExport">
                 Xuất excel
                 <font-awesome-icon
                   :icon="['fas', 'download']"
@@ -141,6 +141,99 @@
             </a-form-model-item>
           </a-form-model>
         </a-modal>
+
+        <a-modal v-model="visibleExport" title="Tùy chỉnh xuất">
+          <template slot="footer">
+            <a-button key="back" @click="handleCancel"> Hủy </a-button>
+            <a-button type="danger" @click="priviewExcel"> Priview </a-button>
+            <a-button key="submit" type="primary" @click="submitExport">
+              Export
+            </a-button>
+          </template>
+          <a-form-model>
+            <a-form-model-item label="Loại xuất">
+              <a-select
+                v-model="dataExport.type"
+                @change="changeTypeExport"
+                style="width: 100%"
+              >
+                <a-select-option key="1"> Chi tiết </a-select-option>
+                <a-select-option key="0"> Gộp ngày </a-select-option>
+              </a-select>
+            </a-form-model-item>
+
+            <a-form-model-item label="Xuất ghi chú" @change="changeExportNote">
+              <a-radio-group v-model="dataExport.note">
+                <a-radio-button value="true"> Có </a-radio-button>
+                <a-radio-button value="false"> Không </a-radio-button>
+              </a-radio-group>
+            </a-form-model-item>
+
+            <a-form-model-item label="Cấu trúc xuất" @change="changeExportNote">
+              <a-radio-group v-model="dataExport.structure">
+                <a-radio-button value="horizontal"> Ngang </a-radio-button>
+                <a-radio-button value="vertical"> Dọc </a-radio-button>
+              </a-radio-group>
+            </a-form-model-item>
+
+            <a-form-model-item label="Sắp xếp">
+              <a-select
+                v-model="dataExport.sort"
+                mode="multiple"
+                style="width: 100%"
+                placeholder="Hãy chọn trường muốn sắp xếp"
+              >
+                <a-select-option v-for="type in dataSort" :key="type.key">
+                  {{ type.value }}
+                </a-select-option>
+              </a-select>
+
+              <a-form-model-item
+                label="Chia dữ liệu theo tháng"
+                @change="changeExportNote"
+              >
+                <a-radio-group v-model="dataExport.paging">
+                  <a-radio-button value="true"> Có </a-radio-button>
+                  <a-radio-button value="false"> Không </a-radio-button>
+                </a-radio-group>
+              </a-form-model-item>
+            </a-form-model-item>
+          </a-form-model>
+        </a-modal>
+
+        <a-modal
+          v-model="visiblePriviewExport"
+          height="100%"
+          width="80%"
+          title="Priview Excel"
+        >
+          <template slot="footer">
+            <a-button key="back" @click="handleCancelPriview"> Hủy </a-button>
+          </template>
+          <template>
+            <ejs-spreadsheet>
+              <e-sheets>
+                <e-sheet
+                  v-for="(datax, index) in dataPriviewExcel"
+                  :name="dataName(index)"
+                  :key="index"
+                >
+                  <e-ranges>
+                    <e-range :dataSource="datax"></e-range>
+                  </e-ranges>
+                  <e-columns>
+                    <e-column :width="100"></e-column>
+                    <e-column :width="200"></e-column>
+                    <e-column :width="200"></e-column>
+                    <e-column :width="200"></e-column>
+                    <e-column :width="200"></e-column>
+                    <e-column :width="200"></e-column>
+                  </e-columns>
+                </e-sheet>
+              </e-sheets>
+            </ejs-spreadsheet>
+          </template>
+        </a-modal>
       </a-layout-content>
       <Footer />
     </a-layout>
@@ -151,6 +244,12 @@ import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 import attendanceService from "@/service/attendanceService.js";
 
+const dataSortCommon = [
+  { key: "name", value: "Họ và tên" },
+  { key: "1", value: "Đi làm" },
+  { key: "0.5", value: "Nghỉ" },
+  { key: "0", value: "Nửa công" },
+];
 export default {
   name: "Attendance",
   components: {
@@ -159,9 +258,21 @@ export default {
   },
   data() {
     return {
+      dataPriviewExcel: [],
+      visiblePriviewExport: false,
+      visibleExport: false,
       visibleEdit: false,
       nameEdit: "",
       dataSourceTable: [],
+      dataExport: {
+        dataSearch: {},
+        type: "1",
+        note: "true",
+        structure: "horizontal",
+        sort: [],
+        paging: "true",
+      },
+      dataSort: [{ key: "name", value: "Họ và tên" }],
       dataSearch: {
         name: "",
         date: [],
@@ -227,10 +338,52 @@ export default {
       ],
     };
   },
+  computed: {},
   created() {
     this.search();
   },
   methods: {
+    dataName(datax) {
+      return "A" + datax;
+    },
+    handleCancelPriview() {
+      this.visiblePriviewExport = false;
+    },
+    priviewExcel() {
+      this.dataPriviewExcel = [];
+      this.dataExport.dataSearch = this.dataSearch;
+      attendanceService
+        .priviewExcel(this.dataExport)
+        .then((response) => {
+          this.dataPriviewExcel = response.data.data;
+          console.log("data preview", this.dataPriviewExcel);
+          this.visiblePriviewExport = true;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    changeTypeExport(value) {
+      this.dataExport.sort = [];
+      this.dataSort = [];
+      if (value == "1") {
+        this.dataSort.push(dataSortCommon[0]);
+      } else {
+        this.dataSort = dataSortCommon;
+      }
+    },
+    changeExportNote() {},
+    showExport() {
+      this.visibleExport = true;
+      this.dataExport.dataSearch = {};
+      this.dataExport.type = "1";
+      this.dataExport.note = "true";
+      this.dataExport.structure = "horizontal";
+      this.dataExport.sort = [];
+      this.dataExport.paging = "true";
+      this.dataSort = [{ key: "name", value: "Họ và tên" }];
+    },
+    submitExport() {},
     showModalEdit(record) {
       this.visibleEdit = true;
       this.dataEdit.id = record.id;
@@ -259,6 +412,7 @@ export default {
       });
     },
     handleCancel() {
+      this.visibleExport = false;
       this.visibleEdit = false;
       this.dataEdit.id = "";
       this.dataEdit.type = "1";
@@ -292,6 +446,20 @@ export default {
 </script>
 
 <style scoped>
+@import "../../node_modules/@syncfusion/ej2-vue-spreadsheet/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-base/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-buttons/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-dropdowns/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-inputs/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-navigations/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-popups/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-grids/styles/material.css";
+@import "../../node_modules/@syncfusion/ej2-spreadsheet/styles/material.css";
+
+.e-sheet-panel {
+  height: 100% !important;
+}
 /* back top */
 .ant-back-top-inner {
   color: rgb(241, 237, 237);

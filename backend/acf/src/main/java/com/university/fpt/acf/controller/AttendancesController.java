@@ -132,5 +132,26 @@ public class AttendancesController {
         }
     }
 
+    @PostMapping(path = "/priview")
+    public ResponseEntity<ResponseCommon> priviewExcel(@Valid @RequestBody ExportExcelForm exportExcelForm) {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        List<Object> priviewExcel = new ArrayList<>();
+        try {
+            priviewExcel = attendancesService.priviewExcel(exportExcelForm);
+            responseCommon.setData(priviewExcel);
+            message = "Get attendances successfully";
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = "Could not get  attendances !";
+            responseCommon.setData(priviewExcel);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
+
 
 }

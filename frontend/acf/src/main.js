@@ -12,7 +12,10 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import {
     fas,
 } from '@fortawesome/free-solid-svg-icons';
+import { SpreadsheetPlugin } from "@syncfusion/ej2-vue-spreadsheet";
+Vue.use(SpreadsheetPlugin);
 library.add(fas);
+
 Vue.config.productionTip = false
 Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.use(Vuex);
