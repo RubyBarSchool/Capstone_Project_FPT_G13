@@ -5,7 +5,7 @@
         <div class="footer-content pt-5 pb-5">
           <div class="row">
             <div class="col-xl-4 col-lg-4 mb-50">
-              <div class="footer-widget" :style="{ 'margin-top' : '-15px'}">
+              <div class="footer-widget" :style="{ 'margin-top': '-15px' }">
                 <div class="footer-logo">
                   <a href="index.html"
                     ><img
@@ -66,9 +66,7 @@
           <div class="row">
             <div class="col-xl-6 col-lg-6 text-center text-lg-left">
               <div class="copyright-text">
-                <p>
-                 Copyright © 2010-2021 ACF Company. All rights reserved
-                </p>
+                <p>Copyright © 2010-2021 ACF Company. All rights reserved</p>
               </div>
             </div>
             <div class="col-xl-6 col-lg-6 d-none d-lg-block text-right">
@@ -100,7 +98,7 @@ ul {
   padding: 0px;
 }
 .footer-section {
-  background: #151414;
+  background: #141414;
   position: relative;
 }
 .footer-logo {
@@ -116,15 +114,17 @@ ul {
   text-justify: distribute;
   margin-bottom: 14px;
   font-size: 14px;
-  color: #bebdbd;
+  color: #ffffff;
   line-height: 28px;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 .footer-widget-heading h3 {
-  color: rgb(255, 255, 255);
+  color: #ffffff;
   font-size: 20px;
   font-weight: 600;
   margin-bottom: 40px;
   position: relative;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 .footer-widget-heading h3::before {
   content: "";
@@ -133,7 +133,7 @@ ul {
   bottom: -15px;
   height: 2px;
   width: 60px;
-  background: #A57E37;
+  background: #a57e37;
 }
 .footer-widget ul li {
   display: inline-block;
@@ -141,16 +141,17 @@ ul {
   margin-bottom: 12px;
 }
 .footer-widget ul li a:hover {
-  color: #A57E37;
+  color: #a57e37;
 }
 .footer-widget ul li a {
-  color: #bebdbd;
+  color: #ffffff;
   text-transform: capitalize;
 }
 .footer-widget ul li {
-  color: #bebdbd;
+  color: #ffffff;
   font-size: 12px;
   text-transform: capitalize;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 .copyright-area {
   background: #202020;
@@ -159,20 +160,23 @@ ul {
 .copyright-text p {
   margin: 0;
   font-size: 14px;
-  color: #878787;
+  color: white;
 }
 .copyright-text p a {
-  color: #A57E37;
+  color: #a57e37;
 }
 .footer-menu li {
   display: inline-block;
   margin-left: 20px;
 }
 .footer-menu li:hover a {
-  color: #A57E37;
+  color: #a57e37;
 }
 .footer-menu li a {
   font-size: 14px;
   color: #878787;
+}
+.footer-content {
+  margin: -11px;
 }
 </style>

@@ -22,7 +22,7 @@
                 />
                 {{ loadUser }}
               </a>
-              
+              <a-menu slot="overlay" class="menu">
                 <a-menu-item :key="index" v-for="(data, index) in router">
                   <router-link :to="data.path">
                     {{ data.name }}
@@ -30,9 +30,13 @@
                 </a-menu-item>
                 <a-menu-divider />
                 <a-menu-item :key="router.length" @click="logout">
-                  Thoát ra 
-                  <font-awesome-icon :icon="['fas','sign-out-alt']" :style="{'margin-left':'40px'}"/>
+                  Thoát ra
+                  <font-awesome-icon
+                    :icon="['fas', 'sign-out-alt']"
+                    :style="{ 'margin-left': '40px' }"
+                  />
                 </a-menu-item>
+              </a-menu>
             </a-dropdown>
           </span>
         </a-col>
@@ -120,4 +124,9 @@ export default {
   z-index: 1050;
   top: 0;
 } */
+
+.menu {
+  padding: 10px;
+  margin: 15px;
+}
 </style>

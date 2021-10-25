@@ -521,10 +521,14 @@ export default {
             let description =
               "Thêm mới tài khoản " + this.dataAdd.username + " thành công !!";
             this.notifi(type, message, description);
-          }else {
+          } else {
             let type = "error";
             let message = "Thêm mới";
-            let description = "Thêm mới tài khoản " + this.dataAdd.username + " không thành công vì " + response.data.message;
+            let description =
+              "Thêm mới tài khoản " +
+              this.dataAdd.username +
+              " không thành công vì " +
+              response.data.message;
             this.notifi(type, message, description);
           }
         })
@@ -637,15 +641,15 @@ export default {
 <style>
 /* button icon */
 #delete {
-  background-color: #f56c6c;
+  background-color: red;
   color: white;
 }
 #edit {
-  background-color: #18cfc9;
+  background-color: rgb(17, 196, 228);
   color: white;
 }
 #user {
-  background-color: #13ce66;
+  background-color: rgb(24, 216, 24);
   color: white;
 }
 
