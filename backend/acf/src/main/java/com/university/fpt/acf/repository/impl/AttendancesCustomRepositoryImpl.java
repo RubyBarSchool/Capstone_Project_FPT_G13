@@ -28,7 +28,7 @@ public class AttendancesCustomRepositoryImpl extends CommonRepository implements
             paramsAcc.put("name", "%" + attendanceFrom.getName().toLowerCase() + "%");
         }
         if (attendanceFrom.getDate() != null && !attendanceFrom.getDate().isEmpty()) {
-            sqlAcc.append(" and  t.date BETWEEN :dateStart and :dateEnd");
+            sqlAcc.append(" and  t.date BETWEEN :dateStart and :dateEnd ");
             paramsAcc.put("dateStart", attendanceFrom.getDate().get(0));
             paramsAcc.put("dateEnd", attendanceFrom.getDate().get(1));
         }
@@ -40,7 +40,7 @@ public class AttendancesCustomRepositoryImpl extends CommonRepository implements
             sqlAcc.append(" and LOWER(t.note) like :note ");
             paramsAcc.put("note","%" +attendanceFrom.getNote()+"%");
         }
-        sqlAcc.append("ORDER by t.date desc");
+        sqlAcc.append(" ORDER by t.date desc ");
         TypedQuery<AttendanceVO> queryAcc = super.createQuery(sqlAcc.toString(), paramsAcc, AttendanceVO.class);
         queryAcc.setFirstResult((attendanceFrom.getPageIndex() - 1)*attendanceFrom.getPageSize());
         queryAcc.setMaxResults(attendanceFrom.getPageSize());
@@ -58,7 +58,7 @@ public class AttendancesCustomRepositoryImpl extends CommonRepository implements
             paramsAcc.put("name", "%" + exportExcelForm.getDataSearch().getName().toLowerCase() + "%");
         }
         if (exportExcelForm.getDataSearch().getDate() != null && !exportExcelForm.getDataSearch().getDate().isEmpty()) {
-            sqlAcc.append(" and  t.date BETWEEN :dateStart and :dateEnd");
+            sqlAcc.append(" and  t.date BETWEEN :dateStart and :dateEnd ");
             paramsAcc.put("dateStart", exportExcelForm.getDataSearch().getDate().get(0));
             paramsAcc.put("dateEnd", exportExcelForm.getDataSearch().getDate().get(1));
         }
@@ -70,7 +70,7 @@ public class AttendancesCustomRepositoryImpl extends CommonRepository implements
             sqlAcc.append(" and LOWER(t.note) like :note ");
             paramsAcc.put("note","%" +exportExcelForm.getDataSearch().getNote()+"%");
         }
-        sqlAcc.append("ORDER by t.date ASC ");
+        sqlAcc.append(" ORDER by t.date ASC ");
 
         if(exportExcelForm.getSort().contains("name")){
             sqlAcc.append(" , e.fullName desc ");
@@ -92,7 +92,7 @@ public class AttendancesCustomRepositoryImpl extends CommonRepository implements
             paramsAcc.put("name", "%" + attendanceFrom.getName().toLowerCase() + "%");
         }
         if (attendanceFrom.getDate() != null && !attendanceFrom.getDate().isEmpty()) {
-            sqlAcc.append(" and  t.date BETWEEN :dateStart and :dateEnd");
+            sqlAcc.append(" and  t.date BETWEEN :dateStart and :dateEnd ");
             paramsAcc.put("dateStart", attendanceFrom.getDate().get(0));
             paramsAcc.put("dateEnd", attendanceFrom.getDate().get(1));
         }

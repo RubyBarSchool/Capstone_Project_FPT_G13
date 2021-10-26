@@ -9,6 +9,7 @@ import com.university.fpt.acf.service.EmployeeService;
 import com.university.fpt.acf.vo.AttendanceVO;
 import com.university.fpt.acf.vo.GetAllAccountResponseVO;
 import com.university.fpt.acf.vo.GetAllEmployeeVO;
+import com.university.fpt.acf.vo.ResponsePriviewExcel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @RestController
@@ -30,13 +32,13 @@ public class AttendancesController {
 
 
     @PostMapping
-    public  ResponseEntity<ResponseCommon> addAttendance(@Valid @RequestBody AddAttendanceForm addAccountForm){
+    public ResponseEntity<ResponseCommon> addAttendance(@Valid @RequestBody AddAttendanceForm addAccountForm) {
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
-        try{
+        try {
             List<TimeKeep> timeKeeps = attendancesService.saveAttendance(addAccountForm);
             message = "add attendances successfully";
-            if (timeKeeps.size()==0) {
+            if (timeKeeps.size() == 0) {
                 message = "add false";
                 responseCommon.setData(false);
             }
@@ -44,7 +46,7 @@ public class AttendancesController {
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
-        }catch (Exception e){
+        } catch (Exception e) {
             message = "Could not add attendances !";
             responseCommon.setData(false);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -54,13 +56,13 @@ public class AttendancesController {
     }
 
     @PutMapping
-    public  ResponseEntity<ResponseCommon> updateAttendance(@Valid @RequestBody UpdateAttendanceForm updateAttendanceForm){
+    public ResponseEntity<ResponseCommon> updateAttendance(@Valid @RequestBody UpdateAttendanceForm updateAttendanceForm) {
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
-        try{
+        try {
             TimeKeep timeKeeps = attendancesService.updateAttendance(updateAttendanceForm);
             message = "update attendances successfully";
-            if (timeKeeps.getId()==null) {
+            if (timeKeeps.getId() == null) {
                 message = "update false";
                 responseCommon.setData(false);
             }
@@ -68,7 +70,7 @@ public class AttendancesController {
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
-        }catch (Exception e){
+        } catch (Exception e) {
             message = "Could not update attendances !";
             responseCommon.setData(false);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -90,7 +92,7 @@ public class AttendancesController {
             responseCommon.setData(employeeVOS);
             responseCommon.setTotal(total);
             message = "Get Employee not attendances successfully";
-            if (total.intValue()==0) {
+            if (total.intValue() == 0) {
                 message = "Get Employee not attendances not found";
             }
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -117,7 +119,7 @@ public class AttendancesController {
             responseCommon.setData(attendanceVOS);
             responseCommon.setTotal(total);
             message = "Get attendances successfully";
-            if (total==0) {
+            if (total == 0) {
                 message = "Get attendances not found";
             }
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -133,23 +135,23 @@ public class AttendancesController {
     }
 
     @PostMapping(path = "/priview")
-    public ResponseEntity<ResponseCommon> priviewExcel(@Valid @RequestBody ExportExcelForm exportExcelForm) {
-        ResponseCommon responseCommon = new ResponseCommon();
+    public ResponseEntity<ResponsePriviewExcel> priviewExcel(@Valid @RequestBody ExportExcelForm exportExcelForm) {
+        ResponsePriviewExcel excel = new ResponsePriviewExcel();
         String message = "";
         List<Object> priviewExcel = new ArrayList<>();
+        List<Object> nameSheets = new ArrayList<>();
         try {
             priviewExcel = attendancesService.priviewExcel(exportExcelForm);
-            responseCommon.setData(priviewExcel);
+            nameSheets.addAll((Collection<?>) priviewExcel.get(priviewExcel.size() - 1));
+            priviewExcel.remove(priviewExcel.size() - 1);
+            excel.setData(priviewExcel);
+            excel.setNameSheets(nameSheets);
             message = "Get attendances successfully";
-            responseCommon.setStatus(HttpStatus.OK.value());
-            responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(excel);
         } catch (Exception e) {
             message = "Could not get  attendances !";
-            responseCommon.setData(priviewExcel);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
-            responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            excel.setData(priviewExcel);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(excel);
         }
     }
 

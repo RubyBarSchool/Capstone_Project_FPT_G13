@@ -211,11 +211,10 @@
             <a-button key="back" @click="handleCancelPriview"> Hủy </a-button>
           </template>
           <template>
-            <ejs-spreadsheet>
+            <ejs-spreadsheet  ref="spreadsheet"  :created="created">
               <e-sheets>
                 <e-sheet
                   v-for="(datax, index) in dataPriviewExcel"
-                  :name="dataName(index)"
                   :key="index"
                 >
                   <e-ranges>
@@ -259,6 +258,7 @@ export default {
   data() {
     return {
       dataPriviewExcel: [],
+      dataNameSheets:[],
       visiblePriviewExport: false,
       visibleExport: false,
       visibleEdit: false,
@@ -343,19 +343,35 @@ export default {
     this.search();
   },
   methods: {
-    dataName(datax) {
-      return "A" + datax;
+    created() {
+      var spreadsheet = this.$refs.spreadsheet;
+      spreadsheet.delete(1);
+      console.log("excel",spreadsheet);
     },
+    // dataName(datax) {
+    //   let data = Object.keys(datax[0]);
+    //   let month = "";
+    //         console.log("data sheets: ",data);
+    //   if (this.dataExport.note === "true") {
+    //     let indexFirst = data[3].indexOf("-");
+    //     let indexLast = data[3].indexOf("-", indexFirst + 1);
+    //     month = data[3].substring(indexFirst+1, indexLast);
+    //   }
+    //   console.log("data sheets: ",month);
+    //   return "Tháng "+ month;
+    // },
     handleCancelPriview() {
       this.visiblePriviewExport = false;
     },
     priviewExcel() {
       this.dataPriviewExcel = [];
+      this.dataNameSheets = [];
       this.dataExport.dataSearch = this.dataSearch;
       attendanceService
         .priviewExcel(this.dataExport)
         .then((response) => {
           this.dataPriviewExcel = response.data.data;
+          this.dataNameSheets = response.data.nameSheets;
           console.log("data preview", this.dataPriviewExcel);
           this.visiblePriviewExport = true;
         })
@@ -383,7 +399,19 @@ export default {
       this.dataExport.paging = "true";
       this.dataSort = [{ key: "name", value: "Họ và tên" }];
     },
-    submitExport() {},
+    submitExport() {
+      this.dataExport.dataSearch = this.dataSearch;
+      attendanceService
+        .downExcel(this.dataExport)
+        .then((response) => {
+          this.dataPriviewExcel = response.data.data;
+          console.log("data preview", this.dataPriviewExcel);
+          this.visiblePriviewExport = true;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     showModalEdit(record) {
       this.visibleEdit = true;
       this.dataEdit.id = record.id;

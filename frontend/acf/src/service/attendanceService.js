@@ -16,6 +16,9 @@ class attendanceService {
     priviewExcel(form) {
         return http.post(`/admin/attendances/priview`, form);
     }
+    downExcel(form) {
+        return http.post(`/admin/attendances/down`, form);
+    }
 }
 
 export default new attendanceService();

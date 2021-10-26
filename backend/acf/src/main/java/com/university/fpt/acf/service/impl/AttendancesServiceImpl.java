@@ -117,6 +117,7 @@ public class AttendancesServiceImpl implements AttendancesService {
         List<Long> idNhanVien = new ArrayList<>();
         List<LocalDate> localDates = new ArrayList<>();
         List<Integer> month = new ArrayList<>();
+        List<String> nameSheet = new ArrayList<>();
         try {
             attendanceVOS = attendancesCustomRepository.priviewDetailExcel(exportExcelForm);
             for (AttendanceVO attendanceVO : attendanceVOS) {
@@ -128,6 +129,7 @@ public class AttendancesServiceImpl implements AttendancesService {
                 }
                 if (!month.contains(attendanceVO.getDate().getMonthValue())) {
                     month.add(attendanceVO.getDate().getMonthValue());
+                    nameSheet.add("Tháng "+ attendanceVO.getDate().getMonthValue());
                 }
             }
             // load data
@@ -197,7 +199,9 @@ public class AttendancesServiceImpl implements AttendancesService {
                                 }
                             }
                             for (LocalDate localDate : localDates) {
-                                dataAttendance.put(localDate.format(dateFormatter), "");
+                                if(localDate.getMonthValue() == month.get(sheets.size())){
+                                    dataAttendance.put(localDate.format(dateFormatter), "");
+                                }
                             }
                             dataAttendance.put(attendanceVOS.get(i).getDate().format(dateFormatter), attendanceVOS.get(i).getType());
                             row.add(dataAttendance);
@@ -209,6 +213,8 @@ public class AttendancesServiceImpl implements AttendancesService {
             } else {
 
             }
+
+            sheets.add(nameSheet);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
