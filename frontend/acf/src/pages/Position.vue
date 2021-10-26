@@ -12,10 +12,11 @@
           <a-row type="flex">
             <a-col flex="auto">
               <a-carousel autoplay>
-                <div><img src="../assets/1.jpg"></div>
-                <div><img src="../assets/2.jpg"></div>
-                <div><img src="../assets/3.jpg"></div>
-                <div><img src="../assets/4.jpg"></div>
+                <div><img src="../assets/1.png" /></div>
+                <div><img src="../assets/2.png" /></div>
+                <div><img src="../assets/3.png" /></div>
+                <div><img src="../assets/4.png" /></div>
+                <div><img src="../assets/5.png" /></div>
               </a-carousel>
             </a-col>
             <a-col flex="650px">
@@ -326,7 +327,7 @@ export default {
 
 /* slide image */
 .ant-carousel {
-  width:800px;
+  width: 800px;
 }
 .ant-carousel :deep(.slick-slide) {
   text-align: center;
