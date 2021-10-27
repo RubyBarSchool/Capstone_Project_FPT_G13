@@ -48,11 +48,21 @@ export default {
 };
 </script>
 <style scoped>
+/* check */
 #check {
-  color: rgb(24, 216, 24);
+  color: rgb(76, 238, 12);;
 }
+#check:hover {
+  font-size: 23px;
+  color: rgb(42, 253, 0);
+}
+/* button */
 #edit {
-  background-color: rgb(17, 196, 228);
+  background-color: rgb(15, 208, 241);
+  color: white;
+}
+#edit:hover {
+  background-color: rgb(0, 181, 253);
   color: white;
 }
 </style>

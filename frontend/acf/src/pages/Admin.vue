@@ -2,7 +2,7 @@
   <div class="admin">
     <a-layout :style="{ background: 'white' }">
       <Header />
-      <a-layout-content :style="{ margin: '30px 16px 0'}">
+      <a-layout-content :style="{ margin: '30px 16px 0' }">
         <div
           :style="{
             minHeight: '360px',
@@ -56,7 +56,11 @@
                 :show-time="{ format: 'DD/MM/YYYY' }"
                 format="DD/MM/YYYY"
               />
-              <a-button type="primary" @click="submitSearch" :style="{ 'margin-left': '5px' }">
+              <a-button
+                type="primary"
+                @click="submitSearch"
+                :style="{ 'margin-left': '5px' }"
+              >
                 <font-awesome-icon
                   :icon="['fas', 'search']"
                   :style="{ 'margin-right': '5px' }"
@@ -647,7 +651,6 @@ export default {
 </script>
 
 <style scoped>
-
 /* back top */
 .ant-back-top-inner {
   color: rgb(241, 237, 237);
@@ -656,18 +659,29 @@ export default {
 
 /* button icon */
 #delete {
-  background-color: red;
+  background-color: rgb(255, 0, 0);
+  color: white;
+}
+#delete:hover {
+  background-color: rgba(233, 15, 15, 0.863);
   color: white;
 }
 #edit {
-  background-color: rgb(17, 196, 228);
+  background-color: rgb(10, 208, 243);
+  color: white;
+}
+#edit:hover {
+  background-color: rgb(0, 181, 253);
   color: white;
 }
 #user {
-  background-color: rgb(24, 216, 24);
+  background-color: rgb(76, 238, 12);
   color: white;
 }
-
+#user:hover {
+  background-color: rgb(42, 253, 0);
+  color: white;
+}
 /* profile */
 .bg-c-lite-green {
   border-radius: 5px;

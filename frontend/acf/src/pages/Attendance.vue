@@ -255,4 +255,5 @@ export default {
   color: rgb(241, 237, 237);
   text-align: center;
 }
+
 </style>

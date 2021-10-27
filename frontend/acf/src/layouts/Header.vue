@@ -8,17 +8,18 @@
             src="../assets/logo_header.png"
           />
         </a-col>
-        <a-col flex="250px" >
-          <span style="margin-right: 90px">
+        <a-col flex="170px">
+          <span>
             <a-badge :count="5"
               ><a-icon :style="{ fontSize: '30px' }" type="bell" />
             </a-badge>
-            <a-dropdown :trigger="['click']" class="avatar">
+            <a-dropdown :trigger="['click']" class="dropdown">
               <a class="ant-dropdown-link">
                 <a-avatar
                   :size="55"
-                  style="margin: 5px"
+                  :style="{ 'margin-left': '10px' }"
                   src="https://img.icons8.com/bubbles/100/000000/user.png"
+                  class="avatar"
                 />
                 {{ loadUser }}
               </a>
@@ -122,7 +123,11 @@ export default {
   margin: 15px;
 }
 
-.avatar{
-  border: 1px solid #000;
+.dropdown:hover {
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  color: rgb(0, 0, 0);
+  font-size: 18px;
 }
+
 </style>
