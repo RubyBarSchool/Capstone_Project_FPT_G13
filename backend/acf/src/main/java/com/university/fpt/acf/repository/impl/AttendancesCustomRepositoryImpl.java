@@ -71,12 +71,6 @@ public class AttendancesCustomRepositoryImpl extends CommonRepository implements
             paramsAcc.put("note","%" +exportExcelForm.getDataSearch().getNote()+"%");
         }
         sqlAcc.append(" ORDER by t.date ASC ");
-
-        if(exportExcelForm.getSort().contains("name")){
-            sqlAcc.append(" , e.fullName desc ");
-        }else{
-            sqlAcc.append(" , e.fullName asc ");
-        }
         TypedQuery<AttendanceVO> queryAcc = super.createQuery(sqlAcc.toString(), paramsAcc, AttendanceVO.class);
         List<AttendanceVO> resultList = queryAcc.getResultList();
         return resultList;

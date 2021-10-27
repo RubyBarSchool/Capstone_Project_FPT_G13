@@ -183,36 +183,6 @@
                 <a-radio-button value="false"> Không </a-radio-button>
               </a-radio-group>
             </a-form-model-item>
-
-            <a-form-model-item label="Cấu trúc xuất" @change="changeExportNote">
-              <a-radio-group v-model="dataExport.structure">
-                <a-radio-button value="horizontal"> Ngang </a-radio-button>
-                <a-radio-button value="vertical"> Dọc </a-radio-button>
-              </a-radio-group>
-            </a-form-model-item>
-
-            <a-form-model-item label="Sắp xếp">
-              <a-select
-                v-model="dataExport.sort"
-                mode="multiple"
-                style="width: 100%"
-                placeholder="Hãy chọn trường muốn sắp xếp"
-              >
-                <a-select-option v-for="type in dataSort" :key="type.key">
-                  {{ type.value }}
-                </a-select-option>
-              </a-select>
-
-              <a-form-model-item
-                label="Chia dữ liệu theo tháng"
-                @change="changeExportNote"
-              >
-                <a-radio-group v-model="dataExport.paging">
-                  <a-radio-button value="true"> Có </a-radio-button>
-                  <a-radio-button value="false"> Không </a-radio-button>
-                </a-radio-group>
-              </a-form-model-item>
-            </a-form-model-item>
           </a-form-model>
         </a-modal>
 
@@ -227,7 +197,7 @@
             <a-button key="back" @click="handleCancelPriview"> Hủy </a-button>
           </template>
           <template>
-            <ejs-spreadsheet  ref="spreadsheet"  :created="created">
+            <ejs-spreadsheet>
               <e-sheets>
                 <e-sheet
                   v-for="(datax, index) in dataPriviewExcel"
@@ -274,7 +244,6 @@ export default {
   data() {
     return {
       dataPriviewExcel: [],
-      dataNameSheets:[],
       visiblePriviewExport: false,
       visibleExport: false,
       visibleEdit: false,
@@ -284,11 +253,7 @@ export default {
         dataSearch: {},
         type: "1",
         note: "true",
-        structure: "horizontal",
-        sort: [],
-        paging: "true",
       },
-      dataSort: [{ key: "name", value: "Họ và tên" }],
       dataSearch: {
         name: "",
         date: [],
@@ -359,36 +324,16 @@ export default {
     this.search();
   },
   methods: {
-    created() {
-      var spreadsheet = this.$refs.spreadsheet;
-      spreadsheet.delete(1);
-      console.log("excel",spreadsheet);
-    },
-    // dataName(datax) {
-    //   let data = Object.keys(datax[0]);
-    //   let month = "";
-    //         console.log("data sheets: ",data);
-    //   if (this.dataExport.note === "true") {
-    //     let indexFirst = data[3].indexOf("-");
-    //     let indexLast = data[3].indexOf("-", indexFirst + 1);
-    //     month = data[3].substring(indexFirst+1, indexLast);
-    //   }
-    //   console.log("data sheets: ",month);
-    //   return "Tháng "+ month;
-    // },
     handleCancelPriview() {
       this.visiblePriviewExport = false;
     },
     priviewExcel() {
       this.dataPriviewExcel = [];
-      this.dataNameSheets = [];
       this.dataExport.dataSearch = this.dataSearch;
       attendanceService
         .priviewExcel(this.dataExport)
         .then((response) => {
           this.dataPriviewExcel = response.data.data;
-          this.dataNameSheets = response.data.nameSheets;
-          console.log("data preview", this.dataPriviewExcel);
           this.visiblePriviewExport = true;
         })
         .catch((e) => {
@@ -396,8 +341,6 @@ export default {
         });
     },
     changeTypeExport(value) {
-      this.dataExport.sort = [];
-      this.dataSort = [];
       if (value == "1") {
         this.dataSort.push(dataSortCommon[0]);
       } else {
@@ -410,19 +353,19 @@ export default {
       this.dataExport.dataSearch = {};
       this.dataExport.type = "1";
       this.dataExport.note = "true";
-      this.dataExport.structure = "horizontal";
-      this.dataExport.sort = [];
-      this.dataExport.paging = "true";
-      this.dataSort = [{ key: "name", value: "Họ và tên" }];
     },
     submitExport() {
       this.dataExport.dataSearch = this.dataSearch;
+      this.visibleExport = false;
       attendanceService
         .downExcel(this.dataExport)
         .then((response) => {
-          this.dataPriviewExcel = response.data.data;
-          console.log("data preview", this.dataPriviewExcel);
-          this.visiblePriviewExport = true;
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "Attendance.xlsx");
+          document.body.appendChild(link);
+          link.click();
         })
         .catch((e) => {
           console.log(e);

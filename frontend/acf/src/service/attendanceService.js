@@ -17,7 +17,7 @@ class attendanceService {
         return http.post(`/admin/attendances/priview`, form);
     }
     downExcel(form) {
-        return http.post(`/admin/attendances/down`, form);
+        return http.post(`/admin/attendances/down`, form, { responseType: 'blob' });
     }
 }
 

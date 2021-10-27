@@ -7,15 +7,19 @@ import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.service.AttendancesService;
 import com.university.fpt.acf.service.EmployeeService;
 import com.university.fpt.acf.vo.AttendanceVO;
-import com.university.fpt.acf.vo.GetAllAccountResponseVO;
 import com.university.fpt.acf.vo.GetAllEmployeeVO;
-import com.university.fpt.acf.vo.ResponsePriviewExcel;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -135,24 +139,36 @@ public class AttendancesController {
     }
 
     @PostMapping(path = "/priview")
-    public ResponseEntity<ResponsePriviewExcel> priviewExcel(@Valid @RequestBody ExportExcelForm exportExcelForm) {
-        ResponsePriviewExcel excel = new ResponsePriviewExcel();
+    public ResponseEntity<ResponseCommon> priviewExcel(@Valid @RequestBody ExportExcelForm exportExcelForm) {
+        ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
         List<Object> priviewExcel = new ArrayList<>();
         List<Object> nameSheets = new ArrayList<>();
         try {
             priviewExcel = attendancesService.priviewExcel(exportExcelForm);
-            nameSheets.addAll((Collection<?>) priviewExcel.get(priviewExcel.size() - 1));
-            priviewExcel.remove(priviewExcel.size() - 1);
-            excel.setData(priviewExcel);
-            excel.setNameSheets(nameSheets);
+            responseCommon.setData(priviewExcel);
             message = "Get attendances successfully";
-            return ResponseEntity.status(HttpStatus.OK).body(excel);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
             message = "Could not get  attendances !";
-            excel.setData(priviewExcel);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(excel);
+            responseCommon.setData(priviewExcel);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
+    }
+
+    @PostMapping("/down")
+    public ResponseEntity<Resource> downExcel( @Valid @RequestBody ExportExcelForm exportExcelForm) {
+        ByteArrayInputStream file = attendancesService.downExcel(exportExcelForm);
+        String filename = "tutorials.xlsx";
+        InputStreamResource filex = new InputStreamResource(file);
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                .body(filex);
     }
 
 

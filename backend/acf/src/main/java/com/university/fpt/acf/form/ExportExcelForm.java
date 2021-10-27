@@ -18,11 +18,4 @@ public class ExportExcelForm {
     private String type;
     @NotBlank
     private String note;
-    @NotBlank
-    private String structure;
-    @NotNull
-    private List<String> sort;
-    @NotBlank
-    private String paging;
-
 }
