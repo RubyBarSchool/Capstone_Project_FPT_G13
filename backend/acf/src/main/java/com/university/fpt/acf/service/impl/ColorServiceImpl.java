@@ -59,7 +59,7 @@ public class ColorServiceImpl implements ColorService {
                     Color c = new Color();
                     c.setName(addColorForm.getName());
                     c.setCode(addColorForm.getCode());
-                    c.setImage(addColorForm.getName());
+                    c.setImage(addColorForm.getImage());
                     Company cp = new Company();
                     cp.setId(addColorForm.getIdCompany());
                     c.setCompany(cp);
@@ -93,7 +93,8 @@ public class ColorServiceImpl implements ColorService {
                         if(c!=null) {
                             c.setName(updateColorForm.getName());
                             c.setCode(updateColorForm.getCode());
-                            c.setImage(updateColorForm.getName());
+                            c.setName(updateColorForm.getName());
+                            c.setImage(updateColorForm.getImage());
                             Company cp = new Company();
                             cp.setId(updateColorForm.getIdCompany());
                             c.setCompany(cp);

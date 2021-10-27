@@ -7,5 +7,6 @@ public class UpdateColorForm {
     private Long id;
     private String name;
     private String code;
+    private String image;
     private Long idCompany;
 }
