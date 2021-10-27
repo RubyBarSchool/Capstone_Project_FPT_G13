@@ -9,6 +9,14 @@
             minHeight: '360px',
           }"
         >
+          <a-back-top>
+            <div class="ant-back-top-inner">
+              <font-awesome-icon
+                :icon="['fas', 'angle-double-up']"
+                :style="{ width: '160px', height: '50px', color: '#15AABF' }"
+              />
+            </div>
+          </a-back-top>
           <a-row type="flex">
             <a-col flex="auto">
               <a-carousel autoplay>
@@ -20,14 +28,6 @@
               </a-carousel>
             </a-col>
             <a-col flex="650px">
-              <a-back-top>
-                <div class="ant-back-top-inner">
-                  <font-awesome-icon
-                    :icon="['fas', 'arrow-alt-circle-up']"
-                    :style="{ width: '100px', height: '50px' }"
-                  />
-                </div>
-              </a-back-top>
               <!-- menu trên -->
               <a-input
                 placeholder="Tên chức vụ"

@@ -12,72 +12,70 @@
           <a-back-top>
             <div class="ant-back-top-inner">
               <font-awesome-icon
-                :icon="['fas', 'arrow-alt-circle-up']"
-                :style="{ width: '100px', height: '50px' }"
+                :icon="['fas', 'angle-double-up']"
+                :style="{ width: '160px', height: '50px', color: '#15AABF' }"
               />
             </div>
           </a-back-top>
           <!-- menu trên -->
-          <a-row type="flex">
-            <a-col flex="auto">
-              <a-input
-                placeholder="Tên tài khoản"
-                style="width: 150px"
-                v-model="dataSearch.name"
-              />
-              <a-select
-                placeholder="Chức vụ"
-                mode="multiple"
-                v-model="dataSearch.listRole"
-                :filter-option="false"
-                @search="fetchRoles"
-                style="width: 120px"
-              >
-                <a-select-option
-                  v-for="(role, index) in dataRoles"
-                  :value="role.id"
-                  :key="index"
-                >
-                  {{ role.name }}
-                </a-select-option>
-              </a-select>
-              <a-select
-                placeholder="Trạng thái"
-                mode="multiple"
-                v-model="dataSearch.listStatus"
-                style="width: 150px"
-              >
-                <a-select-option value="false"> Nháp </a-select-option>
-                <a-select-option value="true"> Công khai </a-select-option>
-              </a-select>
-              <a-range-picker
-                v-model="dataSearch.date"
-                :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-                :show-time="{ format: 'DD/MM/YYYY' }"
-                format="DD/MM/YYYY"
-              />
-              <a-button
-                type="primary"
-                @click="submitSearch"
-                :style="{ 'margin-left': '5px' }"
-              >
-                <font-awesome-icon
-                  :icon="['fas', 'search']"
-                  :style="{ 'margin-right': '5px' }"
-                />
-                Tìm kiếm
-              </a-button>
-            </a-col>
-            <a-col flex="100px">
-              <a-button type="primary" @click="showModalAdd">
-                <font-awesome-icon
-                  :icon="['fas', 'user-plus']"
-                  :style="{ 'margin-right': '5px' }"
-                />
-                Thêm
-              </a-button>
-            </a-col>
-          </a-row>
+          <a-input
+            placeholder="Tên tài khoản"
+            style="width: 150px"
+            v-model="dataSearch.name"
+          />
+          <a-select
+            placeholder="Chức vụ"
+            mode="multiple"
+            v-model="dataSearch.listRole"
+            :filter-option="false"
+            @search="fetchRoles"
+            style="width: 150px"
+          >
+            <a-select-option
+              v-for="(role, index) in dataRoles"
+              :value="role.id"
+              :key="index"
+            >
+              {{ role.name }}
+            </a-select-option>
+          </a-select>
+          <a-select
+            placeholder="Trạng thái"
+            mode="multiple"
+            v-model="dataSearch.listStatus"
+            style="width: 150px"
+          >
+            <a-select-option value="false"> Nháp </a-select-option>
+            <a-select-option value="true"> Công khai </a-select-option>
+          </a-select>
+          <a-range-picker
+            v-model="dataSearch.date"
+            :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+            :show-time="{ format: 'DD/MM/YYYY' }"
+            format="DD/MM/YYYY"
+          />
+          <a-button
+            type="primary"
+            @click="submitSearch"
+            :style="{ 'margin-left': '5px' }"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'search']"
+              :style="{ 'margin-right': '5px' }"
+            />
+            Tìm kiếm
+          </a-button>
+          <a-button
+            type="primary"
+            @click="showModalAdd"
+            :style="{ 'margin-left': '5px' }"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'user-plus']"
+              :style="{ 'margin-right': '5px' }"
+            />
+            Thêm
+          </a-button>
 
           <!-- table content -->
           <div :style="{ 'padding-top': '10px' }">

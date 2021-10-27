@@ -2,22 +2,20 @@
   <div id="Header">
     <a-layout-header>
       <a-row type="flex">
-        <a-col flex="auto">
-          <img
-            :style="{ width: '140px', 'margin-left': '20px' }"
-            src="../assets/logo_header.png"
-          />
-        </a-col>
-        <a-col flex="170px">
+        <a-col flex="auto"> </a-col>
+        <a-col flex="180px">
           <span>
-            <a-badge :count="5"
-              ><a-icon :style="{ fontSize: '30px' }" type="bell" />
+            <a-badge dot>
+              <font-awesome-icon
+                :icon="['far', 'bell']"
+                :style="{ 'font-size': '30px', color: 'white' }"
+              />
             </a-badge>
             <a-dropdown :trigger="['click']" class="dropdown">
               <a class="ant-dropdown-link">
                 <a-avatar
-                  :size="55"
-                  :style="{ 'margin-left': '10px' }"
+                  :size="50"
+                  :style="{ 'margin-left': '10px', 'margin-bottom': '9px' }"
                   src="https://img.icons8.com/bubbles/100/000000/user.png"
                   class="avatar"
                 />
@@ -111,23 +109,27 @@ export default {
 </script>
 <style scoped>
 .ant-layout-header {
-  background-color: white;
-  -webkit-box-shadow: 0px 7px 13px -1px rgba(230, 230, 230, 1);
+  background-color: #24292f;
+  /* -webkit-box-shadow: 0px 7px 13px -1px rgba(230, 230, 230, 1);
   -webkit-box-shadow: 0px 7px 13px -4px rgba(230, 230, 230, 1);
   -moz-box-shadow: 0px 7px 13px -4px rgba(230, 230, 230, 1);
-  box-shadow: 0px 7px 13px -4px rgba(230, 230, 230, 1);
+  box-shadow: 0px 7px 13px -4px rgba(230, 230, 230, 1); */
 }
-
 .menu {
   padding: 10px;
   margin: 15px;
+}
+.dropdown {
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  color: white;
+  font-size: 16px;
 }
 
 .dropdown:hover {
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
-  color: rgb(0, 0, 0);
+  color: white;
   font-size: 18px;
 }
-
 </style>

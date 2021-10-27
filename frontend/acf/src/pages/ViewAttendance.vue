@@ -9,17 +9,15 @@
             background: 'white',
           }"
         >
-          <a-back-top>
+         <a-back-top>
             <div class="ant-back-top-inner">
               <font-awesome-icon
-                :icon="['fas', 'arrow-alt-circle-up']"
-                :style="{ width: '100px', height: '50px' }"
+                :icon="['fas', 'angle-double-up']"
+                :style="{ width: '160px', height: '50px', color: '#15AABF' }"
               />
             </div>
           </a-back-top>
           <!-- menu trên -->
-          <a-row type="flex">
-            <a-col flex="auto">
               <a-input
                 v-model="dataSearch.name"
                 placeholder="Tên  nhân viên"
@@ -57,17 +55,13 @@
                 />
                 Tìm Kiếm
               </a-button>
-            </a-col>
-            <a-col flex="100px">
-              <a-button type="primary" @click="showExport">
+              <a-button type="primary" @click="showExport" :style="{ 'margin-left': '5px' }">
                 Xuất File
                 <font-awesome-icon
                   :icon="['fas', 'download']"
                   :style="{ 'margin-left': '10px' }"
                 />
               </a-button>
-            </a-col>
-          </a-row>
 
           <!-- table content -->
           <div :style="{ 'padding-top': '10px' }">

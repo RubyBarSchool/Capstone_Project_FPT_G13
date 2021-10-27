@@ -10,11 +10,11 @@
             minHeight: '360px',
           }"
         >
-           <a-back-top>
+          <a-back-top>
             <div class="ant-back-top-inner">
               <font-awesome-icon
-                :icon="['fas', 'arrow-alt-circle-up']"
-                :style="{ width: '100px', height: '50px' }"
+                :icon="['fas', 'angle-double-up']"
+                :style="{ width: '160px', height: '50px', color: '#15AABF' }"
               />
             </div>
           </a-back-top>
@@ -66,7 +66,7 @@
                 <!-- Table content -->
 
                 <a-row type="flex">
-                  <a-col flex="442px"></a-col>
+                  <a-col flex="435px"></a-col>
                   <a-col flex="auto">
                     <a-button
                       type="primary"
@@ -75,7 +75,7 @@
                     >
                       Lưu điểm danh
                     </a-button>
-                    <a-button type="primary" @click="reset"> Cài lại </a-button>
+                    <a-button type="primary" @click="reset" :style="{ 'margin-left': '6px' }"> Cài lại </a-button>
                   </a-col>
                 </a-row>
               </div>
@@ -255,5 +255,4 @@ export default {
   color: rgb(241, 237, 237);
   text-align: center;
 }
-
 </style>

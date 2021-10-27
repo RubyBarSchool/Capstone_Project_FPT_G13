@@ -12,61 +12,59 @@
           <a-back-top>
             <div class="ant-back-top-inner">
               <font-awesome-icon
-                :icon="['fas', 'arrow-alt-circle-up']"
-                :style="{ width: '100px', height: '50px' }"
+                :icon="['fas', 'angle-double-up']"
+                :style="{ width: '160px', height: '50px', color: '#15AABF' }"
               />
             </div>
           </a-back-top>
           <!-- menu trên -->
-          <a-row type="flex">
-            <a-col flex="auto">
-              <a-input
-                placeholder="Tên nhân viên"
-                style="width: 150px"
-                v-model="dataSearch.name"
-              />
-              <a-select
-                placeholder="Chức vụ"
-                :filter-option="false"
-                @search="fetchPosition"
-                style="width: 140px"
-                v-model="dataSearch.idPosition"
-                show-search
-              >
-                <a-select-option
-                  v-for="(position, index) in dataPositions"
-                  :value="position.id"
-                  :key="index"
-                >
-                  {{ position.name }}
-                </a-select-option>
-              </a-select>
-              <a-select
-                placeholder="Trạng thái"
-                style="width: 150px"
-                v-model="dataSearch.statusDelete"
-              >
-                <a-select-option value="false"> Đang làm </a-select-option>
-                <a-select-option value="true"> Nghỉ </a-select-option>
-              </a-select>
-              <a-button type="primary" @click="submitSearch" :style="{ 'margin-left': '5px' }">
-                <font-awesome-icon
-                  :icon="['fas', 'search']"
-                  :style="{ 'margin-right': '5px' }"
-                />
-                Tìm kiếm
-              </a-button>
-            </a-col>
-            <a-col flex="100px">
-              <a-button type="primary" @click="showModalAdd">
-                <font-awesome-icon
-                  :icon="['fas', 'user-plus']"
-                  :style="{ 'margin-right': '5px' }"
-                />
-                Thêm
-              </a-button>
-            </a-col>
-          </a-row>
+          <a-input
+            placeholder="Tên nhân viên"
+            style="width: 150px"
+            v-model="dataSearch.name"
+          />
+          <a-select
+            placeholder="Chức vụ"
+            :filter-option="false"
+            @search="fetchPosition"
+            style="width: 140px"
+            v-model="dataSearch.idPosition"
+            show-search
+          >
+            <a-select-option
+              v-for="(position, index) in dataPositions"
+              :value="position.id"
+              :key="index"
+            >
+              {{ position.name }}
+            </a-select-option>
+          </a-select>
+          <a-select
+            placeholder="Trạng thái"
+            style="width: 150px"
+            v-model="dataSearch.statusDelete"
+          >
+            <a-select-option value="false"> Đang làm </a-select-option>
+            <a-select-option value="true"> Nghỉ </a-select-option>
+          </a-select>
+          <a-button
+            type="primary"
+            @click="submitSearch"
+            :style="{ 'margin-left': '5px' }"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'search']"
+              :style="{ 'margin-right': '5px' }"
+            />
+            Tìm kiếm
+          </a-button>
+          <a-button type="primary" @click="showModalAdd" :style="{ 'margin-left': '5px' }">
+            <font-awesome-icon
+              :icon="['fas', 'user-plus']"
+              :style="{ 'margin-right': '5px' }"
+            />
+            Thêm
+          </a-button>
 
           <!-- table content -->
           <div :style="{ 'padding-top': '10px' }">
