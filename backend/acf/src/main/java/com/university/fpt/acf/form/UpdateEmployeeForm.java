@@ -17,7 +17,7 @@ public class UpdateEmployeeForm {
     private LocalDate dob;
     @NotNull(message = "email đang null")
     private String email;
-    @Min(value = 10,message = "phone phải có 10 số") private String phone;
+    @Min(value = 10,message = "SĐT phải có 10 số") private String phone;
     @NotNull(message = "Địa chỉ đang null")
     private String address;
     @NotNull(message = "dân tộc đang null")
