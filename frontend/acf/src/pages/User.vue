@@ -29,7 +29,7 @@
                 placeholder="Chức vụ"
                 :filter-option="false"
                 @search="fetchPosition"
-                style="width: 120px"
+                style="width: 140px"
                 v-model="dataSearch.idPosition"
                 show-search
               >
@@ -49,7 +49,7 @@
                 <a-select-option value="false"> Đang làm </a-select-option>
                 <a-select-option value="true"> Nghỉ </a-select-option>
               </a-select>
-              <a-button type="primary" @click="submitSearch">
+              <a-button type="primary" @click="submitSearch" :style="{ 'margin-left': '5px' }">
                 <font-awesome-icon
                   :icon="['fas', 'search']"
                   :style="{ 'margin-right': '5px' }"

@@ -8,12 +8,12 @@
             src="../assets/logo_header.png"
           />
         </a-col>
-        <a-col flex="250px">
-          <span style="margin-right: 80px">
+        <a-col flex="250px" >
+          <span style="margin-right: 90px">
             <a-badge :count="5"
               ><a-icon :style="{ fontSize: '30px' }" type="bell" />
             </a-badge>
-            <a-dropdown :trigger="['click']">
+            <a-dropdown :trigger="['click']" class="avatar">
               <a class="ant-dropdown-link">
                 <a-avatar
                   :size="55"
@@ -120,5 +120,9 @@ export default {
 .menu {
   padding: 10px;
   margin: 15px;
+}
+
+.avatar{
+  border: 1px solid #000;
 }
 </style>

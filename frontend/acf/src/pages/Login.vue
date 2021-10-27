@@ -9,7 +9,7 @@
           @submit="handleSubmit"
         >
           <a-form-item>
-            <img src="../assets/logo_login.jpg" />
+            <img src="../assets/logo.jpg" />
           </a-form-item>
           <a-form-item class="input-form">
             <a-input
@@ -153,7 +153,7 @@ export default {
 }
 img {
   border-radius: 10px 10px 0 0;
-  width: 327px;
-  height: 175px;
+  width: 340px;
+  height: 150px;
 }
 </style>

@@ -46,17 +46,21 @@
                 placeholder="Ghi Chú"
                 style="width: 15%"
               />
-              <a-button type="primary" @click="search">
+              <a-button
+                type="primary"
+                @click="search"
+                :style="{ 'margin-left': '5px' }"
+              >
                 <font-awesome-icon
                   :icon="['fas', 'search']"
                   :style="{ 'margin-right': '5px' }"
                 />
-                Tìm kiếm
+                Tìm Kiếm
               </a-button>
             </a-col>
             <a-col flex="100px">
               <a-button type="primary" @click="showExport">
-                Xuất excel
+                Xuất File
                 <font-awesome-icon
                   :icon="['fas', 'download']"
                   :style="{ 'margin-left': '10px' }"
@@ -142,12 +146,23 @@
           </a-form-model>
         </a-modal>
 
-        <a-modal v-model="visibleExport" title="Tùy chỉnh xuất">
+        <!-- popup tùy chỉnh xuất -->
+        <a-modal v-model="visibleExport" title="Tùy Chỉnh Xuất">
           <template slot="footer">
             <a-button key="back" @click="handleCancel"> Hủy </a-button>
-            <a-button type="danger" @click="priviewExcel"> Priview </a-button>
+            <a-button type="danger" @click="priviewExcel">
+              Xem Trước
+              <font-awesome-icon
+                :icon="['fas', 'eye']"
+                :style="{ 'margin-left': '5px' }"
+              />
+            </a-button>
             <a-button key="submit" type="primary" @click="submitExport">
-              Export
+              Xuất File
+              <font-awesome-icon
+                :icon="['fas', 'download']"
+                :style="{ 'margin-left': '5px' }"
+              />
             </a-button>
           </template>
           <a-form-model>
@@ -201,11 +216,12 @@
           </a-form-model>
         </a-modal>
 
+        <!-- preview excel -->
         <a-modal
           v-model="visiblePriviewExport"
           height="100%"
           width="80%"
-          title="Priview Excel"
+          title="Xem Trước File Excel"
         >
           <template slot="footer">
             <a-button key="back" @click="handleCancelPriview"> Hủy </a-button>
@@ -511,4 +527,5 @@ export default {
   background-color: rgb(24, 216, 24);
   color: white;
 }
+
 </style>

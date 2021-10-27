@@ -9,7 +9,7 @@
                 <div class="footer-logo">
                   <a href="index.html"
                     ><img
-                      src="../assets/logo_footer.jpg"
+                      src="../assets/logo.jpg"
                       class="img-fluid"
                       alt="logo"
                   /></a>

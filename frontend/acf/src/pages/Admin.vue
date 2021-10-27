@@ -2,7 +2,7 @@
   <div class="admin">
     <a-layout :style="{ background: 'white' }">
       <Header />
-      <a-layout-content :style="{ margin: '30px 16px 0' }">
+      <a-layout-content :style="{ margin: '30px 16px 0'}">
         <div
           :style="{
             minHeight: '360px',
@@ -56,7 +56,7 @@
                 :show-time="{ format: 'DD/MM/YYYY' }"
                 format="DD/MM/YYYY"
               />
-              <a-button type="primary" @click="submitSearch">
+              <a-button type="primary" @click="submitSearch" :style="{ 'margin-left': '5px' }">
                 <font-awesome-icon
                   :icon="['fas', 'search']"
                   :style="{ 'margin-right': '5px' }"
@@ -646,7 +646,8 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
 /* back top */
 .ant-back-top-inner {
   color: rgb(241, 237, 237);
