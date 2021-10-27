@@ -32,13 +32,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     private EmployeeCustomRepository employeeCustomRepository;
     @Override
     public List<SearchEmployeeVO> searchEmployee(SearchAllEmployeeForm searchAllEmployeeForm) {
-        List<SearchEmployeeVO> getAlPositionVOS = new ArrayList<>();
+        List<SearchEmployeeVO> getAlEmployeeVOS = new ArrayList<>();
         try {
-            getAlPositionVOS = employeeCustomRepository.searchEmployee(searchAllEmployeeForm);
+            getAlEmployeeVOS = employeeCustomRepository.searchEmployee(searchAllEmployeeForm);
         } catch (Exception e) {
             throw new RuntimeException("Error position repository " + e.getMessage());
         }
-        return  getAlPositionVOS;
+        return  getAlEmployeeVOS;
     }
 
     @Override
