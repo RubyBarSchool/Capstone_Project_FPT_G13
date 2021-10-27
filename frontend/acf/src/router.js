@@ -66,7 +66,21 @@ export const router = new Router({
             // lazy-loaded
             component: () =>
                 import ('./pages/PageNotFound.vue')
-        }
+        },
+        {
+            path: '/company',
+            name: 'Company',
+            // lazy-loaded
+            component: () =>
+                import ('./pages/Company.vue')
+        },
+        {
+            path: '/color',
+            name: 'Color',
+            // lazy-loaded
+            component: () =>
+                import ('./pages/Color.vue')
+        },
     ]
 });
 

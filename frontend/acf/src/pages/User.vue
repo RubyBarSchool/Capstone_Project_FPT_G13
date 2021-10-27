@@ -263,7 +263,7 @@
                     <a-form-model-item label="Email">
                       <a-input v-model="dataEdit.email" />
                     </a-form-model-item>
-                    <a-form-model-item label="Quê Quán">
+                    <a-form-model-item label="Địa chỉ">
                       <a-input v-model="dataUserDetail.address" />
                     </a-form-model-item>
                     <a-form-model-item label="Dân Tộc">
