@@ -6,6 +6,7 @@ import lombok.Data;
 public class SearchColorForm {
     private String code;
     private String name;
+    private String nameCompany;
     private Integer pageIndex;
     private Integer pageSize;
 }

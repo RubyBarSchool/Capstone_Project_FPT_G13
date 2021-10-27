@@ -28,6 +28,10 @@ public class ColorCustomRepositoryImpl extends CommonRepository implements Color
             sql.append(" and LOWER(c.code) like :code ");
             params.put("code","%"+searchColorForm.getCode().toLowerCase()+"%");
         }
+        if(!searchColorForm.getNameCompany().isEmpty() && searchColorForm.getNameCompany()!=null){
+            sql.append(" and LOWER(cp.name) like :nameCompany ");
+            params.put("nameCompany","%"+searchColorForm.getNameCompany().toLowerCase()+"%");
+        }
         sql.append(" ORDER by c.id desc ");
         TypedQuery<ColorVO> query = super.createQuery(sql.toString(),params, ColorVO.class);
         query.setFirstResult((searchColorForm.getPageIndex()-1)* searchColorForm.getPageSize());

@@ -23,7 +23,7 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
     String getFullNameById(@Param("id") Long id);
 
     @Query("select new com.university.fpt.acf.vo.GetAllEmployeeVO(e.id,e.fullName) from Employee e  left join Account a on e.id = a.employee.id  " +
-            "where a.username is null and LOWER(e.fullName) LIKE :fullname order by e.fullName asc  ")
+            "where e.deleted= false and a.username is null and LOWER(e.fullName) LIKE :fullname order by e.fullName asc  ")
     List<GetAllEmployeeVO> getTop10EmployeeNotAccount(@Param("fullname") String fullName,Pageable pageable);
 
     @Query("SELECT new com.university.fpt.acf.vo.EmployeeDetailVO(e.image,e.fullName,e.gender,e.dob,e.email,e.phone,e.address,e.nation,e.salary,p.id,p.name)  " +

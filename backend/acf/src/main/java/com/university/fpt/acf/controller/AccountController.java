@@ -83,21 +83,26 @@ public class AccountController {
         Boolean checkAdd = false;
         try {
             if(addAccountForm.getUsername()!=null && !addAccountForm.getUsername().isEmpty()){
-                if(addAccountForm.getPassword()!=null&&!addAccountForm.getPassword().isEmpty()){
-                    AddAccountValidate cv = new AddAccountValidate();
-                    if(cv.checkPassword(addAccountForm.getPassword())){
-                        checkAdd =accountService.insertAccount(addAccountForm);
-                        if(checkAdd==false){
-                            message="Add account fail!";
+                if(addAccountForm.getListRole()!=null && !addAccountForm.getListRole().isEmpty()){
+                    if(addAccountForm.getPassword()!=null&&!addAccountForm.getPassword().isEmpty()){
+                        AddAccountValidate cv = new AddAccountValidate();
+                        if(cv.checkPassword(addAccountForm.getPassword())){
+                            checkAdd =accountService.insertAccount(addAccountForm);
+                            if(checkAdd==false){
+                                message="Lỗi thêm tài khoản!";
+                            }else{
+                                message="Thêm tài khoản thành công";
+                            }
                         }else{
-                            message="Add sucessfuly!";
+                            message="Mật khẩu phải có ít nhất 8 kí tự, 1 số,1 chữ viết hoa và 1 kí tự đặc biệt(@#$%^&+=)";
                         }
                     }else{
-                        message="Password is format wrong";
+                        message="Password is Empty!";
                     }
-                }else{
-                    message="Password is Empty!";
+                }else {
+                    message="Chức Vụ không được để chống!";
                 }
+
             }else{
                 message="username is empty!";
             }
