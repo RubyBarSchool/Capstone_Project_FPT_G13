@@ -1,5 +1,6 @@
 package com.university.fpt.acf.controller;
 
+import com.university.fpt.acf.config.scheduled.service.AttendanceCheckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -10,21 +11,15 @@ import org.springframework.web.bind.annotation.*;
 public class MailController {
 
     @Autowired
-    public JavaMailSender emailSender;
+    private AttendanceCheckService attendanceCheckService;
 
 
     @GetMapping
-    public String sendSimpleEmail(@RequestParam String mail) {
+    public String sendSimpleEmail() {
 
         // Create a Simple MailMessage.
         try{
-            SimpleMailMessage message = new SimpleMailMessage();
-
-            message.setTo(mail);
-            message.setSubject("Test Simple Email");
-            message.setText("Hello, Im testing Simple Email");
-            // Send Message!
-            this.emailSender.send(message);
+            attendanceCheckService.checkAttendance();
         }catch (Exception e){
             e.printStackTrace();
         }

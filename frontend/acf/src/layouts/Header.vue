@@ -2,7 +2,12 @@
   <div id="Header">
     <a-layout-header>
       <a-row type="flex">
-        <a-col flex="auto"> </a-col>
+        <a-col flex="auto">
+          <img
+            :style="{ width: '140px', 'margin-left': '20px' }"
+            src="../assets/logo.jpg"
+          />
+        </a-col>
         <a-col flex="180px">
           <span>
             <a-badge dot>
