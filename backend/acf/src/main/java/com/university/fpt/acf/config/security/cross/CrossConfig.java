@@ -1,5 +1,7 @@
 package com.university.fpt.acf.config.security.cross;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,13 +14,17 @@ import java.util.Collections;
 
 @Configuration
 public class CrossConfig {
+
+    @Value( "${acf.scross.path}" )
+    private String path;
+
     @Bean
     public FilterRegistrationBean simpleCorsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         // *** URL below needs to match the Vue client URL and port ***
-        config.setAllowedOrigins(Collections.singletonList("http://localhost:8081"));
+        config.setAllowedOrigins(Collections.singletonList(path));
         config.setAllowedMethods(Collections.singletonList("*"));
         config.setAllowedHeaders(Collections.singletonList("*"));
         source.registerCorsConfiguration("/**", config);

@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface EmployeeCustomRepository {
     List<GetAllEmployeeVO> getAllEmployeeNotAttendance(EmployeeNotAttendanceForm employeeNotAttendanceForm);
+    List<GetAllEmployeeVO> getAllEmployeeNotAttendanceJob();
     int getTotalEmployeeNotAttendance(EmployeeNotAttendanceForm employeeNotAttendanceForm);
     List<SearchEmployeeVO> searchEmployee(SearchAllEmployeeForm searchAllEmployeeForm);
     int getTotalEmployee(SearchAllEmployeeForm searchAllEmployeeForm);

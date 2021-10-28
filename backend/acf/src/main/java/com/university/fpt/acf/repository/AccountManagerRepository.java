@@ -36,4 +36,7 @@ public interface AccountManagerRepository extends JpaRepository<Account,Long> {
 
     @Query("SELECT a.username FROM Account a where  a.employee.id = :id")
     String checkEmplyeeInAccountExit(@Param("id") Long id);
+
+    @Query("SELECT DISTINCT e.email FROM Account a inner join  a.employee e  inner join a.roles r where a.deleted = false and e.deleted = false and r.deleted = false and r.id = 3")
+    List<String> getEmailAdmin();
 }
