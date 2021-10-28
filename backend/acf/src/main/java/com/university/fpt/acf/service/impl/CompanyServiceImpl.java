@@ -84,9 +84,9 @@ public class CompanyServiceImpl implements CompanyService {
                     && updateCompanyForm.getPhone()==null && updateCompanyForm.getEmail()==null){
                 throw new Exception("Data company is null");
             }else{
-
-                if(companyRespository.checkExitCompanyByName(updateCompanyForm.getName())==null||
-                        companyRespository.checkExitCompanyByName(updateCompanyForm.getName()).isEmpty()){
+                if(companyRespository.checkExitCompanyById(updateCompanyForm.getName())!= updateCompanyForm.getId()){
+                    throw new Exception("Company da ton tai");
+                }
                     Company c = companyRespository.getCompanyById(updateCompanyForm.getId());
                     if(c!=null){
                         c.setName(updateCompanyForm.getName());
@@ -99,15 +99,9 @@ public class CompanyServiceImpl implements CompanyService {
                         companyRespository.save(c);
                         check = true;
                     }else {
-                    throw new Exception("Ko tim thay company");
-                }
-
-                }else {
-                    throw new Exception("Company da ton tai");
-                }
-
+                        throw new Exception("Ko tim thay company");
+                    }
             }
-
         }catch (Exception e){
             throw  new RuntimeException(e.getMessage());
         }
