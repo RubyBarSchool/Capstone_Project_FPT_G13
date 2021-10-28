@@ -54,25 +54,33 @@ export default {
       routerSPAdmin: [
         {
           path: "/admin",
-          name: "Account Manager",
+          name: "Quản lý tài khoản",
         },
       ],
       routerAdmin: [
         {
           path: "/attendance",
-          name: "Attendance",
+          name: "Chấm công",
         },
         {
           path: "/viewattendance",
-          name: "ViewAttendance",
+          name: "Xem chấm công",
         },
         {
           path: "/user",
-          name: "Manager User",
+          name: "Quản lý nhân viên",
         },
         {
           path: "/position",
-          name: "Manager Position",
+          name: "Quản lý chức vụ",
+        },
+        {
+          path: "/company",
+          name: "Quản lý công ty liên kết",
+        },
+        {
+          path: "/color",
+          name: "Quản lý màu sắc vật liệu",
         },
       ],
       routerEmployee: [],
