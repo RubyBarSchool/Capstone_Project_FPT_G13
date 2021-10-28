@@ -18,4 +18,12 @@ public interface CompanyRespository extends JpaRepository<Company,Long> {
     Long checkExitCompanyInColor(@Param("id") Long id);
     @Query("SELECT c.name FROM Company c where c.deleted=false AND c.name=:name")
     String checkExitCompanyByName(@Param("name") String  name);
+    @Query("SELECT c.phone FROM Company c where c.deleted=false AND c.phone=:phone")
+    String checkExitPhoneCompanyByPhone(@Param("phone") String  phone);
+    @Query("SELECT c.id FROM Company c where c.deleted=false AND c.phone=:phone")
+    Long checkExitPhoneCompanyById(@Param("phone") String  phone);
+    @Query("SELECT c.email FROM Company c where c.deleted=false AND c.email=:email")
+    String checkExitEmailCompanyByEmail(@Param("email") String  email);
+    @Query("SELECT c.id FROM Company c where c.deleted=false AND c.email=:email")
+    Long checkExitEmailCompanyById(@Param("email") String  email);
 }
