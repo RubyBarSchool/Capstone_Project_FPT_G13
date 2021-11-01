@@ -13,16 +13,18 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PersonaLeaveApplication extends EntityCommon {
-
+    private String title;
     private LocalDate dateStart;
     private LocalDate dateEnd;
 
     @Column(columnDefinition = "TEXT")
-    private String reson;
+    private String content;
 
     private String fileAttach;
 
-    private Boolean accept;
+    private Boolean accept = false;
+    private String comment;
+    private Long idEmployeeAccept;
 
     @ManyToOne
     @EqualsAndHashCode.Exclude

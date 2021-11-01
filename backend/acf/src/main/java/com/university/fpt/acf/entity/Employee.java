@@ -54,4 +54,5 @@ public class Employee extends EntityCommon {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<HistorySalary> historySalaries;
+    
 }
