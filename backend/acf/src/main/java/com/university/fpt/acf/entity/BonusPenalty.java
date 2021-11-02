@@ -17,6 +17,7 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BonusPenalty extends EntityCommon {
+    private String title;
     private String reason;
     private String money;
     private Boolean status;
