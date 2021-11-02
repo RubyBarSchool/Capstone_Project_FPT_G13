@@ -17,7 +17,7 @@ public class PersonalLeaveApplicationAdminCustomRepositoryImpl extends CommonRep
     public List<SearchPersonalLeaveApplicationAdminVO> searchApplication(SearchPersonalLeaveAdminApplicationForm searchApplication) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append(" SELECT new com.university.fpt.acf.vo.SearchPersonalLeaveApplicationVO(p.id,p.fileAttach,p.title,p.comment,p.content,e.id,e.fullName) From PersonaLeaveApplication p inner join p.employee e where p.accept=true ");
+        sql.append(" SELECT new com.university.fpt.acf.vo.SearchPersonalLeaveApplicationVO(p.id,p.fileAttach,p.title,p.comment,p.content,e.id,e.fullName,p.statusAccept) From PersonaLeaveApplication p inner join p.employee e where p.accept=true ");
         if(searchApplication.getNameEmployee() != null && !searchApplication.getNameEmployee().isEmpty()){
             sql.append(" and LOWER(e.fullName) like :name ");
             params.put("name","%"+searchApplication.getNameEmployee().toLowerCase()+"%");

@@ -67,4 +67,9 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
         }
         return check;
     }
+
+    @Override
+    public SearchPersonalLeaveApplicationAdminVO detailPersonalApplicationById(Long id) {
+        return null;
+    }
 }

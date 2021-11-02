@@ -18,11 +18,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/admin")
+@RequestMapping(path = "/admin/acceptPersonalLeaveApplication")
 public class PersonalLeaveApplicationAdminController {
     @Autowired
     PersonalLeaveApplicationAdminService personalLeaveApplicationService;
-    @PostMapping("/acceptPersonalLeaveApplication")
+    @PostMapping("/search")
     public ResponseEntity<ResponseCommon> searchPersonalLeaveApplication(@RequestBody SearchPersonalLeaveAdminApplicationForm personalLeaveApplicationForm){
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";

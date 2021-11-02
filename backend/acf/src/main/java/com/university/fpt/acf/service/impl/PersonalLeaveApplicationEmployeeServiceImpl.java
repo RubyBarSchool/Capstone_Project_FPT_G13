@@ -4,16 +4,19 @@ import com.university.fpt.acf.config.security.AccountSercurity;
 import com.university.fpt.acf.entity.Employee;
 import com.university.fpt.acf.entity.PersonaLeaveApplication;
 import com.university.fpt.acf.form.AddPerLeaveAppEmployeeForm;
+import com.university.fpt.acf.form.SearchAdvanceEmployeeForm;
+import com.university.fpt.acf.form.SearchPersonalApplicationEmployeeForm;
 import com.university.fpt.acf.form.UpdatePersonalAppEmployeeForm;
-import com.university.fpt.acf.repository.EmployeeRepository;
-import com.university.fpt.acf.repository.PersonalLeaveApplicationAdminCustomRepository;
-import com.university.fpt.acf.repository.PersonalLeaveApplicationAdminRepository;
-import com.university.fpt.acf.repository.PersonalLeaveApplicationEmployeeRepository;
+import com.university.fpt.acf.repository.*;
 import com.university.fpt.acf.service.PersonalLeaveApplicationEmployeeService;
+import com.university.fpt.acf.vo.SearchPersonalApplicationEmployeeVO;
+import com.university.fpt.acf.vo.SearchPersonalLeaveApplicationAdminVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeaveApplicationEmployeeService {
@@ -23,6 +26,8 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
     private  PersonalLeaveApplicationEmployeeRepository personalLeaveApplicationEmployeeRepository;
     @Autowired
     private EmployeeRepository employeeRepository;
+    @Autowired
+    private PersonalLeaveApplicationEmployeeCustomRepository personalCustomRepository;
     @Override
     public Boolean AddLeaveApplication(AddPerLeaveAppEmployeeForm addPerLeaveAppEmployeeForm) {
         boolean check = false;
@@ -104,4 +109,29 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
         }
         return check;
     }
+
+    @Override
+    public List<SearchPersonalApplicationEmployeeVO> searchPersonalLeaveApplicationEmployee(SearchPersonalApplicationEmployeeForm searchForm) {
+        List<SearchPersonalApplicationEmployeeVO> list = new ArrayList<>();
+        try{
+            list =personalCustomRepository.searchPerLeaApplicationEmployee(searchForm);
+
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+        return list;
+    }
+
+    @Override
+    public int totalSearch(SearchPersonalApplicationEmployeeForm searchForm) {
+        int size;
+        try{
+            size = personalCustomRepository.totalSearch(searchForm);
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+        return size;
+    }
+
+
 }
