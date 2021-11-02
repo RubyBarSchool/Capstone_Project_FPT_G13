@@ -1,23 +1,20 @@
 import http from "./http-common";
 
 class ungLuongService {
-    getAllPosition(form) {
-        return http.post(`/admin/position`, form);
+    searchAdvanceSalaryEmployee(name) {
+        return http.post("/employee/advanceSalary/search", name);
     }
-    searchUser(name) {
-        return http.post("/admin/employee/search", name);
+    addAdvanceSalaryEmployee(form) {
+        return http.post(`/employee/advanceSalary/add`, form);
     }
-    addUser(form) {
-        return http.post(`/admin/employee/add`, form);
+    updateAdvanceSalaryEmployee(data) {
+        return http.put(`/employee/advanceSalary/update`, data);
     }
-    updateUser(data) {
-        return http.put(`/admin/employee/update`, data);
+    getAdvanceSalaryEmployeeByID(id) {
+        return http.get(`/employee/advanceSalary/detail?id=${id}`);
     }
-    getUserByID(id) {
-        return http.get(`/admin/employee/getEmployee?id=${id}`);
-    }
-    deleteUser(id) {
-        return http.delete(`/admin/employee/delete?id=${id}`);
+    deleteAdvanceSalaryEmployee(id) {
+        return http.delete(`/employee/advanceSalary/delete?id=${id}`);
     }
 
 }
