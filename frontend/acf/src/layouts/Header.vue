@@ -34,11 +34,11 @@
                 </a-menu-item>
                 <a-menu-divider />
                 <a-menu-item :key="router.length" @click="logout">
-                  Thoát ra
-                  <font-awesome-icon
+                  <h6>Thoát ra <font-awesome-icon
                     :icon="['fas', 'sign-out-alt']"
-                    :style="{ 'margin-left': '40px' }"
-                  />
+                    :style="{ 'margin-left': '80px' }"
+                  /></h6>
+                  
                 </a-menu-item>
               </a-menu>
             </a-dropdown>

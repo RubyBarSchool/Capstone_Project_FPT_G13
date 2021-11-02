@@ -1,28 +1,15 @@
 import http from "./http-common";
 
 class acceptUngLuongService {
-    getAllAccount(user) {
-        return http.post(`/spadmin/account/allaccount`, user);
+    acceptAdvanceSalaryAdmin(id) {
+        return http.put(`/admin/advanceSalary/accept`, id);
     }
-    searchAccount(name) {
-        return http.post("/spadmin/account/searchaccount", name);
+    getDetailAdvanceSalaryAdmin(id) {
+        return http.get(`/admin/advanceSalary/detail`, id);
     }
-    updateAccount(data) {
-        return http.put(`/spadmin/account/update`, data);
+    searchAdvanceSalaryAdmin(form) {
+        return http.post(`/admin/advanceSalary/search`, form);
     }
-    getAccountByID(id) {
-        return http.post(`/spadmin/account/getAcc?id=${id}`);
-    }
-    generateUsername(id) {
-        return http.get(`/spadmin/account/generateUsername?id=${id}`);
-    }
-    deleteAccount(id) {
-        return http.delete(`/spadmin/account/delete?id=${id}`);
-    }
-    addAccount(form) {
-        return http.post(`/spadmin/account/add`, form);
-    }
-
 }
 
 export default new acceptUngLuongService();

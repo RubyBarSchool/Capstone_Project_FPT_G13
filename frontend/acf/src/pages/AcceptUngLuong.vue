@@ -28,6 +28,11 @@
             style="width: 150px"
             v-model="dataSearch.name"
           />
+          <a-input
+            placeholder="Trạng thái"
+            style="width: 150px"
+            v-model="dataSearch.name"
+          />
           <a-date-picker
             v-model="dataSearch.date"
             @change="onChangeDate"
@@ -46,8 +51,9 @@
             />
             Tìm kiếm
           </a-button>
+
           <!-- table content -->
-          <div :style="{ 'padding-top': '10px' }">
+          <!-- <div :style="{ 'padding-top': '10px' }">
             <a-table
               :columns="columns"
               :data-source="dataSourceTable"
@@ -59,13 +65,16 @@
               "
               @change="handleTableChange"
             >
-              <template slot="username" slot-scope="text, record">
+              <template slot="employee" slot-scope="text, record">
                 {{ record.username }}
               </template>
-              <template slot="roles" slot-scope="text, record">
+              <template slot="title" slot-scope="text, record">
                 <div v-for="(item, index) in record.roles" :key="index">
                   {{ item.name }}
                 </div>
+              </template>
+                <template slot="money" slot-scope="text, record">
+                {{ record.username }}
               </template>
               <template slot="status" slot-scope="text, record">
                 <a-tag :color="record.status ? 'green' : 'blue'">
@@ -91,7 +100,7 @@
                 </a-row>
               </template>
             </a-table>
-          </div>
+          </div> -->
           <!-- table content -->
 
           <!-- popup profile-->
@@ -103,30 +112,24 @@
           >
             <template slot="footer">
               <a-button key="back" @click="handleCancel">Hủy</a-button>
-              <a-button key="submit" @click="submitAdd">Loại bỏ</a-button>
-              <a-button key="submit" type="primary" @click="submitAdd">
-                Chấp nhận
-              </a-button>
+              <a-button type="danger">Loại bỏ</a-button>
+              <a-button type="primary"> Chấp nhận </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Tiêu đề" >
-                <a-input v-model="dataAdd.username" disabled/>
+              <a-form-model-item label="Tiêu đề">
+                <a-input v-model="dataAdd.username" disabled />
               </a-form-model-item>
-              <a-form-model-item label="Số tiền" >
-                <a-input v-model="dataAdd.password" disabled/>
-              </a-form-model-item>
-              <a-form-model-item label="Nội dung">
-                <a-textarea
-                  v-model="value"
-                  auto-size="auto"
-                  disabled
-                />
+              <a-form-model-item label="Số tiền">
+                <a-input v-model="dataAdd.password" disabled />
               </a-form-model-item>
               <a-form-model-item label="Nội dung">
+                <a-textarea v-model="value" :rows="4" disabled />
+              </a-form-model-item>
+              <a-form-model-item label="Ghi chú">
                 <a-textarea
                   v-model="value"
                   placeholder="Nhận xét như nào thì viết vào đây"
-                  auto-size="auto"
+                  :rows="4"
                 />
               </a-form-model-item>
             </a-form-model>
@@ -139,10 +142,7 @@
   </div>
 </template>
  <script>
-import accountService from "@/service/accountService.js";
-import roleService from "@/service/roleService.js";
-import employeeService from "@/service/employeeService.js";
-import adminTruongService from "../service/adminTruongService";
+// import acceptUngLuongService from "@/service/acceptUngLuong.js";
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 
@@ -160,49 +160,14 @@ export default {
         total: 0,
       },
       dataSearch: {
-        name: "",
-        listRole: [],
-        listStatus: [],
-        date: [],
-        pageIndex: 1,
-        pageSize: 10,
+        employeeName: "",
+        pageIndex: 0,
+        pageSize: 0,
+        status: "",
+        title: "",
         total: 0,
       },
       dataSourceTable: [],
-      dataRoles: [],
-      dataEmployees: [],
-      dataAdd: {
-        listRole: [],
-        employee: "",
-        password: "",
-        username: "",
-      },
-      dataRole: {
-        name: "",
-        pageIndex: 1,
-        pageSize: 10,
-      },
-      dataEmployee: {
-        name: "",
-        pageIndex: 1,
-        pageSize: 10,
-      },
-      dataEdit: {
-        id: "",
-        username: "",
-        listRole: [],
-        status: false,
-      },
-      dataAccountDetail: {
-        id: "",
-        name: "",
-        roles: [],
-        image: "",
-        fullname: "",
-        dob: "",
-        phone: "",
-        gender: "",
-      },
       columns: [
         {
           title: "ID",
@@ -248,95 +213,25 @@ export default {
           scopedSlots: { customRender: "action" },
         },
       ],
-      visibleProfile: false,
     };
   },
   computed: {},
-  created() {
-    this.submitSearch();
-    this.getAllRole();
-  },
+  created() {},
   methods: {
-    handleTableChange(pagination) {
-      this.dataSearch.pageIndex = pagination.current;
-      this.pagination = pagination;
-      adminTruongService
-        .searchAccount(this.dataSearch)
-        .then((response) => {
-          this.dataSourceTable = response.data.data;
-          this.dataSearch.total = response.data.total;
-          this.pagination.total = response.data.total;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    generateUsername() {
-      accountService
-        .generateUsername(this.dataAdd.employee)
-        .then((response) => {
-          this.dataAdd.username = response.data.data;
-        });
-    },
-    fetchRoles(value) {
-      this.dataRole.name = value;
-      this.getAllRole();
-    },
-    getAllRole() {
-      roleService
-        .getAllRole(this.dataRole)
-        .then((response) => {
-          this.dataRoles = response.data.data;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    getAllEmployeeNotAccount() {
-      employeeService
-        .getAllEmployeeNotAccount(this.dataEmployee)
-        .then((response) => {
-          this.dataEmployees = response.data.data;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    handleCancel() {
-      this.visibleAdd = false;
-      this.visibleEdit = false;
-      this.visibleProfile = false;
-    },
-    submitSearch() {
-      this.dataSearch.total = 0;
-      adminTruongService
-        .searchAccount(this.dataSearch)
-        .then((response) => {
-          this.dataSourceTable = response.data.data;
-          this.dataSearch.total = response.data.total;
-          this.pagination.total = response.data.total;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    getAccountByID(id) {
-      adminTruongService
-        .getAccountByID(id)
-        .then((response) => {
-          this.dataAccountDetail = response.data.data;
-          this.visibleProfile = true;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    notifi(type, message, description) {
-      this.$notification[type]({
-        message: message,
-        description: description,
-      });
-    },
+    // handleTableChange(pagination) {
+    //   this.dataSearch.pageIndex = pagination.current;
+    //   this.pagination = pagination;
+    //   acceptUngLuongService
+    //     .searchAdvanceSalaryAdmin(this.dataSearch)
+    //     .then((response) => {
+    //       this.dataSourceTable = response.data.data;
+    //       this.dataSearch.total = response.data.total;
+    //       this.pagination.total = response.data.total;
+    //     })
+    //     .catch((e) => {
+    //       console.log(e);
+    //     });
+    // },
   },
 };
 </script>
