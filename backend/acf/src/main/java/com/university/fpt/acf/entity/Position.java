@@ -1,5 +1,6 @@
 package com.university.fpt.acf.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.university.fpt.acf.common.entity.EntityCommon;
 import lombok.*;
 
@@ -19,4 +20,10 @@ public class Position extends EntityCommon {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<Employee> employees;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "employee",fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Collection<HistorySalary> historySalaries;
 }

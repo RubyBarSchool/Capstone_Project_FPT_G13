@@ -25,6 +25,7 @@ public class PersonaLeaveApplication extends EntityCommon {
     private Boolean accept = false;
     private String comment;
     private Long idEmployeeAccept;
+    private LocalDate dateAccept;
 
     @ManyToOne
     @EqualsAndHashCode.Exclude

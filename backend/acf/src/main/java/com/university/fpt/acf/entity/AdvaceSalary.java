@@ -22,6 +22,7 @@ public class AdvaceSalary extends EntityCommon {
     private String comment;
     private Boolean accept = false;
     private Long idEmployeeAccept;
+    private LocalDate dateAccept;
 
     @ManyToOne
     @EqualsAndHashCode.Exclude

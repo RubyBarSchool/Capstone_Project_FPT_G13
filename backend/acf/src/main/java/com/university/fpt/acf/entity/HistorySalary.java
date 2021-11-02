@@ -12,9 +12,15 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HistorySalary extends EntityCommon {
-    private LocalDate date;
+
+    private LocalDate dateAccept;
+    private Double countWork;
     private String salary;
-    private Boolean accept;
+    private String bonus;
+    private String penalty;
+    private String advanceSalary;
+    private String totalMoney;
+    private String status;
 
     @ManyToOne
     @EqualsAndHashCode.Exclude
