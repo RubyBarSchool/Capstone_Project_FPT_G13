@@ -1,0 +1,439 @@
+<template>
+  <div class="admin">
+    <a-layout :style="{ background: 'white' }">
+      <Header />
+      <a-layout-content :style="{ margin: '30px 16px 0' }">
+        <div
+          :style="{
+            minHeight: '360px',
+            background: 'white',
+          }"
+        >
+          <a-back-top>
+            <div class="ant-back-top-inner">
+              <font-awesome-icon
+                :icon="['fas', 'angle-double-up']"
+                :style="{ width: '160px', height: '50px', color: '#15AABF' }"
+              />
+            </div>
+          </a-back-top>
+          <!-- menu trên -->
+          <a-input
+            placeholder="Nhân viên"
+            style="width: 150px"
+            v-model="dataSearch.name"
+          />
+          <a-input
+            placeholder="Tiêu đề"
+            style="width: 150px"
+            v-model="dataSearch.name"
+          />
+          <a-date-picker
+            v-model="dataSearch.date"
+            @change="onChangeDate"
+            format="YYYY-MM-DD"
+            valueFormat="YYYY-MM-DD"
+          >
+          </a-date-picker>
+          <a-button
+            type="primary"
+            @click="submitSearch"
+            :style="{ 'margin-left': '5px' }"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'search']"
+              :style="{ 'margin-right': '5px' }"
+            />
+            Tìm kiếm
+          </a-button>
+          <!-- table content -->
+          <div :style="{ 'padding-top': '10px' }">
+            <a-table
+              :columns="columns"
+              :data-source="dataSourceTable"
+              :pagination="pagination"
+              :rowKey="
+                (record, index) => {
+                  return index;
+                }
+              "
+              @change="handleTableChange"
+            >
+              <template slot="username" slot-scope="text, record">
+                {{ record.username }}
+              </template>
+              <template slot="roles" slot-scope="text, record">
+                <div v-for="(item, index) in record.roles" :key="index">
+                  {{ item.name }}
+                </div>
+              </template>
+              <template slot="status" slot-scope="text, record">
+                <a-tag :color="record.status ? 'green' : 'blue'">
+                  {{ record.status ? "Công khai" : "Nháp" }}
+                </a-tag>
+              </template>
+              <template slot="time" slot-scope="text, record">
+                {{
+                  new Date(record.time).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
+              </template>
+              <template slot="action" slot-scope="text, record">
+                <a-row>
+                  <a-col :span="8">
+                    <a-button id="edit" @click="getAccountByID(record.id)">
+                      <font-awesome-icon :icon="['fas', 'eye']" />
+                    </a-button>
+                  </a-col>
+                </a-row>
+              </template>
+            </a-table>
+          </div>
+          <!-- table content -->
+
+          <!-- popup profile-->
+          <a-modal
+            v-model="visibleProfile"
+            class="profile"
+            title="Xem đơn"
+            @ok="handleOk"
+          >
+            <template slot="footer">
+              <a-button key="back" @click="handleCancel">Hủy</a-button>
+              <a-button key="submit" @click="submitAdd">Loại bỏ</a-button>
+              <a-button key="submit" type="primary" @click="submitAdd">
+                Chấp nhận
+              </a-button>
+            </template>
+            <a-form-model>
+              <a-form-model-item label="Tiêu đề" >
+                <a-input v-model="dataAdd.username" disabled/>
+              </a-form-model-item>
+              <a-form-model-item label="Số tiền" >
+                <a-input v-model="dataAdd.password" disabled/>
+              </a-form-model-item>
+              <a-form-model-item label="Nội dung">
+                <a-textarea
+                  v-model="value"
+                  auto-size="auto"
+                  disabled
+                />
+              </a-form-model-item>
+              <a-form-model-item label="Nội dung">
+                <a-textarea
+                  v-model="value"
+                  placeholder="Nhận xét như nào thì viết vào đây"
+                  auto-size="auto"
+                />
+              </a-form-model-item>
+            </a-form-model>
+          </a-modal>
+          <!-- popup profile-->
+        </div>
+      </a-layout-content>
+      <Footer />
+    </a-layout>
+  </div>
+</template>
+ <script>
+import accountService from "@/service/accountService.js";
+import roleService from "@/service/roleService.js";
+import employeeService from "@/service/employeeService.js";
+import adminTruongService from "../service/adminTruongService";
+import Header from "@/layouts/Header.vue";
+import Footer from "@/layouts/Footer.vue";
+
+export default {
+  name: "acceptungluong",
+  components: {
+    Header,
+    Footer,
+  },
+  data() {
+    return {
+      pagination: {
+        current: 1,
+        pageSize: 10,
+        total: 0,
+      },
+      dataSearch: {
+        name: "",
+        listRole: [],
+        listStatus: [],
+        date: [],
+        pageIndex: 1,
+        pageSize: 10,
+        total: 0,
+      },
+      dataSourceTable: [],
+      dataRoles: [],
+      dataEmployees: [],
+      dataAdd: {
+        listRole: [],
+        employee: "",
+        password: "",
+        username: "",
+      },
+      dataRole: {
+        name: "",
+        pageIndex: 1,
+        pageSize: 10,
+      },
+      dataEmployee: {
+        name: "",
+        pageIndex: 1,
+        pageSize: 10,
+      },
+      dataEdit: {
+        id: "",
+        username: "",
+        listRole: [],
+        status: false,
+      },
+      dataAccountDetail: {
+        id: "",
+        name: "",
+        roles: [],
+        image: "",
+        fullname: "",
+        dob: "",
+        phone: "",
+        gender: "",
+      },
+      columns: [
+        {
+          title: "ID",
+          width: 100,
+          dataIndex: "id",
+          key: "id",
+          fixed: "left",
+        },
+        {
+          title: "Nhân viên",
+          dataIndex: "employee",
+          key: "employee",
+          width: 150,
+          scopedSlots: { customRender: "employee" },
+        },
+        {
+          title: "Tiêu đề",
+          dataIndex: "title",
+          key: "title",
+          width: 150,
+          scopedSlots: { customRender: "title" },
+        },
+        {
+          title: "Số tiền",
+          dataIndex: "money",
+          key: "money",
+          width: 150,
+          scopedSlots: { customRender: "money" },
+        },
+        {
+          title: "Trạng thái",
+          dataIndex: "status",
+          key: "status",
+          width: 150,
+          scopedSlots: { customRender: "status" },
+        },
+        {
+          title: "",
+          dataIndex: "action",
+          key: "action",
+          fixed: "right",
+          width: 150,
+          scopedSlots: { customRender: "action" },
+        },
+      ],
+      visibleProfile: false,
+    };
+  },
+  computed: {},
+  created() {
+    this.submitSearch();
+    this.getAllRole();
+  },
+  methods: {
+    handleTableChange(pagination) {
+      this.dataSearch.pageIndex = pagination.current;
+      this.pagination = pagination;
+      adminTruongService
+        .searchAccount(this.dataSearch)
+        .then((response) => {
+          this.dataSourceTable = response.data.data;
+          this.dataSearch.total = response.data.total;
+          this.pagination.total = response.data.total;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    generateUsername() {
+      accountService
+        .generateUsername(this.dataAdd.employee)
+        .then((response) => {
+          this.dataAdd.username = response.data.data;
+        });
+    },
+    fetchRoles(value) {
+      this.dataRole.name = value;
+      this.getAllRole();
+    },
+    getAllRole() {
+      roleService
+        .getAllRole(this.dataRole)
+        .then((response) => {
+          this.dataRoles = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getAllEmployeeNotAccount() {
+      employeeService
+        .getAllEmployeeNotAccount(this.dataEmployee)
+        .then((response) => {
+          this.dataEmployees = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    handleCancel() {
+      this.visibleAdd = false;
+      this.visibleEdit = false;
+      this.visibleProfile = false;
+    },
+    submitSearch() {
+      this.dataSearch.total = 0;
+      adminTruongService
+        .searchAccount(this.dataSearch)
+        .then((response) => {
+          this.dataSourceTable = response.data.data;
+          this.dataSearch.total = response.data.total;
+          this.pagination.total = response.data.total;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getAccountByID(id) {
+      adminTruongService
+        .getAccountByID(id)
+        .then((response) => {
+          this.dataAccountDetail = response.data.data;
+          this.visibleProfile = true;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    notifi(type, message, description) {
+      this.$notification[type]({
+        message: message,
+        description: description,
+      });
+    },
+  },
+};
+</script>
+
+<style scoped>
+/* back top */
+.ant-back-top-inner {
+  color: rgb(241, 237, 237);
+  text-align: center;
+}
+
+/* button icon */
+#delete {
+  background-color: rgb(255, 0, 0);
+  color: white;
+}
+#delete:hover {
+  background-color: rgba(233, 15, 15, 0.863);
+  color: white;
+}
+#edit {
+  background-color: rgb(10, 208, 243);
+  color: white;
+}
+#edit:hover {
+  background-color: rgb(0, 181, 253);
+  color: white;
+}
+#user {
+  background-color: rgb(76, 238, 12);
+  color: white;
+}
+#user:hover {
+  background-color: rgb(42, 253, 0);
+  color: white;
+}
+/* profile */
+.bg-c-lite-green {
+  border-radius: 5px;
+  background: linear-gradient(to right, #000000, #000000);
+}
+
+.card-block {
+  padding: 1.25rem;
+}
+
+.m-b-25 {
+  margin-bottom: 30px;
+}
+
+.img-radius {
+  border-radius: 5px;
+}
+
+h6 {
+  font-size: 13.5px;
+}
+
+.card-block p {
+  line-height: 25px;
+}
+
+.card-block {
+  padding: 1.25rem;
+}
+
+.b-b-default {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.m-b-20 {
+  margin-bottom: 20px;
+}
+
+.p-b-5 {
+  padding-bottom: 5px !important;
+}
+
+.m-b-10 {
+  margin-bottom: 10px;
+  color: black;
+}
+
+.text-muted {
+  color: #919aa3 !important;
+}
+
+.text-white {
+  color: white;
+}
+
+.f-w-600 {
+  font-weight: 600;
+}
+
+.m-t-40 {
+  margin-top: 20px;
+}
+/* profile */
+</style>
