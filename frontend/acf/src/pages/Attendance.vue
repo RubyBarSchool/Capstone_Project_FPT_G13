@@ -22,11 +22,11 @@
             <div class="row">
               <div class="col">
                 <a-date-picker
-                  :open="true"
                   v-model="dataGetEmployee.date"
                   @change="onChangeDate"
                   format="YYYY-MM-DD"
                   valueFormat="YYYY-MM-DD"
+                  :open="true"
                 >
                 </a-date-picker>
               </div>

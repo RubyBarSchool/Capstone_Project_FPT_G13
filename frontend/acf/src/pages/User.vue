@@ -187,7 +187,7 @@
                     <a-form-model-item label="Email">
                       <a-input v-model="dataAdd.email" />
                     </a-form-model-item>
-                    <a-form-model-item label="Quê Quán">
+                    <a-form-model-item label="Địa chỉ">
                       <a-input v-model="dataAdd.address" />
                     </a-form-model-item>
                     <a-form-model-item label="Dân Tộc">

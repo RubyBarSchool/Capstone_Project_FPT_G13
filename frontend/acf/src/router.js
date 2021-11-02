@@ -81,6 +81,20 @@ export const router = new Router({
             component: () =>
                 import ('./pages/Color.vue')
         },
+        {
+            path: '/xinnghi',
+            name: 'XinNghi',
+            // lazy-loaded
+            component: () =>
+                import ('./pages/XinNghi.vue')
+        },
+        {
+            path: '/acceptxinnghi',
+            name: 'AcceptXinNghi',
+            // lazy-loaded
+            component: () =>
+                import ('./pages/AcceptXinNghi.vue')
+        },
     ]
 });
 
