@@ -10,6 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class SearchPersonalLeaveAdminApplicationForm {
+    private Boolean status;
     private String title;
     private String nameEmployee;
     private List<LocalDate> date;

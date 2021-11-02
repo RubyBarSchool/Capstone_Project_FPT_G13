@@ -26,6 +26,10 @@ public class PersonalLeaveApplicationAdminCustomRepositoryImpl extends CommonRep
             sql.append(" and LOWER(p.title) like :title ");
             params.put("title","%"+searchApplication.getTitle().toLowerCase()+"%");
         }
+        if(searchApplication.getStatus() != null ){
+            sql.append(" and p.accept=:status ");
+            params.put("status",searchApplication.getStatus());
+        }
         if (searchApplication.getDate() != null && !searchApplication.getDate().isEmpty()) {
             sql.append(" and  p.date BETWEEN :dateStart and :dateEnd ");
             params.put("dateStart", searchApplication.getDate().get(0));
