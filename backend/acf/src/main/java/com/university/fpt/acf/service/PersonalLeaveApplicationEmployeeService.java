@@ -15,4 +15,5 @@ public interface PersonalLeaveApplicationEmployeeService {
     Boolean DeleteLeaveApplication(Long id);
     List<SearchPersonalApplicationEmployeeVO> searchPersonalLeaveApplicationEmployee(SearchPersonalApplicationEmployeeForm searchForm);
     int totalSearch(SearchPersonalApplicationEmployeeForm searchForm);
+    SearchPersonalApplicationEmployeeVO detailPersonalLeaveAppEmployee(Long id);
 }

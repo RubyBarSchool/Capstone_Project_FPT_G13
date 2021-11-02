@@ -80,7 +80,7 @@ public class AdvanceSalaryAdminController {
             if(data==null){
                 message="Không tìm thấy đơn ứng lương";
             }else{
-                message="Lấy đơn ứng lương không thành công!";
+                message="Lấy đơn ứng lương  thành công!";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(data);

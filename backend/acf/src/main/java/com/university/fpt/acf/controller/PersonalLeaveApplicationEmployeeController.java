@@ -4,6 +4,7 @@ import com.university.fpt.acf.common.entity.ResponseCommon;
 import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.service.PersonalLeaveApplicationEmployeeService;
 import com.university.fpt.acf.vo.SearchPersonalApplicationEmployeeVO;
+import com.university.fpt.acf.vo.SearchPersonalLeaveApplicationAdminVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -128,4 +129,29 @@ public class PersonalLeaveApplicationEmployeeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    @GetMapping("/detail")
+    public ResponseEntity<ResponseCommon> getDetailPersonalLeaveApplicationEmployee(@RequestParam Long id){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message="";
+        SearchPersonalApplicationEmployeeVO data = new SearchPersonalApplicationEmployeeVO();
+        try {
+            data = personalLeaveApplicationService.detailPersonalLeaveAppEmployee(id);
+            if(data==null){
+                message="Không tìm thấy đơn nghỉ phép";
+            }else{
+                message="Lấy đơn nghỉ phép thành công!";
+            }
+            responseCommon.setMessage(message);
+            responseCommon.setData(data);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+        }catch (Exception e){
+            message = e.getMessage();
+            responseCommon.setData(data);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
+
 }

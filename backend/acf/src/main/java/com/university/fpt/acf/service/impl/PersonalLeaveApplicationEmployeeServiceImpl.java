@@ -133,5 +133,18 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
         return size;
     }
 
+    @Override
+    public SearchPersonalApplicationEmployeeVO detailPersonalLeaveAppEmployee(Long id) {
+        SearchPersonalApplicationEmployeeVO data = new SearchPersonalApplicationEmployeeVO();
+        try {
+            data = personalLeaveApplicationEmployeeRepository.detailPersonalLeaveAppEmployee(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Error Personal Leave Application Employee  repository " + e.getMessage());
+        }
+        return  data;
+
+    }
+
+
 
 }

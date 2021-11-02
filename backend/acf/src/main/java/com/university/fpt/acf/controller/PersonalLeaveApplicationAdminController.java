@@ -5,14 +5,12 @@ import com.university.fpt.acf.form.AcceptPersonalLeaveApplicationAdminForm;
 import com.university.fpt.acf.form.AddPositionForm;
 import com.university.fpt.acf.form.SearchPersonalLeaveAdminApplicationForm;
 import com.university.fpt.acf.service.PersonalLeaveApplicationAdminService;
+import com.university.fpt.acf.vo.SearchAdvanceSalaryAdminVO;
 import com.university.fpt.acf.vo.SearchPersonalLeaveApplicationAdminVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,6 +69,30 @@ public class PersonalLeaveApplicationAdminController {
         }catch (Exception e){
             message = e.getMessage();
             responseCommon.setData(checkAccept);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
+    @GetMapping("/detail")
+    public ResponseEntity<ResponseCommon> getDetailPersonalLeaveApplicationAdmin(@RequestParam Long id){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message="";
+        SearchPersonalLeaveApplicationAdminVO data = new SearchPersonalLeaveApplicationAdminVO();
+        try {
+            data = personalLeaveApplicationService.detailPersonalApplicationById(id);
+            if(data==null){
+                message="Không tìm thấy đơn nghỉ phép";
+            }else{
+                message="Lấy đơn nghỉ phép thành công!";
+            }
+            responseCommon.setMessage(message);
+            responseCommon.setData(data);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+        }catch (Exception e){
+            message = e.getMessage();
+            responseCommon.setData(data);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);

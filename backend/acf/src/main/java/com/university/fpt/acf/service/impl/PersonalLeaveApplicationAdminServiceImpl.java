@@ -70,6 +70,13 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
 
     @Override
     public SearchPersonalLeaveApplicationAdminVO detailPersonalApplicationById(Long id) {
-        return null;
+        SearchPersonalLeaveApplicationAdminVO data = new SearchPersonalLeaveApplicationAdminVO();
+        try {
+            data = personalLeaveApplicationAdminRepository.detailPersonLeaveApplication(id);
+        } catch (Exception e) {
+            throw new RuntimeException("Error Personal Leave Application  repository " + e.getMessage());
+        }
+        return  data;
+
     }
 }
