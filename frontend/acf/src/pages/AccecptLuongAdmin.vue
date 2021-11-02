@@ -15,10 +15,7 @@
         <a-input placeholder="Họ và tên" style="width: 150px" />
         <a-input placeholder="Chức vụ" style="width: 150px" />
         <a-date-picker placeholder="Chọn ngày" />
-        <a-button
-          type="primary"
-          :style="{ 'margin-left': '5px' }"
-        >
+        <a-button type="primary" :style="{ 'margin-left': '5px' }">
           <font-awesome-icon
             :icon="['fas', 'search']"
             :style="{ 'margin-right': '5px' }"
@@ -32,12 +29,15 @@
           :style="{ 'padding-top': '10px' }"
         >
           <a slot="name" slot-scope="text">{{ text }}</a>
-          <template slot="action" >
+          <template slot="action">
             <a-button
-              id="user"
-              :style="{ 'margin-right': '100px' }"
+              :style="{
+                'margin-right': '100px',
+                'background-color': '#2DEB33',
+                color: 'white',
+              }"
             >
-             Thanh Toán
+              Thanh Toán
             </a-button>
           </template>
         </a-table>
