@@ -3,6 +3,14 @@
     <a-layout :style="{ background: 'white' }">
       <Header />
       <a-layout-content :style="{ margin: '24px 16px 0' }">
+        <a-back-top>
+          <div class="ant-back-top-inner">
+            <font-awesome-icon
+              :icon="['fas', 'angle-double-up']"
+              :style="{ width: '160px', height: '50px', color: '#15AABF' }"
+            />
+          </div>
+        </a-back-top>
         <a-tabs default-active-key="1">
           <!-- Hiện tại -->
           <a-tab-pane key="1">

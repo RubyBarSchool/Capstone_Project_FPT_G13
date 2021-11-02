@@ -116,6 +116,13 @@ export const router = new Router({
             component: () =>
                 import ("./pages/ViewLuong.vue"),
         },
+        {
+            path: "/acceptluongadmin",
+            name: "AccecptLuongAdmin",
+            // lazy-loaded
+            component: () =>
+                import ("./pages/AccecptLuongAdmin.vue"),
+        },
     ],
 });
 
