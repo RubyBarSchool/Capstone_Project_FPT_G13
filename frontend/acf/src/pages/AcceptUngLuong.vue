@@ -18,33 +18,12 @@
             </div>
           </a-back-top>
           <!-- menu trên -->
-          <a-input
-            placeholder="Nhân viên"
-            style="width: 150px"
-            v-model="dataSearch.name"
-          />
-          <a-input
-            placeholder="Tiêu đề"
-            style="width: 150px"
-            v-model="dataSearch.name"
-          />
-          <a-input
-            placeholder="Trạng thái"
-            style="width: 150px"
-            v-model="dataSearch.name"
-          />
-          <a-date-picker
-            v-model="dataSearch.date"
-            @change="onChangeDate"
-            format="YYYY-MM-DD"
-            valueFormat="YYYY-MM-DD"
-          >
+          <a-input placeholder="Nhân viên" style="width: 150px" />
+          <a-input placeholder="Tiêu đề" style="width: 150px" />
+          <a-input placeholder="Trạng thái" style="width: 150px" />
+          <a-date-picker format="YYYY-MM-DD" valueFormat="YYYY-MM-DD">
           </a-date-picker>
-          <a-button
-            type="primary"
-            @click="submitSearch"
-            :style="{ 'margin-left': '5px' }"
-          >
+          <a-button type="primary" :style="{ 'margin-left': '5px' }">
             <font-awesome-icon
               :icon="['fas', 'search']"
               :style="{ 'margin-right': '5px' }"
@@ -104,7 +83,7 @@
           <!-- table content -->
 
           <!-- popup profile-->
-          <a-modal
+          <!-- <a-modal
             v-model="visibleProfile"
             class="profile"
             title="Xem đơn"
@@ -133,7 +112,7 @@
                 />
               </a-form-model-item>
             </a-form-model>
-          </a-modal>
+          </a-modal> -->
           <!-- popup profile-->
         </div>
       </a-layout-content>
@@ -142,7 +121,7 @@
   </div>
 </template>
  <script>
-// import acceptUngLuongService from "@/service/acceptUngLuong.js";
+import acceptUngLuongService from "@/service/acceptUngLuongService.js";
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 
@@ -218,20 +197,20 @@ export default {
   computed: {},
   created() {},
   methods: {
-    // handleTableChange(pagination) {
-    //   this.dataSearch.pageIndex = pagination.current;
-    //   this.pagination = pagination;
-    //   acceptUngLuongService
-    //     .searchAdvanceSalaryAdmin(this.dataSearch)
-    //     .then((response) => {
-    //       this.dataSourceTable = response.data.data;
-    //       this.dataSearch.total = response.data.total;
-    //       this.pagination.total = response.data.total;
-    //     })
-    //     .catch((e) => {
-    //       console.log(e);
-    //     });
-    // },
+    handleTableChange(pagination) {
+      this.dataSearch.pageIndex = pagination.current;
+      this.pagination = pagination;
+      acceptUngLuongService
+        .searchAdvanceSalaryAdmin(this.dataSearch)
+        .then((response) => {
+          this.dataSourceTable = response.data.data;
+          this.dataSearch.total = response.data.total;
+          this.pagination.total = response.data.total;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
   },
 };
 </script>
