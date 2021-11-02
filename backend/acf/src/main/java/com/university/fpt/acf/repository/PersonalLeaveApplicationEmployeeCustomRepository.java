@@ -9,6 +9,6 @@ import com.university.fpt.acf.vo.SearchPersonalLeaveApplicationAdminVO;
 import java.util.List;
 
 public interface PersonalLeaveApplicationEmployeeCustomRepository {
-    List<SearchPersonalApplicationEmployeeVO> searchPerLeaApplicationEmployee(SearchPersonalApplicationEmployeeForm searchForm);
-    int totalSearch(SearchPersonalApplicationEmployeeForm searchForm);
+    List<SearchPersonalApplicationEmployeeVO> searchPerLeaApplicationEmployee(SearchPersonalApplicationEmployeeForm searchForm, Long idEmployee);
+    int totalSearch(SearchPersonalApplicationEmployeeForm searchForm,Long idEmployee);
 }

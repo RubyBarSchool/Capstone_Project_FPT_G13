@@ -12,5 +12,5 @@ public class UpdatePersonalAppEmployeeForm {
     private String title;
     private String content;
     private List<LocalDate> date;
-    private Long idEmployee;
+
 }

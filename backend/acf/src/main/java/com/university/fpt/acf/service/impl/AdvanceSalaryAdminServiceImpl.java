@@ -2,12 +2,12 @@ package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.config.security.AccountSercurity;
 import com.university.fpt.acf.entity.AdvaceSalary;
-import com.university.fpt.acf.entity.Employee;
+
 import com.university.fpt.acf.form.SearchAdvanceSalaryAdminForm;
+import com.university.fpt.acf.repository.AccountManagerRepository;
 import com.university.fpt.acf.repository.AdvanceSalaryAdminCustomRepository;
 import com.university.fpt.acf.repository.AdvanceSalaryAdminRepository;
 import com.university.fpt.acf.service.AdvanceSalaryAdminService;
-import com.university.fpt.acf.service.AdvanceSalaryEmployeeService;
 import com.university.fpt.acf.vo.SearchAdvanceSalaryAdminVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,10 +22,13 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
     private AdvanceSalaryAdminCustomRepository adminCustomRepository;
     @Autowired
     private AdvanceSalaryAdminRepository adminRepository;
+    @Autowired
+    private AccountManagerRepository accountManagerRepository;
     @Override
     public List<SearchAdvanceSalaryAdminVO> searchAdvanceSalaryAdmin(SearchAdvanceSalaryAdminForm searchForm) {
         List<SearchAdvanceSalaryAdminVO> list = new ArrayList<>();
         try {
+
             list =adminCustomRepository.searchAdvanceSalary(searchForm);
         }catch (Exception e){
             throw new RuntimeException("Error Advance Salary repository " + e.getMessage());
@@ -56,13 +59,15 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
     }
 
     @Override
-    public Boolean acceptAddvanceSalary(Long id) {
+    public Boolean acceptAddvanceSalary() {
         boolean check = false;
         try{
+            AccountSercurity accountSercurity = new AccountSercurity();
+            Long id = accountManagerRepository.getIdEmployeeByUsername(accountSercurity.getUserName());
             AdvaceSalary data = adminRepository.getDetailAdvanceSalaryById(id);
             data.setAccept(true);
-            // thieu setDate
-            AccountSercurity accountSercurity = new AccountSercurity();
+            data.setDateAccept(LocalDate.now());
+            data.setIdEmployeeAccept(id);
             data.setModified_by(accountSercurity.getUserName());
             data.setModified_date(LocalDate.now());
             adminRepository.save(data);

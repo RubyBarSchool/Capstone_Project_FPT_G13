@@ -29,6 +29,7 @@ public class AdvanceSalaryEmployeeController {
         int total=0;
         List<GetAllAdvanceSalaryEmployeeVO> list = new ArrayList<>();
         try {
+
             list = advanceSalaryEmployeeService.searchAdvanceSalaryEmployee(searchForm);
             total = advanceSalaryEmployeeService.totalSearch(searchForm);
             responseCommon.setData(list);

@@ -12,5 +12,5 @@ public class SearchPersonalApplicationEmployeeForm {
     private List<LocalDate> date;
     private Integer pageIndex;
     private Integer pageSize;
-    private Long idEmployee;
+//    private Long idEmployee;
 }

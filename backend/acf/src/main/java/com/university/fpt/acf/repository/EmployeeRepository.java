@@ -39,4 +39,5 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
     @Query("SELECT e FROM Employee e where e.deleted = false and e.id=:id")
     Employee getEmployeeToUpdateById(@Param("id") Long id);
 
+
 }

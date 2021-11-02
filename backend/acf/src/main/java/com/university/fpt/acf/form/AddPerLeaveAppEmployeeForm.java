@@ -11,5 +11,4 @@ public class AddPerLeaveAppEmployeeForm {
     private String title;
     private String content;
     private List<LocalDate> date;
-    private Long idEmployee;
 }

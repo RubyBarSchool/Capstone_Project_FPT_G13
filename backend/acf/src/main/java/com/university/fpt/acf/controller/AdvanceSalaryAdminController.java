@@ -47,12 +47,12 @@ public class AdvanceSalaryAdminController {
         }
     }
     @PutMapping("/accept")
-    public ResponseEntity<ResponseCommon> acceptAdvanceSalaryAdmin(@RequestParam Long id){
+    public ResponseEntity<ResponseCommon> acceptAdvanceSalaryAdmin(){
         ResponseCommon responseCommon = new ResponseCommon();
         String message="";
         Boolean check = false;
         try {
-            check = adminService.acceptAddvanceSalary(id);
+            check = adminService.acceptAddvanceSalary();
             if(check==true){
                 message="Duyệt đơn ứng lương thành công!";
             }else{

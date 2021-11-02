@@ -16,11 +16,11 @@ import java.util.Map;
 @Repository
 public class AdvanceSalaryEmployeeCustomRepositoryImpl extends CommonRepository implements AdvanceSalaryEmployeeCustomRepository {
     @Override
-    public List<GetAllAdvanceSalaryEmployeeVO> searchAdvanceSalary(SearchAdvanceEmployeeForm advanceForm) {
+    public List<GetAllAdvanceSalaryEmployeeVO> searchAdvanceSalary(SearchAdvanceEmployeeForm advanceForm,Long idEmployee) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
         sql.append(" select new com.university.fpt.acf.vo.GetAllAdvanceSalaryEmployeeVO(a.id,a.advaceSalary,a.title,a.content,a.accept) from AdvaceSalary a where a.employee.id=:id");
-        params.put("id",advanceForm.getIdEmployee());
+        params.put("id",idEmployee);
         if(!advanceForm.getTitle().isEmpty() && advanceForm.getTitle()!=null){
             sql.append(" and LOWER(a.title) like :title ");
             params.put("title","%"+advanceForm.getTitle().toLowerCase()+"%");
@@ -47,10 +47,11 @@ public class AdvanceSalaryEmployeeCustomRepositoryImpl extends CommonRepository 
 
 
     @Override
-    public int totalSearch(SearchAdvanceEmployeeForm advanceForm) {
+    public int totalSearch(SearchAdvanceEmployeeForm advanceForm, Long idEmployee) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append(" select COUNT(*) from AdvaceSalary a where 1=1");
+        sql.append(" select COUNT(*) from AdvaceSalary a where a.employee.id=:id");
+        params.put("id",idEmployee);
         if(!advanceForm.getTitle().isEmpty() && advanceForm.getTitle()!=null){
             sql.append(" and LOWER(a.title) like :title ");
             params.put("title","%"+advanceForm.getTitle().toLowerCase()+"%");
