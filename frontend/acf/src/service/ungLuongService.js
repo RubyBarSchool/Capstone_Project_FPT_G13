@@ -16,7 +16,6 @@ class ungLuongService {
     deleteAdvanceSalaryEmployee(id) {
         return http.delete(`/employee/advanceSalary/delete?id=${id}`);
     }
-
 }
 
 export default new ungLuongService();

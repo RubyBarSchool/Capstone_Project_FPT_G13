@@ -122,7 +122,7 @@ export default {
 </script>
 <style scoped>
 .ant-layout-header {
-  background-color: #24292f;
+  background-color: #141414;
   /* -webkit-box-shadow: 0px 7px 13px -1px rgba(230, 230, 230, 1);
   -webkit-box-shadow: 0px 7px 13px -4px rgba(230, 230, 230, 1);
   -moz-box-shadow: 0px 7px 13px -4px rgba(230, 230, 230, 1);

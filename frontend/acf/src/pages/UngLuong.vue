@@ -87,7 +87,7 @@
                     <a-button
                       id="view"
                       @click="getDetailAdvanceSalaryEmployeeByID(record.id)"
-                      :style="{ 'margin-right': '100px' }"
+                      :style="{ width: '44.25px', 'margin-right': '100px' }"
                     >
                       <font-awesome-icon :icon="['fas', 'eye']" />
                     </a-button>
@@ -144,7 +144,7 @@
                 <a-textarea
                   v-model="dataAdd.content"
                   placeholder="Lý do như nào thì viết vào đây"
-                  auto-size="auto"
+                  :row="4"
                 />
               </a-form-model-item>
             </a-form-model>
@@ -167,16 +167,17 @@
                 <a-input v-model="dataEdit.advanceSalary" />
               </a-form-model-item>
               <a-form-model-item label="Nội dung">
-                <a-textarea v-model="dataEdit.content" placeholder="Lý do như nào thì viết vào đây" auto-size="auto" />
+                <a-textarea v-model="dataEdit.content" placeholder="Lý do như nào thì viết vào đây" :row="4" />
               </a-form-model-item>
             </a-form-model>
           </a-modal>
           <!-- popup edit-->
+
           <!-- popup view-->
           <a-modal v-model="visibleView" class="view">
             <template slot="footer">
               <a-button key="a" hidden></a-button>
-              <a-button key="submit" @click="handleCancel">OK</a-button>
+              <a-button key="submit" type="primary" @click="handleCancel">Lưu</a-button>
             </template>
             <a-form-model>
               <a-form-model-item label="Tiêu đề">
@@ -194,7 +195,7 @@
               <a-form-model-item label="Nội dung">
                 <a-textarea
                   v-model="dataAdvanceSalaryEmployeeDetail.content"
-                  auto-size="auto"
+                  :row="4"
                   disabled
                 />
               </a-form-model-item>
@@ -234,17 +235,11 @@ export default {
         total: 0,
       },
       dataSourceTable: [],
-      dataRoles: [],
       dataEmployees: [],
       dataAdd: {
         advanceSalary: "",
         content: "",
         title: "",
-      },
-      dataRole: {
-        name: "",
-        pageIndex: 1,
-        pageSize: 10,
       },
       dataEmployee: {
         name: "",
@@ -285,13 +280,6 @@ export default {
           width: 150,
           scopedSlots: { customRender: "advanceSalary" },
         },
-        // {
-        //   title: "Nội dung",
-        //   dataIndex: "content",
-        //   key: "content",
-        //   width: 150,
-        //   scopedSlots: { customRender: "content" },
-        // },
         {
           title: "Trạng thái",
           dataIndex: "status",
@@ -313,7 +301,6 @@ export default {
       visibleView: false,
     };
   },
-  computed: {},
   created() {
     this.submitSearch();
   },
@@ -377,7 +364,6 @@ export default {
       this.dataEdit.content = content;
       this.dataEdit.advanceSalary = advanceSalary;
       this.visibleEdit = true;
-      //
     },
     submitUpdate() {
       ungLuongService
@@ -482,75 +468,13 @@ export default {
   background-color: rgb(0, 181, 253);
   color: white;
 }
-#user {
+#view {
   background-color: rgb(76, 238, 12);
   color: white;
 }
-#user:hover {
+#view:hover {
   background-color: rgb(42, 253, 0);
   color: white;
 }
-/* profile */
-.bg-c-lite-green {
-  border-radius: 5px;
-  background: linear-gradient(to right, #000000, #000000);
-}
 
-.card-block {
-  padding: 1.25rem;
-}
-
-.m-b-25 {
-  margin-bottom: 30px;
-}
-
-.img-radius {
-  border-radius: 5px;
-}
-
-h6 {
-  font-size: 13.5px;
-}
-
-.card-block p {
-  line-height: 25px;
-}
-
-.card-block {
-  padding: 1.25rem;
-}
-
-.b-b-default {
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.m-b-20 {
-  margin-bottom: 20px;
-}
-
-.p-b-5 {
-  padding-bottom: 5px !important;
-}
-
-.m-b-10 {
-  margin-bottom: 10px;
-  color: black;
-}
-
-.text-muted {
-  color: #919aa3 !important;
-}
-
-.text-white {
-  color: white;
-}
-
-.f-w-600 {
-  font-weight: 600;
-}
-
-.m-t-40 {
-  margin-top: 20px;
-}
-/* profile */
 </style>
