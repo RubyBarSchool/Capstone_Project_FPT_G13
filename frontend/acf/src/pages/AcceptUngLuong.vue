@@ -80,7 +80,10 @@
               <template slot="action" slot-scope="text, record">
                 <a-row>
                   <a-col :span="8">
-                    <a-button id="edit" @click="getDetailAdvanceSalaryAdmin(record.id)">
+                    <a-button
+                      id="edit"
+                      @click="getDetailAdvanceSalaryAdmin(record.id)"
+                    >
                       <font-awesome-icon :icon="['fas', 'eye']" />
                     </a-button>
                   </a-col>
@@ -103,16 +106,29 @@
             </template>
             <a-form-model>
               <a-form-model-item label="Nhân viên">
-                <a-input v-model="dataAdvanceSalaryAdminDetail.nameEmployee" disabled />
+                <a-input
+                  v-model="dataAdvanceSalaryAdminDetail.nameEmployee"
+                  disabled
+                />
               </a-form-model-item>
               <a-form-model-item label="Tiêu đề">
-                <a-input v-model="dataAdvanceSalaryAdminDetail.title" disabled />
+                <a-input
+                  v-model="dataAdvanceSalaryAdminDetail.title"
+                  disabled
+                />
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
-                <a-input v-model="dataAdvanceSalaryAdminDetail.advanceSalary" disabled />
+                <a-input
+                  v-model="dataAdvanceSalaryAdminDetail.advanceSalary"
+                  disabled
+                />
               </a-form-model-item>
               <a-form-model-item label="Nội dung">
-                <a-textarea v-model="dataAdvanceSalaryAdminDetail.content" :rows="4" disabled />
+                <a-textarea
+                  v-model="dataAdvanceSalaryAdminDetail.content"
+                  :rows="4"
+                  disabled
+                />
               </a-form-model-item>
               <a-form-model-item label="Ghi chú">
                 <a-textarea
@@ -149,9 +165,10 @@ export default {
         total: 0,
       },
       dataSearch: {
-        employeeName: "",
-        pageIndex: 1,
-        pageSize: 10,
+        content: "",
+        date: [],
+        pageIndex: 0,
+        pageSize: 0,
         status: "",
         title: "",
         total: 0,
@@ -162,7 +179,7 @@ export default {
         title: "",
         advanceSalary: "",
         content: "",
-        note:"",
+        note: "",
       },
       columns: [
         {

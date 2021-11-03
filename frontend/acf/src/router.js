@@ -131,11 +131,11 @@ export const router = new Router({
                 import ("./pages/HistoryLuongAdmin.vue"),
         },
         {
-            path: "/thuongadmin",
-            name: "ThuongAdmin",
+            path: "/phatadmin",
+            name: "PhatAdmin",
             // lazy-loaded
             component: () =>
-                import ("./pages/ThuongAdmin.vue"),
+                import ("./pages/PhatAdmin.vue"),
         },
     ],
 });

@@ -19,18 +19,18 @@
           </a-back-top>
           <!-- menu trên -->
           <a-input
-            placeholder="Tiêu đề"
+            placeholder="Họ và tên"
             style="width: 150px"
-            v-model="dataSearch.title"
+            v-model="dataSearch.name"
           />
           <a-select
             placeholder="Trạng thái"
-            v-model="dataSearch.status"
+            mode="multiple"
+            v-model="dataSearch.listStatus"
             style="width: 150px"
           >
-            <a-select-option value="-1"> Chờ duyệt </a-select-option>
-            <a-select-option value="0"> Hủy bỏ </a-select-option>
-            <a-select-option value="1"> Đã duyệt </a-select-option>
+            <a-select-option value="false"> Nháp </a-select-option>
+            <a-select-option value="true"> Công khai </a-select-option>
           </a-select>
           <a-range-picker
             v-model="dataSearch.date"
@@ -55,10 +55,10 @@
             :style="{ 'margin-left': '5px' }"
           >
             <font-awesome-icon
-              :icon="['fas', 'envelope-open-text']"
+              :icon="['fas', 'plus-circle']"
               :style="{ 'margin-right': '5px' }"
             />
-            Viết đơn
+            Thêm
           </a-button>
 
           <!-- table content -->
@@ -74,54 +74,39 @@
               "
               @change="handleTableChange"
             >
-              <template slot="titlee" slot-scope="text, record">
-                {{ record.title }}
+              <template slot="username" slot-scope="text, record">
+                {{ record.username }}
               </template>
-              <template slot="date" slot-scope="text, record">
-                {{ record.date }}
-              </template>
-              <template slot="advanceSalary" slot-scope="text, record">
-                {{ record.advanceSalary }}
+              <template slot="roles" slot-scope="text, record">
+                <div v-for="(item, index) in record.roles" :key="index">
+                  {{ item.name }}
+                </div>
               </template>
               <template slot="status" slot-scope="text, record">
-                <a-tag
-                  :color="
-                    record.accept == '-1'
-                      ? 'red'
-                      : record.accept == '0'
-                      ? 'gray'
-                      : 'green'
-                  "
-                >
-                  {{
-                    record.accept == "-1"
-                      ? "Hủy bỏ"
-                      : record.accept == "0"
-                      ? "Chờ duyệt"
-                      : "Đã duyệt"
-                  }}
+                <a-tag :color="record.status ? 'green' : 'blue'">
+                  {{ record.status ? "Công khai" : "Nháp" }}
                 </a-tag>
+              </template>
+              <template slot="time" slot-scope="text, record">
+                {{
+                  new Date(record.time).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-row>
-                  <a-col :span="8">
-                    <a-button
-                      id="view"
-                      @click="getDetailAdvanceSalaryEmployeeByID(record.id)"
-                      :style="{ width: '44.25px', 'margin-right': '100px' }"
-                    >
-                      <font-awesome-icon :icon="['fas', 'eye']" />
-                    </a-button>
-                  </a-col>
-                  <a-col :span="8">
+                  <a-col :span="9">
                     <a-button
                       id="edit"
                       @click="
                         showModalEdit(
                           record.id,
-                          record.title,
-                          record.content,
-                          record.advanceSalary
+                          record.username,
+                          record.roles,
+                          record.status
                         )
                       "
                       :style="{ width: '44.25px' }"
@@ -129,11 +114,11 @@
                       <font-awesome-icon :icon="['fas', 'edit']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="8">
+                  <a-col :span="9">
                     <a-popconfirm
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
-                      @confirm="deleteAdvanceSalary(record.id)"
+                      @confirm="deleteAccount(record.id)"
                     >
                       <a-button id="delete">
                         <font-awesome-icon :icon="['fas', 'trash']" />
@@ -145,8 +130,9 @@
             </a-table>
           </div>
           <!-- table content -->
+
           <!-- popup add-->
-          <a-modal v-model="visibleAdd" title="Viết đơn">
+          <a-modal v-model="visibleAdd" title="Thêm hình phạt">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button key="submit" type="primary" @click="submitAdd">
@@ -155,25 +141,37 @@
             </template>
             <a-form-model>
               <a-form-model-item label="Tiêu đề">
-                <a-input v-model="dataAdd.title" />
+                <a-input v-model="dataAdd.username" />
+              </a-form-model-item>
+              <a-form-model-item label="Họ và tên">
+                <a-input v-model="dataAdd.password" />
+              </a-form-model-item>
+              <a-form-model-item label="Lý do">
+                <a-textarea placeholder="Lý do" :rows="4" v-model="dataAdd.password"/>
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
-                <a-input v-model="dataAdd.advanceSalary" />
+                <a-input v-model="dataAdd.password" />
               </a-form-model-item>
-
-              <a-form-model-item label="Nội dung">
-                <a-textarea
-                  v-model="dataAdd.content"
-                  placeholder="Lý do như nào thì viết vào đây"
-                  :row="4"
-                />
+              <a-form-model-item label="Trạng thái">
+                <a-radio-group name="radioGroup" v-model="dataEdit.status">
+                  <a-radio :value="false"> Nháp </a-radio>
+                  <a-radio :value="true"> Hiệu lực </a-radio>
+                </a-radio-group>
+              </a-form-model-item>
+              <a-form-model-item label="Ngày hiệu lực">
+              <a-range-picker
+                v-model="dataSearch.date"
+                :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+                :show-time="{ format: 'DD/MM/YYYY' }"
+                format="DD/MM/YYYY"
+              />
               </a-form-model-item>
             </a-form-model>
           </a-modal>
           <!-- popup add -->
 
           <!-- popup edit-->
-          <a-modal v-model="visibleEdit" title="Chỉnh sửa đơn">
+          <a-modal v-model="visibleEdit" title="Chỉnh sửa tài khoản">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button key="submit" type="primary" @click="submitUpdate">
@@ -182,53 +180,34 @@
             </template>
             <a-form-model>
               <a-form-model-item label="Tiêu đề">
-                <a-input v-model="dataEdit.title" />
+                <a-input v-model="dataAdd.username" />
+              </a-form-model-item>
+              <a-form-model-item label="Họ và tên">
+                <a-input v-model="dataAdd.password" />
+              </a-form-model-item>
+              <a-form-model-item label="Lý do">
+                <a-textarea placeholder="Lý do" :rows="4" v-model="dataAdd.password"/>
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
-                <a-input v-model="dataEdit.advanceSalary" />
+                <a-input v-model="dataAdd.password" />
               </a-form-model-item>
-              <a-form-model-item label="Nội dung">
-                <a-textarea
-                  v-model="dataEdit.content"
-                  placeholder="Lý do như nào thì viết vào đây"
-                  :row="4"
-                />
+              <a-form-model-item label="Trạng thái">
+                <a-radio-group name="radioGroup" v-model="dataEdit.status">
+                  <a-radio :value="false"> Nháp </a-radio>
+                  <a-radio :value="true"> Hiệu lực </a-radio>
+                </a-radio-group>
+              </a-form-model-item>
+              <a-form-model-item label="Ngày hiệu lực">
+              <a-range-picker
+                v-model="dataSearch.date"
+                :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+                :show-time="{ format: 'DD/MM/YYYY' }"
+                format="DD/MM/YYYY"
+              />
               </a-form-model-item>
             </a-form-model>
           </a-modal>
           <!-- popup edit-->
-
-          <!-- popup view-->
-          <a-modal v-model="visibleView" class="view">
-            <template slot="footer">
-              <a-button key="a" hidden></a-button>
-              <a-button key="submit" type="primary" @click="handleCancel"
-                >Lưu</a-button
-              >
-            </template>
-            <a-form-model>
-              <a-form-model-item label="Tiêu đề">
-                <a-input
-                  v-model="dataAdvanceSalaryEmployeeDetail.title"
-                  disabled
-                />
-              </a-form-model-item>
-              <a-form-model-item label="Số tiền">
-                <a-input
-                  v-model="dataAdvanceSalaryEmployeeDetail.advanceSalary"
-                  disabled
-                />
-              </a-form-model-item>
-              <a-form-model-item label="Nội dung">
-                <a-textarea
-                  v-model="dataAdvanceSalaryEmployeeDetail.content"
-                  :row="4"
-                  disabled
-                />
-              </a-form-model-item>
-            </a-form-model>
-          </a-modal>
-          <!-- popup view-->
         </div>
       </a-layout-content>
       <Footer />
@@ -236,12 +215,15 @@
   </div>
 </template>
  <script>
+import accountService from "@/service/accountService.js";
+import roleService from "@/service/roleService.js";
+import employeeService from "@/service/employeeService.js";
+import adminTruongService from "../service/adminTruongService";
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
-import ungLuongService from "../service/ungLuongService";
 
 export default {
-  name: "UngLuong",
+  name: "PhatAdmin",
   components: {
     Header,
     Footer,
@@ -254,20 +236,27 @@ export default {
         total: 0,
       },
       dataSearch: {
-        content: "",
+        name: "",
+        listRole: [],
+        listStatus: [],
         date: [],
         pageIndex: 1,
         pageSize: 10,
-        status: "",
-        title: "",
         total: 0,
       },
       dataSourceTable: [],
-      dataAdvanceSalaryEmployees: [],
+      dataRoles: [],
+      dataEmployees: [],
       dataAdd: {
-        advanceSalary: "",
-        content: "",
-        title: "",
+        listRole: [],
+        employee: "",
+        password: "",
+        username: "",
+      },
+      dataRole: {
+        name: "",
+        pageIndex: 1,
+        pageSize: 10,
       },
       dataEmployee: {
         name: "",
@@ -275,16 +264,20 @@ export default {
         pageSize: 10,
       },
       dataEdit: {
-        advanceSalary: "",
-        content: "",
-        id: 0,
-        title: "",
-      },
-      dataAdvanceSalaryEmployeeDetail: {
         id: "",
-        title: "",
-        content: "",
-        advanceSalary: "",
+        username: "",
+        listRole: [],
+        status: false,
+      },
+      dataAccountDetail: {
+        id: "",
+        name: "",
+        roles: [],
+        image: "",
+        fullname: "",
+        dob: "",
+        phone: "",
+        gender: "",
       },
       columns: [
         {
@@ -295,6 +288,13 @@ export default {
           fixed: "left",
         },
         {
+          title: "Ngày hiệu lực",
+          dataIndex: "time",
+          key: "time",
+          width: 150,
+          scopedSlots: { customRender: "time" },
+        },
+        {
           title: "Tiêu đề",
           dataIndex: "titlee",
           key: "titlee",
@@ -302,18 +302,11 @@ export default {
           scopedSlots: { customRender: "titlee" },
         },
         {
-          title: "Ngày tạo",
-          dataIndex: "date",
-          key: "date",
-          width: 150,
-          scopedSlots: { customRender: "date" },
-        },
-        {
           title: "Số tiền",
-          dataIndex: "advanceSalary",
-          key: "advanceSalary",
+          dataIndex: "money",
+          key: "money",
           width: 150,
-          scopedSlots: { customRender: "advanceSalary" },
+          scopedSlots: { customRender: "money" },
         },
         {
           title: "Trạng thái",
@@ -333,18 +326,20 @@ export default {
       ],
       visibleAdd: false,
       visibleEdit: false,
-      visibleView: false,
+      visibleProfile: false,
     };
   },
+  computed: {},
   created() {
     this.submitSearch();
+    this.getAllRole();
   },
   methods: {
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;
-      ungLuongService
-        .searchAdvanceSalaryEmployee(this.dataSearch)
+      adminTruongService
+        .searchAccount(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
           this.dataSearch.total = response.data.total;
@@ -354,40 +349,66 @@ export default {
           console.log(e);
         });
     },
-    submitSearch() {
-      this.dataSearch.total = 0;
-      ungLuongService
-        .searchAdvanceSalaryEmployee(this.dataSearch)
+    generateUsername() {
+      accountService
+        .generateUsername(this.dataAdd.employee)
         .then((response) => {
-          this.dataSourceTable = response.data.data;
-          this.dataSearch.total = response.data.total;
-          this.pagination.total = response.data.total;
+          this.dataAdd.username = response.data.data;
+        });
+    },
+    fetchRoles(value) {
+      this.dataRole.name = value;
+      this.getAllRole();
+    },
+    getAllRole() {
+      roleService
+        .getAllRole(this.dataRole)
+        .then((response) => {
+          this.dataRoles = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    fetchEmployees(value) {
+      this.dataEmployee.name = value;
+      this.getAllEmployeeNotAccount();
+    },
+    getAllEmployeeNotAccount() {
+      employeeService
+        .getAllEmployeeNotAccount(this.dataEmployee)
+        .then((response) => {
+          this.dataEmployees = response.data.data;
         })
         .catch((e) => {
           console.log(e);
         });
     },
     showModalAdd() {
+      this.dataRole.name = "";
+      this.getAllRole();
+      this.dataEmployee.name = "";
+      this.getAllEmployeeNotAccount();
       this.visibleAdd = true;
     },
     submitAdd() {
-      ungLuongService
-        .addAdvanceSalaryEmployee(this.dataAdd)
+      accountService
+        .addAccount(this.dataAdd)
         .then((response) => {
-          this.dataAdvanceSalaryEmployees = response.data.data;
+          this.dataEmployees = response.data.data;
           this.submitSearch();
           if (response.data.data) {
             let type = "success";
-            let message = "Viết đơn";
+            let message = "Thêm mới";
             let description =
-              "Thêm mới đơn " + this.dataAdd.title + " thành công !!";
+              "Thêm mới tài khoản " + this.dataAdd.username + " thành công !!";
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Viết đơn";
+            let message = "Thêm mới";
             let description =
-              "Thêm mới đơn " +
-              this.dataAdd.title +
+              "Thêm mới tài khoản " +
+              this.dataAdd.username +
               " không thành công vì " +
               response.data.message;
             this.notifi(type, message, description);
@@ -397,37 +418,44 @@ export default {
           console.log(e);
         });
       this.visibleAdd = false;
-      this.dataAdd.title = "";
-      this.dataAdd.advanceSalary = "";
-      this.dataAdd.content = "";
+      this.dataAdd.username = "";
+      this.dataAdd.password = "";
+      this.dataAdd.employee = "";
+      this.dataAdd.listRole = [];
     },
-
     handleCancel() {
       this.visibleAdd = false;
       this.visibleEdit = false;
-      this.visibleView = false;
+      this.visibleProfile = false;
     },
-    showModalEdit(id, title, content, advanceSalary) {
+    showModalEdit(id, username, roles, status) {
       this.dataEdit.id = id;
-      this.dataEdit.title = title;
-      this.dataEdit.content = content;
-      this.dataEdit.advanceSalary = advanceSalary;
+      this.dataEdit.username = username;
+      this.dataEdit.listRole = [];
+      for (var i = 0; i < roles.length; i++) {
+        this.dataEdit.listRole.push(roles[i].id);
+      }
+      this.dataEdit.status = status;
       this.visibleEdit = true;
+      this.dataRole.name = "";
+      this.getAllRole();
+      this.dataEmployee.name = "";
+      this.getAllEmployeeNotAccount();
     },
     submitUpdate() {
-      ungLuongService
-        .updateAdvanceSalaryEmployee(this.dataEdit)
+      adminTruongService
+        .updateAccount(this.dataEdit)
         .then((response) => {
           this.submitSearch();
           if (response.data.data) {
             let type = "success";
             let message = "Cập nhật";
-            let description = "Cập nhật đơn thành công";
+            let description = "Account đang đăng nhập không được xóa";
             this.notifi(type, message, description);
           } else {
             let type = "error";
             let message = "Cập nhật";
-            let description = "Cập nhật đơn không thành công";
+            let description = "Account đang đăng nhập không được xóa";
             this.notifi(type, message, description);
           }
         })
@@ -436,35 +464,47 @@ export default {
         });
       this.visibleEdit = false;
     },
-
-    deleteAdvanceSalary(id) {
-      ungLuongService
-        .deleteAdvanceSalaryEmployee(id)
+    submitSearch() {
+      this.dataSearch.total = 0;
+      adminTruongService
+        .searchAccount(this.dataSearch)
         .then((response) => {
-          if (response.data.data) {
-            let type = "success";
-            let message = "Xóa";
-            let description = "Xóa đơn thành công";
-            this.notifi(type, message, description);
-            this.submitSearch();
-          } else {
-            let type = "error";
-            let message = "Xóa";
-            let description = "Xóa đơn không thành công :(";
-            this.notifi(type, message, description);
-            this.submitSearch();
-          }
+          this.dataSourceTable = response.data.data;
+          this.dataSearch.total = response.data.total;
+          this.pagination.total = response.data.total;
         })
         .catch((e) => {
           console.log(e);
         });
     },
-    getDetailAdvanceSalaryEmployeeByID(id) {
-      ungLuongService
-        .getAdvanceSalaryEmployeeByID(id)
+    getAccountByID(id) {
+      adminTruongService
+        .getAccountByID(id)
         .then((response) => {
-          this.dataAdvanceSalaryEmployeeDetail = response.data.data;
-          this.visibleView = true;
+          this.dataAccountDetail = response.data.data;
+          this.visibleProfile = true;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    deleteAccount(id) {
+      accountService
+        .deleteAccount(id)
+        .then((response) => {
+          if (response.data.data) {
+            let type = "success";
+            let message = "Xóa";
+            let description = "Xóa thành công";
+            this.notifi(type, message, description);
+            this.submitSearch();
+          } else {
+            let type = "error";
+            let message = "Xóa";
+            let description = "Account đang đăng nhập không được xóa";
+            this.notifi(type, message, description);
+            this.submitSearch();
+          }
         })
         .catch((e) => {
           console.log(e);
@@ -504,12 +544,75 @@ export default {
   background-color: rgb(0, 181, 253);
   color: white;
 }
-#view {
+#user {
   background-color: rgb(76, 238, 12);
   color: white;
 }
-#view:hover {
+#user:hover {
   background-color: rgb(42, 253, 0);
   color: white;
 }
+/* profile */
+.bg-c-lite-green {
+  border-radius: 5px;
+  background: linear-gradient(to right, #000000, #000000);
+}
+
+.card-block {
+  padding: 1.25rem;
+}
+
+.m-b-25 {
+  margin-bottom: 30px;
+}
+
+.img-radius {
+  border-radius: 5px;
+}
+
+h6 {
+  font-size: 13.5px;
+}
+
+.card-block p {
+  line-height: 25px;
+}
+
+.card-block {
+  padding: 1.25rem;
+}
+
+.b-b-default {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.m-b-20 {
+  margin-bottom: 20px;
+}
+
+.p-b-5 {
+  padding-bottom: 5px !important;
+}
+
+.m-b-10 {
+  margin-bottom: 10px;
+  color: black;
+}
+
+.text-muted {
+  color: #919aa3 !important;
+}
+
+.text-white {
+  color: white;
+}
+
+.f-w-600 {
+  font-weight: 600;
+}
+
+.m-t-40 {
+  margin-top: 20px;
+}
+/* profile */
 </style>
