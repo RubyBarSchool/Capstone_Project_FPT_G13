@@ -10,4 +10,5 @@ public interface BonusService {
     List<SearchBonusAdminVO> searchBonus(SearchBonusAdminForm searchBonus);
     int totalSearchBonus(SearchBonusAdminForm searchBonus);
     Boolean addBonus(AddBonusAdminForm addBonus);
+    Boolean deleteBonus(Long id);
 }

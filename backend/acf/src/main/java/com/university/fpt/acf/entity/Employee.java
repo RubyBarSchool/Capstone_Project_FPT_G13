@@ -57,7 +57,7 @@ public class Employee extends EntityCommon {
     private Collection<HistorySalary> historySalaries;
 
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @JoinTable(name = "employee_bonus_penalties",

@@ -2,8 +2,7 @@ package com.university.fpt.acf.repository.impl;
 
 import com.university.fpt.acf.common.repository.CommonRepository;
 import com.university.fpt.acf.form.SearchBonusAdminForm;
-import com.university.fpt.acf.repository.BonusCustomRepository;
-import com.university.fpt.acf.vo.GetAllAdvanceSalaryEmployeeVO;
+import com.university.fpt.acf.repository.PunishCustomRepository;
 import com.university.fpt.acf.vo.SearchBonusAdminVO;
 import org.springframework.stereotype.Repository;
 
@@ -13,12 +12,12 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class BonusCustomRepositoryImpl extends CommonRepository implements BonusCustomRepository {
+public class PunishCustomRepositoryImpl extends CommonRepository implements PunishCustomRepository {
     @Override
-    public List<SearchBonusAdminVO> searchBonus(SearchBonusAdminForm searchForm) {
+    public List<SearchBonusAdminVO> searchPunish(SearchBonusAdminForm searchForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select  new com.university.fpt.acf.vo.SearchBonusAdminVO(b.id,b.title,b.reason,b.money,b.status,b.effectiveDate) from BonusPenalty b where b.deleted=false and b.bonus=true");
+        sql.append("select  new com.university.fpt.acf.vo.SearchBonusAdminVO(b.id,b.title,b.reason,b.money,b.status,b.effectiveDate) from BonusPenalty b where b.deleted=false and b.bonus = false");
 
         if(searchForm.getTitle()!=null){
             sql.append(" and LOWER(a.title) like :title ");
@@ -41,10 +40,10 @@ public class BonusCustomRepositoryImpl extends CommonRepository implements Bonus
     }
 
     @Override
-    public int totalSearchBonus(SearchBonusAdminForm searchForm) {
+    public int totalSearchPunish(SearchBonusAdminForm searchForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select  COUNT(*) from BonusPenalty b where b.deleted=false");
+        sql.append("select  COUNT(*) from BonusPenalty b where b.deleted=false and b.bonus = false");
 
         if(searchForm.getTitle()!=null){
             sql.append(" and LOWER(a.title) like :title ");
@@ -61,7 +60,6 @@ public class BonusCustomRepositoryImpl extends CommonRepository implements Bonus
         }
         sql.append(" ORDER by a.id desc ");
         TypedQuery<Long> query = super.createQuery(sql.toString(),params, Long.class);
-
         return query.getSingleResult().intValue();
     }
 }
