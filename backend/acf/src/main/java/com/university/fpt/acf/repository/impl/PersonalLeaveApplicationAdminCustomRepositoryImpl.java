@@ -31,7 +31,7 @@ public class PersonalLeaveApplicationAdminCustomRepositoryImpl extends CommonRep
             params.put("status",searchApplication.getStatus());
         }
         if (searchApplication.getDate() != null && !searchApplication.getDate().isEmpty()) {
-            sql.append(" and  p.date BETWEEN :dateStart and :dateEnd ");
+            sql.append(" and  p.created_date BETWEEN :dateStart and :dateEnd ");
             params.put("dateStart", searchApplication.getDate().get(0));
             params.put("dateEnd", searchApplication.getDate().get(1));
         }
@@ -56,7 +56,7 @@ public class PersonalLeaveApplicationAdminCustomRepositoryImpl extends CommonRep
             params.put("title","%"+searchApplication.getTitle().toLowerCase()+"%");
         }
         if (searchApplication.getDate() != null && !searchApplication.getDate().isEmpty()) {
-            sql.append(" and  p.date BETWEEN :dateStart and :dateEnd ");
+            sql.append(" and  p.created_date BETWEEN :dateStart and :dateEnd ");
             params.put("dateStart", searchApplication.getDate().get(0));
             params.put("dateEnd", searchApplication.getDate().get(1));
         }
