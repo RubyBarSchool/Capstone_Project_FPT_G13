@@ -78,27 +78,25 @@ public class SalaryAdminController {
         }
     }
 
-    @PutMapping("/accept")
-    public ResponseEntity<ResponseCommon> salaryAcceptDone(@Valid @RequestBody SearchSalaryForm searchSalaryForm) {
+    @PutMapping("/accept/{id}")
+    public ResponseEntity<ResponseCommon> salaryAcceptDone(@PathVariable Long id) {
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
-        List<SearchSalaryVO> searchSalaryVOS = new ArrayList<>();
-        Integer total = 0;
+        Boolean status = false;
         try {
-            searchSalaryVOS = salaryService.searchSalaryAccept(searchSalaryForm);
-            total = salaryService.getTotalAllSalaryAccept(searchSalaryForm);
-            responseCommon.setData(searchSalaryVOS);
-            responseCommon.setTotal(total);
-            message = "Get Salary successfully";
-            if (total.intValue() == 0) {
-                message = "Get Salary not found";
+            status = salaryService.acceptSalary(id);
+            responseCommon.setData(status);
+            responseCommon.setTotal(0);
+            message = "Accept Salary successfully";
+            if (!status) {
+                message = "Accept Salary not success";
             }
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
-            message = "Could not get Salary !";
-            responseCommon.setData(searchSalaryVOS);
+            message = "Could not Accept !";
+            responseCommon.setData(status);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);

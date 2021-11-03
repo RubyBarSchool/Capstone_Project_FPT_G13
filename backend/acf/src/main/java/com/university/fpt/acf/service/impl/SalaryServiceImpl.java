@@ -66,4 +66,9 @@ public class SalaryServiceImpl implements SalaryService {
         }
         return total;
     }
+
+    @Override
+    public Boolean acceptSalary(Long id) {
+        return null;
+    }
 }

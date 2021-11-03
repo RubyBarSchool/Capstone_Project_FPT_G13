@@ -12,4 +12,6 @@ public interface SalaryService {
 
     List<SearchSalaryVO> searchSalaryAccept(SearchSalaryForm searchSalaryForm);
     int getTotalAllSalaryAccept(SearchSalaryForm searchSalaryForm);
+
+    Boolean acceptSalary(Long id);
 }
