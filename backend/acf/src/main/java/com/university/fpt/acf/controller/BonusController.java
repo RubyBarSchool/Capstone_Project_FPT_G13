@@ -1,6 +1,7 @@
 package com.university.fpt.acf.controller;
 
 import com.university.fpt.acf.common.entity.ResponseCommon;
+import com.university.fpt.acf.form.SearchBonusAdminForm;
 import com.university.fpt.acf.form.SearchColorForm;
 import com.university.fpt.acf.service.BonusService;
 import com.university.fpt.acf.vo.ColorVO;
@@ -21,30 +22,30 @@ import java.util.List;
 public class BonusController {
     @Autowired
 private BonusService bonusService;
-//    @PostMapping("/search")
-//    public ResponseEntity<ResponseCommon> searchColor(@RequestBody SearchColorForm searchColorForm){
-//        ResponseCommon responseCommon = new ResponseCommon();
-//        String message = "";
-//        int total=0;
-//        List<SearchBonusAdminVO> list;
-//        try {
-//            list = bonusService.searchBonus(searchColorForm);
-//            total = bonusService.totalSearchBonus(searchColorForm);
-//            responseCommon.setData(list);
-//            message = "Get color successfully";
-//            if(total==0){
-//                message = "Get color not found";
-//            }
-//            responseCommon.setTotal(total);
-//            responseCommon.setStatus(HttpStatus.OK.value());
-//            responseCommon.setMessage(message);
-//            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
-//        } catch (Exception e) {
-//            message = e.getMessage();
-//            responseCommon.setData(list);
-//            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
-//            responseCommon.setMessage(message);
-//            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
-//        }
-
+    @PostMapping("/search")
+    public ResponseEntity<ResponseCommon> searchColor(@RequestBody SearchBonusAdminForm searchForm) {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total = 0;
+        List<SearchBonusAdminVO> list = new ArrayList<>();
+        try {
+            list = bonusService.searchBonus(searchForm);
+            total = bonusService.totalSearchBonus(searchForm);
+            responseCommon.setData(list);
+            message = "Get bonus successfully";
+            if (total == 0) {
+                message = "Get bonus not found";
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(list);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
 }

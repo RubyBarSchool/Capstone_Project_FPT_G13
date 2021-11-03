@@ -35,8 +35,8 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
             PersonaLeaveApplication p = new PersonaLeaveApplication();
             AccountSercurity accountSercurity = new AccountSercurity();
             Long idEmployee =accountManagerRepository.getIdEmployeeByUsername(accountSercurity.getUserName());
-            String em = employeeRepository.getFullNameById(idEmployee);
-            if(em==null || em.isEmpty()){
+//            String em = employeeRepository.getFullNameById(idEmployee);
+            if(idEmployee==null ){
                 throw new Exception("Nhan vien ko ton tai");
             }
             p.setTitle(addPerLeaveAppEmployeeForm.getTitle());
@@ -47,8 +47,8 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
             Employee e = new Employee();
             e.setId(idEmployee);
             p.setEmployee(e);
+            p.setCreated_by(accountSercurity.getUserName());
             p.setModified_by(accountSercurity.getUserName());
-            p.setCreated_date(LocalDate.now());
             personalLeaveApplicationEmployeeRepository.save(p);
             check=true;
 

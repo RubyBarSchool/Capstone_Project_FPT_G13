@@ -16,5 +16,5 @@ public class GetAllAdvanceSalaryEmployeeVO {
     private String advanceSalary;
     private String title;
     private String content;
-    private Boolean status;
+    private String status;
 }
