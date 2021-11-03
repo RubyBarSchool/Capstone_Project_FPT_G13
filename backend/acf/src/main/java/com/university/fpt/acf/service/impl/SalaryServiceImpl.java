@@ -1,13 +1,16 @@
 package com.university.fpt.acf.service.impl;
 
+import com.university.fpt.acf.entity.HistorySalary;
 import com.university.fpt.acf.form.SearchSalaryForm;
 import com.university.fpt.acf.repository.SalaryCustomRepository;
+import com.university.fpt.acf.repository.SalaryRepository;
 import com.university.fpt.acf.service.SalaryService;
 import com.university.fpt.acf.vo.AttendanceVO;
 import com.university.fpt.acf.vo.SearchSalaryVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,6 +19,9 @@ public class SalaryServiceImpl implements SalaryService {
 
     @Autowired
     private SalaryCustomRepository salaryCustomRepository;
+
+    @Autowired
+    private SalaryRepository salaryRepository;
 
     @Override
     public List<SearchSalaryVO> searchSalaryHistory(SearchSalaryForm searchSalaryForm) {
@@ -68,7 +74,19 @@ public class SalaryServiceImpl implements SalaryService {
     }
 
     @Override
+    @Transactional
     public Boolean acceptSalary(Long id) {
-        return null;
+        try{
+            HistorySalary historySalary = salaryRepository.getById(id);
+            if(historySalary != null){
+                historySalary.setStatus(true);
+            }else {
+                throw new RuntimeException("id not exit");
+            }
+            salaryRepository.save(historySalary);
+            return true;
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
     }
 }
