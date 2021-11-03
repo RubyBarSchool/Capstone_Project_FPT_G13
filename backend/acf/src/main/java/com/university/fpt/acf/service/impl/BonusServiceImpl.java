@@ -8,6 +8,7 @@ import com.university.fpt.acf.form.AddBonusAdminForm;
 import com.university.fpt.acf.form.SearchBonusAdminForm;
 import com.university.fpt.acf.repository.BonusCustomRepository;
 import com.university.fpt.acf.repository.BonusRepository;
+import com.university.fpt.acf.repository.EmployeeRepository;
 import com.university.fpt.acf.service.BonusService;
 import com.university.fpt.acf.vo.GetAllAdvanceSalaryEmployeeVO;
 import com.university.fpt.acf.vo.SearchBonusAdminVO;
@@ -26,6 +27,9 @@ public class BonusServiceImpl implements BonusService {
     private  BonusRepository bonusRepository;
     @Autowired
     private BonusCustomRepository bonusCustomRepository;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
     @Override
     public List<SearchBonusAdminVO> searchBonus(SearchBonusAdminForm searchBonus) {
         List<SearchBonusAdminVO> list = new ArrayList<>();
@@ -60,15 +64,11 @@ public class BonusServiceImpl implements BonusService {
             bonus.setReason(addBonus.getReason());
             bonus.setStatus(addBonus.getStatus());
             bonus.setEffectiveDate(addBonus.getEffectiveDate());
-            for(Long id :addBonus.getListIdEmployee()) {
-                Employee e = new Employee();
-                e.setId(id);
-                bonus.getEmployees().add(e);
-            }
+            bonus.setEmployees(employeeRepository.getEmployeeByIdS(addBonus.getListIdEmployee()));
             AccountSercurity accountSercurity = new AccountSercurity();
             bonus.setCreated_by(accountSercurity.getUserName());
             bonus.setCreated_date(LocalDate.now());
-            bonusRepository.save(bonus);
+            bonusRepository.saveAndFlush(bonus);
             check=true;
 
         }catch (Exception e){

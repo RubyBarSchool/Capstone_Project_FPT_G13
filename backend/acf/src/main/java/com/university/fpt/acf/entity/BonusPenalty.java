@@ -5,10 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToMany;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,8 +23,12 @@ public class BonusPenalty extends EntityCommon {
     private Boolean bonus;
 
 
-    @ManyToMany(mappedBy = "bonusPenalties",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
-    private Collection<Employee> employees = new ArrayList<>();
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "employee_bonus_penalties",
+            joinColumns = @JoinColumn(name = "bonus_penalty_id"),
+            inverseJoinColumns = @JoinColumn(name = "employee_id")
+    )
+    private Collection<Employee> employees;
 
 
 }
