@@ -54,6 +54,30 @@ public class BonusServiceImpl implements BonusService {
     }
 
     @Override
+    public List<SearchBonusAdminVO> searchBonusUser() {
+        List<SearchBonusAdminVO> list = new ArrayList<>();
+        try {
+            AccountSercurity accountSercurity = new AccountSercurity();
+            list = bonusCustomRepository.searchBonusUser(accountSercurity.getUserName());
+        } catch (Exception e) {
+            throw new RuntimeException("Error bonus repository " + e.getMessage());
+        }
+        return  list;
+    }
+
+    @Override
+    public int totalSearchBonusUser() {
+        int size;
+        try {
+            AccountSercurity accountSercurity = new AccountSercurity();
+            size = bonusCustomRepository.totalSearchBonusUser(accountSercurity.getUserName());
+        } catch (Exception e) {
+            throw new RuntimeException("Error bonus  repository " + e.getMessage());
+        }
+        return  size;
+    }
+
+    @Override
     @Transactional
     public Boolean addBonus(AddBonusAdminForm addBonus) {
         boolean check = false;

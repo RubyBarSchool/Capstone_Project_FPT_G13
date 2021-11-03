@@ -10,6 +10,9 @@ import java.util.List;
 public interface BonusService {
     List<SearchBonusAdminVO> searchBonus(SearchBonusAdminForm searchBonus);
     int totalSearchBonus(SearchBonusAdminForm searchBonus);
+    List<SearchBonusAdminVO> searchBonusUser();
+    int totalSearchBonusUser();
+
     Boolean addBonus(AddBonusAdminForm addBonus);
     Boolean deleteBonus(Long id);
     Boolean updateBonus(UpdateBonusForm updateBonus);

@@ -8,4 +8,6 @@ import java.util.List;
 public interface BonusCustomRepository {
     List<SearchBonusAdminVO> searchBonus(SearchBonusAdminForm searchForm);
     int totalSearchBonus(SearchBonusAdminForm searchForm);
+    List<SearchBonusAdminVO> searchBonusUser(String username);
+    int totalSearchBonusUser(String username);
 }

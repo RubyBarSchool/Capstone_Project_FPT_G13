@@ -8,6 +8,7 @@ import com.university.fpt.acf.vo.SearchBonusAdminVO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,16 +21,16 @@ public class BonusCustomRepositoryImpl extends CommonRepository implements Bonus
         Map<String, Object> params = new HashMap<>();
         sql.append("select  new com.university.fpt.acf.vo.SearchBonusAdminVO(b.id,b.title,b.reason,b.money,b.status,b.effectiveDate) from BonusPenalty b where b.deleted=false and b.bonus=true");
 
-        if(searchForm.getTitle()!=null){
+        if(searchForm.getTitle()!=null && !searchForm.getTitle().isEmpty()){
             sql.append(" and LOWER(b.title) like :title ");
             params.put("title","%"+searchForm.getTitle().toLowerCase()+"%");
         }
-        if(searchForm.getStatus()!=null){
-            sql.append(" and LOWER(b.status) =:status ");
+        if(searchForm.getStatus()!=null ){
+            sql.append(" and b.status = :status ");
             params.put("status",searchForm.getStatus());
         }
         if (searchForm.getDate() != null && !searchForm.getDate().isEmpty()) {
-            sql.append(" and  b.effective_date BETWEEN :dateStart and :dateEnd ");
+            sql.append(" and  b.effectiveDate BETWEEN :dateStart and :dateEnd ");
             params.put("dateStart", searchForm.getDate().get(0));
             params.put("dateEnd", searchForm.getDate().get(1));
         }
@@ -46,16 +47,16 @@ public class BonusCustomRepositoryImpl extends CommonRepository implements Bonus
         Map<String, Object> params = new HashMap<>();
         sql.append("select  COUNT(*) from BonusPenalty b where b.deleted=false");
 
-        if(searchForm.getTitle()!=null){
+        if(searchForm.getTitle()!=null && !searchForm.getTitle().isEmpty()){
             sql.append(" and LOWER(b.title) like :title ");
             params.put("title","%"+searchForm.getTitle().toLowerCase()+"%");
         }
-        if(searchForm.getStatus()!=null){
-            sql.append(" and LOWER(b.status) =:status ");
+        if(searchForm.getStatus()!=null ){
+            sql.append(" and b.status = :status ");
             params.put("status",searchForm.getStatus());
         }
         if (searchForm.getDate() != null && !searchForm.getDate().isEmpty()) {
-            sql.append(" and  b.effective_date BETWEEN :dateStart and :dateEnd ");
+            sql.append(" and  b.effectiveDate BETWEEN :dateStart and :dateEnd ");
             params.put("dateStart", searchForm.getDate().get(0));
             params.put("dateEnd", searchForm.getDate().get(1));
         }
@@ -63,5 +64,38 @@ public class BonusCustomRepositoryImpl extends CommonRepository implements Bonus
         TypedQuery<Long> query = super.createQuery(sql.toString(),params, Long.class);
 
         return query.getSingleResult().intValue();
+    }
+
+    @Override
+    public List<SearchBonusAdminVO> searchBonusUser(String username) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append("select  new com.university.fpt.acf.vo.SearchBonusAdminVO(b.id,b.title,b.reason,b.money,b.status," +
+                "b.effectiveDate) from Account a inner join a.employee e inner join e.bonusPenalties b  where b.deleted" +
+                " = false and b.bonus = true and a.username = :username");
+
+        params.put("username",username);
+        LocalDate localDate = LocalDate.now();
+        int day = localDate.getDayOfMonth() ;
+        int month = localDate.getMonth().getValue() ;
+        int year = localDate.getYear() ;
+        if(day<10){
+        }
+//        if (searchForm.getDate() != null && !searchForm.getDate().isEmpty()) {
+//            sql.append(" and  b.effective_date BETWEEN :dateStart and :dateEnd ");
+//            params.put("dateStart", searchForm.getDate().get(0));
+//            params.put("dateEnd", searchForm.getDate().get(1));
+//        }
+//        sql.append(" ORDER by b.id desc ");
+//        TypedQuery<SearchBonusAdminVO> query = super.createQuery(sql.toString(),params, SearchBonusAdminVO.class);
+//        query.setFirstResult((searchForm.getPageIndex()-1)* searchForm.getPageSize());
+//        query.setMaxResults(searchForm.getPageSize());
+//        return query.getResultList();
+        return  null;
+    }
+
+    @Override
+    public int totalSearchBonusUser(String username) {
+        return 0;
     }
 }
