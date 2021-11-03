@@ -46,7 +46,7 @@ public class PunishCustomRepositoryImpl extends CommonRepository implements Puni
         sql.append("select  COUNT(*) from BonusPenalty b where b.deleted=false and b.bonus = false");
 
         if(searchForm.getTitle()!=null){
-            sql.append(" and LOWER(a.title) like :title ");
+            sql.append(" and LOWER(b.title) like :title ");
             params.put("title","%"+searchForm.getTitle().toLowerCase()+"%");
         }
         if(searchForm.getStatus()!=null){
@@ -58,7 +58,7 @@ public class PunishCustomRepositoryImpl extends CommonRepository implements Puni
             params.put("dateStart", searchForm.getDate().get(0));
             params.put("dateEnd", searchForm.getDate().get(1));
         }
-        sql.append(" ORDER by a.id desc ");
+        sql.append(" ORDER by b.id desc ");
         TypedQuery<Long> query = super.createQuery(sql.toString(),params, Long.class);
         return query.getSingleResult().intValue();
     }

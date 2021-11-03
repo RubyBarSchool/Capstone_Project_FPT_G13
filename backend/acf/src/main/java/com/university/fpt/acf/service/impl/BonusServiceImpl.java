@@ -6,6 +6,7 @@ import com.university.fpt.acf.entity.BonusPenalty;
 import com.university.fpt.acf.entity.Employee;
 import com.university.fpt.acf.form.AddBonusAdminForm;
 import com.university.fpt.acf.form.SearchBonusAdminForm;
+import com.university.fpt.acf.form.UpdateBonusForm;
 import com.university.fpt.acf.repository.BonusCustomRepository;
 import com.university.fpt.acf.repository.BonusRepository;
 import com.university.fpt.acf.repository.EmployeeRepository;
@@ -87,6 +88,30 @@ public class BonusServiceImpl implements BonusService {
             bonus.setCreated_by(accountSercurity.getUserName());
             bonus.setCreated_date(LocalDate.now());
             bonusRepository.save(bonus);
+            check=true;
+
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+        return check;
+    }
+
+    @Override
+    public Boolean updateBonus(UpdateBonusForm updateBonus) {
+        boolean check = false;
+        try{
+            BonusPenalty bonus = bonusRepository.getBonusById(updateBonus.getId());
+            bonus.setBonus(true);
+            bonus.setTitle(updateBonus.getTitle());
+            bonus.setMoney(updateBonus.getMoney());
+            bonus.setReason(updateBonus.getReason());
+            bonus.setStatus(updateBonus.getStatus());
+            bonus.setEffectiveDate(updateBonus.getEffectiveDate());
+            bonus.setEmployees(employeeRepository.getEmployeeByIdS(updateBonus.getListIdEmployee()));
+            AccountSercurity accountSercurity = new AccountSercurity();
+            bonus.setCreated_by(accountSercurity.getUserName());
+            bonus.setCreated_date(LocalDate.now());
+            bonusRepository.saveAndFlush(bonus);
             check=true;
 
         }catch (Exception e){

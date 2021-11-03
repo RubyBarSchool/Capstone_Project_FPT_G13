@@ -1,10 +1,7 @@
 package com.university.fpt.acf.controller;
 
 import com.university.fpt.acf.common.entity.ResponseCommon;
-import com.university.fpt.acf.form.AddAdvanceSalaryEmployeeForm;
-import com.university.fpt.acf.form.AddBonusAdminForm;
-import com.university.fpt.acf.form.SearchBonusAdminForm;
-import com.university.fpt.acf.form.SearchColorForm;
+import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.service.BonusService;
 import com.university.fpt.acf.vo.ColorVO;
 import com.university.fpt.acf.vo.SearchBonusAdminVO;
@@ -86,6 +83,30 @@ private BonusService bonusService;
                 message="Hủy đơn  thành công!";
             }else{
                 message="Hủy đơn không thành công!";
+            }
+            responseCommon.setMessage(message);
+            responseCommon.setData(checkDelete);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+        }catch (Exception e){
+            message = e.getMessage();
+            responseCommon.setData(checkDelete);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
+    @PutMapping("/update")
+    public ResponseEntity<ResponseCommon> updateBonus(@RequestBody UpdateBonusForm updateForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message="";
+        Boolean checkDelete = false;
+        try {
+            checkDelete = bonusService.updateBonus(updateForm);
+            if(checkDelete==true){
+                message="Chỉnh sửa đơn thưởng thành công!";
+            }else{
+                message="Chỉnh sửa đơn thưởng không thành công!";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkDelete);

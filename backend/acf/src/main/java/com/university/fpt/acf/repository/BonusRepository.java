@@ -13,6 +13,7 @@ import java.time.LocalDate;
 @Transactional
 @Repository
 public interface BonusRepository extends JpaRepository<BonusPenalty,Long> {
-    @Query("select  b from BonusPenalty b where b.id=:id")
+    @Query("select  b from BonusPenalty b where b.id=:id and b.bonus = true")
     BonusPenalty getBonusById(@Param("id") Long id);
+
 }

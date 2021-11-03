@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PunishRepository extends JpaRepository<BonusPenalty,Long> {
-    @Query("select  b from BonusPenalty b where b.id=:id ")
-    BonusPenalty getBonusById(@Param("id") Long id);
+    @Query("select  b from BonusPenalty b where b.id=:id and b.bonus=false ")
+    BonusPenalty getPunishById(@Param("id") Long id);
 }

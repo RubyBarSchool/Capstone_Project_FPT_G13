@@ -21,7 +21,7 @@ public class BonusCustomRepositoryImpl extends CommonRepository implements Bonus
         sql.append("select  new com.university.fpt.acf.vo.SearchBonusAdminVO(b.id,b.title,b.reason,b.money,b.status,b.effectiveDate) from BonusPenalty b where b.deleted=false and b.bonus=true");
 
         if(searchForm.getTitle()!=null){
-            sql.append(" and LOWER(a.title) like :title ");
+            sql.append(" and LOWER(b.title) like :title ");
             params.put("title","%"+searchForm.getTitle().toLowerCase()+"%");
         }
         if(searchForm.getStatus()!=null){
@@ -33,7 +33,7 @@ public class BonusCustomRepositoryImpl extends CommonRepository implements Bonus
             params.put("dateStart", searchForm.getDate().get(0));
             params.put("dateEnd", searchForm.getDate().get(1));
         }
-        sql.append(" ORDER by a.id desc ");
+        sql.append(" ORDER by b.id desc ");
         TypedQuery<SearchBonusAdminVO> query = super.createQuery(sql.toString(),params, SearchBonusAdminVO.class);
         query.setFirstResult((searchForm.getPageIndex()-1)* searchForm.getPageSize());
         query.setMaxResults(searchForm.getPageSize());
@@ -47,7 +47,7 @@ public class BonusCustomRepositoryImpl extends CommonRepository implements Bonus
         sql.append("select  COUNT(*) from BonusPenalty b where b.deleted=false");
 
         if(searchForm.getTitle()!=null){
-            sql.append(" and LOWER(a.title) like :title ");
+            sql.append(" and LOWER(b.title) like :title ");
             params.put("title","%"+searchForm.getTitle().toLowerCase()+"%");
         }
         if(searchForm.getStatus()!=null){
@@ -59,7 +59,7 @@ public class BonusCustomRepositoryImpl extends CommonRepository implements Bonus
             params.put("dateStart", searchForm.getDate().get(0));
             params.put("dateEnd", searchForm.getDate().get(1));
         }
-        sql.append(" ORDER by a.id desc ");
+        sql.append(" ORDER by b.id desc ");
         TypedQuery<Long> query = super.createQuery(sql.toString(),params, Long.class);
 
         return query.getSingleResult().intValue();
