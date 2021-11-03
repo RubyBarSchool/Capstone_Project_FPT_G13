@@ -15,12 +15,30 @@
         <a-input
           placeholder="Họ và tên"
           style="width: 150px"
+          v-model="dataSearch.name"
         />
-        <a-input
-          placeholder="Chức vụ"
-          style="width: 150px"
+        <a-select
+            placeholder="Chức vụ"
+            :filter-option="false"
+            @search="fetchPosition"
+            style="width: 140px"
+            v-model="dataSearch.idPosition"
+            show-search
+          >
+            <a-select-option
+              v-for="(position, index) in dataPositions"
+              :value="position.id"
+              :key="index"
+            >
+              {{ position.name }}
+            </a-select-option>
+          </a-select>
+        <a-range-picker
+          @change="search"
+          v-model="dataSearch.date"
+          :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+          format="DD/MM/YYYY"
         />
-        <a-date-picker placeholder="Chọn ngày"  />
         <a-button type="primary" :style="{ 'margin-left': '5px' }">
           <font-awesome-icon
             :icon="['fas', 'search']"
@@ -72,10 +90,10 @@
               {{ record.totalMoney }}
             </template>
             <template slot="status" slot-scope="text, record">
-                <a-tag :color="record.status ? 'green' : 'blue'">
-                  {{ record.status ? "Đã thanh toán" : "Chưa thanh toán" }}
-                </a-tag>
-              </template>
+              <a-tag :color="record.status ? 'green' : 'blue'">
+                {{ record.status ? "Đã thanh toán" : "Chưa thanh toán" }}
+              </a-tag>
+            </template>
           </a-table>
         </div>
         <!-- table content -->
@@ -86,6 +104,7 @@
 </template>
 
 <script>
+import userService from "../service/userService";
 import historyLuongAdminService from "@/service/historyLuongAdmin.js";
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
@@ -111,6 +130,12 @@ export default {
         total: 0,
       },
       dataSourceTable: [],
+      dataPositions: [],
+      dataPosition: {
+        name: "",
+        pageIndex: 1,
+        pageSize: 10,
+      },
       columns: [
         {
           title: "ID",
@@ -194,6 +219,7 @@ export default {
   },
   created() {
     this.submitSearch();
+    this.getAllPosition();
   },
   methods: {
     handleTableChange(pagination) {
@@ -222,6 +248,25 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+    },
+    fetchPosition(value) {
+      this.dataPosition.name = value;
+      this.getAllPosition();
+    },
+    getAllPosition() {
+      userService
+        .getAllPosition(this.dataPosition)
+        .then((response) => {
+          this.dataPositions = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    search() {
+      this.dataSearch.pageIndex = 1;
+      this.dataSearch.total = 0;
+      this.submitSearch();
     },
   },
 };
