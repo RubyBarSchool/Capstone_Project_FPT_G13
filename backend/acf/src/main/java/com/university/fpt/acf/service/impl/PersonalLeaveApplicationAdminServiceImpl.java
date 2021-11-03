@@ -54,7 +54,7 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
                 if(p==null){
                     throw new Exception(" Personal Leave Application ko ton tai ");
                 }
-                p.setAccept(true);
+                p.setAccept("1");
                 p.setComment(acceptForm.getComment());
                 p.setIdEmployeeAccept(acceptForm.getIdAcceptEmployee());
                 AccountSercurity accountSercurity = new AccountSercurity();

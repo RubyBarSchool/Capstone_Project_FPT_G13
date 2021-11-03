@@ -20,7 +20,7 @@ public class AdvaceSalary extends EntityCommon {
     private String content;
 
     private String comment;
-    private Boolean accept = false;
+    private String accept = "-1";
     private Long idEmployeeAccept;
     private LocalDate dateAccept;
 

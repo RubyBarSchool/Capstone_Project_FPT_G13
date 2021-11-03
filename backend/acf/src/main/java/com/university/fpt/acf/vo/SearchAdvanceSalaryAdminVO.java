@@ -11,7 +11,7 @@ public class SearchAdvanceSalaryAdminVO {
     private Long id;
     private String title;
     private String advanceSalary;
-    private Boolean status;
+    private String status;
     private Long idEmployee;
     private String nameEmployee;
 }

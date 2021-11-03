@@ -22,7 +22,7 @@ public class PersonaLeaveApplication extends EntityCommon {
 
     private String fileAttach;
 
-    private Boolean accept = false;
+    private String accept = "-1";
     private String comment;
     private Long idEmployeeAccept;
     private LocalDate dateAccept;

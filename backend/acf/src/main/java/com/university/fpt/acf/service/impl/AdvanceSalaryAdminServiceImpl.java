@@ -65,7 +65,7 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
             AccountSercurity accountSercurity = new AccountSercurity();
             Long id = accountManagerRepository.getIdEmployeeByUsername(accountSercurity.getUserName());
             AdvaceSalary data = adminRepository.getDetailAdvanceSalaryById(id);
-            data.setAccept(true);
+            data.setAccept("1");
             data.setDateAccept(LocalDate.now());
             data.setIdEmployeeAccept(id);
             data.setModified_by(accountSercurity.getUserName());

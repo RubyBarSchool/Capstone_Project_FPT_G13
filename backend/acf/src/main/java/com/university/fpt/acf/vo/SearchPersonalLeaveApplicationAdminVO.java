@@ -10,11 +10,12 @@ import java.time.LocalDate;
 @Data
 public class SearchPersonalLeaveApplicationAdminVO {
     private Long idApplication;
+    private LocalDate date;
     private String fileAttach;
     private String title;
     private String comment;
     private String content;
     private Long idEmployee;
     private String nameEmployee;
-    private Boolean statusAccept;
+    private String statusAccept;
 }

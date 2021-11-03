@@ -18,7 +18,7 @@ public class PersonalLeaveApplicationEmployeeCustomRepositoryImpl extends Common
     public List<SearchPersonalApplicationEmployeeVO> searchPerLeaApplicationEmployee(SearchPersonalApplicationEmployeeForm searchForm,Long idEmployee) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append(" select new com.university.fpt.acf.vo.SearchPersonalApplicationEmployeeVO(p.id,p.fileAttach,p.title,p.comment,p.content,p.accept) from PersonaLeaveApplication p where p.employee.id=:id ");
+        sql.append(" select new com.university.fpt.acf.vo.SearchPersonalApplicationEmployeeVO(p.id,p.created_date,p.fileAttach,p.title,p.comment,p.content,p.accept) from PersonaLeaveApplication p where p.deleted = false and p.employee.id=:id ");
         params.put("id",idEmployee);
         if(searchForm.getStatus() != null ){
             sql.append(" and p.accept=:status ");
@@ -44,7 +44,7 @@ public class PersonalLeaveApplicationEmployeeCustomRepositoryImpl extends Common
     public int totalSearch(SearchPersonalApplicationEmployeeForm searchForm,Long idEmployee) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append(" select COUNT(*) from PersonaLeaveApplication p where p.employee.id=:id ");
+        sql.append(" select COUNT(*) from PersonaLeaveApplication p where  p.deleted = false and p.employee.id=:id ");
         params.put("id",idEmployee);
         if(searchForm.getStatus() != null ){
             sql.append(" and p.accept=:status ");
