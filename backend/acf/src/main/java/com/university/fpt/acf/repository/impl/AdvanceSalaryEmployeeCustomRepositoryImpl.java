@@ -17,7 +17,7 @@ public class AdvanceSalaryEmployeeCustomRepositoryImpl extends CommonRepository 
     public List<GetAllAdvanceSalaryEmployeeVO> searchAdvanceSalary(SearchAdvanceEmployeeForm advanceForm,Long idEmployee) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append(" select new com.university.fpt.acf.vo.GetAllAdvanceSalaryEmployeeVO(a.id,a.advaceSalary,a.title,a.content,a.accept) from AdvaceSalary a where a.employee.id=:id and a.deleted=false");
+        sql.append(" select new com.university.fpt.acf.vo.GetAllAdvanceSalaryEmployeeVO(a.id,a.created_date,a.advaceSalary,a.title,a.content,a.accept) from AdvaceSalary a where a.employee.id=:id and a.deleted=false");
         params.put("id",idEmployee);
         if(!advanceForm.getTitle().isEmpty() && advanceForm.getTitle()!=null){
             sql.append(" and LOWER(a.title) like :title ");

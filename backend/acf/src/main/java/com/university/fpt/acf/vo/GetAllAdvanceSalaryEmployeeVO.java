@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class GetAllAdvanceSalaryEmployeeVO {
     private Long id;
+    private LocalDate date;
     private String advanceSalary;
     private String title;
     private String content;

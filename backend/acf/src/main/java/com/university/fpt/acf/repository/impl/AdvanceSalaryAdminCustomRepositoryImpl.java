@@ -20,7 +20,7 @@ public class AdvanceSalaryAdminCustomRepositoryImpl extends CommonRepository imp
     public List<SearchAdvanceSalaryAdminVO> searchAdvanceSalary(SearchAdvanceSalaryAdminForm searchForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append(" select new com.university.fpt.acf.vo.SearchAdvanceSalaryAdminVO(a.id,a.title,a.advaceSalary,a.accept,e.id,e.fullName) from AdvaceSalary a inner join a.employee  e where a.deleted=false");
+        sql.append(" select new com.university.fpt.acf.vo.SearchAdvanceSalaryAdminVO(a.id,a.created_date,a.title,a.advaceSalary,a.accept,e.id,e.fullName) from AdvaceSalary a inner join a.employee  e where a.deleted=false");
         if(!searchForm.getTitle().isEmpty() && searchForm.getTitle()!=null){
             sql.append(" and LOWER(a.title) like :title ");
             params.put("title","%"+searchForm.getTitle().toLowerCase()+"%");
@@ -33,11 +33,11 @@ public class AdvanceSalaryAdminCustomRepositoryImpl extends CommonRepository imp
             sql.append(" and LOWER(a.accept) =:status ");
             params.put("status",searchForm.getStatus());
         }
-//        if (advanceForm.getDate() != null && !advanceForm.getDate().isEmpty()) {
-//            sql.append(" and  a.date BETWEEN :dateStart and :dateEnd ");
-//            params.put("dateStart", advanceForm.getDate().get(0));
-//            params.put("dateEnd", advanceForm.getDate().get(1));
-//        }
+        if (searchForm.getDate() != null && !searchForm.getDate().isEmpty()) {
+            sql.append(" and  a.created_date BETWEEN :dateStart and :dateEnd ");
+            params.put("dateStart", searchForm.getDate().get(0));
+            params.put("dateEnd", searchForm.getDate().get(1));
+        }
         sql.append(" ORDER by a.id desc ");
         TypedQuery<SearchAdvanceSalaryAdminVO> query = super.createQuery(sql.toString(),params, SearchAdvanceSalaryAdminVO.class);
         query.setFirstResult((searchForm.getPageIndex()-1)* searchForm.getPageSize());
@@ -62,11 +62,11 @@ public class AdvanceSalaryAdminCustomRepositoryImpl extends CommonRepository imp
             sql.append(" and LOWER(a.accept) =:status ");
             params.put("status",searchForm.getStatus());
         }
-//        if (advanceForm.getDate() != null && !advanceForm.getDate().isEmpty()) {
-//            sql.append(" and  a.date BETWEEN :dateStart and :dateEnd ");
-//            params.put("dateStart", advanceForm.getDate().get(0));
-//            params.put("dateEnd", advanceForm.getDate().get(1));
-//        }
+        if (searchForm.getDate() != null && !searchForm.getDate().isEmpty()) {
+            sql.append(" and  a.created_date BETWEEN :dateStart and :dateEnd ");
+            params.put("dateStart", searchForm.getDate().get(0));
+            params.put("dateEnd", searchForm.getDate().get(1));
+        }
         sql.append(" ORDER by a.id desc ");
         TypedQuery<Long> query = super.createQuery(sql.toString(),params, Long.class);
         return query.getSingleResult().intValue();
