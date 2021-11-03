@@ -130,6 +130,13 @@ export const router = new Router({
             component: () =>
                 import ("./pages/HistoryLuongAdmin.vue"),
         },
+        {
+            path: "/thuongadmin",
+            name: "ThuongAdmin",
+            // lazy-loaded
+            component: () =>
+                import ("./pages/ThuongAdmin.vue"),
+        },
     ],
 });
 
