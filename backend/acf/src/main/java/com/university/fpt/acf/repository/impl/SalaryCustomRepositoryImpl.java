@@ -16,7 +16,8 @@ public class SalaryCustomRepositoryImpl extends CommonRepository implements Sala
     public List<SearchSalaryVO> searchSalary(SearchSalaryForm searchSalaryForm) {
         StringBuilder sqlAcc = new StringBuilder("");
         Map<String, Object> paramsAcc = new HashMap<>();
-        sqlAcc.append(" select new com.university.fpt.acf.vo.SearchSalaryVO(hs.id,hs.created_date,e.fullName,p.name) " +
+        sqlAcc.append(" select new com.university.fpt.acf.vo.SearchSalaryVO(hs.id,hs.created_date,e.fullName,p.name,hs.countWork,hs.salary" +
+                ",hs.bonus,hs.penalty,hs.advanceSalary,hs.totalMoney,hs.status) " +
                 " from HistorySalary hs inner join hs.employee e inner join e.position p where 1=1");
 //        if (attendanceFrom.getName() != null && !attendanceFrom.getName().isEmpty()) {
 //            sqlAcc.append(" and LOWER(e.fullName) like :name ");
