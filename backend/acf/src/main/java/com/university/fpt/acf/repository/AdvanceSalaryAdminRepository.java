@@ -14,7 +14,5 @@ public interface AdvanceSalaryAdminRepository extends JpaRepository<AdvaceSalary
     SearchAdvanceSalaryAdminVO getDetailById(@Param("id") Long id);
     @Query("select a from AdvaceSalary a inner join a.employee  e where a.deleted=false and a.id=:id")
     AdvaceSalary getDetailAdvanceSalaryById(@Param("id") Long id);
-
-
 }
 

@@ -4,13 +4,12 @@ import lombok.Data;
 
 import java.time.LocalDate;
 import java.util.List;
+
 @Data
-public class SearchAdvanceEmployeeForm {
+public class SearchBonusAdminForm {
     private String title;
-    private String content;
-    private Boolean status;
     private List<LocalDate> date;
+    private Boolean status;
     private Integer pageIndex;
     private Integer pageSize;
-//    private Long idEmployee;
 }
