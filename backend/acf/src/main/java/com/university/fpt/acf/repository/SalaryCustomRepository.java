@@ -9,6 +9,9 @@ import com.university.fpt.acf.vo.SearchSalaryVO;
 import java.util.List;
 
 public interface SalaryCustomRepository {
-    List<SearchSalaryVO> searchSalary(SearchSalaryForm searchSalaryForm);
-    int getTotalSearchSalary(SearchSalaryForm searchSalaryForm);
+    List<SearchSalaryVO> searchSalaryHistory(SearchSalaryForm searchSalaryForm);
+    int getTotalSearchSalaryHistory(SearchSalaryForm searchSalaryForm);
+
+    List<SearchSalaryVO> searchSalaryAccept(SearchSalaryForm searchSalaryForm);
+    int getTotalSearchSalaryAccept(SearchSalaryForm searchSalaryForm);
 }

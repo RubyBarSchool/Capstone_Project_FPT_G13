@@ -15,7 +15,7 @@ public class SearchSalaryForm {
     @NotNull(message = "name cannot be null")
     private String name;
     @NotNull(message = "position cannot be null")
-    private Long idPositon;
+    private List<Long> idPositons;
     @NotNull(message = "date cannot be null")
     private List<LocalDate> date;
     @NotNull(message = "pageIndex cannot be null")

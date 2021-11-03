@@ -7,6 +7,9 @@ import com.university.fpt.acf.vo.SearchSalaryVO;
 import java.util.List;
 
 public interface SalaryService {
-    List<SearchSalaryVO> searchSalary(SearchSalaryForm searchSalaryForm);
-    int getTotalAllAttendance(SearchSalaryForm searchSalaryForm);
+    List<SearchSalaryVO> searchSalaryHistory(SearchSalaryForm searchSalaryForm);
+    int getTotalAllSalaryHistory(SearchSalaryForm searchSalaryForm);
+
+    List<SearchSalaryVO> searchSalaryAccept(SearchSalaryForm searchSalaryForm);
+    int getTotalAllSalaryAccept(SearchSalaryForm searchSalaryForm);
 }
