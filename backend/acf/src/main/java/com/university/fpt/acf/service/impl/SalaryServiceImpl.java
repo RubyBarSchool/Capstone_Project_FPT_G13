@@ -44,11 +44,26 @@ public class SalaryServiceImpl implements SalaryService {
 
     @Override
     public List<SearchSalaryVO> searchSalaryAccept(SearchSalaryForm searchSalaryForm) {
-        return null;
+        List<SearchSalaryVO> searchSalaryVOS = new ArrayList<>();
+        try {
+            searchSalaryVOS = salaryCustomRepository.searchSalaryAccept(searchSalaryForm);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return searchSalaryVOS;
     }
 
     @Override
     public int getTotalAllSalaryAccept(SearchSalaryForm searchSalaryForm) {
-        return 0;
+        if (searchSalaryForm.getTotal() != null && searchSalaryForm.getTotal() != 0) {
+            return searchSalaryForm.getTotal().intValue();
+        }
+        int total = 0;
+        try {
+            total = salaryCustomRepository.getTotalSearchSalaryAccept(searchSalaryForm);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return total;
     }
 }

@@ -80,7 +80,7 @@ public class SalaryCustomRepositoryImpl extends CommonRepository implements Sala
         Map<String, Object> paramsAcc = new HashMap<>();
         sqlAcc.append(" select new com.university.fpt.acf.vo.SearchSalaryVO(hs.id,hs.created_date,e.fullName,p.name,hs.countWork,hs.salary" +
                 ",hs.bonus,hs.penalty,hs.advanceSalary,hs.totalMoney,hs.status) " +
-                " from HistorySalary hs inner join hs.employee e inner join e.position p where hs.status = true and hs.deleted = false ");
+                " from HistorySalary hs inner join hs.employee e inner join e.position p where hs.status = false and hs.deleted = false ");
 
         if (searchSalaryForm.getName() != null && !searchSalaryForm.getName().isEmpty()) {
             sqlAcc.append(" and LOWER(e.fullName) like :name ");
@@ -108,6 +108,29 @@ public class SalaryCustomRepositoryImpl extends CommonRepository implements Sala
 
     @Override
     public int getTotalSearchSalaryAccept(SearchSalaryForm searchSalaryForm) {
-        return 0;
+        StringBuilder sqlAcc = new StringBuilder("");
+        Map<String, Object> paramsAcc = new HashMap<>();
+        sqlAcc.append(" select COUNT(*)  from HistorySalary hs inner join hs.employee e inner join e.position p " +
+                "where hs.status = false and hs.deleted = false  ");
+
+        if (searchSalaryForm.getName() != null && !searchSalaryForm.getName().isEmpty()) {
+            sqlAcc.append(" and LOWER(e.fullName) like :name ");
+            paramsAcc.put("name", "%" + searchSalaryForm.getName() + "%");
+        }
+
+        if (searchSalaryForm.getIdPositons() != null && !searchSalaryForm.getIdPositons().isEmpty()) {
+            sqlAcc.append(" and p.id in :idPosition ");
+            paramsAcc.put("idPosition", searchSalaryForm.getIdPositons());
+        }
+
+
+        if (searchSalaryForm.getDate() != null && !searchSalaryForm.getDate().isEmpty()) {
+            sqlAcc.append(" and  hs.created_date BETWEEN :dateStart and :dateEnd ");
+            paramsAcc.put("dateStart", searchSalaryForm.getDate().get(0));
+            paramsAcc.put("dateEnd", searchSalaryForm.getDate().get(1));
+        }
+
+        TypedQuery<Long> queryAcc = super.createQuery(sqlAcc.toString(), paramsAcc, Long.class);
+        return queryAcc.getSingleResult().intValue();
     }
 }

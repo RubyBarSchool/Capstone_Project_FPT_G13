@@ -58,8 +58,35 @@ public class SalaryAdminController {
         List<SearchSalaryVO> searchSalaryVOS = new ArrayList<>();
         Integer total = 0;
         try {
-            searchSalaryVOS = salaryService.searchSalaryHistory(searchSalaryForm);
-            total = salaryService.getTotalAllSalaryHistory(searchSalaryForm);
+            searchSalaryVOS = salaryService.searchSalaryAccept(searchSalaryForm);
+            total = salaryService.getTotalAllSalaryAccept(searchSalaryForm);
+            responseCommon.setData(searchSalaryVOS);
+            responseCommon.setTotal(total);
+            message = "Get Salary successfully";
+            if (total.intValue() == 0) {
+                message = "Get Salary not found";
+            }
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = "Could not get Salary !";
+            responseCommon.setData(searchSalaryVOS);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
+
+    @PutMapping("/accept")
+    public ResponseEntity<ResponseCommon> salaryAcceptDone(@Valid @RequestBody SearchSalaryForm searchSalaryForm) {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        List<SearchSalaryVO> searchSalaryVOS = new ArrayList<>();
+        Integer total = 0;
+        try {
+            searchSalaryVOS = salaryService.searchSalaryAccept(searchSalaryForm);
+            total = salaryService.getTotalAllSalaryAccept(searchSalaryForm);
             responseCommon.setData(searchSalaryVOS);
             responseCommon.setTotal(total);
             message = "Get Salary successfully";
