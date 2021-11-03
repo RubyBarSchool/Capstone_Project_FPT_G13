@@ -1,6 +1,8 @@
 package com.university.fpt.acf.controller;
 
 import com.university.fpt.acf.common.entity.ResponseCommon;
+import com.university.fpt.acf.form.AddAdvanceSalaryEmployeeForm;
+import com.university.fpt.acf.form.AddBonusAdminForm;
 import com.university.fpt.acf.form.SearchBonusAdminForm;
 import com.university.fpt.acf.form.SearchColorForm;
 import com.university.fpt.acf.service.BonusService;
@@ -9,10 +11,7 @@ import com.university.fpt.acf.vo.SearchBonusAdminVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +45,58 @@ private BonusService bonusService;
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+    @PostMapping("/add")
+    public ResponseEntity<ResponseCommon> addBonus(@RequestBody AddBonusAdminForm addForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message="";
+        Boolean checkAdd = false;
+        try {
+
+            if(addForm==null){
+                message="Thông tin đang trống!";
+            }
+            checkAdd = bonusService.addBonus(addForm);
+            if(checkAdd==true){
+                message="Thêm đơn thưởng thành công!";
+            }else{
+                message="Thêm đơn thưởng lỗi!";
+            }
+            responseCommon.setMessage(message);
+            responseCommon.setData(checkAdd);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+        }catch (Exception e){
+            message = e.getMessage();
+            responseCommon.setData(checkAdd);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
+    @DeleteMapping("/delete")
+    public ResponseEntity<ResponseCommon> deleteBonus(@RequestParam Long id){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message="";
+        Boolean checkDelete = false;
+        try {
+            checkDelete = bonusService.deleteBonus(id);
+            if(checkDelete==true){
+                message="Hủy đơn  thành công!";
+            }else{
+                message="Hủy đơn không thành công!";
+            }
+            responseCommon.setMessage(message);
+            responseCommon.setData(checkDelete);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+        }catch (Exception e){
+            message = e.getMessage();
+            responseCommon.setData(checkDelete);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
 }

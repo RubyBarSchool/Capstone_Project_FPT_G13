@@ -11,7 +11,6 @@ public class AddBonusAdminForm {
     private List<Long> listIdEmployee;
     private String reason;
     private String money;
-    private int status;
-    private boolean bonus;
+    private Boolean status;
     private LocalDate effectiveDate;
 }

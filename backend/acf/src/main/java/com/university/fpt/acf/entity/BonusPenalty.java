@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
@@ -25,7 +26,7 @@ public class BonusPenalty extends EntityCommon {
     private Boolean bonus;
 
 
-    @ManyToMany(mappedBy = "bonusPenalties",fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "bonusPenalties",fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private Collection<Employee> employees = new ArrayList<>();
 
 
