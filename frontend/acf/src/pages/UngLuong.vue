@@ -23,11 +23,14 @@
             style="width: 150px"
             v-model="dataSearch.title"
           />
-          <a-input
-            placeholder="Nội dung"
+          <a-select
+            placeholder="Trạng thái"
+            v-model="dataSearch.status"
             style="width: 150px"
-            v-model="dataSearch.content"
-          />
+          >
+            <a-select-option value="false"> Chờ duyệt </a-select-option>
+            <a-select-option value="true"> Đã duyệt </a-select-option>
+          </a-select>
           <a-range-picker
             v-model="dataSearch.date"
             :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
@@ -144,6 +147,7 @@
                 <a-textarea
                   v-model="dataAdd.content"
                   placeholder="Lý do như nào thì viết vào đây"
+                 
                   :row="4"
                 />
               </a-form-model-item>
@@ -167,6 +171,7 @@
                 <a-input v-model="dataEdit.advanceSalary" />
               </a-form-model-item>
               <a-form-model-item label="Nội dung">
+               
                 <a-textarea v-model="dataEdit.content" placeholder="Lý do như nào thì viết vào đây" :row="4" />
               </a-form-model-item>
             </a-form-model>
@@ -195,6 +200,7 @@
               <a-form-model-item label="Nội dung">
                 <a-textarea
                   v-model="dataAdvanceSalaryEmployeeDetail.content"
+                 
                   :row="4"
                   disabled
                 />
@@ -235,7 +241,7 @@ export default {
         total: 0,
       },
       dataSourceTable: [],
-      dataEmployees: [],
+      dataAdvanceSalaryEmployees: [],
       dataAdd: {
         advanceSalary: "",
         content: "",
@@ -326,7 +332,7 @@ export default {
       ungLuongService
         .addAdvanceSalaryEmployee(this.dataAdd)
         .then((response) => {
-          this.dataEmployees = response.data.data;
+          this.dataAdvanceSalaryEmployees= response.data.data;
           this.submitSearch();
           if (response.data.data) {
             let type = "success";

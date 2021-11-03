@@ -18,12 +18,31 @@
             </div>
           </a-back-top>
           <!-- menu trên -->
-          <a-input placeholder="Nhân viên" style="width: 150px" />
-          <a-input placeholder="Tiêu đề" style="width: 150px" />
-          <a-input placeholder="Trạng thái" style="width: 150px" />
+          <a-input
+            placeholder="Nhân viên"
+            style="width: 150px"
+            v-model="dataSearch.nameEmployee"
+          />
+          <a-input
+            placeholder="Tiêu đề"
+            style="width: 150px"
+            v-model="dataSearch.title"
+          />
+          <a-select
+            placeholder="Trạng thái"
+            v-model="dataSearch.status"
+            style="width: 150px"
+          >
+            <a-select-option value="false"> Chờ duyệt </a-select-option>
+            <a-select-option value="true"> Đã duyệt </a-select-option>
+          </a-select>
           <a-date-picker format="YYYY-MM-DD" valueFormat="YYYY-MM-DD">
           </a-date-picker>
-          <a-button type="primary" :style="{ 'margin-left': '5px' }">
+          <a-button
+            type="primary"
+            :style="{ 'margin-left': '5px' }"
+            @click="submitSearch"
+          >
             <font-awesome-icon
               :icon="['fas', 'search']"
               :style="{ 'margin-right': '5px' }"
@@ -32,7 +51,7 @@
           </a-button>
 
           <!-- table content -->
-          <!-- <div :style="{ 'padding-top': '10px' }">
+          <div :style="{ 'padding-top': '10px' }">
             <a-table
               :columns="columns"
               :data-source="dataSourceTable"
@@ -45,49 +64,37 @@
               @change="handleTableChange"
             >
               <template slot="employee" slot-scope="text, record">
-                {{ record.username }}
+                {{ record.nameEmployee }}
               </template>
-              <template slot="title" slot-scope="text, record">
-                <div v-for="(item, index) in record.roles" :key="index">
-                  {{ item.name }}
-                </div>
+              <template slot="titlee" slot-scope="text, record">
+                {{ record.title }}
               </template>
-                <template slot="money" slot-scope="text, record">
-                {{ record.username }}
+              <template slot="money" slot-scope="text, record">
+                {{ record.advanceSalary }}
               </template>
               <template slot="status" slot-scope="text, record">
-                <a-tag :color="record.status ? 'green' : 'blue'">
-                  {{ record.status ? "Công khai" : "Nháp" }}
+                <a-tag :color="record.accept ? 'green' : 'gray'">
+                  {{ record.accept ? "Đã duyệt" : "Chờ duyệt" }}
                 </a-tag>
-              </template>
-              <template slot="time" slot-scope="text, record">
-                {{
-                  new Date(record.time).toLocaleDateString("en-GB", {
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                  })
-                }}
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-row>
                   <a-col :span="8">
-                    <a-button id="edit" @click="getAccountByID(record.id)">
+                    <a-button id="edit" @click="getDetailAdvanceSalaryAdmin(record.id)">
                       <font-awesome-icon :icon="['fas', 'eye']" />
                     </a-button>
                   </a-col>
                 </a-row>
               </template>
             </a-table>
-          </div> -->
+          </div>
           <!-- table content -->
 
-          <!-- popup profile-->
-          <!-- <a-modal
-            v-model="visibleProfile"
-            class="profile"
-            title="Xem đơn"
-            @ok="handleOk"
+          <!-- popup view-->
+          <a-modal
+            v-model="visibleView"
+            class="view"
+            title="Xem xét đơn xin ứng lương"
           >
             <template slot="footer">
               <a-button key="back" @click="handleCancel">Hủy</a-button>
@@ -95,24 +102,27 @@
               <a-button type="primary"> Chấp nhận </a-button>
             </template>
             <a-form-model>
+              <a-form-model-item label="Nhân viên">
+                <a-input v-model="dataAdvanceSalaryAdminDetail.nameEmployee" disabled />
+              </a-form-model-item>
               <a-form-model-item label="Tiêu đề">
-                <a-input v-model="dataAdd.username" disabled />
+                <a-input v-model="dataAdvanceSalaryAdminDetail.title" disabled />
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
-                <a-input v-model="dataAdd.password" disabled />
+                <a-input v-model="dataAdvanceSalaryAdminDetail.advanceSalary" disabled />
               </a-form-model-item>
               <a-form-model-item label="Nội dung">
-                <a-textarea v-model="value" :rows="4" disabled />
+                <a-textarea v-model="dataAdvanceSalaryAdminDetail.content" :rows="4" disabled />
               </a-form-model-item>
               <a-form-model-item label="Ghi chú">
                 <a-textarea
-                  v-model="value"
+                  v-model="dataAdvanceSalaryAdminDetail.note"
                   placeholder="Nhận xét như nào thì viết vào đây"
                   :rows="4"
                 />
               </a-form-model-item>
             </a-form-model>
-          </a-modal> -->
+          </a-modal>
           <!-- popup profile-->
         </div>
       </a-layout-content>
@@ -140,13 +150,20 @@ export default {
       },
       dataSearch: {
         employeeName: "",
-        pageIndex: 0,
-        pageSize: 0,
+        pageIndex: 1,
+        pageSize: 10,
         status: "",
         title: "",
         total: 0,
       },
       dataSourceTable: [],
+      dataAdvanceSalaryAdminDetail: {
+        nameEmployee: "",
+        title: "",
+        advanceSalary: "",
+        content: "",
+        note:"",
+      },
       columns: [
         {
           title: "ID",
@@ -164,10 +181,10 @@ export default {
         },
         {
           title: "Tiêu đề",
-          dataIndex: "title",
-          key: "title",
+          dataIndex: "titlee",
+          key: "titlee",
           width: 150,
-          scopedSlots: { customRender: "title" },
+          scopedSlots: { customRender: "titlee" },
         },
         {
           title: "Số tiền",
@@ -192,10 +209,13 @@ export default {
           scopedSlots: { customRender: "action" },
         },
       ],
+      visibleView: false,
     };
   },
   computed: {},
-  created() {},
+  created() {
+    this.submitSearch();
+  },
   methods: {
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
@@ -210,6 +230,56 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+    },
+    submitSearch() {
+      this.dataSearch.total = 0;
+      acceptUngLuongService
+        .searchAdvanceSalaryAdmin(this.dataSearch)
+        .then((response) => {
+          this.dataSourceTable = response.data.data;
+          this.dataSearch.total = response.data.total;
+          this.pagination.total = response.data.total;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
+    getDetailAdvanceSalaryAdmin(id) {
+      acceptUngLuongService
+        .getDetailAdvanceSalaryAdmin(id)
+        .then((response) => {
+          this.dataAdvanceSalaryAdminDetail = response.data.data;
+          this.visibleView = true;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    submitAccept() {
+      acceptUngLuongService
+        .acceptAdvanceSalaryAdmin()
+        .then((response) => {
+          if (response.data.data) {
+            let type = "success";
+            let message = "Cập nhật";
+            let description = "Cập nhật trạng thái đơn thành công";
+            this.notifi(type, message, description);
+            this.submitSearch();
+          } else {
+            let type = "error";
+            let message = "Cập nhật";
+            let description = "Cập nhật trạng thái đơn thành công";
+            this.notifi(type, message, description);
+            this.submitSearch();
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    handleCancel() {
+      this.visibleView = false;
     },
   },
 };
