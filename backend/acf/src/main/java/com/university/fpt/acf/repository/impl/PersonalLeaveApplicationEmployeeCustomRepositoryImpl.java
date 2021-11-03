@@ -29,7 +29,7 @@ public class PersonalLeaveApplicationEmployeeCustomRepositoryImpl extends Common
             params.put("title","%"+searchForm.getTitle().toLowerCase()+"%");
         }
         if (searchForm.getDate() != null && !searchForm.getDate().isEmpty()) {
-            sql.append(" and  p.date BETWEEN :dateStart and :dateEnd ");
+            sql.append(" and  p.created_date BETWEEN :dateStart and :dateEnd ");
             params.put("dateStart", searchForm.getDate().get(0));
             params.put("dateEnd", searchForm.getDate().get(1));
         }
@@ -55,7 +55,7 @@ public class PersonalLeaveApplicationEmployeeCustomRepositoryImpl extends Common
             params.put("title","%"+searchForm.getTitle().toLowerCase()+"%");
         }
         if (searchForm.getDate() != null && !searchForm.getDate().isEmpty()) {
-            sql.append(" and  p.date BETWEEN :dateStart and :dateEnd ");
+            sql.append(" and  p.created_date BETWEEN :dateStart and :dateEnd ");
             params.put("dateStart", searchForm.getDate().get(0));
             params.put("dateEnd", searchForm.getDate().get(1));
         }
