@@ -20,7 +20,7 @@ public class BonusPenalty extends EntityCommon {
     private String title;
     private String reason;
     private String money;
-    private Boolean status;
+    private String status;
     private LocalDate effectiveDate;
     private Boolean bonus;
 

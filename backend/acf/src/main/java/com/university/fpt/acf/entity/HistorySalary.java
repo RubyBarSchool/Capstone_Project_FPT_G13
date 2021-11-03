@@ -20,7 +20,7 @@ public class HistorySalary extends EntityCommon {
     private String penalty;
     private String advanceSalary;
     private String totalMoney;
-    private String status;
+    private Boolean status;
 
     @ManyToOne
     @EqualsAndHashCode.Exclude
