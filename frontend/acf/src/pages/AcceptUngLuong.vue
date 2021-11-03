@@ -78,16 +78,12 @@
                 </a-tag>
               </template>
               <template slot="action" slot-scope="text, record">
-                <a-row>
-                  <a-col :span="8">
-                    <a-button
-                      id="edit"
-                      @click="getDetailAdvanceSalaryAdmin(record.id)"
-                    >
-                      <font-awesome-icon :icon="['fas', 'eye']" />
-                    </a-button>
-                  </a-col>
-                </a-row>
+                <a-button
+                  id="view"
+                  @click="getDetailAdvanceSalaryAdmin(record.id)"
+                >
+                  <font-awesome-icon :icon="['fas', 'eye']" />
+                </a-button>
               </template>
             </a-table>
           </div>
@@ -229,7 +225,6 @@ export default {
       visibleView: false,
     };
   },
-  computed: {},
   created() {
     this.submitSearch();
   },
@@ -310,27 +305,11 @@ export default {
 }
 
 /* button icon */
-#delete {
-  background-color: rgb(255, 0, 0);
-  color: white;
-}
-#delete:hover {
-  background-color: rgba(233, 15, 15, 0.863);
-  color: white;
-}
-#edit {
-  background-color: rgb(10, 208, 243);
-  color: white;
-}
-#edit:hover {
-  background-color: rgb(0, 181, 253);
-  color: white;
-}
-#user {
+#view {
   background-color: rgb(76, 238, 12);
   color: white;
 }
-#user:hover {
+#view:hover {
   background-color: rgb(42, 253, 0);
   color: white;
 }

@@ -24,9 +24,9 @@
             v-model="dataSearch.title"
           />
           <a-input
-            placeholder="Nội dung"
+            placeholder="Trạng thái"
             :style="{ 'margin-right': '5px', width: '200px' }"
-            v-model="dataSearch.content"
+            v-model="dataSearch.status"
           />
           <a-range-picker
             v-model="dataSearch.date"
@@ -111,7 +111,7 @@
                     <a-popconfirm
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
-                      @confirm="deletePersonalApplication(record.id)"
+                      @confirm="deletePersonalApplication(record.idApplication)"
                     >
                       <a-button id="delete">
                         <font-awesome-icon :icon="['fas', 'trash']" />
@@ -168,7 +168,7 @@
            <div class="container">
               <a-form-model>
                 <a-form-model-item label="Tiêu đề">
-                  <a-input v-model="dataEdit" />
+                  <a-input v-model="dataEdit.title" />
                 </a-form-model-item>
                 <a-form-model-item label="Chọn ngày">
                   <a-range-picker
@@ -215,8 +215,7 @@ export default {
         total: 0,
       },
       dataSearch: {
-        date: ["", ""],
-        idEmployee: 0,
+        date: [],
         pageIndex: 1,
         pageSize: 10,
         status: "",
@@ -241,8 +240,8 @@ export default {
         {
           title: "ID",
           width: 100,
-          dataIndex: "id",
-          key: "id",
+          dataIndex: "idApplication",
+          key: "idApplication",
           fixed: "left",
         },
         {

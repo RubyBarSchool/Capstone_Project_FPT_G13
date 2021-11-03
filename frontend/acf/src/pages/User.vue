@@ -134,6 +134,7 @@
               </template>
             </a-table>
           </div>
+          <!-- table content -->
 
           <!-- popup add-->
           <a-modal v-model="visibleAdd" title="Thêm nhân viên">

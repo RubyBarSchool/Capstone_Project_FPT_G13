@@ -19,32 +19,78 @@
           </a-back-top>
           <!-- menu trên -->
           <a-input
-            placeholder="Tiêu đề"
-            :style="{ 'margin-right': '5px', width: '200px' }"
+            placeholder="Nhân viên"
+            style="width: 150px"
+            v-model="dataSearch.nameEmployee"
           />
           <a-input
-            placeholder="Nội dung"
-            :style="{ 'margin-right': '5px', width: '200px' }"
+            placeholder="Tiêu đề"
+            style="width: 150px"
+            v-model="dataSearch.title"
           />
-          <a-range-picker
-            :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-            format="DD/MM/YYYY"
-          />
+          <a-select
+            placeholder="Trạng thái"
+            v-model="dataSearch.status"
+            style="width: 150px"
+          >
+            <a-select-option value="false"> Chờ duyệt </a-select-option>
+            <a-select-option value="true"> Đã duyệt </a-select-option>
+          </a-select>
+          <a-date-picker format="YYYY-MM-DD" valueFormat="YYYY-MM-DD">
+          </a-date-picker>
           <a-button
             type="primary"
             :style="{ 'margin-left': '5px' }"
-            @click="showModalAdd"
+            @click="submitSearch"
           >
             <font-awesome-icon
-              :icon="['fas', 'user-edit']"
+              :icon="['fas', 'search']"
               :style="{ 'margin-right': '5px' }"
             />
-            Xem đơn
+            Tìm kiếm
           </a-button>
           <!-- menu trên -->
 
           <!-- table content -->
-
+          <div :style="{ 'padding-top': '10px' }">
+            <a-table
+              :columns="columns"
+              :data-source="dataSourceTable"
+              :pagination="pagination"
+              :rowKey="
+                (record, index) => {
+                  return index;
+                }
+              "
+              @change="handleTableChange"
+            >
+              <template slot="employee" slot-scope="text, record">
+                {{ record.nameEmployee }}
+              </template>
+              <template slot="date" slot-scope="text, record">
+                {{ record.date }}
+              </template>
+              <template slot="statusAccept" slot-scope="text, record">
+                <a-tag :color="record.statusAccept ? 'green' : 'gray'">
+                  {{ record.statusAccept ? "Đã duyệt" : "Chờ duyệt" }}
+                </a-tag>
+              </template>
+              <template slot="titlee" slot-scope="text, record">
+                {{ record.title }}
+              </template>
+              <template slot="comment" slot-scope="text, record">
+                {{ record.comment }}
+              </template>
+              <template slot="action" slot-scope="text, record">
+                <a-button
+                  id="view"
+                  @click="getDetailPersonalLeaveApplicationAdmin(record.id)"
+                >
+                  <font-awesome-icon :icon="['fas', 'eye']" />
+                </a-button>
+              </template>
+            </a-table>
+          </div>
           <!-- table content -->
 
           <!-- popup view -->
@@ -56,26 +102,46 @@
             </template>
             <div class="container">
               <a-form-model>
+                <a-form-model-item label="Nhân viên">
+                  <a-input
+                    v-model="
+                      dataDetailPersonalLeaveApplicationAdmin.nameEmployee
+                    "
+                    disabled
+                  />
+                </a-form-model-item>
                 <a-form-model-item label="Tiêu đề">
-                  <a-input disabled />
+                  <a-input
+                    v-model="dataDetailPersonalLeaveApplicationAdmin.title"
+                    disabled
+                  />
                 </a-form-model-item>
                 <a-form-model-item label="Chọn ngày">
-                  <a-date-picker placeholder="Chọn ngày" disabled />
+                  <a-date-picker
+                    placeholder="Chọn ngày"
+                    v-model="dataDetailPersonalLeaveApplicationAdmin.date"
+                    disabled
+                  />
                 </a-form-model-item>
                 <a-form-model-item label="Nội dung">
                   <a-textarea
                     placeholder="Viết nội dung....."
                     :rows="4"
+                    v-model="dataDetailPersonalLeaveApplicationAdmin.content"
                     disabled
                   />
                 </a-form-model-item>
                 <a-form-model-item label="Ghi chú">
-                  <a-textarea placeholder="Viết ghi chú....." :rows="4" />
+                  <a-textarea
+                    placeholder="Viết ghi chú....."
+                    :rows="4"
+                    v-model="dataDetailPersonalLeaveApplicationAdmin.comment"
+                  />
                 </a-form-model-item>
               </a-form-model>
             </div>
           </a-modal>
-          <!-- popup add -->
+          <!-- popup view -->
         </div>
       </a-layout-content>
       <Footer />
@@ -84,6 +150,7 @@
 </template>
 
 <script>
+import acceptXinNghiService from "../service/acceptXinNghiService";
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 export default {
@@ -94,20 +161,238 @@ export default {
   },
   data() {
     return {
+      pagination: {
+        current: 1,
+        pageSize: 10,
+        total: 0,
+      },
+      dataSearch: {
+        date: [],
+        nameEmployee: "",
+        pageIndex: 1,
+        pageSize: 10,
+        status: "",
+        title: "",
+        total: 0,
+      },
+      dataSourceTable: [],
+      dataDetailPersonalLeaveApplicationAdmin: {
+        nameEmployee: "",
+        title: "",
+        date: ["", ""],
+        content: "",
+        comment: "",
+      },
+      columns: [
+        {
+          title: "ID",
+          width: 100,
+          dataIndex: "idApplication",
+          key: "idApplication",
+          fixed: "left",
+        },
+        {
+          title: "Nhân viên",
+          dataIndex: "employee",
+          key: "employee",
+          width: 150,
+          scopedSlots: { customRender: "employee" },
+        },
+        {
+          title: "Ngày",
+          dataIndex: "date",
+          key: "date",
+          width: 150,
+          scopedSlots: { customRender: "date" },
+        },
+        {
+          title: "Trạng thái",
+          dataIndex: "statusAccept",
+          key: "statusAccept",
+          width: 150,
+          scopedSlots: { customRender: "statusAccept" },
+        },
+        {
+          title: "Tiêu đề",
+          dataIndex: "titlee",
+          key: "titlee",
+          width: 150,
+          scopedSlots: { customRender: "titlee" },
+        },
+        {
+          title: "Ghi chú",
+          dataIndex: "comment",
+          key: "comment",
+          width: 150,
+          scopedSlots: { customRender: "comment" },
+        },
+        {
+          title: "",
+          dataIndex: "action",
+          key: "action",
+          fixed: "right",
+          width: 150,
+          scopedSlots: { customRender: "action" },
+        },
+      ],
       visibleView: false,
     };
   },
+  created() {
+    this.submitSearch();
+  },
   methods: {
+    handleTableChange(pagination) {
+      this.dataSearch.pageIndex = pagination.current;
+      this.pagination = pagination;
+      acceptXinNghiService
+        .searchPersonalLeaveApplication(this.dataSearch)
+        .then((response) => {
+          this.dataSourceTable = response.data.data;
+          this.dataSearch.total = response.data.total;
+          this.pagination.total = response.data.total;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    submitSearch() {
+      this.dataSearch.total = 0;
+      acceptXinNghiService
+        .searchPersonalLeaveApplication(this.dataSearch)
+        .then((response) => {
+          this.dataSourceTable = response.data.data;
+          this.dataSearch.total = response.data.total;
+          this.pagination.total = response.data.total;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
+    getDetailAdvanceSalaryAdmin(id) {
+      acceptXinNghiService
+        .getDetailPersonalLeaveApplicationAdmin(id)
+        .then((response) => {
+          this.dataAdvanceSalaryAdminDetail = response.data.data;
+          this.visibleView = true;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    
+    submitAccept() {
+      acceptXinNghiService
+        .getDetailPersonalLeaveApplicationAdmin()
+        .then((response) => {
+          if (response.data.data) {
+            let type = "success";
+            let message = "Cập nhật";
+            let description = "Cập nhật trạng thái đơn thành công";
+            this.notifi(type, message, description);
+            this.submitSearch();
+          } else {
+            let type = "error";
+            let message = "Cập nhật";
+            let description = "Cập nhật trạng thái đơn thành công";
+            this.notifi(type, message, description);
+            this.submitSearch();
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
     handleCancel() {
       this.visibleView = false;
     },
 
-    showModalAdd() {
+    showModaView() {
       this.visibleView = true;
     },
   },
 };
 </script>
 
-<style>
+<style scoped>
+/* back top */
+.ant-back-top-inner {
+  color: rgb(241, 237, 237);
+  text-align: center;
+}
+
+/* button icon */
+#view {
+  background-color: rgb(76, 238, 12);
+  color: white;
+}
+#view:hover {
+  background-color: rgb(42, 253, 0);
+  color: white;
+}
+/* profile */
+.bg-c-lite-green {
+  border-radius: 5px;
+  background: linear-gradient(to right, #000000, #000000);
+}
+
+.card-block {
+  padding: 1.25rem;
+}
+
+.m-b-25 {
+  margin-bottom: 30px;
+}
+
+.img-radius {
+  border-radius: 5px;
+}
+
+h6 {
+  font-size: 13.5px;
+}
+
+.card-block p {
+  line-height: 25px;
+}
+
+.card-block {
+  padding: 1.25rem;
+}
+
+.b-b-default {
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.m-b-20 {
+  margin-bottom: 20px;
+}
+
+.p-b-5 {
+  padding-bottom: 5px !important;
+}
+
+.m-b-10 {
+  margin-bottom: 10px;
+  color: black;
+}
+
+.text-muted {
+  color: #919aa3 !important;
+}
+
+.text-white {
+  color: white;
+}
+
+.f-w-600 {
+  font-weight: 600;
+}
+
+.m-t-40 {
+  margin-top: 20px;
+}
+/* profile */
 </style>
