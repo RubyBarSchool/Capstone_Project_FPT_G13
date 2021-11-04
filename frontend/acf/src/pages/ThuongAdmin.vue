@@ -100,7 +100,7 @@
                           record.money,
                           record.reason,
                           record.status,
-                          record.title,
+                          record.title
                         )
                       "
                       :style="{ width: '44.25px' }"
@@ -195,7 +195,6 @@
                 <a-input v-model="dataEdit.title" />
               </a-form-model-item>
               <a-form-model-item label="Họ và tên">
-                <!-- <a-input v-model="dataEdit.listIdEmployee" /> -->
                 <a-select
                   placeholder="Họ và tên"
                   mode="multiple"
@@ -213,7 +212,11 @@
                 </a-select>
               </a-form-model-item>
               <a-form-model-item label="Lý do">
-                <a-input v-model="dataEdit.reason" />
+                <a-textarea
+                  placeholder="Lý do"
+                  :rows="4"
+                  v-model="dataEdit.reason"
+                />
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
                 <a-input v-model="dataEdit.money" />
@@ -226,8 +229,7 @@
               </a-form-model-item>
               <a-form-model-item label="Ngày hiệu lực">
                 <a-date-picker
-                  v-model="dataEdit.dateEffective"
-                  :show-time="{ format: 'DD/MM/YYYY' }"
+                  v-model="dataEdit.effectiveDate"
                   format="DD/MM/YYYY"
                 />
               </a-form-model-item>
@@ -292,6 +294,16 @@ export default {
         status: "",
         title: "",
       },
+      // dataAccountDetail: {
+      //   id: "",
+      //   name: "",
+      //   roles: [],
+      //   image: "",
+      //   fullname: "",
+      //   dob: "",
+      //   phone: "",
+      //   gender: "",
+      // },
       columns: [
         {
           title: "ID",
@@ -374,15 +386,15 @@ export default {
         .getAllEmployee(this.dataEmployee)
         .then((response) => {
           this.dataEmployees = response.data.data;
+          console.log("data", this.dataEmployees);
         })
         .catch((e) => {
           console.log(e);
         });
     },
     showModalAdd() {
-      this.getAllEmployee();
-      this.dataEmployee.name = "";
       this.visibleAdd = true;
+      this.getAllEmployee();
     },
     submitAdd() {
       thuongAdminService
@@ -419,16 +431,27 @@ export default {
       this.visibleEdit = false;
       this.visibleProfile = false;
     },
-    showModalEdit(id, effectiveDate, listIdEmployee, money, reason, status, title) {
+    showModalEdit(
+      id,
+      effectiveDate,
+      listIdEmployees,
+      money,
+      reason,
+      status,
+      title
+    ) {
       this.dataEdit.id = id;
-      this.dataEdit.title = title;
       this.dataEdit.effectiveDate = effectiveDate;
-      this.dataEdit.listIdEmployee = listIdEmployee;
-      this.dataEdit.money = money;
-      this.dataEdit.reason = reason;
+      this.dataEdit.listIdEmployee = [];
+      // for (var i = 0; i < listIdEmployees.length; i++) {
+      //   this.dataEdit.listIdEmployee.push(listIdEmployees[i].id);
+      // }
       this.dataEdit.status = status;
-      this.getAllEmployee();
+      this.dataEdit.reason = reason;
+      this.dataEdit.money = money;
+      this.dataEdit.title = title;
       this.visibleEdit = true;
+      this.getAllEmployee();
     },
     submitUpdate() {
       thuongAdminService
@@ -438,12 +461,12 @@ export default {
           if (response.data.data) {
             let type = "success";
             let message = "Cập nhật";
-            let description = "Account đang đăng nhập không được xóa";
+            let description = "Cập nhật thưởng thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
             let message = "Cập nhật";
-            let description = "Account đang đăng nhập không được xóa";
+            let description = "Cập nhật thưởng không thành công";
             this.notifi(type, message, description);
           }
         })
