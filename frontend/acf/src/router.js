@@ -137,6 +137,13 @@ export const router = new Router({
             component: () =>
                 import ("./pages/PhatAdmin.vue"),
         },
+        {
+            path: "/thuongadmin",
+            name: "ThuongAdmin",
+            // lazy-loaded
+            component: () =>
+                import ("./pages/ThuongAdmin.vue"),
+        },
     ],
 });
 
