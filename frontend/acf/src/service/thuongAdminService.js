@@ -10,9 +10,9 @@ class thuongAdminService {
     addThuongAdmin(form) {
         return http.post(`/admin/bonus/add`, form);
     }
-    // updateThuongAdmin(data) {
-    //     return http.put(`/employee/advanceSalary/update`, data);
-    // }
+    updateThuongAdmin(data) {
+        return http.put(`/admin/bonus/update`, data);
+    }
     // getAdvanceSalaryEmployeeByID(id) {
     //     return http.get(`/employee/advanceSalary/detail?id=${id}`);
     // }

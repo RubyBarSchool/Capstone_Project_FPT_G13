@@ -95,9 +95,12 @@
                       @click="
                         showModalEdit(
                           record.id,
-                          record.username,
-                          record.roles,
-                          record.status
+                          record.effectiveDate,
+                          record.listIdEmployee,
+                          record.money,
+                          record.reason,
+                          record.status,
+                          record.title,
                         )
                       "
                       :style="{ width: '44.25px' }"
@@ -187,22 +190,33 @@
                 Lưu
               </a-button>
             </template>
-            <!-- <a-form-model>
+            <a-form-model>
               <a-form-model-item label="Tiêu đề">
-                <a-input v-model="dataAdd.username" />
+                <a-input v-model="dataEdit.title" />
               </a-form-model-item>
               <a-form-model-item label="Họ và tên">
-                <a-input v-model="dataAdd.password" />
+                <!-- <a-input v-model="dataEdit.listIdEmployee" /> -->
+                <a-select
+                  placeholder="Họ và tên"
+                  mode="multiple"
+                  v-model="dataEdit.listIdEmployee"
+                  :filter-option="false"
+                  @search="fetchEmployees"
+                >
+                  <a-select-option
+                    v-for="(employee, index) in dataEmployees"
+                    :value="employee.id"
+                    :key="index"
+                  >
+                    {{ employee.fullName }}
+                  </a-select-option>
+                </a-select>
               </a-form-model-item>
               <a-form-model-item label="Lý do">
-                <a-textarea
-                  placeholder="Lý do"
-                  :rows="4"
-                  v-model="dataAdd.password"
-                />
+                <a-input v-model="dataEdit.reason" />
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
-                <a-input v-model="dataAdd.password" />
+                <a-input v-model="dataEdit.money" />
               </a-form-model-item>
               <a-form-model-item label="Trạng thái">
                 <a-radio-group name="radioGroup" v-model="dataEdit.status">
@@ -211,14 +225,13 @@
                 </a-radio-group>
               </a-form-model-item>
               <a-form-model-item label="Ngày hiệu lực">
-                <a-range-picker
-                  v-model="dataSearch.date"
-                  :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+                <a-date-picker
+                  v-model="dataEdit.dateEffective"
                   :show-time="{ format: 'DD/MM/YYYY' }"
                   format="DD/MM/YYYY"
                 />
               </a-form-model-item>
-            </a-form-model> -->
+            </a-form-model>
           </a-modal>
           <!-- popup edit-->
         </div>
@@ -270,22 +283,15 @@ export default {
         pageSize: 10,
         statusDelete: "",
       },
-      // dataEdit: {
-      //   id: "",
-      //   username: "",
-      //   listRole: [],
-      //   status: false,
-      // },
-      // dataAccountDetail: {
-      //   id: "",
-      //   name: "",
-      //   roles: [],
-      //   image: "",
-      //   fullname: "",
-      //   dob: "",
-      //   phone: "",
-      //   gender: "",
-      // },
+      dataEdit: {
+        effectiveDate: "",
+        id: 0,
+        listIdEmployee: [],
+        money: "",
+        reason: "",
+        status: "",
+        title: "",
+      },
       columns: [
         {
           title: "ID",
@@ -413,41 +419,38 @@ export default {
       this.visibleEdit = false;
       this.visibleProfile = false;
     },
-    showModalEdit() {
+    showModalEdit(id, effectiveDate, listIdEmployee, money, reason, status, title) {
+      this.dataEdit.id = id;
+      this.dataEdit.title = title;
+      this.dataEdit.effectiveDate = effectiveDate;
+      this.dataEdit.listIdEmployee = listIdEmployee;
+      this.dataEdit.money = money;
+      this.dataEdit.reason = reason;
+      this.dataEdit.status = status;
+      this.getAllEmployee();
       this.visibleEdit = true;
     },
-    // showModalEdit(id, username, roles, status) {
-    //   this.dataEdit.id = id;
-    //   this.dataEdit.username = username;
-    //   this.dataEdit.listRole = [];
-    //   for (var i = 0; i < roles.length; i++) {
-    //     this.dataEdit.listRole.push(roles[i].id);
-    //   }
-    //   this.dataEdit.status = status;
-    //   this.visibleEdit = true;
-    //   this.dataEmployee.name = "";
-    // },
     submitUpdate() {
-      //   adminTruongService
-      //     .updateAccount(this.dataEdit)
-      //     .then((response) => {
-      //       this.submitSearch();
-      //       if (response.data.data) {
-      //         let type = "success";
-      //         let message = "Cập nhật";
-      //         let description = "Account đang đăng nhập không được xóa";
-      //         this.notifi(type, message, description);
-      //       } else {
-      //         let type = "error";
-      //         let message = "Cập nhật";
-      //         let description = "Account đang đăng nhập không được xóa";
-      //         this.notifi(type, message, description);
-      //       }
-      //     })
-      //     .catch((e) => {
-      //       console.log(e);
-      //     });
-      //   this.visibleEdit = false;
+      thuongAdminService
+        .updateThuongAdmin(this.dataEdit)
+        .then((response) => {
+          this.submitSearch();
+          if (response.data.data) {
+            let type = "success";
+            let message = "Cập nhật";
+            let description = "Account đang đăng nhập không được xóa";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Cập nhật";
+            let description = "Account đang đăng nhập không được xóa";
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      this.visibleEdit = false;
     },
     submitSearch() {
       this.dataSearch.total = 0;

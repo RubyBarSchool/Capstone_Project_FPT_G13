@@ -37,7 +37,6 @@
             <a-select-option :value="true"> Đã duyệt </a-select-option>
           </a-select>
           <a-range-picker
-            @change="search"
             v-model="dataSearch.date"
             :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
             format="DD/MM/YYYY"
@@ -260,7 +259,6 @@ export default {
           console.log(e);
         });
     },
-
     getDetailAdvanceSalaryAdmin(id) {
       acceptUngLuongService
         .getDetailAdvanceSalaryAdmin(id)
