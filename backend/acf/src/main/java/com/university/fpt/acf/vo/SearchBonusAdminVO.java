@@ -15,5 +15,5 @@ public class SearchBonusAdminVO {
     private String reason;
     private String money;
     private Boolean status;
-    private LocalDate dateEffective;
+    private LocalDate effectiveDate;
 }

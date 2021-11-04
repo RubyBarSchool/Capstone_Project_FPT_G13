@@ -9,6 +9,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PersonalLeaveApplicationEmployeeRepository extends JpaRepository<PersonaLeaveApplication,Long> {
-    @Query("select new com.university.fpt.acf.vo.SearchPersonalApplicationEmployeeVO(p.id,p.created_date,p.fileAttach,p.title,p.comment,p.content,p.accept) from PersonaLeaveApplication p where p.id=:id")
+    @Query("select new com.university.fpt.acf.vo.SearchPersonalApplicationEmployeeVO(p.id,p.created_date,p.dateAccept,p.dateStart,p.dateEnd,p.fileAttach,p.title,p.comment,p.content,p.accept) from PersonaLeaveApplication p where p.id=:id")
     SearchPersonalApplicationEmployeeVO detailPersonalLeaveAppEmployee(@Param("id") Long id);
 }

@@ -11,7 +11,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class SearchPersonalApplicationEmployeeVO {
     private Long idApplication;
-    private LocalDate date;
+    private LocalDate dateCreate;
+    private LocalDate dateAccept;
+    private LocalDate dateStart;
+    private LocalDate dateEnd;
     private String fileAttach;
     private String title;
     private String comment;
