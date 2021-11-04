@@ -33,11 +33,15 @@
             v-model="dataSearch.status"
             style="width: 150px"
           >
-            <a-select-option value="false"> Chờ duyệt </a-select-option>
-            <a-select-option value="true"> Đã duyệt </a-select-option>
+            <a-select-option :value="false"> Chờ duyệt </a-select-option>
+            <a-select-option :value="true"> Đã duyệt </a-select-option>
           </a-select>
-          <a-date-picker format="YYYY-MM-DD" valueFormat="YYYY-MM-DD">
-          </a-date-picker>
+          <a-range-picker
+            @change="search"
+            v-model="dataSearch.date"
+            :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+            format="DD/MM/YYYY"
+          />
           <a-button
             type="primary"
             :style="{ 'margin-left': '5px' }"
@@ -161,10 +165,10 @@ export default {
         total: 0,
       },
       dataSearch: {
-        content: "",
         date: [],
-        pageIndex: 0,
-        pageSize: 0,
+        employeeName: "",
+        pageIndex: 1,
+        pageSize: 10,
         status: "",
         title: "",
         total: 0,
