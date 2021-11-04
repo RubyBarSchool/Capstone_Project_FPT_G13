@@ -8,6 +8,7 @@ import com.university.fpt.acf.repository.AccountManagerRepository;
 import com.university.fpt.acf.repository.AdvanceSalaryAdminCustomRepository;
 import com.university.fpt.acf.repository.AdvanceSalaryAdminRepository;
 import com.university.fpt.acf.service.AdvanceSalaryAdminService;
+import com.university.fpt.acf.vo.DetailAdvanceSalaryAdminVO;
 import com.university.fpt.acf.vo.SearchAdvanceSalaryAdminVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,9 +48,11 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
         return  size;
     }
 
+
+
     @Override
-    public SearchAdvanceSalaryAdminVO getDetailAdvanceSalaryAdmin(Long id) {
-        SearchAdvanceSalaryAdminVO data ;
+    public DetailAdvanceSalaryAdminVO getDetailAdvanceSalaryAdmin(Long id) {
+        DetailAdvanceSalaryAdminVO data ;
         try {
             data =adminRepository.getDetailById(id);
         }catch (Exception e){

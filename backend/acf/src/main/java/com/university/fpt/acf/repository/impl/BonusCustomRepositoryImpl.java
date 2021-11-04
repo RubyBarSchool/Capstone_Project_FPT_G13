@@ -45,7 +45,7 @@ public class BonusCustomRepositoryImpl extends CommonRepository implements Bonus
     public int totalSearchBonus(SearchBonusAdminForm searchForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select  COUNT(*) from BonusPenalty b where b.deleted=false");
+        sql.append("select  COUNT(*) from BonusPenalty b where b.deleted=false and b.bonus = true");
 
         if(searchForm.getTitle()!=null && !searchForm.getTitle().isEmpty()){
             sql.append(" and LOWER(b.title) like :title ");

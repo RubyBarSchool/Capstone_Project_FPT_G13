@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/personalLeaveApplication")
+@RequestMapping(path = "/employee/personalLeaveApplication")
 public class PersonalLeaveApplicationEmployeeController {
     @Autowired
     PersonalLeaveApplicationEmployeeService personalLeaveApplicationService;

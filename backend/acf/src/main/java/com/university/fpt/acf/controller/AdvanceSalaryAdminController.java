@@ -6,6 +6,7 @@ import com.university.fpt.acf.form.SearchAdvanceSalaryAdminForm;
 
 import com.university.fpt.acf.service.AdvanceSalaryAdminService;
 
+import com.university.fpt.acf.vo.DetailAdvanceSalaryAdminVO;
 import com.university.fpt.acf.vo.SearchAdvanceSalaryAdminVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -74,7 +75,7 @@ public class AdvanceSalaryAdminController {
     public ResponseEntity<ResponseCommon> getDetailAdvanceSalaryAdmin(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();
         String message="";
-        SearchAdvanceSalaryAdminVO data = new SearchAdvanceSalaryAdminVO();
+        DetailAdvanceSalaryAdminVO data = new DetailAdvanceSalaryAdminVO();
         try {
              data = adminService.getDetailAdvanceSalaryAdmin(id);
             if(data==null){
