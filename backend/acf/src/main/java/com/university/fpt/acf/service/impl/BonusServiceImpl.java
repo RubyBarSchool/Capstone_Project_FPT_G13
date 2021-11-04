@@ -5,6 +5,7 @@ import com.university.fpt.acf.entity.AdvaceSalary;
 import com.university.fpt.acf.entity.BonusPenalty;
 import com.university.fpt.acf.entity.Employee;
 import com.university.fpt.acf.form.AddBonusAdminForm;
+import com.university.fpt.acf.form.BonusPunishForm;
 import com.university.fpt.acf.form.SearchBonusAdminForm;
 import com.university.fpt.acf.form.UpdateBonusForm;
 import com.university.fpt.acf.repository.BonusCustomRepository;
@@ -25,12 +26,13 @@ import java.util.List;
 @Service
 public class BonusServiceImpl implements BonusService {
     @Autowired
-    private  BonusRepository bonusRepository;
+    private BonusRepository bonusRepository;
     @Autowired
     private BonusCustomRepository bonusCustomRepository;
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
     @Override
     public List<SearchBonusAdminVO> searchBonus(SearchBonusAdminForm searchBonus) {
         List<SearchBonusAdminVO> list = new ArrayList<>();
@@ -39,7 +41,7 @@ public class BonusServiceImpl implements BonusService {
         } catch (Exception e) {
             throw new RuntimeException("Error bonus repository " + e.getMessage());
         }
-        return  list;
+        return list;
     }
 
     @Override
@@ -50,38 +52,43 @@ public class BonusServiceImpl implements BonusService {
         } catch (Exception e) {
             throw new RuntimeException("Error bonus  repository " + e.getMessage());
         }
-        return  size;
+        return size;
     }
 
     @Override
-    public List<SearchBonusAdminVO> searchBonusUser() {
+    public List<SearchBonusAdminVO> searchBonusUser(BonusPunishForm bonusPunishForm) {
         List<SearchBonusAdminVO> list = new ArrayList<>();
         try {
             AccountSercurity accountSercurity = new AccountSercurity();
-            list = bonusCustomRepository.searchBonusUser(accountSercurity.getUserName());
+            list = bonusCustomRepository.searchBonusUser(accountSercurity.getUserName(), bonusPunishForm);
         } catch (Exception e) {
             throw new RuntimeException("Error bonus repository " + e.getMessage());
         }
-        return  list;
+        return list;
     }
 
     @Override
-    public int totalSearchBonusUser() {
+    public int totalSearchBonusUser(BonusPunishForm bonusPunishForm) {
+        if (bonusPunishForm.getTotal() != null && bonusPunishForm.getTotal() != 0) {
+            return bonusPunishForm.getTotal().intValue();
+        }
         int size;
         try {
             AccountSercurity accountSercurity = new AccountSercurity();
-            size = bonusCustomRepository.totalSearchBonusUser(accountSercurity.getUserName());
+            size = bonusCustomRepository.totalSearchBonusUser(accountSercurity.getUserName(), bonusPunishForm);
         } catch (Exception e) {
             throw new RuntimeException("Error bonus  repository " + e.getMessage());
         }
-        return  size;
+        return size;
     }
+
+
 
     @Override
     @Transactional
     public Boolean addBonus(AddBonusAdminForm addBonus) {
         boolean check = false;
-        try{
+        try {
             BonusPenalty bonus = new BonusPenalty();
             bonus.setBonus(true);
             bonus.setTitle(addBonus.getTitle());
@@ -94,9 +101,9 @@ public class BonusServiceImpl implements BonusService {
             bonus.setCreated_by(accountSercurity.getUserName());
             bonus.setCreated_date(LocalDate.now());
             bonusRepository.saveAndFlush(bonus);
-            check=true;
+            check = true;
 
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
         return check;
@@ -105,16 +112,16 @@ public class BonusServiceImpl implements BonusService {
     @Override
     public Boolean deleteBonus(Long id) {
         boolean check = false;
-        try{
+        try {
             BonusPenalty bonus = bonusRepository.getBonusById(id);
             bonus.setDeleted(true);
             AccountSercurity accountSercurity = new AccountSercurity();
             bonus.setCreated_by(accountSercurity.getUserName());
             bonus.setCreated_date(LocalDate.now());
             bonusRepository.save(bonus);
-            check=true;
+            check = true;
 
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
         return check;
@@ -123,7 +130,7 @@ public class BonusServiceImpl implements BonusService {
     @Override
     public Boolean updateBonus(UpdateBonusForm updateBonus) {
         boolean check = false;
-        try{
+        try {
             BonusPenalty bonus = bonusRepository.getBonusById(updateBonus.getId());
             bonus.setBonus(true);
             bonus.setTitle(updateBonus.getTitle());
@@ -136,9 +143,9 @@ public class BonusServiceImpl implements BonusService {
             bonus.setCreated_by(accountSercurity.getUserName());
             bonus.setCreated_date(LocalDate.now());
             bonusRepository.saveAndFlush(bonus);
-            check=true;
+            check = true;
 
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
         return check;

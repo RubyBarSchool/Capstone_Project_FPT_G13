@@ -1,6 +1,7 @@
 package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.entity.HistorySalary;
+import com.university.fpt.acf.form.BonusPunishForm;
 import com.university.fpt.acf.form.SearchSalaryForm;
 import com.university.fpt.acf.repository.SalaryCustomRepository;
 import com.university.fpt.acf.repository.SalaryRepository;
@@ -22,6 +23,31 @@ public class SalaryServiceImpl implements SalaryService {
 
     @Autowired
     private SalaryRepository salaryRepository;
+
+    @Override
+    public List<SearchSalaryVO> searchSalary(BonusPunishForm bonusPunishForm) {
+        List<SearchSalaryVO> searchSalaryVOS = new ArrayList<>();
+        try {
+            searchSalaryVOS = salaryCustomRepository.searchSalary(bonusPunishForm);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return searchSalaryVOS;
+    }
+
+    @Override
+    public int getTotalAllSalary(BonusPunishForm bonusPunishForm) {
+        if (bonusPunishForm.getTotal() != null && bonusPunishForm.getTotal() != 0) {
+            return bonusPunishForm.getTotal().intValue();
+        }
+        int total = 0;
+        try {
+            total = salaryCustomRepository.getTotalSearchSalary(bonusPunishForm);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return total;
+    }
 
     @Override
     public List<SearchSalaryVO> searchSalaryHistory(SearchSalaryForm searchSalaryForm) {

@@ -4,6 +4,7 @@ import com.university.fpt.acf.config.security.AccountSercurity;
 import com.university.fpt.acf.entity.BonusPenalty;
 import com.university.fpt.acf.entity.Employee;
 import com.university.fpt.acf.form.AddBonusAdminForm;
+import com.university.fpt.acf.form.BonusPunishForm;
 import com.university.fpt.acf.form.SearchBonusAdminForm;
 import com.university.fpt.acf.form.UpdateBonusForm;
 import com.university.fpt.acf.repository.EmployeeRepository;
@@ -47,6 +48,33 @@ public class PunishServiceImpl implements PunishService {
             throw new RuntimeException("Error bonus  repository " + e.getMessage());
         }
         return  size;
+    }
+
+    @Override
+    public List<SearchBonusAdminVO> searchPunishUser(BonusPunishForm bonusPunishForm) {
+        List<SearchBonusAdminVO> list = new ArrayList<>();
+        try {
+            AccountSercurity accountSercurity = new AccountSercurity();
+            list = punishCustomRepository.searchPunishUser(accountSercurity.getUserName(), bonusPunishForm);
+        } catch (Exception e) {
+            throw new RuntimeException("Error bonus repository " + e.getMessage());
+        }
+        return list;
+    }
+
+    @Override
+    public int totalSearchPunishUser(BonusPunishForm bonusPunishForm) {
+        if (bonusPunishForm.getTotal() != null && bonusPunishForm.getTotal() != 0) {
+            return bonusPunishForm.getTotal().intValue();
+        }
+        int size;
+        try {
+            AccountSercurity accountSercurity = new AccountSercurity();
+            size = punishCustomRepository.totalSearchPunishUser(accountSercurity.getUserName(), bonusPunishForm);
+        } catch (Exception e) {
+            throw new RuntimeException("Error bonus  repository " + e.getMessage());
+        }
+        return size;
     }
 
     @Override
