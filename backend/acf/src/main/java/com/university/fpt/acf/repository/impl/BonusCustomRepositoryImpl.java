@@ -71,8 +71,10 @@ public class BonusCustomRepositoryImpl extends CommonRepository implements Bonus
     public List<SearchBonusAdminVO> searchBonusUser(String username, BonusPunishForm bonusPunishForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select  COUNT(*) from Account a inner join a.employee e inner join e.bonusPenalties b  where b.deleted" +
-                " = false and b.bonus = true and a.username = :username");
+        sql.append("select  new com.university.fpt.acf.vo.SearchBonusAdminVO(b.id,b.title,b.reason,b.money,b.status," +
+                "b.effectiveDate) from Account a inner join a.employee e inner join e.bonusPenalties b  where b.deleted" +
+                " = false and b.status = true and b.bonus = true and a.username = :username");
+
 
         params.put("username", username);
         if(bonusPunishForm.getCheckNow()){
@@ -138,9 +140,8 @@ public class BonusCustomRepositoryImpl extends CommonRepository implements Bonus
 
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select  new com.university.fpt.acf.vo.SearchBonusAdminVO(b.id,b.title,b.reason,b.money,b.status," +
-                "b.effectiveDate) from Account a inner join a.employee e inner join e.bonusPenalties b  where b.deleted" +
-                " = false and b.bonus = true and a.username = :username");
+        sql.append("select  COUNT(*) from Account a inner join a.employee e inner join e.bonusPenalties b  where b.deleted" +
+                " = false and b.status = true and b.bonus = true and a.username = :username");
         params.put("username", username);
         if(bonusPunishForm.getCheckNow()){
             LocalDate localDate = LocalDate.now();

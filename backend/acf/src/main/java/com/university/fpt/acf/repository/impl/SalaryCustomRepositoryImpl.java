@@ -21,7 +21,7 @@ public class SalaryCustomRepositoryImpl extends CommonRepository implements Sala
         StringBuilder sqlAcc = new StringBuilder("");
         Map<String, Object> paramsAcc = new HashMap<>();
         sqlAcc.append(" select new com.university.fpt.acf.vo.SearchSalaryVO(hs.id,hs.created_date,e.fullName,p.name,hs.countWork,hs.salary" +
-                ",hs.bonus,hs.penalty,hs.advanceSalary,hs.totalMoney,hs.status) " +
+                ",hs.bonus,hs.penalty,hs.advanceSalary,hs.totalMoney,hs.status,hs.accountAccept,hs.dateAccept) " +
                 " from HistorySalary hs inner join hs.employee e inner join e.position p where  hs.deleted = false ");
         if (bonusPunishForm.getCheckNow()) {
             LocalDate localDate = LocalDate.now();
@@ -126,7 +126,7 @@ public class SalaryCustomRepositoryImpl extends CommonRepository implements Sala
         StringBuilder sqlAcc = new StringBuilder("");
         Map<String, Object> paramsAcc = new HashMap<>();
         sqlAcc.append(" select new com.university.fpt.acf.vo.SearchSalaryVO(hs.id,hs.created_date,e.fullName,p.name,hs.countWork,hs.salary" +
-                ",hs.bonus,hs.penalty,hs.advanceSalary,hs.totalMoney,hs.status) " +
+                ",hs.bonus,hs.penalty,hs.advanceSalary,hs.totalMoney,hs.status,hs.accountAccept,hs.dateAccept) " +
                 " from HistorySalary hs inner join hs.employee e inner join e.position p where hs.status = true and hs.deleted = false ");
 
         if (searchSalaryForm.getName() != null && !searchSalaryForm.getName().isEmpty()) {
@@ -186,7 +186,7 @@ public class SalaryCustomRepositoryImpl extends CommonRepository implements Sala
         StringBuilder sqlAcc = new StringBuilder("");
         Map<String, Object> paramsAcc = new HashMap<>();
         sqlAcc.append(" select new com.university.fpt.acf.vo.SearchSalaryVO(hs.id,hs.created_date,e.fullName,p.name,hs.countWork,hs.salary" +
-                ",hs.bonus,hs.penalty,hs.advanceSalary,hs.totalMoney,hs.status) " +
+                ",hs.bonus,hs.penalty,hs.advanceSalary,hs.totalMoney,hs.status,hs.accountAccept,hs.dateAccept) " +
                 " from HistorySalary hs inner join hs.employee e inner join e.position p where hs.status = false and hs.deleted = false ");
 
         if (searchSalaryForm.getName() != null && !searchSalaryForm.getName().isEmpty()) {

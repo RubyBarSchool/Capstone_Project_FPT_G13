@@ -34,11 +34,13 @@
                 </a-menu-item>
                 <a-menu-divider />
                 <a-menu-item :key="router.length" @click="logout">
-                  <h6>Thoát ra <font-awesome-icon
-                    :icon="['fas', 'sign-out-alt']"
-                    :style="{ 'margin-left': '80px' }"
-                  /></h6>
-                  
+                  <h6>
+                    Thoát ra
+                    <font-awesome-icon
+                      :icon="['fas', 'sign-out-alt']"
+                      :style="{ 'margin-left': '80px' }"
+                    />
+                  </h6>
                 </a-menu-item>
               </a-menu>
             </a-dropdown>
@@ -87,8 +89,45 @@ export default {
           path: "/color",
           name: "Quản lý màu sắc vật liệu",
         },
+        {
+          path: "/acceptungluong",
+          name: "Quản lý đơn ứng lương",
+        },
+        {
+          path: "/acceptxinnghi",
+          name: "Quản lí đơn xin nghỉ",
+        },
+        {
+          path: "/acceptluongadmin",
+          name: "Quản lý thanh toán lương",
+        },
+        {
+          path: "/historyluongadmin",
+          name: "Quản lý lương",
+        },
+        {
+          path: "/phatadmin",
+          name: "Quản lý đơn phạt",
+        },
+        {
+          path: "/thuongadmin",
+          name: "Quản lý đơn thưởng",
+        },
       ],
-      routerEmployee: [],
+      routerEmployee: [
+        {
+          path: "/viewluong",
+          name: "Xem lương",
+        },
+        {
+          path: "/ungluong",
+          name: "Ứng lương",
+        },
+        {
+          path: "/xinnghi",
+          name: "Đơn xin nghỉ",
+        },
+      ],
     };
   },
   created() {

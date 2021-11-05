@@ -15,21 +15,48 @@
           <!-- Hiện tại -->
           <a-tab-pane key="1">
             <span slot="tab"> <h6>Hiện tại</h6> </span>
-            <a-table :columns="columns" :data-source="data">
-              <a slot="name" slot-scope="text">{{ text }}</a>
+            <a-table
+              :columns="columnsSalaryNow"
+              :data-source="datasalaryNow"
+              :pagination="paginationSalaryNow"
+              :rowKey="
+                (record, index) => {
+                  return index;
+                }
+              "
+              @change="handleTableChangeSalaryNow"
+            >
             </a-table>
             <div class="container-fluid">
               <div class="row">
                 <div class="col-6">
                   <h6>Thưởng</h6>
-                  <a-table :columns="columns1" :data-source="data1">
-                    <a slot="name" slot-scope="text">{{ text }}</a>
+                  <a-table
+                    :columns="columnsBonusPunish"
+                    :data-source="dataBonusNow"
+                    :pagination="paginationBonusNow"
+                    :rowKey="
+                      (record, index) => {
+                        return index;
+                      }
+                    "
+                    @change="handleTableChangeBonusNow"
+                  >
                   </a-table>
                 </div>
                 <div class="col-6">
                   <h6>Phạt</h6>
-                  <a-table :columns="columns1" :data-source="data1">
-                    <a slot="name" slot-scope="text">{{ text }}</a>
+                  <a-table
+                    :columns="columnsBonusPunish"
+                    :data-source="dataPunishNow"
+                    :pagination="paginationPunishNow"
+                    :rowKey="
+                      (record, index) => {
+                        return index;
+                      }
+                    "
+                    @change="handleTableChangePunishNow"
+                  >
                   </a-table>
                 </div>
               </div>
@@ -41,24 +68,47 @@
             <span slot="tab"> <h6>Quá khứ</h6> </span>
             <a-date-picker />
             <a-table
-              :columns="columns"
-              :data-source="data"
-              :style="{ 'padding-top': '10px' }"
+              :columns="columnsSalaryNotNow"
+              :data-source="dataSalaryNotNow"
+              :pagination="paginationSalaryNotNow"
+              :rowKey="
+                (record, index) => {
+                  return index;
+                }
+              "
+              @change="handleTableChangeSalaryNotNow"
             >
-              <a slot="name" slot-scope="text">{{ text }}</a>
             </a-table>
             <div class="container-fluid">
               <div class="row">
                 <div class="col-6">
                   <h6>Thưởng</h6>
-                  <a-table :columns="columns1" :data-source="data1">
-                    <a slot="name" slot-scope="text">{{ text }}</a>
+                  <a-table
+                    :columns="columnsBonusPunish"
+                    :data-source="dataBonusNotNow"
+                    :pagination="paginationBonusNotNow"
+                    :rowKey="
+                      (record, index) => {
+                        return index;
+                      }
+                    "
+                    @change="handleTableChangeBonusNotNow"
+                  >
                   </a-table>
                 </div>
                 <div class="col-6">
                   <h6>Phạt</h6>
-                  <a-table :columns="columns1" :data-source="data1">
-                    <a slot="name" slot-scope="text">{{ text }}</a>
+                  <a-table
+                    :columns="columnsBonusPunish"
+                    :data-source="dataPunishNotNow"
+                    :pagination="paginationPunishNotNow"
+                    :rowKey="
+                      (record, index) => {
+                        return index;
+                      }
+                    "
+                    @change="handleTableChangePunishNotNow"
+                  >
                   </a-table>
                 </div>
               </div>
@@ -72,147 +122,9 @@
 </template>
 
 <script>
-const columns = [
-  {
-    title: "Họ và tên",
-    dataIndex: "name",
-    key: "name",
-    scopedSlots: { customRender: "name" },
-  },
-  {
-    title: "Chức vụ",
-    dataIndex: "role",
-    key: "role",
-    ellipsis: true,
-  },
-  {
-    title: "Số công",
-    dataIndex: "workno",
-    key: "workno",
-    ellipsis: true,
-  },
-  {
-    title: "Lương",
-    dataIndex: "salary",
-    key: "salary",
-    ellipsis: true,
-  },
-  {
-    title: "Thưởng",
-    dataIndex: "bonus",
-    key: "bonus",
-    ellipsis: true,
-  },
-  {
-    title: "Phạt",
-    dataIndex: "punish",
-    key: "punish",
-    ellipsis: true,
-  },
-  {
-    title: "Tạm ứng",
-    dataIndex: "advance",
-    key: "advance",
-    ellipsis: true,
-  },
-  {
-    title: "Tổng nhận",
-    dataIndex: "total",
-    key: "total",
-    ellipsis: true,
-  },
-  {
-    title: "Trạng thái",
-    dataIndex: "status",
-    key: "status",
-    ellipsis: true,
-  },
-];
-
-const columns1 = [
-  {
-    title: "Số thứ tự",
-    dataIndex: "number",
-    key: "number",
-    scopedSlots: { customRender: "number" },
-  },
-  {
-    title: "Ngày hiệu lực",
-    dataIndex: "effectivedate",
-    key: "effectivedate",
-    ellipsis: true,
-  },
-  {
-    title: "Lý do",
-    dataIndex: "reason",
-    key: "reason",
-    ellipsis: true,
-  },
-  {
-    title: "Số tiền",
-    dataIndex: "money",
-    key: "money",
-    ellipsis: true,
-  },
-  {
-    title: "Trạng thái",
-    dataIndex: "status",
-    key: "status",
-    ellipsis: true,
-  },
-];
-
-const data1 = [
-  {
-    number: "1",
-    effectivedate: "01/01/2021",
-    reason: "Ok",
-    money: "1.500.000",
-    status: "Nháp",
-  },
-];
-
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    role: "Quản lý",
-    workno: "30",
-    salary: "1.500.000",
-    bonus: "500.000",
-    punish: "500.000",
-    advance: "500.000",
-    total: "500.000",
-    status: "Nháp",
-  },
-  {
-    key: "2",
-    name: "John Brown",
-    role: "Quản lý",
-    workno: "30",
-    salary: "1.500.000",
-    bonus: "500.000",
-    punish: "500.000",
-    advance: "500.000",
-    total: "500.000",
-    status: "Nháp",
-  },
-  {
-    key: "3",
-    name: "John Brown",
-    role: "Quản lý",
-    workno: "30",
-    salary: "1.500.000",
-    bonus: "500.000",
-    punish: "500.000",
-    advance: "500.000",
-    total: "500.000",
-    status: "Nháp",
-  },
-];
-
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
+import ViewSalaryService from "@/service/viewSalaryService.js";
 export default {
   name: "ViewLuong",
   components: {
@@ -221,11 +133,375 @@ export default {
   },
   data() {
     return {
-      data,
-      columns,
-      columns1,
-      data1,
+      columnsSalaryNow: [
+        {
+          title: "Số thứ tự",
+          width: 100,
+          dataIndex: "id",
+          key: "id",
+          fixed: "left",
+        },
+        {
+          title: "Ngày tạo",
+          dataIndex: "date",
+          key: "date",
+          width: 150,
+        },
+        {
+          title: "Họ Và Tên",
+          dataIndex: "nameEmployee",
+          key: "nameEmployee",
+          width: 150,
+        },
+        {
+          title: "Chức vụ",
+          dataIndex: "namePosition",
+          key: "namePosition",
+          width: 150,
+        },
+        {
+          title: "Số công",
+          dataIndex: "countWork",
+          key: "countWork",
+          width: 150,
+        },
+        {
+          title: "Lương / 1 Công",
+          dataIndex: "salary",
+          key: "salary",
+          width: 150,
+        },
+        {
+          title: "Thưởng",
+          dataIndex: "bonus",
+          key: "bonus",
+          width: 150,
+        },
+        {
+          title: "Phạt",
+          dataIndex: "penalty",
+          key: "penalty",
+          width: 150,
+        },
+        {
+          title: "Tạm ứng",
+          dataIndex: "advanceSalary",
+          key: "advanceSalary",
+          width: 150,
+        },
+        {
+          title: "Tổng nhận",
+          dataIndex: "totalMoney",
+          key: "totalMoney",
+          width: 150,
+        },
+        {
+          title: "Trạng thái",
+          dataIndex: "status",
+          key: "status",
+          width: 150,
+          fixed: "right",
+        },
+      ],
+      columnsSalaryNotNow: [
+        {
+          title: "Số thứ tự",
+          width: 100,
+          dataIndex: "id",
+          key: "id",
+          fixed: "left",
+        },
+        {
+          title: "Ngày tạo",
+          dataIndex: "date",
+          key: "date",
+          width: 150,
+        },
+        {
+          title: "Họ Và Tên",
+          dataIndex: "nameEmployee",
+          key: "nameEmployee",
+          width: 150,
+        },
+        {
+          title: "Chức vụ",
+          dataIndex: "namePosition",
+          key: "namePosition",
+          width: 150,
+        },
+        {
+          title: "Số công",
+          dataIndex: "countWork",
+          key: "countWork",
+          width: 150,
+        },
+        {
+          title: "Lương / 1 Công",
+          dataIndex: "salary",
+          key: "salary",
+          width: 150,
+        },
+        {
+          title: "Thưởng",
+          dataIndex: "bonus",
+          key: "bonus",
+          width: 150,
+        },
+        {
+          title: "Phạt",
+          dataIndex: "penalty",
+          key: "penalty",
+          width: 150,
+        },
+        {
+          title: "Tạm ứng",
+          dataIndex: "advanceSalary",
+          key: "advanceSalary",
+          width: 150,
+        },
+        {
+          title: "Tổng nhận",
+          dataIndex: "totalMoney",
+          key: "totalMoney",
+          width: 150,
+        },
+        {
+          title: "Tài khoản thanh toán",
+          dataIndex: "accountAccept",
+          key: "accountAccept",
+          width: 150,
+        },
+        {
+          title: "Ngày thanh toán",
+          dataIndex: "acceptDate",
+          key: "acceptDate",
+          width: 150,
+        },
+        {
+          title: "Trạng thái",
+          dataIndex: "status",
+          key: "status",
+          width: 150,
+          fixed: "right",
+        },
+      ],
+      columnsBonusPunish: [
+        {
+          title: "Số thứ tự",
+          width: 100,
+          dataIndex: "id",
+          key: "id",
+          fixed: "left",
+        },
+        {
+          title: "Ngày hiệu lực",
+          dataIndex: "effectiveDate",
+          key: "effectiveDate",
+          width: 150,
+        },
+        {
+          title: "Tiêu đề",
+          dataIndex: "title",
+          key: "title",
+          width: 150,
+        },
+        {
+          title: "Số tiền",
+          dataIndex: "money",
+          key: "money",
+          width: 150,
+        },
+        {
+          title: "Trạng thái",
+          dataIndex: "status",
+          key: "status",
+          width: 150,
+        },
+      ],
+
+      datasalaryNow: [],
+      dataSalaryNotNow: [],
+      dataBonusNow: [],
+      dataBonusNotNow: [],
+      dataPunishNow: [],
+      dataPunishNotNow: [],
+
+      paginationSalaryNow: {
+        current: 1,
+        pageSize: 10,
+        total: 0,
+      },
+      paginationSalaryNotNow: {
+        current: 1,
+        pageSize: 10,
+        total: 0,
+      },
+      paginationBonusNow: {
+        current: 1,
+        pageSize: 10,
+        total: 0,
+      },
+      paginationPunishNow: {
+        current: 1,
+        pageSize: 10,
+        total: 0,
+      },
+      paginationBonusNotNow: {
+        current: 1,
+        pageSize: 10,
+        total: 0,
+      },
+      paginationPunishNotNow: {
+        current: 1,
+        pageSize: 10,
+        total: 0,
+      },
+      dataSearchSalaryNow: {
+        checkNow: true,
+        date: "",
+        pageIndex: 1,
+        pageSize: 10,
+        total: 0,
+      },
+      dataSearchSalaryNotNow: {
+        checkNow: false,
+        date: "",
+        pageIndex: 1,
+        pageSize: 10,
+        total: 0,
+      },
+      dataSearchBonusNow: {
+        checkNow: true,
+        date: "",
+        pageIndex: 1,
+        pageSize: 10,
+        total: 0,
+      },
+      dataSearchBonusNotNow: {
+        checkNow: false,
+        date: "",
+        pageIndex: 1,
+        pageSize: 10,
+        total: 0,
+      },
+      dataSearchPunishNow: {
+        checkNow: true,
+        date: "",
+        pageIndex: 1,
+        pageSize: 10,
+        total: 0,
+      },
+      dataSearchPunishNotNow: {
+        checkNow: false,
+        date: "",
+        pageIndex: 1,
+        pageSize: 10,
+        total: 0,
+      },
     };
+  },
+  created() {
+    this.searchSalaryNow();
+    this.searchBonusNow();
+    this.searchPunishNow();
+  },
+  methods: {
+    handleTableChangeSalaryNow(pagination) {
+      this.dataSearchSalaryNow.pageIndex = pagination.current;
+      this.paginationSalaryNow = pagination;
+      this.searchSalaryNow();
+    },
+    handleTableChangeSalaryNotNow(pagination) {
+      this.dataSearchSalaryNotNow.pageIndex = pagination.current;
+      this.paginationSalaryNotNow = pagination;
+      this.searchSalaryNotNow();
+    },
+    handleTableChangeBonusNow(pagination) {
+      this.dataSearchBonusNow.pageIndex = pagination.current;
+      this.paginationBonusNow = pagination;
+      this.searchBonusNow();
+    },
+    handleTableChangeBonusNotNow(pagination) {
+      this.dataSearchBonusNotNow.pageIndex = pagination.current;
+      this.paginationBonusNotNow = pagination;
+      this.searchBonusNotNow();
+    },
+    handleTableChangePunishNow(pagination) {
+      this.dataSearchPunishNow.pageIndex = pagination.current;
+      this.paginationPunishNow = pagination;
+      this.searchPunishNow();
+    },
+    handleTableChangePunishNotNow(pagination) {
+      this.dataSearchPunishNotNow.pageIndex = pagination.current;
+      this.paginationPunishNotNow = pagination;
+      this.searchPunishNotNow();
+    },
+    searchSalaryNow() {
+      ViewSalaryService.getSalary(this.dataSearchSalaryNow)
+        .then((response) => {
+          this.datasalaryNow = response.data.data;
+          this.dataSearchSalaryNow.total = response.data.total;
+          this.paginationSalaryNow.total = response.data.total;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    searchSalaryNotNow() {
+      ViewSalaryService.getSalary(this.dataSearchSalaryNotNow)
+        .then((response) => {
+          this.dataSalaryNotNow = response.data.data;
+          this.dataSearchSalaryNotNow.total = response.data.total;
+          this.paginationSalaryNotNow.total = response.data.total;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    searchBonusNow() {
+      ViewSalaryService.getBonus(this.dataSearchBonusNow)
+        .then((response) => {
+          this.dataBonusNow = response.data.data;
+          this.dataSearchBonusNow.total = response.data.total;
+          this.paginationBonusNow.total = response.data.total;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    searchPunishNow() {
+      ViewSalaryService.getPunish(this.dataSearchPunishNow)
+        .then((response) => {
+          this.dataPunishNow = response.data.data;
+          this.dataSearchPunishNow.total = response.data.total;
+          this.paginationPunishNow.total = response.data.total;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    searchBonusNotNow() {
+      ViewSalaryService.getBonus(this.dataSearchBonusNotNow)
+        .then((response) => {
+          this.dataBonusNotNow = response.data.data;
+          this.dataSearchBonusNotNow.total = response.data.total;
+          this.paginationBonusNotNow.total = response.data.total;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    searchPunishNotNow() {
+      ViewSalaryService.getPunish(this.dataSearchPunishNotNow)
+        .then((response) => {
+          this.dataPunishNotNow = response.data.data;
+          this.dataSearchPunishNotNow.total = response.data.total;
+          this.paginationPunishNotNow.total = response.data.total;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
   },
 };
 </script>

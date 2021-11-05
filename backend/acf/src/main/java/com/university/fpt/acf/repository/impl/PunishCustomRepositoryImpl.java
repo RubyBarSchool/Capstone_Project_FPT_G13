@@ -68,8 +68,11 @@ public class PunishCustomRepositoryImpl extends CommonRepository implements Puni
     public List<SearchBonusAdminVO> searchPunishUser(String username, BonusPunishForm bonusPunishForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select  COUNT(*) from Account a inner join a.employee e inner join e.bonusPenalties b  where b.deleted" +
-                " = false and b.bonus = false and a.username = :username");
+
+        sql.append("select  new com.university.fpt.acf.vo.SearchBonusAdminVO(b.id,b.title,b.reason,b.money,b.status," +
+                "b.effectiveDate) from Account a inner join a.employee e inner join e.bonusPenalties b  where b.deleted" +
+                " = false and b.status = true and b.bonus = false and a.username = :username");
+
 
         params.put("username", username);
         if(bonusPunishForm.getCheckNow()){
@@ -134,9 +137,8 @@ public class PunishCustomRepositoryImpl extends CommonRepository implements Puni
     public int totalSearchPunishUser(String username, BonusPunishForm bonusPunishForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select  new com.university.fpt.acf.vo.SearchBonusAdminVO(b.id,b.title,b.reason,b.money,b.status," +
-                "b.effectiveDate) from Account a inner join a.employee e inner join e.bonusPenalties b  where b.deleted" +
-                " = false and b.bonus = false and a.username = :username");
+        sql.append("select  COUNT(*) from Account a inner join a.employee e inner join e.bonusPenalties b  where b.deleted" +
+                " = false and b.status = true and b.bonus = false and a.username = :username");
         params.put("username", username);
         if(bonusPunishForm.getCheckNow()){
             LocalDate localDate = LocalDate.now();

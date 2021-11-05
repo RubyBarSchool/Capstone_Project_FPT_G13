@@ -21,4 +21,6 @@ public class SearchSalaryVO {
     private String advanceSalary;
     private String totalMoney;
     private Boolean status;
+    private String accountAccept;
+    private LocalDate acceptDate;
 }

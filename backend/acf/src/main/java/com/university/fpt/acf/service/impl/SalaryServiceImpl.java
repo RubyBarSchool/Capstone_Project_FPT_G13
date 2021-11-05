@@ -1,5 +1,6 @@
 package com.university.fpt.acf.service.impl;
 
+import com.university.fpt.acf.config.security.AccountSercurity;
 import com.university.fpt.acf.entity.HistorySalary;
 import com.university.fpt.acf.form.BonusPunishForm;
 import com.university.fpt.acf.form.SearchSalaryForm;
@@ -104,9 +105,13 @@ public class SalaryServiceImpl implements SalaryService {
     @Transactional
     public Boolean acceptSalary(Long id) {
         try{
+            AccountSercurity accountSercurity = new AccountSercurity();
             HistorySalary historySalary = salaryRepository.getById(id);
             if(historySalary != null){
                 historySalary.setStatus(true);
+                historySalary.setModified_by(accountSercurity.getUserName());
+                historySalary.setAccountAccept(accountSercurity.getUserName());
+                historySalary.setDateAccept(LocalDate.now());
                 historySalary.setModified_date(LocalDate.now());
             }else {
                 throw new RuntimeException("id not exit");
