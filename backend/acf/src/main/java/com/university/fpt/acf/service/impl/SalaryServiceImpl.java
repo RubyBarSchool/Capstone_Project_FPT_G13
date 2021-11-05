@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,6 +107,7 @@ public class SalaryServiceImpl implements SalaryService {
             HistorySalary historySalary = salaryRepository.getById(id);
             if(historySalary != null){
                 historySalary.setStatus(true);
+                historySalary.setModified_date(LocalDate.now());
             }else {
                 throw new RuntimeException("id not exit");
             }

@@ -23,39 +23,52 @@ public class SalaryCustomRepositoryImpl extends CommonRepository implements Sala
         sqlAcc.append(" select new com.university.fpt.acf.vo.SearchSalaryVO(hs.id,hs.created_date,e.fullName,p.name,hs.countWork,hs.salary" +
                 ",hs.bonus,hs.penalty,hs.advanceSalary,hs.totalMoney,hs.status) " +
                 " from HistorySalary hs inner join hs.employee e inner join e.position p where  hs.deleted = false ");
-        if(bonusPunishForm.getCheckNow()){
+        if (bonusPunishForm.getCheckNow()) {
             LocalDate localDate = LocalDate.now();
             int day = localDate.getDayOfMonth();
             LocalDate dateCreated = LocalDate.now();
-            if(day<10){
+            if (day < 10) {
                 LocalDate localDate1 = localDate.minusMonths(1);
-//                dateCreated = LocalDate.of(localDate1.getYear(),localDate1.ge)
+                dateCreated = LocalDate.of(localDate1.getYear(), localDate1.getMonth(), 10);
+            } else {
+                dateCreated = LocalDate.of(dateCreated.getYear(), dateCreated.getMonth(), 10);
             }
-        }else{
-
+            sqlAcc.append(" and  hs.created_date =  :dateStart  ");
+            paramsAcc.put("dateStart", dateCreated);
+        } else {
+            if (bonusPunishForm.getDate() != null) {
+                LocalDate localDate = bonusPunishForm.getDate();
+                int day = localDate.getDayOfMonth();
+                LocalDate dateCreated = LocalDate.now();
+                if (day < 10) {
+                    LocalDate localDate1 = localDate.minusMonths(1);
+                    dateCreated = LocalDate.of(localDate1.getYear(), localDate1.getMonth(), 10);
+                } else {
+                    dateCreated = LocalDate.of(dateCreated.getYear(), dateCreated.getMonth(), 10);
+                }
+                sqlAcc.append(" and  hs.created_date =  :dateStart  ");
+                paramsAcc.put("dateStart", dateCreated);
+            } else {
+                LocalDate localDate = LocalDate.now();
+                int day = localDate.getDayOfMonth();
+                LocalDate dateCreated = LocalDate.now();
+                if (day < 10) {
+                    LocalDate localDate1 = localDate.minusMonths(2);
+                    dateCreated = LocalDate.of(localDate1.getYear(), localDate1.getMonth(), 10);
+                } else {
+                    LocalDate localDate1 = localDate.minusMonths(1);
+                    dateCreated = LocalDate.of(localDate1.getYear(), localDate1.getMonth(), 10);
+                }
+                sqlAcc.append(" and  hs.created_date <=  :dateStart  ");
+                paramsAcc.put("dateStart", dateCreated);
+            }
         }
-//        if (searchSalaryForm.getName() != null && !searchSalaryForm.getName().isEmpty()) {
-//            sqlAcc.append(" and LOWER(e.fullName) like :name ");
-//            paramsAcc.put("name", "%" + searchSalaryForm.getName() + "%");
-//        }
-//
-//        if (searchSalaryForm.getIdPositons() != null && !searchSalaryForm.getIdPositons().isEmpty()) {
-//            sqlAcc.append(" and p.id in :idPosition ");
-//            paramsAcc.put("idPosition", searchSalaryForm.getIdPositons());
-//        }
-//
-//
-//        if (searchSalaryForm.getDate() != null && !searchSalaryForm.getDate().isEmpty()) {
-//            sqlAcc.append(" and  hs.created_date BETWEEN :dateStart and :dateEnd ");
-//            paramsAcc.put("dateStart", searchSalaryForm.getDate().get(0));
-//            paramsAcc.put("dateEnd", searchSalaryForm.getDate().get(1));
-//        }
-//        sqlAcc.append(" ORDER by hs.created_date desc ");
-//        TypedQuery<SearchSalaryVO> queryAcc = super.createQuery(sqlAcc.toString(), paramsAcc, SearchSalaryVO.class);
-//        queryAcc.setFirstResult((searchSalaryForm.getPageIndex() - 1)*searchSalaryForm.getPageSize());
-//        queryAcc.setMaxResults(searchSalaryForm.getPageSize());
-//        List<SearchSalaryVO> resultList = queryAcc.getResultList();
-        return null;
+        sqlAcc.append(" ORDER by hs.created_date desc ");
+        TypedQuery<SearchSalaryVO> queryAcc = super.createQuery(sqlAcc.toString(), paramsAcc, SearchSalaryVO.class);
+        queryAcc.setFirstResult((bonusPunishForm.getPageIndex() - 1)*bonusPunishForm.getPageSize());
+        queryAcc.setMaxResults(bonusPunishForm.getPageSize());
+        List<SearchSalaryVO> resultList = queryAcc.getResultList();
+        return resultList;
     }
 
     @Override
@@ -63,25 +76,47 @@ public class SalaryCustomRepositoryImpl extends CommonRepository implements Sala
         StringBuilder sqlAcc = new StringBuilder("");
         Map<String, Object> paramsAcc = new HashMap<>();
         sqlAcc.append(" select COUNT(*)  from HistorySalary hs inner join hs.employee e inner join e.position p " +
-                "where hs.status = true and hs.deleted = false  ");
-
-//        if (searchSalaryForm.getName() != null && !searchSalaryForm.getName().isEmpty()) {
-//            sqlAcc.append(" and LOWER(e.fullName) like :name ");
-//            paramsAcc.put("name", "%" + searchSalaryForm.getName() + "%");
-//        }
-//
-//        if (searchSalaryForm.getIdPositons() != null && !searchSalaryForm.getIdPositons().isEmpty()) {
-//            sqlAcc.append(" and p.id in :idPosition ");
-//            paramsAcc.put("idPosition", searchSalaryForm.getIdPositons());
-//        }
-//
-//
-//        if (searchSalaryForm.getDate() != null && !searchSalaryForm.getDate().isEmpty()) {
-//            sqlAcc.append(" and  hs.created_date BETWEEN :dateStart and :dateEnd ");
-//            paramsAcc.put("dateStart", searchSalaryForm.getDate().get(0));
-//            paramsAcc.put("dateEnd", searchSalaryForm.getDate().get(1));
-//        }
-
+                "where  hs.deleted = false  ");
+        if (bonusPunishForm.getCheckNow()) {
+            LocalDate localDate = LocalDate.now();
+            int day = localDate.getDayOfMonth();
+            LocalDate dateCreated = LocalDate.now();
+            if (day < 10) {
+                LocalDate localDate1 = localDate.minusMonths(1);
+                dateCreated = LocalDate.of(localDate1.getYear(), localDate1.getMonth(), 10);
+            } else {
+                dateCreated = LocalDate.of(dateCreated.getYear(), dateCreated.getMonth(), 10);
+            }
+            sqlAcc.append(" and  hs.created_date =  :dateStart  ");
+            paramsAcc.put("dateStart", dateCreated);
+        } else {
+            if (bonusPunishForm.getDate() != null) {
+                LocalDate localDate = bonusPunishForm.getDate();
+                int day = localDate.getDayOfMonth();
+                LocalDate dateCreated = LocalDate.now();
+                if (day < 10) {
+                    LocalDate localDate1 = localDate.minusMonths(1);
+                    dateCreated = LocalDate.of(localDate1.getYear(), localDate1.getMonth(), 10);
+                } else {
+                    dateCreated = LocalDate.of(dateCreated.getYear(), dateCreated.getMonth(), 10);
+                }
+                sqlAcc.append(" and  hs.created_date =  :dateStart  ");
+                paramsAcc.put("dateStart", dateCreated);
+            } else {
+                LocalDate localDate = LocalDate.now();
+                int day = localDate.getDayOfMonth();
+                LocalDate dateCreated = LocalDate.now();
+                if (day < 10) {
+                    LocalDate localDate1 = localDate.minusMonths(2);
+                    dateCreated = LocalDate.of(localDate1.getYear(), localDate1.getMonth(), 10);
+                } else {
+                    LocalDate localDate1 = localDate.minusMonths(1);
+                    dateCreated = LocalDate.of(localDate1.getYear(), localDate1.getMonth(), 10);
+                }
+                sqlAcc.append(" and  hs.created_date <=  :dateStart  ");
+                paramsAcc.put("dateStart", dateCreated);
+            }
+        }
         TypedQuery<Long> queryAcc = super.createQuery(sqlAcc.toString(), paramsAcc, Long.class);
         return queryAcc.getSingleResult().intValue();
     }
@@ -112,7 +147,7 @@ public class SalaryCustomRepositoryImpl extends CommonRepository implements Sala
         }
         sqlAcc.append(" ORDER by hs.created_date desc ");
         TypedQuery<SearchSalaryVO> queryAcc = super.createQuery(sqlAcc.toString(), paramsAcc, SearchSalaryVO.class);
-        queryAcc.setFirstResult((searchSalaryForm.getPageIndex() - 1)*searchSalaryForm.getPageSize());
+        queryAcc.setFirstResult((searchSalaryForm.getPageIndex() - 1) * searchSalaryForm.getPageSize());
         queryAcc.setMaxResults(searchSalaryForm.getPageSize());
         List<SearchSalaryVO> resultList = queryAcc.getResultList();
         return resultList;
@@ -172,7 +207,7 @@ public class SalaryCustomRepositoryImpl extends CommonRepository implements Sala
         }
         sqlAcc.append(" ORDER by hs.created_date desc ");
         TypedQuery<SearchSalaryVO> queryAcc = super.createQuery(sqlAcc.toString(), paramsAcc, SearchSalaryVO.class);
-        queryAcc.setFirstResult((searchSalaryForm.getPageIndex() - 1)*searchSalaryForm.getPageSize());
+        queryAcc.setFirstResult((searchSalaryForm.getPageIndex() - 1) * searchSalaryForm.getPageSize());
         queryAcc.setMaxResults(searchSalaryForm.getPageSize());
         List<SearchSalaryVO> resultList = queryAcc.getResultList();
         return resultList;

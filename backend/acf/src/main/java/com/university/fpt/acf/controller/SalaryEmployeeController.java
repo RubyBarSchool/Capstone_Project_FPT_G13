@@ -31,10 +31,10 @@ public class SalaryEmployeeController {
     @Autowired
     private PunishService punishService;
 
+    @Autowired
     private SalaryService salaryService;
 
     // get salary with account
-
     @PostMapping("")
     public ResponseEntity<ResponseCommon> salary(@Valid @RequestBody BonusPunishForm bonusPunishForm) {
         ResponseCommon responseCommon = new ResponseCommon();
