@@ -84,7 +84,9 @@
               <template slot="action" slot-scope="text, record">
                 <a-button
                   id="view"
-                  @click="getDetailPersonalLeaveApplicationAdmin(record.id)"
+                  @click="
+                    getDetailPersonalLeaveApplicationAdmin(record.idApplication)
+                  "
                 >
                   <font-awesome-icon :icon="['fas', 'eye']" />
                 </a-button>
@@ -98,7 +100,17 @@
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button type="danger"> Loại bỏ </a-button>
-              <a-button type="primary"> Chấp nhận </a-button>
+              <a-button
+                type="primary"
+                @click="
+                  submitAccept(
+                    dataDetailPersonalLeaveApplicationAdmin.idApplication,
+                    dataDetailPersonalLeaveApplicationAdmin.comment
+                  )
+                "
+              >
+                Chấp nhận
+              </a-button>
             </template>
             <div class="container">
               <a-form-model>
@@ -116,16 +128,14 @@
                     disabled
                   />
                 </a-form-model-item>
-                <a-form-model-item label="Chọn ngày">
+                <!-- <a-form-model-item label="Ngày nghỉ">
                   <a-date-picker
-                    placeholder="Chọn ngày"
                     v-model="dataDetailPersonalLeaveApplicationAdmin.date"
                     disabled
                   />
-                </a-form-model-item>
+                </a-form-model-item> -->
                 <a-form-model-item label="Nội dung">
                   <a-textarea
-                    placeholder="Viết nội dung....."
                     :rows="4"
                     v-model="dataDetailPersonalLeaveApplicationAdmin.content"
                     disabled
@@ -177,11 +187,19 @@ export default {
       },
       dataSourceTable: [],
       dataDetailPersonalLeaveApplicationAdmin: {
-        nameEmployee: "",
-        title: "",
-        date: [],
-        content: "",
         comment: "",
+        content: "",
+        date: "",
+        fileAttach: "",
+        idApplication: "",
+        idEmployee: "",
+        nameEmployee: "",
+        statusAccept: "",
+        title: "",
+      },
+      dataAcceptPersonalApplication: {
+        comment: "",
+        idApplication: "",
       },
       columns: [
         {
@@ -270,35 +288,12 @@ export default {
         });
     },
 
-    getDetailAdvanceSalaryAdmin(id) {
+    getDetailPersonalLeaveApplicationAdmin(id) {
       acceptXinNghiService
         .getDetailPersonalLeaveApplicationAdmin(id)
         .then((response) => {
-          this.dataAdvanceSalaryAdminDetail = response.data.data;
+          this.dataDetailPersonalLeaveApplicationAdmin = response.data.data;
           this.visibleView = true;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    
-    submitAccept() {
-      acceptXinNghiService
-        .getDetailPersonalLeaveApplicationAdmin()
-        .then((response) => {
-          if (response.data.data) {
-            let type = "success";
-            let message = "Cập nhật";
-            let description = "Cập nhật trạng thái đơn thành công";
-            this.notifi(type, message, description);
-            this.submitSearch();
-          } else {
-            let type = "error";
-            let message = "Cập nhật";
-            let description = "Cập nhật trạng thái đơn thành công";
-            this.notifi(type, message, description);
-            this.submitSearch();
-          }
         })
         .catch((e) => {
           console.log(e);
@@ -311,6 +306,49 @@ export default {
 
     showModaView() {
       this.visibleView = true;
+    },
+
+    search() {
+      this.dataSearch.pageIndex = 1;
+      this.dataSearch.total = 0;
+      this.submitSearch();
+    },
+
+    handAccept() {
+      acceptXinNghiService
+        .acceptPersonalApplication(this.dataAcceptPersonalApplication)
+        .then((response) => {
+          if (response.data.data) {
+            let type = "success";
+            let message = "Cập nhật";
+            let description = "Cập nhật trạng thái đơn thành công";
+            this.notifi(type, message, description);
+            this.submitSearch();
+          } else {
+            let type = "error";
+            let message = "Cập nhật";
+            let description = "Cập nhật trạng thái đơn không thành công";
+            this.notifi(type, message, description);
+            this.submitSearch();
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
+    submitAccept(idApplication, comment) {
+      this.dataAcceptPersonalApplication.idApplication = idApplication;
+      this.dataAcceptPersonalApplication.comment = comment;
+      this.handAccept();
+      this.visibleView = false;
+    },
+
+    notifi(type, message, description) {
+      this.$notification[type]({
+        message: message,
+        description: description,
+      });
     },
   },
 };

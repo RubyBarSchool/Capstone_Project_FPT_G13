@@ -1,8 +1,8 @@
 import http from "./http-common";
 
 class acceptXinNghiService {
-    acceptPersonalApplication() {
-        return http.post(`/admin/acceptPersonalLeaveApplication/accept`);
+    acceptPersonalApplication(form) {
+        return http.post(`/admin/acceptPersonalLeaveApplication/accept`, form);
     }
     getDetailPersonalLeaveApplicationAdmin(id) {
         return http.get(`/admin/acceptPersonalLeaveApplication/detail?id=${id}`);
