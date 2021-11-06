@@ -179,7 +179,7 @@ export default {
       dataDetailPersonalLeaveApplicationAdmin: {
         nameEmployee: "",
         title: "",
-        date: ["", ""],
+        date: [],
         content: "",
         comment: "",
       },

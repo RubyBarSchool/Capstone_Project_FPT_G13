@@ -144,6 +144,13 @@ export const router = new Router({
             component: () =>
                 import ("./pages/ThuongAdmin.vue"),
         },
+        {
+            path: "/viewthuongphat",
+            name: "ViewThuongPhat",
+            // lazy-loaded
+            component: () =>
+                import ("./pages/ViewThuongPhat.vue"),
+        },
     ],
 });
 

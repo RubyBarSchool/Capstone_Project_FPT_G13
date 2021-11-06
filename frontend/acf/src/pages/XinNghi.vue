@@ -2,7 +2,7 @@
   <div class="xinnghi">
     <a-layout :style="{ background: 'white' }">
       <Header />
-      <a-layout-content :style="{ margin: '24px 16px 0' }">
+      <a-layout-content :style="{ margin: '30px 16px 0' }">
         <div
           :style="{
             minHeight: '360px',
@@ -20,14 +20,18 @@
           <!-- menu trên -->
           <a-input
             placeholder="Tiêu đề"
-            :style="{ 'margin-right': '5px', width: '200px' }"
+            style="width: 150px"
             v-model="dataSearch.title"
           />
-          <a-input
+          <a-select
             placeholder="Trạng thái"
-            :style="{ 'margin-right': '5px', width: '200px' }"
             v-model="dataSearch.status"
-          />
+            style="width: 150px"
+          >
+            <a-select-option value="-1"> Chờ duyệt </a-select-option>
+            <a-select-option value="0"> Hủy bỏ </a-select-option>
+            <a-select-option value="1"> Đã duyệt </a-select-option>
+          </a-select>
           <a-range-picker
             v-model="dataSearch.date"
             :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
@@ -56,7 +60,6 @@
             />
             Viết đơn
           </a-button>
-          <!-- menu trên -->
 
           <!-- table content -->
           <div :style="{ 'padding-top': '10px' }">
@@ -71,35 +74,64 @@
               "
               @change="handleTableChange"
             >
-              <template slot="date" slot-scope="text, record">
-                {{ record.date }}
-              </template>
-              <template slot="status" slot-scope="text, record">
-                <a-tag :color="record.accept ? 'green' : 'gray'">
-                  {{ record.accept ? "Đã duyệt" : "Chờ duyệt" }}
-                </a-tag>
-              </template>
               <template slot="titlee" slot-scope="text, record">
                 {{ record.title }}
               </template>
-              <template slot="content" slot-scope="text, record">
-                {{ record.content }}
+              <template slot="dateCreate" slot-scope="text, record">
+                {{ record.dateCreate }}
               </template>
-              <template slot="comment" slot-scope="text, record">
-                {{ record.comment }}
+              <template slot="dateAccept" slot-scope="text, record">
+                {{ record.dateAccept }}
+              </template>
+              <template slot="dateStart" slot-scope="text, record">
+                {{ record.dateStart }}
+              </template>
+              <template slot="dateEnd" slot-scope="text, record">
+                {{ record.dateEnd }}
+              </template>
+              <template slot="status" slot-scope="text, record">
+                <a-tag
+                  :color="
+                    record.statusAccept == '-1'
+                      ? 'red'
+                      : record.statusAccept == '0'
+                      ? 'gray'
+                      : 'green'
+                  "
+                >
+                  {{
+                    record.statusAccept == "-1"
+                      ? "Hủy bỏ"
+                      : record.statusAccept == "0"
+                      ? "Chờ duyệt"
+                      : "Đã duyệt"
+                  }}
+                </a-tag>
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-row>
                   <a-col :span="8">
                     <a-button
+                      id="view"
+                      @click="
+                        getDetailPersonalLeaveApplicationEmployee(
+                          record.idApplication
+                        )
+                      "
+                      :style="{ width: '44.25px', 'margin-right': '100px' }"
+                    >
+                      <font-awesome-icon :icon="['fas', 'eye']" />
+                    </a-button>
+                  </a-col>
+                  <a-col :span="8">
+                    <a-button
                       id="edit"
                       @click="
                         showModalEdit(
-                          record.content,
-                          record.date,
-                          record.fileAttach,
                           record.idApplication,
-                          record.title
+                          record.title,
+                          record.content,
+                          record.date
                         )
                       "
                       :style="{ width: '44.25px' }"
@@ -123,37 +155,34 @@
             </a-table>
           </div>
           <!-- table content -->
-
-          <!-- popup add -->
-          <a-modal v-model="visibleAdd" title="Đơn xin nghỉ">
+          <!-- popup add-->
+          <a-modal v-model="visibleAdd" title="Viết đơn">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button key="submit" type="primary" @click="submitAdd">
                 Lưu
               </a-button>
             </template>
-            <div class="container">
-              <a-form-model>
-                <a-form-model-item label="Tiêu đề">
-                  <a-input v-model="dataAdd.title" />
-                </a-form-model-item>
-                <a-form-model-item label="Chọn ngày">
-                  <a-range-picker
-                    :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-                    v-model="dataAdd.date"
-                    :show-time="{ format: 'DD/MM/YYYY' }"
-                    format="DD/MM/YYYY"
-                  />
-                </a-form-model-item>
-                <a-form-model-item label="Nội dung">
-                  <a-textarea
-                    placeholder="Viết nội dung"
-                    :rows="4"
-                    v-model="dataAdd.content"
-                  />
-                </a-form-model-item>
-              </a-form-model>
-            </div>
+            <a-form-model>
+              <a-form-model-item label="Tiêu đề">
+                <a-input v-model="dataAdd.title" />
+              </a-form-model-item>
+              <a-form-model-item label="Ngày">
+                <a-range-picker
+                  v-model="dataAdd.date"
+                  :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+                  format="DD/MM/YYYY"
+                />
+              </a-form-model-item>
+
+              <a-form-model-item label="Nội dung">
+                <a-textarea
+                  v-model="dataAdd.content"
+                  placeholder="Lý do như nào thì viết vào đây"
+                  :row="4"
+                />
+              </a-form-model-item>
+            </a-form-model>
           </a-modal>
           <!-- popup add -->
 
@@ -165,42 +194,70 @@
                 Lưu
               </a-button>
             </template>
-           <div class="container">
-              <a-form-model>
-                <a-form-model-item label="Tiêu đề">
-                  <a-input v-model="dataEdit.title" />
-                </a-form-model-item>
-                <a-form-model-item label="Chọn ngày">
-                  <a-range-picker
-                    :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-                    v-model="dataEdit.date"
-                    :show-time="{ format: 'DD/MM/YYYY' }"
-                    format="DD/MM/YYYY"
-                  />
-                </a-form-model-item>
-                <a-form-model-item label="Nội dung">
-                  <a-textarea
-                    placeholder="Viết nội dung"
-                    :rows="4"
-                    v-model="dataEdit.content"
-                  />
-                </a-form-model-item>
-              </a-form-model>
-            </div>
+            <a-form-model>
+              <a-form-model-item label="Tiêu đề">
+                <a-input v-model="dataEdit.title" />
+              </a-form-model-item>
+              <a-form-model-item label="Ngày">
+                <a-range-picker
+                  v-model="dataEdit.date"
+                  :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+                  format="DD/MM/YYYY"
+                />
+              </a-form-model-item>
+              <a-form-model-item label="Nội dung">
+                <a-textarea
+                  v-model="dataEdit.content"
+                  placeholder="Lý do như nào thì viết vào đây"
+                  :row="4"
+                />
+              </a-form-model-item>
+            </a-form-model>
           </a-modal>
           <!-- popup edit-->
 
+          <!-- popup view-->
+          <a-modal v-model="visibleView" class="view">
+            <template slot="footer">
+              <a-button key="a" hidden></a-button>
+              <a-button key="submit" type="primary" @click="handleCancel"
+                >Thoát ra</a-button
+              >
+            </template>
+            <a-form-model>
+              <a-form-model-item label="Tiêu đề">
+                <a-input
+                  v-model="dataPersonalLeaveEmployeeDetail.title"
+                  disabled
+                />
+              </a-form-model-item>
+              <a-form-model-item label="Ngày">
+                <a-input
+                  v-model="dataPersonalLeaveEmployeeDetail.dateAccept"
+                  disabled
+                />
+              </a-form-model-item>
+              <a-form-model-item label="Nội dung">
+                <a-textarea
+                  v-model="dataPersonalLeaveEmployeeDetail.content"
+                  :row="4"
+                  disabled
+                />
+              </a-form-model-item>
+            </a-form-model>
+          </a-modal>
+          <!-- popup view-->
         </div>
       </a-layout-content>
       <Footer />
     </a-layout>
   </div>
 </template>
-
-<script>
+ <script>
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 import xinNghiService from "../service/xinNghiService";
+
 export default {
   name: "XinNghi",
   components: {
@@ -224,17 +281,23 @@ export default {
       },
       dataSourceTable: [],
       dataAdd: {
-        date: ["", ""],
         content: "",
-        title: "",
+        date: [],
         fileAttach: "",
+        title: "",
       },
       dataEdit: {
         content: "",
-        date: ["", ""],
+        date: [],
         fileAttach: "",
         idApplication: 0,
         title: "",
+      },
+      dataPersonalLeaveEmployeeDetail: {
+        id: "",
+        title: "",
+        content: "",
+        date: [],
       },
       columns: [
         {
@@ -245,20 +308,6 @@ export default {
           fixed: "left",
         },
         {
-          title: "Ngày",
-          dataIndex: "date",
-          key: "date",
-          width: 150,
-          scopedSlots: { customRender: "date" },
-        },
-        {
-          title: "Trạng thái",
-          dataIndex: "status",
-          key: "status",
-          width: 150,
-          scopedSlots: { customRender: "status" },
-        },
-        {
           title: "Tiêu đề",
           dataIndex: "titlee",
           key: "titlee",
@@ -266,18 +315,39 @@ export default {
           scopedSlots: { customRender: "titlee" },
         },
         {
-          title: "Nội dung",
-          dataIndex: "content",
-          key: "content",
+          title: "Ngày tạo",
+          dataIndex: "dateCreate",
+          key: "dateCreate",
           width: 150,
-          scopedSlots: { customRender: "content" },
+          scopedSlots: { customRender: "dateCreate" },
         },
         {
-          title: "Ghi chú",
-          dataIndex: "comment",
-          key: "comment",
+          title: "Ngày chấp nhận",
+          dataIndex: "dateAccept",
+          key: "dateAccept",
           width: 150,
-          scopedSlots: { customRender: "comment" },
+          scopedSlots: { customRender: "dateAccept" },
+        },
+        {
+          title: "Thời gian bắt đầu",
+          dataIndex: "dateStart",
+          key: "dateStart",
+          width: 150,
+          scopedSlots: { customRender: "dateStart" },
+        },
+        {
+          title: "Thời gian kết thúc",
+          dataIndex: "dateEnd",
+          key: "dateEnd",
+          width: 150,
+          scopedSlots: { customRender: "dateEnd" },
+        },
+        {
+          title: "Trạng thái",
+          dataIndex: "status",
+          key: "status",
+          width: 150,
+          scopedSlots: { customRender: "status" },
         },
         {
           title: "",
@@ -290,6 +360,7 @@ export default {
       ],
       visibleAdd: false,
       visibleEdit: false,
+      visibleView: false,
     };
   },
   created() {
@@ -323,13 +394,50 @@ export default {
           console.log(e);
         });
     },
+    showModalAdd() {
+      this.visibleAdd = true;
+    },
+    submitAdd() {
+      xinNghiService
+        .addPersonalApplication(this.dataAdd)
+        .then((response) => {
+          this.submitSearch();
+          if (response.data.data) {
+            let type = "success";
+            let message = "Viết đơn";
+            let description =
+              "Thêm mới đơn " + this.dataAdd.title + " thành công !!";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Viết đơn";
+            let description =
+              "Thêm mới đơn " +
+              this.dataAdd.title +
+              " không thành công vì " +
+              response.data.message;
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      this.visibleAdd = false;
+      this.dataAdd.title = "";
+      this.dataAdd.date = [];
+      this.dataAdd.content = "";
+    },
 
-    showModalEdit(content, date, fileAttach, idApplication, title) {
-      this.dataEdit.content = content;
-      this.dataEdit.date = date;
-      this.dataEdit.fileAttach = fileAttach;
+    handleCancel() {
+      this.visibleAdd = false;
+      this.visibleEdit = false;
+      this.visibleView = false;
+    },
+    showModalEdit(idApplication, title, content, date) {
       this.dataEdit.idApplication = idApplication;
       this.dataEdit.title = title;
+      this.dataEdit.content = content;
+      this.dataEdit.date = date;
       this.visibleEdit = true;
     },
     submitUpdate() {
@@ -355,47 +463,6 @@ export default {
       this.visibleEdit = false;
     },
 
-    handleCancel() {
-      this.visibleAdd = false;
-      this.visibleEdit = false;
-    },
-
-    showModalAdd() {
-      this.visibleAdd = true;
-    },
-    submitAdd() {
-      xinNghiService
-        .addPersonalApplication(this.dataAdd)
-        .then((response) => {
-          this.dataEmployees = response.data.data;
-          this.submitSearch();
-          if (response.data.data) {
-            let type = "success";
-            let message = "Viết đơn";
-            let description =
-              "Thêm mới đơn " + this.dataAdd.title + " thành công !!";
-            this.notifi(type, message, description);
-          } else {
-            let type = "error";
-            let message = "Viết đơn";
-            let description =
-              "Thêm mới đơn " +
-              this.dataAdd.title +
-              " không thành công vì " +
-              response.data.message;
-            this.notifi(type, message, description);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-      this.visibleAdd = false;
-      this.dataAdd.date = ["", ""];
-      this.dataAdd.content = "";
-      this.dataAdd.title = "";
-      this.dataAdd.fileAttach = "";
-    },
-
     deletePersonalApplication(id) {
       xinNghiService
         .deletePersonalApplication(id)
@@ -418,7 +485,17 @@ export default {
           console.log(e);
         });
     },
-
+    getDetailPersonalLeaveApplicationEmployee(id) {
+      xinNghiService
+        .getDetailPersonalLeaveApplicationEmployee(id)
+        .then((response) => {
+          this.dataPersonalLeaveEmployeeDetail = response.data.data;
+          this.visibleView = true;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     notifi(type, message, description) {
       this.$notification[type]({
         message: message,
@@ -453,5 +530,12 @@ export default {
   background-color: rgb(0, 181, 253);
   color: white;
 }
-
+#view {
+  background-color: rgb(76, 238, 12);
+  color: white;
+}
+#view:hover {
+  background-color: rgb(42, 253, 0);
+  color: white;
+}
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="admin">
+  <div class="ungluong">
     <a-layout :style="{ background: 'white' }">
       <Header />
       <a-layout-content :style="{ margin: '30px 16px 0' }">
@@ -86,17 +86,17 @@
               <template slot="status" slot-scope="text, record">
                 <a-tag
                   :color="
-                    record.accept == '-1'
+                    record.status == '-1'
                       ? 'red'
-                      : record.accept == '0'
+                      : record.status == '0'
                       ? 'gray'
                       : 'green'
                   "
                 >
                   {{
-                    record.accept == "-1"
+                    record.status == "-1"
                       ? "Hủy bỏ"
-                      : record.accept == "0"
+                      : record.status == "0"
                       ? "Chờ duyệt"
                       : "Đã duyệt"
                   }}
@@ -263,16 +263,10 @@ export default {
         total: 0,
       },
       dataSourceTable: [],
-      dataAdvanceSalaryEmployees: [],
       dataAdd: {
         advanceSalary: "",
         content: "",
         title: "",
-      },
-      dataEmployee: {
-        name: "",
-        pageIndex: 1,
-        pageSize: 10,
       },
       dataEdit: {
         advanceSalary: "",
@@ -374,7 +368,6 @@ export default {
       ungLuongService
         .addAdvanceSalaryEmployee(this.dataAdd)
         .then((response) => {
-          this.dataAdvanceSalaryEmployees = response.data.data;
           this.submitSearch();
           if (response.data.data) {
             let type = "success";

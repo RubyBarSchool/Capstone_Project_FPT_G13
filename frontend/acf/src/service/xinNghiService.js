@@ -10,6 +10,9 @@ class xinNghiService {
     updatePersonalApplication(data) {
         return http.put(`/employee/personalLeaveApplication/update`, data);
     }
+    getDetailPersonalLeaveApplicationEmployee(id) {
+        return http.get(`/employee/personalLeaveApplication/detail?id=${id}`);
+    }
     deletePersonalApplication(id) {
         return http.delete(`/employee/personalLeaveApplication/delete?id=${id}`);
     }
