@@ -17,7 +17,7 @@ public class PersonalLeaveApplicationAdminCustomRepositoryImpl extends CommonRep
     public List<SearchPersonalLeaveApplicationAdminVO> searchApplication(SearchPersonalLeaveAdminApplicationForm searchApplication) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append(" SELECT new com.university.fpt.acf.vo.SearchPersonalLeaveApplicationVO(p.id,p.created_date,p.fileAttach,p.title,p.comment,p.content,e.id,e.fullName,p.statusAccept) From PersonaLeaveApplication p inner join p.employee e where p.accept=true ");
+        sql.append(" SELECT new com.university.fpt.acf.vo.SearchPersonalLeaveApplicationAdminVO(p.id,p.created_date,p.fileAttach,p.title,p.comment,p.content,e.id,e.fullName,p.accept) From PersonaLeaveApplication p inner join p.employee e where 1=1 ");
         if(searchApplication.getNameEmployee() != null && !searchApplication.getNameEmployee().isEmpty()){
             sql.append(" and LOWER(e.fullName) like :name ");
             params.put("name","%"+searchApplication.getNameEmployee().toLowerCase()+"%");
@@ -26,7 +26,7 @@ public class PersonalLeaveApplicationAdminCustomRepositoryImpl extends CommonRep
             sql.append(" and LOWER(p.title) like :title ");
             params.put("title","%"+searchApplication.getTitle().toLowerCase()+"%");
         }
-        if(searchApplication.getStatus() != null ){
+        if(searchApplication.getStatus() != null && !searchApplication.getStatus().isEmpty()){
             sql.append(" and p.accept=:status ");
             params.put("status",searchApplication.getStatus());
         }
@@ -46,7 +46,7 @@ public class PersonalLeaveApplicationAdminCustomRepositoryImpl extends CommonRep
     public int totalSearchApplication(SearchPersonalLeaveAdminApplicationForm searchApplication) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append(" SELECT COUNT(*) From PersonaLeaveApplication p inner join p.employee e where p.accept=0 ");
+        sql.append(" SELECT COUNT(*) From PersonaLeaveApplication p inner join p.employee e where 1=1 ");
         if(searchApplication.getNameEmployee() != null && !searchApplication.getNameEmployee().isEmpty()){
             sql.append(" and LOWER(e.fullName) like :name ");
             params.put("name","%"+searchApplication.getNameEmployee().toLowerCase()+"%");
@@ -54,6 +54,10 @@ public class PersonalLeaveApplicationAdminCustomRepositoryImpl extends CommonRep
         if(searchApplication.getTitle() != null && !searchApplication.getTitle().isEmpty()){
             sql.append(" and LOWER(p.title) like :title ");
             params.put("title","%"+searchApplication.getTitle().toLowerCase()+"%");
+        }
+        if(searchApplication.getStatus() != null && !searchApplication.getStatus().isEmpty()){
+            sql.append(" and p.accept=:status ");
+            params.put("status",searchApplication.getStatus());
         }
         if (searchApplication.getDate() != null && !searchApplication.getDate().isEmpty()) {
             sql.append(" and  p.created_date BETWEEN :dateStart and :dateEnd ");

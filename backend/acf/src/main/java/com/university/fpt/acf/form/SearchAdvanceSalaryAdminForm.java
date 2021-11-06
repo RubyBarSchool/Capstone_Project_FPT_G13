@@ -10,7 +10,7 @@ public class SearchAdvanceSalaryAdminForm {
     private String title;
     private String employeeName;
     private List<LocalDate> date;
-    private Boolean status;
+    private String status;
     private Integer pageIndex;
     private Integer pageSize;
 }

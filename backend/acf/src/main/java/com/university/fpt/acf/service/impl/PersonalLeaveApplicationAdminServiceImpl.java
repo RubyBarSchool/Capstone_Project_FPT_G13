@@ -5,6 +5,8 @@ import com.university.fpt.acf.entity.PersonaLeaveApplication;
 import com.university.fpt.acf.entity.Position;
 import com.university.fpt.acf.form.AcceptPersonalLeaveApplicationAdminForm;
 import com.university.fpt.acf.form.SearchPersonalLeaveAdminApplicationForm;
+import com.university.fpt.acf.repository.AccountManagerRepository;
+import com.university.fpt.acf.repository.EmployeeRepository;
 import com.university.fpt.acf.repository.PersonalLeaveApplicationAdminCustomRepository;
 import com.university.fpt.acf.repository.PersonalLeaveApplicationAdminRepository;
 import com.university.fpt.acf.service.PersonalLeaveApplicationAdminService;
@@ -21,6 +23,8 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
     PersonalLeaveApplicationAdminCustomRepository personalLeaveApplicationCustomRepository;
     @Autowired
     PersonalLeaveApplicationAdminRepository personalLeaveApplicationAdminRepository;
+    @Autowired
+    AccountManagerRepository accountRepository;
     @Override
     public List<SearchPersonalLeaveApplicationAdminVO> searchPersonalApplication(SearchPersonalLeaveAdminApplicationForm personalApplicationForm) {
         List<SearchPersonalLeaveApplicationAdminVO> listPersonalApplication = new ArrayList<>();
@@ -56,8 +60,9 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
                 }
                 p.setAccept("1");
                 p.setComment(acceptForm.getComment());
-                p.setIdEmployeeAccept(acceptForm.getIdAcceptEmployee());
                 AccountSercurity accountSercurity = new AccountSercurity();
+                Long idEm = accountRepository.getIdEmployeeByUsername(accountSercurity.getUserName());
+                p.setIdEmployeeAccept(idEm);
                 p.setModified_by(accountSercurity.getUserName());
                 p.setCreated_by(accountSercurity.getUserName());
                 personalLeaveApplicationAdminRepository.save(p);

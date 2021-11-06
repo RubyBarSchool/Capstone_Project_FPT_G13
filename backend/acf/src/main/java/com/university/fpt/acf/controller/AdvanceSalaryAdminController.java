@@ -2,6 +2,7 @@ package com.university.fpt.acf.controller;
 
 import com.university.fpt.acf.common.entity.ResponseCommon;
 
+import com.university.fpt.acf.form.AcceptAdvanceSalaryAdminForm;
 import com.university.fpt.acf.form.SearchAdvanceSalaryAdminForm;
 
 import com.university.fpt.acf.service.AdvanceSalaryAdminService;
@@ -48,12 +49,12 @@ public class AdvanceSalaryAdminController {
         }
     }
     @PutMapping("/accept")
-    public ResponseEntity<ResponseCommon> acceptAdvanceSalaryAdmin(){
+    public ResponseEntity<ResponseCommon> acceptAdvanceSalaryAdmin(AcceptAdvanceSalaryAdminForm acceptForm){
         ResponseCommon responseCommon = new ResponseCommon();
         String message="";
         Boolean check = false;
         try {
-            check = adminService.acceptAddvanceSalary();
+            check = adminService.acceptAddvanceSalary(acceptForm);
             if(check==true){
                 message="Duyệt đơn ứng lương thành công!";
             }else{

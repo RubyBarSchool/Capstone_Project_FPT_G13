@@ -3,6 +3,7 @@ package com.university.fpt.acf.service.impl;
 import com.university.fpt.acf.config.security.AccountSercurity;
 import com.university.fpt.acf.entity.AdvaceSalary;
 
+import com.university.fpt.acf.form.AcceptAdvanceSalaryAdminForm;
 import com.university.fpt.acf.form.SearchAdvanceSalaryAdminForm;
 import com.university.fpt.acf.repository.AccountManagerRepository;
 import com.university.fpt.acf.repository.AdvanceSalaryAdminCustomRepository;
@@ -62,15 +63,16 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
     }
 
     @Override
-    public Boolean acceptAddvanceSalary() {
+    public Boolean acceptAddvanceSalary(AcceptAdvanceSalaryAdminForm acceptForm) {
         boolean check = false;
         try{
             AccountSercurity accountSercurity = new AccountSercurity();
             Long id = accountManagerRepository.getIdEmployeeByUsername(accountSercurity.getUserName());
-            AdvaceSalary data = adminRepository.getDetailAdvanceSalaryById(id);
+            AdvaceSalary data = adminRepository.getDetailAdvanceSalaryById(acceptForm.getId());
             data.setAccept("1");
             data.setDateAccept(LocalDate.now());
             data.setIdEmployeeAccept(id);
+            data.setComment(acceptForm.getComment());
             data.setModified_by(accountSercurity.getUserName());
             data.setModified_date(LocalDate.now());
             adminRepository.save(data);
