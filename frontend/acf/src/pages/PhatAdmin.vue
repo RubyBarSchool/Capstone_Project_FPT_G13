@@ -1,5 +1,5 @@
 <template>
-  <div class="admin">
+  <div class="punish">
     <a-layout :style="{ background: 'white' }">
       <Header />
       <a-layout-content :style="{ margin: '30px 16px 0' }">
@@ -19,14 +19,14 @@
           </a-back-top>
           <!-- menu trên -->
           <a-input
-            placeholder="Họ và tên"
+            placeholder="Tiêu đề"
             style="width: 150px"
-            v-model="dataSearch.name"
+            v-model="dataSearch.title"
           />
           <a-select
             placeholder="Trạng thái"
             mode="multiple"
-            v-model="dataSearch.listStatus"
+            v-model="dataSearch.status"
             style="width: 150px"
           >
             <a-select-option value="false"> Nháp </a-select-option>
@@ -74,7 +74,7 @@
               "
               @change="handleTableChange"
             >
-              <template slot="username" slot-scope="text, record">
+              <template slot="time" slot-scope="text, record">
                 {{ record.username }}
               </template>
               <template slot="roles" slot-scope="text, record">
@@ -147,7 +147,11 @@
                 <a-input v-model="dataAdd.password" />
               </a-form-model-item>
               <a-form-model-item label="Lý do">
-                <a-textarea placeholder="Lý do" :rows="4" v-model="dataAdd.password"/>
+                <a-textarea
+                  placeholder="Lý do"
+                  :rows="4"
+                  v-model="dataAdd.password"
+                />
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
                 <a-input v-model="dataAdd.password" />
@@ -159,12 +163,12 @@
                 </a-radio-group>
               </a-form-model-item>
               <a-form-model-item label="Ngày hiệu lực">
-              <a-range-picker
-                v-model="dataSearch.date"
-                :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-                :show-time="{ format: 'DD/MM/YYYY' }"
-                format="DD/MM/YYYY"
-              />
+                <a-range-picker
+                  v-model="dataSearch.date"
+                  :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+                  :show-time="{ format: 'DD/MM/YYYY' }"
+                  format="DD/MM/YYYY"
+                />
               </a-form-model-item>
             </a-form-model>
           </a-modal>
@@ -186,7 +190,11 @@
                 <a-input v-model="dataAdd.password" />
               </a-form-model-item>
               <a-form-model-item label="Lý do">
-                <a-textarea placeholder="Lý do" :rows="4" v-model="dataAdd.password"/>
+                <a-textarea
+                  placeholder="Lý do"
+                  :rows="4"
+                  v-model="dataAdd.password"
+                />
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
                 <a-input v-model="dataAdd.password" />
@@ -198,12 +206,12 @@
                 </a-radio-group>
               </a-form-model-item>
               <a-form-model-item label="Ngày hiệu lực">
-              <a-range-picker
-                v-model="dataSearch.date"
-                :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-                :show-time="{ format: 'DD/MM/YYYY' }"
-                format="DD/MM/YYYY"
-              />
+                <a-range-picker
+                  v-model="dataSearch.date"
+                  :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+                  :show-time="{ format: 'DD/MM/YYYY' }"
+                  format="DD/MM/YYYY"
+                />
               </a-form-model-item>
             </a-form-model>
           </a-modal>
@@ -219,6 +227,7 @@ import accountService from "@/service/accountService.js";
 import roleService from "@/service/roleService.js";
 import employeeService from "@/service/employeeService.js";
 import adminTruongService from "../service/adminTruongService";
+import punishAdminService from "../service/punishAdminService";
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 
@@ -236,12 +245,11 @@ export default {
         total: 0,
       },
       dataSearch: {
-        name: "",
-        listRole: [],
-        listStatus: [],
         date: [],
         pageIndex: 1,
         pageSize: 10,
+        status: "",
+        title: "",
         total: 0,
       },
       dataSourceTable: [],
@@ -338,8 +346,8 @@ export default {
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;
-      adminTruongService
-        .searchAccount(this.dataSearch)
+      punishAdminService
+        .searchPunishAdmin(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
           this.dataSearch.total = response.data.total;
@@ -466,8 +474,8 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
-      adminTruongService
-        .searchAccount(this.dataSearch)
+      punishAdminService
+        .searchPunishAdmin(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
           this.dataSearch.total = response.data.total;
