@@ -11,7 +11,7 @@
             />
           </div>
         </a-back-top>
-        <a-tabs default-active-key="1">
+        <a-tabs default-active-key="1" @change="changeTab">
           <!-- Hiện tại -->
           <a-tab-pane key="1">
             <span slot="tab"> <h6>Hiện tại</h6> </span>
@@ -26,6 +26,11 @@
               "
               @change="handleTableChangeSalaryNow"
             >
+              <template slot="status" slot-scope="text, record">
+                <a-tag :color="record.status ? 'green' : 'blue'">
+                  {{ record.status ? "Đã thanh toán" : "Chưa thanh toán" }}
+                </a-tag>
+              </template>
             </a-table>
             <div class="container-fluid">
               <div class="row">
@@ -42,6 +47,13 @@
                     "
                     @change="handleTableChangeBonusNow"
                   >
+                    <template slot="status" slot-scope="text, record">
+                      <a-tag :color="record.status ? 'green' : 'blue'">
+                        {{
+                          record.status ? "Chưa có hiệu lực" : "Đã có hiệu lực"
+                        }}
+                      </a-tag>
+                    </template>
                   </a-table>
                 </div>
                 <div class="col-6">
@@ -57,6 +69,13 @@
                     "
                     @change="handleTableChangePunishNow"
                   >
+                    <template slot="status" slot-scope="text, record">
+                      <a-tag :color="record.status ? 'green' : 'blue'">
+                        {{
+                          record.status ? "Chưa có hiệu lực" : "Đã có hiệu lực"
+                        }}
+                      </a-tag>
+                    </template>
                   </a-table>
                 </div>
               </div>
@@ -66,7 +85,11 @@
           <!-- Quá khứ -->
           <a-tab-pane key="2">
             <span slot="tab"> <h6>Quá khứ</h6> </span>
-            <a-date-picker />
+            <a-date-picker
+              v-model="dateSelect"
+              :disabled-date="disabledDate"
+              @change="changeDate"
+            />
             <a-table
               :columns="columnsSalaryNotNow"
               :data-source="dataSalaryNotNow"
@@ -78,6 +101,11 @@
               "
               @change="handleTableChangeSalaryNotNow"
             >
+              <template slot="status" slot-scope="text, record">
+                <a-tag :color="record.status ? 'green' : 'blue'">
+                  {{ record.status ? "Đã thanh toán" : "Chưa thanh toán" }}
+                </a-tag>
+              </template>
             </a-table>
             <div class="container-fluid">
               <div class="row">
@@ -94,6 +122,13 @@
                     "
                     @change="handleTableChangeBonusNotNow"
                   >
+                    <template slot="status" slot-scope="text, record">
+                      <a-tag :color="record.status ? 'green' : 'blue'">
+                        {{
+                          record.status ? "Chưa có hiệu lực" : "Đã có hiệu lực"
+                        }}
+                      </a-tag>
+                    </template>
                   </a-table>
                 </div>
                 <div class="col-6">
@@ -109,6 +144,13 @@
                     "
                     @change="handleTableChangePunishNotNow"
                   >
+                    <template slot="status" slot-scope="text, record">
+                      <a-tag :color="record.status ? 'green' : 'blue'">
+                        {{
+                          record.status ? "Chưa có hiệu lực" : "Đã có hiệu lực"
+                        }}
+                      </a-tag>
+                    </template>
                   </a-table>
                 </div>
               </div>
@@ -122,6 +164,7 @@
 </template>
 
 <script>
+import moment from "moment";
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 import ViewSalaryService from "@/service/viewSalaryService.js";
@@ -201,6 +244,7 @@ export default {
           key: "status",
           width: 150,
           fixed: "right",
+          scopedSlots: { customRender: "status" },
         },
       ],
       columnsSalaryNotNow: [
@@ -283,6 +327,7 @@ export default {
           key: "status",
           width: 150,
           fixed: "right",
+          scopedSlots: { customRender: "status" },
         },
       ],
       columnsBonusPunish: [
@@ -316,9 +361,10 @@ export default {
           dataIndex: "status",
           key: "status",
           width: 150,
+          scopedSlots: { customRender: "status" },
         },
       ],
-
+      dateSelect: "",
       datasalaryNow: [],
       dataSalaryNotNow: [],
       dataBonusNow: [],
@@ -406,6 +452,37 @@ export default {
     this.searchPunishNow();
   },
   methods: {
+    disabledDate(current) {
+      return current && current > moment().subtract(1, "months");
+    },
+    changeDate() {
+      this.dataSearchSalaryNotNow.date = this.dateSelect;
+      this.dataSearchBonusNotNow.date = this.dateSelect;
+      this.dataSearchPunishNotNow.date = this.dateSelect;
+
+      this.dataSearchSalaryNotNow.pageIndex = 1;
+      this.dataSearchBonusNotNow.pageIndex = 1;
+      this.dataSearchPunishNotNow.pageIndex = 1;
+
+      this.dataSearchSalaryNotNow.total = 0;
+      this.dataSearchBonusNotNow.total = 0;
+      this.dataSearchPunishNotNow.total = 0;
+      this.searchSalaryNotNow();
+      this.searchBonusNotNow();
+      this.searchPunishNotNow();
+    },
+    changeTab(key) {
+      if (key === 1) {
+        this.searchSalaryNow();
+        this.searchBonusNow();
+        this.searchPunishNow();
+      } else {
+        this.searchSalaryNotNow();
+        this.searchBonusNotNow();
+        this.searchPunishNotNow();
+        // this.dateSelect = moment().subtract(1, "months");
+      }
+    },
     handleTableChangeSalaryNow(pagination) {
       this.dataSearchSalaryNow.pageIndex = pagination.current;
       this.paginationSalaryNow = pagination;

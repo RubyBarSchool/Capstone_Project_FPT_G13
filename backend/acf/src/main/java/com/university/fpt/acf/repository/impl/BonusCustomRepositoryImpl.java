@@ -119,12 +119,12 @@ public class BonusCustomRepositoryImpl extends CommonRepository implements Bonus
                 int day = localDate.getDayOfMonth();
                 LocalDate locaDateEnd = LocalDate.now();
                 if (day < 10) {
-                    locaDateEnd = LocalDate.of(localDate.getYear(), localDate.getMonth(), 10);
+                    LocalDate localDate1 = localDate.minusMonths(1);
+                    locaDateEnd = LocalDate.of(localDate1.getYear(), localDate1.getMonth(), 10);
                 } else {
-                    LocalDate localDate2 = localDate.plusMonths(1);
-                    locaDateEnd = LocalDate.of(localDate2.getYear(), localDate2.getMonth(), 10);
+                    locaDateEnd = LocalDate.of(localDate.getYear(), localDate.getMonth(), 10);
                 }
-                sql.append(" and  b.effectiveDate <= :dateEnd ");
+                sql.append(" and  b.effectiveDate < :dateEnd ");
                 params.put("dateEnd", locaDateEnd);
             }
         }
