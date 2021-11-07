@@ -8,7 +8,7 @@ import java.util.List;
 @Data
 public class SearchPersonalApplicationEmployeeForm {
     private String title;
-    private Boolean status;
+    private String status;
     private List<LocalDate> date;
     private Integer pageIndex;
     private Integer pageSize;

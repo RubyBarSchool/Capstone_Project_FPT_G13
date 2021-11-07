@@ -42,6 +42,8 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
 
     @Query("SELECT e FROM Employee e where e.deleted = false and e.id  in :id")
     List<Employee> getEmployeeByIdS(@Param("id") List<Long> ids);
+    @Query("SELECT new com.university.fpt.acf.vo.GetAllEmployeeVO(e.id,e.fullName) FROM Employee e where e.deleted = false ")
+    List<GetAllEmployeeVO> getEmployeeNotDelete();
 
 
 }

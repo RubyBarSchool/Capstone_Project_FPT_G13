@@ -12,7 +12,7 @@ import java.util.List;
 public interface AdvanceSalaryAdminService {
     List<SearchAdvanceSalaryAdminVO> searchAdvanceSalaryAdmin(SearchAdvanceSalaryAdminForm searchForm);
     int totalSearch(SearchAdvanceSalaryAdminForm searchForm);
-    DetailAdvanceSalaryAdminVO getDetailAdvanceSalaryAdmin(Long id);
+//    DetailAdvanceSalaryAdminVO getDetailAdvanceSalaryAdmin(Long id);
     Boolean acceptAddvanceSalary(AcceptAdvanceSalaryAdminForm acceptForm);
 
 }

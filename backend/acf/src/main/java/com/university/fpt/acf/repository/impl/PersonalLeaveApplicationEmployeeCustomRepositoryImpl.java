@@ -20,7 +20,7 @@ public class PersonalLeaveApplicationEmployeeCustomRepositoryImpl extends Common
         Map<String, Object> params = new HashMap<>();
         sql.append(" select new com.university.fpt.acf.vo.SearchPersonalApplicationEmployeeVO(p.id,p.created_date,p.dateAccept,p.dateStart,p.dateEnd,p.fileAttach,p.title,p.comment,p.content,p.accept) from PersonaLeaveApplication p where p.deleted = false and p.employee.id=:id  ");
         params.put("id",idEmployee);
-        if(searchForm.getStatus() != null ){
+        if(searchForm.getStatus() != null && !searchForm.getStatus().isEmpty() ){
             sql.append(" and p.accept=:status ");
             params.put("status",searchForm.getStatus());
         }
@@ -46,7 +46,7 @@ public class PersonalLeaveApplicationEmployeeCustomRepositoryImpl extends Common
         Map<String, Object> params = new HashMap<>();
         sql.append(" select COUNT(*) from PersonaLeaveApplication p where  p.deleted = false and p.employee.id=:id ");
         params.put("id",idEmployee);
-        if(searchForm.getStatus() != null ){
+        if(searchForm.getStatus() != null && !searchForm.getStatus().isEmpty() ){
             sql.append(" and p.accept=:status ");
             params.put("status",searchForm.getStatus());
         }

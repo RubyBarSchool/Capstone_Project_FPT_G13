@@ -20,16 +20,16 @@ public class AdvanceSalaryAdminCustomRepositoryImpl extends CommonRepository imp
     public List<SearchAdvanceSalaryAdminVO> searchAdvanceSalary(SearchAdvanceSalaryAdminForm searchForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append(" select new com.university.fpt.acf.vo.SearchAdvanceSalaryAdminVO(a.id,a.created_date,a.title,a.advaceSalary,a.accept,e.id,e.fullName) from AdvaceSalary a inner join a.employee  e where a.deleted=false");
+        sql.append(" select new com.university.fpt.acf.vo.SearchAdvanceSalaryAdminVO(a.id,a.created_date,a.title,a.advaceSalary,a.accept,e.id,e.fullName,a.content,a.comment,a.dateAccept) from AdvaceSalary a inner join a.employee  e where a.deleted=false");
         if(!searchForm.getTitle().isEmpty() && searchForm.getTitle()!=null){
             sql.append(" and LOWER(a.title) like :title ");
             params.put("title","%"+searchForm.getTitle().toLowerCase()+"%");
         }
         if(!searchForm.getEmployeeName().isEmpty() && searchForm.getEmployeeName()!=null){
-            sql.append(" and LOWER(e.fullName) like :content ");
-            params.put("content","%"+searchForm.getEmployeeName().toLowerCase()+"%");
+            sql.append(" and LOWER(e.fullName) like :name ");
+            params.put("name","%"+searchForm.getEmployeeName().toLowerCase()+"%");
         }
-        if(searchForm.getStatus()!=null){
+        if(searchForm.getStatus()!=null && !searchForm.getStatus().isEmpty()){
             sql.append(" and LOWER(a.accept) =:status ");
             params.put("status",searchForm.getStatus());
         }
@@ -55,10 +55,10 @@ public class AdvanceSalaryAdminCustomRepositoryImpl extends CommonRepository imp
             params.put("title","%"+searchForm.getTitle().toLowerCase()+"%");
         }
         if(!searchForm.getEmployeeName().isEmpty() && searchForm.getEmployeeName()!=null){
-            sql.append(" and LOWER(e.fullName) like :content ");
-            params.put("content","%"+searchForm.getEmployeeName().toLowerCase()+"%");
+            sql.append(" and LOWER(e.fullName) like :name ");
+            params.put("name","%"+searchForm.getEmployeeName().toLowerCase()+"%");
         }
-        if(searchForm.getStatus()!=null){
+        if(searchForm.getStatus()!=null && !searchForm.getStatus().isEmpty()){
             sql.append(" and LOWER(a.accept) =:status ");
             params.put("status",searchForm.getStatus());
         }

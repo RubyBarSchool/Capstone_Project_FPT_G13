@@ -14,6 +14,7 @@ import com.university.fpt.acf.vo.SearchPersonalLeaveApplicationAdminVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +65,7 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
                 Long idEm = accountRepository.getIdEmployeeByUsername(accountSercurity.getUserName());
                 p.setIdEmployeeAccept(idEm);
                 p.setModified_by(accountSercurity.getUserName());
-                p.setCreated_by(accountSercurity.getUserName());
+                p.setModified_date(LocalDate.now());
                 personalLeaveApplicationAdminRepository.save(p);
             }
         }catch (Exception e){
@@ -73,15 +74,15 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
         return check;
     }
 
-    @Override
-    public SearchPersonalLeaveApplicationAdminVO detailPersonalApplicationById(Long id) {
-        SearchPersonalLeaveApplicationAdminVO data = new SearchPersonalLeaveApplicationAdminVO();
-        try {
-            data = personalLeaveApplicationAdminRepository.detailPersonLeaveApplication(id);
-        } catch (Exception e) {
-            throw new RuntimeException("Error Personal Leave Application  repository " + e.getMessage());
-        }
-        return  data;
-
-    }
+//    @Override
+//    public SearchPersonalLeaveApplicationAdminVO detailPersonalApplicationById(Long id) {
+//        SearchPersonalLeaveApplicationAdminVO data = new SearchPersonalLeaveApplicationAdminVO();
+//        try {
+//            data = personalLeaveApplicationAdminRepository.detailPersonLeaveApplication(id);
+//        } catch (Exception e) {
+//            throw new RuntimeException("Error Personal Leave Application  repository " + e.getMessage());
+//        }
+//        return  data;
+//
+//    }
 }

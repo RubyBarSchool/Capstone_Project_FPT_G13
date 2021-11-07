@@ -206,4 +206,16 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return check;
     }
+
+    @Override
+    public List<GetAllEmployeeVO> getEmployeeSNotDelete() {
+        List<GetAllEmployeeVO> list = new ArrayList<>();
+        try{
+            list = employeeRepository.getEmployeeNotDelete();
+
+        }catch (Exception e){
+            e.getMessage();
+        }
+        return list;
+    }
 }

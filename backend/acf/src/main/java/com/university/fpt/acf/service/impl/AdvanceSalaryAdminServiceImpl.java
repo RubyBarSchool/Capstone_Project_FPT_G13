@@ -51,16 +51,16 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
 
 
 
-    @Override
-    public DetailAdvanceSalaryAdminVO getDetailAdvanceSalaryAdmin(Long id) {
-        DetailAdvanceSalaryAdminVO data ;
-        try {
-            data =adminRepository.getDetailById(id);
-        }catch (Exception e){
-            throw new RuntimeException("Error Advance Salary Detail repository " + e.getMessage());
-        }
-        return data;
-    }
+//    @Override
+//    public DetailAdvanceSalaryAdminVO getDetailAdvanceSalaryAdmin(Long id) {
+//        DetailAdvanceSalaryAdminVO data ;
+//        try {
+//            data =adminRepository.getDetailById(id);
+//        }catch (Exception e){
+//            throw new RuntimeException("Error Advance Salary Detail repository " + e.getMessage());
+//        }
+//        return data;
+//    }
 
     @Override
     public Boolean acceptAddvanceSalary(AcceptAdvanceSalaryAdminForm acceptForm) {

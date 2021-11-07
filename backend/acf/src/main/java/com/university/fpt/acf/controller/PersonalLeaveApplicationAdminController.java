@@ -74,29 +74,29 @@ public class PersonalLeaveApplicationAdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-    @GetMapping("/detail")
-    public ResponseEntity<ResponseCommon> getDetailPersonalLeaveApplicationAdmin(@RequestParam Long id){
-        ResponseCommon responseCommon = new ResponseCommon();
-        String message="";
-        SearchPersonalLeaveApplicationAdminVO data = new SearchPersonalLeaveApplicationAdminVO();
-        try {
-            data = personalLeaveApplicationService.detailPersonalApplicationById(id);
-            if(data==null){
-                message="Không tìm thấy đơn nghỉ phép";
-            }else{
-                message="Lấy đơn nghỉ phép thành công!";
-            }
-            responseCommon.setMessage(message);
-            responseCommon.setData(data);
-            responseCommon.setStatus(HttpStatus.OK.value());
-            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
-        }catch (Exception e){
-            message = e.getMessage();
-            responseCommon.setData(data);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
-            responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
-        }
-    }
+//    @GetMapping("/detail")
+//    public ResponseEntity<ResponseCommon> getDetailPersonalLeaveApplicationAdmin(@RequestParam Long id){
+//        ResponseCommon responseCommon = new ResponseCommon();
+//        String message="";
+//        SearchPersonalLeaveApplicationAdminVO data = new SearchPersonalLeaveApplicationAdminVO();
+//        try {
+//            data = personalLeaveApplicationService.detailPersonalApplicationById(id);
+//            if(data==null){
+//                message="Không tìm thấy đơn nghỉ phép";
+//            }else{
+//                message="Lấy đơn nghỉ phép thành công!";
+//            }
+//            responseCommon.setMessage(message);
+//            responseCommon.setData(data);
+//            responseCommon.setStatus(HttpStatus.OK.value());
+//            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+//        }catch (Exception e){
+//            message = e.getMessage();
+//            responseCommon.setData(data);
+//            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+//            responseCommon.setMessage(message);
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+//        }
+//    }
 
 }
