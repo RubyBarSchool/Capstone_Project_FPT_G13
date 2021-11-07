@@ -250,6 +250,25 @@
               </a-button>
             </template>
             <a-form-model>
+              <a-form-model-item label="Nhân viên">
+                <a-select
+                  show-search
+                  placeholder="Tên nhân viên"
+                  :filter-option="false"
+                  v-model="dataAdd.employee"
+                  @change="generateUsername"
+                  @search="fetchEmployees"
+                  style="width: 100%"
+                >
+                  <a-select-option
+                    v-for="(employee, index) in dataEmployees"
+                    :value="employee.id"
+                    :key="index"
+                  >
+                    {{ employee.name }}
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
               <a-form-model-item label="Tài khoản">
                 <a-input v-model="dataAdd.username" disabled />
               </a-form-model-item>
@@ -271,25 +290,6 @@
                     :key="index"
                   >
                     {{ role.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-              <a-form-model-item label="Nhân viên">
-                <a-select
-                  show-search
-                  placeholder="Tên nhân viên"
-                  :filter-option="false"
-                  v-model="dataAdd.employee"
-                  @change="generateUsername"
-                  @search="fetchEmployees"
-                  style="width: 100%"
-                >
-                  <a-select-option
-                    v-for="(employee, index) in dataEmployees"
-                    :value="employee.id"
-                    :key="index"
-                  >
-                    {{ employee.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>

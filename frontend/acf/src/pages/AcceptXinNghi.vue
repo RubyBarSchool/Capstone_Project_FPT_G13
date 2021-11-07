@@ -304,10 +304,6 @@ export default {
       this.visibleView = false;
     },
 
-    showModaView() {
-      this.visibleView = true;
-    },
-
     search() {
       this.dataSearch.pageIndex = 1;
       this.dataSearch.total = 0;

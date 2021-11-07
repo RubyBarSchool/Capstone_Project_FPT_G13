@@ -25,17 +25,16 @@
           />
           <a-select
             placeholder="Trạng thái"
-            mode="multiple"
             v-model="dataSearch.status"
             style="width: 150px"
           >
-            <a-select-option value="false"> Nháp </a-select-option>
-            <a-select-option value="true"> Công khai </a-select-option>
+            <a-select-option :value="false"> Nháp </a-select-option>
+            <a-select-option :value="true"> Công khai </a-select-option>
           </a-select>
           <a-range-picker
+            @change="search"
             v-model="dataSearch.date"
             :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-            :show-time="{ format: 'DD/MM/YYYY' }"
             format="DD/MM/YYYY"
           />
           <a-button
@@ -60,6 +59,7 @@
             />
             Thêm
           </a-button>
+          <!-- menu trên -->
 
           <!-- table content -->
           <div :style="{ 'padding-top': '10px' }">
@@ -74,13 +74,11 @@
               "
               @change="handleTableChange"
             >
-              <template slot="time" slot-scope="text, record">
-                {{ record.username }}
+              <template slot="titlee" slot-scope="text, record">
+                {{ record.title }}
               </template>
-              <template slot="roles" slot-scope="text, record">
-                <div v-for="(item, index) in record.roles" :key="index">
-                  {{ item.name }}
-                </div>
+              <template slot="money" slot-scope="text, record">
+                {{ record.money }}
               </template>
               <template slot="status" slot-scope="text, record">
                 <a-tag :color="record.status ? 'green' : 'blue'">
@@ -88,13 +86,7 @@
                 </a-tag>
               </template>
               <template slot="time" slot-scope="text, record">
-                {{
-                  new Date(record.time).toLocaleDateString("en-GB", {
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                  })
-                }}
+                {{ record.dateEffective }}
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-row>
@@ -104,9 +96,12 @@
                       @click="
                         showModalEdit(
                           record.id,
-                          record.username,
-                          record.roles,
-                          record.status
+                          record.effectiveDate,
+                          record.listIdEmployee,
+                          record.money,
+                          record.reason,
+                          record.status,
+                          record.title
                         )
                       "
                       :style="{ width: '44.25px' }"
@@ -118,7 +113,7 @@
                     <a-popconfirm
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
-                      @confirm="deleteAccount(record.id)"
+                      @confirm="deletePunishAdmin(record.id)"
                     >
                       <a-button id="delete">
                         <font-awesome-icon :icon="['fas', 'trash']" />
@@ -132,7 +127,7 @@
           <!-- table content -->
 
           <!-- popup add-->
-          <a-modal v-model="visibleAdd" title="Thêm hình phạt">
+          <a-modal v-model="visibleAdd" title="Thêm khen thưởng">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button key="submit" type="primary" @click="submitAdd">
@@ -141,41 +136,55 @@
             </template>
             <a-form-model>
               <a-form-model-item label="Tiêu đề">
-                <a-input v-model="dataAdd.username" />
+                <a-input v-model="dataAdd.title" />
               </a-form-model-item>
               <a-form-model-item label="Họ và tên">
-                <a-input v-model="dataAdd.password" />
+                <a-select
+                  placeholder="Họ và tên"
+                  mode="multiple"
+                  v-model="dataAdd.listIdEmployee"
+                  :filter-option="false"
+                  @search="fetchEmployees"
+                >
+                  <a-select-option
+                    v-for="(employee, index) in dataEmployees"
+                    :value="employee.id"
+                    :key="index"
+                  >
+                    {{ employee.fullName }}
+                  </a-select-option>
+                </a-select>
               </a-form-model-item>
               <a-form-model-item label="Lý do">
                 <a-textarea
                   placeholder="Lý do"
                   :rows="4"
-                  v-model="dataAdd.password"
+                  v-model="dataAdd.reason"
                 />
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
-                <a-input v-model="dataAdd.password" />
+                <a-input v-model="dataAdd.money" />
               </a-form-model-item>
               <a-form-model-item label="Trạng thái">
-                <a-radio-group name="radioGroup" v-model="dataEdit.status">
-                  <a-radio :value="false"> Nháp </a-radio>
-                  <a-radio :value="true"> Hiệu lực </a-radio>
+                <a-radio-group name="radioGroup" v-model="dataAdd.status">
+                  <a-radio value="false"> Nháp </a-radio>
+                  <a-radio value="true"> Hiệu lực </a-radio>
                 </a-radio-group>
               </a-form-model-item>
               <a-form-model-item label="Ngày hiệu lực">
-                <a-range-picker
-                  v-model="dataSearch.date"
-                  :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-                  :show-time="{ format: 'DD/MM/YYYY' }"
-                  format="DD/MM/YYYY"
-                />
+                <a-date-picker
+                  v-model="dataAdd.effectiveDate"
+                  format="YYYY-MM-DD"
+                  valueFormat="YYYY-MM-DD"
+                >
+                </a-date-picker>
               </a-form-model-item>
             </a-form-model>
           </a-modal>
           <!-- popup add -->
 
           <!-- popup edit-->
-          <a-modal v-model="visibleEdit" title="Chỉnh sửa tài khoản">
+          <a-modal v-model="visibleEdit" title="Chỉnh sửa khen thưởng">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button key="submit" type="primary" @click="submitUpdate">
@@ -184,20 +193,34 @@
             </template>
             <a-form-model>
               <a-form-model-item label="Tiêu đề">
-                <a-input v-model="dataAdd.username" />
+                <a-input v-model="dataEdit.title" />
               </a-form-model-item>
               <a-form-model-item label="Họ và tên">
-                <a-input v-model="dataAdd.password" />
+                <a-select
+                  placeholder="Họ và tên"
+                  mode="multiple"
+                  v-model="dataEdit.listIdEmployee"
+                  :filter-option="false"
+                  @search="fetchEmployees"
+                >
+                  <a-select-option
+                    v-for="(employee, index) in dataEmployees"
+                    :value="employee.id"
+                    :key="index"
+                  >
+                    {{ employee.fullName }}
+                  </a-select-option>
+                </a-select>
               </a-form-model-item>
               <a-form-model-item label="Lý do">
                 <a-textarea
                   placeholder="Lý do"
                   :rows="4"
-                  v-model="dataAdd.password"
+                  v-model="dataEdit.reason"
                 />
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
-                <a-input v-model="dataAdd.password" />
+                <a-input v-model="dataEdit.money" />
               </a-form-model-item>
               <a-form-model-item label="Trạng thái">
                 <a-radio-group name="radioGroup" v-model="dataEdit.status">
@@ -206,10 +229,8 @@
                 </a-radio-group>
               </a-form-model-item>
               <a-form-model-item label="Ngày hiệu lực">
-                <a-range-picker
-                  v-model="dataSearch.date"
-                  :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-                  :show-time="{ format: 'DD/MM/YYYY' }"
+                <a-date-picker
+                  v-model="dataEdit.effectiveDate"
                   format="DD/MM/YYYY"
                 />
               </a-form-model-item>
@@ -222,12 +243,8 @@
     </a-layout>
   </div>
 </template>
- <script>
-import accountService from "@/service/accountService.js";
-import roleService from "@/service/roleService.js";
-import employeeService from "@/service/employeeService.js";
-import adminTruongService from "../service/adminTruongService";
-import punishAdminService from "../service/punishAdminService";
+<script>
+import punishAdminService from "@/service/punishAdminService";
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 
@@ -253,39 +270,30 @@ export default {
         total: 0,
       },
       dataSourceTable: [],
-      dataRoles: [],
       dataEmployees: [],
       dataAdd: {
-        listRole: [],
-        employee: "",
-        password: "",
-        username: "",
-      },
-      dataRole: {
-        name: "",
-        pageIndex: 1,
-        pageSize: 10,
+        effectiveDate: "",
+        listIdEmployee: [],
+        money: "",
+        reason: "",
+        status: "",
+        title: "",
       },
       dataEmployee: {
+        idPosition: "",
         name: "",
         pageIndex: 1,
         pageSize: 10,
+        statusDelete: "",
       },
       dataEdit: {
-        id: "",
-        username: "",
-        listRole: [],
-        status: false,
-      },
-      dataAccountDetail: {
-        id: "",
-        name: "",
-        roles: [],
-        image: "",
-        fullname: "",
-        dob: "",
-        phone: "",
-        gender: "",
+        effectiveDate: "",
+        id: 0,
+        listIdEmployee: [],
+        money: "",
+        reason: "",
+        status: "",
+        title: "",
       },
       columns: [
         {
@@ -334,13 +342,10 @@ export default {
       ],
       visibleAdd: false,
       visibleEdit: false,
-      visibleProfile: false,
     };
   },
-  computed: {},
   created() {
     this.submitSearch();
-    this.getAllRole();
   },
   methods: {
     handleTableChange(pagination) {
@@ -357,121 +362,6 @@ export default {
           console.log(e);
         });
     },
-    generateUsername() {
-      accountService
-        .generateUsername(this.dataAdd.employee)
-        .then((response) => {
-          this.dataAdd.username = response.data.data;
-        });
-    },
-    fetchRoles(value) {
-      this.dataRole.name = value;
-      this.getAllRole();
-    },
-    getAllRole() {
-      roleService
-        .getAllRole(this.dataRole)
-        .then((response) => {
-          this.dataRoles = response.data.data;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    fetchEmployees(value) {
-      this.dataEmployee.name = value;
-      this.getAllEmployeeNotAccount();
-    },
-    getAllEmployeeNotAccount() {
-      employeeService
-        .getAllEmployeeNotAccount(this.dataEmployee)
-        .then((response) => {
-          this.dataEmployees = response.data.data;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    showModalAdd() {
-      this.dataRole.name = "";
-      this.getAllRole();
-      this.dataEmployee.name = "";
-      this.getAllEmployeeNotAccount();
-      this.visibleAdd = true;
-    },
-    submitAdd() {
-      accountService
-        .addAccount(this.dataAdd)
-        .then((response) => {
-          this.dataEmployees = response.data.data;
-          this.submitSearch();
-          if (response.data.data) {
-            let type = "success";
-            let message = "Thêm mới";
-            let description =
-              "Thêm mới tài khoản " + this.dataAdd.username + " thành công !!";
-            this.notifi(type, message, description);
-          } else {
-            let type = "error";
-            let message = "Thêm mới";
-            let description =
-              "Thêm mới tài khoản " +
-              this.dataAdd.username +
-              " không thành công vì " +
-              response.data.message;
-            this.notifi(type, message, description);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-      this.visibleAdd = false;
-      this.dataAdd.username = "";
-      this.dataAdd.password = "";
-      this.dataAdd.employee = "";
-      this.dataAdd.listRole = [];
-    },
-    handleCancel() {
-      this.visibleAdd = false;
-      this.visibleEdit = false;
-      this.visibleProfile = false;
-    },
-    showModalEdit(id, username, roles, status) {
-      this.dataEdit.id = id;
-      this.dataEdit.username = username;
-      this.dataEdit.listRole = [];
-      for (var i = 0; i < roles.length; i++) {
-        this.dataEdit.listRole.push(roles[i].id);
-      }
-      this.dataEdit.status = status;
-      this.visibleEdit = true;
-      this.dataRole.name = "";
-      this.getAllRole();
-      this.dataEmployee.name = "";
-      this.getAllEmployeeNotAccount();
-    },
-    submitUpdate() {
-      adminTruongService
-        .updateAccount(this.dataEdit)
-        .then((response) => {
-          this.submitSearch();
-          if (response.data.data) {
-            let type = "success";
-            let message = "Cập nhật";
-            let description = "Account đang đăng nhập không được xóa";
-            this.notifi(type, message, description);
-          } else {
-            let type = "error";
-            let message = "Cập nhật";
-            let description = "Account đang đăng nhập không được xóa";
-            this.notifi(type, message, description);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-      this.visibleEdit = false;
-    },
     submitSearch() {
       this.dataSearch.total = 0;
       punishAdminService
@@ -485,31 +375,119 @@ export default {
           console.log(e);
         });
     },
-    getAccountByID(id) {
-      adminTruongService
-        .getAccountByID(id)
+    search() {
+      this.dataSearch.pageIndex = 1;
+      this.dataSearch.total = 0;
+      this.submitSearch();
+    },
+    fetchEmployees(value) {
+      this.dataEmployee.name = value;
+      this.getAllEmployee();
+    },
+    getAllEmployee() {
+      punishAdminService
+        .getAllEmployee(this.dataEmployee)
         .then((response) => {
-          this.dataAccountDetail = response.data.data;
-          this.visibleProfile = true;
+          this.dataEmployees = response.data.data;
         })
         .catch((e) => {
           console.log(e);
         });
     },
-    deleteAccount(id) {
-      accountService
-        .deleteAccount(id)
+    showModalAdd() {
+      this.visibleAdd = true;
+      this.getAllEmployee();
+    },
+    submitAdd() {
+      punishAdminService
+        .addPunishAdmin(this.dataAdd)
+        .then((response) => {
+          this.submitSearch();
+          if (response.data.data) {
+            let type = "success";
+            let message = "Thêm khen thưởng";
+            let description = "Thêm mới khen thưởng thành công !!";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Thêm khen thưởng";
+            let description =
+              "Thêm mới khen thưởng không thành công vì " +
+              response.data.message;
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      this.visibleAdd = false;
+      this.dataAdd.effectiveDate = "";
+      this.dataAdd.listIdEmployee = [];
+      this.dataAdd.money = "";
+      this.dataAdd.reason = "";
+      this.dataAdd.status = "";
+      this.dataAdd.title = "";
+    },
+    showModalEdit(
+      id,
+      effectiveDate,
+      listIdEmployees,
+      money,
+      reason,
+      status,
+      title
+    ) {
+      this.dataEdit.id = id;
+      this.dataEdit.effectiveDate = effectiveDate;
+      this.dataEdit.listIdEmployee = [];
+      // for (var i = 0; i < listIdEmployees.length; i++) {
+      //   this.dataEdit.listIdEmployee.push(listIdEmployees[i].id);
+      // }
+      this.dataEdit.status = status;
+      this.dataEdit.reason = reason;
+      this.dataEdit.money = money;
+      this.dataEdit.title = title;
+      this.visibleEdit = true;
+      this.getAllEmployee();
+    },
+    submitUpdate() {
+      punishAdminService
+        .updatePunishAdmin(this.dataEdit)
+        .then((response) => {
+          this.submitSearch();
+          if (response.data.data) {
+            let type = "success";
+            let message = "Cập nhật";
+            let description = "Cập nhật thưởng thành công";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Cập nhật";
+            let description = "Cập nhật thưởng không thành công";
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      this.visibleEdit = false;
+    },
+    deleteThuongAdmin(id) {
+      punishAdminService
+        .deletePunishAdmin(id)
         .then((response) => {
           if (response.data.data) {
             let type = "success";
             let message = "Xóa";
-            let description = "Xóa thành công";
+            let description =
+              "Xóa khen thưởng " + this.dataAdd.title + " thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           } else {
             let type = "error";
             let message = "Xóa";
-            let description = "Account đang đăng nhập không được xóa";
+            let description =
+              "Xóa khen thưởng " + this.dataAdd.title + " không thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           }
@@ -523,6 +501,11 @@ export default {
         message: message,
         description: description,
       });
+    },
+    handleCancel() {
+      this.visibleAdd = false;
+      this.visibleEdit = false;
+      this.visibleProfile = false;
     },
   },
 };

@@ -85,7 +85,7 @@
                 </a-tag>
               </template>
               <template slot="time" slot-scope="text, record">
-                {{ record.dateEffective }}
+                {{ record.effectiveDate }}
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-row>
@@ -294,16 +294,6 @@ export default {
         status: "",
         title: "",
       },
-      // dataAccountDetail: {
-      //   id: "",
-      //   name: "",
-      //   roles: [],
-      //   image: "",
-      //   fullname: "",
-      //   dob: "",
-      //   phone: "",
-      //   gender: "",
-      // },
       columns: [
         {
           title: "ID",
@@ -353,7 +343,6 @@ export default {
       visibleEdit: false,
     };
   },
-  computed: {},
   created() {
     this.submitSearch();
   },
@@ -361,6 +350,19 @@ export default {
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;
+      thuongAdminService
+        .searchThuongAdmin(this.dataSearch)
+        .then((response) => {
+          this.dataSourceTable = response.data.data;
+          this.dataSearch.total = response.data.total;
+          this.pagination.total = response.data.total;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    submitSearch() {
+      this.dataSearch.total = 0;
       thuongAdminService
         .searchThuongAdmin(this.dataSearch)
         .then((response) => {
@@ -386,7 +388,6 @@ export default {
         .getAllEmployee(this.dataEmployee)
         .then((response) => {
           this.dataEmployees = response.data.data;
-          console.log("data", this.dataEmployees);
         })
         .catch((e) => {
           console.log(e);
@@ -474,19 +475,6 @@ export default {
           console.log(e);
         });
       this.visibleEdit = false;
-    },
-    submitSearch() {
-      this.dataSearch.total = 0;
-      thuongAdminService
-        .searchThuongAdmin(this.dataSearch)
-        .then((response) => {
-          this.dataSourceTable = response.data.data;
-          this.dataSearch.total = response.data.total;
-          this.pagination.total = response.data.total;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
     },
     deleteThuongAdmin(id) {
       thuongAdminService

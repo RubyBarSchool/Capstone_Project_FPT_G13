@@ -13,9 +13,6 @@ class thuongAdminService {
     updateThuongAdmin(data) {
         return http.put(`/admin/bonus/update`, data);
     }
-    // getAdvanceSalaryEmployeeByID(id) {
-    //     return http.get(`/employee/advanceSalary/detail?id=${id}`);
-    // }
     deleteThuongAdmin(id) {
         return http.delete(`/admin/bonus/delete?id=${id}`);
     }

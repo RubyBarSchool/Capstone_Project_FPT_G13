@@ -205,10 +205,6 @@ export default {
     this.submitSearch();
   },
   methods: {
-    handleCancel() {
-      this.visibleAdd = false;
-      this.visibleEdit = false;
-    },
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;
@@ -299,6 +295,10 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+      this.visibleEdit = false;
+    },
+    handleCancel() {
+      this.visibleAdd = false;
       this.visibleEdit = false;
     },
   },
