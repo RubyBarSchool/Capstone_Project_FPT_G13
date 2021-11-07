@@ -127,7 +127,7 @@
           <!-- table content -->
 
           <!-- popup add-->
-          <a-modal v-model="visibleAdd" title="Thêm khen thưởng">
+          <a-modal v-model="visibleAdd" title="Thêm hình phạt">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button key="submit" type="primary" @click="submitAdd">
@@ -184,7 +184,7 @@
           <!-- popup add -->
 
           <!-- popup edit-->
-          <a-modal v-model="visibleEdit" title="Chỉnh sửa khen thưởng">
+          <a-modal v-model="visibleEdit" title="Chỉnh sửa hình phạt">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button key="submit" type="primary" @click="submitUpdate">
@@ -543,67 +543,4 @@ export default {
   background-color: rgb(42, 253, 0);
   color: white;
 }
-/* profile */
-.bg-c-lite-green {
-  border-radius: 5px;
-  background: linear-gradient(to right, #000000, #000000);
-}
-
-.card-block {
-  padding: 1.25rem;
-}
-
-.m-b-25 {
-  margin-bottom: 30px;
-}
-
-.img-radius {
-  border-radius: 5px;
-}
-
-h6 {
-  font-size: 13.5px;
-}
-
-.card-block p {
-  line-height: 25px;
-}
-
-.card-block {
-  padding: 1.25rem;
-}
-
-.b-b-default {
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.m-b-20 {
-  margin-bottom: 20px;
-}
-
-.p-b-5 {
-  padding-bottom: 5px !important;
-}
-
-.m-b-10 {
-  margin-bottom: 10px;
-  color: black;
-}
-
-.text-muted {
-  color: #919aa3 !important;
-}
-
-.text-white {
-  color: white;
-}
-
-.f-w-600 {
-  font-weight: 600;
-}
-
-.m-t-40 {
-  margin-top: 20px;
-}
-/* profile */
 </style>

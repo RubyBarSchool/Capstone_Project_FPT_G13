@@ -71,8 +71,22 @@
                 {{ record.date }}
               </template>
               <template slot="statusAccept" slot-scope="text, record">
-                <a-tag :color="record.statusAccept ? 'green' : 'gray'">
-                  {{ record.statusAccept ? "Đã duyệt" : "Chờ duyệt" }}
+                <a-tag
+                  :color="
+                    record.statusAccept == '-1'
+                      ? 'orange'
+                      : record.statusAccept == '0'
+                      ? 'red'
+                      : 'green'
+                  "
+                >
+                  {{
+                    record.statusAccept == "-1"
+                      ? "Chờ duyệt"
+                      : record.statusAccept == "0"
+                      ? "Từ chối"
+                      : "Đã duyệt"
+                  }}
                 </a-tag>
               </template>
               <template slot="titlee" slot-scope="text, record">
@@ -85,7 +99,14 @@
                 <a-button
                   id="view"
                   @click="
-                    getDetailPersonalLeaveApplicationAdmin(record.idApplication)
+                    showModelView(
+                      record.idApplication,
+                      record.nameEmployee,
+                      record.title,
+                      record.date,
+                      record.content,
+                      record.comment
+                    )
                   "
                 >
                   <font-awesome-icon :icon="['fas', 'eye']" />
@@ -99,7 +120,17 @@
           <a-modal v-model="visibleView" title="Xét đơn xin nghỉ">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button type="danger"> Loại bỏ </a-button>
+              <a-button
+                type="danger"
+                @click="
+                  submitReject(
+                    dataDetailPersonalLeaveApplicationAdmin.idApplication,
+                    dataDetailPersonalLeaveApplicationAdmin.comment
+                  )
+                "
+              >
+                Loại bỏ
+              </a-button>
               <a-button
                 type="primary"
                 @click="
@@ -128,12 +159,14 @@
                     disabled
                   />
                 </a-form-model-item>
-                <!-- <a-form-model-item label="Ngày nghỉ">
+                <a-form-model-item label="Ngày nghỉ">
                   <a-date-picker
                     v-model="dataDetailPersonalLeaveApplicationAdmin.date"
+                    format="YYYY-MM-DD"
+                    valueFormat="YYYY-MM-DD"
                     disabled
                   />
-                </a-form-model-item> -->
+                </a-form-model-item>
                 <a-form-model-item label="Nội dung">
                   <a-textarea
                     :rows="4"
@@ -288,16 +321,13 @@ export default {
         });
     },
 
-    getDetailPersonalLeaveApplicationAdmin(id) {
-      acceptXinNghiService
-        .getDetailPersonalLeaveApplicationAdmin(id)
-        .then((response) => {
-          this.dataDetailPersonalLeaveApplicationAdmin = response.data.data;
-          this.visibleView = true;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+    showModelView(nameEmployee, title, date, content, comment) {
+      this.dataDetailPersonalLeaveApplicationAdmin.nameEmployee = nameEmployee;
+      this.dataDetailPersonalLeaveApplicationAdmin.title = title;
+      this.dataDetailPersonalLeaveApplicationAdmin.date = date;
+      this.dataDetailPersonalLeaveApplicationAdmin.content = content;
+      this.dataDetailPersonalLeaveApplicationAdmin.comment = comment;
+      this.visibleView = true;
     },
 
     handleCancel() {
@@ -333,10 +363,40 @@ export default {
         });
     },
 
+    handReject() {
+      acceptXinNghiService
+        .rejectPersonalApplication(this.dataAcceptPersonalApplication)
+        .then((response) => {
+          if (response.data.data) {
+            let type = "success";
+            let message = "Cập nhật";
+            let description = "Cập nhật trạng thái đơn thành công";
+            this.notifi(type, message, description);
+            this.submitSearch();
+          } else {
+            let type = "error";
+            let message = "Cập nhật";
+            let description = "Cập nhật trạng thái đơn không thành công";
+            this.notifi(type, message, description);
+            this.submitSearch();
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
     submitAccept(idApplication, comment) {
       this.dataAcceptPersonalApplication.idApplication = idApplication;
       this.dataAcceptPersonalApplication.comment = comment;
       this.handAccept();
+      this.visibleView = false;
+    },
+
+    submitReject(idApplication, comment) {
+      this.dataAcceptPersonalApplication.idApplication = idApplication;
+      this.dataAcceptPersonalApplication.comment = comment;
+      this.handReject();
       this.visibleView = false;
     },
 

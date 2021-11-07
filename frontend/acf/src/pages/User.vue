@@ -58,7 +58,11 @@
             />
             Tìm kiếm
           </a-button>
-          <a-button type="primary" @click="showModalAdd" :style="{ 'margin-left': '5px' }">
+          <a-button
+            type="primary"
+            @click="showModalAdd"
+            :style="{ 'margin-left': '5px' }"
+          >
             <font-awesome-icon
               :icon="['fas', 'user-plus']"
               :style="{ 'margin-right': '5px' }"
@@ -207,6 +211,7 @@
           </a-modal>
           <!-- popup add -->
 
+          <!-- popup edit -->
           <a-modal v-model="visibleEdit" title="Chỉnh sửa nhân viên">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
@@ -255,7 +260,7 @@
                       </a-select>
                     </a-form-model-item>
                     <a-form-model-item label="Số Điện Thoại">
-                      <a-input v-model="dataUserDetail.phone" />
+                      <a-input v-model="dataEdit.phone" />
                     </a-form-model-item>
                   </div>
                   <div class="col">
@@ -263,13 +268,13 @@
                       <a-input v-model="dataEdit.email" />
                     </a-form-model-item>
                     <a-form-model-item label="Địa chỉ">
-                      <a-input v-model="dataUserDetail.address" />
+                      <a-input v-model="dataEdit.address" />
                     </a-form-model-item>
                     <a-form-model-item label="Dân Tộc">
-                      <a-input v-model="dataUserDetail.nation" />
+                      <a-input v-model="dataEdit.nation" />
                     </a-form-model-item>
                     <a-form-model-item label="Lương">
-                      <a-input v-model="dataUserDetail.salary" />
+                      <a-input v-model="dataEdit.salary" />
                     </a-form-model-item>
                     <a-form-model-item label="Ảnh">
                       <a-input v-model="dataEdit.image" />
@@ -279,6 +284,7 @@
               </a-form-model>
             </div>
           </a-modal>
+          <!-- popup edit -->
 
           <a-modal v-model="visibleProfile" class="profile">
             <template slot="footer">

@@ -93,17 +93,17 @@
                 <a-tag
                   :color="
                     record.statusAccept == '-1'
-                      ? 'red'
+                      ? 'orange'
                       : record.statusAccept == '0'
-                      ? 'gray'
+                      ? 'red'
                       : 'green'
                   "
                 >
                   {{
                     record.statusAccept == "-1"
-                      ? "Hủy bỏ"
-                      : record.statusAccept == "0"
                       ? "Chờ duyệt"
+                      : record.statusAccept == "0"
+                      ? "Hủy bỏ"
                       : "Đã duyệt"
                   }}
                 </a-tag>
@@ -114,8 +114,10 @@
                     <a-button
                       id="view"
                       @click="
-                        getDetailPersonalLeaveApplicationEmployee(
-                          record.idApplication
+                        showModelView(
+                          record.title,
+                          record.dateCreate,
+                          record.content
                         )
                       "
                       :style="{ width: '44.25px', 'margin-right': '100px' }"
@@ -220,9 +222,6 @@
           <a-modal v-model="visibleView" class="view">
             <template slot="footer">
               <a-button key="a" hidden></a-button>
-              <a-button key="submit" type="primary" @click="handleCancel"
-                >Thoát ra</a-button
-              >
             </template>
             <a-form-model>
               <a-form-model-item label="Tiêu đề">
@@ -233,7 +232,7 @@
               </a-form-model-item>
               <a-form-model-item label="Ngày">
                 <a-input
-                  v-model="dataPersonalLeaveEmployeeDetail.dateAccept"
+                  v-model="dataPersonalLeaveEmployeeDetail.dateCreate"
                   disabled
                 />
               </a-form-model-item>
@@ -256,7 +255,7 @@
  <script>
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
-import xinNghiService from "../service/xinNghiService";
+import xinNghiService from "@/service/xinNghiService";
 
 export default {
   name: "XinNghi",
@@ -485,17 +484,14 @@ export default {
           console.log(e);
         });
     },
-    getDetailPersonalLeaveApplicationEmployee(id) {
-      xinNghiService
-        .getDetailPersonalLeaveApplicationEmployee(id)
-        .then((response) => {
-          this.dataPersonalLeaveEmployeeDetail = response.data.data;
-          this.visibleView = true;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+
+    showModelView(title, dateCreate, content) {
+      this.dataPersonalLeaveEmployeeDetail.title = title;
+      this.dataPersonalLeaveEmployeeDetail.dateCreate = dateCreate;
+      this.dataPersonalLeaveEmployeeDetail.content = content;
+      this.visibleView = true;
     },
+
     notifi(type, message, description) {
       this.$notification[type]({
         message: message,
