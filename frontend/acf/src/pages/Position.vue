@@ -104,13 +104,16 @@
               <a-modal v-model="visibleAdd" title="Thêm chức vụ">
                 <template slot="footer">
                   <a-button key="back" @click="handleCancel"> Hủy </a-button>
-                  <a-button key="submit" type="primary" @click="submitAdd">
+                  <a-button key="submit" type="primary" @click="checkFormAdd">
                     Lưu
                   </a-button>
                 </template>
                 <a-form-model>
-                  <a-form-model-item label="Tên chức vụ">
+                  <a-form-model-item label="Tên chức vụ *">
                     <a-input v-model="dataAdd.name" />
+                    <div style="color: red" v-if="checkDataInputName.show">
+                      {{ checkDataInputName.message }}
+                    </div>
                   </a-form-model-item>
                 </a-form-model>
               </a-modal>
@@ -199,6 +202,10 @@ export default {
       ],
       visibleAdd: false,
       visibleEdit: false,
+      checkDataInputName: {
+        show: false,
+        message: "",
+      },
     };
   },
   created() {
@@ -234,6 +241,24 @@ export default {
     },
     showModalAdd() {
       this.visibleAdd = true;
+      this.checkDataInputName.show = false;
+      this.checkDataInputName.message = "";
+    },
+    checkFormAdd() {
+      if (this.dataAdd.name != null && this.dataAdd.name != "") {
+        if (this.dataAdd.name.length < 8) {
+          this.checkDataInputName.show = true;
+          this.checkDataInputName.message =
+            "Mày phải didenf vào chỗ trống ddooj dai lon hon 8";
+        } else {
+          this.checkDataInputName.show = false;
+          this.checkDataInputName.message = "";
+          this.submitAdd();
+        }
+      } else {
+        this.checkDataInputName.show = true;
+        this.checkDataInputName.message = "Mày phải didenf vào chỗ trống";
+      }
     },
     submitAdd() {
       positionService
