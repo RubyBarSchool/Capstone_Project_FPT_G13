@@ -444,9 +444,9 @@ export default {
       this.dataEdit.id = id;
       this.dataEdit.effectiveDate = effectiveDate;
       this.dataEdit.listIdEmployee = [];
-      // for (var i = 0; i < listIdEmployees.length; i++) {
-      //   this.dataEdit.listIdEmployee.push(listIdEmployees[i].id);
-      // }
+      for (var i = 0; i < listIdEmployees.length; i++) {
+        this.dataEdit.listIdEmployee.push(listIdEmployees[i].id);
+      }
       this.dataEdit.status = status;
       this.dataEdit.reason = reason;
       this.dataEdit.money = money;

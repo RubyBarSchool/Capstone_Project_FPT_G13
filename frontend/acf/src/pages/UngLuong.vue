@@ -107,7 +107,7 @@
                   <a-col :span="8">
                     <a-button
                       id="view"
-                      @click="getDetailAdvanceSalaryEmployeeByID(record.id)"
+                      @click="showModalView(record.id,record.title, record.advanceSalary, record.content)"
                       :style="{ width: '44.25px', 'margin-right': '100px' }"
                     >
                       <font-awesome-icon :icon="['fas', 'eye']" />
@@ -208,20 +208,17 @@
             </template>
             <a-form-model>
               <a-form-model-item label="Tiêu đề">
-                <a-input
-                  v-model="dataAdvanceSalaryEmployeeDetail.title"
-                  disabled
-                />
+                <a-input v-model="dataDetail.title" disabled />
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
                 <a-input
-                  v-model="dataAdvanceSalaryEmployeeDetail.advanceSalary"
+                  v-model="dataDetail.advanceSalary"
                   disabled
                 />
               </a-form-model-item>
               <a-form-model-item label="Nội dung">
                 <a-textarea
-                  v-model="dataAdvanceSalaryEmployeeDetail.content"
+                  v-model="dataDetail.content"
                   :row="4"
                   disabled
                 />
@@ -254,11 +251,11 @@ export default {
         total: 0,
       },
       dataSearch: {
+        accept: "",
         content: "",
         date: [],
         pageIndex: 1,
         pageSize: 10,
-        status: "",
         title: "",
         total: 0,
       },
@@ -274,7 +271,7 @@ export default {
         id: 0,
         title: "",
       },
-      dataAdvanceSalaryEmployeeDetail: {
+      dataDetail: {
         id: "",
         title: "",
         content: "",
@@ -452,16 +449,12 @@ export default {
           console.log(e);
         });
     },
-    getDetailAdvanceSalaryEmployeeByID(id) {
-      ungLuongService
-        .getAdvanceSalaryEmployeeByID(id)
-        .then((response) => {
-          this.dataAdvanceSalaryEmployeeDetail = response.data.data;
-          this.visibleView = true;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+    showModalView(id, title, advanceSalary, content) {
+      this.dataDetail.id = id;
+      this.dataDetail.title = title;
+      this.dataDetail.content = content;
+      this.dataDetail.advanceSalary = advanceSalary;
+      this.visibleView = true;
     },
     notifi(type, message, description) {
       this.$notification[type]({

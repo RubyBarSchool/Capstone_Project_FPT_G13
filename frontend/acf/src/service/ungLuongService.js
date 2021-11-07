@@ -10,9 +10,9 @@ class ungLuongService {
     updateAdvanceSalaryEmployee(data) {
         return http.put(`/employee/advanceSalary/update`, data);
     }
-    getAdvanceSalaryEmployeeByID(id) {
-        return http.get(`/employee/advanceSalary/detail?id=${id}`);
-    }
+    // getAdvanceSalaryEmployeeByID(id) {
+    //     return http.get(`/employee/advanceSalary/detail?id=${id}`);
+    // }
     deleteAdvanceSalaryEmployee(id) {
         return http.delete(`/employee/advanceSalary/delete?id=${id}`);
     }

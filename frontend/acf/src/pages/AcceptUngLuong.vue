@@ -21,7 +21,7 @@
           <a-input
             placeholder="Nhân viên"
             style="width: 150px"
-            v-model="dataSearch.nameEmployee"
+            v-model="dataSearch.employeeName"
           />
           <a-input
             placeholder="Tiêu đề"
@@ -30,11 +30,12 @@
           />
           <a-select
             placeholder="Trạng thái"
-            v-model="dataSearch.status"
+            v-model="dataSearch.accept"
             style="width: 150px"
           >
-            <a-select-option :value="false"> Chờ duyệt </a-select-option>
-            <a-select-option :value="true"> Đã duyệt </a-select-option>
+            <a-select-option value="-1"> Chờ duyệt </a-select-option>
+            <a-select-option value="1"> Đã duyệt </a-select-option>
+            <a-select-option value="0"> Từ chối </a-select-option>
           </a-select>
           <a-range-picker
             v-model="dataSearch.date"
@@ -76,14 +77,37 @@
                 {{ record.advanceSalary }}
               </template>
               <template slot="status" slot-scope="text, record">
-                <a-tag :color="record.accept ? 'green' : 'gray'">
-                  {{ record.accept ? "Đã duyệt" : "Chờ duyệt" }}
+                <a-tag
+                  :color="
+                    record.status == '-1'
+                      ? 'orange'
+                      : record.status == '0'
+                      ? 'red'
+                      : 'green'
+                  "
+                >
+                  {{
+                    record.status == "-1"
+                      ? "Chờ duyệt"
+                      : record.status == "0"
+                      ? "Từ chối"
+                      : "Đã duyệt"
+                  }}
                 </a-tag>
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-button
                   id="view"
-                  @click="getDetailAdvanceSalaryAdmin(record.id)"
+                  @click="
+                    showModalView(
+                      record.id,
+                      record.nameEmployee,
+                      record.title,
+                      record.advanceSalary,
+                      record.content,
+                      record.comment
+                    )
+                  "
                 >
                   <font-awesome-icon :icon="['fas', 'eye']" />
                 </a-button>
@@ -100,38 +124,34 @@
           >
             <template slot="footer">
               <a-button key="back" @click="handleCancel">Hủy</a-button>
-              <a-button type="danger">Loại bỏ</a-button>
-              <a-button type="primary"> Chấp nhận </a-button>
+              <a-button
+                type="danger"
+                @click="submitReject(dataDetail.id, dataDetail.comment)"
+                >Loại bỏ</a-button
+              >
+              <a-button
+                type="primary"
+                @click="submitAccept(dataDetail.id, dataDetail.comment)"
+              >
+                Chấp nhận
+              </a-button>
             </template>
             <a-form-model>
               <a-form-model-item label="Nhân viên">
-                <a-input
-                  v-model="dataAdvanceSalaryAdminDetail.nameEmployee"
-                  disabled
-                />
+                <a-input v-model="dataDetail.nameEmployee" disabled />
               </a-form-model-item>
               <a-form-model-item label="Tiêu đề">
-                <a-input
-                  v-model="dataAdvanceSalaryAdminDetail.title"
-                  disabled
-                />
+                <a-input v-model="dataDetail.title" disabled />
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
-                <a-input
-                  v-model="dataAdvanceSalaryAdminDetail.advanceSalary"
-                  disabled
-                />
+                <a-input v-model="dataDetail.advanceSalary" disabled />
               </a-form-model-item>
               <a-form-model-item label="Nội dung">
-                <a-textarea
-                  v-model="dataAdvanceSalaryAdminDetail.content"
-                  :rows="4"
-                  disabled
-                />
+                <a-textarea v-model="dataDetail.content" :rows="4" disabled />
               </a-form-model-item>
               <a-form-model-item label="Ghi chú">
                 <a-textarea
-                  v-model="dataAdvanceSalaryAdminDetail.note"
+                  v-model="dataDetail.comment"
                   placeholder="Nhận xét như nào thì viết vào đây"
                   :rows="4"
                 />
@@ -164,21 +184,30 @@ export default {
         total: 0,
       },
       dataSearch: {
+        accept: "",
         date: [],
         employeeName: "",
         pageIndex: 1,
         pageSize: 10,
-        status: "",
         title: "",
         total: 0,
       },
       dataSourceTable: [],
-      dataAdvanceSalaryAdminDetail: {
-        nameEmployee: "",
-        title: "",
+      dataDetail: {
         advanceSalary: "",
+        comment: "",
         content: "",
-        note: "",
+        date: "",
+        dateAccept: "",
+        id: "",
+        idEmployee: "",
+        nameEmployee: "",
+        status: "",
+        title: "",
+      },
+      dataAccept: {
+        comment: "",
+        id: 0,
       },
       columns: [
         {
@@ -259,38 +288,68 @@ export default {
           console.log(e);
         });
     },
-    getDetailAdvanceSalaryAdmin(id) {
-      acceptUngLuongService
-        .getDetailAdvanceSalaryAdmin(id)
-        .then((response) => {
-          this.dataAdvanceSalaryAdminDetail = response.data.data;
-          this.visibleView = true;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+    showModalView(id, nameEmployee, title, advanceSalary, content, comment) {
+      this.dataDetail.id = id;
+      this.dataDetail.nameEmployee = nameEmployee;
+      this.dataDetail.title = title;
+      this.dataDetail.advanceSalary = advanceSalary;
+      this.dataDetail.content = content;
+      this.dataDetail.comment = comment;
+      this.visibleView = true;
     },
-    submitAccept() {
+    handAccept() {
       acceptUngLuongService
-        .acceptAdvanceSalaryAdmin()
+        .acceptAdvanceSalaryAdmin(this.dataAccept)
         .then((response) => {
+          this.submitSearch();
           if (response.data.data) {
             let type = "success";
             let message = "Cập nhật";
             let description = "Cập nhật trạng thái đơn thành công";
             this.notifi(type, message, description);
-            this.submitSearch();
           } else {
             let type = "error";
             let message = "Cập nhật";
             let description = "Cập nhật trạng thái đơn thành công";
             this.notifi(type, message, description);
-            this.submitSearch();
           }
         })
         .catch((e) => {
           console.log(e);
         });
+    },
+    submitAccept(id, comment) {
+      this.dataAccept.id = id;
+      this.dataAccept.comment = comment;
+      this.handAccept();
+      this.visibleView = false;
+    },
+    handReject() {
+      acceptUngLuongService
+        .rejectAdvanceSalaryAdmin(this.dataAccept)
+        .then((response) => {
+          this.submitSearch();
+          if (response.data.data) {
+            let type = "success";
+            let message = "Cập nhật";
+            let description = "Cập nhật trạng thái đơn thành công";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Cập nhật";
+            let description = "Cập nhật trạng thái đơn thành công";
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    submitReject(id, comment) {
+      this.dataAccept.id = id;
+      this.dataAccept.comment = comment;
+      this.handReject();
+      this.visibleView = false;
     },
     handleCancel() {
       this.visibleView = false;
