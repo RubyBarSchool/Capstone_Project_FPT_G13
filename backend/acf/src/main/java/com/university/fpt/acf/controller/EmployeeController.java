@@ -108,9 +108,9 @@ public class EmployeeController {
         try{
             checkUpdate =employeeService.UpdateEmployee(updateEmployeeForm);
             if(checkUpdate==false){
-                message="Update account fail!";
+                message="Chỉnh sửa không thành công!";
             }else{
-                message="Update sucessfuly!";
+                message="Chỉnh sửa thành công!";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkUpdate);

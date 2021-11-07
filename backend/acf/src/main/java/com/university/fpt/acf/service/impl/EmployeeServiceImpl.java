@@ -6,6 +6,7 @@ import com.university.fpt.acf.entity.Position;
 import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.repository.EmployeeCustomRepository;
 import com.university.fpt.acf.repository.EmployeeRepository;
+import com.university.fpt.acf.repository.PositionRespository;
 import com.university.fpt.acf.service.EmployeeService;
 import com.university.fpt.acf.util.EmployeeValidate.EmployeeValidate;
 import com.university.fpt.acf.vo.EmployeeDetailVO;
@@ -27,7 +28,8 @@ import java.util.List;
 public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmployeeRepository employeeRepository;
-
+    @Autowired
+    private PositionRespository positionRespository;
     @Autowired
     private EmployeeCustomRepository employeeCustomRepository;
     @Override
@@ -104,27 +106,35 @@ public class EmployeeServiceImpl implements EmployeeService {
                 if(validate.checkFormEmail(addEmployeeForm.getEmail())&&validate.checkFormPhone(addEmployeeForm.getPhone())){
                     if(employeeRepository.checkExitPhone(addEmployeeForm.getPhone())==null &&
                             employeeRepository.checkExitEmail(addEmployeeForm.getEmail())== null){
-                        Employee e = new Employee();
-                        e.setFullName(addEmployeeForm.getFullName());
-                        e.setImage(addEmployeeForm.getImage());
-                        e.setDob(addEmployeeForm.getDob());
-                        e.setGender(addEmployeeForm.getGender());
-                        e.setAddress(addEmployeeForm.getAddress());
-                        e.setEmail(addEmployeeForm.getEmail());
-                        e.setSalary(addEmployeeForm.getSalary());
-                        Position p = new Position();
-                        p.setId(addEmployeeForm.getIdPosition());
-                        e.setPosition(p);
-                        AccountSercurity accountSercurity = new AccountSercurity();
-                        e.setModified_by(accountSercurity.getUserName());
-                        e.setCreated_by(accountSercurity.getUserName());
-                        Employee ex = employeeRepository.save(e);
-                        check =true;
+                        String checkPosition =positionRespository.CheckExitPositionById(addEmployeeForm.getIdPosition());
+                        if(checkPosition !=null && !checkPosition.isEmpty()){
+                            Employee e = new Employee();
+                            e.setFullName(addEmployeeForm.getFullName());
+                            e.setImage(addEmployeeForm.getImage());
+                            e.setDob(addEmployeeForm.getDob());
+                            e.setGender(addEmployeeForm.getGender());
+                            e.setAddress(addEmployeeForm.getAddress());
+                            e.setEmail(addEmployeeForm.getEmail());
+                            e.setSalary(addEmployeeForm.getSalary());
+                            e.setNation(addEmployeeForm.getNation());
+                            e.setPhone(addEmployeeForm.getPhone());
+                            Position p = new Position();
+                            p.setId(addEmployeeForm.getIdPosition());
+                            e.setPosition(p);
+                            AccountSercurity accountSercurity = new AccountSercurity();
+                            e.setModified_by(accountSercurity.getUserName());
+                            e.setCreated_by(accountSercurity.getUserName());
+                            Employee ex = employeeRepository.save(e);
+                            check =true;
+                        }else{
+                            throw new Exception("Chức vụ không tồn tại!");
+                        }
+
                     }else{
-                        throw new Exception("Phone/ Email is exist!");
+                        throw new Exception("SĐT/ Email không tồn tại!");
                     }
                 }else {
-                    throw new Exception("Employee is not format Phone/ Email!");
+                    throw new Exception("SĐT/Email sai quy chuẩn");
                 }
             }
         }catch (Exception e){
@@ -139,33 +149,37 @@ public class EmployeeServiceImpl implements EmployeeService {
         try{
             if(updateEmployeeForm==null){
                 throw new Exception("Data update employee is null");
-            }else{
-                Employee e = employeeRepository.getEmployeeToUpdateById(updateEmployeeForm.getId());
-                EmployeeValidate validate = new EmployeeValidate();
-                if(e!=null){
-                    if(validate.checkFormEmail(updateEmployeeForm.getEmail())&&validate.checkFormPhone(updateEmployeeForm.getPhone())){
-                            e.setFullName(updateEmployeeForm.getFullName());
-                            e.setImage(updateEmployeeForm.getImage());
-                            e.setDob(updateEmployeeForm.getDob());
-                            e.setGender(updateEmployeeForm.getGender());
-                            e.setAddress(updateEmployeeForm.getAddress());
-                            e.setEmail(updateEmployeeForm.getEmail());
-                            e.setSalary(updateEmployeeForm.getSalary());
-                            Position p = new Position();
-                            p.setId(updateEmployeeForm.getIdPosition());
-                            e.setPosition(p);
-                            AccountSercurity accountSercurity = new AccountSercurity();
-                            e.setModified_by(accountSercurity.getUserName());
-                            e.setModified_date(LocalDate.now());
-                            employeeRepository.save(e);
-                            check =true;
-                    }else {
-                        throw new Exception("Employee is not format Phone/ Email!");
-                    }
+            }
+            String checkPosition =positionRespository.CheckExitPositionById(updateEmployeeForm.getIdPosition());
+            if(checkPosition ==null || checkPosition.isEmpty()) {
+                throw new Exception("Chức vụ không tồn tại!");
+            }
+            Employee e = employeeRepository.getEmployeeToUpdateById(updateEmployeeForm.getId());
+            EmployeeValidate validate = new EmployeeValidate();
+            if(e!=null){
+                if(validate.checkFormEmail(updateEmployeeForm.getEmail())&&validate.checkFormPhone(updateEmployeeForm.getPhone())){
+                    e.setFullName(updateEmployeeForm.getFullName());
+                    e.setImage(updateEmployeeForm.getImage());
+                    e.setDob(updateEmployeeForm.getDob());
+                    e.setGender(updateEmployeeForm.getGender());
+                    e.setAddress(updateEmployeeForm.getAddress());
+                    e.setEmail(updateEmployeeForm.getEmail());
+                    e.setSalary(updateEmployeeForm.getSalary());
+                    e.setNation(updateEmployeeForm.getNation());
+                    e.setPhone(updateEmployeeForm.getPhone());
+                    Position p = new Position();
+                    p.setId(updateEmployeeForm.getIdPosition());
+                    e.setPosition(p);
+                    AccountSercurity accountSercurity = new AccountSercurity();
+                    e.setModified_by(accountSercurity.getUserName());
+                    e.setModified_date(LocalDate.now());
+                    employeeRepository.save(e);
+                    check =true;
                 }else {
-                    throw new Exception("Employee ko tổn tại hoặc đã bị xóa");
-                }
-
+                    throw new Exception("Employee is not format Phone/ Email!");
+                    }
+            }else {
+                throw new Exception("Employee ko tổn tại hoặc đã bị xóa");
             }
         }catch (Exception e){
             e.getMessage();
