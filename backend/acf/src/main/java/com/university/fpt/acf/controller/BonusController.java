@@ -28,9 +28,9 @@ private BonusService bonusService;
             list = bonusService.searchBonus(searchForm);
             total = bonusService.totalSearchBonus(searchForm);
             responseCommon.setData(list);
-            message = "Get bonus successfully";
+            message = "Thành công";
             if (total == 0) {
-                message = "Get bonus not found";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());

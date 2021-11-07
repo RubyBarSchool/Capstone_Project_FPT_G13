@@ -28,9 +28,9 @@ public class PositionController {
             getAllPositionVOList = positionService.searchPosition(positionForm);
             total = positionService.totalSearchPosition(positionForm);
             responseCommon.setData(getAllPositionVOList);
-            message = "Get position successfully";
+            message = "Thành công!";
             if(total==0){
-                message = "Get position not found";
+                message = "Không tìm thấy!";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -51,13 +51,13 @@ public class PositionController {
         Boolean checkAdd = false;
         try {
             if(addPositionForm.getName()==null || addPositionForm.getName()==""){
-                message="Data is null! Dont Add!";
+                message="Dữ liệu NULL!";
             }else {
                 checkAdd =positionService.addPosition(addPositionForm);
                 if(checkAdd==false){
-                    message="Add position fail!";
+                    message="Thêm không thành công!";
                 }else{
-                    message="Add position sucessfuly!";
+                    message="Thêm thành công!";
                 }
             }
             responseCommon.setMessage(message);
@@ -80,13 +80,13 @@ public class PositionController {
         Boolean checkUpdate = false;
         try{
             if(updatePositionForm.getName()==null || updatePositionForm.getName()==""){
-                message="Data is emplty! Dont Add!";
+                message="Dữ liệu Null hoặc chống!";
             }else {
                 checkUpdate =positionService.updatePosition(updatePositionForm);
                 if(checkUpdate==false){
-                    message="Update position fail!";
+                    message="Chỉnh sửa không thành công";
                 }else{
-                    message="Update position sucessfuly!";
+                    message="Chình sửa thành công!";
                 }
             }
             responseCommon.setMessage(message);
@@ -109,9 +109,9 @@ public class PositionController {
         try{
             checkDelete = positionService.deletePosition(id);
             if(checkDelete==false){
-                message="Delete position fail!";
+                message="Xóa không thành công!";
             }else{
-                message="Delete position sucessfuly";
+                message="Xóa thành công!";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkDelete);

@@ -35,15 +35,15 @@ public class SalaryAdminController {
             total = salaryService.getTotalAllSalaryHistory(searchSalaryForm);
             responseCommon.setData(searchSalaryVOS);
             responseCommon.setTotal(total);
-            message = "Get Salary successfully";
+            message = "Thành công";
             if (total.intValue() == 0) {
-                message = "Get Salary not found";
+                message = "Không tìm thấy";
             }
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
-            message = "Could not get Salary !";
+            message = e.getMessage();
             responseCommon.setData(searchSalaryVOS);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
@@ -62,15 +62,15 @@ public class SalaryAdminController {
             total = salaryService.getTotalAllSalaryAccept(searchSalaryForm);
             responseCommon.setData(searchSalaryVOS);
             responseCommon.setTotal(total);
-            message = "Get Salary successfully";
+            message = "Thành công!";
             if (total.intValue() == 0) {
-                message = "Get Salary not found";
+                message = "Không tìm thấy";
             }
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
-            message = "Could not get Salary !";
+            message = e.getMessage();
             responseCommon.setData(searchSalaryVOS);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
@@ -87,15 +87,15 @@ public class SalaryAdminController {
             status = salaryService.acceptSalary(id);
             responseCommon.setData(status);
             responseCommon.setTotal(0);
-            message = "Accept Salary successfully";
+            message = "Duyệt ứng lương thành công!";
             if (!status) {
-                message = "Accept Salary not success";
+                message = "Duyệt ứng lương lỗi!";
             }
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
-            message = "Could not Accept !";
+            message = e.getMessage();
             responseCommon.setData(status);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);

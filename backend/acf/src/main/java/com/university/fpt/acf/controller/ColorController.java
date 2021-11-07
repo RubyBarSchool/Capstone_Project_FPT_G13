@@ -28,9 +28,9 @@ public class ColorController {
             listColor = colorService.searchColor(searchColorForm);
             total = colorService.getTotalSearchColor(searchColorForm);
             responseCommon.setData(listColor);
-            message = "Get color successfully";
+            message = "Thành công";
             if(total==0){
-                message = "Get color not found";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -51,13 +51,13 @@ public class ColorController {
         Boolean checkAdd = false;
         try {
             if (addColorForm.getName() == null || addColorForm.getName() == "") {
-                message = "Data is null! Dont Add!";
+                message = "Dữ liệu bị null! Không thêm được!";
             } else {
                 checkAdd = colorService.insertColor(addColorForm);
                 if (checkAdd == false) {
-                    message = "Add color fail!";
+                    message = "Thêm màu sắc không thành công!";
                 } else {
-                    message = "Add color sucessfuly!";
+                    message = "Thêm thành công!";
                 }
             }
             responseCommon.setMessage(message);
@@ -79,13 +79,13 @@ public class ColorController {
         Boolean checkUpdate = false;
         try{
             if(updateColorForm.getName()==null || updateColorForm.getName()==""){
-                message="Ten color ko dc de chong";
+                message="Tên màu sắc chống";
             }else {
                 checkUpdate =colorService.updateColor(updateColorForm);
                 if(checkUpdate==false){
-                    message="Update color fail!";
+                    message="Chỉnh sửa không thành công";
                 }else{
-                    message="Update color sucessfuly!";
+                    message="Chỉnh sửa thành công";
                 }
             }
             responseCommon.setMessage(message);
@@ -108,9 +108,9 @@ public class ColorController {
         try{
             checkDelete = colorService.deleteColor(id);
             if(checkDelete==false){
-                message="Delete color fail!";
+                message="Xóa không thành công";
             }else{
-                message="Delete color sucessfuly";
+                message="Xóa thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkDelete);

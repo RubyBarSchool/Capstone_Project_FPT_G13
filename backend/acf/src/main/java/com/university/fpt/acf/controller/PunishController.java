@@ -29,9 +29,9 @@ public class PunishController {
             list = punishService.searchPunish(searchForm);
             total = punishService.totalSearchPunish(searchForm);
             responseCommon.setData(list);
-            message = "Get punish successfully";
+            message = "Thành công!";
             if (total == 0) {
-                message = "Get punish not found";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -53,7 +53,7 @@ public class PunishController {
         try {
 
             if(addForm==null){
-                message="Thông tin đang trống!";
+                message="Thông tin đang chống!";
             }
             checkAdd = punishService.addPunish(addForm);
             if(checkAdd==true){

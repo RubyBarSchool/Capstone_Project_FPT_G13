@@ -28,9 +28,9 @@ public class PersonalLeaveApplicationEmployeeController {
             list = personalLeaveApplicationService.searchPersonalLeaveApplicationEmployee(searchForm);
             total = personalLeaveApplicationService.totalSearch(searchForm);
             responseCommon.setData(list);
-            message = "Get  Application successfully";
+            message = "Thành công";
             if(total==0){
-                message = "Get  Application not found";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -52,7 +52,7 @@ public class PersonalLeaveApplicationEmployeeController {
         try {
 
                 if(addForm==null){
-                    message="Đơn gửi đang trống!";
+                    message="Đơn gửi Chống!";
                 }
                 checkAdd = personalLeaveApplicationService.AddLeaveApplication(addForm);
                 if(checkAdd==true){

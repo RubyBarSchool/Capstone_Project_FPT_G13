@@ -28,9 +28,9 @@ public class CompanyController {
             listCompany = companyService.searchCompany(searchCompanyForm);
             total = companyService.getTotalSearchCompany(searchCompanyForm);
             responseCommon.setData(listCompany);
-            message = "Get company successfully";
+            message = "Thành công";
             if(total==0){
-                message = "Get company not found";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -51,13 +51,13 @@ public class CompanyController {
         Boolean checkAdd = false;
         try {
             if (addCompanyForm.getName() == null || addCompanyForm.getName() == "") {
-                message = "Data is null! Dont Add!";
+                message = "Dữ liệu bị NULL ! Thêm không thành công!";
             } else {
                 checkAdd = companyService.insertCompany(addCompanyForm);
                 if (checkAdd == false) {
-                    message = "Add company fail!";
+                    message = "Thêm không thành công!";
                 } else {
-                    message = "Add company sucessfuly!";
+                    message = "Thêm thành công!";
                 }
             }
             responseCommon.setMessage(message);
@@ -79,13 +79,13 @@ public class CompanyController {
         Boolean checkUpdate = false;
         try{
             if(updateCompanyForm.getName()==null || updateCompanyForm.getName()==""){
-                message="Ten color ko dc de chong";
+                message="Tên màu sắc chống";
             }else {
                 checkUpdate =companyService.updateCompany(updateCompanyForm);
                 if(checkUpdate==false){
-                    message="Update company fail!";
+                    message="Chỉnh sửa không thành công!";
                 }else{
-                    message="Update company sucessfuly!";
+                    message="Chỉnh sửa thành công!";
                 }
             }
             responseCommon.setMessage(message);
@@ -108,9 +108,9 @@ public class CompanyController {
         try{
             checkDelete = companyService.deleteCompany(id);
             if(checkDelete==false){
-                message="Delete color fail!";
+                message="Xóa không thành công!";
             }else{
-                message="Delete color sucessfuly";
+                message="Xóa thành công!";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkDelete);

@@ -30,9 +30,9 @@ public class PersonalLeaveApplicationAdminController {
             getAllPositionVOList = personalLeaveApplicationService.searchPersonalApplication(personalLeaveApplicationForm);
             total = personalLeaveApplicationService.totalPersonalApplication(personalLeaveApplicationForm);
             responseCommon.setData(getAllPositionVOList);
-            message = "Get personal Leave Application successfully";
+            message = "Thành công!";
             if(total==0){
-                message = "Get personal Leave Application not found";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -53,13 +53,13 @@ public class PersonalLeaveApplicationAdminController {
         Boolean checkAccept = false;
         try {
             if(acceptForm.getIdApplication()==null ){
-                message="Data is null! Dont Accept!";
+                message="Dữ liệu NULL! ";
             }else {
                 checkAccept =personalLeaveApplicationService.acceptPersonalLeaveApplication(acceptForm);
                 if(checkAccept==false){
-                    message="Accept personalLeaveApplication fail!";
+                    message="Duyệt đơn lỗi!";
                 }else{
-                    message="Accept personalLeaveApplication sucessfuly!";
+                    message="Duyệt đơn thành công!";
                 }
             }
             responseCommon.setMessage(message);

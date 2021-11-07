@@ -18,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/spadmin/account")
 public class AccountController {
-
     @Autowired
     private AccountManagerService accountService;
 
@@ -33,9 +32,9 @@ public class AccountController {
             total = accountService.getTotalSearchAccount(searchAccountForm);
             responseCommon.setData(getAllAccountResponseVOS);
             responseCommon.setTotal(total);
-            message = "Get accounts successfully";
+            message = "Thành công";
             if(total.intValue()==0){
-                message = "Get accounts not found";
+                message = "Không tìm thấy";
             }
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
@@ -58,9 +57,9 @@ public class AccountController {
         try {
             getAccountDetailResponeVO = accountService.getAccountById(id);
             if(getAccountDetailResponeVO==null){
-                message="Account not exist";
+                message="Tài khoản không tồn tại";
             }else {
-                message="Get Account sucessfuly";
+                message="Thành công";
 
             }
             responseCommon.setMessage(message);
@@ -97,14 +96,14 @@ public class AccountController {
                             message="Mật khẩu phải có ít nhất 8 kí tự, 1 số,1 chữ viết hoa và 1 kí tự đặc biệt(@#$%^&+=)";
                         }
                     }else{
-                        message="Password is Empty!";
+                        message="Password chống!";
                     }
                 }else {
                     message="Chức Vụ không được để chống!";
                 }
 
             }else{
-                message="username is empty!";
+                message="Tên tài khoản chống!";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
@@ -126,9 +125,9 @@ public class AccountController {
         try{
             checkUpdate =accountService.updateAccount(updateAccountForm);
             if(checkUpdate==false){
-                message="Update account fail!";
+                message="Chỉnh sửa không thành công!";
             }else{
-                message="Update sucessfuly!";
+                message="Chỉnh sửa thành công!";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkUpdate);
@@ -151,9 +150,9 @@ public class AccountController {
         try{
             checkDelete = accountService.deleteAccount(id);
             if(checkDelete==false){
-                message="Delete account fail!";
+                message="Xóa không thành công";
             }else{
-                message="Delete account sucessfuly";
+                message="Xóa thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkDelete);
@@ -175,9 +174,9 @@ public class AccountController {
         String genUsername="";
         try {
             genUsername = accountService.GenerateUsername(id);
-            message="GenerateUsername sucessfuly";
+            message="Generate tên tài khoản thành công";
             if(genUsername==null ||  genUsername.isEmpty()){
-                message ="Dont GenerateUsername";
+                message ="Generate tên tài khoản không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(accountService.GenerateUsername(id));

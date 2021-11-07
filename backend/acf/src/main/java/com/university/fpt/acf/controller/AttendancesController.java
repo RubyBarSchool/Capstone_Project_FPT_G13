@@ -41,9 +41,9 @@ public class AttendancesController {
         String message = "";
         try {
             List<TimeKeep> timeKeeps = attendancesService.saveAttendance(addAccountForm);
-            message = "add attendances successfully";
+            message = "Thêm thành công !";
             if (timeKeeps.size() == 0) {
-                message = "add false";
+                message = "Thêm không thành công!";
                 responseCommon.setData(false);
             }
             responseCommon.setData(true);
@@ -65,7 +65,7 @@ public class AttendancesController {
         String message = "";
         try {
             TimeKeep timeKeeps = attendancesService.updateAttendance(updateAttendanceForm);
-            message = "update attendances successfully";
+            message = "Chỉnh sửa thành công!";
             if (timeKeeps.getId() == null) {
                 message = "update false";
                 responseCommon.setData(false);
@@ -122,9 +122,9 @@ public class AttendancesController {
             total = attendancesService.getTotalAllAttendance(attendanceFrom);
             responseCommon.setData(attendanceVOS);
             responseCommon.setTotal(total);
-            message = "Get attendances successfully";
+            message = "Thành công!";
             if (total == 0) {
-                message = "Get attendances not found";
+                message = "Không tìm thấy";
             }
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
@@ -138,8 +138,8 @@ public class AttendancesController {
         }
     }
 
-    @PostMapping(path = "/priview")
-    public ResponseEntity<ResponseCommon> priviewExcel(@Valid @RequestBody ExportExcelForm exportExcelForm) {
+    @PostMapping(path = "/preview")
+    public ResponseEntity<ResponseCommon> previewExcel(@Valid @RequestBody ExportExcelForm exportExcelForm) {
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
         List<Object> priviewExcel = new ArrayList<>();
@@ -147,7 +147,7 @@ public class AttendancesController {
         try {
             priviewExcel = attendancesService.priviewExcel(exportExcelForm);
             responseCommon.setData(priviewExcel);
-            message = "Get attendances successfully";
+            message = "Thành công";
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);

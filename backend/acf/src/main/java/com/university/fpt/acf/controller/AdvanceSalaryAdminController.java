@@ -32,9 +32,9 @@ public class AdvanceSalaryAdminController {
             list = adminService.searchAdvanceSalaryAdmin(searchForm);
             total = adminService.totalSearch(searchForm);
             responseCommon.setData(list);
-            message = "Get advance Salary Admin successfully";
+            message = "Thành công";
             if(total==0){
-                message = "Get advance Salary Admin not found";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());

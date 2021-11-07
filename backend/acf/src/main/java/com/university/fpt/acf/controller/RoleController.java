@@ -28,16 +28,16 @@ public class RoleController {
             getAllRoleVOList = rolesService.getRoles(rolesForm);
             responseCommon.setData(getAllRoleVOList);
             total=rolesService.totalGetAllRole(rolesForm);
-            message = "Get roles successfully";
+            message = "Thành công!";
             if(total==0){
-                message = "Get roles not found";
+                message = "Không tìm thấy!";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
-            message = "Could not get roles !";
+            message = e.getMessage();
             responseCommon.setData(getAllRoleVOList);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);

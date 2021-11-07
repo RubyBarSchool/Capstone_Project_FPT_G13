@@ -47,15 +47,15 @@ public class SalaryEmployeeController {
             total = salaryService.getTotalAllSalary(bonusPunishForm);
             responseCommon.setData(searchSalaryVOS);
             responseCommon.setTotal(total);
-            message = "Get Salary successfully";
+            message = "Thành công !";
             if (total.intValue() == 0) {
-                message = "Get Salary not found";
+                message = "Không tìm thấy!";
             }
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
-            message = "Could not get Salary !";
+            message = e.getMessage();
             responseCommon.setData(searchSalaryVOS);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
@@ -74,9 +74,9 @@ public class SalaryEmployeeController {
             list = bonusService.searchBonusUser(bonusPunishForm);
             total = bonusService.totalSearchBonusUser(bonusPunishForm);
             responseCommon.setData(list);
-            message = "Get bonus successfully";
+            message = "Thành công!";
             if (total == 0) {
-                message = "Get bonus not found";
+                message = "Không tìm thấy!";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -101,9 +101,9 @@ public class SalaryEmployeeController {
             list = punishService.searchPunishUser(bonusPunishForm);
             total = punishService.totalSearchPunishUser(bonusPunishForm);
             responseCommon.setData(list);
-            message = "Get punish successfully";
+            message = "Thành công!";
             if (total == 0) {
-                message = "Get punish not found";
+                message = "Không tìm thấy!";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -129,9 +129,9 @@ public class SalaryEmployeeController {
             list = bonusService.searchBonusAndPunish(searchForm);
             total = bonusService.totalSearchBonusAndPunish(searchForm);
             responseCommon.setData(list);
-            message = "Get bonus successfully";
+            message = "Thành công!";
             if (total == 0) {
-                message = "Get bonus not found";
+                message = "Không thành công!";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
