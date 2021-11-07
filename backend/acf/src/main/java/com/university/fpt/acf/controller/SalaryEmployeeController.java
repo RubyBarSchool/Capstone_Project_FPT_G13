@@ -8,6 +8,7 @@ import com.university.fpt.acf.service.BonusService;
 import com.university.fpt.acf.service.PunishService;
 import com.university.fpt.acf.service.SalaryService;
 import com.university.fpt.acf.vo.SearchBonusAdminVO;
+import com.university.fpt.acf.vo.SearchBonusAndPunishVO;
 import com.university.fpt.acf.vo.SearchSalaryVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -103,6 +104,34 @@ public class SalaryEmployeeController {
             message = "Get punish successfully";
             if (total == 0) {
                 message = "Get punish not found";
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(list);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+
+
+    @PostMapping("/bonusandpunish")
+    public ResponseEntity<ResponseCommon> getBonusAndPunish(@Valid @RequestBody SearchBonusAdminForm searchForm) {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total = 0;
+        List<SearchBonusAndPunishVO> list = new ArrayList<>();
+        try {
+            list = bonusService.searchBonusAndPunish(searchForm);
+            total = bonusService.totalSearchBonusAndPunish(searchForm);
+            responseCommon.setData(list);
+            message = "Get bonus successfully";
+            if (total == 0) {
+                message = "Get bonus not found";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());

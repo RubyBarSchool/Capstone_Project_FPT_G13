@@ -14,6 +14,7 @@ import com.university.fpt.acf.repository.EmployeeRepository;
 import com.university.fpt.acf.service.BonusService;
 import com.university.fpt.acf.vo.GetAllAdvanceSalaryEmployeeVO;
 import com.university.fpt.acf.vo.SearchBonusAdminVO;
+import com.university.fpt.acf.vo.SearchBonusAndPunishVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +50,28 @@ public class BonusServiceImpl implements BonusService {
         int size;
         try {
             size = bonusCustomRepository.totalSearchBonus(searchBonus);
+        } catch (Exception e) {
+            throw new RuntimeException("Error bonus  repository " + e.getMessage());
+        }
+        return size;
+    }
+
+    @Override
+    public List<SearchBonusAndPunishVO> searchBonusAndPunish(SearchBonusAdminForm searchBonus) {
+        List<SearchBonusAndPunishVO> list = new ArrayList<>();
+        try {
+            list = bonusCustomRepository.searchBonusAndPunish(searchBonus);
+        } catch (Exception e) {
+            throw new RuntimeException("Error bonus repository " + e.getMessage());
+        }
+        return list;
+    }
+
+    @Override
+    public int totalSearchBonusAndPunish(SearchBonusAdminForm searchBonus) {
+        int size;
+        try {
+            size = bonusCustomRepository.totalSearchBonusAndPunish(searchBonus);
         } catch (Exception e) {
             throw new RuntimeException("Error bonus  repository " + e.getMessage());
         }
