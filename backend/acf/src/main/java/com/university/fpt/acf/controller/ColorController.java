@@ -4,7 +4,6 @@ import com.university.fpt.acf.common.entity.ResponseCommon;
 import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.service.ColorService;
 import com.university.fpt.acf.vo.ColorVO;
-import com.university.fpt.acf.vo.PositionResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

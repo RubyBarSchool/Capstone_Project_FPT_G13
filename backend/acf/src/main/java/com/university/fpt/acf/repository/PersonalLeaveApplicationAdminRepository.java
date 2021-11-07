@@ -19,8 +19,6 @@ public interface PersonalLeaveApplicationAdminRepository extends JpaRepository<P
  PersonaLeaveApplication getApplicationById(@Param("id") Long id);
  @Query("select new com.university.fpt.acf.vo.SearchPersonalLeaveApplicationAdminVO(p.id,p.created_date,p.fileAttach,p.title,p.comment,p.content,e.id,e.fullName,p.accept) from PersonaLeaveApplication p inner join p.employee  e where p.deleted=false and p.id=:id")
  SearchPersonalLeaveApplicationAdminVO detailPersonLeaveApplication(@Param("id") Long id);
-// @Query("select new com.university.fpt.acf.vo.SearchPersonalApplicationEmployeeVO(p.id,p.created_date,p.dateAccept,p.dateStart,p.dateEnd,p.fileAttach,p.title,p.comment,p.content,p.accept) from PersonaLeaveApplication p where p.deleted = false and p.employee.id=:id ")
-// SearchPersonalApplicationEmployeeVO get();
  @Query("SELECT new com.university.fpt.acf.vo.SearchPersonalLeaveApplicationAdminVO(p.id,p.created_date,p.fileAttach,p.title,p.comment,p.content,e.id,e.fullName,p.accept) From PersonaLeaveApplication p inner join p.employee e where 1=1")
  SearchPersonalLeaveApplicationAdminVO getQ();
 

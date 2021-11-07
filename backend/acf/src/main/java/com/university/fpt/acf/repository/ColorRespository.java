@@ -1,9 +1,6 @@
 package com.university.fpt.acf.repository;
 
-import com.university.fpt.acf.config.security.entity.Role;
 import com.university.fpt.acf.entity.Color;
-import com.university.fpt.acf.entity.Position;
-import com.university.fpt.acf.vo.ColorVO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,10 +1,7 @@
 package com.university.fpt.acf.repository;
 
-import com.university.fpt.acf.config.security.entity.Account;
 import com.university.fpt.acf.entity.Employee;
-import com.university.fpt.acf.entity.Position;
 import com.university.fpt.acf.vo.EmployeeDetailVO;
-import com.university.fpt.acf.vo.GetAllAccountVO;
 import com.university.fpt.acf.vo.GetAllEmployeeVO;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

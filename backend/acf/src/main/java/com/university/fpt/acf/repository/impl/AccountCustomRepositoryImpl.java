@@ -4,9 +4,6 @@ import com.university.fpt.acf.common.repository.CommonRepository;
 import com.university.fpt.acf.form.SearchAccountForm;
 import com.university.fpt.acf.repository.AccountCustomRepository;
 import com.university.fpt.acf.vo.GetAllAccountVO;
-import com.university.fpt.acf.vo.GetAllRoleVO;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;

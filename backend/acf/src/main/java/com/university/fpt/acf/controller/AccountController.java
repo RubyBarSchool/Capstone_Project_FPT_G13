@@ -6,7 +6,6 @@ import com.university.fpt.acf.service.AccountManagerService;
 import com.university.fpt.acf.util.AccountValidate.AddAccountValidate;
 import com.university.fpt.acf.vo.GetAccountDetailResponeVO;
 import com.university.fpt.acf.vo.GetAllAccountResponseVO;
-import com.university.fpt.acf.vo.GetAllRoleVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

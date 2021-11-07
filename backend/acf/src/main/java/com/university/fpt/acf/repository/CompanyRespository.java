@@ -6,8 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface CompanyRespository extends JpaRepository<Company,Long> {
     @Query("SELECT c.id FROM Company c where c.deleted=false AND c.name=:name")

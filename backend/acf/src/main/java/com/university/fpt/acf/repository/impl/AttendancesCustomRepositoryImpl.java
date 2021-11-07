@@ -3,15 +3,11 @@ package com.university.fpt.acf.repository.impl;
 import com.university.fpt.acf.common.repository.CommonRepository;
 import com.university.fpt.acf.form.AttendanceFrom;
 import com.university.fpt.acf.form.ExportExcelForm;
-import com.university.fpt.acf.form.SearchAccountForm;
-import com.university.fpt.acf.repository.AccountCustomRepository;
 import com.university.fpt.acf.repository.AttendancesCustomRepository;
 import com.university.fpt.acf.vo.AttendanceVO;
-import com.university.fpt.acf.vo.GetAllAccountVO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

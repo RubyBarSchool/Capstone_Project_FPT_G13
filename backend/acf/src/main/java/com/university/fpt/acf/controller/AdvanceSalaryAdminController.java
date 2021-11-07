@@ -1,13 +1,9 @@
 package com.university.fpt.acf.controller;
 
 import com.university.fpt.acf.common.entity.ResponseCommon;
-
 import com.university.fpt.acf.form.AcceptAdvanceSalaryAdminForm;
 import com.university.fpt.acf.form.SearchAdvanceSalaryAdminForm;
-
 import com.university.fpt.acf.service.AdvanceSalaryAdminService;
-
-import com.university.fpt.acf.vo.DetailAdvanceSalaryAdminVO;
 import com.university.fpt.acf.vo.SearchAdvanceSalaryAdminVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -3,7 +3,6 @@ package com.university.fpt.acf.controller;
 import com.university.fpt.acf.common.entity.ResponseCommon;
 import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.service.CompanyService;
-import com.university.fpt.acf.vo.ColorVO;
 import com.university.fpt.acf.vo.CompanyVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,12 +1,8 @@
 package com.university.fpt.acf.repository.impl;
 
 import com.university.fpt.acf.common.repository.CommonRepository;
-import com.university.fpt.acf.form.AddCompanyForm;
 import com.university.fpt.acf.form.SearchCompanyForm;
-import com.university.fpt.acf.form.UpdateCompanyForm;
-import com.university.fpt.acf.repository.ColorCustomRepository;
 import com.university.fpt.acf.repository.CompanyCustomRepository;
-import com.university.fpt.acf.vo.ColorVO;
 import com.university.fpt.acf.vo.CompanyVO;
 import org.springframework.stereotype.Repository;
 

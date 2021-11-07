@@ -3,10 +3,7 @@ package com.university.fpt.acf.repository.impl;
 import com.university.fpt.acf.common.repository.CommonRepository;
 import com.university.fpt.acf.form.SearchAdvanceSalaryAdminForm;
 import com.university.fpt.acf.repository.AdvanceSalaryAdminCustomRepository;
-import com.university.fpt.acf.vo.GetAllAdvanceSalaryEmployeeVO;
 import com.university.fpt.acf.vo.SearchAdvanceSalaryAdminVO;
-import com.university.fpt.acf.vo.SearchPersonalLeaveApplicationAdminVO;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;

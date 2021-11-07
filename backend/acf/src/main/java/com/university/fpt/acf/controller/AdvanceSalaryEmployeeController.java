@@ -2,13 +2,10 @@ package com.university.fpt.acf.controller;
 
 import com.university.fpt.acf.common.entity.ResponseCommon;
 import com.university.fpt.acf.form.AddAdvanceSalaryEmployeeForm;
-import com.university.fpt.acf.form.AddPerLeaveAppEmployeeForm;
 import com.university.fpt.acf.form.SearchAdvanceEmployeeForm;
 import com.university.fpt.acf.form.UpdateAdvanceSalaryEmployeeForm;
 import com.university.fpt.acf.service.AdvanceSalaryEmployeeService;
-import com.university.fpt.acf.vo.DetailAdvanceSalaryEmployeeVO;
 import com.university.fpt.acf.vo.GetAllAdvanceSalaryEmployeeVO;
-import com.university.fpt.acf.vo.SearchAdvanceSalaryAdminVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

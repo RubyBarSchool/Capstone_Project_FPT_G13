@@ -4,7 +4,6 @@ import com.university.fpt.acf.common.repository.CommonRepository;
 import com.university.fpt.acf.form.BonusPunishForm;
 import com.university.fpt.acf.form.SearchBonusAdminForm;
 import com.university.fpt.acf.repository.BonusCustomRepository;
-import com.university.fpt.acf.vo.GetAllAdvanceSalaryEmployeeVO;
 import com.university.fpt.acf.vo.SearchBonusAdminVO;
 import com.university.fpt.acf.vo.SearchBonusAndPunishVO;
 import org.springframework.stereotype.Repository;

@@ -1,7 +1,6 @@
 package com.university.fpt.acf.repository.impl;
 
 import com.university.fpt.acf.common.repository.CommonRepository;
-import com.university.fpt.acf.config.security.entity.Role;
 import com.university.fpt.acf.form.RolesForm;
 import com.university.fpt.acf.repository.RolesCustomRepository;
 import com.university.fpt.acf.vo.GetAllRoleVO;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.TypedQuery;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 @Repository

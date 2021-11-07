@@ -4,7 +4,6 @@ import com.university.fpt.acf.common.repository.CommonRepository;
 import com.university.fpt.acf.form.SearchPersonalApplicationEmployeeForm;
 import com.university.fpt.acf.repository.PersonalLeaveApplicationEmployeeCustomRepository;
 import com.university.fpt.acf.vo.SearchPersonalApplicationEmployeeVO;
-import com.university.fpt.acf.vo.SearchPersonalLeaveApplicationAdminVO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
