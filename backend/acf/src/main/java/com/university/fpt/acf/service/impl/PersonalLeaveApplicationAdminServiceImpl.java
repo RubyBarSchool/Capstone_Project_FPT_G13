@@ -53,13 +53,39 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
         boolean check = false;
         try{
             if(acceptForm.getIdApplication()==null ){
-                throw new Exception("Data accept Personal Leave Application is null");
+                throw new Exception("idApplication is null");
             }else{
                 PersonaLeaveApplication p = personalLeaveApplicationAdminRepository.getApplicationById(acceptForm.getIdApplication());
                 if(p==null){
                     throw new Exception(" Personal Leave Application ko ton tai ");
                 }
                 p.setAccept("1");
+                p.setComment(acceptForm.getComment());
+                AccountSercurity accountSercurity = new AccountSercurity();
+                Long idEm = accountRepository.getIdEmployeeByUsername(accountSercurity.getUserName());
+                p.setIdEmployeeAccept(idEm);
+                p.setModified_by(accountSercurity.getUserName());
+                p.setModified_date(LocalDate.now());
+                personalLeaveApplicationAdminRepository.save(p);
+            }
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+        return check;
+    }
+
+    @Override
+    public Boolean rejectPersonalLeaveApplication(AcceptPersonalLeaveApplicationAdminForm acceptForm) {
+        boolean check = false;
+        try{
+            if(acceptForm.getIdApplication()==null ){
+                throw new Exception("idApplication is  Null");
+            }else{
+                PersonaLeaveApplication p = personalLeaveApplicationAdminRepository.getApplicationById(acceptForm.getIdApplication());
+                if(p==null){
+                    throw new Exception(" Không tìm thấy đơn! ");
+                }
+                p.setAccept("0");
                 p.setComment(acceptForm.getComment());
                 AccountSercurity accountSercurity = new AccountSercurity();
                 Long idEm = accountRepository.getIdEmployeeByUsername(accountSercurity.getUserName());

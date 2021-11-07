@@ -83,4 +83,26 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
         }
         return check;
     }
+
+    @Override
+    public Boolean rejectAdvanceSalary(AcceptAdvanceSalaryAdminForm acceptForm) {
+        boolean check = false;
+        try{
+            AccountSercurity accountSercurity = new AccountSercurity();
+            Long id = accountManagerRepository.getIdEmployeeByUsername(accountSercurity.getUserName());
+            AdvaceSalary data = adminRepository.getDetailAdvanceSalaryById(acceptForm.getId());
+            data.setAccept("0");
+            data.setDateAccept(LocalDate.now());
+            data.setIdEmployeeAccept(id);
+            data.setComment(acceptForm.getComment());
+            data.setModified_by(accountSercurity.getUserName());
+            data.setModified_date(LocalDate.now());
+            adminRepository.save(data);
+            check=true;
+
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+        return check;
+    }
 }

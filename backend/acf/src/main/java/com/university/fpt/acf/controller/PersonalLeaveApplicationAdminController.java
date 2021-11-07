@@ -72,6 +72,34 @@ public class PersonalLeaveApplicationAdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    @PostMapping("/reject")
+    public  ResponseEntity<ResponseCommon> rejectPersonalApplication(@RequestBody AcceptPersonalLeaveApplicationAdminForm acceptForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message="";
+        Boolean checkAccept = false;
+        try {
+            if(acceptForm.getIdApplication()==null ){
+                message="Dữ liệu NULL! ";
+            }else {
+                checkAccept =personalLeaveApplicationService.acceptPersonalLeaveApplication(acceptForm);
+                if(checkAccept==false){
+                    message="Loại bỏ đơn lỗi!";
+                }else{
+                    message="Loại bỏ đơn thành công!";
+                }
+            }
+            responseCommon.setMessage(message);
+            responseCommon.setData(checkAccept);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+        }catch (Exception e){
+            message = e.getMessage();
+            responseCommon.setData(checkAccept);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
 //    @GetMapping("/detail")
 //    public ResponseEntity<ResponseCommon> getDetailPersonalLeaveApplicationAdmin(@RequestParam Long id){
 //        ResponseCommon responseCommon = new ResponseCommon();

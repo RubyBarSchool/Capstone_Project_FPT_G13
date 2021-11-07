@@ -14,5 +14,6 @@ public interface AdvanceSalaryAdminService {
     int totalSearch(SearchAdvanceSalaryAdminForm searchForm);
 //    DetailAdvanceSalaryAdminVO getDetailAdvanceSalaryAdmin(Long id);
     Boolean acceptAddvanceSalary(AcceptAdvanceSalaryAdminForm acceptForm);
+    Boolean rejectAdvanceSalary(AcceptAdvanceSalaryAdminForm acceptForm);
 
 }

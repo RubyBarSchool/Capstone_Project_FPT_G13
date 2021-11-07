@@ -10,5 +10,6 @@ public interface PersonalLeaveApplicationAdminService {
     List<SearchPersonalLeaveApplicationAdminVO> searchPersonalApplication(SearchPersonalLeaveAdminApplicationForm personalApplicationForm);
     int totalPersonalApplication(SearchPersonalLeaveAdminApplicationForm personalApplicationForm);
     Boolean acceptPersonalLeaveApplication(AcceptPersonalLeaveApplicationAdminForm acceptForm);
+    Boolean rejectPersonalLeaveApplication(AcceptPersonalLeaveApplicationAdminForm acceptForm);
 //    SearchPersonalLeaveApplicationAdminVO detailPersonalApplicationById(Long id);
 }

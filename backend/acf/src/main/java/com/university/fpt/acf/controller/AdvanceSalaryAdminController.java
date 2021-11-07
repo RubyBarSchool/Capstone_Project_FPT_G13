@@ -68,6 +68,30 @@ public class AdvanceSalaryAdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    @PutMapping("/reject")
+    public ResponseEntity<ResponseCommon> rejectAdvanceSalaryAdmin(@RequestBody AcceptAdvanceSalaryAdminForm acceptForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message="";
+        Boolean check = false;
+        try {
+            check = adminService.rejectAdvanceSalary(acceptForm);
+            if(check==true){
+                message="Loại bỏ đơn ứng lương thành công!";
+            }else{
+                message="Loại bỏ đơn ứng lương không thành công!";
+            }
+            responseCommon.setMessage(message);
+            responseCommon.setData(check);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+        }catch (Exception e){
+            message = e.getMessage();
+            responseCommon.setData(check);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
 //    @GetMapping("/detail")
 //    public ResponseEntity<ResponseCommon> getDetailAdvanceSalaryAdmin(@RequestParam Long id){
 //        ResponseCommon responseCommon = new ResponseCommon();
