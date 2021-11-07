@@ -19,9 +19,10 @@ public class PunishCustomRepositoryImpl extends CommonRepository implements Puni
     public List<SearchBonusAdminVO> searchPunish(SearchBonusAdminForm searchForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select  new com.university.fpt.acf.vo.SearchBonusAdminVO(b.id,b.title,b.reason,b.money,b.status,b.effectiveDate) from BonusPenalty b where b.deleted=false and b.bonus = false");
+        sql.append("select  new com.university.fpt.acf.vo.SearchBonusAdminVO(b.id,b.title,b.reason,b.money,b.status," +
+                "b.effectiveDate,e.id) from BonusPenalty  b  inner  join  b.employees e where b.deleted=false and b.bonus = false  ");
 
-        if(searchForm.getTitle()!=null){
+        if(searchForm.getTitle()!=null && !searchForm.getTitle().isEmpty()){
             sql.append(" and LOWER(b.title) like :title ");
             params.put("title","%"+searchForm.getTitle().toLowerCase()+"%");
         }
@@ -47,11 +48,11 @@ public class PunishCustomRepositoryImpl extends CommonRepository implements Puni
         Map<String, Object> params = new HashMap<>();
         sql.append("select  COUNT(*) from BonusPenalty b where b.deleted=false and b.bonus = false");
 
-        if(searchForm.getTitle()!=null){
+        if(searchForm.getTitle()!=null && !searchForm.getTitle().isEmpty()){
             sql.append(" and LOWER(b.title) like :title ");
             params.put("title","%"+searchForm.getTitle().toLowerCase()+"%");
         }
-        if(searchForm.getStatus()!=null){
+        if(searchForm.getStatus()!=null ){
             sql.append(" and LOWER(b.status) =:status ");
             params.put("status",searchForm.getStatus());
         }

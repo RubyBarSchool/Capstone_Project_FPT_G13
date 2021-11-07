@@ -49,7 +49,7 @@ public class AdvanceSalaryAdminController {
         }
     }
     @PutMapping("/accept")
-    public ResponseEntity<ResponseCommon> acceptAdvanceSalaryAdmin(AcceptAdvanceSalaryAdminForm acceptForm){
+    public ResponseEntity<ResponseCommon> acceptAdvanceSalaryAdmin(@RequestBody AcceptAdvanceSalaryAdminForm acceptForm){
         ResponseCommon responseCommon = new ResponseCommon();
         String message="";
         Boolean check = false;

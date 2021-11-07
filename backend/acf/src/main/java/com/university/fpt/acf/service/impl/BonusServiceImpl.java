@@ -13,6 +13,7 @@ import com.university.fpt.acf.repository.BonusRepository;
 import com.university.fpt.acf.repository.EmployeeRepository;
 import com.university.fpt.acf.service.BonusService;
 import com.university.fpt.acf.vo.GetAllAdvanceSalaryEmployeeVO;
+import com.university.fpt.acf.vo.ResultSearchBonusAdminVO;
 import com.university.fpt.acf.vo.SearchBonusAdminVO;
 import com.university.fpt.acf.vo.SearchBonusAndPunishVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,14 +36,44 @@ public class BonusServiceImpl implements BonusService {
     private EmployeeRepository employeeRepository;
 
     @Override
-    public List<SearchBonusAdminVO> searchBonus(SearchBonusAdminForm searchBonus) {
+    public List<ResultSearchBonusAdminVO> searchBonus(SearchBonusAdminForm searchBonus) {
         List<SearchBonusAdminVO> list = new ArrayList<>();
+        List<ResultSearchBonusAdminVO> listResult = new ArrayList<>();
+        int dem=0;
         try {
             list = bonusCustomRepository.searchBonus(searchBonus);
+            for(int i=dem;i<list.size();i++){
+                dem++;
+                List<Long> listId = new ArrayList<>();
+                ResultSearchBonusAdminVO re = new ResultSearchBonusAdminVO();
+                re.setId(list.get(i).getId());
+                re.setMoney(list.get(i).getMoney());
+                re.setReason(list.get(i).getReason());
+                re.setTitle(list.get(i).getTitle());
+                re.setEffectiveDate(list.get(i).getEffectiveDate());
+                re.setStatus(list.get(i).getStatus());
+                Long idBonus = list.get(i).getId();
+                listId.add(list.get(i).getIdEmployee());
+                for(int j=i+1;j< list.size();j++){
+                    if(list.get(j).getId()==idBonus){
+                        dem=j;
+                        listId.add(list.get(j).getIdEmployee());
+                    }else {
+                        break;
+                    }
+                }
+                re.setListIdEmployee(listId);
+                listResult.add(re);
+                if(dem<list.size()){
+                    i=dem;
+                }else{
+                    break;
+                }
+             }
         } catch (Exception e) {
             throw new RuntimeException("Error bonus repository " + e.getMessage());
         }
-        return list;
+        return listResult;
     }
 
     @Override
@@ -55,6 +86,37 @@ public class BonusServiceImpl implements BonusService {
         }
         return size;
     }
+
+//    @Override
+//    public List<ResultSearchBonusAdminVO> resultSearchBonus(List<SearchBonusAdminVO> list) {
+//        List<ResultSearchBonusAdminVO> listResult = new ArrayList<>();
+//        int dem=0;
+//        for(int i=0;i<list.size();i++){
+//            List<Long> listId = new ArrayList<>();
+//            ResultSearchBonusAdminVO re = new ResultSearchBonusAdminVO();
+//            re.setId(list.get(i).getId());
+//            re.setMoney(list.get(i).getMoney());
+//            re.setReason(list.get(i).getReason());
+//            re.setTitle(list.get(i).getTitle());
+//            re.setEffectiveDate(list.get(i).getEffectiveDate());
+//            re.setStatus(list.get(i).getStatus());
+//            Long idBonus = list.get(i).getId();
+//            for(int j=0;j< list.size();j++){
+//                dem =j;
+//                if(list.get(j).getId()==idBonus){
+//                    listId.add(list.get(i).getIdEmployee());
+//                }else {
+//                    break;
+//                }
+//
+//            }
+//            re.setListIdEmployee(listId);
+//            listResult.add(re);
+//            i=dem+1;
+//
+//        }
+//        return listResult;
+//    }
 
     @Override
     public List<SearchBonusAndPunishVO> searchBonusAndPunish(SearchBonusAdminForm searchBonus) {

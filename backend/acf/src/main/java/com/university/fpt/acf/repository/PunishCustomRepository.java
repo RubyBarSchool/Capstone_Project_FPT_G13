@@ -12,4 +12,5 @@ public interface PunishCustomRepository {
 
     List<SearchBonusAdminVO> searchPunishUser(String username, BonusPunishForm bonusPunishForm);
     int totalSearchPunishUser(String username,BonusPunishForm bonusPunishForm);
+
 }

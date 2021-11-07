@@ -29,9 +29,9 @@ public class AdvanceSalaryAdminCustomRepositoryImpl extends CommonRepository imp
             sql.append(" and LOWER(e.fullName) like :name ");
             params.put("name","%"+searchForm.getEmployeeName().toLowerCase()+"%");
         }
-        if(searchForm.getStatus()!=null && !searchForm.getStatus().isEmpty()){
+        if(searchForm.getAccept()!=null && !searchForm.getAccept().isEmpty()){
             sql.append(" and LOWER(a.accept) =:status ");
-            params.put("status",searchForm.getStatus());
+            params.put("status",searchForm.getAccept());
         }
         if (searchForm.getDate() != null && !searchForm.getDate().isEmpty()) {
             sql.append(" and  a.created_date BETWEEN :dateStart and :dateEnd ");
@@ -58,9 +58,9 @@ public class AdvanceSalaryAdminCustomRepositoryImpl extends CommonRepository imp
             sql.append(" and LOWER(e.fullName) like :name ");
             params.put("name","%"+searchForm.getEmployeeName().toLowerCase()+"%");
         }
-        if(searchForm.getStatus()!=null && !searchForm.getStatus().isEmpty()){
+        if(searchForm.getAccept()!=null && !searchForm.getAccept().isEmpty()){
             sql.append(" and LOWER(a.accept) =:status ");
-            params.put("status",searchForm.getStatus());
+            params.put("status",searchForm.getAccept());
         }
         if (searchForm.getDate() != null && !searchForm.getDate().isEmpty()) {
             sql.append(" and  a.created_date BETWEEN :dateStart and :dateEnd ");

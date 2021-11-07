@@ -15,7 +15,7 @@ import java.time.LocalDate;
 public interface BonusRepository extends JpaRepository<BonusPenalty,Long> {
     @Query("select  b from BonusPenalty b where b.id=:id and b.bonus = true")
     BonusPenalty getBonusById(@Param("id") Long id);
-    @Query("select  new com.university.fpt.acf.vo.SearchBonusAdminVO(b.id,b.title,b.reason,b.money,b.status,b.effectiveDate) from BonusPenalty b where b.deleted=false and b.bonus=true")
-    SearchBonusAdminVO get();
+//    @Query("select  new com.university.fpt.acf.vo.SearchBonusAdminVO(b.id,b.title,b.reason,b.money,b.status,b.effectiveDate,e.id) from BonusPenalty  b  inner  join  b.employees e where b.deleted=false and b.bonus=true order by b.id")
+//    SearchBonusAdminVO get();
 
 }

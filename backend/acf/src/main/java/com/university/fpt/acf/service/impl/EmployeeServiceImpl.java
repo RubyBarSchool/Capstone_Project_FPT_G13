@@ -208,14 +208,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<GetAllEmployeeVO> getEmployeeSNotDelete() {
-        List<GetAllEmployeeVO> list = new ArrayList<>();
-        try{
-            list = employeeRepository.getEmployeeNotDelete();
-
-        }catch (Exception e){
-            e.getMessage();
-        }
-        return list;
+    public List<GetAllEmployeeVO> getEmployeeSNotDelete(SearchEmployeeForm employeeForm) {
+        Pageable pageable = PageRequest.of(employeeForm.getPageIndex()-1,employeeForm.getPageSize());
+        List<GetAllEmployeeVO > list = employeeRepository.getEmployeeNotDelete("%"+employeeForm.getName().toLowerCase()+"%",pageable);
+        return list ;
     }
 }

@@ -76,10 +76,10 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-    @GetMapping("/getAllEmployee")
-    public ResponseEntity<ResponseCommon> GetEmployeesNotDelete(){
+    @PostMapping("/getAllEmployee")
+    public ResponseEntity<ResponseCommon> GetEmployeesNotDelete( @RequestBody SearchEmployeeForm employeeForm){
         ResponseCommon responseCommon = new ResponseCommon();
-        responseCommon.setData(employeeService.getEmployeeSNotDelete());
+        responseCommon.setData(employeeService.getEmployeeSNotDelete(employeeForm));
         responseCommon.setStatus(HttpStatus.OK.value());
         return new ResponseEntity<>(responseCommon,HttpStatus.OK);
     }

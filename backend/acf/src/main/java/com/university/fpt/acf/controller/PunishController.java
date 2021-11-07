@@ -5,6 +5,7 @@ import com.university.fpt.acf.form.AddBonusAdminForm;
 import com.university.fpt.acf.form.SearchBonusAdminForm;
 import com.university.fpt.acf.form.UpdateBonusForm;
 import com.university.fpt.acf.service.PunishService;
+import com.university.fpt.acf.vo.ResultSearchBonusAdminVO;
 import com.university.fpt.acf.vo.SearchBonusAdminVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,15 +21,15 @@ public class PunishController {
     @Autowired
     private PunishService punishService;
     @PostMapping("/search")
-    public ResponseEntity<ResponseCommon> searchColor(@RequestBody SearchBonusAdminForm searchForm) {
+    public ResponseEntity<ResponseCommon> searchPunish(@RequestBody SearchBonusAdminForm searchForm) {
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
         int total = 0;
-        List<SearchBonusAdminVO> list = new ArrayList<>();
+        List<ResultSearchBonusAdminVO> listResult = new ArrayList<>();
         try {
-            list = punishService.searchPunish(searchForm);
+            listResult = punishService.searchPunish(searchForm);
             total = punishService.totalSearchPunish(searchForm);
-            responseCommon.setData(list);
+            responseCommon.setData(listResult);
             message = "Thành công!";
             if (total == 0) {
                 message = "Không tìm thấy";
@@ -39,7 +40,7 @@ public class PunishController {
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
             message = e.getMessage();
-            responseCommon.setData(list);
+            responseCommon.setData(listResult);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);

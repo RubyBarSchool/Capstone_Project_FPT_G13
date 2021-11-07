@@ -12,10 +12,12 @@ import com.university.fpt.acf.repository.PunishCustomRepository;
 import com.university.fpt.acf.repository.PunishRepository;
 import com.university.fpt.acf.service.EmployeeService;
 import com.university.fpt.acf.service.PunishService;
+import com.university.fpt.acf.vo.ResultSearchBonusAdminVO;
 import com.university.fpt.acf.vo.SearchBonusAdminVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +31,44 @@ public class PunishServiceImpl implements PunishService {
     @Autowired
     private EmployeeRepository employeeRepository;
     @Override
-    public List<SearchBonusAdminVO> searchPunish(SearchBonusAdminForm searchBonus) {
+    public List<ResultSearchBonusAdminVO> searchPunish(SearchBonusAdminForm searchBonus) {
         List<SearchBonusAdminVO> list = new ArrayList<>();
+        List<ResultSearchBonusAdminVO> listResult = new ArrayList<>();
+        int dem=0;
         try {
             list = punishCustomRepository.searchPunish(searchBonus);
+            for(int i=dem;i<list.size();i++){
+                dem++;
+                List<Long> listId = new ArrayList<>();
+                ResultSearchBonusAdminVO re = new ResultSearchBonusAdminVO();
+                re.setId(list.get(i).getId());
+                re.setMoney(list.get(i).getMoney());
+                re.setReason(list.get(i).getReason());
+                re.setTitle(list.get(i).getTitle());
+                re.setEffectiveDate(list.get(i).getEffectiveDate());
+                re.setStatus(list.get(i).getStatus());
+                Long idBonus = list.get(i).getId();
+                listId.add(list.get(i).getIdEmployee());
+                for(int j=i+1;j< list.size();j++){
+                    if(list.get(j).getId()==idBonus){
+                        dem=j;
+                        listId.add(list.get(j).getIdEmployee());
+                    }else {
+                        break;
+                    }
+                }
+                re.setListIdEmployee(listId);
+                listResult.add(re);
+                if(dem<list.size()){
+                    i=dem;
+                }else{
+                    break;
+                }
+            }
         } catch (Exception e) {
             throw new RuntimeException("Error punish repository " + e.getMessage());
         }
-        return  list;
+        return listResult;
     }
 
     @Override
@@ -78,21 +110,22 @@ public class PunishServiceImpl implements PunishService {
     }
 
     @Override
-    public Boolean addPunish(AddBonusAdminForm addBonus) {
+    @Transactional
+    public Boolean addPunish(AddBonusAdminForm addPunish) {
         boolean check = false;
         try{
-            BonusPenalty bonus = new BonusPenalty();
-            bonus.setBonus(false);
-            bonus.setTitle(addBonus.getTitle());
-            bonus.setMoney(addBonus.getMoney());
-            bonus.setReason(addBonus.getReason());
-            bonus.setStatus(addBonus.getStatus());
-            bonus.setEffectiveDate(addBonus.getEffectiveDate());
-            bonus.setEmployees(employeeRepository.getEmployeeByIdS(addBonus.getListIdEmployee()));
+            BonusPenalty punish = new BonusPenalty();
+            punish.setBonus(false);
+            punish.setTitle(addPunish.getTitle());
+            punish.setMoney(addPunish.getMoney());
+            punish.setReason(addPunish.getReason());
+            punish.setStatus(addPunish.getStatus());
+            punish.setEffectiveDate(addPunish.getEffectiveDate());
+            punish.setEmployees(employeeRepository.getEmployeeByIdS(addPunish.getListIdEmployee()));
             AccountSercurity accountSercurity = new AccountSercurity();
-            bonus.setCreated_by(accountSercurity.getUserName());
-            bonus.setCreated_date(LocalDate.now());
-            punishRepository.saveAndFlush(bonus);
+            punish.setCreated_by(accountSercurity.getUserName());
+            punish.setCreated_date(LocalDate.now());
+            punishRepository.saveAndFlush(punish);
             check=true;
 
         }catch (Exception e){

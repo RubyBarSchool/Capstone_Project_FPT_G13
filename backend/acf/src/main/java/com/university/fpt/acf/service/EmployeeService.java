@@ -19,5 +19,5 @@ public interface EmployeeService  {
     Boolean AddEmployee(AddEmployeeForm addEmployeeForm);
     Boolean UpdateEmployee(UpdateEmployeeForm updateEmployeeForm);
     Boolean DeleteEmployee(Long id);
-    List<GetAllEmployeeVO> getEmployeeSNotDelete();
+    List<GetAllEmployeeVO> getEmployeeSNotDelete( SearchEmployeeForm employeeForm);
 }
