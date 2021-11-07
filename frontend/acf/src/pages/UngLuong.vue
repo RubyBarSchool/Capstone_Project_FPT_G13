@@ -29,7 +29,7 @@
             style="width: 150px"
           >
             <a-select-option value="-1"> Chờ duyệt </a-select-option>
-            <a-select-option value="0"> Hủy bỏ </a-select-option>
+            <a-select-option value="0"> Từ chối </a-select-option>
             <a-select-option value="1"> Đã duyệt </a-select-option>
           </a-select>
           <a-range-picker
@@ -87,17 +87,17 @@
                 <a-tag
                   :color="
                     record.status == '-1'
-                      ? 'red'
+                      ? 'orange'
                       : record.status == '0'
-                      ? 'gray'
+                      ? 'red'
                       : 'green'
                   "
                 >
                   {{
                     record.status == "-1"
-                      ? "Hủy bỏ"
-                      : record.status == "0"
                       ? "Chờ duyệt"
+                      : record.status == "0"
+                      ? "Từ chối"
                       : "Đã duyệt"
                   }}
                 </a-tag>

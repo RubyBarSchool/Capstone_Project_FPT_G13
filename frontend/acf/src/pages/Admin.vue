@@ -620,18 +620,17 @@ export default {
       accountService
         .deleteAccount(id)
         .then((response) => {
+          this.submitSearch();
           if (response.data.data) {
             let type = "success";
             let message = "Xóa";
             let description = "Xóa thành công";
             this.notifi(type, message, description);
-            this.submitSearch();
           } else {
             let type = "error";
             let message = "Xóa";
             let description = "Account đang đăng nhập không được xóa";
             this.notifi(type, message, description);
-            this.submitSearch();
           }
         })
         .catch((e) => {
