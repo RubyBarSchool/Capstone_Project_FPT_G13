@@ -121,7 +121,7 @@
                     placeholder="Công ty"
                     :filter-option="false"
                     @search="fetchCompany"
-                    style="width: 120px"
+                    style="width: 100%"
                     v-model="dataAdd.idCompany"
                     show-search
                   >
@@ -166,7 +166,7 @@
                     placeholder="Công ty"
                     :filter-option="false"
                     @search="fetchCompany"
-                    style="width: 120px"
+                    style="width: 100%"
                     v-model="dataEdit.idCompany"
                     show-search
                   >
@@ -318,30 +318,6 @@ export default {
           console.log(e);
         });
     },
-    // getAllPositionEdit(id, name) {
-    //   userService
-    //     .getAllPosition(this.dataPosition)
-    //     .then((response) => {
-    //       this.dataPositions = response.data.data;
-    //       let check = true;
-    //       for (let i = 0; i < this.dataPositions.length; i++) {
-    //         if (this.dataPositions[i].id == id) {
-    //           check = false;
-    //           break;
-    //         }
-    //       }
-    //       if (check) {
-    //         let dataPosition = {
-    //           id: id,
-    //           name: name,
-    //         };
-    //         this.dataPositions.push(dataPosition);
-    //       }
-    //     })
-    //     .catch((e) => {
-    //       console.log(e);
-    //     });
-    // },
     fetchCompany(value) {
       this.dataCompany.name = value;
       this.getAllCompany();
@@ -375,6 +351,7 @@ export default {
     },
     showModalAdd() {
       this.visibleAdd = true;
+      this.getAllCompany();
     },
     submitAdd() {
       colorService
@@ -443,20 +420,6 @@ export default {
         });
       this.visibleEdit = false;
     },
-    // showDetail(id) {
-    //   this.visibleProfile = true;
-    //   this.getUserByID(id);
-    // },
-    // getUserByID(id) {
-    //   userService
-    //     .getUserByID(id)
-    //     .then((response) => {
-    //       this.dataUserDetail = response.data.data;
-    //     })
-    //     .catch((e) => {
-    //       console.log(e);
-    //     });
-    // },
     deleteUser(id) {
       colorService
         .deleteColor(id)
