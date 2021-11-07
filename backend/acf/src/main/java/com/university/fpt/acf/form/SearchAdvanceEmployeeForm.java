@@ -8,7 +8,7 @@ import java.util.List;
 public class SearchAdvanceEmployeeForm {
     private String title;
     private String content;
-    private Boolean status;
+    private String accept;
     private List<LocalDate> date;
     private Integer pageIndex;
     private Integer pageSize;

@@ -33,9 +33,9 @@ public class AdvanceSalaryEmployeeController {
             list = advanceSalaryEmployeeService.searchAdvanceSalaryEmployee(searchForm);
             total = advanceSalaryEmployeeService.totalSearch(searchForm);
             responseCommon.setData(list);
-            message = "Get AdvanceSalaryEmployee successfully";
+            message = "Tìm kiếm ứng lương thành công";
             if(total==0){
-                message = "Get AdvanceSalaryEmployee not found";
+                message = "không tim thấy đơn ứng lương của bạn";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -49,30 +49,30 @@ public class AdvanceSalaryEmployeeController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-    @GetMapping("/detail")
-    public ResponseEntity<ResponseCommon> getDetailAdvanceSalaryEmployee(@RequestParam Long id){
-        ResponseCommon responseCommon = new ResponseCommon();
-        String message="";
-        DetailAdvanceSalaryEmployeeVO data = new DetailAdvanceSalaryEmployeeVO();
-        try {
-            data = advanceSalaryEmployeeService.getDetailAdvanceSalaryEmployee(id);
-            if(data==null){
-                message="Không tìm thấy đơn ứng lương";
-            }else{
-                message="Lấy đơn ứng lương  thành công!";
-            }
-            responseCommon.setMessage(message);
-            responseCommon.setData(data);
-            responseCommon.setStatus(HttpStatus.OK.value());
-            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
-        }catch (Exception e){
-            message = e.getMessage();
-            responseCommon.setData(data);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
-            responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
-        }
-    }
+//    @GetMapping("/detail")
+//    public ResponseEntity<ResponseCommon> getDetailAdvanceSalaryEmployee(@RequestParam Long id){
+//        ResponseCommon responseCommon = new ResponseCommon();
+//        String message="";
+//        DetailAdvanceSalaryEmployeeVO data = new DetailAdvanceSalaryEmployeeVO();
+//        try {
+//            data = advanceSalaryEmployeeService.getDetailAdvanceSalaryEmployee(id);
+//            if(data==null){
+//                message="Không tìm thấy đơn ứng lương";
+//            }else{
+//                message="Lấy đơn ứng lương  thành công!";
+//            }
+//            responseCommon.setMessage(message);
+//            responseCommon.setData(data);
+//            responseCommon.setStatus(HttpStatus.OK.value());
+//            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+//        }catch (Exception e){
+//            message = e.getMessage();
+//            responseCommon.setData(data);
+//            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+//            responseCommon.setMessage(message);
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+//        }
+//    }
 
     @PostMapping("/add")
     public ResponseEntity<ResponseCommon> addAdvanceSalary(@RequestBody AddAdvanceSalaryEmployeeForm addForm){

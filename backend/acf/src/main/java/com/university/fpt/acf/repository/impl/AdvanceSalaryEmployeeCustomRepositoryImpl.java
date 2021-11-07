@@ -17,7 +17,7 @@ public class AdvanceSalaryEmployeeCustomRepositoryImpl extends CommonRepository 
     public List<GetAllAdvanceSalaryEmployeeVO> searchAdvanceSalary(SearchAdvanceEmployeeForm advanceForm,Long idEmployee) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append(" select new com.university.fpt.acf.vo.GetAllAdvanceSalaryEmployeeVO(a.id,a.created_date,a.advaceSalary,a.title,a.content,a.accept) from AdvaceSalary a where a.employee.id=:id and a.deleted=false");
+        sql.append(" select new com.university.fpt.acf.vo.GetAllAdvanceSalaryEmployeeVO(a.id,a.created_date,a.advaceSalary,a.title,a.content,a.accept,a.comment,a.idEmployeeAccept,e.fullName,a.dateAccept) from AdvaceSalary a left join a.employee e1 left  join Employee e on a.idEmployeeAccept = e.id where e1.id = :id and a.deleted=false");
         params.put("id",idEmployee);
         if(!advanceForm.getTitle().isEmpty() && advanceForm.getTitle()!=null){
             sql.append(" and LOWER(a.title) like :title ");
@@ -27,9 +27,9 @@ public class AdvanceSalaryEmployeeCustomRepositoryImpl extends CommonRepository 
             sql.append(" and LOWER(a.content) like :content ");
             params.put("content","%"+advanceForm.getContent().toLowerCase()+"%");
         }
-        if(advanceForm.getStatus()!=null){
-            sql.append(" and LOWER(a.accept) =:status ");
-            params.put("status",advanceForm.getStatus());
+        if(advanceForm.getAccept()!=null && !advanceForm.getAccept().isEmpty()){
+            sql.append(" and LOWER(a.accept) =:accept ");
+            params.put("accept",advanceForm.getAccept());
         }
         if (advanceForm.getDate() != null && !advanceForm.getDate().isEmpty()) {
             sql.append(" and  a.created_date BETWEEN :dateStart and :dateEnd ");
@@ -57,6 +57,10 @@ public class AdvanceSalaryEmployeeCustomRepositoryImpl extends CommonRepository 
         if(!advanceForm.getContent().isEmpty() && advanceForm.getContent()!=null){
             sql.append(" and LOWER(a.content) like :content ");
             params.put("content","%"+advanceForm.getContent().toLowerCase()+"%");
+        }
+        if(advanceForm.getAccept()!=null && !advanceForm.getAccept().isEmpty()){
+            sql.append(" and LOWER(a.accept) =:status ");
+            params.put("status",advanceForm.getAccept());
         }
         if (advanceForm.getDate() != null && !advanceForm.getDate().isEmpty()) {
             sql.append(" and  a.created_date BETWEEN :dateStart and :dateEnd ");

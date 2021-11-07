@@ -3,6 +3,7 @@ package com.university.fpt.acf.repository;
 import com.university.fpt.acf.entity.AdvaceSalary;
 import com.university.fpt.acf.vo.DetailAdvanceSalaryEmployeeVO;
 import com.university.fpt.acf.vo.GetAllAdvanceSalaryEmployeeVO;
+import com.university.fpt.acf.vo.SearchPersonalApplicationEmployeeVO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,4 +16,6 @@ public interface AdvanceSalaryEmployeeRepository extends JpaRepository<AdvaceSal
     AdvaceSalary getAdvanceSalaryById(@Param("id") Long id);
     @Query("select new com.university.fpt.acf.vo.DetailAdvanceSalaryEmployeeVO(a.title,a.advaceSalary,a.comment,a.content,a.modified_by) from AdvaceSalary a where a.id=:id")
     DetailAdvanceSalaryEmployeeVO getDetailAdvanceSalaryEmployeeByIdAplication(@Param("id") Long id);
+    @Query("select new com.university.fpt.acf.vo.GetAllAdvanceSalaryEmployeeVO(a.id,a.created_date,a.advaceSalary,a.title,a.content,a.accept,a.comment,a.idEmployeeAccept,e.fullName,a.dateAccept) from AdvaceSalary a left  join Employee e on a.idEmployeeAccept = e.id where a.id=:id ")
+    GetAllAdvanceSalaryEmployeeVO getAdvanceSalaryEmployeeBy(@Param("id") Long id);
 }

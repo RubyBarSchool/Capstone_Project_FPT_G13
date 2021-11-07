@@ -22,7 +22,7 @@ public class PunishCustomRepositoryImpl extends CommonRepository implements Puni
         sql.append("select  new com.university.fpt.acf.vo.SearchBonusAdminVO(b.id,b.title,b.reason,b.money,b.status,b.effectiveDate) from BonusPenalty b where b.deleted=false and b.bonus = false");
 
         if(searchForm.getTitle()!=null){
-            sql.append(" and LOWER(a.title) like :title ");
+            sql.append(" and LOWER(b.title) like :title ");
             params.put("title","%"+searchForm.getTitle().toLowerCase()+"%");
         }
         if(searchForm.getStatus()!=null){
@@ -34,7 +34,7 @@ public class PunishCustomRepositoryImpl extends CommonRepository implements Puni
             params.put("dateStart", searchForm.getDate().get(0));
             params.put("dateEnd", searchForm.getDate().get(1));
         }
-        sql.append(" ORDER by a.id desc ");
+        sql.append(" ORDER by b.id desc ");
         TypedQuery<SearchBonusAdminVO> query = super.createQuery(sql.toString(),params, SearchBonusAdminVO.class);
         query.setFirstResult((searchForm.getPageIndex()-1)* searchForm.getPageSize());
         query.setMaxResults(searchForm.getPageSize());

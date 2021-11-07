@@ -28,9 +28,9 @@ public class EmployeeController {
         try {
             getAllEmployee = employeeService.searchEmployee(searchAllEmployeeForm);
             responseCommon.setData(getAllEmployee);
-            message = "Get employee successfully";
+            message = "Search thành công";
             if(getAllEmployee.isEmpty()){
-                message = "Get employee not found";
+                message = "Không tìm thấy";
             }
             total = employeeService.getTotalEmployee(searchAllEmployeeForm);
             responseCommon.setTotal(total);
@@ -60,9 +60,9 @@ public class EmployeeController {
         try{
             em = employeeService.getEmployeeDetailById(id);
             if(em==null){
-                message ="Dont find Employee";
+                message ="Không tồn tại";
             }
-                message ="Sucessfuly";
+                message ="Thành công";
                 responseCommon.setMessage(message);
                 responseCommon.setData(em);
                 responseCommon.setStatus(HttpStatus.OK.value());
@@ -76,7 +76,7 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-    @GetMapping()
+    @GetMapping("/getAllEmployee")
     public ResponseEntity<ResponseCommon> GetEmployeesNotDelete(){
         ResponseCommon responseCommon = new ResponseCommon();
         responseCommon.setData(employeeService.getEmployeeSNotDelete());
@@ -91,9 +91,9 @@ public class EmployeeController {
         try {
             checkAdd =employeeService.AddEmployee(addEmployeeForm);
             if(checkAdd==false){
-                message="Add employee fail!";
+                message="Thêm nhân viên không thành công";
             }else{
-                message="Add employee sucessfuly!";
+                message="Thêm nhân viên không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
@@ -139,9 +139,9 @@ public class EmployeeController {
         try{
             checkDelete = employeeService.DeleteEmployee(id);
             if(checkDelete==false){
-                message="Delete employee fail!";
+                message="Xóa nhân viên không thành công";
             }else{
-                message="Delete employee sucessfuly";
+                message="Xóa nhân viên thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkDelete);
