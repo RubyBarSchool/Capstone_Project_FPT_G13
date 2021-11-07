@@ -75,7 +75,13 @@
                     >
                       Lưu điểm danh
                     </a-button>
-                    <a-button type="primary" @click="reset" :style="{ 'margin-left': '6px' }"> Cài lại </a-button>
+                    <a-button
+                      type="primary"
+                      @click="reset"
+                      :style="{ 'margin-left': '6px' }"
+                    >
+                      Cài lại
+                    </a-button>
                   </a-col>
                 </a-row>
               </div>
@@ -225,13 +231,17 @@ export default {
       this.onChangeDate();
     },
     getDate() {
-      var datex = new Date();
+      let datex = new Date();
+      let month =
+        (datex.getMonth() + 1 + "").length == 1
+          ? "0" + datex.getMonth() + 1
+          : datex.getMonth() + 1;
+      let date =
+        (datex.getDate() + "").length == 1
+          ? "0" + datex.getDate()
+          : datex.getDate();
       this.dataGetEmployee.date =
-        datex.getFullYear() +
-        "-" +
-        (datex.getMonth() + 1) +
-        "-" +
-        datex.getDate();
+        datex.getFullYear() + "-" + month + "-" + date;
     },
     onChangeDate() {
       this.reloadSelect();
