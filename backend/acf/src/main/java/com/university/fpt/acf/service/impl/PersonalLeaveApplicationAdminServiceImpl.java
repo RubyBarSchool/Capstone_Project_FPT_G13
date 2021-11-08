@@ -67,6 +67,7 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
                 p.setModified_by(accountSercurity.getUserName());
                 p.setModified_date(LocalDate.now());
                 personalLeaveApplicationAdminRepository.save(p);
+                check=true;
             }
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
