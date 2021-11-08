@@ -30,7 +30,6 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
     public List<SearchAdvanceSalaryAdminVO> searchAdvanceSalaryAdmin(SearchAdvanceSalaryAdminForm searchForm) {
         List<SearchAdvanceSalaryAdminVO> list = new ArrayList<>();
         try {
-
             list =adminCustomRepository.searchAdvanceSalary(searchForm);
         }catch (Exception e){
             throw new RuntimeException("Error Advance Salary repository " + e.getMessage());

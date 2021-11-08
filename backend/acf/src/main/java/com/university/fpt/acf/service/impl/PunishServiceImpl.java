@@ -38,38 +38,74 @@ public class PunishServiceImpl implements PunishService {
         int dem=0;
         try {
             list = punishCustomRepository.searchPunish(searchBonus);
-            for(int i=dem;i<list.size();i++){
-                dem++;
-                List<GetAllEmployeeVO> listId = new ArrayList<>();
-                ResultSearchBonusAdminVO re = new ResultSearchBonusAdminVO();
-                re.setId(list.get(i).getId());
-                re.setMoney(list.get(i).getMoney());
-                re.setReason(list.get(i).getReason());
-                re.setTitle(list.get(i).getTitle());
-                re.setEffectiveDate(list.get(i).getEffectiveDate());
-                re.setStatus(list.get(i).getStatus());
-                Long idBonus = list.get(i).getId();
-                GetAllEmployeeVO em = new GetAllEmployeeVO();
-                em.setId(list.get(i).getIdEmployee());
-                em.setName(list.get(i).getNameEmployee());
-                listId.add(em);
-                for(int j=i+1;j< list.size();j++){
-                    if(list.get(j).getId()==idBonus){
-                        dem=j;
-                        GetAllEmployeeVO employeeVO = new GetAllEmployeeVO();
-                        employeeVO.setId(list.get(j).getIdEmployee());
-                        employeeVO.setName(list.get(j).getNameEmployee());
-                        listId.add(employeeVO);
-                    }else {
-                        break;
-                    }
-                }
-                re.setListIdEmployee(listId);
-                listResult.add(re);
-                if(dem<list.size()){
-                    i=dem;
+//            for(int i=dem;i<list.size();i++){
+//                dem++;
+//                List<GetAllEmployeeVO> listId = new ArrayList<>();
+//                ResultSearchBonusAdminVO re = new ResultSearchBonusAdminVO();
+//                re.setId(list.get(i).getId());
+//                re.setMoney(list.get(i).getMoney());
+//                re.setReason(list.get(i).getReason());
+//                re.setTitle(list.get(i).getTitle());
+//                re.setEffectiveDate(list.get(i).getEffectiveDate());
+//                re.setStatus(list.get(i).getStatus());
+//                Long idBonus = list.get(i).getId();
+//                GetAllEmployeeVO em = new GetAllEmployeeVO();
+//                em.setId(list.get(i).getIdEmployee());
+//                em.setName(list.get(i).getNameEmployee());
+//                listId.add(em);
+//                for(int j=i+1;j< list.size();j++){
+//                    if(list.get(j).getId()==idBonus){
+//                        dem=j;
+//                        GetAllEmployeeVO employeeVO = new GetAllEmployeeVO();
+//                        employeeVO.setId(list.get(j).getIdEmployee());
+//                        employeeVO.setName(list.get(j).getNameEmployee());
+//                        listId.add(employeeVO);
+//                    }else {
+//                        break;
+//                    }
+//                }
+//                re.setListIdEmployee(listId);
+//                listResult.add(re);
+//                if(dem<list.size()){
+//                    i=dem;
+//                }else{
+//                    break;
+//                }
+//            }
+            ResultSearchBonusAdminVO re = new ResultSearchBonusAdminVO();
+            for(int i=0;i< list.size();i++){
+                if(i==0){
+                    re.setId(list.get(i).getId());
+                    re.setMoney(list.get(i).getMoney());
+                    re.setReason(list.get(i).getReason());
+                    re.setTitle(list.get(i).getTitle());
+                    re.setEffectiveDate(list.get(i).getEffectiveDate());
+                    re.setStatus(list.get(i).getStatus());
+                    GetAllEmployeeVO em = new GetAllEmployeeVO();
+                    em.setId(list.get(i).getIdEmployee());
+                    em.setName(list.get(i).getNameEmployee());
+                    re.getListIdEmployee().add(em);
+                    listResult.add(re);
                 }else{
-                    break;
+                    if(listResult.get(listResult.size()-1).getId().equals(list.get(i).getId())){
+                        GetAllEmployeeVO em = new GetAllEmployeeVO();
+                        em.setId(list.get(i).getIdEmployee());
+                        em.setName(list.get(i).getNameEmployee());
+                        listResult.get(listResult.size()-1).getListIdEmployee().add(em);
+                    }else {
+                        re = new ResultSearchBonusAdminVO();
+                        re.setId(list.get(i).getId());
+                        re.setMoney(list.get(i).getMoney());
+                        re.setReason(list.get(i).getReason());
+                        re.setTitle(list.get(i).getTitle());
+                        re.setEffectiveDate(list.get(i).getEffectiveDate());
+                        re.setStatus(list.get(i).getStatus());
+                        GetAllEmployeeVO em = new GetAllEmployeeVO();
+                        em.setId(list.get(i).getIdEmployee());
+                        em.setName(list.get(i).getNameEmployee());
+                        re.getListIdEmployee().add(em);
+                        listResult.add(re);
+                    }
                 }
             }
         } catch (Exception e) {
