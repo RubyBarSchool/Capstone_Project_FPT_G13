@@ -70,6 +70,9 @@
               <template slot="employee" slot-scope="text, record">
                 {{ record.nameEmployee }}
               </template>
+              <template slot="date" slot-scope="text, record">
+                {{ record.date }}
+              </template>
               <template slot="titlee" slot-scope="text, record">
                 {{ record.title }}
               </template>
@@ -223,6 +226,13 @@ export default {
           key: "employee",
           width: 150,
           scopedSlots: { customRender: "employee" },
+        },
+        {
+          title: "Ngày tạo",
+          dataIndex: "date",
+          key: "date",
+          width: 150,
+          scopedSlots: { customRender: "date" },
         },
         {
           title: "Tiêu đề",
