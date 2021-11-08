@@ -18,4 +18,5 @@ public class SearchPersonalLeaveApplicationAdminVO {
     private Long idEmployee;
     private String nameEmployee;
     private String statusAccept;
+    private  LocalDate dateAccept;
 }
