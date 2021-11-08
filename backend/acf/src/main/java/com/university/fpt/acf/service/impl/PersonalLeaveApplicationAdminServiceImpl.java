@@ -61,6 +61,7 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
                 }
                 p.setAccept("1");
                 p.setComment(acceptForm.getComment());
+                p.setDateAccept(LocalDate.now());
                 AccountSercurity accountSercurity = new AccountSercurity();
                 Long idEm = accountRepository.getIdEmployeeByUsername(accountSercurity.getUserName());
                 p.setIdEmployeeAccept(idEm);
@@ -88,6 +89,7 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
                 }
                 p.setAccept("0");
                 p.setComment(acceptForm.getComment());
+                p.setDateAccept(LocalDate.now());
                 AccountSercurity accountSercurity = new AccountSercurity();
                 Long idEm = accountRepository.getIdEmployeeByUsername(accountSercurity.getUserName());
                 p.setIdEmployeeAccept(idEm);
