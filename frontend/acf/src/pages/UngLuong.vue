@@ -78,7 +78,7 @@
                 {{ record.title }}
               </template>
               <template slot="date" slot-scope="text, record">
-                {{ record.date }}
+                {{ record.dateCreate }}
               </template>
               <template slot="advanceSalary" slot-scope="text, record">
                 {{ record.advanceSalary }}

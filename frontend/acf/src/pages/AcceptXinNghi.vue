@@ -36,8 +36,12 @@
             <a-select-option value="false"> Chờ duyệt </a-select-option>
             <a-select-option value="true"> Đã duyệt </a-select-option>
           </a-select>
-          <a-date-picker format="YYYY-MM-DD" valueFormat="YYYY-MM-DD">
-          </a-date-picker>
+          <a-range-picker
+            v-model="dataSearch.date"
+            :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+            format="YYYY-MM-DD"
+          >
+          </a-range-picker>
           <a-button
             type="primary"
             :style="{ 'margin-left': '5px' }"
@@ -101,11 +105,14 @@
                   @click="
                     showModelView(
                       record.idApplication,
+                      record.idEmployee,
                       record.nameEmployee,
                       record.title,
                       record.date,
                       record.content,
-                      record.comment
+                      record.comment,
+                      record.fileAttach,
+                      record.statusAccept
                     )
                   "
                 >
@@ -120,65 +127,32 @@
           <a-modal v-model="visibleView" title="Xét đơn xin nghỉ">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button
-                type="danger"
-                @click="
-                  submitReject(
-                    dataDetailPersonalLeaveApplicationAdmin.idApplication,
-                    dataDetailPersonalLeaveApplicationAdmin.comment
-                  )
-                "
-              >
+              <a-button type="danger" @click="submitReject()">
                 Loại bỏ
               </a-button>
-              <a-button
-                type="primary"
-                @click="
-                  submitAccept(
-                    dataDetailPersonalLeaveApplicationAdmin.idApplication,
-                    dataDetailPersonalLeaveApplicationAdmin.comment
-                  )
-                "
-              >
+              <a-button type="primary" @click="submitAccept()">
                 Chấp nhận
               </a-button>
             </template>
             <div class="container">
               <a-form-model>
                 <a-form-model-item label="Nhân viên">
-                  <a-input
-                    v-model="
-                      dataDetailPersonalLeaveApplicationAdmin.nameEmployee
-                    "
-                    disabled
-                  />
+                  <a-input v-model="dataDetail.nameEmployee" disabled />
                 </a-form-model-item>
                 <a-form-model-item label="Tiêu đề">
-                  <a-input
-                    v-model="dataDetailPersonalLeaveApplicationAdmin.title"
-                    disabled
-                  />
+                  <a-input v-model="dataDetail.title" disabled />
                 </a-form-model-item>
-                <a-form-model-item label="Ngày nghỉ">
-                  <a-date-picker
-                    v-model="dataDetailPersonalLeaveApplicationAdmin.date"
-                    format="YYYY-MM-DD"
-                    valueFormat="YYYY-MM-DD"
-                    disabled
-                  />
+                <a-form-model-item label="Ngày tạo">
+                  <a-input v-model="dataDetail.date" disabled />
                 </a-form-model-item>
                 <a-form-model-item label="Nội dung">
-                  <a-textarea
-                    :rows="4"
-                    v-model="dataDetailPersonalLeaveApplicationAdmin.content"
-                    disabled
-                  />
+                  <a-textarea v-model="dataDetail.content" :rows="4" disabled />
                 </a-form-model-item>
                 <a-form-model-item label="Ghi chú">
                   <a-textarea
                     placeholder="Viết ghi chú....."
+                    v-model="dataDetail.comment"
                     :rows="4"
-                    v-model="dataDetailPersonalLeaveApplicationAdmin.comment"
                   />
                 </a-form-model-item>
               </a-form-model>
@@ -219,10 +193,11 @@ export default {
         total: 0,
       },
       dataSourceTable: [],
-      dataDetailPersonalLeaveApplicationAdmin: {
+      dataDetail: {
         comment: "",
-        content: "",
         date: "",
+        dateAccept: "",
+        content: "",
         fileAttach: "",
         idApplication: "",
         idEmployee: "",
@@ -230,9 +205,9 @@ export default {
         statusAccept: "",
         title: "",
       },
-      dataAcceptPersonalApplication: {
+      dataAccept: {
         comment: "",
-        idApplication: "",
+        idApplication: 0,
       },
       columns: [
         {
@@ -320,13 +295,26 @@ export default {
           console.log(e);
         });
     },
-
-    showModelView(nameEmployee, title, date, content, comment) {
-      this.dataDetailPersonalLeaveApplicationAdmin.nameEmployee = nameEmployee;
-      this.dataDetailPersonalLeaveApplicationAdmin.title = title;
-      this.dataDetailPersonalLeaveApplicationAdmin.date = date;
-      this.dataDetailPersonalLeaveApplicationAdmin.content = content;
-      this.dataDetailPersonalLeaveApplicationAdmin.comment = comment;
+    showModelView(
+      idApplication,
+      idEmployee,
+      nameEmployee,
+      title,
+      date,
+      content,
+      comment,
+      fileAttach,
+      statusAccept
+    ) {
+      this.dataDetail.nameEmployee = nameEmployee;
+      this.dataDetail.title = title;
+      this.dataDetail.date = date;
+      this.dataDetail.content = content;
+      this.dataDetail.comment = comment;
+      this.dataDetail.fileAttach = fileAttach;
+      this.dataDetail.statusAccept = statusAccept;
+      this.dataDetail.idEmployee = idEmployee;
+      this.dataDetail.idApplication = idApplication;
       this.visibleView = true;
     },
 
@@ -342,7 +330,7 @@ export default {
 
     handAccept() {
       acceptXinNghiService
-        .acceptPersonalApplication(this.dataAcceptPersonalApplication)
+        .acceptPersonalApplication(this.dataAccept)
         .then((response) => {
           if (response.data.data) {
             let type = "success";
@@ -365,7 +353,7 @@ export default {
 
     handReject() {
       acceptXinNghiService
-        .rejectPersonalApplication(this.dataAcceptPersonalApplication)
+        .rejectPersonalApplication(this.dataAccept)
         .then((response) => {
           if (response.data.data) {
             let type = "success";
@@ -386,16 +374,16 @@ export default {
         });
     },
 
-    submitAccept(idApplication, comment) {
-      this.dataAcceptPersonalApplication.idApplication = idApplication;
-      this.dataAcceptPersonalApplication.comment = comment;
+    submitAccept() {
+      this.dataAccept.idApplication = this.dataDetail.idApplication;
+      this.dataAccept.comment = this.dataDetail.comment;
       this.handAccept();
       this.visibleView = false;
     },
 
-    submitReject(idApplication, comment) {
-      this.dataAcceptPersonalApplication.idApplication = idApplication;
-      this.dataAcceptPersonalApplication.comment = comment;
+    submitReject() {
+      this.dataAccept.idApplication = this.dataDetail.idApplication;
+      this.dataAccept.comment = this.dataDetail.comment;
       this.handReject();
       this.visibleView = false;
     },

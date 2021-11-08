@@ -24,9 +24,9 @@
             v-model="dataSearch.title"
           />
           <a-select
-            placeholder="Trạng thái"
             v-model="dataSearch.status"
             style="width: 150px"
+            placeholder="Trạng thái"
           >
             <a-select-option value="-1"> Chờ duyệt </a-select-option>
             <a-select-option value="0"> Hủy bỏ </a-select-option>
@@ -174,6 +174,7 @@
                   v-model="dataAdd.date"
                   :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
                   format="DD/MM/YYYY"
+                  :style="{ width: '472px' }"
                 />
               </a-form-model-item>
 
@@ -205,6 +206,7 @@
                   v-model="dataEdit.date"
                   :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
                   format="DD/MM/YYYY"
+                  :style="{ width: '472px' }"
                 />
               </a-form-model-item>
               <a-form-model-item label="Nội dung">

@@ -57,13 +57,13 @@
                 {{ record.money }}
               </template>
               <template slot="status" slot-scope="text, record">
-                <a-tag :color="record.status ? 'green' : 'blue'">
+                <a-tag :color="record.status ? 'green' : 'orange'">
                   {{ record.status ? "Đã duyệt" : "Chờ duyệt" }}
                 </a-tag>
               </template>
               <template slot="bonus" slot-scope="text, record">
-                <a-tag :color="record.bonus ? 'green' : 'blue'">
-                  {{ record.bonus ? "Thưởng" : "Phạt" }}
+                <a-tag :color="record.bonus ? 'green ' : 'red '">
+                  {{ record.bonus ? "THƯỞNG" : "PHẠT" }}
                 </a-tag>
               </template>
               <template slot="action" slot-scope="text, record">

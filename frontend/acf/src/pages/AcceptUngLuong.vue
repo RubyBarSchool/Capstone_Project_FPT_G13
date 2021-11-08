@@ -108,7 +108,8 @@
                       record.title,
                       record.advanceSalary,
                       record.content,
-                      record.comment
+                      record.comment,
+                      record.dateAccept
                     )
                   "
                 >
@@ -161,7 +162,7 @@
               </a-form-model-item>
             </a-form-model>
           </a-modal>
-          <!-- popup profile-->
+          <!-- popup view-->
         </div>
       </a-layout-content>
       <Footer />
@@ -207,6 +208,7 @@ export default {
         nameEmployee: "",
         status: "",
         title: "",
+        dataAccept: "",
       },
       dataAccept: {
         comment: "",
@@ -298,13 +300,22 @@ export default {
           console.log(e);
         });
     },
-    showModalView(id, nameEmployee, title, advanceSalary, content, comment) {
+    showModalView(
+      id,
+      nameEmployee,
+      title,
+      advanceSalary,
+      content,
+      comment,
+      dataAccept
+    ) {
       this.dataDetail.id = id;
       this.dataDetail.nameEmployee = nameEmployee;
       this.dataDetail.title = title;
       this.dataDetail.advanceSalary = advanceSalary;
       this.dataDetail.content = content;
       this.dataDetail.comment = comment;
+      this.dataDetail.dataAccept = dataAccept;
       this.visibleView = true;
     },
     handAccept() {
