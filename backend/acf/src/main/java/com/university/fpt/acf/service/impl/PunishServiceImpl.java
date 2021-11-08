@@ -12,6 +12,7 @@ import com.university.fpt.acf.repository.PunishCustomRepository;
 import com.university.fpt.acf.repository.PunishRepository;
 import com.university.fpt.acf.service.EmployeeService;
 import com.university.fpt.acf.service.PunishService;
+import com.university.fpt.acf.vo.GetAllEmployeeVO;
 import com.university.fpt.acf.vo.ResultSearchBonusAdminVO;
 import com.university.fpt.acf.vo.SearchBonusAdminVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,7 @@ public class PunishServiceImpl implements PunishService {
             list = punishCustomRepository.searchPunish(searchBonus);
             for(int i=dem;i<list.size();i++){
                 dem++;
-                List<Long> listId = new ArrayList<>();
+                List<GetAllEmployeeVO> listId = new ArrayList<>();
                 ResultSearchBonusAdminVO re = new ResultSearchBonusAdminVO();
                 re.setId(list.get(i).getId());
                 re.setMoney(list.get(i).getMoney());
@@ -48,11 +49,17 @@ public class PunishServiceImpl implements PunishService {
                 re.setEffectiveDate(list.get(i).getEffectiveDate());
                 re.setStatus(list.get(i).getStatus());
                 Long idBonus = list.get(i).getId();
-                listId.add(list.get(i).getIdEmployee());
+                GetAllEmployeeVO em = new GetAllEmployeeVO();
+                em.setId(list.get(i).getIdEmployee());
+                em.setName(list.get(i).getNameEmployee());
+                listId.add(em);
                 for(int j=i+1;j< list.size();j++){
                     if(list.get(j).getId()==idBonus){
                         dem=j;
-                        listId.add(list.get(j).getIdEmployee());
+                        GetAllEmployeeVO employeeVO = new GetAllEmployeeVO();
+                        employeeVO.setId(list.get(j).getIdEmployee());
+                        employeeVO.setName(list.get(j).getNameEmployee());
+                        listId.add(employeeVO);
                     }else {
                         break;
                     }

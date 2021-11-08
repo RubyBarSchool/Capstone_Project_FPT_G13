@@ -10,4 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface PunishRepository extends JpaRepository<BonusPenalty,Long> {
     @Query("select  b from BonusPenalty b where b.id=:id and b.bonus=false ")
     BonusPenalty getPunishById(@Param("id") Long id);
+    @Query("select  new com.university.fpt.acf.vo.SearchBonusAdminVO(b.id,b.title,b.reason,b.money,b.status,b.effectiveDate,e.id,e.fullName) from BonusPenalty  b  inner  join  b.employees e where b.deleted=false and b.bonus = false ")
+    String a();
 }

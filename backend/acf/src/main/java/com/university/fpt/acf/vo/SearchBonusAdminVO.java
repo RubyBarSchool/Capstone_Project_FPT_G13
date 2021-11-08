@@ -18,4 +18,5 @@ public class SearchBonusAdminVO {
     private Boolean status;
     private LocalDate effectiveDate;
     private Long idEmployee;
+    private String nameEmployee;
 }

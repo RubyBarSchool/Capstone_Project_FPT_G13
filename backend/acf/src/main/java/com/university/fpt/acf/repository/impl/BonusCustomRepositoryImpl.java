@@ -21,7 +21,7 @@ public class BonusCustomRepositoryImpl extends CommonRepository implements Bonus
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
         sql.append("select  new com.university.fpt.acf.vo.SearchBonusAdminVO(b.id,b.title,b.reason,b.money,b.status," +
-                "b.effectiveDate,e.id) from BonusPenalty  b  left  join  b.employees e where b.deleted=false and b.bonus=true ");
+                "b.effectiveDate,e.id,e.fullName) from BonusPenalty  b  left  join  b.employees e where b.deleted=false and b.bonus=true ");
 
         if (searchForm.getTitle() != null && !searchForm.getTitle().isEmpty()) {
             sql.append(" and LOWER(b.title) like :title ");

@@ -12,10 +12,7 @@ import com.university.fpt.acf.repository.BonusCustomRepository;
 import com.university.fpt.acf.repository.BonusRepository;
 import com.university.fpt.acf.repository.EmployeeRepository;
 import com.university.fpt.acf.service.BonusService;
-import com.university.fpt.acf.vo.GetAllAdvanceSalaryEmployeeVO;
-import com.university.fpt.acf.vo.ResultSearchBonusAdminVO;
-import com.university.fpt.acf.vo.SearchBonusAdminVO;
-import com.university.fpt.acf.vo.SearchBonusAndPunishVO;
+import com.university.fpt.acf.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -44,7 +41,7 @@ public class BonusServiceImpl implements BonusService {
             list = bonusCustomRepository.searchBonus(searchBonus);
             for(int i=dem;i<list.size();i++){
                 dem++;
-                List<Long> listId = new ArrayList<>();
+                List<GetAllEmployeeVO> listId = new ArrayList<>();
                 ResultSearchBonusAdminVO re = new ResultSearchBonusAdminVO();
                 re.setId(list.get(i).getId());
                 re.setMoney(list.get(i).getMoney());
@@ -53,11 +50,17 @@ public class BonusServiceImpl implements BonusService {
                 re.setEffectiveDate(list.get(i).getEffectiveDate());
                 re.setStatus(list.get(i).getStatus());
                 Long idBonus = list.get(i).getId();
-                listId.add(list.get(i).getIdEmployee());
+                GetAllEmployeeVO em = new GetAllEmployeeVO();
+                em.setId(list.get(i).getIdEmployee());
+                em.setName(list.get(i).getNameEmployee());
+                listId.add(em);
                 for(int j=i+1;j< list.size();j++){
                     if(list.get(j).getId()==idBonus){
                         dem=j;
-                        listId.add(list.get(j).getIdEmployee());
+                        GetAllEmployeeVO employeeVO = new GetAllEmployeeVO();
+                        employeeVO.setId(list.get(j).getIdEmployee());
+                        employeeVO.setName(list.get(j).getNameEmployee());
+                        listId.add(employeeVO);
                     }else {
                         break;
                     }

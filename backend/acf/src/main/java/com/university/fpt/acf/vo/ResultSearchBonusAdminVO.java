@@ -13,5 +13,5 @@ public class ResultSearchBonusAdminVO {
     private String money;
     private Boolean status;
     private LocalDate effectiveDate;
-    private List<Long> listIdEmployee;
+    private List<GetAllEmployeeVO> listIdEmployee;
 }

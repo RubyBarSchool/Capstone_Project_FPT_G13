@@ -20,7 +20,7 @@ public class PunishCustomRepositoryImpl extends CommonRepository implements Puni
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
         sql.append("select  new com.university.fpt.acf.vo.SearchBonusAdminVO(b.id,b.title,b.reason,b.money,b.status," +
-                "b.effectiveDate,e.id) from BonusPenalty  b  inner  join  b.employees e where b.deleted=false and b.bonus = false  ");
+                "b.effectiveDate,e.id,e.fullName) from BonusPenalty  b  inner  join  b.employees e where b.deleted=false and b.bonus = false  ");
 
         if(searchForm.getTitle()!=null && !searchForm.getTitle().isEmpty()){
             sql.append(" and LOWER(b.title) like :title ");
