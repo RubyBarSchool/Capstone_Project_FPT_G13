@@ -1,12 +1,10 @@
 package com.university.fpt.acf.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.university.fpt.acf.common.entity.EntityCommon;
 import lombok.*;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import java.util.Collection;
 
@@ -14,14 +12,11 @@ import java.util.Collection;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Company extends EntityCommon {
-    private String name;
-    private String address;
-    private String phone;
-    private String email;
+public class HeightMaterial extends EntityCommon {
+    private String height;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "heightMaterial",cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Collection<Material> materials;
+    private Collection<FrameMaterial> frameMaterials;
 }

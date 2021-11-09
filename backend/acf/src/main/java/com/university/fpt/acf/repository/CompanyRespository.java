@@ -12,8 +12,6 @@ public interface CompanyRespository extends JpaRepository<Company,Long> {
     Long checkExitCompanyById(@Param("name") String  name);
     @Query("SELECT c FROM Company c  where c.deleted = false and c.id=:id")
     Company getCompanyById(@Param("id") Long id);
-    @Query("SELECT count(c.id) FROM Color c  where c.deleted = false and c.company.id=:id")
-    Long checkExitCompanyInColor(@Param("id") Long id);
     @Query("SELECT c.name FROM Company c where c.deleted=false AND c.name=:name")
     String checkExitCompanyByName(@Param("name") String  name);
     @Query("SELECT c.phone FROM Company c where c.deleted=false AND c.phone=:phone")
