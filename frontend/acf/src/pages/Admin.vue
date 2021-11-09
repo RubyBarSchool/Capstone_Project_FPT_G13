@@ -91,7 +91,7 @@
               @change="handleTableChange"
             >
               <template slot="username" slot-scope="text, record">
-                {{ record.username }}
+                <a href="http://localhost:8080/api/swagger-ui.html?fbclid=IwAR1u0wLaFrB-A3sAGdVGdVkmren5YIb94eya3pmmy_yzOZeTRiYWmudeGuI#/advance-salary-admin-controller/searchAdvanceSalaryAdminUsingPOST">{{ record.username }}</a>
               </template>
               <template slot="roles" slot-scope="text, record">
                 <div v-for="(item, index) in record.roles" :key="index">

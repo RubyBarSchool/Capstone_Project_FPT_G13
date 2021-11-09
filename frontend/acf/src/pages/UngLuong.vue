@@ -77,8 +77,11 @@
               <template slot="titlee" slot-scope="text, record">
                 {{ record.title }}
               </template>
-              <template slot="date" slot-scope="text, record">
+              <template slot="dateCreate" slot-scope="text, record">
                 {{ record.dateCreate }}
+              </template>
+              <template slot="dateAccept" slot-scope="text, record">
+                {{ record.dateAccept }}
               </template>
               <template slot="advanceSalary" slot-scope="text, record">
                 {{ record.advanceSalary }}
@@ -86,17 +89,17 @@
               <template slot="status" slot-scope="text, record">
                 <a-tag
                   :color="
-                    record.status == '-1'
+                    record.accept == '-1'
                       ? 'orange'
-                      : record.status == '0'
+                      : record.accept == '0'
                       ? 'red'
                       : 'green'
                   "
                 >
                   {{
-                    record.status == "-1"
+                    record.accept == "-1"
                       ? "Chờ duyệt"
-                      : record.status == "0"
+                      : record.accept == "0"
                       ? "Từ chối"
                       : "Đã duyệt"
                   }}
@@ -294,10 +297,17 @@ export default {
         },
         {
           title: "Ngày tạo",
-          dataIndex: "date",
-          key: "date",
+          dataIndex: "dateCreate",
+          key: "dateCreate",
           width: 150,
-          scopedSlots: { customRender: "date" },
+          scopedSlots: { customRender: "dateCreate" },
+        },
+        {
+          title: "Ngày chấp nhận",
+          dataIndex: "dateAccept",
+          key: "dateAccept",
+          width: 150,
+          scopedSlots: { customRender: "dateAccept" },
         },
         {
           title: "Số tiền",

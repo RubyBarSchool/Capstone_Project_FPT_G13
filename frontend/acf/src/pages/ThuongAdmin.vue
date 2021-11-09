@@ -173,8 +173,7 @@
               <a-form-model-item label="Ngày hiệu lực">
                 <a-date-picker
                   v-model="dataAdd.effectiveDate"
-                  format="YYYY-MM-DD"
-                  valueFormat="YYYY-MM-DD"
+                  format="DD/MM/YYYY"
                 >
                 </a-date-picker>
               </a-form-model-item>
@@ -231,7 +230,9 @@
                 <a-date-picker
                   v-model="dataEdit.effectiveDate"
                   format="DD/MM/YYYY"
-                />
+                  valueFormat="YYYY-MM-DD"
+                >
+                </a-date-picker>
               </a-form-model-item>
             </a-form-model>
           </a-modal>
