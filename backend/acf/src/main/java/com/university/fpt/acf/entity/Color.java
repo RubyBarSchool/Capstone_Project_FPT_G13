@@ -12,7 +12,6 @@ import java.util.Collection;
 @AllArgsConstructor
 public class Color extends EntityCommon {
     private String code;
-    private String name;
 
     private Double percentChooseInMonth = 0.0;
 
