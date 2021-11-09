@@ -14,17 +14,20 @@ public class Material extends EntityCommon {
 
     private String name;
 
+    private Boolean checkMaterial = true;
+
+    private Double percentChooseInMonth = 0.0;
+
+    private Double percentChooseInQuarterOfYear = 0.0;
+
+    private Double percentChooseInYear = 0.0;
+
     @ManyToOne
     @JoinColumn(name = "unit_measure_id")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private UnitMeasure unitMeasure;
 
-    @ManyToOne
-    @JoinColumn(name = "color_id")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private Color color;
 
     @ManyToOne
     @JoinColumn(name = "company_id")

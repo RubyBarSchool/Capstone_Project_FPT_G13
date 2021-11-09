@@ -12,7 +12,8 @@ import java.util.Collection;
 @AllArgsConstructor
 public class FrameMaterial extends EntityCommon {
 
-    private String frame;
+    private String frameLength;
+    private String frameWidth;
 
 
     @ManyToOne
