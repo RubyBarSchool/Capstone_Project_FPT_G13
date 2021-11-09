@@ -14,8 +14,6 @@ class adminTruongService {
     // getAllAccount(user) {
     //     return http.post(`/spadmin/account/allaccount`, user);
     // }
-
-
     // generateUsername(fullname) {
     //     return http.post(`/spadmin/account/generateUsername?fullname=${fullname}`);
     // }

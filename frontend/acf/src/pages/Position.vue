@@ -109,7 +109,7 @@
                   </a-button>
                 </template>
                 <a-form-model>
-                  <a-form-model-item label="Tên chức vụ *">
+                  <a-form-model-item label="* Tên chức vụ">
                     <a-input v-model="dataAdd.name" />
                     <div style="color: red" v-if="checkDataInputName.show">
                       {{ checkDataInputName.message }}
@@ -246,18 +246,18 @@ export default {
     },
     checkFormAdd() {
       if (this.dataAdd.name != null && this.dataAdd.name != "") {
-        if (this.dataAdd.name.length < 8) {
-          this.checkDataInputName.show = true;
-          this.checkDataInputName.message =
-            "Mày phải didenf vào chỗ trống ddooj dai lon hon 8";
-        } else {
+        // if (this.dataAdd.name.length < 8) {
+        //   this.checkDataInputName.show = true;
+        //   this.checkDataInputName.message =
+        //     "Mày phải didenf vào chỗ trống ddooj dai lon hon 8";
+        // } else {
           this.checkDataInputName.show = false;
           this.checkDataInputName.message = "";
           this.submitAdd();
-        }
+        // }
       } else {
         this.checkDataInputName.show = true;
-        this.checkDataInputName.message = "Mày phải didenf vào chỗ trống";
+        this.checkDataInputName.message = "Bạn phải điền vào chỗ trống";
       }
     },
     submitAdd() {
