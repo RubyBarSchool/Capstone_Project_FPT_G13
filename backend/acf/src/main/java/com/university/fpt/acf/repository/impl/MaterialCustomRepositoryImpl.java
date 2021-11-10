@@ -20,31 +20,22 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
         StringBuilder sqlAcc = new StringBuilder("");
         Map<String, Object> paramsAcc = new HashMap<>();
         if(materialSuggestFrom.getType().equals("thang")){
-            sqlAcc.append(" select new com.university.fpt.acf.vo.SuggestMaterialVO(m.name," +
-                    "CONCAT(fm.frameLength,' x ',fm.frameWidth,' x ',hm.height),gm.name,um.name,c.name," +
-                    "m.percentChooseInMonth) " +
-                    " from Material m inner join m.priceMaterials pm inner join m.groupMaterial gm " +
-                    " inner join m.unitMeasure um inner join m.company c inner join pm.frameMaterial fm " +
-                    " inner join fm.heightMaterial hm" +
-                    " where m.deleted = false and m.checkMaterial = false ");
+            sqlAcc.append(" select new com.university.fpt.acf.vo.SuggestMaterialVO(m.groupMaterial.name, m.name , " +
+                    "CONCAT(pm.frameMaterial.frameLength,' x ',pm.frameMaterial.frameWidth,' x '," +
+                    "pm.heightMaterial.frameHeight), pm.unitMeasure.name,m.company.name,m.percentChooseInMonth ) " +
+                    " from Material m inner join m.priceMaterials pm   where m.deleted = false and m.checkMaterial = false ");
             sqlAcc.append(" ORDER by m.percentChooseInMonth desc ");
         }else if(materialSuggestFrom.getType().equals("quy")){
-            sqlAcc.append(" select new com.university.fpt.acf.vo.SuggestMaterialVO(m.name," +
-                    "CONCAT(fm.frameLength,' x ',fm.frameWidth,' x ',hm.height),gm.name,um.name,c.name," +
-                    "m.percentChooseInQuarterOfYear) " +
-                    " from Material m inner join m.priceMaterials pm inner join m.groupMaterial gm " +
-                    " inner join m.unitMeasure um inner join m.company c inner join pm.frameMaterial fm " +
-                    " inner join fm.heightMaterial hm" +
-                    " where m.deleted = false and m.checkMaterial = false ");
+            sqlAcc.append(" select new com.university.fpt.acf.vo.SuggestMaterialVO(m.groupMaterial.name, m.name , " +
+                    "CONCAT(pm.frameMaterial.frameLength,' x ',pm.frameMaterial.frameWidth,' x '," +
+                    "pm.heightMaterial.frameHeight), pm.unitMeasure.name,m.company.name,m.percentChooseInQuarterOfYear ) " +
+                    " from Material m inner join m.priceMaterials pm   where m.deleted = false and m.checkMaterial = false ");
             sqlAcc.append(" ORDER by m.percentChooseInQuarterOfYear desc ");
         }else if(materialSuggestFrom.getType().equals("name")){
-            sqlAcc.append(" select new com.university.fpt.acf.vo.SuggestMaterialVO(m.name," +
-                    "CONCAT(fm.frameLength,' x ',fm.frameWidth,' x ',hm.height),gm.name,um.name,c.name," +
-                    "m.percentChooseInMonth) " +
-                    " from Material m inner join m.priceMaterials pm inner join m.groupMaterial gm " +
-                    " inner join m.unitMeasure um inner join m.company c inner join pm.frameMaterial fm " +
-                    " inner join fm.heightMaterial hm" +
-                    " where m.deleted = false and m.checkMaterial = false ");
+            sqlAcc.append(" select new com.university.fpt.acf.vo.SuggestMaterialVO(m.groupMaterial.name, m.name , " +
+                    "CONCAT(pm.frameMaterial.frameLength,' x ',pm.frameMaterial.frameWidth,' x '," +
+                    "pm.heightMaterial.frameHeight), pm.unitMeasure.name,m.company.name,m.percentChooseInYear ) " +
+                    " from Material m inner join m.priceMaterials pm   where m.deleted = false and m.checkMaterial = false ");
             sqlAcc.append(" ORDER by m.percentChooseInYear desc ");
         }
         TypedQuery<SuggestMaterialVO> queryAcc = super.createQuery(sqlAcc.toString(), paramsAcc, SuggestMaterialVO.class);
