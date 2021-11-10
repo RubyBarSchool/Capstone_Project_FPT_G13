@@ -165,6 +165,13 @@ export const router = new Router({
             component: () =>
                 import ("./pages/ChieuCao.vue"),
         },
+        {
+            path: "/groupcoverplate",
+            name: "GroupCoverPlate",
+            // lazy-loaded
+            component: () =>
+                import ("./pages/GroupCoverPlate.vue"),
+        },
     ],
 });
 
