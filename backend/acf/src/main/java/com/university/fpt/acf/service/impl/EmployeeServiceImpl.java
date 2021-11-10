@@ -122,7 +122,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                             p.setId(addEmployeeForm.getIdPosition());
                             e.setPosition(p);
                             AccountSercurity accountSercurity = new AccountSercurity();
-                            e.setModified_by(accountSercurity.getUserName());
+                            e.setCreated_date(LocalDate.now());;
                             e.setCreated_by(accountSercurity.getUserName());
                             Employee ex = employeeRepository.save(e);
                             check =true;

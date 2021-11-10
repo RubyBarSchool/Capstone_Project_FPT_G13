@@ -48,7 +48,7 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
             e.setId(idEmployee);
             p.setEmployee(e);
             p.setCreated_by(accountSercurity.getUserName());
-            p.setModified_by(accountSercurity.getUserName());
+            p.setCreated_date(LocalDate.now());
             personalLeaveApplicationEmployeeRepository.save(p);
             check=true;
 

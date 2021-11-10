@@ -71,7 +71,7 @@ public class CompanyServiceImpl implements CompanyService {
             c.setEmail(addCompanyForm.getEmail());
             c.setPhone(addCompanyForm.getPhone());
             AccountSercurity accountSercurity = new AccountSercurity();
-            c.setModified_by(accountSercurity.getUserName());
+            c.setCreated_date(LocalDate.now());;
             c.setCreated_by(accountSercurity.getUserName());
             companyRespository.save(c);
             check = true;

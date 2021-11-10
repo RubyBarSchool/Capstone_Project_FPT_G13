@@ -58,7 +58,7 @@ public class PositionServiceImpl implements PositionService {
                     p.setName(addPositionForm.getName());
                     p.setCode(addPositionForm.getCode());
                     AccountSercurity accountSercurity = new AccountSercurity();
-                    p.setModified_by(accountSercurity.getUserName());
+                    p.setCreated_date(LocalDate.now());
                     p.setCreated_by(accountSercurity.getUserName());
                     positionRespository.save(p);
                     check =true;

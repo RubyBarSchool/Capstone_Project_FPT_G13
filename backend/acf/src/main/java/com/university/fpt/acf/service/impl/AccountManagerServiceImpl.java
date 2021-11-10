@@ -52,7 +52,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                     ac.setPassword(passwordEncoder.encode(addAccountForm.getPassword()));
                     ac.setUsername(addAccountForm.getUsername());
                     AccountSercurity accountSercurity = new AccountSercurity();
-                    ac.setModified_by(accountSercurity.getUserName());
+                    ac.setCreated_date(LocalDate.now());
                     ac.setCreated_by(accountSercurity.getUserName());
                     List<Role> listRole = new ArrayList<>();
                     for (Long i : addAccountForm.getListRole()) {
@@ -91,7 +91,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                 ac.setStatus(updateAccountForm.getStatus());
                 ac.setModified_by(accountSercurity.getUserName());
                 ac.setModified_date(LocalDate.now());
-                ac.setCreated_by(accountSercurity.getUserName());
+                ac.setModified_by(accountSercurity.getUserName());
                 List<Role> listRole = new ArrayList<>();
                 for(Long i : updateAccountForm.getListRole()){
                     Role role = new Role();
