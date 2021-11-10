@@ -91,7 +91,8 @@
               @change="handleTableChange"
             >
               <template slot="username" slot-scope="text, record">
-                <a href="http://localhost:8080/api/swagger-ui.html?fbclid=IwAR1u0wLaFrB-A3sAGdVGdVkmren5YIb94eya3pmmy_yzOZeTRiYWmudeGuI#/advance-salary-admin-controller/searchAdvanceSalaryAdminUsingPOST">{{ record.username }}</a>
+                <!-- <a href="http://localhost:8080/api/swagger-ui.html?fbclid=IwAR1u0wLaFrB-A3sAGdVGdVkmren5YIb94eya3pmmy_yzOZeTRiYWmudeGuI#/advance-salary-admin-controller/searchAdvanceSalaryAdminUsingPOST">{{ record.username }}</a> -->
+                {{ record.username }}
               </template>
               <template slot="roles" slot-scope="text, record">
                 <div v-for="(item, index) in record.roles" :key="index">
@@ -245,7 +246,7 @@
           <a-modal v-model="visibleAdd" title="Thêm tài khoản">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitAdd">
+              <a-button key="submit" type="primary" @click="checkFormAdd">
                 Lưu
               </a-button>
             </template>
@@ -274,6 +275,9 @@
               </a-form-model-item>
               <a-form-model-item label="Mật khẩu">
                 <a-input-password v-model="dataAdd.password" />
+                <div style="color: red" v-if="checkDataInput.show">
+                  {{ checkDataInput.message }}
+                </div>
               </a-form-model-item>
               <a-form-model-item label="Chức vụ">
                 <a-select
@@ -455,6 +459,10 @@ export default {
       visibleAdd: false,
       visibleEdit: false,
       visibleProfile: false,
+      checkDataInput: {
+        show: false,
+        message: "",
+      },
     };
   },
   computed: {},
@@ -518,6 +526,18 @@ export default {
       this.dataEmployee.name = "";
       this.getAllEmployeeNotAccount();
       this.visibleAdd = true;
+      this.checkDataInput.show = false;
+      this.checkDataInput.message = "";
+    },
+    checkFormAdd() {
+      if (this.dataAdd.password != null && this.dataAdd.password != "") {
+        this.checkDataInput.show = false;
+        this.checkDataInput.message = "";
+        this.submitAdd();
+      } else {
+        this.checkDataInput.show = true;
+        this.checkDataInput.message = "Bạn phải điền vào chỗ trống";
+      }
     },
     submitAdd() {
       accountService

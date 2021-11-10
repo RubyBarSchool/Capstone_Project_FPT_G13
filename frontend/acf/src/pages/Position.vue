@@ -109,7 +109,7 @@
                   </a-button>
                 </template>
                 <a-form-model>
-                  <a-form-model-item label="* Tên chức vụ">
+                  <a-form-model-item label="Tên chức vụ">
                     <a-input v-model="dataAdd.name" />
                     <div style="color: red" v-if="checkDataInputName.show">
                       {{ checkDataInputName.message }}

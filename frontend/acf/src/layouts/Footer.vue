@@ -5,11 +5,11 @@
       <a href="#"
         ><a-col :span="1" class="textMail"> acfurniturett@gmail.com </a-col></a
       >
-      <a href="#"><a-col :span="1" class="text"> Terms </a-col></a>
-      <a href="#"><a-col :span="1" class="text"> Privacy </a-col></a>
-      <a href="#"><a-col :span="1" class="text"> Security</a-col></a>
-      <a href="#"><a-col :span="1" class="text"> Status </a-col></a>
-      <a href="#"><a-col :span="1" class="text"> Docs </a-col></a>
+      <a href="#"><a-col :span="1" class="text">TrangChủ </a-col></a>
+      <a href="#"><a-col :span="1" class="text">BảoMật </a-col></a>
+      <a href="#"><a-col :span="1" class="text">BảoVệ</a-col></a>
+      <a href="#"><a-col :span="1" class="text">TrạngThái </a-col></a>
+      <a href="#"><a-col :span="1" class="text">Docs </a-col></a>
       <a href="#"
         ><a-col :span="1">
           <font-awesome-icon
@@ -17,12 +17,12 @@
             :style="{ 'font-size': '40px', color: '#495057' }"
           /> </a-col
       ></a>
-      <a href="#"><a-col :span="1" class="text"> Contacts </a-col></a>
-      <a href="#"><a-col :span="1" class="text"> Pricing </a-col></a>
-      <a href="#"><a-col :span="1" class="text"> API </a-col></a>
-      <a href="#"><a-col :span="1" class="text"> Training </a-col></a>
-      <a href="#"><a-col :span="1" class="text"> Blog </a-col></a>
-      <a href="#"><a-col :span="1" class="text"> About </a-col></a>
+      <a href="#"><a-col :span="1" class="text">LiênLạc </a-col></a>
+      <a href="#"><a-col :span="1" class="text">ĐịnhGiá </a-col></a>
+      <a href="#"><a-col :span="1" class="text">API </a-col></a>
+      <a href="#"><a-col :span="1" class="text">HướngDẫn </a-col></a>
+      <a href="#"><a-col :span="1" class="text">Blog </a-col></a>
+      <a href="#"><a-col :span="1" class="text">ThôngTin </a-col></a>
     </a-row>
   </div>
 </template>

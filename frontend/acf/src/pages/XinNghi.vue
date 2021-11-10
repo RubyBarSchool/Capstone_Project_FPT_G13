@@ -117,7 +117,9 @@
                         showModelView(
                           record.title,
                           record.dateCreate,
-                          record.content
+                          record.content,
+                          record.dateStart,
+                          record.dateEnd
                         )
                       "
                       :style="{ width: '44.25px', 'margin-right': '100px' }"
@@ -161,13 +163,16 @@
           <a-modal v-model="visibleAdd" title="Viết đơn">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitAdd">
+              <a-button key="submit" type="primary" @click="checkFormAdd">
                 Lưu
               </a-button>
             </template>
             <a-form-model>
               <a-form-model-item label="Tiêu đề">
                 <a-input v-model="dataAdd.title" />
+                <div style="color: red" v-if="checkDataInput.show">
+                  {{ checkDataInput.message }}
+                </div>
               </a-form-model-item>
               <a-form-model-item label="Ngày">
                 <a-range-picker
@@ -184,6 +189,9 @@
                   placeholder="Lý do như nào thì viết vào đây"
                   :row="4"
                 />
+                <div style="color: red" v-if="checkDataInput.show">
+                  {{ checkDataInput.message }}
+                </div>
               </a-form-model-item>
             </a-form-model>
           </a-modal>
@@ -232,9 +240,21 @@
                   disabled
                 />
               </a-form-model-item>
-              <a-form-model-item label="Ngày">
+              <a-form-model-item label="Ngày tạo">
                 <a-input
                   v-model="dataPersonalLeaveEmployeeDetail.dateCreate"
+                  disabled
+                />
+              </a-form-model-item>
+              <a-form-model-item label="Ngày bắt đầu">
+                <a-input
+                  v-model="dataPersonalLeaveEmployeeDetail.dateStart"
+                  disabled
+                />
+              </a-form-model-item>
+              <a-form-model-item label="Ngày kết thúc">
+                <a-input
+                  v-model="dataPersonalLeaveEmployeeDetail.dateEnd"
                   disabled
                 />
               </a-form-model-item>
@@ -299,6 +319,8 @@ export default {
         title: "",
         content: "",
         date: [],
+        dateStart: "",
+        dateEnd: "",
       },
       columns: [
         {
@@ -362,6 +384,10 @@ export default {
       visibleAdd: false,
       visibleEdit: false,
       visibleView: false,
+      checkDataInput: {
+        show: false,
+        message: "",
+      },
     };
   },
   created() {
@@ -397,6 +423,8 @@ export default {
     },
     showModalAdd() {
       this.visibleAdd = true;
+      this.checkDataInput.show = false;
+      this.checkDataInput.message = "";
     },
     submitAdd() {
       xinNghiService
@@ -428,7 +456,21 @@ export default {
       this.dataAdd.date = [];
       this.dataAdd.content = "";
     },
-
+    checkFormAdd() {
+      if (
+        this.dataAdd.title != null &&
+        this.dataAdd.title != "" &&
+        this.dataAdd.content != null &&
+        this.dataAdd.content != ""
+      ) {
+        this.checkDataInput.show = false;
+        this.checkDataInput.message = "";
+        this.submitAdd();
+      } else {
+        this.checkDataInput.show = true;
+        this.checkDataInput.message = "Bạn phải điền vào chỗ trống";
+      }
+    },
     handleCancel() {
       this.visibleAdd = false;
       this.visibleEdit = false;
@@ -487,10 +529,12 @@ export default {
         });
     },
 
-    showModelView(title, dateCreate, content) {
+    showModelView(title, dateCreate, content, dateStart, dateEnd) {
       this.dataPersonalLeaveEmployeeDetail.title = title;
       this.dataPersonalLeaveEmployeeDetail.dateCreate = dateCreate;
       this.dataPersonalLeaveEmployeeDetail.content = content;
+      this.dataPersonalLeaveEmployeeDetail.dateStart = dateStart;
+      this.dataPersonalLeaveEmployeeDetail.dateEnd = dateEnd;
       this.visibleView = true;
     },
 
