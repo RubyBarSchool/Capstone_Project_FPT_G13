@@ -151,6 +151,13 @@ export const router = new Router({
             component: () =>
                 import ("./pages/ViewThuongPhat.vue"),
         },
+        {
+            path: "/unitadmin",
+            name: "UnitAdmin",
+            // lazy-loaded
+            component: () =>
+                import ("./pages/UnitAdmin.vue"),
+        },
     ],
 });
 
