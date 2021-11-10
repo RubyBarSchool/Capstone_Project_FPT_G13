@@ -1,30 +1,33 @@
 package com.university.fpt.acf.controller;
 
 import com.university.fpt.acf.common.entity.ResponseCommon;
-import com.university.fpt.acf.service.GroupMaterialService;
-import com.university.fpt.acf.vo.GroupMaterialVO;
+import com.university.fpt.acf.form.AddFrameMaterialForm;
+import com.university.fpt.acf.form.SearchFrameMaterialForm;
+import com.university.fpt.acf.form.SearchHeightMaterialForm;
+import com.university.fpt.acf.service.FrameMaterialService;
+import com.university.fpt.acf.vo.HeightMaterialVO;
+import com.university.fpt.acf.vo.SearchFrameMaterialVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Repository
-@RequestMapping(path = "/admin/groupcoverplate")
-public class GroupCoverPlateController {
+@RestController
+@RequestMapping(path = "/admin/framematerial")
+public class FrameMaterialController {
     @Autowired
-    private GroupMaterialService service;
-    @GetMapping("/get")
-    public ResponseEntity<ResponseCommon> getAllGroups(){
+    private FrameMaterialService  frameService;
+    @PostMapping("/getHeight")
+    public ResponseEntity<ResponseCommon> getAllHeightNotInsertFrame(@RequestBody SearchHeightMaterialForm searchForm){
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
         int total;
-        List<GroupMaterialVO> list = new ArrayList<>();
+        List<HeightMaterialVO> list = new ArrayList<>();
         try {
-            list = service.getAllGroupCoverPlate();
+            list = frameService.getAllHeightNotFrameTable(searchForm);
             responseCommon.setData(list);
             total=list.size();
             message = "Thành công!";
@@ -44,12 +47,12 @@ public class GroupCoverPlateController {
         }
     }
     @PostMapping("/add")
-    public ResponseEntity<ResponseCommon> addGroup(@RequestParam String name){
+    public ResponseEntity<ResponseCommon> addFrameMaterial(@RequestBody AddFrameMaterialForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();
         String message="";
         Boolean checkAdd = false;
         try {
-            checkAdd = service.addGroupCoverPlate(name);
+            checkAdd = frameService.addFrame(addForm);
             if(checkAdd==true){
                 message="Thêm thành công!";
             }else{
@@ -67,28 +70,55 @@ public class GroupCoverPlateController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    @PostMapping("/search")
+    public ResponseEntity<ResponseCommon> searchFrame(@RequestBody SearchFrameMaterialForm searchForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<SearchFrameMaterialVO> list = new ArrayList<>();
+        try {
+            list = frameService.searchFrame(searchForm);
+            responseCommon.setData(list);
+            total=frameService.totalSearch(searchForm);
+            message = "Thành công!";
+            if(total==0){
+                message = "Không tìm thấy!";
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(list);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
     @DeleteMapping("/delete")
-    public ResponseEntity<ResponseCommon> deleteGroup(@RequestParam Long id){
+    public ResponseEntity<ResponseCommon> deleteFrameMaterial(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();
         String message="";
-        Boolean checkDelete = false;
+        Boolean checkAdd = false;
         try {
-            checkDelete = service.deleteGroupCoverPlate(id);
-            if(checkDelete==true){
+            checkAdd = frameService.deleteFrame(id);
+            if(checkAdd==true){
                 message="Xóa thành công!";
             }else{
                 message="Xóa không thành công!";
             }
             responseCommon.setMessage(message);
-            responseCommon.setData(checkDelete);
+            responseCommon.setData(checkAdd);
             responseCommon.setStatus(HttpStatus.OK.value());
             return new ResponseEntity<>(responseCommon,HttpStatus.OK);
         }catch (Exception e){
             message = e.getMessage();
-            responseCommon.setData(checkDelete);
+            responseCommon.setData(checkAdd);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+
 }

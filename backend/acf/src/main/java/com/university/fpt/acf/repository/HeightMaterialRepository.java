@@ -1,5 +1,6 @@
 package com.university.fpt.acf.repository;
 
+import com.university.fpt.acf.entity.Employee;
 import com.university.fpt.acf.entity.HeightMaterial;
 import com.university.fpt.acf.vo.HeightMaterialVO;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -19,4 +20,6 @@ public interface HeightMaterialRepository extends JpaRepository<HeightMaterial,L
     List<HeightMaterialVO> getAllHeight();
     @Query("select h from HeightMaterial h where h.id=:id")
     HeightMaterial getHeightMaterialById(@Param("id") Long id);
+    @Query("SELECT e FROM HeightMaterial e where  e.id  in :id")
+    List<HeightMaterial> getHeightByIdS(@Param("id") List<Long> ids);
 }
