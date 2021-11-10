@@ -112,7 +112,9 @@
                       record.content,
                       record.comment,
                       record.fileAttach,
-                      record.statusAccept
+                      record.statusAccept,
+                      record.dateStart,
+                      record.dateEnd
                     )
                   "
                 >
@@ -142,11 +144,32 @@
                 <a-form-model-item label="Tiêu đề">
                   <a-input v-model="dataDetail.title" disabled />
                 </a-form-model-item>
-                <a-form-model-item label="Ngày tạo">
-                  <a-input v-model="dataDetail.date" disabled />
-                </a-form-model-item>
+                <a-row :gutter="[16, 8]">
+                  <a-col :span="8">
+                    <a-form-model-item label="Ngày tạo">
+                      <a-input v-model="dataDetail.date" disabled />
+                    </a-form-model-item>
+                  </a-col>
+                  <a-col :span="8">
+                    <a-form-model-item label="Ngày bắt đầu">
+                      <a-input v-model="dataDetail.dateStart" disabled />
+                    </a-form-model-item>
+                  </a-col>
+                  <a-col :span="8">
+                    <a-form-model-item label="Ngày kết thúc">
+                      <a-input v-model="dataDetail.dateEnd" disabled />
+                    </a-form-model-item>
+                  </a-col>
+                </a-row>
                 <a-form-model-item label="Nội dung">
-                  <a-textarea v-model="dataDetail.content" :rows="4" disabled />
+                  <a-textarea
+                    v-model="dataDetail.content"
+                    :auto-size="{
+                      minRows: 1,
+                      maxRows: 6,
+                    }"
+                    disabled
+                  />
                 </a-form-model-item>
                 <a-form-model-item label="Ghi chú">
                   <a-textarea
@@ -204,6 +227,8 @@ export default {
         nameEmployee: "",
         statusAccept: "",
         title: "",
+        dateStart: "",
+        dateEnd: "",
       },
       dataAccept: {
         comment: "",
@@ -211,7 +236,7 @@ export default {
       },
       columns: [
         {
-          title: "ID",
+          title: "STT",
           width: 100,
           dataIndex: "idApplication",
           key: "idApplication",
@@ -225,7 +250,7 @@ export default {
           scopedSlots: { customRender: "employee" },
         },
         {
-          title: "Ngày",
+          title: "Ngày tạo",
           dataIndex: "date",
           key: "date",
           width: 150,
@@ -295,6 +320,7 @@ export default {
           console.log(e);
         });
     },
+    //     dateAccept: "",
     showModelView(
       idApplication,
       idEmployee,
@@ -304,7 +330,9 @@ export default {
       content,
       comment,
       fileAttach,
-      statusAccept
+      statusAccept,
+      dateStart,
+      dateEnd
     ) {
       this.dataDetail.nameEmployee = nameEmployee;
       this.dataDetail.title = title;
@@ -315,6 +343,8 @@ export default {
       this.dataDetail.statusAccept = statusAccept;
       this.dataDetail.idEmployee = idEmployee;
       this.dataDetail.idApplication = idApplication;
+      this.dataDetail.dateStart = dateStart;
+      this.dataDetail.dateEnd = dateEnd;
       this.visibleView = true;
     },
 
