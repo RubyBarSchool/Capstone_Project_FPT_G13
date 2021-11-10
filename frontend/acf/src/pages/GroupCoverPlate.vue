@@ -1,5 +1,5 @@
 <template>
-  <div class="chieucao">
+  <div class="groupcoverplate">
     <a-layout :style="{ background: 'white' }">
       <Header />
       <a-layout-content :style="{ margin: '24px 16px 0' }">
@@ -26,6 +26,7 @@
             Thêm
           </a-button>
           <!-- menu trên -->
+
           <!-- table content -->
           <div :style="{ 'padding-top': '10px' }">
             <a-table
@@ -39,14 +40,14 @@
               "
               @change="handleTableChange"
             >
-              <template slot="height" slot-scope="text, record">
-                {{ record.height }}
+              <template slot="name" slot-scope="text, record">
+                {{ record.name }}
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-popconfirm
                   v-if="dataSourceTable.length"
                   title="Bạn có chắc chắn muốn xóa không?"
-                  @confirm="deleteUnit(record.id)"
+                  @confirm="deleteGroup(record.id)"
                 >
                   <a-button id="delete">
                     <font-awesome-icon :icon="['fas', 'trash']" />
@@ -58,7 +59,7 @@
           <!-- table content -->
 
           <!-- popup add -->
-          <a-modal v-model="visibleAdd" title="Thêm chiều cao">
+          <a-modal v-model="visibleAdd" title="Thêm nhóm tấm phủ">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button key="submit" type="primary" @click="checkFormAdd">
@@ -66,10 +67,10 @@
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Chiều cao">
-                <a-input v-model="height" />
-                <div style="color: red" v-if="checkDataInputHeight.show">
-                  {{ checkDataInputHeight.message }}
+              <a-form-model-item label="Tên nhóm tấm phủ">
+                <a-input v-model="name" />
+                <div style="color: red" v-if="checkDataInputGroup.show">
+                  {{ checkDataInputGroup.message }}
                 </div>
               </a-form-model-item>
             </a-form-model>
@@ -85,9 +86,9 @@
 <script>
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
-import chieuCaoService from "@/service/chieuCaoService";
+import groupCoverPlateService from "@/service/groupCoverPlateService";
 export default {
-  name: "ChieuCao",
+  name: "GroupCoverPlate",
   components: {
     Header,
     Footer,
@@ -102,9 +103,9 @@ export default {
       dataSourceTable: [],
       dataAll: {
         id: "",
-        height: "",
+        name: "",
       },
-      height: "",
+      name: "",
       columns: [
         {
           title: "STT",
@@ -114,11 +115,11 @@ export default {
           fixed: "left",
         },
         {
-          title: "Chiều cao",
-          dataIndex: "height",
-          key: "height",
+          title: "Nhóm tấm phủ",
+          dataIndex: "name",
+          key: "name",
           width: 150,
-          scopedSlots: { customRender: "height" },
+          scopedSlots: { customRender: "name" },
         },
         {
           title: "",
@@ -130,7 +131,7 @@ export default {
         },
       ],
       visibleAdd: false,
-      checkDataInputHeight: {
+      checkDataInputGroup: {
         show: false,
         message: "",
       },
@@ -143,8 +144,8 @@ export default {
     handleTableChange(pagination) {
       this.dataAll.pageIndex = pagination.current;
       this.pagination = pagination;
-      chieuCaoService
-        .getAllUnits(this.dataAll)
+      groupCoverPlateService
+        .getAllGroupS(this.dataAll)
         .then((response) => {
           this.dataSourceTable = response.data.data;
           this.dataAll.total = response.data.total;
@@ -154,11 +155,10 @@ export default {
           console.log(e);
         });
     },
-
     submitSearch() {
       this.dataAll.total = 0;
-      chieuCaoService
-        .getAllUnits(this.dataAll)
+      groupCoverPlateService
+        .getAllGroupS(this.dataAll)
         .then((response) => {
           this.dataSourceTable = response.data.data;
           this.dataAll.total = response.data.total;
@@ -168,22 +168,21 @@ export default {
           console.log(e);
         });
     },
-
     submitAdd() {
-      chieuCaoService
-        .addUnit(this.height)
+      groupCoverPlateService
+        .addGroup(this.name)
         .then((response) => {
           this.submitSearch();
           if (response.data.data) {
             let type = "success";
-            let message = "Chiều cao";
-            let description = "Thêm chiều cao thành công !!";
+            let message = "Nhóm tấm phủ";
+            let description = "Thêm nhóm tấm phủ thành công !!";
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Chiều cao";
+            let message = "Nhóm tấm phủ";
             let description =
-              "Thêm chiều cao không thành công vì" + response.data.message;
+              "Thêm nhóm tấm phủ không thành công vì" + response.data.message;
             this.notifi(type, message, description);
           }
         })
@@ -191,46 +190,42 @@ export default {
           console.log(e);
         });
       this.visibleAdd = false;
-      this.height = "";
+      this.name = "";
     },
-
     showModalAdd() {
       this.visibleAdd = true;
-      this.checkDataInputHeight.show = false;
-      this.checkDataInputHeight.message = "";
-    //   this.height = "";
+      this.checkDataInputGroup.show = false;
+      this.checkDataInputGroup.message = "";
+      this.name = "";
     },
-
     checkFormAdd() {
-      if (this.height != null && this.height != "") {
-        this.checkDataInputHeight.show = false;
-        this.checkDataInputHeight.message = "";
+      if (this.name != null && this.name != "") {
+        this.checkDataInputGroup.show = false;
+        this.checkDataInputGroup.message = "";
         this.submitAdd();
       } else {
-        this.checkDataInputHeight.show = true;
-        this.checkDataInputHeight.message = "Bạn phải điền vào chỗ trống";
+        this.checkDataInputGroup.show = true;
+        this.checkDataInputGroup.message = "Bạn phải điền vào chỗ trống";
       }
     },
-
     handleCancel() {
       this.visibleAdd = false;
     },
-
-    deleteUnit(id) {
-      chieuCaoService
-        .deleteUnit(id)
+    deleteGroup(id) {
+      groupCoverPlateService
+        .deleteGroup(id)
         .then((response) => {
           this.submitSearch();
           if (response.data.data) {
             let type = "success";
-            let message = "Xóa";
-            let description = "Xóa chiều cao thành công";
+            let message = "Xóa nhóm tấm phủ";
+            let description = "Xóa nhóm tấm phủ thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           } else {
             let type = "error";
-            let message = "Xóa";
-            let description = "Xóa chiều cao không thành công :(";
+            let message = "Xóa nhóm tấm phủ";
+            let description = "Xóa nhóm tấm phủ không thành công :(";
             this.notifi(type, message, description);
             this.submitSearch();
           }
