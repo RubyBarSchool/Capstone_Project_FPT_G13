@@ -19,6 +19,7 @@ public interface UnitMeasureRepository extends JpaRepository<UnitMeasure,Long> {
 
     @Query("select u from UnitMeasure  u where  u.id =:id")
     UnitMeasure getUnitByID(@Param("id") Long id);
+
     @Query("select new com.university.fpt.acf.vo.UnitMeasureVO(u.id,u.name) from UnitMeasure u")
     List<UnitMeasureVO> getAllUnit();
 }
