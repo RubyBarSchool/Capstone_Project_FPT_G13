@@ -14,4 +14,6 @@ import java.util.List;
 public interface FrameMaterialRepository extends JpaRepository<FrameMaterial,Long> {
     @Query("select f from FrameMaterial f where f.id =:id ")
     FrameMaterial getFrameById(@Param("id") Long id);
+    @Query("select f.id from FrameMaterial f where f.frameWidth=:width and f.frameLength=:length ")
+    Long getIdByLengthWith(@Param("width") String width,@Param("length") String length);
 }

@@ -20,32 +20,6 @@ import java.util.List;
 public class FrameMaterialController {
     @Autowired
     private FrameMaterialService  frameService;
-    @PostMapping("/getHeight")
-    public ResponseEntity<ResponseCommon> getAllHeightNotInsertFrame(@RequestBody SearchHeightMaterialForm searchForm){
-        ResponseCommon responseCommon = new ResponseCommon();
-        String message = "";
-        int total;
-        List<HeightMaterialVO> list = new ArrayList<>();
-        try {
-            list = frameService.getAllHeightNotFrameTable(searchForm);
-            responseCommon.setData(list);
-            total=list.size();
-            message = "Thành công!";
-            if(total==0){
-                message = "Không tìm thấy!";
-            }
-            responseCommon.setTotal(total);
-            responseCommon.setStatus(HttpStatus.OK.value());
-            responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
-        } catch (Exception e) {
-            message = e.getMessage();
-            responseCommon.setData(list);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
-            responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
-        }
-    }
     @PostMapping("/add")
     public ResponseEntity<ResponseCommon> addFrameMaterial(@RequestBody AddFrameMaterialForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();

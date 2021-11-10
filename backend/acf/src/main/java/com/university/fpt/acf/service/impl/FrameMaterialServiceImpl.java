@@ -31,32 +31,19 @@ public class FrameMaterialServiceImpl implements FrameMaterialService {
     private HeightMaterialRepository heightMaterialRepository;
     @Autowired
     private UnitMeasureRepository unitMeasureRepository;
-    @Override
-    public List<HeightMaterialVO> getAllHeightNotFrameTable(SearchHeightMaterialForm searchForm) {
-        List<HeightMaterialVO> list = new ArrayList<>();
-        try {
-            list = customRepository.getAllHeightNotFrameTable(searchForm);
-            if(list == null ){
-                throw new Exception("Không tìm thấy ");
-            }
-        }catch (Exception e){
-            e.getMessage();
-        }
-        return list;
-    }
 
     @Override
     @Transactional
     public Boolean addFrame(AddFrameMaterialForm addForm) {
         boolean check = false;
         try {
+            Long id = repository.getIdByLengthWith(addForm.getWidth(), addForm.getLength());
+            if(id!=null){
+                throw new RuntimeException("Đã tồn tại!");
+            }
             FrameMaterial frame = new FrameMaterial();
             frame.setFrameLength(addForm.getLength());
             frame.setFrameWidth(addForm.getWidth());
-            UnitMeasure unit = unitMeasureRepository.getUnitByID(addForm.getIdUnit());
-            if(unit==null){
-                throw new Exception("Đơn vị không tồn tại  ");
-            }
             AccountSercurity accountSercurity = new AccountSercurity();
             frame.setCreated_by(accountSercurity.getUserName());
             frame.setCreated_date(LocalDate.now());

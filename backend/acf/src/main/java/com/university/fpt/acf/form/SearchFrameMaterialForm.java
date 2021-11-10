@@ -6,7 +6,6 @@ import lombok.Data;
 public class SearchFrameMaterialForm {
     private String length;
     private String width;
-    private Long idUnit;
     private int pageIndex;
     private int pageSize;
 }

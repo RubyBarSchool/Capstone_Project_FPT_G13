@@ -11,6 +11,4 @@ public class SearchFrameMaterialVO {
     private Long id;
     private String length;
     private String width;
-    private String unit;
-    private String height;
 }

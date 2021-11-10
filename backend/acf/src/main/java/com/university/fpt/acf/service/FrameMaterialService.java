@@ -9,7 +9,6 @@ import com.university.fpt.acf.vo.SearchFrameMaterialVO;
 import java.util.List;
 
 public interface FrameMaterialService {
-    List<HeightMaterialVO> getAllHeightNotFrameTable(SearchHeightMaterialForm searchForm);
     Boolean addFrame(AddFrameMaterialForm addForm);
     List<SearchFrameMaterialVO>searchFrame(SearchFrameMaterialForm searchForm);
     int totalSearch(SearchFrameMaterialForm searchForm);

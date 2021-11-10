@@ -8,6 +8,4 @@ import java.util.List;
 public class AddFrameMaterialForm {
     private String length;
     private String width;
-    private Long idUnit;
-    private List<Long> listIdHeight;
 }
