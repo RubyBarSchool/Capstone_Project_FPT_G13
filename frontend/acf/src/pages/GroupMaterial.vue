@@ -23,7 +23,7 @@
             :style="{ 'margin-left': '5px' }"
           >
             <font-awesome-icon
-              :icon="['fas', 'user-plus']"
+              :icon="['fas', 'plus-square']"
               :style="{ 'margin-right': '5px' }"
             />
             Thêm
@@ -73,7 +73,7 @@
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Loại nhóm vật liệu">
+              <a-form-model-item label="Tên nhóm vật liệu">
                 <a-input v-model="name" />
                 <div style="color: red" v-if="checkDataInputName.show">
                   {{ checkDataInputName.message }}

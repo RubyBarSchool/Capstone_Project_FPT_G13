@@ -1,5 +1,5 @@
 <template>
-  <div class="unit">
+  <div class="frame">
     <a-layout :style="{ background: 'white' }">
       <Header />
       <a-layout-content :style="{ margin: '30px 16px 0' }">
@@ -17,6 +17,28 @@
               />
             </div>
           </a-back-top>
+          <!-- menu trên -->
+          <a-input
+            placeholder="Chiều dài"
+            style="width: 150px"
+            v-model="dataSearch.length"
+          />
+          <a-input
+            placeholder="Chiều rộng"
+            style="width: 150px"
+            v-model="dataSearch.width"
+          />
+          <a-button
+            type="primary"
+            @click="submitSearch"
+            :style="{ 'margin-left': '5px' }"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'search']"
+              :style="{ 'margin-right': '5px' }"
+            />
+            Tìm kiếm
+          </a-button>
           <a-button
             type="primary"
             @click="showModalAdd"
@@ -34,26 +56,33 @@
             <a-table
               :columns="columns"
               :data-source="dataSourceTable"
+              :pagination="pagination"
               :rowKey="
                 (record, index) => {
                   return index;
                 }
               "
+              @change="handleTableChange"
             >
-              <template slot="unit" slot-scope="text, record">
-                {{ record.name }}
+              <template slot="height" slot-scope="text, record">
+                {{ record.length }}
+              </template>
+              <template slot="width" slot-scope="text, record">
+                {{ record.width }}
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-row>
-                  <a-popconfirm
-                    v-if="dataSourceTable.length"
-                    title="Bạn có chắc chắn muốn xóa không?"
-                    @confirm="deleteUnitAdmin(record.id)"
-                  >
-                    <a-button id="delete">
-                      <font-awesome-icon :icon="['fas', 'trash']" />
-                    </a-button>
-                  </a-popconfirm>
+                  <a-col :span="8">
+                    <a-popconfirm
+                      v-if="dataSourceTable.length"
+                      title="Bạn có chắc chắn muốn xóa không?"
+                      @confirm="deleteFrame(record.id)"
+                    >
+                      <a-button id="delete">
+                        <font-awesome-icon :icon="['fas', 'trash']" />
+                      </a-button>
+                    </a-popconfirm>
+                  </a-col>
                 </a-row>
               </template>
             </a-table>
@@ -61,18 +90,24 @@
           <!-- table content -->
 
           <!-- popup add-->
-          <a-modal v-model="visibleAdd" title="Thêm đơn vị">
+          <a-modal v-model="visibleAdd" title="Thêm khung">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="checkUnitAdmin">
+              <a-button key="submit" type="primary" @click="checkFormAdd">
                 Lưu
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Loại đơn vị đo">
-                <a-input v-model="name" />
-                <div style="color: red" v-if="checkDataInputName.show">
-                  {{ checkDataInputName.message }}
+              <a-form-model-item label="Chiều dài">
+                <a-input v-model="dataAdd.length" />
+                <div style="color: red" v-if="checkInputLength.show">
+                  {{ checkInputLength.message }}
+                </div>
+              </a-form-model-item>
+              <a-form-model-item label="Chiều rộng">
+                <a-input v-model="dataAdd.width" />
+                <div style="color: red" v-if="checkInputWidth.show">
+                  {{ checkInputWidth.message }}
                 </div>
               </a-form-model-item>
             </a-form-model>
@@ -85,38 +120,57 @@
   </div>
 </template>
  <script>
-import unitService from "../service/unitService.js";
+import frameAdminService from "../service/frameAdminService";
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 
 export default {
-  name: "UnitAdmin",
+  name: "FrameAdmin",
   components: {
     Header,
     Footer,
   },
   data() {
     return {
+      pagination: {
+        current: 1,
+        pageSize: 10,
+        total: 0,
+      },
+      dataSearch: {
+        idUnit: 0,
+        length: "",
+        pageIndex: 1,
+        pageSize: 10,
+        width: "",
+        total: 0,
+      },
       dataSourceTable: [],
-      name: "",
-      checkDataInputName: {
-        show: false,
-        message: "",
+      dataAdd: {
+        length: "",
+        width: "",
       },
       columns: [
         {
-          title: "ID",
+          title: "STT",
           width: 100,
           dataIndex: "id",
           key: "id",
           fixed: "left",
         },
         {
-          title: "Loại đơn vị đo",
-          dataIndex: "unit",
-          key: "unit",
+          title: "Chiều dài",
+          dataIndex: "height",
+          key: "height",
           width: 150,
-          scopedSlots: { customRender: "unit" },
+          scopedSlots: { customRender: "height" },
+        },
+        {
+          title: "Chiều rộng",
+          dataIndex: "width",
+          key: "width",
+          width: 150,
+          scopedSlots: { customRender: "width" },
         },
         {
           title: "",
@@ -128,18 +182,31 @@ export default {
         },
       ],
       visibleAdd: false,
+      visibleEdit: false,
+      checkInputLength: {
+        show: false,
+        message: "",
+      },
+      checkInputWidth: {
+        show: false,
+        message: "",
+      },
     };
   },
   computed: {},
   created() {
-    this.getAllUnits();
+    this.submitSearch();
   },
   methods: {
-    getAllUnits() {
-      unitService
-        .getAllUnits()
+    handleTableChange(pagination) {
+      this.dataSearch.pageIndex = pagination.current;
+      this.pagination = pagination;
+      frameAdminService
+        .searchFrame(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
+          this.dataSearch.total = response.data.total;
+          this.pagination.total = response.data.total;
         })
         .catch((e) => {
           console.log(e);
@@ -147,13 +214,39 @@ export default {
     },
     showModalAdd() {
       this.visibleAdd = true;
-      this.name = "";
+      this.checkInputLength.show = false;
+      this.checkInputLength.message = "";
+      this.checkInputWidth.show = false;
+      this.checkInputWidth.message = "";
+    },
+    checkFormAdd() {
+        if (this.dataAdd.length == null || this.dataAdd.length == "") {
+        this.checkInputLength.show = true;
+        this.checkInputLength.message = "Bạn phải điền chiều dài";
+      } else {
+        this.checkInputLength.show = false;
+        this.checkInputLength.message = "";
+      }
+      if(this.dataAdd.width == null || this.dataAdd.width == "") {
+        this.checkInputWidth.show = true;
+        this.checkInputWidth.message = "Bạn phải điền chiều rộng";
+      }else {
+        this.checkInputWidth.show = false;
+        this.checkInputWidth.message = "";
+      }
+      if(this.dataAdd.width != null && this.dataAdd.width != ""
+      && this.dataAdd.length != null && this.dataAdd.length != ""){
+        this.checkInputWidth.show = false;
+        this.checkInputLength.show = false;
+        this.submitAdd();
+      }
     },
     submitAdd() {
-      unitService
-        .addUnitAdmin(this.name)
+      frameAdminService
+        .addFrame(this.dataAdd)
         .then((response) => {
-          this.getAllUnits();
+          this.dataEmployees = response.data.data;
+          this.submitSearch();
           if (response.data.data) {
             let type = "success";
             let message = "Thêm mới";
@@ -170,24 +263,39 @@ export default {
           console.log(e);
         });
       this.visibleAdd = false;
+      this.dataAdd.length = "";
+      this.dataAdd.width = "";
     },
     handleCancel() {
       this.visibleAdd = false;
     },
-    deleteUnitAdmin(id) {
-      unitService
-        .deleteUnitAdmin(id)
+    submitSearch() {
+      this.dataSearch.total = 0;
+      frameAdminService
+        .searchFrame(this.dataSearch)
         .then((response) => {
-          this.getAllUnits();
+          this.dataSourceTable = response.data.data;
+          this.dataSearch.total = response.data.total;
+          this.pagination.total = response.data.total;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    deleteFrame(id) {
+      frameAdminService
+        .deleteFrame(id)
+        .then((response) => {
+          this.submitSearch();
           if (response.data.data) {
             let type = "success";
             let message = "Xóa";
-            let description = "Xóa đơn vị thành công";
+            let description = response.data.message;
             this.notifi(type, message, description);
           } else {
             let type = "error";
             let message = "Xóa";
-            let description = "Đơn vị đang sử dụng, không được xóa";
+            let description = response.data.message;
             this.notifi(type, message, description);
           }
         })
@@ -200,16 +308,6 @@ export default {
         message: message,
         description: description,
       });
-    },
-    checkUnitAdmin() {
-      if (this.name != null && this.name != "") {
-        this.checkDataInputName.show = false;
-        this.checkDataInputName.message = "";
-        this.submitAdd();
-      } else {
-        this.checkDataInputName.show = true;
-        this.checkDataInputName.message = "Bạn phải điền vào chỗ trống";
-      }
     },
   },
 };

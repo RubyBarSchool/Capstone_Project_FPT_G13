@@ -152,16 +152,22 @@
           <a-modal v-model="visibleAdd" title="Viết đơn">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitAdd">
+              <a-button key="submit" type="primary" @click="checkInput">
                 Lưu
               </a-button>
             </template>
             <a-form-model>
               <a-form-model-item label="Tiêu đề">
                 <a-input v-model="dataAdd.title" />
+                <div style="color: red" v-if="checkInputTitle.show">
+                  {{ checkInputTitle.message }}
+                </div>
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
                 <a-input v-model="dataAdd.advanceSalary" />
+                <div style="color: red" v-if="checkInputSalary.show">
+                  {{ checkInputSalary.message }}
+                </div>
               </a-form-model-item>
 
               <a-form-model-item label="Nội dung">
@@ -170,6 +176,9 @@
                   placeholder="Lý do như nào thì viết vào đây"
                   :row="4"
                 />
+                <div style="color: red" v-if="checkInputContent.show">
+                  {{ checkInputContent.message }}
+                </div>
               </a-form-model-item>
             </a-form-model>
           </a-modal>
@@ -279,6 +288,18 @@ export default {
         title: "",
         content: "",
         advanceSalary: "",
+      },
+      checkInputTitle: {
+        show: false,
+        message: "",
+      },
+      checkInputSalary: {
+        show: false,
+        message: "",
+      },
+      checkInputContent: {
+        show: false,
+        message: "",
       },
       columns: [
         {
@@ -471,6 +492,38 @@ export default {
         message: message,
         description: description,
       });
+    },
+    checkInput() {
+      if (this.dataAdd.title == null || this.dataAdd.title == "") {
+        this.checkInputTitle.show = true;
+        this.checkInputTitle.message = "Bạn phải điền vào chỗ trống";
+      } else {
+        this.checkInputTitle.show = false;
+        this.checkInputTitle.message = "";
+      }
+      if(this.dataAdd.advanceSalary == null || this.dataAdd.advanceSalary == "") {
+        this.checkInputSalary.show = true;
+        this.checkInputSalary.message = "Bạn phải điền vào chỗ trống";
+      }else {
+        this.checkInputSalary.show = false;
+        this.checkInputSalary.message = "";
+      }
+      if(this.dataAdd.content == null || this.dataAdd.content == "") {
+        this.checkInputContent.show = true;
+        this.checkInputContent.message = "Bạn phải điền vào chỗ trống";
+      }else{
+        this.checkInputContent.show = false;
+        this.checkInputContent.message = "";
+        this.submitAdd();
+      }
+      if(this.dataAdd.content != null && this.dataAdd.content != ""
+      && this.dataAdd.advanceSalary != null && this.dataAdd.advanceSalary != ""
+      && this.dataAdd.content != null && this.dataAdd.content != ""){
+        this.checkInputContent.show = false;
+        this.checkInputSalary.show = false;
+        this.checkInputTitle.show = false;
+        this.submitAdd();
+      }
     },
   },
 };

@@ -172,6 +172,13 @@ export const router = new Router({
             component: () =>
                 import ("./pages/GroupMaterial.vue"),
         },
+        {
+            path: "/frameadmin",
+            name: "FrameAdmin",
+            // lazy-loaded
+            component: () =>
+                import ("./pages/FrameAdmin.vue"),
+        },
     ],
 });
 
