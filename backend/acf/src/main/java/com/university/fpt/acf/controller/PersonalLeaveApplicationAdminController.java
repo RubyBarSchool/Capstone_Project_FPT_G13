@@ -44,7 +44,7 @@ public class PersonalLeaveApplicationAdminController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-    @PostMapping("/accept")
+    @PutMapping("/accept")
     public  ResponseEntity<ResponseCommon> acceptPersonalApplication(@RequestBody AcceptPersonalLeaveApplicationAdminForm acceptForm){
         ResponseCommon responseCommon = new ResponseCommon();
         String message="";
@@ -72,7 +72,7 @@ public class PersonalLeaveApplicationAdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-    @PostMapping("/reject")
+    @PutMapping("/reject")
     public  ResponseEntity<ResponseCommon> rejectPersonalApplication(@RequestBody AcceptPersonalLeaveApplicationAdminForm acceptForm){
         ResponseCommon responseCommon = new ResponseCommon();
         String message="";
