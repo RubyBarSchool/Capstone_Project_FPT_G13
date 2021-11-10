@@ -16,6 +16,11 @@ public class PriceMaterial extends EntityCommon {
     private String price = "0";
 
 
+    @ManyToOne
+    @JoinColumn(name = "unit_measure_id")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private UnitMeasure unitMeasure;
 
     @ManyToOne
     @JoinColumn(name = "material_id")
@@ -28,4 +33,10 @@ public class PriceMaterial extends EntityCommon {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private FrameMaterial frameMaterial;
+
+    @ManyToOne
+    @JoinColumn(name = "frame_height_material_id")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private HeightMaterial heightMaterial;
 }

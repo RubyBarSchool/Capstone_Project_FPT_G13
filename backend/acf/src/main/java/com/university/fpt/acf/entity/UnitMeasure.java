@@ -15,13 +15,9 @@ import java.util.Collection;
 public class UnitMeasure extends EntityCommon {
     private String name;
 
-    @OneToMany(mappedBy = "unitMeasure",cascade = CascadeType.ALL)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private Collection<FrameMaterial> frameMaterials;
 
     @OneToMany(mappedBy = "unitMeasure",cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Collection<Material> materials;
+    private Collection<PriceMaterial> priceMaterials;
 }

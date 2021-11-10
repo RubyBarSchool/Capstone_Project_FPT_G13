@@ -14,10 +14,10 @@ import java.util.Collection;
 @NoArgsConstructor
 @AllArgsConstructor
 public class HeightMaterial extends EntityCommon {
-    private String height;
+    private String frameHeight;
 
-    @ManyToMany(mappedBy = "heightMaterial")
+    @OneToMany(mappedBy = "heightMaterial",cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Collection<FrameMaterial> frameMaterials;
+    private Collection<PriceMaterial> priceMaterials;
 }

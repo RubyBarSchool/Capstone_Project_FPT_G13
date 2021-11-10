@@ -16,25 +16,24 @@ import java.util.List;
 public class HeightMaterialServiceImpl implements HeightMaterialService {
     @Autowired
     private HeightMaterialRepository heightMaterialRepository;
-    @Override
-    public Boolean addHeightMaterial(String height) {
-        Boolean insert = false;
-        try {
-            if(heightMaterialRepository.getIdByHeight(height)!=null){
-                throw new Exception("Chiều cao đã tồn tại");
-            }
-            HeightMaterial h = new HeightMaterial();
-            h.setHeight(height);
-            AccountSercurity accountSercurity = new AccountSercurity();
-            h.setCreated_by(accountSercurity.getUserName());
-            h.setCreated_date(LocalDate.now());
-            heightMaterialRepository.save(h);
-            insert = true;
-        }catch (Exception e){
-            e.getMessage();
-        }
-        return insert;
-    }
+//    @Override
+//    public Boolean addHeightMaterial(String height) {
+//        Boolean insert = false;
+//        try {
+//            if(heightMaterialRepository.getIdByHeight(height)!=null){
+//                throw new Exception("Chiều cao đã tồn tại");
+//            }
+//            HeightMaterial h = new HeightMaterial();
+//            AccountSercurity accountSercurity = new AccountSercurity();
+//            h.setCreated_by(accountSercurity.getUserName());
+//            h.setCreated_date(LocalDate.now());
+//            heightMaterialRepository.save(h);
+//            insert = true;
+//        }catch (Exception e){
+//            e.getMessage();
+//        }
+//        return insert;
+//    }
 
     @Override
     public Boolean deleteHeightMaterial(Long id) {
@@ -52,17 +51,17 @@ public class HeightMaterialServiceImpl implements HeightMaterialService {
         return delete;
     }
 
-    @Override
-    public List<HeightMaterialVO> getAllHeights() {
-        List<HeightMaterialVO> list = new ArrayList<>();
-        try {
-            list = heightMaterialRepository.getAllHeight();
-            if(list == null ){
-                throw new Exception("Không tìm thấy ");
-            }
-        }catch (Exception e){
-            e.getMessage();
-        }
-        return list;
-    }
+//    @Override
+//    public List<HeightMaterialVO> getAllHeights() {
+//        List<HeightMaterialVO> list = new ArrayList<>();
+//        try {
+//            list = heightMaterialRepository.getAllHeight();
+//            if(list == null ){
+//                throw new Exception("Không tìm thấy ");
+//            }
+//        }catch (Exception e){
+//            e.getMessage();
+//        }
+//        return list;
+//    }
 }

@@ -57,8 +57,6 @@ public class FrameMaterialServiceImpl implements FrameMaterialService {
             if(unit==null){
                 throw new Exception("Đơn vị không tồn tại  ");
             }
-            frame.setUnitMeasure(unit);
-            frame.setHeightMaterial(heightMaterialRepository.getHeightByIdS(addForm.getListIdHeight()));
             AccountSercurity accountSercurity = new AccountSercurity();
             frame.setCreated_by(accountSercurity.getUserName());
             frame.setCreated_date(LocalDate.now());

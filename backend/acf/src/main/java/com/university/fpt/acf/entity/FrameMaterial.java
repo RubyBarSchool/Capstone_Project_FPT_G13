@@ -16,19 +16,6 @@ public class FrameMaterial extends EntityCommon {
     private String frameWidth;
 
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    @JoinTable(name = "frame_height_material",joinColumns = @JoinColumn(name = "frame_material_id")
-            ,inverseJoinColumns = @JoinColumn(name = "height_material_id"))
-    private Collection<HeightMaterial> heightMaterial;
-
-    @ManyToOne
-    @JoinColumn(name = "unit_measure_id")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private UnitMeasure unitMeasure;
-
     @OneToMany(mappedBy = "frameMaterial",cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

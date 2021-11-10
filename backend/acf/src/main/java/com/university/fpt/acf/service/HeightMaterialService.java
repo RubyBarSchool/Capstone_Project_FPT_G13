@@ -6,7 +6,7 @@ import com.university.fpt.acf.vo.UnitMeasureVO;
 import java.util.List;
 
 public interface HeightMaterialService {
-    Boolean addHeightMaterial(String name);
+//    Boolean addHeightMaterial(String name);
     Boolean deleteHeightMaterial(Long id);
-    List<HeightMaterialVO> getAllHeights();
+//    List<HeightMaterialVO> getAllHeights();
 }

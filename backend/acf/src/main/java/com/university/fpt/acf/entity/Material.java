@@ -22,12 +22,6 @@ public class Material extends EntityCommon {
 
     private Double percentChooseInYear = 0.0;
 
-    @ManyToOne
-    @JoinColumn(name = "unit_measure_id")
-    @EqualsAndHashCode.Exclude
-    @ToString.Exclude
-    private UnitMeasure unitMeasure;
-
 
     @ManyToOne
     @JoinColumn(name = "company_id")
@@ -47,7 +41,5 @@ public class Material extends EntityCommon {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<PriceMaterial> priceMaterials;
-
-
 
 }
