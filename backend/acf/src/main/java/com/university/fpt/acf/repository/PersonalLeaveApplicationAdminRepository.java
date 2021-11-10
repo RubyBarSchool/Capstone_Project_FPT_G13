@@ -17,9 +17,9 @@ import java.time.LocalDate;
 public interface PersonalLeaveApplicationAdminRepository extends JpaRepository<PersonaLeaveApplication,Long> {
  @Query("SELECT p FROM PersonaLeaveApplication p where p.deleted=false and p.id=:id")
  PersonaLeaveApplication getApplicationById(@Param("id") Long id);
- @Query("select new com.university.fpt.acf.vo.SearchPersonalLeaveApplicationAdminVO(p.id,p.created_date,p.fileAttach,p.title,p.comment,p.content,e.id,e.fullName,p.accept,p.dateAccept) from PersonaLeaveApplication p inner join p.employee  e where p.deleted=false and p.id=:id")
+ @Query("select new com.university.fpt.acf.vo.SearchPersonalLeaveApplicationAdminVO(p.id,p.created_date,p.dateStart,p.dateEnd,p.fileAttach,p.title,p.comment,p.content,e.id,e.fullName,p.accept,p.dateAccept) from PersonaLeaveApplication p inner join p.employee  e where p.deleted=false and p.id=:id")
  SearchPersonalLeaveApplicationAdminVO detailPersonLeaveApplication(@Param("id") Long id);
- @Query("SELECT new com.university.fpt.acf.vo.SearchPersonalLeaveApplicationAdminVO(p.id,p.created_date,p.fileAttach,p.title,p.comment,p.content,e.id,e.fullName,p.accept,p.dateAccept) From PersonaLeaveApplication p left join p.employee e where 1=1")
+ @Query("SELECT new com.university.fpt.acf.vo.SearchPersonalLeaveApplicationAdminVO(p.id,p.created_date,p.dateStart,p.dateEnd,p.fileAttach,p.title,p.comment,p.content,e.id,e.fullName,p.accept,p.dateAccept) From PersonaLeaveApplication p left join p.employee e where 1=1")
  SearchPersonalLeaveApplicationAdminVO getQ();
 
 }

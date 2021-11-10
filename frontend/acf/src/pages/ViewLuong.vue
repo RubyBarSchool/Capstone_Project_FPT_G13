@@ -178,7 +178,7 @@ export default {
     return {
       columnsSalaryNow: [
         {
-          title: "Số thứ tự",
+          title: "STT",
           width: 100,
           dataIndex: "id",
           key: "id",
@@ -249,7 +249,7 @@ export default {
       ],
       columnsSalaryNotNow: [
         {
-          title: "Số thứ tự",
+          title: "STT",
           width: 100,
           dataIndex: "id",
           key: "id",
@@ -332,7 +332,7 @@ export default {
       ],
       columnsBonusPunish: [
         {
-          title: "Số thứ tự",
+          title: "STT",
           width: 100,
           dataIndex: "id",
           key: "id",

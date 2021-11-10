@@ -17,7 +17,7 @@ public class PersonalLeaveApplicationAdminCustomRepositoryImpl extends CommonRep
     public List<SearchPersonalLeaveApplicationAdminVO> searchApplication(SearchPersonalLeaveAdminApplicationForm searchApplication) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append(" SELECT new com.university.fpt.acf.vo.SearchPersonalLeaveApplicationAdminVO(p.id,p.created_date,p.fileAttach,p.title,p.comment,p.content,e.id,e.fullName,p.accept,p.dateAccept) From PersonaLeaveApplication p left join p.employee e where 1=1 ");
+        sql.append(" SELECT new com.university.fpt.acf.vo.SearchPersonalLeaveApplicationAdminVO(p.id,p.created_date,p.dateStart,p.dateEnd,p.fileAttach,p.title,p.comment,p.content,e.id,e.fullName,p.accept,p.dateAccept) From PersonaLeaveApplication p left join p.employee e where p.deleted = false ");
         if(searchApplication.getNameEmployee() != null && !searchApplication.getNameEmployee().isEmpty()){
             sql.append(" and LOWER(e.fullName) like :name ");
             params.put("name","%"+searchApplication.getNameEmployee().toLowerCase()+"%");
@@ -46,7 +46,7 @@ public class PersonalLeaveApplicationAdminCustomRepositoryImpl extends CommonRep
     public int totalSearchApplication(SearchPersonalLeaveAdminApplicationForm searchApplication) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append(" SELECT COUNT(*) From PersonaLeaveApplication p left join p.employee e where 1=1 ");
+        sql.append(" SELECT COUNT(*) From PersonaLeaveApplication p left join p.employee e where p.deleted = false ");
         if(searchApplication.getNameEmployee() != null && !searchApplication.getNameEmployee().isEmpty()){
             sql.append(" and LOWER(e.fullName) like :name ");
             params.put("name","%"+searchApplication.getNameEmployee().toLowerCase()+"%");

@@ -302,7 +302,7 @@ export default {
       },
       columns: [
         {
-          title: "ID",
+          title: "STT",
           width: 100,
           dataIndex: "idApplication",
           key: "idApplication",

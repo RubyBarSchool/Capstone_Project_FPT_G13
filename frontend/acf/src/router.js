@@ -75,13 +75,6 @@ export const router = new Router({
                 import ("./pages/Company.vue"),
         },
         {
-            path: "/color",
-            name: "Color",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/Color.vue"),
-        },
-        {
             path: "/ungluong",
             name: "UngLuong",
             // lazy-loaded

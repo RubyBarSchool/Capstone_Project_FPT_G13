@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import java.util.Collection;
 
@@ -15,7 +16,7 @@ import java.util.Collection;
 public class HeightMaterial extends EntityCommon {
     private String height;
 
-    @OneToMany(mappedBy = "heightMaterial",cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "heightMaterial")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<FrameMaterial> frameMaterials;

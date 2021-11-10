@@ -11,6 +11,8 @@ import java.time.LocalDate;
 public class SearchPersonalLeaveApplicationAdminVO {
     private Long idApplication;
     private LocalDate date;
+    private LocalDate dateStart;
+    private LocalDate dateEnd;
     private String fileAttach;
     private String title;
     private String comment;

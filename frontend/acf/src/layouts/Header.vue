@@ -86,10 +86,6 @@ export default {
           name: "Quản lý công ty liên kết",
         },
         {
-          path: "/color",
-          name: "Quản lý màu sắc vật liệu",
-        },
-        {
           path: "/acceptungluong",
           name: "Quản lý đơn ứng lương",
         },

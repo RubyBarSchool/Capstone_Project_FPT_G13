@@ -297,7 +297,7 @@ export default {
       },
       columns: [
         {
-          title: "ID",
+          title: "STT",
           width: 100,
           dataIndex: "id",
           key: "id",
