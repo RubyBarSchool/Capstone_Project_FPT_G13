@@ -165,6 +165,13 @@ export const router = new Router({
             component: () =>
                 import ("./pages/GroupCoverPlate.vue"),
         },
+        {
+            path: "/groupmaterial",
+            name: "GroupMaterial",
+            // lazy-loaded
+            component: () =>
+                import ("./pages/GroupMaterial.vue"),
+        },
     ],
 });
 
