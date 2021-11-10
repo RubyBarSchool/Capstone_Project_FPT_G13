@@ -16,11 +16,12 @@ public class FrameMaterial extends EntityCommon {
     private String frameWidth;
 
 
-    @ManyToOne
-    @JoinColumn(name = "height_id")
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private HeightMaterial heightMaterial;
+    @JoinTable(name = "frame_height_material",joinColumns = @JoinColumn(name = "frame_material_id")
+            ,inverseJoinColumns = @JoinColumn(name = "height_material_id"))
+    private Collection<HeightMaterial> heightMaterial;
 
     @ManyToOne
     @JoinColumn(name = "unit_measure_id")
