@@ -17,58 +17,58 @@ import java.util.List;
 public class HeightMaterialController {
     @Autowired
     private HeightMaterialService heightMaterialService;
-//    @GetMapping("/get")
-//    public ResponseEntity<ResponseCommon> getAllUnits(){
-//        ResponseCommon responseCommon = new ResponseCommon();
-//        String message = "";
-//        int total;
-//        List<HeightMaterialVO> list = new ArrayList<>();
-//        try {
-//            list = heightMaterialService.getAllHeights();
-//            responseCommon.setData(list);
-//            total=list.size();
-//            message = "Thành công!";
-//            if(total==0){
-//                message = "Không tìm thấy!";
-//            }
-//            responseCommon.setTotal(total);
-//            responseCommon.setStatus(HttpStatus.OK.value());
-//            responseCommon.setMessage(message);
-//            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
-//        } catch (Exception e) {
-//            message = e.getMessage();
-//            responseCommon.setData(list);
-//            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
-//            responseCommon.setMessage(message);
-//            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
-//        }
-//    }
-//    @PostMapping("/add")
-//    public ResponseEntity<ResponseCommon> addUnit(@RequestParam String height){
-//        ResponseCommon responseCommon = new ResponseCommon();
-//        String message="";
-//        Boolean checkAdd = false;
-//        try {
-//            checkAdd = heightMaterialService.addHeightMaterial(height);
-//            if(checkAdd==true){
-//                message="Thêm thành công!";
-//            }else{
-//                message="Thêm không thành công!";
-//            }
-//            responseCommon.setMessage(message);
-//            responseCommon.setData(checkAdd);
-//            responseCommon.setStatus(HttpStatus.OK.value());
-//            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
-//        }catch (Exception e){
-//            message = e.getMessage();
-//            responseCommon.setData(checkAdd);
-//            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
-//            responseCommon.setMessage(message);
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
-//        }
-//    }
+    @GetMapping("/get")
+    public ResponseEntity<ResponseCommon> getAllFrameHeight(){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<HeightMaterialVO> list = new ArrayList<>();
+        try {
+            list = heightMaterialService.getAllHeights();
+            responseCommon.setData(list);
+            total=list.size();
+            message = "Thành công!";
+            if(total==0){
+                message = "Không tìm thấy!";
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(list);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+    @PostMapping("/add")
+    public ResponseEntity<ResponseCommon> addFrameHeight(@RequestParam String frameHeight){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message="";
+        Boolean checkAdd = false;
+        try {
+            checkAdd = heightMaterialService.addHeightMaterial(frameHeight);
+            if(checkAdd==true){
+                message="Thêm thành công!";
+            }else{
+                message="Thêm không thành công!";
+            }
+            responseCommon.setMessage(message);
+            responseCommon.setData(checkAdd);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
+        }catch (Exception e){
+            message = e.getMessage();
+            responseCommon.setData(checkAdd);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
     @DeleteMapping("/delete")
-    public ResponseEntity<ResponseCommon> deleteUnit(@RequestParam Long id){
+    public ResponseEntity<ResponseCommon> deleteFrameHeight(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();
         String message="";
         Boolean checkDelete = false;

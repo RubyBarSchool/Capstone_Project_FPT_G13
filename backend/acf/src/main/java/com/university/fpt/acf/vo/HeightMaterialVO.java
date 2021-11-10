@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class HeightMaterialVO {
     private Long id;
-    private String height;
+    private String frameHeight;
 }
