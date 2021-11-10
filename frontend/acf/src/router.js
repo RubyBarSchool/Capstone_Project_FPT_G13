@@ -158,6 +158,13 @@ export const router = new Router({
             component: () =>
                 import ("./pages/UnitAdmin.vue"),
         },
+        {
+            path: "/chieucao",
+            name: "ChieuCao",
+            // lazy-loaded
+            component: () =>
+                import ("./pages/ChieuCao.vue"),
+        },
     ],
 });
 
