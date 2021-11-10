@@ -15,6 +15,8 @@ import java.util.Collection;
 public class GroupMaterial extends EntityCommon {
     private String name;
 
+    private Boolean checkGroupMaterial = true;
+
     @OneToMany(mappedBy = "groupMaterial", cascade =  CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
