@@ -36,6 +36,13 @@ public class Material extends EntityCommon {
     private Company company;
 
 
+    @ManyToOne
+    @JoinColumn(name = "group_material_id")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private GroupMaterial groupMaterial;
+
+
     @OneToMany(mappedBy = "material",cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude

@@ -13,7 +13,9 @@ import javax.persistence.ManyToOne;
 @AllArgsConstructor
 public class PriceMaterial extends EntityCommon {
 
-    private String price;
+    private String price = "0";
+
+
 
     @ManyToOne
     @JoinColumn(name = "material_id")
