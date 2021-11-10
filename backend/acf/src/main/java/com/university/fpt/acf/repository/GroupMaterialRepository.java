@@ -13,14 +13,25 @@ import java.util.List;
 
 @Repository
 public interface GroupMaterialRepository extends JpaRepository<GroupMaterial, Long> {
-    @Query("select g.name from GroupMaterial  g where  g.id =:id")
+    @Query("select g.name from GroupMaterial  g where g.checkGroupMaterial=true and g.id =:id")
     String getNameGroupById(@Param("id") Long id);
 
-    @Query("select g.id from GroupMaterial  g where  g.name =:name")
+    @Query("select g.id from GroupMaterial  g where g.checkGroupMaterial=true and g.name =:name")
     Long getIdByNameGroup(@Param("name") String name);
 
-    @Query("select g from GroupMaterial  g where  g.id =:id")
+    @Query("select g from GroupMaterial  g where g.checkGroupMaterial=true and  g.id =:id")
     GroupMaterial getGroupMaterialByID(@Param("id") Long id);
-    @Query("select new com.university.fpt.acf.vo.GroupMaterialVO(u.id,u.name) from GroupMaterial u")
+    @Query("select new com.university.fpt.acf.vo.GroupMaterialVO(u.id,u.name) from GroupMaterial u  where u.checkGroupMaterial=true")
     List<GroupMaterialVO> getAllGroups();
+
+    @Query("select g.name from GroupMaterial  g where g.checkGroupMaterial=false and g.id =:id")
+    String getNameGroupCoverPlateById(@Param("id") Long id);
+
+    @Query("select g.id from GroupMaterial  g where g.checkGroupMaterial=false and g.name =:name")
+    Long getIdCoverPlateByNameGroup(@Param("name") String name);
+
+    @Query("select g from GroupMaterial  g where g.checkGroupMaterial=false and  g.id =:id")
+    GroupMaterial getGroupCoverPlateByID(@Param("id") Long id);
+    @Query("select new com.university.fpt.acf.vo.GroupMaterialVO(u.id,u.name) from GroupMaterial u  where u.checkGroupMaterial=false ")
+    List<GroupMaterialVO> getAllGroupsCoverPlate();
 }

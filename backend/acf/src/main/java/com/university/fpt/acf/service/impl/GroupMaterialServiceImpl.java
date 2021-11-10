@@ -28,6 +28,7 @@ public class GroupMaterialServiceImpl implements GroupMaterialService {
             GroupMaterial h = new GroupMaterial();
             h.setName(name);
             AccountSercurity accountSercurity = new AccountSercurity();
+            h.setModified_by(accountSercurity.getUserName());
             h.setCreated_by(accountSercurity.getUserName());
             h.setCreated_date(LocalDate.now());
             repository.save(h);
@@ -59,6 +60,58 @@ public class GroupMaterialServiceImpl implements GroupMaterialService {
         List<GroupMaterialVO> list = new ArrayList<>();
         try {
             list = repository.getAllGroups();
+            if(list == null ){
+                throw new Exception("Không tìm thấy ");
+            }
+        }catch (Exception e){
+            e.getMessage();
+        }
+        return list;
+    }
+
+    @Override
+    public Boolean addGroupCoverPlate(String name) {
+        Boolean insert = false;
+        try {
+            if(repository.getIdCoverPlateByNameGroup(name)!=null){
+                throw new Exception("Nhóm tấm phủ đã tồn tại");
+            }
+            GroupMaterial h = new GroupMaterial();
+            h.setName(name);
+            h.setCheckGroupMaterial(false);
+            AccountSercurity accountSercurity = new AccountSercurity();
+            h.setModified_by(accountSercurity.getUserName());
+            h.setCreated_by(accountSercurity.getUserName());
+            h.setCreated_date(LocalDate.now());
+            repository.save(h);
+            insert = true;
+        }catch (Exception e){
+            e.getMessage();
+        }
+        return insert;
+    }
+
+    @Override
+    public Boolean deleteGroupCoverPlate(Long id) {
+        Boolean delete = false;
+        try {
+            GroupMaterial h = repository.getGroupCoverPlateByID(id);
+            if(h==null ){
+                throw new Exception("Nhóm tấm phủ không tồn tại");
+            }
+            repository.delete(h);
+            delete = true;
+        }catch (Exception e){
+            e.getMessage();
+        }
+        return delete;
+    }
+
+    @Override
+    public List<GroupMaterialVO> getAllGroupCoverPlate() {
+        List<GroupMaterialVO> list = new ArrayList<>();
+        try {
+            list = repository.getAllGroupsCoverPlate();
             if(list == null ){
                 throw new Exception("Không tìm thấy ");
             }

@@ -31,6 +31,7 @@ public class UnitMeasureServiceImpl implements UnitMeasureService {
             AccountSercurity accountSercurity = new AccountSercurity();
             u.setCreated_date(LocalDate.now());
             u.setCreated_by(accountSercurity.getUserName());
+            u.setModified_by(accountSercurity.getUserName());
             unitMeasureRepository.save(u);
             insert = true;
         }catch (Exception e){
