@@ -440,7 +440,7 @@
       </g>
     </svg>
     <div class="contant_box_404">
-      <h3 class="h2">Xin lỗi, trang bạn đã truy cập không tồn tại.</h3>
+      <h3 class="h2">Xin lỗi, trang bạn truy cập không tồn tại.</h3>
       <router-link class="link_404" to="/home"> Về Trang Chủ </router-link>
     </div>
   </div>

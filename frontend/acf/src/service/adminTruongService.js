@@ -1,6 +1,6 @@
 import http from "./http-common";
 
-class adminTruongService {
+class adminService {
     searchAccount(name) {
         return http.post("/spadmin/account/search", name);
     }
@@ -26,4 +26,4 @@ class adminTruongService {
 
 }
 
-export default new adminTruongService();
+export default new adminService();

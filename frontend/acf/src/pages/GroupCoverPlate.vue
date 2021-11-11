@@ -32,13 +32,11 @@
             <a-table
               :columns="columns"
               :data-source="dataSourceTable"
-              :pagination="pagination"
               :rowKey="
                 (record, index) => {
                   return index;
                 }
               "
-              @change="handleTableChange"
             >
               <template slot="name" slot-scope="text, record">
                 {{ record.name }}
@@ -101,10 +99,6 @@ export default {
         total: 0,
       },
       dataSourceTable: [],
-      dataAll: {
-        id: "",
-        name: "",
-      },
       name: "",
       columns: [
         {
@@ -138,51 +132,37 @@ export default {
     };
   },
   created() {
-    this.submitSearch();
+    this.getAllGroupS();
   },
   methods: {
-    handleTableChange(pagination) {
-      this.dataAll.pageIndex = pagination.current;
-      this.pagination = pagination;
+    getAllGroupS() {
       groupCoverPlateService
-        .getAllGroupS(this.dataAll)
+        .getAllGroupS()
         .then((response) => {
           this.dataSourceTable = response.data.data;
-          this.dataAll.total = response.data.total;
-          this.pagination.total = response.data.total;
         })
         .catch((e) => {
           console.log(e);
         });
     },
-    submitSearch() {
-      this.dataAll.total = 0;
-      groupCoverPlateService
-        .getAllGroupS(this.dataAll)
-        .then((response) => {
-          this.dataSourceTable = response.data.data;
-          this.dataAll.total = response.data.total;
-          this.pagination.total = response.data.total;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+    showModalAdd() {
+      this.visibleAdd = true;
+      this.name = "";
     },
     submitAdd() {
       groupCoverPlateService
         .addGroup(this.name)
         .then((response) => {
-          this.submitSearch();
+          this.getAllGroupS();
           if (response.data.data) {
             let type = "success";
-            let message = "Nhóm tấm phủ";
-            let description = "Thêm nhóm tấm phủ thành công !!";
+            let message = "Thêm mới";
+            let description = response.data.message;
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Nhóm tấm phủ";
-            let description =
-              "Thêm nhóm tấm phủ không thành công vì" + response.data.message;
+            let message = "Thêm mới";
+            let description = response.data.message;
             this.notifi(type, message, description);
           }
         })
@@ -190,23 +170,6 @@ export default {
           console.log(e);
         });
       this.visibleAdd = false;
-      this.name = "";
-    },
-    showModalAdd() {
-      this.visibleAdd = true;
-      this.checkDataInputGroup.show = false;
-      this.checkDataInputGroup.message = "";
-      this.name = "";
-    },
-    checkFormAdd() {
-      if (this.name != null && this.name != "") {
-        this.checkDataInputGroup.show = false;
-        this.checkDataInputGroup.message = "";
-        this.submitAdd();
-      } else {
-        this.checkDataInputGroup.show = true;
-        this.checkDataInputGroup.message = "Bạn phải điền vào chỗ trống";
-      }
     },
     handleCancel() {
       this.visibleAdd = false;
@@ -215,19 +178,17 @@ export default {
       groupCoverPlateService
         .deleteGroup(id)
         .then((response) => {
-          this.submitSearch();
+          this.getAllGroupS();
           if (response.data.data) {
             let type = "success";
-            let message = "Xóa nhóm tấm phủ";
-            let description = "Xóa nhóm tấm phủ thành công";
+            let message = "Xóa";
+            let description = "Xóa đơn vị thành công";
             this.notifi(type, message, description);
-            this.submitSearch();
           } else {
             let type = "error";
-            let message = "Xóa nhóm tấm phủ";
-            let description = "Xóa nhóm tấm phủ không thành công :(";
+            let message = "Xóa";
+            let description = "Đơn vị đang sử dụng, không được xóa";
             this.notifi(type, message, description);
-            this.submitSearch();
           }
         })
         .catch((e) => {
@@ -240,11 +201,27 @@ export default {
         description: description,
       });
     },
+    checkFormAdd() {
+      if (this.name != null && this.name != "") {
+        this.checkDataInputGroup.show = false;
+        this.checkDataInputGroup.message = "";
+        this.submitAdd();
+      } else {
+        this.checkDataInputGroup.show = true;
+        this.checkDataInputGroup.message = "Bạn phải điền vào chỗ trống";
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
+/* back top */
+.ant-back-top-inner {
+  color: rgb(241, 237, 237);
+  text-align: center;
+}
+
 /* button icon */
 #delete {
   background-color: rgb(255, 0, 0);

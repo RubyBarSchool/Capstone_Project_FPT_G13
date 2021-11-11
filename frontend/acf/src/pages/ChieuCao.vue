@@ -31,22 +31,20 @@
             <a-table
               :columns="columns"
               :data-source="dataSourceTable"
-              :pagination="pagination"
               :rowKey="
                 (record, index) => {
                   return index;
                 }
               "
-              @change="handleTableChange"
             >
-              <template slot="height" slot-scope="text, record">
-                {{ record.height }}
+              <template slot="frameHeight" slot-scope="text, record">
+                {{ record.frameHeight }}
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-popconfirm
                   v-if="dataSourceTable.length"
                   title="Bạn có chắc chắn muốn xóa không?"
-                  @confirm="deleteUnit(record.id)"
+                  @confirm="deleteFrameHeight(record.id)"
                 >
                   <a-button id="delete">
                     <font-awesome-icon :icon="['fas', 'trash']" />
@@ -61,15 +59,15 @@
           <a-modal v-model="visibleAdd" title="Thêm chiều cao">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="checkFormAdd">
+              <a-button key="submit" type="primary" @click="checkForm">
                 Lưu
               </a-button>
             </template>
             <a-form-model>
               <a-form-model-item label="Chiều cao">
-                <a-input v-model="height" />
-                <div style="color: red" v-if="checkDataInputHeight.show">
-                  {{ checkDataInputHeight.message }}
+                <a-input v-model="frameHeight" />
+                <div style="color: red" v-if="checkDataInputName.show">
+                  {{ checkDataInputName.message }}
                 </div>
               </a-form-model-item>
             </a-form-model>
@@ -94,17 +92,12 @@ export default {
   },
   data() {
     return {
-      pagination: {
-        current: 1,
-        pageSize: 10,
-        total: 0,
-      },
       dataSourceTable: [],
-      dataAll: {
-        id: "",
-        height: "",
+      frameHeight: "",
+      checkDataInputName: {
+        show: false,
+        message: "",
       },
-      height: "",
       columns: [
         {
           title: "STT",
@@ -115,10 +108,10 @@ export default {
         },
         {
           title: "Chiều cao",
-          dataIndex: "height",
-          key: "height",
+          dataIndex: "frameHeight",
+          key: "frameHeight",
           width: 150,
-          scopedSlots: { customRender: "height" },
+          scopedSlots: { customRender: "frameHeight" },
         },
         {
           title: "",
@@ -130,60 +123,40 @@ export default {
         },
       ],
       visibleAdd: false,
-      checkDataInputHeight: {
-        show: false,
-        message: "",
-      },
     };
   },
   created() {
-    this.submitSearch();
+    this.getAllFrameHeight();
   },
   methods: {
-    handleTableChange(pagination) {
-      this.dataAll.pageIndex = pagination.current;
-      this.pagination = pagination;
+    getAllFrameHeight() {
       chieuCaoService
-        .getAllUnits(this.dataAll)
+        .getAllFrameHeight()
         .then((response) => {
           this.dataSourceTable = response.data.data;
-          this.dataAll.total = response.data.total;
-          this.pagination.total = response.data.total;
         })
         .catch((e) => {
           console.log(e);
         });
     },
-
-    submitSearch() {
-      this.dataAll.total = 0;
-      chieuCaoService
-        .getAllUnits(this.dataAll)
-        .then((response) => {
-          this.dataSourceTable = response.data.data;
-          this.dataAll.total = response.data.total;
-          this.pagination.total = response.data.total;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
+    showModalAdd() {
+      this.visibleAdd = true;
+      this.frameHeight = "";
     },
-
     submitAdd() {
       chieuCaoService
-        .addUnit(this.height)
+        .addFrameHeight(this.frameHeight)
         .then((response) => {
-          this.submitSearch();
+          this.getAllFrameHeight();
           if (response.data.data) {
             let type = "success";
-            let message = "Chiều cao";
-            let description = "Thêm chiều cao thành công !!";
+            let message = "Thêm mới";
+            let description = response.data.message;
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Chiều cao";
-            let description =
-              "Thêm chiều cao không thành công vì" + response.data.message;
+            let message = "Thêm mới";
+            let description = response.data.message;
             this.notifi(type, message, description);
           }
         })
@@ -191,48 +164,25 @@ export default {
           console.log(e);
         });
       this.visibleAdd = false;
-      this.height = "";
     },
-
-    showModalAdd() {
-      this.visibleAdd = true;
-      this.checkDataInputHeight.show = false;
-      this.checkDataInputHeight.message = "";
-    //   this.height = "";
-    },
-
-    checkFormAdd() {
-      if (this.height != null && this.height != "") {
-        this.checkDataInputHeight.show = false;
-        this.checkDataInputHeight.message = "";
-        this.submitAdd();
-      } else {
-        this.checkDataInputHeight.show = true;
-        this.checkDataInputHeight.message = "Bạn phải điền vào chỗ trống";
-      }
-    },
-
     handleCancel() {
       this.visibleAdd = false;
     },
-
-    deleteUnit(id) {
+    deleteFrameHeight(id) {
       chieuCaoService
-        .deleteUnit(id)
+        .deleteFrameHeight(id)
         .then((response) => {
-          this.submitSearch();
+          this.getAllFrameHeight();
           if (response.data.data) {
             let type = "success";
             let message = "Xóa";
-            let description = "Xóa chiều cao thành công";
+            let description = "Xóa đơn vị thành công";
             this.notifi(type, message, description);
-            this.submitSearch();
           } else {
             let type = "error";
             let message = "Xóa";
-            let description = "Xóa chiều cao không thành công :(";
+            let description = "Đơn vị đang sử dụng, không được xóa";
             this.notifi(type, message, description);
-            this.submitSearch();
           }
         })
         .catch((e) => {
@@ -245,11 +195,26 @@ export default {
         description: description,
       });
     },
+    checkForm() {
+      if (this.frameHeight != null && this.frameHeight != "") {
+        this.checkDataInputName.show = false;
+        this.checkDataInputName.message = "";
+        this.submitAdd();
+      } else {
+        this.checkDataInputName.show = true;
+        this.checkDataInputName.message = "Bạn phải điền vào chỗ trống";
+      }
+    },
   },
 };
 </script>
 
 <style scoped>
+/* back top */
+.ant-back-top-inner {
+  color: rgb(241, 237, 237);
+  text-align: center;
+}
 /* button icon */
 #delete {
   background-color: rgb(255, 0, 0);

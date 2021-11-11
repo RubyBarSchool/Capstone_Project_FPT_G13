@@ -535,12 +535,4 @@ export default {
   background-color: rgb(0, 181, 253);
   color: white;
 }
-#user {
-  background-color: rgb(76, 238, 12);
-  color: white;
-}
-#user:hover {
-  background-color: rgb(42, 253, 0);
-  color: white;
-}
 </style>

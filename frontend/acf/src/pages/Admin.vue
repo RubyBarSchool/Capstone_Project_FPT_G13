@@ -350,7 +350,7 @@
 import accountService from "@/service/accountService.js";
 import roleService from "@/service/roleService.js";
 import employeeService from "@/service/employeeService.js";
-import adminTruongService from "../service/adminTruongService";
+import adminService from "../service/adminService";
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 
@@ -474,7 +474,7 @@ export default {
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;
-      adminTruongService
+      adminService
         .searchAccount(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
@@ -591,7 +591,7 @@ export default {
       this.getAllEmployeeNotAccount();
     },
     submitUpdate() {
-      adminTruongService
+      adminService
         .updateAccount(this.dataEdit)
         .then((response) => {
           this.submitSearch();
@@ -614,7 +614,7 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
-      adminTruongService
+      adminService
         .searchAccount(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
@@ -626,7 +626,7 @@ export default {
         });
     },
     getAccountByID(id) {
-      adminTruongService
+      adminService
         .getAccountByID(id)
         .then((response) => {
           this.dataAccountDetail = response.data.data;

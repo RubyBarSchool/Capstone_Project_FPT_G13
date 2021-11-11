@@ -1,13 +1,13 @@
 import http from "./http-common";
 
 class chieuCaoService {
-    addUnit(height) {
-        return http.post(`/admin/height/add?height=${height}`);
+    addFrameHeight(frameHeight) {
+        return http.post(`/admin/height/add?frameHeight=${frameHeight}`);
     }
-    getAllUnits(form) {
+    getAllFrameHeight(form) {
         return http.get(`/admin/height/get`, form);
     }
-    deleteUnit(id) {
+    deleteFrameHeight(id) {
         return http.delete(`/admin/height/delete?id=${id}`);
     }
 }
