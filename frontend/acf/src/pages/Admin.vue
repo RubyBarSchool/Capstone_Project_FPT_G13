@@ -350,7 +350,7 @@
 import accountService from "@/service/accountService.js";
 import roleService from "@/service/roleService.js";
 import employeeService from "@/service/employeeService.js";
-import adminService from "../service/adminService";
+import adminService from "@/service/adminService";
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 
