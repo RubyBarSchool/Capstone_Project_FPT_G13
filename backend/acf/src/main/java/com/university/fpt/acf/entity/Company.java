@@ -24,4 +24,10 @@ public class Company extends EntityCommon {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<Material> materials;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "company",cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Collection<Contact> contacts;
 }

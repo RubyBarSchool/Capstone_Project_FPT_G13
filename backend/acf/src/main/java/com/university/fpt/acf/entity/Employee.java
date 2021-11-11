@@ -33,33 +33,41 @@ public class Employee extends EntityCommon {
     private Position position;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "employee",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "employee")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<TimeKeep> timeKeeps;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "employee",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "employee")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<PersonaLeaveApplication> personaLeaveApplications;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "employee",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "employee")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<AdvaceSalary> advaceSalaries;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "employee",fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "employee")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<HistorySalary> historySalaries;
 
 
-    @ManyToMany(mappedBy = "employees",fetch = FetchType.LAZY)
+
+
+    @ManyToMany(mappedBy = "employees")
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<BonusPenalty> bonusPenalties;
+
+
+    @ManyToMany(mappedBy = "employees")
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Collection<ProductionOrder> productionOrders;
 
 }

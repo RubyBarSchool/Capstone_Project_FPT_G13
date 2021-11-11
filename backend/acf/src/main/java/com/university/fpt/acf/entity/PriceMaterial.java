@@ -3,9 +3,8 @@ package com.university.fpt.acf.entity;
 import com.university.fpt.acf.common.entity.EntityCommon;
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.util.Collection;
 
 @Entity
 @Data
@@ -39,4 +38,9 @@ public class PriceMaterial extends EntityCommon {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private HeightMaterial heightMaterial;
+
+    @OneToMany(mappedBy = "priceMaterial",cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Collection<ProductMaterial> productMaterials;
 }
