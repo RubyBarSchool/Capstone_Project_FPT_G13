@@ -59,6 +59,7 @@ public class FrameMaterialServiceImpl implements FrameMaterialService {
     @Override
     public List<SearchFrameMaterialVO> searchFrame(SearchFrameMaterialForm searchForm) {
         List<SearchFrameMaterialVO> list = new ArrayList<>();
+        int total;
         try {
             list = customRepository.searchFrame(searchForm);
             if(list == null ){

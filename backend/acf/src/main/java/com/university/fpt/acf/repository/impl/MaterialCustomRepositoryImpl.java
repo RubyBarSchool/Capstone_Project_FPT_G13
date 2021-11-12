@@ -2,9 +2,12 @@ package com.university.fpt.acf.repository.impl;
 
 import com.university.fpt.acf.common.repository.CommonRepository;
 import com.university.fpt.acf.form.MaterialSuggestFrom;
+import com.university.fpt.acf.form.SearchMaterialForm;
 import com.university.fpt.acf.repository.EmployeeCustomRepository;
 import com.university.fpt.acf.repository.MaterialCustomRepository;
 import com.university.fpt.acf.vo.AttendanceVO;
+import com.university.fpt.acf.vo.MaterialVO;
+import com.university.fpt.acf.vo.SearchFrameMaterialVO;
 import com.university.fpt.acf.vo.SuggestMaterialVO;
 import org.springframework.stereotype.Repository;
 
@@ -43,5 +46,121 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
         queryAcc.setMaxResults(materialSuggestFrom.getCount());
         List<SuggestMaterialVO> resultList = queryAcc.getResultList();
         return resultList;
+    }
+
+    @Override
+    public List<MaterialVO> searchMaterial(SearchMaterialForm searchForm) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append("select new com.university.fpt.acf.vo.MaterialVO( m.id,m.name,p.id,concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight),g.id,g.name,c.id,c.name,u.id,u.name,p.price ) from Material m left join m.priceMaterials p inner join m.groupMaterial g inner join " +
+                "m.company c inner join p.heightMaterial h inner join p.unitMeasure u inner join p.frameMaterial f where m.checkMaterial=true  ");
+        if(searchForm.getCodeMaterial()!=null && !searchForm.getCodeMaterial().isEmpty()){
+            sql.append(" and LOWER(m.name) like :code ");
+            params.put("code", "%"+searchForm.getCodeMaterial().toLowerCase()+"%");
+        }
+        if (searchForm.getListIdCompany()!=null ){
+            sql.append(" and c.id in :listID ");
+            params.put("listID", searchForm.getListIdCompany());
+        }
+        if (searchForm.getUnitId()!=null ){
+            sql.append(" and u.id= :idUnit ");
+            params.put("idUnit", searchForm.getUnitId());
+        }
+        if (searchForm.getListGroupID()!=null ){
+            sql.append(" and g.id in :listGroupId ");
+            params.put("listGroupId", searchForm.getListGroupID());
+        }
+        sql.append(" ORDER by m.id desc ");
+        TypedQuery<MaterialVO> query = super.createQuery(sql.toString(), params, MaterialVO.class);
+        query.setFirstResult((searchForm.getPageIndex()-1)* searchForm.getPageSize());
+        query.setMaxResults(searchForm.getPageSize());
+        return query.getResultList();
+    }
+
+    @Override
+    public int totalSearchMaterial(SearchMaterialForm searchForm) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append("select COUNT(*) from Material m left join m.priceMaterials p inner join m.groupMaterial g inner join " +
+                "m.company c inner join p.heightMaterial h inner join p.unitMeasure u inner join p.frameMaterial f where m.checkMaterial=true  ");
+        if(searchForm.getCodeMaterial()!=null && !searchForm.getCodeMaterial().isEmpty()){
+            sql.append(" and LOWER(m.name) like :code ");
+            params.put("code", "%"+searchForm.getCodeMaterial().toLowerCase()+"%");
+        }
+        if (searchForm.getListIdCompany()!=null ){
+            sql.append(" and c.id in :listID ");
+            params.put("listID", searchForm.getListIdCompany());
+        }
+        if (searchForm.getUnitId()!=null ){
+            sql.append(" and u.id= :idUnit ");
+            params.put("idUnit", searchForm.getUnitId());
+        }
+        if (searchForm.getListGroupID()!=null ){
+            sql.append(" and g.id in :listGroupId ");
+            params.put("listGroupId", searchForm.getListGroupID());
+        }
+        sql.append(" ORDER by m.id desc ");
+        TypedQuery<Long> query = super.createQuery(sql.toString(), params, Long.class);
+        query.setFirstResult((searchForm.getPageIndex()-1)* searchForm.getPageSize());
+        query.setMaxResults(searchForm.getPageSize());
+        return query.getSingleResult().intValue();
+    }
+
+    @Override
+    public List<MaterialVO> searchCoverSheet(SearchMaterialForm searchForm) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append("select new com.university.fpt.acf.vo.MaterialVO( m.id,m.name,p.id,concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight),g.id,g.name,c.id,c.name,u.id,u.name,p.price ) from Material m left join m.priceMaterials p inner join m.groupMaterial g inner join " +
+                "m.company c inner join p.heightMaterial h inner join p.unitMeasure u inner join p.frameMaterial f where m.checkMaterial=false  ");
+        if(searchForm.getCodeMaterial()!=null && !searchForm.getCodeMaterial().isEmpty()){
+            sql.append(" and LOWER(m.name) like :code ");
+            params.put("code", "%"+searchForm.getCodeMaterial().toLowerCase()+"%");
+        }
+        if (searchForm.getListIdCompany()!=null ){
+            sql.append(" and c.id in :listID ");
+            params.put("listID", searchForm.getListIdCompany());
+        }
+        if (searchForm.getUnitId()!=null ){
+            sql.append(" and u.id= :idUnit ");
+            params.put("idUnit", searchForm.getUnitId());
+        }
+        if (searchForm.getListGroupID()!=null ){
+            sql.append(" and g.id in :listGroupId ");
+            params.put("listGroupId", searchForm.getListGroupID());
+        }
+        sql.append(" ORDER by m.id desc ");
+        TypedQuery<MaterialVO> query = super.createQuery(sql.toString(), params, MaterialVO.class);
+        query.setFirstResult((searchForm.getPageIndex()-1)* searchForm.getPageSize());
+        query.setMaxResults(searchForm.getPageSize());
+        return query.getResultList();
+    }
+
+    @Override
+    public int totalSearchCoverSheet(SearchMaterialForm searchForm) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append("select COUNT(*) from Material m left join m.priceMaterials p inner join m.groupMaterial g inner join " +
+                "m.company c inner join p.heightMaterial h inner join p.unitMeasure u inner join p.frameMaterial f where m.checkMaterial=false  ");
+        if(searchForm.getCodeMaterial()!=null && !searchForm.getCodeMaterial().isEmpty()){
+            sql.append(" and LOWER(m.name) like :code ");
+            params.put("code", "%"+searchForm.getCodeMaterial().toLowerCase()+"%");
+        }
+        if (searchForm.getListIdCompany()!=null ){
+            sql.append(" and c.id in :listID ");
+            params.put("listID", searchForm.getListIdCompany());
+        }
+        if (searchForm.getUnitId()!=null ){
+            sql.append(" and u.id= :idUnit ");
+            params.put("idUnit", searchForm.getUnitId());
+        }
+        if (searchForm.getListGroupID()!=null ){
+            sql.append(" and g.id in :listGroupId ");
+            params.put("listGroupId", searchForm.getListGroupID());
+        }
+        sql.append(" ORDER by m.id desc ");
+        TypedQuery<Long> query = super.createQuery(sql.toString(), params, Long.class);
+        query.setFirstResult((searchForm.getPageIndex()-1)* searchForm.getPageSize());
+        query.setMaxResults(searchForm.getPageSize());
+        return query.getSingleResult().intValue();
     }
 }
