@@ -4,6 +4,7 @@ import com.university.fpt.acf.config.security.AccountSercurity;
 import com.university.fpt.acf.entity.FrameMaterial;
 import com.university.fpt.acf.entity.UnitMeasure;
 import com.university.fpt.acf.form.AddFrameMaterialForm;
+import com.university.fpt.acf.form.SearchAllFrame;
 import com.university.fpt.acf.form.SearchFrameMaterialForm;
 import com.university.fpt.acf.form.SearchHeightMaterialForm;
 import com.university.fpt.acf.repository.FrameMaterialCustomRepository;
@@ -11,6 +12,7 @@ import com.university.fpt.acf.repository.FrameMaterialRepository;
 import com.university.fpt.acf.repository.HeightMaterialRepository;
 import com.university.fpt.acf.repository.UnitMeasureRepository;
 import com.university.fpt.acf.service.FrameMaterialService;
+import com.university.fpt.acf.vo.FrameMaterialVO;
 import com.university.fpt.acf.vo.HeightMaterialVO;
 import com.university.fpt.acf.vo.SearchFrameMaterialVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,7 +61,7 @@ public class FrameMaterialServiceImpl implements FrameMaterialService {
     @Override
     public List<SearchFrameMaterialVO> searchFrame(SearchFrameMaterialForm searchForm) {
         List<SearchFrameMaterialVO> list = new ArrayList<>();
-        int total;
+
         try {
             list = customRepository.searchFrame(searchForm);
             if(list == null ){
@@ -97,5 +99,61 @@ public class FrameMaterialServiceImpl implements FrameMaterialService {
             throw new RuntimeException(e.getMessage());
         }
         return check;
+    }
+
+    @Override
+    public List<FrameMaterialVO> getFrameCoverSheetToInsert() {
+        List<FrameMaterialVO> list = new ArrayList<>();
+
+        try {
+            list = repository.getFrameCoverSheetToInsert();
+            if(list == null ){
+                throw new Exception("Không tìm thấy ");
+            }
+        }catch (Exception e){
+            e.getMessage();
+        }
+        return list;
+    }
+
+    @Override
+    public List<FrameMaterialVO> getFrameMaterialToInsert() {
+        List<FrameMaterialVO> list = new ArrayList<>();
+
+        try {
+            list = repository.getFrameMaterialToInsert();
+            if(list == null ){
+                throw new Exception("Không tìm thấy ");
+            }
+        }catch (Exception e){
+            e.getMessage();
+        }
+        return list;
+    }
+
+    @Override
+    public List<FrameMaterialVO> searchAllFrame(SearchAllFrame searchForm) {
+        List<FrameMaterialVO> list = new ArrayList<>();
+
+        try {
+            list = customRepository.searchAllFrame(searchForm);
+            if(list == null ){
+                throw new Exception("Không tìm thấy ");
+            }
+        }catch (Exception e){
+            e.getMessage();
+        }
+        return list;
+    }
+
+    @Override
+    public int totalsearchAllFrame(SearchAllFrame searchForm) {
+        int size;
+        try {
+            size = customRepository.totalsearchAllFrame(searchForm);
+        } catch (Exception e) {
+            throw new RuntimeException("Error bonus  repository " + e.getMessage());
+        }
+        return size;
     }
 }

@@ -68,4 +68,32 @@ public class HeightMaterialServiceImpl implements HeightMaterialService {
         }
         return list;
     }
+
+    @Override
+    public List<HeightMaterialVO> getHeightsToInsertMaterial() {
+        List<HeightMaterialVO> list = new ArrayList<>();
+        try {
+            list = heightMaterialRepository.getHeightMaterialToInsert();
+            if(list == null ){
+                throw new Exception("Không tìm thấy ");
+            }
+        }catch (Exception e){
+            e.getMessage();
+        }
+        return list;
+    }
+
+    @Override
+    public List<HeightMaterialVO> getHeightsToInsertCoverInsert() {
+        List<HeightMaterialVO> list = new ArrayList<>();
+        try {
+            list = heightMaterialRepository.getHeightCoverSheetToInsert();
+            if(list == null ){
+                throw new Exception("Không tìm thấy ");
+            }
+        }catch (Exception e){
+            e.getMessage();
+        }
+        return list;
+    }
 }

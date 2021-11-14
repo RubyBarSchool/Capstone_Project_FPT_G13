@@ -59,13 +59,17 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
             sql.append(" and LOWER(m.name) like :code ");
             params.put("code", "%"+searchForm.getCodeMaterial().toLowerCase()+"%");
         }
+        if(!searchForm.getFrame().isEmpty() && searchForm.getFrame()==null){
+            sql.append(" and concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight) like :frame ");
+            params.put("frame", "%"+searchForm.getFrame().toLowerCase()+"%");
+        }
         if (searchForm.getListIdCompany()!=null ){
             sql.append(" and c.id in :listID ");
             params.put("listID", searchForm.getListIdCompany());
         }
-        if (searchForm.getUnitId()!=null ){
-            sql.append(" and u.id= :idUnit ");
-            params.put("idUnit", searchForm.getUnitId());
+        if (searchForm.getListUnitId()!=null ){
+            sql.append(" and u.id in :idUnit ");
+            params.put("idUnit", searchForm.getListUnitId());
         }
         if (searchForm.getListGroupID()!=null ){
             sql.append(" and g.id in :listGroupId ");
@@ -92,9 +96,13 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
             sql.append(" and c.id in :listID ");
             params.put("listID", searchForm.getListIdCompany());
         }
-        if (searchForm.getUnitId()!=null ){
+        if(!searchForm.getFrame().isEmpty() && searchForm.getFrame()==null){
+            sql.append(" and concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight) like :frame ");
+            params.put("frame", "%"+searchForm.getFrame().toLowerCase()+"%");
+        }
+        if (searchForm.getListUnitId()!=null ){
             sql.append(" and u.id= :idUnit ");
-            params.put("idUnit", searchForm.getUnitId());
+            params.put("idUnit", searchForm.getListUnitId());
         }
         if (searchForm.getListGroupID()!=null ){
             sql.append(" and g.id in :listGroupId ");
@@ -102,8 +110,6 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
         }
         sql.append(" ORDER by m.id desc ");
         TypedQuery<Long> query = super.createQuery(sql.toString(), params, Long.class);
-        query.setFirstResult((searchForm.getPageIndex()-1)* searchForm.getPageSize());
-        query.setMaxResults(searchForm.getPageSize());
         return query.getSingleResult().intValue();
     }
 
@@ -121,9 +127,13 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
             sql.append(" and c.id in :listID ");
             params.put("listID", searchForm.getListIdCompany());
         }
-        if (searchForm.getUnitId()!=null ){
+        if(!searchForm.getFrame().isEmpty() && searchForm.getFrame()==null){
+            sql.append(" and concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight) like :frame ");
+            params.put("frame", "%"+searchForm.getFrame().toLowerCase()+"%");
+        }
+        if (searchForm.getListUnitId()!=null ){
             sql.append(" and u.id= :idUnit ");
-            params.put("idUnit", searchForm.getUnitId());
+            params.put("idUnit", searchForm.getListUnitId());
         }
         if (searchForm.getListGroupID()!=null ){
             sql.append(" and g.id in :listGroupId ");
@@ -150,9 +160,13 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
             sql.append(" and c.id in :listID ");
             params.put("listID", searchForm.getListIdCompany());
         }
-        if (searchForm.getUnitId()!=null ){
+        if(!searchForm.getFrame().isEmpty() && searchForm.getFrame()==null){
+            sql.append(" and concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight) like :frame ");
+            params.put("frame", "%"+searchForm.getFrame().toLowerCase()+"%");
+        }
+        if (searchForm.getListUnitId()!=null ){
             sql.append(" and u.id= :idUnit ");
-            params.put("idUnit", searchForm.getUnitId());
+            params.put("idUnit", searchForm.getListUnitId());
         }
         if (searchForm.getListGroupID()!=null ){
             sql.append(" and g.id in :listGroupId ");

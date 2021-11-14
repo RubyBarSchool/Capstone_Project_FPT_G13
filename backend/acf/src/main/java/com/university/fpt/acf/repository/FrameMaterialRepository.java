@@ -18,8 +18,8 @@ public interface FrameMaterialRepository extends JpaRepository<FrameMaterial,Lon
     @Query("select f.id from FrameMaterial f where f.frameWidth=:width and f.frameLength=:length ")
     Long getIdByLengthWith(@Param("width") String width,@Param("length") String length);
     @Query("select new com.university.fpt.acf.vo.FrameMaterialVO(fm.id,concat(fm.frameLength,'x',fm.frameWidth) ) from FrameMaterial fm left join PriceMaterial p inner join p.material m where m.deleted =false and m.checkMaterial=true and p.frameMaterial.id is null")
-    FrameMaterialVO getFrameMaterialToInsert();
+    List<FrameMaterialVO> getFrameMaterialToInsert();
     @Query("select new com.university.fpt.acf.vo.FrameMaterialVO(fm.id,concat(fm.frameLength,'x',fm.frameWidth) ) from FrameMaterial fm left join PriceMaterial p inner join p.material m where m.deleted =false and m.checkMaterial=false and p.frameMaterial.id is null")
-    FrameMaterialVO getFrameCoverSheetToInsert();
+    List<FrameMaterialVO> getFrameCoverSheetToInsert();
 
 }

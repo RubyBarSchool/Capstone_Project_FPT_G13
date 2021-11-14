@@ -66,7 +66,7 @@ public class MaterialServiceImpl implements MaterialService {
     public List<MaterialVO> searchCoverSheet(SearchMaterialForm searchForm) {
         List<MaterialVO> list= new ArrayList<>();
         try{
-            list = materialCustomRepository.searchMaterial(searchForm);
+            list = materialCustomRepository.searchCoverSheet(searchForm);
         }catch (Exception e){
             throw new RuntimeException("Không tìm thấy! ");
         }

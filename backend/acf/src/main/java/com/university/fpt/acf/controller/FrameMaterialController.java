@@ -2,9 +2,11 @@ package com.university.fpt.acf.controller;
 
 import com.university.fpt.acf.common.entity.ResponseCommon;
 import com.university.fpt.acf.form.AddFrameMaterialForm;
+import com.university.fpt.acf.form.SearchAllFrame;
 import com.university.fpt.acf.form.SearchFrameMaterialForm;
 import com.university.fpt.acf.form.SearchHeightMaterialForm;
 import com.university.fpt.acf.service.FrameMaterialService;
+import com.university.fpt.acf.vo.FrameMaterialVO;
 import com.university.fpt.acf.vo.HeightMaterialVO;
 import com.university.fpt.acf.vo.SearchFrameMaterialVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,6 +72,33 @@ public class FrameMaterialController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    @PostMapping("/getframe")
+    public ResponseEntity<ResponseCommon> getAllFrame(@RequestBody SearchAllFrame searchForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<FrameMaterialVO> list = new ArrayList<>();
+        try {
+            list = frameService.searchAllFrame(searchForm);
+            responseCommon.setData(list);
+            total=frameService.totalsearchAllFrame(searchForm);
+            message = "Thành công!";
+            if(total==0){
+                message = "Không tìm thấy!";
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(list);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseCommon> deleteFrameMaterial(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -94,5 +123,57 @@ public class FrameMaterialController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    @GetMapping("/getframecoversheet")
+    public ResponseEntity<ResponseCommon> getAllFrameCoverSheet(){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<FrameMaterialVO> list = new ArrayList<>();
+        try {
+            list = frameService.getFrameCoverSheetToInsert();
+            responseCommon.setData(list);
+            total=list.size();
+            message = "Thành công!";
+            if(total==0){
+                message = "Không tìm thấy!";
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(list);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
 
+    @GetMapping("/getframematerial")
+    public ResponseEntity<ResponseCommon> getAllFrameMaterial(){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<FrameMaterialVO> list = new ArrayList<>();
+        try {
+            list = frameService.getFrameMaterialToInsert();
+            responseCommon.setData(list);
+            total=list.size();
+            message = "Thành công!";
+            if(total==0){
+                message = "Không tìm thấy!";
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(list);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
 }

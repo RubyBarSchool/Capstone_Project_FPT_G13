@@ -43,6 +43,58 @@ public class HeightMaterialController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    @GetMapping("/getheightmaterial")
+    public ResponseEntity<ResponseCommon> getAllFrameHeightMaterialToInset(){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<HeightMaterialVO> list = new ArrayList<>();
+        try {
+            list = heightMaterialService.getHeightsToInsertMaterial();
+            responseCommon.setData(list);
+            total=list.size();
+            message = "Thành công!";
+            if(total==0){
+                message = "Không tìm thấy!";
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(list);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+    @GetMapping("/getheightcoversheet")
+    public ResponseEntity<ResponseCommon> getAllFrameHeightCoverSheet(){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<HeightMaterialVO> list = new ArrayList<>();
+        try {
+            list = heightMaterialService.getHeightsToInsertCoverInsert();
+            responseCommon.setData(list);
+            total=list.size();
+            message = "Thành công!";
+            if(total==0){
+                message = "Không tìm thấy!";
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(list);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
     @PostMapping("/add")
     public ResponseEntity<ResponseCommon> addFrameHeight(@RequestParam String frameHeight){
         ResponseCommon responseCommon = new ResponseCommon();

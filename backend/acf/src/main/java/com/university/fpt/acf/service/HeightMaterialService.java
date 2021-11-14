@@ -9,4 +9,6 @@ public interface HeightMaterialService {
     Boolean addHeightMaterial(String frameHeight);
     Boolean deleteHeightMaterial(Long id);
     List<HeightMaterialVO> getAllHeights();
+    List<HeightMaterialVO> getHeightsToInsertMaterial();
+    List<HeightMaterialVO> getHeightsToInsertCoverInsert();
 }
