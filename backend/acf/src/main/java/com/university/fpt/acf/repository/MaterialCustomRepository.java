@@ -1,5 +1,6 @@
 package com.university.fpt.acf.repository;
 
+import com.university.fpt.acf.form.CheckMaterialForm;
 import com.university.fpt.acf.form.MaterialSuggestFrom;
 import com.university.fpt.acf.form.SearchMaterialForm;
 import com.university.fpt.acf.vo.MaterialVO;
@@ -13,4 +14,5 @@ public interface MaterialCustomRepository {
     int totalSearchMaterial(SearchMaterialForm searchForm);
     List<MaterialVO> searchCoverSheet(SearchMaterialForm searchForm);
     int totalSearchCoverSheet(SearchMaterialForm searchForm);
+    Long getIdMaterial(CheckMaterialForm checkMaterialForm);
 }

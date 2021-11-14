@@ -22,4 +22,8 @@ public interface HeightMaterialRepository extends JpaRepository<HeightMaterial,L
     HeightMaterial getHeightMaterialById(@Param("id") Long id);
     @Query("SELECT e FROM HeightMaterial e where  e.id  in :id")
     List<HeightMaterial> getHeightByIdS(@Param("id") List<Long> ids);
+    @Query("SELECT new  com.university.fpt.acf.vo.HeightMaterialVO(h.id,h.frameHeight) from HeightMaterial h left join PriceMaterial p inner join p.material m where m.checkMaterial=true and m.deleted =false and  p.heightMaterial.id is null ")
+    List<HeightMaterialVO> getHeightMaterialToInsert();
+    @Query("SELECT new  com.university.fpt.acf.vo.HeightMaterialVO(h.id,h.frameHeight) from HeightMaterial h left join PriceMaterial p inner join p.material m where m.checkMaterial=false and m.deleted =false and  p.heightMaterial.id is null ")
+    List<HeightMaterialVO> getHeightCoverSheetToInsert();
 }

@@ -1,6 +1,7 @@
 package com.university.fpt.acf.repository.impl;
 
 import com.university.fpt.acf.common.repository.CommonRepository;
+import com.university.fpt.acf.form.CheckMaterialForm;
 import com.university.fpt.acf.form.MaterialSuggestFrom;
 import com.university.fpt.acf.form.SearchMaterialForm;
 import com.university.fpt.acf.repository.EmployeeCustomRepository;
@@ -159,8 +160,18 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
         }
         sql.append(" ORDER by m.id desc ");
         TypedQuery<Long> query = super.createQuery(sql.toString(), params, Long.class);
-        query.setFirstResult((searchForm.getPageIndex()-1)* searchForm.getPageSize());
-        query.setMaxResults(searchForm.getPageSize());
         return query.getSingleResult().intValue();
+    }
+
+    @Override
+    public Long getIdMaterial(CheckMaterialForm checkMaterialForm) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append("select m.id from Material m where m.checkMaterial = true and m.name=:name and m.company.id=:idCompany and m.company.id=:idGroup ");
+        params.put("name", "%"+checkMaterialForm.getName().toLowerCase()+"%");
+        params.put("idCompany", checkMaterialForm.getIdCompany());
+        params.put("idGroup", checkMaterialForm.getIdGroup());
+        TypedQuery<Long> query = super.createQuery(sql.toString(), params, Long.class);
+        return query.getSingleResult();
     }
 }
