@@ -23,22 +23,64 @@
             style="width: 150px"
             v-model="dataSearch.codeMaterial"
           />
-          <!-- <a-select
-            placeholder="Khung"
+          <a-select
+            placeholder="Thông số"
             mode="multiple"
-            v-model="dataSearch"
+            v-model="dataAddMaterial.listIdFrame"
             :filter-option="false"
-            @search="fetchRoles"
+            @search="fetchFrameMaterial"
             style="width: 150px"
           >
             <a-select-option
-              v-for="(role, index) in dataRoles"
-              :value="role.id"
+              v-for="(frameI, index) in dataFrameMaterials"
+              :value="frameI.id"
               :key="index"
             >
-              {{ role.name }}
+              {{ frameI.frame }}
             </a-select-option>
-          </a-select> -->
+          </a-select>
+          <a-select
+            placeholder="Nhóm vật liệu"
+            mode="multiple"
+            v-model="dataAddMaterial.listName"
+            :filter-option="false"
+            @search="fetchGroupMaterial"
+            style="width: 150px"
+          >
+            <a-select-option
+              v-for="(group, index) in dataGroupMaterials"
+              :value="group.id"
+              :key="index"
+            >
+              {{ group.name }}
+            </a-select-option>
+          </a-select>
+          <a-select
+            placeholder="Đơn vị đo"
+            v-model="dataAddMaterial.idUnit"
+            style="width: 150px"
+          >
+            <a-select-option
+              v-for="(unit, index) in dataUnits"
+              :value="unit.id"
+              :key="index"
+            >
+              {{ unit.name }}
+            </a-select-option>
+          </a-select>
+          <a-select
+            placeholder="Công ty"
+            v-model="dataAddMaterial.idCompany"
+            style="width: 250px"
+          >
+            <a-select-option
+              v-for="(company, index) in dataCompanys"
+              :value="company.id"
+              :key="index"
+            >
+              {{ company.name }}
+            </a-select-option>
+          </a-select>
           <a-button
             type="primary"
             @click="submitSearch"
@@ -203,18 +245,19 @@
               <a-col flex="100px">Khung</a-col>
               <a-col flex="auto">
                 <a-select
+                  placeholder="Thông số"
                   mode="multiple"
                   v-model="dataAddMaterial.listIdFrame"
                   :filter-option="false"
-                  @search="fetchFrame"
+                  @search="fetchFrameMaterial"
                   style="width: 100%"
                 >
                   <a-select-option
-                    v-for="(frame, index) in dataFrames"
-                    :value="frame.id"
+                    v-for="(frameI, index) in dataFrameMaterials"
+                    :value="frameI.id"
                     :key="index"
                   >
-                    {{ frame.name }}
+                    {{ frameI.frame }}
                   </a-select-option>
                 </a-select>
               </a-col>
@@ -320,21 +363,22 @@
             <a-row type="flex">
               <a-col flex="100px">Mã vật liệu</a-col>
               <a-col flex="auto">
-                <a-select
+                <!-- <a-select
+                  placeholder="Thông số"
                   mode="multiple"
-                  v-model="dataAddUnitMaterial.idMaterial"
+                  v-model="dataAddMaterial.listIdFrame"
                   :filter-option="false"
-                  @search="fetchFrame"
-                  style="width: 100%"
+                  @search="fetchFrameMaterial"
+                  style="width: 150px"
                 >
                   <a-select-option
-                    v-for="(frame, index) in dataFrames"
-                    :value="frame.id"
+                    v-for="(frameI, index) in dataFrameMaterials"
+                    :value="frameI.id"
                     :key="index"
                   >
-                    {{ frame.name }}
+                    {{ frameI.frame }}
                   </a-select-option>
-                </a-select>
+                </a-select> -->
               </a-col>
             </a-row>
             <br />
@@ -342,18 +386,19 @@
               <a-col flex="100px">Khung</a-col>
               <a-col flex="auto">
                 <a-select
+                  placeholder="Thông số"
                   mode="multiple"
                   v-model="dataAddMaterial.listIdFrame"
                   :filter-option="false"
-                  @search="fetchFrame"
+                  @search="fetchFrameMaterial"
                   style="width: 100%"
                 >
                   <a-select-option
-                    v-for="(frame, index) in dataFrames"
-                    :value="frame.id"
+                    v-for="(frameI, index) in dataFrameMaterials"
+                    :value="frameI.id"
                     :key="index"
                   >
-                    {{ frame.name }}
+                    {{ frameI.frame }}
                   </a-select-option>
                 </a-select>
               </a-col>
@@ -391,7 +436,7 @@
             <a-row type="flex">
               <a-col flex="100px">Mã vật liệu</a-col>
               <a-col flex="auto">
-                <a-select
+                <!-- <a-select
                   mode="multiple"
                   v-model="dataAddUnitMaterial.idMaterial"
                   :filter-option="false"
@@ -405,7 +450,7 @@
                   >
                     {{ frame.name }}
                   </a-select-option>
-                </a-select>
+                </a-select> -->
               </a-col>
             </a-row>
             <br />
@@ -440,7 +485,7 @@
 import companyService from "@/service/companyService.js";
 import unitService from "@/service/unitService.js";
 import groupMaterialService from "@/service/groupMaterialService.js";
-import frameAdminService from "@/service/frameAdminService.js";
+// import frameAdminService from "@/service/frameAdminService.js";
 import chieuCaoService from "@/service/chieuCaoService.js";
 import vatLieuAdminService from "@/service/vatLieuAdminService.js";
 import Header from "@/layouts/Header.vue";
@@ -499,6 +544,12 @@ export default {
         address: "",
         name: "",
         phone: "",
+        pageIndex: 1,
+        pageSize: 10,
+      },
+      dataFrameMaterials: "",
+      dataFrameMaterial: {
+        frame: "",
         pageIndex: 1,
         pageSize: 10,
       },
@@ -602,11 +653,11 @@ export default {
   computed: {},
   created() {
     this.submitSearch();
-    this.getAllFrame();
     this.getAllHeight();
     this.getAllGroupMaterial();
     this.getAllUnit();
     this.getAllCompany();
+    this.getAllFrameMaterial();
   },
   methods: {
     handleTableChange(pagination) {
@@ -636,12 +687,17 @@ export default {
           console.log(e);
         });
     },
+    // add vật liệu
     showModalAdd() {
       this.visibleAdd = true;
     },
+
+    //add đơn vị
     showModalAddUnit() {
       this.visibleAddUnit = true;
     },
+
+    //add khung
     showModalAddFrame() {
       this.visibleAddFrame = true;
     },
@@ -656,20 +712,8 @@ export default {
         description: description,
       });
     },
-    getAllFrame() {
-      frameAdminService
-        .searchFrame(this.dataFrame)
-        .then((response) => {
-          this.dataFrames = response.data.data;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    fetchFrame(value) {
-      this.dataFrame.name = value;
-      this.getAllFrame();
-    },
+
+    //chiều cao
     getAllHeight() {
       chieuCaoService
         .getAllFrameHeight(this.dataHeight)
@@ -684,6 +728,9 @@ export default {
       this.dataHeight.frameHeight = value;
       this.getAllHeight();
     },
+    //chiều cao
+
+    //nhóm vật liệu
     getAllGroupMaterial() {
       groupMaterialService
         .getAllGroupMaterial(this.dataGroupMaterial)
@@ -698,6 +745,26 @@ export default {
       this.dataGroupMaterial.name = value;
       this.getAllGroupMaterial();
     },
+    //nhóm vật liệu
+
+    //khung vật liệu
+    getAllFrameMaterial() {
+      vatLieuAdminService
+        .getAllFrameMaterial(this.dataFrameMaterial)
+        .then((response) => {
+          this.dataFrameMaterials = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    fetchFrameMaterial(value) {
+      this.dataFrameMaterial.frame = value;
+      this.getAllFrameMaterial();
+    },
+    //khung vật liệu
+
+    //đơn vị
     getAllUnit() {
       unitService
         .getAllUnits(this.dataUnit)
@@ -708,6 +775,9 @@ export default {
           console.log(e);
         });
     },
+    //đơn vị
+
+    //công ty
     getAllCompany() {
       companyService
         .searchCompany(this.dataCompany)
@@ -718,6 +788,9 @@ export default {
           console.log(e);
         });
     },
+    //công ty
+
+    //xử lý thẻ tag
     handleClose(removedTag) {
       const tags = this.tags.filter((tag) => tag !== removedTag);
       console.log(tags);
@@ -745,6 +818,7 @@ export default {
         inputValue: "",
       });
     },
+    //xử lý thẻ tag
   },
 };
 </script>

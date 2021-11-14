@@ -19,6 +19,9 @@ class vatLieuAdminService {
     deleteMaterial(id) {
         return http.delete(`/admin/material/delete?id=${id}`);
     }
+    getAllFrameMaterial(form) {
+        return http.get("/admin/framematerial/getframematerial", form);
+    }
 }
 
 export default new vatLieuAdminService();

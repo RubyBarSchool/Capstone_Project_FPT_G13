@@ -10,6 +10,7 @@ class frameAdminService {
     addFrame(form) {
         return http.post(`/admin/framematerial/add`, form);
     }
+
 }
 
 export default new frameAdminService();
