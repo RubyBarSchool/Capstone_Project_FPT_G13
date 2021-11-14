@@ -71,6 +71,17 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     @Override
+    public String loadUri(String filename) {
+        try {
+            Path file = root.resolve(filename);
+//            String file.
+            return  file.toUri().getPath();
+        } catch (Exception e) {
+            throw new RuntimeException("Error: " + e.getMessage());
+        }
+    }
+
+    @Override
     public void deleteAll() {
 
     }

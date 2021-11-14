@@ -86,15 +86,26 @@
               </a-form-model-item>
 
               <a-row :gutter="[16, 16]">
-                <a-col :span="8"> Bảng chi tiết: </a-col>
-                <a-col :span="8">
-                  <a-button type="primary">
-                    Thêm bảng chi tiết
-                  </a-button></a-col
-                >
-                <a-col :span="8">
-                  <a-button type="primary"> Chi tiết </a-button></a-col
-                >
+                <a-col :span="24"> Bảng chi tiết: </a-col>
+                <a-col :span="24">
+                  <a-upload-dragger
+                    name="file"
+                    :multiple="false"
+                    :action="importFile"
+                    :file-list="fileList"
+                    @change="handleChange"
+                  >
+                    <p class="ant-upload-drag-icon">
+                      <a-icon type="inbox" />
+                    </p>
+                    <p class="ant-upload-text">
+                      Chọn hoặc kéo tệp vào vùng
+                    </p>
+                    <p class="ant-upload-hint">
+                      Hỗ trợ tệp hợp đồng dạng .xlsx , .xlsm , .xlsb
+                    </p>
+                  </a-upload-dragger>
+                </a-col>
               </a-row>
             </a-form-model>
           </a-modal>
@@ -109,6 +120,7 @@
 <script>
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
+import fileService from "@/service/fileService.js"
 const columns = [
   {
     title: "Ngày tạo hợp đồng",
@@ -162,12 +174,29 @@ export default {
   data() {
     return {
       data,
+      fileList: [],
       columns,
       visibleAdd: false,
     };
   },
   created() {},
   methods: {
+    importFile(file){
+      console.log("thisdatafile",file)
+      return fileService.importContact(file);
+    },
+    handleChange(info) {
+      this.fileList = [...info.fileList].slice(-1);
+      const status = info.file.status;
+      if (status !== "uploading") {
+        console.log(info.file, info.fileList);
+      }
+      if (status === "done") {
+        this.$message.success(`${info.file.name} file uploaded successfully.`);
+      } else if (status === "error") {
+        this.$message.error(`${info.file.name} file upload failed.`);
+      }
+    },
     onChange(date, dateString) {
       console.log(date, dateString);
     },

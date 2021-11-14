@@ -17,6 +17,12 @@ public class Product extends EntityCommon {
 
     private Integer count;
 
+    private String width;
+
+    private String height;
+
+    private String length;
+    
     private String note;
 
     private String price;

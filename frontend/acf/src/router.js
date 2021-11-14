@@ -178,6 +178,12 @@ export const router = new Router({
             // lazy-loaded
             component: () =>
                 import ("./pages/FrameAdmin.vue"),
+        }, {
+            path: "/a",
+            name: "a",
+            // lazy-loaded
+            component: () =>
+                import ("./pages/A.vue"),
         },
 {
             path: "/coverplate",

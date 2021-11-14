@@ -1,11 +1,8 @@
 import http from "./http-common";
 
-class attendanceService {
-    getEmployee(form) {
-        return http.post("/admin/attendances/getemployee", form);
-    }
-    addAttendance(form) {
-        return http.post(`/admin/attendances`, form);
+class contactService {
+    importFileContact(form) {
+        return http.post(`/admin/contact/readexcel`, form);
     }
     searchAttendance(form) {
         return http.post(`/admin/attendances/search`, form);
@@ -24,4 +21,4 @@ class attendanceService {
     }
 }
 
-export default new attendanceService();
+export default new contactService();
