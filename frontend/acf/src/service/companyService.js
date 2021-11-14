@@ -1,6 +1,6 @@
 import http from "./http-common";
 
-class userService {
+class companyService {
     searchCompany(form) {
         return http.post(`/admin/company/search`, form);
     }
@@ -16,4 +16,4 @@ class userService {
 
 }
 
-export default new userService();
+export default new companyService();

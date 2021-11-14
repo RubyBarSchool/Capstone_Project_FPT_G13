@@ -72,7 +72,7 @@
             :style="{ 'margin-left': '5px' }"
           >
             <font-awesome-icon
-              :icon="['fas', 'user-plus']"
+              :icon="['fas', 'file-signature']"
               :style="{ 'margin-right': '5px' }"
             />
             Thêm
@@ -92,7 +92,6 @@
               @change="handleTableChange"
             >
               <template slot="username" slot-scope="text, record">
-                <!-- <a href="http://localhost:8080/api/swagger-ui.html?fbclid=IwAR1u0wLaFrB-A3sAGdVGdVkmren5YIb94eya3pmmy_yzOZeTRiYWmudeGuI#/advance-salary-admin-controller/searchAdvanceSalaryAdminUsingPOST">{{ record.username }}</a> -->
                 {{ record.username }}
               </template>
               <template slot="roles" slot-scope="text, record">
