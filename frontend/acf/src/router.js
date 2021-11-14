@@ -179,6 +179,34 @@ export const router = new Router({
             component: () =>
                 import ("./pages/FrameAdmin.vue"),
         },
+        {
+            path: "/materialsuggest",
+            name: "MaterialSuggest",
+            // lazy-loaded
+            component: () =>
+                import ("./pages/MaterialSuggest.vue"),
+        },
+        {
+            path: "/vatlieuadmin",
+            name: "VatLieuAdmin",
+            // lazy-loaded
+            component: () =>
+                import ("./pages/VatLieuAdmin.vue"),
+        },
+        {
+            path: "/taohopdong",
+            name: "TaoHopDong",
+            // lazy-loaded
+            component: () =>
+                import ("./pages/TaoHopDong.vue"),
+        },
+        {
+            path: "/lichsutamung",
+            name: "LichSuTamUng",
+            // lazy-loaded
+            component: () =>
+                import ("./pages/LichSuTamUng.vue"),
+        },
     ],
 });
 

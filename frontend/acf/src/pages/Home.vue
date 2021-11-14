@@ -1,5 +1,5 @@
 <template>
-  <div class="attendance">
+  <div class="home">
     <a-layout :style="{ background: 'white' }">
       <Header />
       <a-layout-content :style="{ margin: '24px 16px 0' }">
