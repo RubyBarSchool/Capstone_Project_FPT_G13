@@ -179,7 +179,13 @@ export const router = new Router({
             component: () =>
                 import ("./pages/FrameAdmin.vue"),
         },
-        {
+{
+            path: "/coverplate",
+            name: "CoverPlate",
+            // lazy-loaded
+            component: () =>
+                import ("./pages/CoverPlate.vue"),
+        },        {
             path: "/materialsuggest",
             name: "MaterialSuggest",
             // lazy-loaded
