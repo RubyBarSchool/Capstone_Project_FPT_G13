@@ -1,12 +1,11 @@
 package com.university.fpt.acf.controller;
 
 import com.university.fpt.acf.common.entity.ResponseCommon;
-import com.university.fpt.acf.form.AddMaterialForm;
-import com.university.fpt.acf.form.AddUnitFrameHeightForm;
-import com.university.fpt.acf.form.SearchMaterialForm;
-import com.university.fpt.acf.form.UpdateMaterialForm;
+import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.service.MaterialService;
+import com.university.fpt.acf.vo.GetAllMaterialVO;
 import com.university.fpt.acf.vo.MaterialVO;
+import com.university.fpt.acf.vo.UnitMeasureVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +29,84 @@ public class MaterialController {
             list = materialService.searchMaterial(searchForm);
             responseCommon.setData(list);
             total= materialService.totalSearchMaterial(searchForm);
+            message = "Thành công!";
+            if(total==0){
+                message = "Không tìm thấy!";
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(list);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+    @PostMapping("/getunitbymaterial")
+    public ResponseEntity<ResponseCommon> getUnitByMaterial(@RequestParam Long id){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<UnitMeasureVO> listUnits = new ArrayList<>();
+        try {
+            listUnits = materialService.getUnitsByMaterial(id);
+            responseCommon.setData(listUnits);
+            total = listUnits.size();
+            message = "Thành công!";
+            if (total == 0) {
+                message = "Không tìm thấy!";
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(listUnits);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+    @PostMapping("/getmaterialbyunit")
+    public ResponseEntity<ResponseCommon> searchMaterialByUnit(@RequestParam Long id){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<GetAllMaterialVO> listUnits = new ArrayList<>();
+        try {
+            listUnits = materialService.getMaterialByUnit(id);
+            responseCommon.setData(listUnits);
+            total = listUnits.size();
+            message = "Thành công!";
+            if (total == 0) {
+                message = "Không tìm thấy!";
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(listUnits);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+    @GetMapping("/getmaterials")
+    public ResponseEntity<ResponseCommon> getMaterials(){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<GetAllMaterialVO> list = new ArrayList<>();
+        try {
+            list = materialService.getAllMaterial();
+            responseCommon.setData(list);
+            total= list.size();
             message = "Thành công!";
             if(total==0){
                 message = "Không tìm thấy!";

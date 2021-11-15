@@ -6,10 +6,7 @@ import com.university.fpt.acf.form.MaterialSuggestFrom;
 import com.university.fpt.acf.form.SearchMaterialForm;
 import com.university.fpt.acf.repository.EmployeeCustomRepository;
 import com.university.fpt.acf.repository.MaterialCustomRepository;
-import com.university.fpt.acf.vo.AttendanceVO;
-import com.university.fpt.acf.vo.MaterialVO;
-import com.university.fpt.acf.vo.SearchFrameMaterialVO;
-import com.university.fpt.acf.vo.SuggestMaterialVO;
+import com.university.fpt.acf.vo.*;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
@@ -202,4 +199,6 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
         List<Long> list = query.getResultList();
         return (list.size()==0)?null:list.get(0);
     }
+
+
 }

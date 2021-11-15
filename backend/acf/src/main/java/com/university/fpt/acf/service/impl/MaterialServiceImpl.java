@@ -5,8 +5,10 @@ import com.university.fpt.acf.entity.*;
 import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.repository.*;
 import com.university.fpt.acf.service.MaterialService;
+import com.university.fpt.acf.vo.GetAllMaterialVO;
 import com.university.fpt.acf.vo.MaterialVO;
 import com.university.fpt.acf.vo.SuggestMaterialVO;
+import com.university.fpt.acf.vo.UnitMeasureVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -348,5 +350,72 @@ public class MaterialServiceImpl implements MaterialService {
             throw new RuntimeException("Không thêm được ! ");
         }
         return check;
+    }
+
+    @Override
+    public List<GetAllMaterialVO> getAllMaterial() {
+        List<GetAllMaterialVO> list= new ArrayList<>();
+        try{
+            list = materialRepository.getAllMaterial();
+        }catch (Exception e){
+            throw new RuntimeException("Không tìm thấy! ");
+        }
+        return list;
+    }
+
+    @Override
+    public List<GetAllMaterialVO> getAllCoverSheet() {
+        List<GetAllMaterialVO> list= new ArrayList<>();
+        try{
+            list = materialRepository.getAllCoverSheet();
+        }catch (Exception e){
+            throw new RuntimeException("Không tìm thấy! ");
+        }
+        return list;
+    }
+
+    @Override
+    public List<UnitMeasureVO> getUnitsByMaterial(Long id) {
+
+        List<UnitMeasureVO> list= new ArrayList<>();
+        try{
+            list = materialRepository.getUnitSByMaterial(id);
+        }catch (Exception e){
+            throw new RuntimeException("Không tìm thấy! ");
+        }
+        return list;
+    }
+
+    @Override
+    public List<UnitMeasureVO> getUnitsByCoverSheet(Long id) {
+        List<UnitMeasureVO> list= new ArrayList<>();
+        try{
+            list = materialRepository.getUnitSByCoverSheet(id);
+        }catch (Exception e){
+            throw new RuntimeException("Không tìm thấy! ");
+        }
+        return list;
+    }
+
+    @Override
+    public List<GetAllMaterialVO> getMaterialByUnit(Long id) {
+        List<GetAllMaterialVO> list= new ArrayList<>();
+        try{
+            list = materialRepository.getMaterialByUnit(id);
+        }catch (Exception e){
+            throw new RuntimeException("Không tìm thấy! ");
+        }
+        return list;
+    }
+
+    @Override
+    public List<GetAllMaterialVO> getCoverSheetByUnit(Long id) {
+        List<GetAllMaterialVO> list= new ArrayList<>();
+        try{
+            list = materialRepository.getCoverSheetByUnit(id);
+        }catch (Exception e){
+            throw new RuntimeException("Không tìm thấy! ");
+        }
+        return list;
     }
 }

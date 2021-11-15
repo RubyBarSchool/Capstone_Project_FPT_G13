@@ -6,7 +6,9 @@ import com.university.fpt.acf.form.AddUnitFrameHeightForm;
 import com.university.fpt.acf.form.SearchMaterialForm;
 import com.university.fpt.acf.form.UpdateMaterialForm;
 import com.university.fpt.acf.service.MaterialService;
+import com.university.fpt.acf.vo.GetAllMaterialVO;
 import com.university.fpt.acf.vo.MaterialVO;
+import com.university.fpt.acf.vo.UnitMeasureVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +48,84 @@ public class CoverSheetController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-
+    @GetMapping("/getcoversheets")
+    public ResponseEntity<ResponseCommon> getCoverSheets(){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<GetAllMaterialVO> list = new ArrayList<>();
+        try {
+            list = materialService.getAllCoverSheet();
+            responseCommon.setData(list);
+            total= list.size();
+            message = "Thành công!";
+            if(total==0){
+                message = "Không tìm thấy!";
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(list);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+    @PostMapping("/getunitbycoversheet")
+    public ResponseEntity<ResponseCommon> getUnitByCoverSheet(@RequestParam Long id){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<UnitMeasureVO> listUnits = new ArrayList<>();
+        try {
+            listUnits = materialService.getUnitsByCoverSheet(id);
+            responseCommon.setData(listUnits);
+            total = listUnits.size();
+            message = "Thành công!";
+            if (total == 0) {
+                message = "Không tìm thấy!";
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(listUnits);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+    @PostMapping("/getcoversheetbyunit")
+    public ResponseEntity<ResponseCommon> searchCoverSheetByUnit(@RequestParam Long id){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<GetAllMaterialVO> listCoverSheet = new ArrayList<>();
+        try {
+            listCoverSheet = materialService.getCoverSheetByUnit(id);
+            responseCommon.setData(listCoverSheet);
+            total = listCoverSheet.size();
+            message = "Thành công!";
+            if (total == 0) {
+                message = "Không tìm thấy!";
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(listCoverSheet);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
     @PostMapping("/add")
     public ResponseEntity<ResponseCommon> addCoverSheet(@RequestBody AddMaterialForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();

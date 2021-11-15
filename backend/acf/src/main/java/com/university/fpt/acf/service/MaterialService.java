@@ -1,8 +1,11 @@
 package com.university.fpt.acf.service;
 
 import com.university.fpt.acf.form.*;
+import com.university.fpt.acf.vo.GetAllMaterialVO;
 import com.university.fpt.acf.vo.MaterialVO;
 import com.university.fpt.acf.vo.SuggestMaterialVO;
+import com.university.fpt.acf.vo.UnitMeasureVO;
+
 
 import java.util.List;
 
@@ -20,4 +23,10 @@ public interface MaterialService {
     Boolean updateCoverSheet(UpdateMaterialForm updateForm);
     Boolean addUnitInMaterial(AddUnitFrameHeightForm addForm);
     Boolean addUnitInCoverSheet(AddUnitFrameHeightForm addForm);
+    List<GetAllMaterialVO> getAllMaterial();
+    List<GetAllMaterialVO> getAllCoverSheet();
+    List<UnitMeasureVO>getUnitsByMaterial(Long id);
+    List<UnitMeasureVO>getUnitsByCoverSheet(Long id);
+    List<GetAllMaterialVO> getMaterialByUnit( Long id);
+    List<GetAllMaterialVO> getCoverSheetByUnit(Long id);
 }

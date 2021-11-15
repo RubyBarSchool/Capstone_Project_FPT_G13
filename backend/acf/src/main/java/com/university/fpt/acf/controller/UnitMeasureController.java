@@ -117,8 +117,8 @@ public class UnitMeasureController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-    @GetMapping("/getheightcoversheet")
-    public ResponseEntity<ResponseCommon> getAllFrameHeightCoverSheet(){
+    @GetMapping("/getunitcoversheet")
+    public ResponseEntity<ResponseCommon> getUnitCoverSheetToCoverInsert(){
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
         int total;
