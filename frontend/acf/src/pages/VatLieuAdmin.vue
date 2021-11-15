@@ -201,20 +201,10 @@
             <a-row type="flex">
               <a-col flex="100px">Mã vật liệu</a-col>
               <a-col flex="auto">
-                <template v-for="(tag, index) in tags">
-                  <a-tooltip v-if="tag.length > 20" :key="tag" :title="tag">
-                    <a-tag
-                      :key="tag"
-                      :closable="index !== 0"
-                      @close="() => handleClose(tag)"
-                    >
-                      {{ `${tag.slice(0, 20)}...` }}
-                    </a-tag>
-                  </a-tooltip>
+                <template v-for="(tag) in tags">
                   <a-tag
-                    v-else
                     :key="tag"
-                    :closable="index !== 0"
+                    :closable="true"
                     @close="() => handleClose(tag)"
                   >
                     {{ tag }}
@@ -645,7 +635,7 @@ export default {
       visibleAdd: false,
       visibleAddUnit: false,
       visibleAddFrame: false,
-      tags: ["Unremovable", "Tag 2"],
+      tags: [],
       inputVisible: false,
       inputValue: "",
     };
@@ -689,6 +679,7 @@ export default {
     },
     // add vật liệu
     showModalAdd() {
+      this.tags = [];
       this.visibleAdd = true;
     },
 
