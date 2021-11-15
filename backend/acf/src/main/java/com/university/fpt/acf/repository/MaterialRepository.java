@@ -20,13 +20,13 @@ public interface MaterialRepository extends JpaRepository<Material,Long> {
     List<GetAllMaterialVO> getAllMaterial();
     @Query("SELECT new com.university.fpt.acf.vo.GetAllMaterialVO(m.id,m.name) from Material m where m.deleted=false and m.checkMaterial =false ")
     List<GetAllMaterialVO> getAllCoverSheet();
-    @Query("SELECT new com.university.fpt.acf.vo.UnitMeasureVO(u.id,u.name) FROM UnitMeasure u where u.id not in (select distinct um.id from UnitMeasure um inner join um.priceMaterials p inner join p.material ma where p.unitMeasure.id=:id and ma.checkMaterial=true )")
+    @Query("SELECT new com.university.fpt.acf.vo.UnitMeasureVO(u.id,u.name) FROM UnitMeasure u where u.id not in (select distinct pm.unitMeasure.id from Material mm inner join mm.priceMaterials  pm where mm.checkMaterial=true and mm.id=:id and mm.deleted=false )")
     List<UnitMeasureVO>getUnitSByMaterial(@Param("id")Long id);
-    @Query("select new com.university.fpt.acf.vo.GetAllMaterialVO(m.id,m.name) from Material m where m.id not in (select distinct mm.id from Material mm inner join mm.priceMaterials  pm  where pm.unitMeasure.id=:id and mm.checkMaterial=false) and m.checkMaterial=false")
+    @Query("select new com.university.fpt.acf.vo.GetAllMaterialVO(m.id,m.name) from Material m where m.id not in (select distinct mm.id from Material mm inner join mm.priceMaterials  pm  where pm.unitMeasure.id=:id and mm.checkMaterial=false and mm.deleted=false ) and m.checkMaterial=false and m.deleted=false ")
     List<GetAllMaterialVO> getMaterialByUnit(@Param("id") Long id);
-    @Query("SELECT new com.university.fpt.acf.vo.UnitMeasureVO(u.id,u.name) FROM UnitMeasure u where u.id not in (select distinct um.id from UnitMeasure um inner join um.priceMaterials p inner join p.material ma where p.unitMeasure.id=:id and ma.checkMaterial=false )")
+    @Query("SELECT new com.university.fpt.acf.vo.UnitMeasureVO(u.id,u.name) FROM UnitMeasure u where u.id not in (select distinct pm.unitMeasure.id from Material mm inner join mm.priceMaterials  pm where mm.checkMaterial=false and mm.id=:id and mm.deleted=false )")
     List<UnitMeasureVO>getUnitSByCoverSheet(@Param("id")Long id);
-    @Query("select new com.university.fpt.acf.vo.GetAllMaterialVO(m.id,m.name) from Material m where m.id not in (select distinct mm.id from Material mm inner join mm.priceMaterials  pm  where pm.unitMeasure.id=:id and mm.checkMaterial=true ) and m.checkMaterial=true ")
+    @Query("select new com.university.fpt.acf.vo.GetAllMaterialVO(m.id,m.name) from Material m where m.id not in (select distinct mm.id from Material mm inner join mm.priceMaterials  pm  where pm.unitMeasure.id=:id and mm.checkMaterial=true and mm.deleted = false ) and m.checkMaterial=true and m.deleted=false ")
     List<GetAllMaterialVO> getCoverSheetByUnit(@Param("id") Long id);
 }
 
