@@ -2,6 +2,7 @@ package com.university.fpt.acf.controller;
 
 import com.university.fpt.acf.common.entity.ResponseCommon;
 import com.university.fpt.acf.service.UnitMeasureService;
+import com.university.fpt.acf.vo.HeightMaterialVO;
 import com.university.fpt.acf.vo.UnitMeasureVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -88,6 +89,58 @@ public class UnitMeasureController {
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
+    @GetMapping("/getunitsmaterial")
+    public ResponseEntity<ResponseCommon> getAllUnitsMaterialToInset(){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<UnitMeasureVO> list = new ArrayList<>();
+        try {
+            list = unitMeasureService.getUnitsToInsertMaterial();
+            responseCommon.setData(list);
+            total=list.size();
+            message = "Thành công!";
+            if(total==0){
+                message = "Không tìm thấy!";
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(list);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+    @GetMapping("/getheightcoversheet")
+    public ResponseEntity<ResponseCommon> getAllFrameHeightCoverSheet(){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<UnitMeasureVO> list = new ArrayList<>();
+        try {
+            list = unitMeasureService.getUnitsToInsertCoverInsert();
+            responseCommon.setData(list);
+            total=list.size();
+            message = "Thành công!";
+            if(total==0){
+                message = "Không tìm thấy!";
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(list);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
 }

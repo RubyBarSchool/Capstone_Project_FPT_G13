@@ -7,6 +7,7 @@ import com.university.fpt.acf.entity.Employee;
 import com.university.fpt.acf.entity.UnitMeasure;
 import com.university.fpt.acf.repository.UnitMeasureRepository;
 import com.university.fpt.acf.service.UnitMeasureService;
+import com.university.fpt.acf.vo.HeightMaterialVO;
 import com.university.fpt.acf.vo.UnitMeasureVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,34 @@ public class UnitMeasureServiceImpl implements UnitMeasureService {
         List<UnitMeasureVO> list = new ArrayList<>();
         try {
             list = unitMeasureRepository.getAllUnit();
+            if(list == null ){
+                throw new Exception("Không tìm thấy ");
+            }
+        }catch (Exception e){
+            e.getMessage();
+        }
+        return list;
+    }
+
+    @Override
+    public List<UnitMeasureVO> getUnitsToInsertMaterial() {
+        List<UnitMeasureVO> list = new ArrayList<>();
+        try {
+            list = unitMeasureRepository.getUnitsMaterialToInsert();
+            if(list == null ){
+                throw new Exception("Không tìm thấy ");
+            }
+        }catch (Exception e){
+            e.getMessage();
+        }
+        return list;
+    }
+
+    @Override
+    public List<UnitMeasureVO> getUnitsToInsertCoverInsert() {
+        List<UnitMeasureVO> list = new ArrayList<>();
+        try {
+            list = unitMeasureRepository.getUnitsCoverSheetToInsert();
             if(list == null ){
                 throw new Exception("Không tìm thấy ");
             }
