@@ -81,7 +81,7 @@ public class PersonalLeaveApplicationAdminController {
             if(acceptForm.getIdApplication()==null ){
                 message="Dữ liệu NULL! ";
             }else {
-                checkAccept =personalLeaveApplicationService.acceptPersonalLeaveApplication(acceptForm);
+                checkAccept =personalLeaveApplicationService.rejectPersonalLeaveApplication(acceptForm);
                 if(checkAccept==false){
                     message="Loại bỏ đơn lỗi!";
                 }else{
