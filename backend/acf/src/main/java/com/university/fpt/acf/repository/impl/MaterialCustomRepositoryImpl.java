@@ -93,7 +93,7 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
             sql.append(" and LOWER(m.name) like :code ");
             params.put("code", "%"+searchForm.getCodeMaterial().toLowerCase()+"%");
         }
-        if (searchForm.getListIdCompany()!=null ){
+        if (searchForm.getListIdCompany()!=null && !searchForm.getListIdCompany().isEmpty()){
             sql.append(" and c.id in :listID ");
             params.put("listID", searchForm.getListIdCompany());
         }
@@ -101,11 +101,11 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
             sql.append(" and concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight) like :frame ");
             params.put("frame", "%"+searchForm.getFrame().toLowerCase()+"%");
         }
-        if (searchForm.getListUnitId()!=null ){
+        if (searchForm.getListUnitId()!=null && !searchForm.getListUnitId().isEmpty() ){
             sql.append(" and u.id= :idUnit ");
             params.put("idUnit", searchForm.getListUnitId());
         }
-        if (searchForm.getListGroupID()!=null ){
+        if (searchForm.getListGroupID()!=null && !searchForm.getListGroupID().isEmpty() ){
             sql.append(" and g.id in :listGroupId ");
             params.put("listGroupId", searchForm.getListGroupID());
         }
@@ -124,7 +124,7 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
             sql.append(" and LOWER(m.name) like :code ");
             params.put("code", "%"+searchForm.getCodeMaterial().toLowerCase()+"%");
         }
-        if (searchForm.getListIdCompany()!=null ){
+        if (searchForm.getListIdCompany()!=null && !searchForm.getListIdCompany().isEmpty()){
             sql.append(" and c.id in :listID ");
             params.put("listID", searchForm.getListIdCompany());
         }
@@ -132,11 +132,11 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
             sql.append(" and concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight) like :frame ");
             params.put("frame", "%"+searchForm.getFrame().toLowerCase()+"%");
         }
-        if (searchForm.getListUnitId()!=null ){
+        if (searchForm.getListUnitId()!=null && !searchForm.getListUnitId().isEmpty() ){
             sql.append(" and u.id= :idUnit ");
             params.put("idUnit", searchForm.getListUnitId());
         }
-        if (searchForm.getListGroupID()!=null ){
+        if (searchForm.getListGroupID()!=null && !searchForm.getListGroupID().isEmpty() ){
             sql.append(" and g.id in :listGroupId ");
             params.put("listGroupId", searchForm.getListGroupID());
         }
@@ -157,7 +157,7 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
             sql.append(" and LOWER(m.name) like :code ");
             params.put("code", "%"+searchForm.getCodeMaterial().toLowerCase()+"%");
         }
-        if (searchForm.getListIdCompany()!=null ){
+        if (searchForm.getListIdCompany()!=null && !searchForm.getListIdCompany().isEmpty()){
             sql.append(" and c.id in :listID ");
             params.put("listID", searchForm.getListIdCompany());
         }
@@ -165,11 +165,11 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
             sql.append(" and concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight) like :frame ");
             params.put("frame", "%"+searchForm.getFrame().toLowerCase()+"%");
         }
-        if (searchForm.getListUnitId()!=null ){
+        if (searchForm.getListUnitId()!=null && !searchForm.getListUnitId().isEmpty() ){
             sql.append(" and u.id= :idUnit ");
             params.put("idUnit", searchForm.getListUnitId());
         }
-        if (searchForm.getListGroupID()!=null ){
+        if (searchForm.getListGroupID()!=null && !searchForm.getListGroupID().isEmpty() ){
             sql.append(" and g.id in :listGroupId ");
             params.put("listGroupId", searchForm.getListGroupID());
         }
