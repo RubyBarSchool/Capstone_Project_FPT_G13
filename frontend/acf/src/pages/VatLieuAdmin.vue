@@ -23,26 +23,15 @@
             style="width: 150px"
             v-model="dataSearch.codeMaterial"
           />
-          <a-select
+          <a-input
             placeholder="Thông số"
-            mode="multiple"
-            v-model="dataAddMaterial.listIdFrame"
-            :filter-option="false"
-            @search="fetchFrameMaterial"
             style="width: 150px"
-          >
-            <a-select-option
-              v-for="(frameI, index) in dataFrameMaterials"
-              :value="frameI.id"
-              :key="index"
-            >
-              {{ frameI.frame }}
-            </a-select-option>
-          </a-select>
+            v-model="dataSearch.listIdFrame"
+          />
           <a-select
             placeholder="Nhóm vật liệu"
             mode="multiple"
-            v-model="dataAddMaterial.listName"
+            v-model="dataSearch.listGroupID"
             :filter-option="false"
             @search="fetchGroupMaterial"
             style="width: 150px"
@@ -57,7 +46,7 @@
           </a-select>
           <a-select
             placeholder="Đơn vị đo"
-            v-model="dataAddMaterial.idUnit"
+            v-model="dataSearch.idUnit"
             style="width: 150px"
           >
             <a-select-option
@@ -70,7 +59,7 @@
           </a-select>
           <a-select
             placeholder="Công ty"
-            v-model="dataAddMaterial.idCompany"
+            v-model="dataSearch.idCompany"
             style="width: 250px"
           >
             <a-select-option
@@ -140,14 +129,14 @@
               "
               @change="handleTableChange"
             >
-              <template slot="codeMaterial" slot-scope="text, record">
-                {{ record.codeMaterial }}
+              <template slot="name" slot-scope="text, record">
+                {{ record.name }}
               </template>
               <template slot="parameter" slot-scope="text, record">
                 {{ record.parameter }}
               </template>
-              <template slot="groupMaterial" slot-scope="text, record">
-                {{ record.groupMaterial }}
+              <template slot="nameGroup" slot-scope="text, record">
+                {{ record.nameGroup }}
               </template>
               <template slot="unitId" slot-scope="text, record">
                 {{ record.unitId }}
@@ -155,7 +144,6 @@
               <template slot="listIdCompany" slot-scope="text, record">
                 {{ record.listIdCompany }}
               </template>
-
               <template slot="action" slot-scope="text, record">
                 <a-row>
                   <a-col :span="9">
@@ -179,7 +167,7 @@
                     <a-popconfirm
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
-                      @confirm="deleteAccount(record.id)"
+                      @confirm="deleteMaterial(record.id)"
                     >
                       <a-button id="delete">
                         <font-awesome-icon :icon="['fas', 'trash']" />
@@ -196,12 +184,14 @@
           <a-modal v-model="visibleAdd" title="Thêm vật liệu">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary"> Lưu </a-button>
+              <a-button key="submit" type="primary" @click="submitAdd">
+                Lưu
+              </a-button>
             </template>
             <a-row type="flex">
               <a-col flex="100px">Mã vật liệu</a-col>
               <a-col flex="auto">
-                <template v-for="(tag) in tags">
+                <template v-for="tag in tags">
                   <a-tag
                     :key="tag"
                     :closable="true"
@@ -226,7 +216,7 @@
                   style="background: #fff; borderstyle: dashed"
                   @click="showInput"
                 >
-                  <a-icon type="plus" /> New Tag
+                  <font-awesome-icon :icon="['fas', 'plus']" /> Thêm vật liệu
                 </a-tag>
               </a-col>
             </a-row>
@@ -239,7 +229,7 @@
                   mode="multiple"
                   v-model="dataAddMaterial.listIdFrame"
                   :filter-option="false"
-                  @search="fetchFrameMaterial"
+                  @search="fetchFrame"
                   style="width: 100%"
                 >
                   <a-select-option
@@ -257,6 +247,7 @@
               <a-col flex="100px">Chiều cao</a-col>
               <a-col flex="auto">
                 <a-select
+                  placeholder="Chiều cao"
                   mode="multiple"
                   v-model="dataAddMaterial.listIdHeight"
                   :filter-option="false"
@@ -279,10 +270,8 @@
               <a-col flex="auto">
                 <a-col flex="auto">
                   <a-select
-                    mode="multiple"
-                    v-model="dataAddMaterial.listName"
-                    :filter-option="false"
-                    @search="fetchGroupMaterial"
+                    placeholder="Nhóm vật liệu"
+                    v-model="dataAddMaterial.idGroup"
                     style="width: 100%"
                   >
                     <a-select-option
@@ -302,6 +291,7 @@
               <a-col flex="auto">
                 <a-col flex="auto">
                   <a-select
+                    placeholder="Đơn vị đo"
                     v-model="dataAddMaterial.idUnit"
                     style="width: 100%"
                   >
@@ -321,6 +311,7 @@
               <a-col flex="100px">Công ty</a-col>
               <a-col flex="auto">
                 <a-select
+                  placeholder="Công ty"
                   v-model="dataAddMaterial.idCompany"
                   style="width: 100%"
                 >
@@ -344,31 +335,44 @@
           </a-modal>
           <!-- popup add -->
 
-          <!-- popup add frame-->
-          <a-modal v-model="visibleAddFrame" title="Thêm đơn vị">
+          <!-- popup edit-->
+          <a-modal v-model="visibleEdit" title="Chỉnh sửa vật liệu">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary"> Lưu </a-button>
+              <a-button key="submit" type="primary" @click="submitUpdate">
+                Lưu
+              </a-button>
             </template>
             <a-row type="flex">
               <a-col flex="100px">Mã vật liệu</a-col>
               <a-col flex="auto">
-                <!-- <a-select
-                  placeholder="Thông số"
-                  mode="multiple"
-                  v-model="dataAddMaterial.listIdFrame"
-                  :filter-option="false"
-                  @search="fetchFrameMaterial"
-                  style="width: 150px"
-                >
-                  <a-select-option
-                    v-for="(frameI, index) in dataFrameMaterials"
-                    :value="frameI.id"
-                    :key="index"
+                <template v-for="tag in tags">
+                  <a-tag
+                    :key="tag"
+                    :closable="true"
+                    @close="() => handleClose(tag)"
                   >
-                    {{ frameI.frame }}
-                  </a-select-option>
-                </a-select> -->
+                    {{ tag }}
+                  </a-tag>
+                </template>
+                <a-input
+                  v-if="inputVisible"
+                  ref="input"
+                  type="text"
+                  size="small"
+                  :style="{ width: '78px' }"
+                  :value="inputValue"
+                  @change="handleInputChange"
+                  @blur="handleInputConfirm"
+                  @keyup.enter="handleInputConfirm"
+                />
+                <a-tag
+                  v-else
+                  style="background: #fff; borderstyle: dashed"
+                  @click="showInput"
+                >
+                  <font-awesome-icon :icon="['fas', 'plus']" /> Thêm vật liệu
+                </a-tag>
               </a-col>
             </a-row>
             <br />
@@ -378,10 +382,11 @@
                 <a-select
                   placeholder="Thông số"
                   mode="multiple"
-                  v-model="dataAddMaterial.listIdFrame"
+                  v-model="dataEdit.listIdFrame"
                   :filter-option="false"
-                  @search="fetchFrameMaterial"
+                  @search="fetchFrame"
                   style="width: 100%"
+                  disabled
                 >
                   <a-select-option
                     v-for="(frameI, index) in dataFrameMaterials"
@@ -398,11 +403,13 @@
               <a-col flex="100px">Chiều cao</a-col>
               <a-col flex="auto">
                 <a-select
+                  placeholder="Chiều cao"
                   mode="multiple"
-                  v-model="dataAddMaterial.listIdHeight"
+                  v-model="dataEdit.listIdHeight"
                   :filter-option="false"
                   @search="fetchHeight"
                   style="width: 100%"
+                  disabled
                 >
                   <a-select-option
                     v-for="(height, index) in dataHeights"
@@ -414,33 +421,26 @@
                 </a-select>
               </a-col>
             </a-row>
-          </a-modal>
-          <!-- popup add frame-->
-
-          <!-- popup add unit-->
-          <a-modal v-model="visibleAddUnit" title="Thêm khung">
-            <template slot="footer">
-              <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary"> Lưu </a-button>
-            </template>
+            <br />
             <a-row type="flex">
-              <a-col flex="100px">Mã vật liệu</a-col>
+              <a-col flex="100px">Nhóm vật liệu</a-col>
               <a-col flex="auto">
-                <!-- <a-select
-                  mode="multiple"
-                  v-model="dataAddUnitMaterial.idMaterial"
-                  :filter-option="false"
-                  @search="fetchFrame"
-                  style="width: 100%"
-                >
-                  <a-select-option
-                    v-for="(frame, index) in dataFrames"
-                    :value="frame.id"
-                    :key="index"
+                <a-col flex="auto">
+                  <a-select
+                    placeholder="Nhóm vật liệu"
+                    v-model="dataEdit.idGroup"
+                    style="width: 100%"
+                    disabled
                   >
-                    {{ frame.name }}
-                  </a-select-option>
-                </a-select> -->
+                    <a-select-option
+                      v-for="(group, index) in dataGroupMaterials"
+                      :value="group.id"
+                      :key="index"
+                    >
+                      {{ group.name }}
+                    </a-select-option>
+                  </a-select>
+                </a-col>
               </a-col>
             </a-row>
             <br />
@@ -449,8 +449,10 @@
               <a-col flex="auto">
                 <a-col flex="auto">
                   <a-select
-                    v-model="dataAddUnitMaterial.idUnit"
+                    placeholder="Đơn vị đo"
+                    v-model="dataEdit.idUnit"
                     style="width: 100%"
+                    disabled
                   >
                     <a-select-option
                       v-for="(unit, index) in dataUnits"
@@ -463,8 +465,147 @@
                 </a-col>
               </a-col>
             </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">Công ty</a-col>
+              <a-col flex="auto">
+                <a-select
+                  placeholder="Công ty"
+                  v-model="dataEdit.idCompany"
+                  style="width: 100%"
+                  disabled
+                >
+                  <a-select-option
+                    v-for="(company, index) in dataCompanys"
+                    :value="company.id"
+                    :key="index"
+                  >
+                    {{ company.name }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">Giá thành</a-col>
+              <a-col flex="auto"> <a-input v-model="dataEdit.price" /></a-col>
+            </a-row>
+          </a-modal>
+          <!-- popup edit-->
+
+          <!-- popup add unit-->
+          <a-modal v-model="visibleAddUnit" title="Thêm đơn vị">
+            <template slot="footer">
+              <a-button key="back" @click="handleCancel"> Hủy </a-button>
+              <a-button key="submit" type="primary" @click="submitAddUnit">
+                Lưu
+              </a-button>
+            </template>
+            <a-row type="flex">
+              <a-col flex="100px">Mã vật liệu</a-col>
+              <a-col flex="auto">
+                <a-select
+                  v-model="dataAddUnitMaterial.idMaterial"
+                  style="width: 100%"
+                >
+                  <a-select-option
+                    v-for="(frame, index) in dataSourceTable"
+                    :value="frame.id"
+                    :key="index"
+                  >
+                    {{ frame.name }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">Đơn vị đo</a-col>
+              <a-col flex="auto">
+                <a-col flex="auto">
+                  <a-select
+                    v-model="dataAddUnitMaterial.idUnit"
+                    style="width: 100%"
+                  >
+                    <a-select-option
+                      v-for="(unit, index) in dataUnitMaterial"
+                      :value="unit.id"
+                      :key="index"
+                    >
+                      {{ unit.name }}
+                    </a-select-option>
+                  </a-select>
+                </a-col>
+              </a-col>
+            </a-row>
           </a-modal>
           <!-- popup add unit-->
+
+          <!-- popup add frame-->
+          <a-modal v-model="visibleAddFrame" title="Thêm khung và chiều cao">
+            <template slot="footer">
+              <a-button key="back" @click="handleCancel"> Hủy </a-button>
+              <a-button key="submit" type="primary" @click="submitAddFrame">
+                Lưu
+              </a-button>
+            </template>
+            <a-row type="flex">
+              <a-col flex="100px">Mã vật liệu</a-col>
+              <a-col flex="auto">
+                <a-select
+                  v-model="dataAddFrameHeightMaterial.idMaterial"
+                  style="width: 100%"
+                >
+                  <a-select-option
+                    v-for="(frame, index) in dataSourceTable"
+                    :value="frame.id"
+                    :key="index"
+                  >
+                    {{ frame.name }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">Khung</a-col>
+              <a-col flex="auto">
+                <a-select
+                  placeholder="Thông số"
+                  v-model="dataAddFrameHeightMaterial.listIdFrame"
+                  style="width: 100%"
+                >
+                  <a-select-option
+                    v-for="(frameI, index) in dataAllFramseMaterial"
+                    :value="frameI.id"
+                    :key="index"
+                  >
+                    {{ frameI.frame }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">Chiều cao</a-col>
+              <a-col flex="auto">
+                <a-select
+                  placeholder="Chiều cao"
+                  v-model="dataAddFrameHeightMaterial.listIdHeight"
+                  style="width: 100%"
+                >
+                  <a-select-option
+                    v-for="(height, index) in dataHeightMaterial"
+                    :value="height.id"
+                    :key="index"
+                  >
+                    {{ height.frameHeight }}
+                  </a-select-option>
+                </a-select>
+              </a-col>
+            </a-row>
+          </a-modal>
+          <!-- popup add frame-->
         </div>
       </a-layout-content>
       <Footer />
@@ -475,7 +616,6 @@
 import companyService from "@/service/companyService.js";
 import unitService from "@/service/unitService.js";
 import groupMaterialService from "@/service/groupMaterialService.js";
-// import frameAdminService from "@/service/frameAdminService.js";
 import chieuCaoService from "@/service/chieuCaoService.js";
 import vatLieuAdminService from "@/service/vatLieuAdminService.js";
 import Header from "@/layouts/Header.vue";
@@ -517,7 +657,8 @@ export default {
         pageIndex: 1,
         pageSize: 10,
       },
-      dataGroupMaterials: [],
+      dataHeightMaterial: [],
+      dataGroupMaterials: "",
       dataGroupMaterial: {
         name: "",
         pageIndex: 1,
@@ -529,6 +670,8 @@ export default {
         pageIndex: 1,
         pageSize: 10,
       },
+      dataUnitMaterial: [],
+      dataAllFramseMaterial: [],
       dataCompanys: "",
       dataCompany: {
         address: "",
@@ -537,7 +680,7 @@ export default {
         pageIndex: 1,
         pageSize: 10,
       },
-      dataFrameMaterials: "",
+      dataFrameMaterials: [],
       dataFrameMaterial: {
         frame: "",
         pageIndex: 1,
@@ -583,10 +726,10 @@ export default {
         },
         {
           title: "Mã vật liệu",
-          dataIndex: "codeMaterial",
-          key: "codeMaterial",
+          dataIndex: "name",
+          key: "name",
           width: 150,
-          scopedSlots: { customRender: "codeMaterial" },
+          scopedSlots: { customRender: "name" },
         },
         {
           title: "Thông số",
@@ -597,10 +740,10 @@ export default {
         },
         {
           title: "Nhóm vật liệu",
-          dataIndex: "groupMaterial",
-          key: "groupMaterial",
+          dataIndex: "nameGroup",
+          key: "nameGroup",
           width: 150,
-          scopedSlots: { customRender: "groupMaterial" },
+          scopedSlots: { customRender: "nameGroup" },
         },
         {
           title: "Đơn vị đo",
@@ -633,6 +776,7 @@ export default {
         },
       ],
       visibleAdd: false,
+      visibleEdit: false,
       visibleAddUnit: false,
       visibleAddFrame: false,
       tags: [],
@@ -643,11 +787,13 @@ export default {
   computed: {},
   created() {
     this.submitSearch();
-    this.getAllHeight();
-    this.getAllGroupMaterial();
-    this.getAllUnit();
-    this.getAllCompany();
-    this.getAllFrameMaterial();
+    // this.getAllHeight();
+    // this.getAllGroupMaterial();
+    // this.getAllUnit();
+    // this.getAllCompany();
+    // this.getAllFrameMaterial();
+    // this.getAllFrame();
+    // this.getAllUnitsMaterialToInset();
   },
   methods: {
     handleTableChange(pagination) {
@@ -677,15 +823,147 @@ export default {
           console.log(e);
         });
     },
+
     // add vật liệu
     showModalAdd() {
       this.tags = [];
       this.visibleAdd = true;
     },
 
+    //submit add
+    submitAdd() {
+      this.dataAddMaterial.listName = this.tags;
+      vatLieuAdminService
+        .addMaterial(this.dataAddMaterial)
+        .then((response) => {
+          this.submitSearch();
+          if (response.data.data) {
+            let type = "success";
+            let message = "Thêm vật liệu mới";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Thêm vật liệu mới";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      this.visibleAdd = false;
+    },
+
+    //delete Material
+    deleteMaterial(id) {
+      vatLieuAdminService
+        .deleteMaterial(id)
+        .then((response) => {
+          if (response.data.data) {
+            let type = "success";
+            let message = "Xóa";
+            let description = "Xóa vật liệu thành công";
+            this.notifi(type, message, description);
+            this.submitSearch();
+          } else {
+            let type = "error";
+            let message = "Xóa";
+            let description = "Xóa vật liệu không thành công";
+            this.notifi(type, message, description);
+            this.submitSearch();
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
+    //show model Update
+    showModalEdit(id, idFrame, idHeight, idUnit, price) {
+      this.dataEdit.id = id;
+      this.dataEdit.idFrame = idFrame;
+      this.dataEdit.idHeight = idHeight;
+      this.dataEdit.idUnit = idUnit;
+      this.dataEdit.price = price;
+      this.visibleEdit = true;
+    },
+
+    //submit update
+    submitUpdate() {
+      vatLieuAdminService
+        .updateMaterial(this.dataEdit)
+        .then((response) => {
+          this.submitSearch();
+          if (response.data.data) {
+            let type = "success";
+            let message = "Cập nhật";
+            let description = "Cập nhật đơn thành công";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Cập nhật";
+            let description = "Cập nhật đơn không thành công";
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      this.visibleEdit = false;
+    },
+
     //add đơn vị
     showModalAddUnit() {
       this.visibleAddUnit = true;
+    },
+
+    //submit add unit
+    submitAddUnit() {
+      vatLieuAdminService
+        .addUnitMaterial(this.dataAddUnitMaterial)
+        .then((response) => {
+          this.submitSearch();
+          if (response.data.data) {
+            let type = "success";
+            let message = "Thêm đơn vị mới";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Thêm đơn vị mới";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      this.visibleAddUnit = false;
+    },
+
+    //submit add frame
+    submitAddFrame() {
+      vatLieuAdminService
+        .addFrameHeightMaterial(this.dataAddFrameHeightMaterial)
+        .then((response) => {
+          this.submitSearch();
+          if (response.data.data) {
+            let type = "success";
+            let message = "Thêm khung và chiều cao mới";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Thêm khung và chiều cao mới";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      this.visibleAddFrame = false;
     },
 
     //add khung
@@ -696,6 +974,7 @@ export default {
       this.visibleAdd = false;
       this.visibleAddUnit = false;
       this.visibleAddFrame = false;
+      this.visibleEdit = false;
     },
     notifi(type, message, description) {
       this.$notification[type]({
@@ -741,7 +1020,33 @@ export default {
     //khung vật liệu
     getAllFrameMaterial() {
       vatLieuAdminService
-        .getAllFrameMaterial(this.dataFrameMaterial)
+        .getAllFrameMaterial()
+        .then((response) => {
+          this.dataAllFramseMaterial = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    //khung vật liệu
+
+    //chiều cao vật liệu
+    getAllFrameHeightMaterialToInset(){
+      vatLieuAdminService
+        .getAllFrameHeightMaterialToInset()
+        .then((response) => {
+          this.dataHeightMaterial = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    //chiều cao vật liệu
+
+    //khung
+    getAllFrame() {
+      vatLieuAdminService
+        .getAllFrame(this.dataFrameMaterial)
         .then((response) => {
           this.dataFrameMaterials = response.data.data;
         })
@@ -749,11 +1054,11 @@ export default {
           console.log(e);
         });
     },
-    fetchFrameMaterial(value) {
+    fetchFrame(value) {
       this.dataFrameMaterial.frame = value;
-      this.getAllFrameMaterial();
+      this.getAllFrame();
     },
-    //khung vật liệu
+    //khung
 
     //đơn vị
     getAllUnit() {
@@ -767,6 +1072,19 @@ export default {
         });
     },
     //đơn vị
+
+    //đơn vị vật liệu
+    getAllUnitsMaterialToInset() {
+      vatLieuAdminService
+        .getAllUnitsMaterialToInset()
+        .then((response) => {
+          this.dataUnitMaterial = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    //đơn vị vật liệu
 
     //công ty
     getAllCompany() {

@@ -19,8 +19,17 @@ class vatLieuAdminService {
     deleteMaterial(id) {
         return http.delete(`/admin/material/delete?id=${id}`);
     }
-    getAllFrameMaterial(form) {
-        return http.get("/admin/framematerial/getframematerial", form);
+    getAllFrameMaterial() {
+        return http.get("/admin/framematerial/getframematerial");
+    }
+    getAllFrame(form) {
+        return http.post("/admin/framematerial/getframe", form);
+    }
+    getAllUnitsMaterialToInset() {
+        return http.get("/admin/unit/getunitsmaterial");
+    }
+    getAllFrameHeightMaterialToInset() {
+        return http.get("/admin/height/getheightmaterial");
     }
 }
 
