@@ -60,19 +60,19 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
             sql.append(" and LOWER(m.name) like :code ");
             params.put("code", "%"+searchForm.getCodeMaterial().toLowerCase()+"%");
         }
-        if(!searchForm.getFrame().isEmpty() && searchForm.getFrame()==null){
-            sql.append(" and concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight) like :frame ");
-            params.put("frame", "%"+searchForm.getFrame().toLowerCase()+"%");
-        }
-        if (searchForm.getListIdCompany()!=null ){
+        if (searchForm.getListIdCompany()!=null && !searchForm.getListIdCompany().isEmpty()){
             sql.append(" and c.id in :listID ");
             params.put("listID", searchForm.getListIdCompany());
         }
-        if (searchForm.getListUnitId()!=null ){
-            sql.append(" and u.id in :idUnit ");
+        if(searchForm.getFrame()!=null && !searchForm.getFrame().isEmpty()  ){
+            sql.append(" and concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight) like :frame ");
+            params.put("frame", "%"+searchForm.getFrame().toLowerCase()+"%");
+        }
+        if (searchForm.getListUnitId()!=null && !searchForm.getListUnitId().isEmpty() ){
+            sql.append(" and u.id= :idUnit ");
             params.put("idUnit", searchForm.getListUnitId());
         }
-        if (searchForm.getListGroupID()!=null ){
+        if (searchForm.getListGroupID()!=null && !searchForm.getListGroupID().isEmpty() ){
             sql.append(" and g.id in :listGroupId ");
             params.put("listGroupId", searchForm.getListGroupID());
         }
@@ -88,7 +88,7 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
         sql.append("select COUNT(*) from Material m left join m.priceMaterials p inner join m.groupMaterial g inner join " +
-                "m.company c inner join p.heightMaterial h inner join p.unitMeasure u inner join p.frameMaterial f where m.checkMaterial=true and m.deleted =false  ");
+                "m.company c inner join p.heightMaterial h inner join p.unitMeasure u inner join p.frameMaterial f where m.checkMaterial=true and m.deleted =false ");
         if(searchForm.getCodeMaterial()!=null && !searchForm.getCodeMaterial().isEmpty()){
             sql.append(" and LOWER(m.name) like :code ");
             params.put("code", "%"+searchForm.getCodeMaterial().toLowerCase()+"%");
@@ -97,7 +97,7 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
             sql.append(" and c.id in :listID ");
             params.put("listID", searchForm.getListIdCompany());
         }
-        if(!searchForm.getFrame().isEmpty() && searchForm.getFrame()==null){
+        if(searchForm.getFrame()!=null && !searchForm.getFrame().isEmpty()  ){
             sql.append(" and concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight) like :frame ");
             params.put("frame", "%"+searchForm.getFrame().toLowerCase()+"%");
         }
@@ -128,7 +128,7 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
             sql.append(" and c.id in :listID ");
             params.put("listID", searchForm.getListIdCompany());
         }
-        if(!searchForm.getFrame().isEmpty() && searchForm.getFrame()==null){
+        if(searchForm.getFrame()!=null && !searchForm.getFrame().isEmpty()  ){
             sql.append(" and concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight) like :frame ");
             params.put("frame", "%"+searchForm.getFrame().toLowerCase()+"%");
         }
@@ -161,7 +161,7 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
             sql.append(" and c.id in :listID ");
             params.put("listID", searchForm.getListIdCompany());
         }
-        if(!searchForm.getFrame().isEmpty() && searchForm.getFrame()==null){
+        if(searchForm.getFrame()!=null && !searchForm.getFrame().isEmpty()  ){
             sql.append(" and concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight) like :frame ");
             params.put("frame", "%"+searchForm.getFrame().toLowerCase()+"%");
         }
