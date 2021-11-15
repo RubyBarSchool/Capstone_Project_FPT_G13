@@ -91,18 +91,39 @@ public class MaterialServiceImpl implements MaterialService {
         try{
             List<String> list = addForm.getListName();
             for(int i=0 ;i<list.size();i++) {
+                GroupMaterial groupMaterial = groupMaterialRepository.getGroupMaterialByID(addForm.getIdGroup());
+                if(groupMaterial==null){
+                    throw new RuntimeException("Không tồn tại nhóm vật liệu  ! ");
+                }
+                Company company =companyRespository.getCompanyById(addForm.getIdCompany());
+                if(company==null){
+                    throw new RuntimeException("Không tồn tại công ty vật liệu  ! ");
+                }
                 CheckMaterialForm a = new CheckMaterialForm();
                 a.setName(list.get(i));
-                a.setIdCompany(a.getIdCompany());
-                a.setIdGroup(a.getIdGroup());
-                if(materialCustomRepository.getIdMaterial(a)==null){
+                a.setIdCompany(addForm.getIdCompany());
+                a.setIdGroup(addForm.getIdGroup());
+                Long idMaterial =materialCustomRepository.getIdCoverSheet(a);
+                if(idMaterial==null){
+                    Material m = new Material();
+                    m.setName(list.get(i));
+                    m.setGroupMaterial(groupMaterial);
+                    m.setCompany(company);
+                    AccountSercurity accountSercurity = new AccountSercurity();
+                    m.setModified_by(accountSercurity.getUserName());
+                    m.setCreated_by(accountSercurity.getUserName());
+                    m.setCreated_date(LocalDate.now());
                     List<PriceMaterial> listPriceMaterial = new ArrayList<>();
                     List<Long> listIdFrame = addForm.getListIdFrame();
                     for(int j=0;j<listIdFrame.size();j++){
                         List<Long> listIdHeight = addForm.getListIdHeight();
                         for(int k=0;k<listIdHeight.size();k++){
                             PriceMaterial pm = new PriceMaterial();
+                            pm.setMaterial(m);
                             pm.setPrice(addForm.getPrice());
+                            pm.setModified_by(accountSercurity.getUserName());
+                            pm.setCreated_by(accountSercurity.getUserName());
+                            pm.setCreated_date(LocalDate.now());
                             HeightMaterial h= new HeightMaterial();
                             h.setId(listIdHeight.get(k));
                             pm.setHeightMaterial(h);
@@ -110,26 +131,16 @@ public class MaterialServiceImpl implements MaterialService {
                             unit.setId(addForm.getIdUnit());
                             pm.setUnitMeasure(unit);
                             FrameMaterial fm = new FrameMaterial();
-                            fm.setId(listIdHeight.get(j));
+                            fm.setId(listIdFrame.get(j));
                             pm.setFrameMaterial(fm);
                             listPriceMaterial.add(pm);
                         }
                     }
-                    Material m = new Material();
-                    m.setGroupMaterial(groupMaterialRepository.getGroupMaterialByID(addForm.getIdGroup()));
-                    m.setCompany(companyRespository.getCompanyById(addForm.getIdCompany()));
-                    AccountSercurity accountSercurity = new AccountSercurity();
-                    m.setModified_by(accountSercurity.getUserName());
-                    m.setCreated_by(accountSercurity.getUserName());
-                    m.setCreated_date(LocalDate.now());
                     m.setPriceMaterials(listPriceMaterial);
                     materialRepository.saveAndFlush(m);
                     check=true;
-
                 }
-
             }
-
         }catch (Exception e){
             throw new RuntimeException("Không thêm mới được ! ");
         }
@@ -185,18 +196,40 @@ public class MaterialServiceImpl implements MaterialService {
         try{
             List<String> list = addForm.getListName();
             for(int i=0 ;i<list.size();i++) {
+                GroupMaterial groupCoverSheet = groupMaterialRepository.getGroupCoverPlateByID(addForm.getIdGroup());
+                if(groupCoverSheet==null){
+                    throw new RuntimeException("Không tồn tại nhóm tấm phủ  ! ");
+                }
+                Company company =companyRespository.getCompanyById(addForm.getIdCompany());
+                if(company==null){
+                    throw new RuntimeException("Không tồn tại công ty tấm phủ  ! ");
+                }
                 CheckMaterialForm a = new CheckMaterialForm();
                 a.setName(list.get(i));
-                a.setIdCompany(a.getIdCompany());
-                a.setIdGroup(a.getIdGroup());
-                if(materialCustomRepository.getIdMaterial(a)==null){
+                a.setIdCompany(addForm.getIdCompany());
+                a.setIdGroup(addForm.getIdGroup());
+                Long idMaterial =materialCustomRepository.getIdCoverSheet(a);
+                if(idMaterial==null){
+                    Material m = new Material();
+                    m.setCheckMaterial(false);
+                    m.setName(list.get(i));
+                    m.setGroupMaterial(groupCoverSheet);
+                    m.setCompany(company);
+                    AccountSercurity accountSercurity = new AccountSercurity();
+                    m.setModified_by(accountSercurity.getUserName());
+                    m.setCreated_by(accountSercurity.getUserName());
+                    m.setCreated_date(LocalDate.now());
                     List<PriceMaterial> listPriceMaterial = new ArrayList<>();
                     List<Long> listIdFrame = addForm.getListIdFrame();
                     for(int j=0;j<listIdFrame.size();j++){
                         List<Long> listIdHeight = addForm.getListIdHeight();
                         for(int k=0;k<listIdHeight.size();k++){
                             PriceMaterial pm = new PriceMaterial();
+                            pm.setMaterial(m);
                             pm.setPrice(addForm.getPrice());
+                            pm.setModified_by(accountSercurity.getUserName());
+                            pm.setCreated_by(accountSercurity.getUserName());
+                            pm.setCreated_date(LocalDate.now());
                             HeightMaterial h= new HeightMaterial();
                             h.setId(listIdHeight.get(k));
                             pm.setHeightMaterial(h);
@@ -204,27 +237,16 @@ public class MaterialServiceImpl implements MaterialService {
                             unit.setId(addForm.getIdUnit());
                             pm.setUnitMeasure(unit);
                             FrameMaterial fm = new FrameMaterial();
-                            fm.setId(listIdHeight.get(j));
+                            fm.setId(listIdFrame.get(j));
                             pm.setFrameMaterial(fm);
                             listPriceMaterial.add(pm);
                         }
                     }
-                    Material m = new Material();
-                    m.setCheckMaterial(false);
-                    m.setGroupMaterial(groupMaterialRepository.getGroupMaterialByID(addForm.getIdGroup()));
-                    m.setCompany(companyRespository.getCompanyById(addForm.getIdCompany()));
-                    AccountSercurity accountSercurity = new AccountSercurity();
-                    m.setModified_by(accountSercurity.getUserName());
-                    m.setCreated_by(accountSercurity.getUserName());
-                    m.setCreated_date(LocalDate.now());
                     m.setPriceMaterials(listPriceMaterial);
                     materialRepository.saveAndFlush(m);
                     check=true;
-
                 }
-
             }
-
         }catch (Exception e){
             throw new RuntimeException("Không thêm mới được ! ");
         }

@@ -13,6 +13,7 @@ import com.university.fpt.acf.vo.SuggestMaterialVO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +55,7 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
         sql.append("select new com.university.fpt.acf.vo.MaterialVO( m.id,m.name,p.id,concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight),g.id,g.name,c.id,c.name,u.id,u.name,p.price ) from Material m left join m.priceMaterials p inner join m.groupMaterial g inner join " +
-                "m.company c inner join p.heightMaterial h inner join p.unitMeasure u inner join p.frameMaterial f where m.checkMaterial=true  ");
+                "m.company c inner join p.heightMaterial h inner join p.unitMeasure u inner join p.frameMaterial f where m.checkMaterial=true and m.deleted =false ");
         if(searchForm.getCodeMaterial()!=null && !searchForm.getCodeMaterial().isEmpty()){
             sql.append(" and LOWER(m.name) like :code ");
             params.put("code", "%"+searchForm.getCodeMaterial().toLowerCase()+"%");
@@ -87,7 +88,7 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
         sql.append("select COUNT(*) from Material m left join m.priceMaterials p inner join m.groupMaterial g inner join " +
-                "m.company c inner join p.heightMaterial h inner join p.unitMeasure u inner join p.frameMaterial f where m.checkMaterial=true  ");
+                "m.company c inner join p.heightMaterial h inner join p.unitMeasure u inner join p.frameMaterial f where m.checkMaterial=true and m.deleted =false  ");
         if(searchForm.getCodeMaterial()!=null && !searchForm.getCodeMaterial().isEmpty()){
             sql.append(" and LOWER(m.name) like :code ");
             params.put("code", "%"+searchForm.getCodeMaterial().toLowerCase()+"%");
@@ -118,7 +119,7 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
         sql.append("select new com.university.fpt.acf.vo.MaterialVO( m.id,m.name,p.id,concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight),g.id,g.name,c.id,c.name,u.id,u.name,p.price ) from Material m left join m.priceMaterials p inner join m.groupMaterial g inner join " +
-                "m.company c inner join p.heightMaterial h inner join p.unitMeasure u inner join p.frameMaterial f where m.checkMaterial=false  ");
+                "m.company c inner join p.heightMaterial h inner join p.unitMeasure u inner join p.frameMaterial f where m.checkMaterial=false and m.deleted =false ");
         if(searchForm.getCodeMaterial()!=null && !searchForm.getCodeMaterial().isEmpty()){
             sql.append(" and LOWER(m.name) like :code ");
             params.put("code", "%"+searchForm.getCodeMaterial().toLowerCase()+"%");
@@ -151,7 +152,7 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
         sql.append("select COUNT(*) from Material m left join m.priceMaterials p inner join m.groupMaterial g inner join " +
-                "m.company c inner join p.heightMaterial h inner join p.unitMeasure u inner join p.frameMaterial f where m.checkMaterial=false  ");
+                "m.company c inner join p.heightMaterial h inner join p.unitMeasure u inner join p.frameMaterial f where m.checkMaterial=false and m.deleted =false ");
         if(searchForm.getCodeMaterial()!=null && !searchForm.getCodeMaterial().isEmpty()){
             sql.append(" and LOWER(m.name) like :code ");
             params.put("code", "%"+searchForm.getCodeMaterial().toLowerCase()+"%");
@@ -181,11 +182,24 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
     public Long getIdMaterial(CheckMaterialForm checkMaterialForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select m.id from Material m where m.checkMaterial = true and m.name=:name and m.company.id=:idCompany and m.company.id=:idGroup ");
+        sql.append("select m.id from Material m where m.checkMaterial = true and m.name=:name and m.company.id=:idCompany and m.groupMaterial.id=:idGroup ");
         params.put("name", "%"+checkMaterialForm.getName().toLowerCase()+"%");
         params.put("idCompany", checkMaterialForm.getIdCompany());
         params.put("idGroup", checkMaterialForm.getIdGroup());
         TypedQuery<Long> query = super.createQuery(sql.toString(), params, Long.class);
         return query.getSingleResult();
+    }
+
+    @Override
+    public Long getIdCoverSheet(CheckMaterialForm checkMaterialForm) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append("select m.id from Material m where m.checkMaterial = false and m.name=:name and m.company.id=:idCompany and m.groupMaterial.id=:idGroup ");
+        params.put("name", "%"+checkMaterialForm.getName().toLowerCase()+"%");
+        params.put("idCompany", checkMaterialForm.getIdCompany());
+        params.put("idGroup", checkMaterialForm.getIdGroup());
+        TypedQuery<Long> query = super.createQuery(sql.toString(), params, Long.class);
+        List<Long> list = query.getResultList();
+        return (list.size()==0)?null:list.get(0);
     }
 }

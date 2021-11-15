@@ -19,7 +19,7 @@ public interface GroupMaterialRepository extends JpaRepository<GroupMaterial, Lo
     @Query("select g.id from GroupMaterial  g where g.checkGroupMaterial=true and g.name =:name")
     Long getIdByNameGroup(@Param("name") String name);
 
-    @Query("select g from GroupMaterial  g where g.checkGroupMaterial=true and  g.id =:id")
+    @Query("select g from GroupMaterial  g where g.checkGroupMaterial = true and  g.id =:id")
     GroupMaterial getGroupMaterialByID(@Param("id") Long id);
     @Query("select new com.university.fpt.acf.vo.GroupMaterialVO(u.id,u.name) from GroupMaterial u  where u.checkGroupMaterial=true")
     List<GroupMaterialVO> getAllGroups();
