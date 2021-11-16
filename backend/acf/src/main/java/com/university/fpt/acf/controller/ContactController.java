@@ -50,33 +50,6 @@ public class ContactController {
         }
     }
 
-    @PostMapping("/getContactInSearch")
-    public ResponseEntity<ResponseCommon> getContactInFormSearch(@Valid @RequestBody ContactInSearchForm contactInSearchForm) {
-        ResponseCommon responseCommon = new ResponseCommon();
-        String message = "";
-        List<ContactVO> contacts = new ArrayList<>();
-        Integer total = 0;
-        try {
-            contacts = contactService.searchContact(contactInSearchForm);
-            total = contactService.getTotalSearchContact(contactInSearchForm);
-            responseCommon.setData(contacts);
-            responseCommon.setTotal(total);
-            message = "Lấy hợp đồng thành công";
-            if (total.intValue() == 0) {
-                message = "Không tìm thấy hợp đồng";
-            }
-            responseCommon.setStatus(HttpStatus.OK.value());
-            responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
-        } catch (Exception e) {
-            message = "Không thêm được hợp đồng";
-            responseCommon.setData(contacts);
-            responseCommon.setTotal(total);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
-            responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
-        }
-    }
 
     @PostMapping("/readexcel")
     public ResponseEntity<ResponseCommon> readFileContact(@RequestParam("file") MultipartFile file) {

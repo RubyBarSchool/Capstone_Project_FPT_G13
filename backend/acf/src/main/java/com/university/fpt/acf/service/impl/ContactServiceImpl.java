@@ -5,6 +5,7 @@ import com.university.fpt.acf.entity.*;
 import com.university.fpt.acf.form.AddContactForm;
 import com.university.fpt.acf.form.AttendanceNote;
 import com.university.fpt.acf.form.ContactInSearchForm;
+import com.university.fpt.acf.form.SearchContactDetailForm;
 import com.university.fpt.acf.repository.ContactCustomRepository;
 import com.university.fpt.acf.repository.ContactRepository;
 import com.university.fpt.acf.repository.PriceMaterialRepository;
@@ -35,6 +36,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Autowired
     private ContactCustomRepository contactCustomRepository;
+
     @Override
     public Contact addContact(AddContactForm addContactForm) {
         Contact contact = new Contact();
@@ -69,7 +71,7 @@ public class ContactServiceImpl implements ContactService {
                             , fileMaterialVO.getIdMaterial(), fileMaterialVO.getFrameWidthMaterial(),
                             fileMaterialVO.getFrameLengthMaterial()
                             , fileMaterialVO.getFrameHeightMaterial());
-                    if(priceMaterial == null){
+                    if (priceMaterial == null) {
                         throw new RuntimeException("Không tồn tại material");
                     }
                     ProductMaterial productMaterial = new ProductMaterial();
@@ -80,18 +82,18 @@ public class ContactServiceImpl implements ContactService {
                     productMaterial.setPriceAtCreateContact(fileMaterialVO.getPriceMaterial());
                     productMaterial.setPriceMaterial(priceMaterial);
                     productMaterial.setProduct(product);
-                    valuePriceMaterial += (Integer.parseInt(priceMaterial.getPrice())*fileMaterialVO.getCountMaterial());
+                    valuePriceMaterial += (Integer.parseInt(priceMaterial.getPrice()) * fileMaterialVO.getCountMaterial());
                     productMaterials.add(productMaterial);
                 }
                 product.setProductMaterials(productMaterials);
-                product.setPrice(valuePriceMaterial*fileProductVO.getCountProduct() +"");
+                product.setPrice(valuePriceMaterial * fileProductVO.getCountProduct() + "");
                 products.add(product);
             }
             contact.setProducts(products);
-            if(products.size() == 0 ){
+            if (products.size() == 0) {
                 throw new RuntimeException("Hợp đồng lỗi không tồn tại bất kì sản phẩm nào");
             }
-            contact.setNumberFinish("0/"+products.size());
+            contact.setNumberFinish("0/" + products.size());
             contactRepository.saveAndFlush(contact);
         } catch (Exception ex) {
             throw new RuntimeException(ex.getMessage());
@@ -118,6 +120,31 @@ public class ContactServiceImpl implements ContactService {
         int total = 0;
         try {
             total = contactCustomRepository.getTotalSearchContact(contactInSearchForm);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return total;
+    }
+
+    @Override
+    public List<SearchContactDetailVO> searchContactDetail(SearchContactDetailForm searchContactDetailForm) {
+        List<SearchContactDetailVO> SearchContactDetailVOS = new ArrayList<>();
+        try {
+            SearchContactDetailVOS = contactCustomRepository.searchContactDetail(searchContactDetailForm);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return SearchContactDetailVOS;
+    }
+
+    @Override
+    public int getTotalSearchContactDetail(SearchContactDetailForm searchContactDetailForm) {
+        if (searchContactDetailForm.getTotal() != null && searchContactDetailForm.getTotal() != 0) {
+            return searchContactDetailForm.getTotal().intValue();
+        }
+        int total = 0;
+        try {
+            total = contactCustomRepository.getTotalSearchContactDetail(searchContactDetailForm);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
