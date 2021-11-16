@@ -290,6 +290,7 @@ public class MaterialServiceImpl implements MaterialService {
             for(int i=0;i<list.size();i++){
                 PriceMaterial pm = list.get(i);
                 pm.setId(null);
+                pm.setPrice("");
                 UnitMeasure unit = new UnitMeasure();
                 unit.setId(addForm.getIdUnit());
                 pm.setUnitMeasure(unit);
@@ -314,6 +315,7 @@ public class MaterialServiceImpl implements MaterialService {
             for(int i=0;i<list.size();i++){
                 PriceMaterial pm = list.get(i);
                 pm.setId(null);
+                pm.setPrice("");
                 UnitMeasure unit = new UnitMeasure();
                 unit.setId(addForm.getIdUnit());
                 pm.setUnitMeasure(unit);
@@ -334,16 +336,25 @@ public class MaterialServiceImpl implements MaterialService {
     public Boolean addFrameHeightMaterial(AddUnitFrameHeightForm addForm) {
         Boolean check = false;
         try{
-            List<PriceMaterial>list = priceMaterialRepository.getListPriceMaterialById(addForm.getIdMaterial());
+            List<Long> listId = priceMaterialRepository.getIdPriceMaterialByFrameHeightMaterial(addForm.getIdMaterial(), addForm.getIdFrame(), addForm.getIdHeight());
+            if(listId!=null && listId.size()!=0){
+                throw new RuntimeException("Đã tồn tại!!! ");
+            }
+            List<Long>list = priceMaterialRepository.getListIdUnitPriceMaterialById(addForm.getIdMaterial());
             for(int i=0;i<list.size();i++){
-                PriceMaterial pm = list.get(i);
-                pm.setId(null);
+                PriceMaterial pm = new PriceMaterial();
+                Material m = new Material();
+                m.setId(addForm.getIdMaterial());
+                pm.setMaterial(m);
                 FrameMaterial frame = new FrameMaterial();
                 frame.setId(addForm.getIdFrame());
                 pm.setFrameMaterial(frame);
                 HeightMaterial h = new HeightMaterial();
                 h.setId(addForm.getIdHeight());
                 pm.setHeightMaterial(h);
+                UnitMeasure u = new UnitMeasure();
+                u.setId(list.get(i));
+                pm.setUnitMeasure(u);
                 AccountSercurity accountSercurity = new AccountSercurity();
                 pm.setModified_by(accountSercurity.getUserName());
                 pm.setCreated_by(accountSercurity.getUserName());
@@ -361,16 +372,25 @@ public class MaterialServiceImpl implements MaterialService {
     public Boolean addFrameHeightCoverSheet(AddUnitFrameHeightForm addForm) {
         Boolean check = false;
         try{
-            List<PriceMaterial>list = priceMaterialRepository.getListPriceCoverSheetById(addForm.getIdMaterial());
+            List<Long> listId = priceMaterialRepository.getIdPriceMaterialByFrameHeightCoverSheet(addForm.getIdMaterial(), addForm.getIdFrame(), addForm.getIdHeight());
+            if(listId!=null && listId.size()!=0){
+                throw new RuntimeException("Đã tồn tại!!! ");
+            }
+            List<Long>list = priceMaterialRepository.getListIdUnitPriceCoverSheetById(addForm.getIdMaterial());
             for(int i=0;i<list.size();i++){
-                PriceMaterial pm = list.get(i);
-                pm.setId(null);
+                PriceMaterial pm = new PriceMaterial();
+                Material m = new Material();
+                m.setId(addForm.getIdMaterial());
+                pm.setMaterial(m);
                 FrameMaterial frame = new FrameMaterial();
                 frame.setId(addForm.getIdFrame());
                 pm.setFrameMaterial(frame);
                 HeightMaterial h = new HeightMaterial();
                 h.setId(addForm.getIdHeight());
                 pm.setHeightMaterial(h);
+                UnitMeasure u = new UnitMeasure();
+                u.setId(list.get(i));
+                pm.setUnitMeasure(u);
                 AccountSercurity accountSercurity = new AccountSercurity();
                 pm.setModified_by(accountSercurity.getUserName());
                 pm.setCreated_by(accountSercurity.getUserName());

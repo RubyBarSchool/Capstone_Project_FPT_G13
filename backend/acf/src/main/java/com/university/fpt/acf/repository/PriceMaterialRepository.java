@@ -24,4 +24,13 @@ public interface PriceMaterialRepository extends JpaRepository<PriceMaterial, Lo
     PriceMaterial getPriceMaterialById(@Param("id")Long id);
     @Query("SELECT p from PriceMaterial p inner join p.material m where m.checkMaterial = false and m.deleted = false and p.id=:id")
     PriceMaterial getPriceCoverSheetById(@Param("id")Long id);
+    @Query("select p.id from PriceMaterial p inner join p.material m where m.checkMaterial=true  and m.deleted=false and p.material.id=:idMaterial and p.frameMaterial.id=:idFrame and p.heightMaterial.id=:idHeight")
+    List<Long> getIdPriceMaterialByFrameHeightMaterial(@Param("idMaterial")Long idMaterial,@Param("idFrame")Long idFrame,@Param("idHeight")Long idHeight);
+    @Query("select p.id from PriceMaterial p inner join p.material m where m.checkMaterial=false  and m.deleted=false and p.material.id=:idMaterial and p.frameMaterial.id=:idFrame and p.heightMaterial.id=:idHeight")
+    List<Long> getIdPriceMaterialByFrameHeightCoverSheet(@Param("idMaterial")Long idMaterial,@Param("idFrame")Long idFrame,@Param("idHeight")Long idHeight);
+
+    @Query("select distinct pm.unitMeasure.id from PriceMaterial pm inner join  pm.material m where m.checkMaterial =true and m.deleted = false and m.id=:id")
+    List<Long> getListIdUnitPriceMaterialById(@Param("id")Long id);
+    @Query("select distinct pm.unitMeasure.id from PriceMaterial pm inner join  pm.material m where m.checkMaterial =false and m.deleted = false and m.id=:id")
+    List<Long> getListIdUnitPriceCoverSheetById(@Param("id")Long id);
 }
