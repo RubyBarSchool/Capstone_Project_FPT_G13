@@ -1,6 +1,7 @@
 package com.university.fpt.acf.repository;
 
 import com.university.fpt.acf.entity.Material;
+import com.university.fpt.acf.entity.PriceMaterial;
 import com.university.fpt.acf.vo.FrameMaterialVO;
 import com.university.fpt.acf.vo.GetAllMaterialVO;
 import com.university.fpt.acf.vo.HeightMaterialVO;

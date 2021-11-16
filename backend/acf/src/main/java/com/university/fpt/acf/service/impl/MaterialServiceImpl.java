@@ -176,7 +176,6 @@ public class MaterialServiceImpl implements MaterialService {
 
             PriceMaterial p = priceCustomRepository.getPriceMaterial(pmf);
             p.setPrice(updateForm.getPrice());
-
             AccountSercurity accountSercurity = new AccountSercurity();
             p.setModified_by(accountSercurity.getUserName());
             p.setModified_date(LocalDate.now());
