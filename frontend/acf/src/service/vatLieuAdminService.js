@@ -19,17 +19,17 @@ class vatLieuAdminService {
     deleteMaterial(id) {
         return http.delete(`/admin/material/delete?id=${id}`);
     }
-    getAllFrameMaterial() {
-        return http.get("/admin/framematerial/getframematerial");
-    }
     getAllFrame(form) {
-        return http.post("/admin/framematerial/getframe", form);
+        return http.post(`/admin/framematerial/getframe`, form);
     }
-    getAllUnitsMaterialToInset() {
-        return http.get("/admin/unit/getunitsmaterial");
+    getUnitByMaterial(id) {
+        return http.post(`/admin/material/getunitbymaterial?id=${id}`);
     }
-    getAllFrameHeightMaterialToInset() {
-        return http.get("/admin/height/getheightmaterial");
+    searchMaterialByUnit(unit) {
+        return http.post(`/admin/material/getmaterialbyunit?unit=${unit}`);
+    }
+    getHeightsByMaterialAndFrame(form) {
+        return http.post(`/admin/material/getheightbymaterialandframe`, form);
     }
 }
 

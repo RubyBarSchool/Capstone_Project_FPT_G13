@@ -90,7 +90,7 @@
               :icon="['fas', 'file-signature']"
               :style="{ 'margin-right': '5px' }"
             />
-            Thêm
+            Thêm vật liệu
           </a-button>
           <a-button
             type="primary"
@@ -151,10 +151,12 @@
                       id="edit"
                       @click="
                         showModalEdit(
-                          record.id,
-                          record.idFrame,
-                          record.idHeight,
-                          record.idUnit,
+                          record.name,
+                          record.idParameter,
+                          record.parameter,
+                          record.nameGroup,
+                          record.unit,
+                          record.company,
                           record.price
                         )
                       "
@@ -268,42 +270,38 @@
             <a-row type="flex">
               <a-col flex="100px">Nhóm vật liệu</a-col>
               <a-col flex="auto">
-                <a-col flex="auto">
-                  <a-select
-                    placeholder="Nhóm vật liệu"
-                    v-model="dataAddMaterial.idGroup"
-                    style="width: 100%"
+                <a-select
+                  placeholder="Nhóm vật liệu"
+                  v-model="dataAddMaterial.idGroup"
+                  style="width: 100%"
+                >
+                  <a-select-option
+                    v-for="(group, index) in dataGroupMaterials"
+                    :value="group.id"
+                    :key="index"
                   >
-                    <a-select-option
-                      v-for="(group, index) in dataGroupMaterials"
-                      :value="group.id"
-                      :key="index"
-                    >
-                      {{ group.name }}
-                    </a-select-option>
-                  </a-select>
-                </a-col>
+                    {{ group.name }}
+                  </a-select-option>
+                </a-select>
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
               <a-col flex="100px">Đơn vị đo</a-col>
               <a-col flex="auto">
-                <a-col flex="auto">
-                  <a-select
-                    placeholder="Đơn vị đo"
-                    v-model="dataAddMaterial.idUnit"
-                    style="width: 100%"
+                <a-select
+                  placeholder="Đơn vị đo"
+                  v-model="dataAddMaterial.idUnit"
+                  style="width: 100%"
+                >
+                  <a-select-option
+                    v-for="(unit, index) in dataUnits"
+                    :value="unit.id"
+                    :key="index"
                   >
-                    <a-select-option
-                      v-for="(unit, index) in dataUnits"
-                      :value="unit.id"
-                      :key="index"
-                    >
-                      {{ unit.name }}
-                    </a-select-option>
-                  </a-select>
-                </a-col>
+                    {{ unit.name }}
+                  </a-select-option>
+                </a-select>
               </a-col>
             </a-row>
             <br />
@@ -346,149 +344,63 @@
             <a-row type="flex">
               <a-col flex="100px">Mã vật liệu</a-col>
               <a-col flex="auto">
-                <template v-for="tag in tags">
-                  <a-tag
-                    :key="tag"
-                    :closable="true"
-                    @close="() => handleClose(tag)"
-                  >
-                    {{ tag }}
-                  </a-tag>
-                </template>
                 <a-input
-                  v-if="inputVisible"
-                  ref="input"
-                  type="text"
-                  size="small"
-                  :style="{ width: '78px' }"
-                  :value="inputValue"
-                  @change="handleInputChange"
-                  @blur="handleInputConfirm"
-                  @keyup.enter="handleInputConfirm"
+                  v-model="dataEditMaterial.name"
+                  style="width: 100%"
+                  disabled
                 />
-                <a-tag
-                  v-else
-                  style="background: #fff; borderstyle: dashed"
-                  @click="showInput"
-                >
-                  <font-awesome-icon :icon="['fas', 'plus']" /> Thêm vật liệu
-                </a-tag>
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Khung</a-col>
+              <a-col flex="100px">Thông số</a-col>
               <a-col flex="auto">
-                <a-select
-                  placeholder="Thông số"
-                  mode="multiple"
-                  v-model="dataEdit.listIdFrame"
-                  :filter-option="false"
-                  @search="fetchFrame"
+                <a-input
+                  v-model="dataEditMaterial.parameter"
                   style="width: 100%"
                   disabled
-                >
-                  <a-select-option
-                    v-for="(frameI, index) in dataFrameMaterials"
-                    :value="frameI.id"
-                    :key="index"
-                  >
-                    {{ frameI.frame }}
-                  </a-select-option>
-                </a-select>
-              </a-col>
-            </a-row>
-            <br />
-            <a-row type="flex">
-              <a-col flex="100px">Chiều cao</a-col>
-              <a-col flex="auto">
-                <a-select
-                  placeholder="Chiều cao"
-                  mode="multiple"
-                  v-model="dataEdit.listIdHeight"
-                  :filter-option="false"
-                  @search="fetchHeight"
-                  style="width: 100%"
-                  disabled
-                >
-                  <a-select-option
-                    v-for="(height, index) in dataHeights"
-                    :value="height.id"
-                    :key="index"
-                  >
-                    {{ height.frameHeight }}
-                  </a-select-option>
-                </a-select>
+                />
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
               <a-col flex="100px">Nhóm vật liệu</a-col>
               <a-col flex="auto">
-                <a-col flex="auto">
-                  <a-select
-                    placeholder="Nhóm vật liệu"
-                    v-model="dataEdit.idGroup"
-                    style="width: 100%"
-                    disabled
-                  >
-                    <a-select-option
-                      v-for="(group, index) in dataGroupMaterials"
-                      :value="group.id"
-                      :key="index"
-                    >
-                      {{ group.name }}
-                    </a-select-option>
-                  </a-select>
-                </a-col>
+                <a-input
+                  v-model="dataEditMaterial.nameGroup"
+                  style="width: 100%"
+                  disabled
+                />
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
               <a-col flex="100px">Đơn vị đo</a-col>
               <a-col flex="auto">
-                <a-col flex="auto">
-                  <a-select
-                    placeholder="Đơn vị đo"
-                    v-model="dataEdit.idUnit"
-                    style="width: 100%"
-                    disabled
-                  >
-                    <a-select-option
-                      v-for="(unit, index) in dataUnits"
-                      :value="unit.id"
-                      :key="index"
-                    >
-                      {{ unit.name }}
-                    </a-select-option>
-                  </a-select>
-                </a-col>
+                <a-input
+                  v-model="dataEditMaterial.unit"
+                  style="width: 100%"
+                  disabled
+                />
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
               <a-col flex="100px">Công ty</a-col>
               <a-col flex="auto">
-                <a-select
-                  placeholder="Công ty"
-                  v-model="dataEdit.idCompany"
+                <a-input
+                  v-model="dataEditMaterial.company"
                   style="width: 100%"
                   disabled
-                >
-                  <a-select-option
-                    v-for="(company, index) in dataCompanys"
-                    :value="company.id"
-                    :key="index"
-                  >
-                    {{ company.name }}
-                  </a-select-option>
-                </a-select>
+                />
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
               <a-col flex="100px">Giá thành</a-col>
-              <a-col flex="auto"> <a-input v-model="dataEdit.price" /></a-col>
+              <a-col flex="auto">
+                <a-input v-model="dataEdit.price" style="width: 100%"
+              /></a-col>
             </a-row>
           </a-modal>
           <!-- popup edit-->
@@ -505,8 +417,10 @@
               <a-col flex="100px">Mã vật liệu</a-col>
               <a-col flex="auto">
                 <a-select
+                  placeholder="Mã vật liệu"
                   v-model="dataAddUnitMaterial.idMaterial"
                   style="width: 100%"
+                  @change="handleDonViByMVL"
                 >
                   <a-select-option
                     v-for="(frame, index) in dataSourceTable"
@@ -522,20 +436,20 @@
             <a-row type="flex">
               <a-col flex="100px">Đơn vị đo</a-col>
               <a-col flex="auto">
-                <a-col flex="auto">
-                  <a-select
-                    v-model="dataAddUnitMaterial.idUnit"
-                    style="width: 100%"
+                <a-select
+                  placeholder="Đơn vị đo"
+                  v-model="dataAddUnitMaterial.idUnit"
+                  style="width: 100%"
+                  @change="handleMVLByDonVi"
+                >
+                  <a-select-option
+                    v-for="(unit, index) in dataUnits"
+                    :value="unit.id"
+                    :key="index"
                   >
-                    <a-select-option
-                      v-for="(unit, index) in dataUnitMaterial"
-                      :value="unit.id"
-                      :key="index"
-                    >
-                      {{ unit.name }}
-                    </a-select-option>
-                  </a-select>
-                </a-col>
+                    {{ unit.name }}
+                  </a-select-option>
+                </a-select>
               </a-col>
             </a-row>
           </a-modal>
@@ -553,6 +467,7 @@
               <a-col flex="100px">Mã vật liệu</a-col>
               <a-col flex="auto">
                 <a-select
+                  placeholder="Mã vật liệu"
                   v-model="dataAddFrameHeightMaterial.idMaterial"
                   style="width: 100%"
                 >
@@ -576,7 +491,7 @@
                   style="width: 100%"
                 >
                   <a-select-option
-                    v-for="(frameI, index) in dataAllFramseMaterial"
+                    v-for="(frameI, index) in dataFrameMaterials"
                     :value="frameI.id"
                     :key="index"
                   >
@@ -593,9 +508,10 @@
                   placeholder="Chiều cao"
                   v-model="dataAddFrameHeightMaterial.listIdHeight"
                   style="width: 100%"
+                  @change="handleChieuCaoByMVLvaKhung"
                 >
                   <a-select-option
-                    v-for="(height, index) in dataHeightMaterial"
+                    v-for="(height, index) in dataHeights"
                     :value="height.id"
                     :key="index"
                   >
@@ -710,12 +626,23 @@ export default {
         price: "",
       },
       dataEdit: {
-        id: "",
-        idFrame: "",
-        idHeight: "",
-        idUnit: "",
+        idParameter: "",
         price: "",
       },
+      dataEditMaterial: {
+        parameter: "",
+        name: "",
+        nameGroup: "",
+        company: "",
+        unit: "",
+      },
+      dataHeightsByMaterialAndFrame: {
+        id1: "",
+        id2: "",
+        name1: "",
+        name2: "",
+      },
+      dataHeightsByMaterialAndFrames: [],
       columns: [
         {
           title: "STT",
@@ -787,13 +714,12 @@ export default {
   computed: {},
   created() {
     this.submitSearch();
-    // this.getAllHeight();
-    // this.getAllGroupMaterial();
-    // this.getAllUnit();
-    // this.getAllCompany();
-    // this.getAllFrameMaterial();
-    // this.getAllFrame();
-    // this.getAllUnitsMaterialToInset();
+    this.getAllHeight();
+    this.getAllGroupMaterial();
+    this.getAllUnit();
+    this.getAllCompany();
+    this.getAllFrame();
+    // this.getHeightsByMaterialAndFrame();
   },
   methods: {
     handleTableChange(pagination) {
@@ -880,11 +806,13 @@ export default {
     },
 
     //show model Update
-    showModalEdit(id, idFrame, idHeight, idUnit, price) {
-      this.dataEdit.id = id;
-      this.dataEdit.idFrame = idFrame;
-      this.dataEdit.idHeight = idHeight;
-      this.dataEdit.idUnit = idUnit;
+    showModalEdit(name, idParameter, parameter, nameGroup, unit, company, price) {
+      this.dataEditMaterial.name = name;
+      this.dataEdit.idParameter = idParameter;
+      this.dataEditMaterial.parameter = parameter;
+      this.dataEditMaterial.nameGroup = nameGroup;
+      this.dataEditMaterial.unit = unit;
+      this.dataEditMaterial.company = company;
       this.dataEdit.price = price;
       this.visibleEdit = true;
     },
@@ -918,6 +846,62 @@ export default {
       this.visibleAddUnit = true;
     },
 
+    //thay đổi đơn vị theo MVL
+    getUnitByMaterial(id) {
+      vatLieuAdminService
+        .getUnitByMaterial(id)
+        .then((response) => {
+          if (response.data.data) {
+            this.dataUnits = response.data.data;
+            let type = "success";
+            let message = "Bạn đã chọn mã vật liệu";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Bạn đã chọn mã vật liệu";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
+    //thay đổi đơn vị theo MVL
+    handleDonViByMVL(value) {
+      this.getUnitByMaterial(value);
+    },
+
+    //thay đổi MVL theo đơn vị
+    searchMaterialByUnit(unit) {
+      vatLieuAdminService
+        .searchMaterialByUnit(unit)
+        .then((response) => {
+          if (response.data.data) {
+            this.dataSourceTable = response.data.data;
+            let type = "success";
+            let message = "Bạn đã chọn đơn vị";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Bạn đã chọn đơn vị";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
+    //thay đổi MVL theo đơn vị
+    handleMVLByDonVi(value) {
+      this.searchMaterialByUnit(value);
+    },
+
     //submit add unit
     submitAddUnit() {
       vatLieuAdminService
@@ -940,6 +924,36 @@ export default {
           console.log(e);
         });
       this.visibleAddUnit = false;
+    },
+
+    //thay đổi chiều cao theo MVL và khung
+    getHeightsByMaterialAndFrame() {
+      vatLieuAdminService
+        .getHeightsByMaterialAndFrame(this.dataHeightsByMaterialAndFrame)
+        .then((response) => {
+          if (response.data.data) {
+            this.dataHeightsByMaterialAndFrame = response.data.data;
+            let type = "success";
+            let message = "Bạn đã chọn mã vật liệu và khung";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Bạn đã chọn mã vật liệu và khung";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
+    //thay đổi chiều cao theo MVL và khung
+    handleChieuCaoByMVLvaKhung(value1, value2) {
+      this.dataHeightsByMaterialAndFrame.name1 = value1;
+      this.dataHeightsByMaterialAndFrame.name2 = value2;
+      this.getHeightsByMaterialAndFrame();
     },
 
     //submit add frame
@@ -1017,32 +1031,6 @@ export default {
     },
     //nhóm vật liệu
 
-    //khung vật liệu
-    getAllFrameMaterial() {
-      vatLieuAdminService
-        .getAllFrameMaterial()
-        .then((response) => {
-          this.dataAllFramseMaterial = response.data.data;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    //khung vật liệu
-
-    //chiều cao vật liệu
-    getAllFrameHeightMaterialToInset(){
-      vatLieuAdminService
-        .getAllFrameHeightMaterialToInset()
-        .then((response) => {
-          this.dataHeightMaterial = response.data.data;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    //chiều cao vật liệu
-
     //khung
     getAllFrame() {
       vatLieuAdminService
@@ -1072,19 +1060,6 @@ export default {
         });
     },
     //đơn vị
-
-    //đơn vị vật liệu
-    getAllUnitsMaterialToInset() {
-      vatLieuAdminService
-        .getAllUnitsMaterialToInset()
-        .then((response) => {
-          this.dataUnitMaterial = response.data.data;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    //đơn vị vật liệu
 
     //công ty
     getAllCompany() {
