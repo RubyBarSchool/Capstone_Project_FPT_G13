@@ -176,29 +176,32 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
     }
 
     @Override
-    public Long getIdMaterial(CheckMaterialForm checkMaterialForm) {
+    public String getNameMaterial(CheckMaterialForm checkMaterialForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select m.id from Material m where m.checkMaterial = true and m.name=:name and m.company.id=:idCompany and m.groupMaterial.id=:idGroup ");
-        params.put("name", "%"+checkMaterialForm.getName().toLowerCase()+"%");
+        sql.append("SELECT distinct m.name FROM Material m where m.company.id =:idCompany and m.groupMaterial.id=:idGroup and m.name=:name and m.deleted=false and m.checkMaterial = true  ");
+        params.put("name", checkMaterialForm.getName());
         params.put("idCompany", checkMaterialForm.getIdCompany());
         params.put("idGroup", checkMaterialForm.getIdGroup());
-        TypedQuery<Long> query = super.createQuery(sql.toString(), params, Long.class);
-        return query.getSingleResult();
+        TypedQuery<String> query = super.createQuery(sql.toString(), params, String.class);
+        List<String> list = query.getResultList();
+        return (list.size()==0)?null:list.get(0);
     }
 
     @Override
-    public Long getIdCoverSheet(CheckMaterialForm checkMaterialForm) {
+    public String getNameCoverSheet(CheckMaterialForm checkMaterialForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select m.id from Material m where m.checkMaterial = false and m.name=:name and m.company.id=:idCompany and m.groupMaterial.id=:idGroup ");
-        params.put("name", "%"+checkMaterialForm.getName().toLowerCase()+"%");
+        sql.append("SELECT distinct m.name FROM Material m where m.company.id =:idCompany and m.groupMaterial.id=:idGroup and m.name=:name and m.deleted=false and m.checkMaterial = false  ");
         params.put("idCompany", checkMaterialForm.getIdCompany());
         params.put("idGroup", checkMaterialForm.getIdGroup());
-        TypedQuery<Long> query = super.createQuery(sql.toString(), params, Long.class);
-        List<Long> list = query.getResultList();
+        params.put("name", checkMaterialForm.getName());
+        TypedQuery<String> query = super.createQuery(sql.toString(), params, String.class);
+        List<String> list = query.getResultList();
         return (list.size()==0)?null:list.get(0);
     }
+
+
 
 
 }

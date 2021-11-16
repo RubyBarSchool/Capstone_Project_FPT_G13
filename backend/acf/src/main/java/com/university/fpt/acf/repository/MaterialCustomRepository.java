@@ -16,7 +16,7 @@ public interface MaterialCustomRepository {
     int totalSearchMaterial(SearchMaterialForm searchForm);
     List<MaterialVO> searchCoverSheet(SearchMaterialForm searchForm);
     int totalSearchCoverSheet(SearchMaterialForm searchForm);
-    Long getIdMaterial(CheckMaterialForm checkMaterialForm);
-    Long getIdCoverSheet(CheckMaterialForm checkMaterialForm);
+    String getNameMaterial(CheckMaterialForm checkMaterialForm);
+    String getNameCoverSheet(CheckMaterialForm checkMaterialForm);
 
 }

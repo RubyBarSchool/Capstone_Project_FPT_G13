@@ -102,8 +102,8 @@ public class MaterialServiceImpl implements MaterialService {
                 a.setName(list.get(i));
                 a.setIdCompany(addForm.getIdCompany());
                 a.setIdGroup(addForm.getIdGroup());
-                Long idMaterial =materialCustomRepository.getIdCoverSheet(a);
-                if(idMaterial==null){
+                String material =materialCustomRepository.getNameMaterial(a);
+                if(material==null || material.isEmpty()){
                     Material m = new Material();
                     m.setName(list.get(i));
                     m.setGroupMaterial(groupMaterial);
@@ -207,8 +207,8 @@ public class MaterialServiceImpl implements MaterialService {
                 a.setName(list.get(i));
                 a.setIdCompany(addForm.getIdCompany());
                 a.setIdGroup(addForm.getIdGroup());
-                Long idMaterial =materialCustomRepository.getIdCoverSheet(a);
-                if(idMaterial==null){
+                String material =materialCustomRepository.getNameCoverSheet(a);
+                if(material==null|| material.isEmpty()){
                     Material m = new Material();
                     m.setCheckMaterial(false);
                     m.setName(list.get(i));
