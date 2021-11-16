@@ -21,40 +21,55 @@
           <a-input
             placeholder="Mã tấm phủ"
             style="width: 150px"
-            v-model="dataSearch.name"
+            v-model="dataSearch.codeMaterial"
           />
-          <a-select
-            placeholder="Khung"
-            mode="multiple"
-            v-model="dataSearch"
-            :filter-option="false"
-            @search="fetchRoles"
+          <a-input
+            placeholder="Thông số"
             style="width: 150px"
-          >
-            <a-select-option
-              v-for="(role, index) in dataRoles"
-              :value="role.id"
-              :key="index"
-            >
-              {{ role.name }}
-            </a-select-option>
-          </a-select>
+            v-model="dataSearch.frame"
+          />
           <a-select
             placeholder="Nhóm tấm phủ"
             mode="multiple"
-            v-model="dataSearch"
+            v-model="dataSearch.listGroupID"
             style="width: 150px"
           >
-            <a-select-option value="false"> MCF </a-select-option>
-            <a-select-option value="true"> HCF </a-select-option>
+            <a-select-option
+              v-for="(cover, index) in listGroupCoverPlate"
+              :value="cover.id"
+              :key="index"
+            >
+              {{ cover.name }}
+            </a-select-option>
           </a-select>
-
-          <a-range-picker
-            v-model="dataSearch.date"
-            :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-            :show-time="{ format: 'DD/MM/YYYY' }"
-            format="DD/MM/YYYY"
-          />
+          <a-select
+            placeholder="Đơn vị đo"
+            mode="multiple"
+            v-model="dataSearch.listUnitId"
+            style="width: 150px"
+          >
+            <a-select-option
+              v-for="(unit, index) in listUnits"
+              :value="unit.id"
+              :key="index"
+            >
+              {{ unit.name }}
+            </a-select-option>
+          </a-select>
+          <a-select
+            placeholder="Công ty"
+            mode="multiple"
+            v-model="dataSearch.listIdCompany"
+            style="width: 150px"
+          >
+            <a-select-option
+              v-for="(company, index) in listCompanys"
+              :value="company.id"
+              :key="index"
+            >
+              {{ company.name }}
+            </a-select-option>
+          </a-select>
           <a-button
             type="primary"
             @click="submitSearch"
@@ -72,12 +87,34 @@
             :style="{ 'margin-left': '5px' }"
           >
             <font-awesome-icon
-              :icon="['fas', 'file-signature']"
+              :icon="['fas', 'plus']"
               :style="{ 'margin-right': '5px' }"
             />
-            Thêm
-          </a-button>
 
+            Thêm tấm phủ
+          </a-button>
+          <a-button
+            type="primary"
+            @click="showModalAddUnit"
+            :style="{ 'margin-left': '5px' }"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'plus']"
+              :style="{ 'margin-right': '5px' }"
+            />
+            Thêm đơn vị
+          </a-button>
+          <a-button
+            type="primary"
+            @click="showModalAddHW"
+            :style="{ 'margin-left': '5px' }"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'plus']"
+              :style="{ 'margin-right': '5px' }"
+            />
+            Thêm khung và chiều cao
+          </a-button>
           <!-- table content -->
           <div :style="{ 'padding-top': '10px' }">
             <a-table
@@ -91,27 +128,20 @@
               "
               @change="handleTableChange"
             >
-              <template slot="username" slot-scope="text, record">
-                {{ record.username }}
+              <template slot="coverplatecode" slot-scope="text, record">
+                {{ record.name }}
               </template>
-              <template slot="roles" slot-scope="text, record">
-                <div v-for="(item, index) in record.roles" :key="index">
-                  {{ item.name }}
-                </div>
+              <template slot="specifications" slot-scope="text, record">
+                {{ record.parameter }}
               </template>
-              <template slot="status" slot-scope="text, record">
-                <a-tag :color="record.status ? 'green' : 'blue'">
-                  {{ record.status ? "Công khai" : "Nháp" }}
-                </a-tag>
+              <template slot="unit" slot-scope="text, record">
+                {{ record.unit }}
               </template>
-              <template slot="time" slot-scope="text, record">
-                {{
-                  new Date(record.time).toLocaleDateString("en-GB", {
-                    year: "numeric",
-                    month: "2-digit",
-                    day: "2-digit",
-                  })
-                }}
+              <template slot="company" slot-scope="text, record">
+                {{ record.company }}
+              </template>
+              <template slot="price" slot-scope="text, record">
+                {{ record.price }}
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-row>
@@ -121,9 +151,13 @@
                       @click="
                         showModalEdit(
                           record.id,
-                          record.username,
-                          record.roles,
-                          record.status
+                          record.name,
+                          record.idParameter,
+                          record.parameter,
+                          record.nameGroup,
+                          record.unit,
+                          record.company,
+                          record.price
                         )
                       "
                       :style="{ width: '44.25px' }"
@@ -135,7 +169,7 @@
                     <a-popconfirm
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
-                      @confirm="deleteAccount(record.id)"
+                      @confirm="deleteCoverSheet(record.id)"
                     >
                       <a-button id="delete">
                         <font-awesome-icon :icon="['fas', 'trash']" />
@@ -152,7 +186,7 @@
           <a-modal v-model="visibleAdd" title="Thêm tấm phủ">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="checkFormAdd">
+              <a-button key="submit" type="primary" @click="submitAdd">
                 Lưu
               </a-button>
             </template>
@@ -172,7 +206,7 @@
                     <a-tag
                       v-else
                       :key="tag"
-                      :closable="index !== 0"
+                      :closable="true"
                       @close="() => handleClose(tag)"
                     >
                       {{ tag }}
@@ -198,21 +232,20 @@
                   </a-tag>
                 </div>
               </a-form-model-item>
-              <a-form-model-item label="Khung">
+              <a-form-model-item label="Thông số">
                 <a-select
-                  placeholder="Khung"
+                  placeholder="Thông số"
                   mode="multiple"
-                  v-model="dataSearch"
+                  v-model="dataAdd.listIdFrame"
                   :filter-option="false"
-                  @search="fetchRoles"
-                  style="width: 150px"
+                  style="width: 100%"
                 >
                   <a-select-option
-                    v-for="(role, index) in dataRoles"
-                    :value="role.id"
+                    v-for="(frame, index) in listFrames"
+                    :value="frame.id"
                     :key="index"
                   >
-                    {{ role.name }}
+                    {{ frame.frame }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
@@ -220,69 +253,71 @@
                 <a-select
                   placeholder="Chiều cao"
                   mode="multiple"
-                  v-model="dataSearch"
-                  style="width: 150px"
+                  v-model="dataAdd.listIdHeight"
+                  style="width: 100%"
                 >
-                  <a-select-option value="false"> MCF </a-select-option>
-                  <a-select-option value="true"> HCF </a-select-option>
+                  <a-select-option
+                    v-for="(height, index) in listFrameHeights"
+                    :value="height.id"
+                    :key="index"
+                  >
+                    {{ height.frameHeight }}
+                  </a-select-option>
                 </a-select>
               </a-form-model-item>
               <a-form-model-item label="Nhóm tấm phủ">
                 <a-select
                   placeholder="Nhóm tấm phủ"
-                  v-model="dataAdd.listRole"
+                  v-model="dataAdd.idGroup"
                   :filter-option="false"
-                  @search="fetchRoles"
                   style="width: 100%"
                 >
                   <a-select-option
-                    v-for="(role, index) in dataRoles"
-                    :value="role.id"
+                    v-for="(cover, index) in listGroupCoverPlate"
+                    :value="cover.id"
                     :key="index"
                   >
-                    {{ role.name }}
+                    {{ cover.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
               <a-form-model-item label="Đơn vị">
                 <a-select
                   placeholder="Đơn vị"
-                  v-model="dataAdd.listRole"
+                  v-model="dataAdd.idUnit"
                   :filter-option="false"
-                  @search="fetchRoles"
                   style="width: 100%"
                 >
                   <a-select-option
-                    v-for="(role, index) in dataRoles"
-                    :value="role.id"
+                    v-for="(unit, index) in listUnits"
+                    :value="unit.id"
                     :key="index"
                   >
-                    {{ role.name }}
+                    {{ unit.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
               <a-form-model-item label="Công ty">
                 <a-select
                   placeholder="Công ty"
-                  v-model="dataAdd.listRole"
+                  v-model="dataAdd.idCompany"
                   :filter-option="false"
-                  @search="fetchRoles"
                   style="width: 100%"
                 >
                   <a-select-option
-                    v-for="(role, index) in dataRoles"
-                    :value="role.id"
+                    v-for="(company, index) in listCompanys"
+                    :value="company.id"
                     :key="index"
                   >
-                    {{ role.name }}
+                    {{ company.name }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
               <a-form-model-item label="Giá thành">
                 <a-input
                   placeholder="Giá thành"
-                  style="width: 150px"
-                  v-model="dataSearch.name"
+                  style="width: 100%"
+                  v-model="dataAdd.price"
                 />
               </a-form-model-item>
             </a-form-model>
@@ -299,136 +334,173 @@
             </template>
             <a-form-model>
               <a-form-model-item label="Mã tấm phủ">
-                <div>
-                  <template v-for="(tag, index) in tags">
-                    <a-tooltip v-if="tag.length > 20" :key="tag" :title="tag">
-                      <a-tag
-                        :key="tag"
-                        :closable="index !== 0"
-                        @close="() => handleClose(tag)"
-                      >
-                        {{ `${tag.slice(0, 20)}...` }}
-                      </a-tag>
-                    </a-tooltip>
-                    <a-tag
-                      v-else
-                      :key="tag"
-                      :closable="index !== 0"
-                      @close="() => handleClose(tag)"
-                    >
-                      {{ tag }}
-                    </a-tag>
-                  </template>
-                  <a-input
-                    v-if="inputVisible"
-                    ref="input"
-                    type="text"
-                    size="small"
-                    :style="{ width: '78px' }"
-                    :value="inputValue"
-                    @change="handleInputChange"
-                    @blur="handleInputConfirm"
-                    @keyup.enter="handleInputConfirm"
-                  />
-                  <a-tag
-                    v-else
-                    style="background: #fff; borderstyle: dashed"
-                    @click="showInput"
+                <a-input
+                  placeholder="Mã tấm phủ"
+                  style="width: 100%"
+                  v-model="dataEditI.code"
+                  disabled
+                />
+              </a-form-model-item>
+              <a-form-model-item label="Thông số">
+                <a-input
+                  placeholder="Thông số"
+                  style="width: 100%"
+                  v-model="dataEditI.parameter"
+                  disabled
+                />
+              </a-form-model-item>
+              <a-form-model-item label="Nhóm tấm phủ">
+                <a-input
+                  placeholder="Nhóm tấm phủ"
+                  style="width: 100%"
+                  v-model="dataEditI.group"
+                  disabled
+                />
+              </a-form-model-item>
+              <a-form-model-item label="Đơn vị">
+                <a-input
+                  placeholder="Đơn vị"
+                  style="width: 100%"
+                  v-model="dataEditI.unit"
+                  disabled
+                />
+              </a-form-model-item>
+              <a-form-model-item label="Công ty">
+                <a-input
+                  placeholder="Công ty"
+                  style="width: 100%"
+                  v-model="dataEditI.company"
+                  disabled
+                />
+              </a-form-model-item>
+              <a-form-model-item label="Giá thành">
+                <a-input
+                  placeholder="Giá thành"
+                  style="width: 100%"
+                  v-model="dataEdit.price"
+                />
+              </a-form-model-item>
+            </a-form-model>
+          </a-modal>
+          <!-- popup edit-->
+
+          <!-- popup unit-->
+          <a-modal v-model="visibleAddUnit" title="Thêm đơn vị">
+            <template slot="footer">
+              <a-button key="back" @click="handleCancel"> Hủy </a-button>
+              <a-button key="submit" type="primary" @click="submitAddUnit">
+                Lưu
+              </a-button>
+            </template>
+            <a-form-model>
+              <a-form-model-item label="Mã tấm phủ">
+                <a-select
+                  placeholder="Mã tấm phủ"
+                  v-model="dataAddUnitCoverSheet.idMaterial"
+                  :filter-option="false"
+                  style="width: 100%"
+                  @change="handleChangeCodeSheet"
+                >
+                  <a-select-option
+                    v-for="(code, index) in listCodeCoverSheets"
+                    :value="code.id"
+                    :key="index"
                   >
-                    <a-icon type="plus" /> New Tag
-                  </a-tag>
-                </div>
+                    {{ code.name }}
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
+              <a-form-model-item label="Đơn vị đo">
+                <a-select
+                  placeholder="Đơn vị đo"
+                  v-model="dataAddUnitCoverSheet.idUnit"
+                  :filter-option="false"
+                  style="width: 100%"
+                  @change="handleChangeUnit"
+                >
+                  <a-select-option
+                    v-for="(unit, index) in listUnits"
+                    :value="unit.id"
+                    :key="index"
+                  >
+                    {{ unit.name }}
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
+            </a-form-model>
+          </a-modal>
+          <!-- popup unit-->
+
+          <!-- popup khung-->
+          <a-modal v-model="visibleAddHW" title="Thêm Khung và chiều cao">
+            <template slot="footer">
+              <a-button key="reset" type="danger" @click="resetFrame">
+                Reset
+              </a-button>
+              <a-button key="back" @click="handleCancel"> Hủy </a-button>
+              <a-button
+                key="submit"
+                type="primary"
+                @click="submitAddFrameHeight"
+              >
+                Lưu
+              </a-button>
+            </template>
+            <a-form-model>
+              <a-form-model-item label="Mã tấm phủ">
+                <a-select
+                  placeholder="Mã tấm phủ"
+                  v-model="dataAddFrameHeight.idMaterial"
+                  :filter-option="false"
+                  style="width: 100%"
+                  @change="handleChangeCodeCoverSheet"
+                  :disabled="disable"
+                >
+                  <a-select-option
+                    v-for="(code, index) in listCodeCoverSheets"
+                    :value="code.id"
+                    :key="index"
+                  >
+                    {{ code.name }}
+                  </a-select-option>
+                </a-select>
               </a-form-model-item>
               <a-form-model-item label="Khung">
                 <a-select
                   placeholder="Khung"
-                  mode="multiple"
-                  v-model="dataSearch"
-                  :filter-option="false"
-                  @search="fetchRoles"
-                  style="width: 150px"
+                  v-model="dataAddFrameHeight.idFrame"
+                  style="width: 100%"
+                  @change="handleChangeFrame"
+                  :disabled="disable"
                 >
                   <a-select-option
-                    v-for="(role, index) in dataRoles"
-                    :value="role.id"
+                    v-for="(frame, index) in listFrames"
+                    :value="frame.id"
                     :key="index"
                   >
-                    {{ role.name }}
+                    {{ frame.frame }}
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
               <a-form-model-item label="Chiều cao">
                 <a-select
                   placeholder="Chiều cao"
-                  mode="multiple"
-                  v-model="dataSearch"
-                  style="width: 150px"
-                >
-                  <a-select-option value="false"> MCF </a-select-option>
-                  <a-select-option value="true"> HCF </a-select-option>
-                </a-select>
-              </a-form-model-item>
-              <a-form-model-item label="Nhóm tấm phủ">
-                <a-select
-                  placeholder="Nhóm tấm phủ"
-                  v-model="dataAdd.listRole"
-                  :filter-option="false"
-                  @search="fetchRoles"
+                  v-model="dataAddFrameHeight.idHeight"
                   style="width: 100%"
+                  @change="handleChangeHeight"
+                  :disabled="disable"
                 >
                   <a-select-option
-                    v-for="(role, index) in dataRoles"
-                    :value="role.id"
+                    v-for="(height, index) in listFrameHeights"
+                    :value="height.id"
                     :key="index"
                   >
-                    {{ role.name }}
+                    {{ height.frameHeight }}
                   </a-select-option>
                 </a-select>
-              </a-form-model-item>
-              <a-form-model-item label="Đơn vị">
-                <a-select
-                  placeholder="Đơn vị"
-                  v-model="dataAdd.listRole"
-                  :filter-option="false"
-                  @search="fetchRoles"
-                  style="width: 100%"
-                >
-                  <a-select-option
-                    v-for="(role, index) in dataRoles"
-                    :value="role.id"
-                    :key="index"
-                  >
-                    {{ role.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-              <a-form-model-item label="Công ty">
-                <a-select
-                  placeholder="Công ty"
-                  v-model="dataAdd.listRole"
-                  :filter-option="false"
-                  @search="fetchRoles"
-                  style="width: 100%"
-                >
-                  <a-select-option
-                    v-for="(role, index) in dataRoles"
-                    :value="role.id"
-                    :key="index"
-                  >
-                    {{ role.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-              <a-form-model-item label="Giá thành">
-                <a-input
-                  placeholder="Giá thành"
-                  style="width: 150px"
-                  v-model="dataSearch.name"
-                />
               </a-form-model-item>
             </a-form-model>
           </a-modal>
-          <!-- popup edit-->
         </div>
       </a-layout-content>
       <Footer />
@@ -436,10 +508,7 @@
   </div>
 </template>
  <script>
-import accountService from "@/service/accountService.js";
-import roleService from "@/service/roleService.js";
-import employeeService from "@/service/employeeService.js";
-import adminService from "@/service/adminService";
+import coverSheetService from "../service/coverPlateService";
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 
@@ -456,11 +525,13 @@ export default {
         pageSize: 10,
         total: 0,
       },
+      // listCodeMaterial: [],
       dataSearch: {
-        name: "",
-        listRole: [],
-        listStatus: [],
-        date: [],
+        codeMaterial: "",
+        frame: "",
+        listGroupID: [],
+        listIdCompany: [],
+        listUnitId: [],
         pageIndex: 1,
         pageSize: 10,
         total: 0,
@@ -469,37 +540,73 @@ export default {
       dataRoles: [],
       dataEmployees: [],
       dataAdd: {
-        listRole: [],
-        employee: "",
-        password: "",
-        username: "",
+        idCompany: "",
+        idGroup: "",
+        idUnit: "",
+        listIdFrame: [],
+        listIdHeight: [],
+        listName: [],
+        price: "",
       },
-      dataRole: {
-        name: "",
-        pageIndex: 1,
-        pageSize: 10,
+      dataAddUnitCoverSheet: {
+        idFrame: "",
+        idHeight: "",
+        idMaterial: "",
+        idUnit: "",
+        price: "",
       },
-      dataEmployee: {
-        name: "",
-        pageIndex: 1,
-        pageSize: 10,
+      dataAddFrameHeight: {
+        idFrame: "",
+        idHeight: "",
+        idMaterial: "",
+        idUnit: "",
       },
+      listGroupCoverPlate: [],
+      listUnits: [],
+      listCodeCoverSheets: [],
       dataEdit: {
-        id: "",
-        username: "",
-        listRole: [],
-        status: false,
+        idParameter: "",
+        price: "",
       },
-      dataAccountDetail: {
+      dataEditI: {
+        code: "",
+        group: "",
+        company: "",
         id: "",
+        unit: "",
+        parameter: "",
+      },
+      listCompanys: [],
+      listCompany: {
+        address: "",
         name: "",
-        roles: [],
-        image: "",
-        fullname: "",
-        dob: "",
+        pageIndex: 1,
+        pageSize: 10,
         phone: "",
-        gender: "",
       },
+      listFrames: [],
+      dataFrame: {
+        frame: "",
+        pageIndex: 1,
+        pageSize: 10,
+      },
+      // listFrameByCoverSheetAndHeights: [],
+      dataFrameByCoverSheetAndHeight: "",
+      // listCoverSheetByFrameAndHeights: [],
+      dataCoverSheetByFrameAndHeight: "",
+      // listHeightsByCoverSheetAndFrames: [],
+      dataHeightsByCoverSheetAndFrame: "",
+      dataForm: {
+        id1: 0,
+        id2: 0,
+        name1: "",
+        name2: "",
+      },
+      listFrameHeights: [],
+      // listUnitCoverSheets: [],
+      listFrameCoverSheets: [],
+      listFrameHeightCoverSheets: [],
+      dataSelect: [],
       columns: [
         {
           title: "STT",
@@ -522,6 +629,7 @@ export default {
           width: 150,
           scopedSlots: { customRender: "specifications" },
         },
+
         {
           title: "Đơn vị",
           dataIndex: "unit",
@@ -554,12 +662,14 @@ export default {
       ],
       visibleAdd: false,
       visibleEdit: false,
-      visibleProfile: false,
+      visibleAddHW: false,
+      visibleAddUnit: false,
+      disable: false,
       checkDataInput: {
         show: false,
         message: "",
       },
-      tags: ["Unremovable", "Tag 2", "Tag 3Tag 3Tag 3Tag 3Tag 3Tag 3Tag 3"],
+      tags: [],
       inputVisible: false,
       inputValue: "",
     };
@@ -567,15 +677,18 @@ export default {
   computed: {},
   created() {
     this.submitSearch();
-    this.getAllRole();
+    this.getAllGroupCoverPlate();
+    this.getAllUnit();
+    this.getAllCompany();
   },
   methods: {
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;
-      adminService
-        .searchAccount(this.dataSearch)
+      coverSheetService
+        .searchCoverSheet(this.dataSearch)
         .then((response) => {
+          // this.listCodeMaterial = response.data.data;
           this.dataSourceTable = response.data.data;
           this.dataSearch.total = response.data.total;
           this.pagination.total = response.data.total;
@@ -583,138 +696,11 @@ export default {
         .catch((e) => {
           console.log(e);
         });
-    },
-    generateUsername() {
-      accountService
-        .generateUsername(this.dataAdd.employee)
-        .then((response) => {
-          this.dataAdd.username = response.data.data;
-        });
-    },
-    fetchRoles(value) {
-      this.dataRole.name = value;
-      this.getAllRole();
-    },
-    getAllRole() {
-      roleService
-        .getAllRole(this.dataRole)
-        .then((response) => {
-          this.dataRoles = response.data.data;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    fetchEmployees(value) {
-      this.dataEmployee.name = value;
-      this.getAllEmployeeNotAccount();
-    },
-    getAllEmployeeNotAccount() {
-      employeeService
-        .getAllEmployeeNotAccount(this.dataEmployee)
-        .then((response) => {
-          this.dataEmployees = response.data.data;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    showModalAdd() {
-      this.dataRole.name = "";
-      this.getAllRole();
-      this.dataEmployee.name = "";
-      this.getAllEmployeeNotAccount();
-      this.visibleAdd = true;
-      this.checkDataInput.show = false;
-      this.checkDataInput.message = "";
-    },
-    checkFormAdd() {
-      if (this.dataAdd.password != null && this.dataAdd.password != "") {
-        this.checkDataInput.show = false;
-        this.checkDataInput.message = "";
-        this.submitAdd();
-      } else {
-        this.checkDataInput.show = true;
-        this.checkDataInput.message = "Bạn phải điền vào chỗ trống";
-      }
-    },
-    submitAdd() {
-      accountService
-        .addAccount(this.dataAdd)
-        .then((response) => {
-          this.dataEmployees = response.data.data;
-          this.submitSearch();
-          if (response.data.data) {
-            let type = "success";
-            let message = "Thêm mới";
-            let description =
-              "Thêm mới tài khoản " + this.dataAdd.username + " thành công !!";
-            this.notifi(type, message, description);
-          } else {
-            let type = "error";
-            let message = "Thêm mới";
-            let description =
-              "Thêm mới tài khoản " +
-              this.dataAdd.username +
-              " không thành công vì " +
-              response.data.message;
-            this.notifi(type, message, description);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-      this.visibleAdd = false;
-      this.dataAdd.username = "";
-      this.dataAdd.password = "";
-      this.dataAdd.employee = "";
-      this.dataAdd.listRole = [];
-    },
-    handleCancel() {
-      this.visibleAdd = false;
-      this.visibleEdit = false;
-      this.visibleProfile = false;
-    },
-    showModalEdit(id, username, roles, status) {
-      this.dataEdit.id = id;
-      this.dataEdit.username = username;
-      this.dataEdit.listRole = [];
-      for (var i = 0; i < roles.length; i++) {
-        this.dataEdit.listRole.push(roles[i].id);
-      }
-      this.dataEdit.status = status;
-      this.visibleEdit = true;
-      this.dataRole.name = "";
-      this.getAllRole();
-      this.dataEmployee.name = "";
-      this.getAllEmployeeNotAccount();
-    },
-    submitUpdate() {
-      adminService
-        .updateAccount(this.dataEdit)
-        .then((response) => {
-          this.submitSearch();
-          if (response.data.data) {
-            let type = "success";
-            let message = "Cập nhật";
-            let description = "Account đang đăng nhập không được xóa";
-            this.notifi(type, message, description);
-          } else {
-            let type = "error";
-            let message = "Cập nhật";
-            let description = "Account đang đăng nhập không được xóa";
-            this.notifi(type, message, description);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-      this.visibleEdit = false;
     },
     submitSearch() {
       this.dataSearch.total = 0;
-      adminService
-        .searchAccount(this.dataSearch)
+      coverSheetService
+        .searchCoverSheet(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
           this.dataSearch.total = response.data.total;
@@ -724,9 +710,471 @@ export default {
           console.log(e);
         });
     },
-    deleteAccount(id) {
-      accountService
-        .deleteAccount(id)
+    // fetchFrame(value) {
+    //   this.dataFrame.length = value;
+    //   this.getAllGroupCoverPlate();
+    // },
+    getAllGroupCoverPlate() {
+      coverSheetService
+        .listGroupCoverPlate()
+        .then((response) => {
+          this.listGroupCoverPlate = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    // fetchEmployees(value) {
+    //   this.dataEmployee.name = value;
+    //   this.getAllEmployeeNotAccount();
+    // },
+    getAllUnit() {
+      coverSheetService
+        .listUnit()
+        .then((response) => {
+          this.listUnits = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getAllCompany() {
+      coverSheetService
+        .listCompany(this.listCompany)
+        .then((response) => {
+          this.listCompanys = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getAllFrame() {
+      coverSheetService
+        .getAllFrame(this.dataFrame)
+        .then((response) => {
+          this.listFrames = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getAllFrameHeight() {
+      coverSheetService
+        .getAllFrameHeight()
+        .then((response) => {
+          this.listFrameHeights = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    // getUnitCoverSheet() {
+    //   coverSheetService
+    //     .listUnitCoverSheet()
+    //     .then((response) => {
+    //       this.listUnitCoverSheets = response.data.data;
+    //     })
+    //     .catch((e) => {
+    //       console.log(e);
+    //     });
+    // },
+    getFrameCoverSheet() {
+      coverSheetService
+        .listFrameCoverSheet()
+        .then((response) => {
+          this.listFrameCoverSheets = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getFrameHeightCoverSheet() {
+      coverSheetService
+        .listFrameHeightCoverSheet()
+        .then((response) => {
+          this.listFrameHeightCoverSheets = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getAllCodeCoverSheet() {
+      coverSheetService
+        .listCodeCoverSheet()
+        .then((response) => {
+          this.listCodeCoverSheets = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getCoverSheetByUnit(id) {
+      coverSheetService
+        .getCoverSheetByUnit(id)
+        .then((response) => {
+          // this.submitSearch();
+          if (response.data.data) {
+            let type = "success";
+            let message = "OK";
+            let description = response.data.data.message;
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Error";
+            let description = response.data.data.message;
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getUnitByCoverSheet(id) {
+      coverSheetService
+        .getUnitByCoverSheet(id)
+        .then((response) => {
+          // this.submitSearch();
+          if (response.data.data) {
+            this.listUnits = response.data.data;
+            let type = "success";
+            let message = "Ok";
+            let description = response.data.data.message;
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Error";
+            let description = response.data.data.message;
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getFrameByCoverSheetAndHeight() {
+      coverSheetService
+        .getFrameByCoverSheetAndHeight(this.dataForm)
+        .then((response) => {
+          // this.listFrameByCoverSheetAndHeights = response.data.data;
+          // this.listFrames = this.listFrameByCoverSheetAndHeights;
+          this.listFrames = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getCoverSheetByFrameAndHeight() {
+      coverSheetService
+        .getCoverSheetByFrameAndHeight(this.dataForm)
+        .then((response) => {
+          // this.listCoverSheetByFrameAndHeights = response.data.data;
+          // this.listFrameHeights = this.listCoverSheetByFrameAndHeights;
+          this.listFrameHeights = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getHeightsByCoverSheetAndFrame() {
+      coverSheetService
+        .getHeightsByCoverSheetAndFrame(this.dataForm)
+        .then((response) => {
+          // this.listHeightsByCoverSheetAndFrames = response.data.data;
+          // this.listCodeCoverSheets = this.listHeightsByCoverSheetAndFrames;
+          this.listCodeCoverSheets = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    handleChangeCodeCoverSheet() {
+      let data = {
+        type: "material",
+        id: this.dataAddFrameHeight.idMaterial,
+        name: "",
+      };
+      for (var i = 0; i < this.listCodeCoverSheets.length; i++) {
+        if (
+          this.listCodeCoverSheets[i].id == this.dataAddFrameHeight.idMaterial
+        ) {
+          data.name = this.listCodeCoverSheets[i].name;
+        }
+      }
+      this.dataSelect.push(data);
+      console.log(this.dataSelect);
+      if (this.dataSelect.length == 2) {
+        this.dataForm.id1 = data.id;
+        this.dataForm.name1 = data.name;
+        this.dataForm.id2 = this.dataSelect[0].id;
+        this.dataForm.name2 = this.dataSelect[0].name;
+        if (this.dataSelect[0].type == "frame") {
+          this.getHeightsByCoverSheetAndFrame();
+        } else {
+          this.getCoverSheetByFrameAndHeight();
+        }
+      }
+      if (this.dataSelect.length == 3) {
+        this.disable = true;
+      }
+    },
+    handleChangeFrame() {
+      let data = {
+        type: "frame",
+        id: this.dataAddFrameHeight.idFrame,
+        name: "",
+      };
+      for (var i = 0; i < this.listFrames.length; i++) {
+        if (this.listFrames[i].id == this.dataAddFrameHeight.idFrame) {
+          data.name = this.listFrames[i].name;
+        }
+      }
+      this.dataSelect.push(data);
+      console.log(this.dataSelect);
+      if (this.dataSelect.length == 2) {
+        if (this.dataSelect[0].type == "material") {
+          this.dataForm.id1 = this.dataSelect[0].id;
+          this.dataForm.name1 = this.dataSelect[0].name;
+          this.dataForm.id2 = data.id;
+          this.dataForm.name2 = data.name;
+          this.getHeightsByCoverSheetAndFrame();
+        } else {
+          this.dataForm.id1 = data.id;
+          this.dataForm.name1 = data.name;
+          this.dataForm.id2 = this.dataSelect[0].id;
+          this.dataForm.name2 = this.dataSelect[0].name;
+          this.getCoverSheetByFrameAndHeight();
+        }
+      }
+      if (this.dataSelect.length == 3) {
+        this.disable = true;
+      }
+    },
+    handleChangeHeight() {
+      let data = {
+        type: "height",
+        id: this.dataAddFrameHeight.idHeight,
+        name: "",
+      };
+      for (var i = 0; i < this.listFrameHeights.length; i++) {
+        if (this.listFrameHeights[i].id == this.dataAddFrameHeight.idHeight) {
+          data.name = this.listFrameHeights[i].name;
+        }
+      }
+      this.dataSelect.push(data);
+      console.log(this.dataSelect);
+      if (this.dataSelect.length == 2) {
+        this.dataForm.id1 = this.dataSelect[0].id;
+        this.dataForm.name1 = this.dataSelect[0].name;
+        this.dataForm.id2 = data.id;
+        this.dataForm.name2 = data.name;
+
+        if (this.dataSelect[0].type == "material") {
+          this.getFrameByCoverSheetAndHeight();
+        } else {
+          this.getCoverSheetByFrameAndHeight();
+        }
+      }
+      if (this.dataSelect.length == 3) {
+        this.disable = true;
+      }
+    },
+    handleChangeCodeSheet(value) {
+      this.getUnitByCoverSheet(value);
+    },
+    handleChangeUnit(value) {
+      this.getCoverSheetByUnit(value);
+    },
+    showModalAdd() {
+      this.visibleAdd = true;
+      // this.checkDataInput.show = false;
+      // this.dataAddUnitCoverSheet.idUnit = "";
+      this.getAllFrame();
+      this.getAllFrameHeight();
+    },
+    showModalAddUnit() {
+      this.getAllCodeCoverSheet();
+      this.getAllUnit();
+      this.dataAddUnitCoverSheet.idMaterial = "";
+      this.dataAddUnitCoverSheet.idUnit = "";
+      this.visibleAddUnit = true;
+      // this.getUnitCoverSheet();
+    },
+    showModalAddHW() {
+      this.visibleAddHW = true;
+      // this.getFrameCoverSheet();
+      // this.getFrameHeightCoverSheet();
+      this.getAllCodeCoverSheet();
+      this.getAllFrame();
+      this.getAllFrameHeight();
+      this.dataAddFrameHeight.idMaterial = "";
+      this.dataAddFrameHeight.idFrame = "";
+      this.dataAddFrameHeight.idHeight = "";
+    },
+    // checkFormAdd() {
+    //   if (this.dataAdd.password != null && this.dataAdd.password != "") {
+    //     this.checkDataInput.show = false;
+    //     this.checkDataInput.message = "";
+    //     this.submitAdd();
+    //   } else {
+    //     this.checkDataInput.show = true;
+    //     this.checkDataInput.message = "Bạn phải điền vào chỗ trống";
+    //   }
+    // },
+    submitAdd() {
+      this.dataAdd.listName = this.tags;
+      coverSheetService
+        .addCoverSheet(this.dataAdd)
+        .then((response) => {
+          // this.dataEmployees = response.data.data;
+          this.submitSearch();
+          if (response.data.data) {
+            let type = "success";
+            let message = "Thêm mới";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Thêm mới";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      this.visibleAdd = false;
+      this.dataAdd.idCompany = "";
+      this.dataAdd.idGroup = "";
+      this.dataAdd.idUnit = "";
+      this.dataAdd.listIdFrame = [];
+      this.dataAdd.listIdHeight = [];
+      this.dataAdd.listName = [];
+      this.dataAdd.price = [];
+    },
+    resetFrame() {
+      this.disable = false;
+      this.dataAddFrameHeight.idMaterial="";
+      this.dataAddFrameHeight.idFrame="";
+      this.dataAddFrameHeight.idHeight="";
+      this.getAllCodeCoverSheet();
+      this.getAllFrame();
+      this.getAllFrameHeight();
+    },
+    submitAddUnit() {
+      coverSheetService
+        .addUnitCoverSheet(this.dataAddUnitCoverSheet)
+        .then((response) => {
+          // this.dataEmployees = response.data.data;
+          this.submitSearch();
+          if (response.data.data) {
+            let type = "success";
+            let message = "Thêm mới";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Thêm mới";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      this.visibleAddUnit = false;
+      this.dataAdd.idCompany = "";
+      this.dataAdd.idGroup = "";
+      this.dataAdd.idUnit = "";
+      this.dataAdd.listIdFrame = [];
+      this.dataAdd.listIdHeight = [];
+      this.dataAdd.listName = [];
+      this.dataAdd.price = [];
+    },
+    submitAddFrameHeight() {
+      coverSheetService
+        .addFrameHeightCoverSheet(this.dataAddFrameHeight)
+        .then((response) => {
+          this.submitSearch();
+          if (response.data.data) {
+            let type = "success";
+            let message = "Thêm mới";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Thêm mới";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      this.visibleAddHW = false;
+      this.dataAdd.idCompany = "";
+      this.dataAdd.idGroup = "";
+      this.dataAdd.idUnit = "";
+      this.dataAdd.listIdFrame = [];
+      this.dataAdd.listIdHeight = [];
+      this.dataAdd.listName = [];
+      this.dataAdd.price = [];
+    },
+    handleCancel() {
+      this.visibleAdd = false;
+      this.visibleAddHW = false;
+      this.visibleAddUnit = false;
+      this.visibleEdit = false;
+    },
+    showModalEdit(
+      id,
+      code,
+      idParameter,
+      parameter,
+      group,
+      unit,
+      company,
+      price
+    ) {
+      this.dataEditI.id = id;
+      this.dataEdit.idParameter = idParameter;
+      this.dataEditI.unit = unit;
+      this.dataEdit.price = price;
+
+      this.dataEditI.group = group;
+      this.dataEditI.company = company;
+      this.dataEditI.code = code;
+      this.dataEditI.parameter = parameter;
+      this.visibleEdit = true;
+      this.getAllFrame();
+      this.getAllFrameHeight();
+      code = "";
+    },
+    submitUpdate() {
+      coverSheetService
+        .updateCoverSheet(this.dataEdit)
+        .then((response) => {
+          this.submitSearch();
+          if (response.data.data) {
+            let type = "success";
+            let message = "Cập nhật";
+            let description = "Account đang đăng nhập không được xóa";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Cập nhật";
+            let description = "Account đang đăng nhập không được xóa";
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      this.visibleEdit = false;
+    },
+
+    deleteCoverSheet(id) {
+      coverSheetService
+        .deleteCoverSheet(id)
         .then((response) => {
           this.submitSearch();
           if (response.data.data) {
@@ -818,67 +1266,4 @@ export default {
   background-color: rgb(42, 253, 0);
   color: white;
 }
-/* profile */
-.bg-c-lite-green {
-  border-radius: 5px;
-  background: linear-gradient(to right, #000000, #000000);
-}
-
-.card-block {
-  padding: 1.25rem;
-}
-
-.m-b-25 {
-  margin-bottom: 30px;
-}
-
-.img-radius {
-  border-radius: 5px;
-}
-
-h6 {
-  font-size: 13.5px;
-}
-
-.card-block p {
-  line-height: 25px;
-}
-
-.card-block {
-  padding: 1.25rem;
-}
-
-.b-b-default {
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.m-b-20 {
-  margin-bottom: 20px;
-}
-
-.p-b-5 {
-  padding-bottom: 5px !important;
-}
-
-.m-b-10 {
-  margin-bottom: 10px;
-  color: black;
-}
-
-.text-muted {
-  color: #919aa3 !important;
-}
-
-.text-white {
-  color: white;
-}
-
-.f-w-600 {
-  font-weight: 600;
-}
-
-.m-t-40 {
-  margin-top: 20px;
-}
-/* profile */
 </style>

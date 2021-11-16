@@ -7,7 +7,7 @@
       <a-button
         type="primary"
         @click="showmodal"
-        :style="{ 'margin-left': '5px' }"
+        :style="dataStype"
         >show</a-button
       >
       <a-modal
@@ -23,6 +23,7 @@
           <a-select
             style="width: 120px"
             v-model="datamaterial"
+            :disabled="disable"
             @change="handleChange"
           >
             <a-select-option value="material1"> material1 </a-select-option>
@@ -35,6 +36,7 @@
           <a-select
             style="width: 120px"
             v-model="dataframe"
+            :disabled="disable"
             @change="handleChange1"
           >
             <a-select-option value="frame1"> frame1 </a-select-option>
@@ -47,6 +49,7 @@
           <a-select
             style="width: 120px"
             v-model="dataheight"
+            :disabled="disable"
             @change="handleChange2"
           >
             <a-select-option value="height1"> height1 </a-select-option>
@@ -76,7 +79,9 @@ export default {
       result: {},
       show: false,
       dataSelect: [],
+      disable: false,
       datamaterial: "",
+      dataStype:{ 'margin-left': '5px' },
       dataframe: "",
       dataheight: "",
       dataForm: {
@@ -100,18 +105,22 @@ export default {
       };
       this.dataSelect.push(data);
       if (this.dataSelect.length == 2) {
+        // co nghia la thang dau tien co the la F hoac H va thang thu 2 laf m
         this.dataForm.id1 = data.id;
         this.dataForm.name1 = data.name;
+
         this.dataForm.id2 = this.dataSelect[0].id;
         this.dataForm.name2 = this.dataSelect[0].name;
+        //
         if (this.dataSelect[0].type == "frame") {
-          console.log("call api height",this.dataForm);
+          console.log("call api height", this.dataForm);
         } else {
-          console.log("call api frame",this.dataForm);
+          console.log("call api frame", this.dataForm);
         }
       }
       if (this.dataSelect.length == 3) {
         console.log("đóng băng lại toàn bộ");
+        this.disable = true;
       }
     },
     handleChange1() {
@@ -121,23 +130,25 @@ export default {
         name: "",
       };
       this.dataSelect.push(data);
+
       if (this.dataSelect.length == 2) {
         if (this.dataSelect[0].type == "material") {
           this.dataForm.id1 = this.dataSelect[0].id;
           this.dataForm.name1 = this.dataSelect[0].name;
           this.dataForm.id2 = data.id;
           this.dataForm.name2 = data.name;
-          console.log("call api height",this.dataForm);
+          console.log("call api height", this.dataForm);
         } else {
           this.dataForm.id1 = data.id;
           this.dataForm.name1 = data.name;
           this.dataForm.id2 = this.dataSelect[0].id;
           this.dataForm.name2 = this.dataSelect[0].name;
-          console.log("call api material",this.dataForm);
+          console.log("call api material", this.dataForm);
         }
       }
       if (this.dataSelect.length == 3) {
         console.log("đóng băng lại toàn bộ");
+        this.disable = true;
       }
     },
     handleChange2() {
@@ -154,13 +165,14 @@ export default {
         this.dataForm.name2 = data.name;
 
         if (this.dataSelect[0].type == "material") {
-          console.log("đcall api frame",this.dataForm);
+          console.log("đcall api frame", this.dataForm);
         } else {
-          console.log("call api material",this.dataForm);
+          console.log("call api material", this.dataForm);
         }
       }
       if (this.dataSelect.length == 3) {
         console.log("đóng băng lại toàn bộ");
+        this.disable = true;
       }
     },
     submit() {
