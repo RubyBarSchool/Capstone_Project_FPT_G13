@@ -423,7 +423,7 @@
                   @change="handleDonViByMVL"
                 >
                   <a-select-option
-                    v-for="(frame, index) in dataSourceTable"
+                    v-for="(frame, index) in dataMaterials"
                     :value="frame.id"
                     :key="index"
                   >
@@ -459,6 +459,9 @@
           <a-modal v-model="visibleAddFrame" title="Thêm khung và chiều cao">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
+              <a-button key="reset" type="danger" @click="resetFrame">
+                Reset
+              </a-button>
               <a-button key="submit" type="primary" @click="submitAddFrame">
                 Lưu
               </a-button>
@@ -470,9 +473,11 @@
                   placeholder="Mã vật liệu"
                   v-model="dataAddFrameHeightMaterial.idMaterial"
                   style="width: 100%"
+                  @change="handleMVLByKhungvaChieuCao"
+                  :disabled="disable"
                 >
                   <a-select-option
-                    v-for="(frame, index) in dataSourceTable"
+                    v-for="(frame, index) in dataMaterials"
                     :value="frame.id"
                     :key="index"
                   >
@@ -487,8 +492,10 @@
               <a-col flex="auto">
                 <a-select
                   placeholder="Thông số"
-                  v-model="dataAddFrameHeightMaterial.listIdFrame"
+                  v-model="dataAddFrameHeightMaterial.idFrame"
                   style="width: 100%"
+                  @change="handleKhungByMVLvaChieuCao"
+                  :disabled="disable"
                 >
                   <a-select-option
                     v-for="(frameI, index) in dataFrameMaterials"
@@ -506,9 +513,10 @@
               <a-col flex="auto">
                 <a-select
                   placeholder="Chiều cao"
-                  v-model="dataAddFrameHeightMaterial.listIdHeight"
+                  v-model="dataAddFrameHeightMaterial.idHeight"
                   style="width: 100%"
                   @change="handleChieuCaoByMVLvaKhung"
+                  :disabled="disable"
                 >
                   <a-select-option
                     v-for="(height, index) in dataHeights"
@@ -616,7 +624,6 @@ export default {
         idHeight: "",
         idMaterial: "",
         idUnit: "",
-        price: "",
       },
       dataAddUnitMaterial: {
         idFrame: "",
@@ -636,13 +643,16 @@ export default {
         company: "",
         unit: "",
       },
-      dataHeightsByMaterialAndFrame: {
-        id1: "",
-        id2: "",
+      dataForm: {
+        id1: 0,
+        id2: 0,
         name1: "",
         name2: "",
       },
       dataHeightsByMaterialAndFrames: [],
+      dataSelect: [],
+      dataMaterials: [],
+      listFrameHeightMaterial: [],
       columns: [
         {
           title: "STT",
@@ -709,6 +719,7 @@ export default {
       tags: [],
       inputVisible: false,
       inputValue: "",
+      disable: false,
     };
   },
   computed: {},
@@ -719,7 +730,7 @@ export default {
     this.getAllUnit();
     this.getAllCompany();
     this.getAllFrame();
-    // this.getHeightsByMaterialAndFrame();
+    this.getMaterials();
   },
   methods: {
     handleTableChange(pagination) {
@@ -744,6 +755,29 @@ export default {
           this.dataSourceTable = response.data.data;
           this.dataSearch.total = response.data.total;
           this.pagination.total = response.data.total;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
+    //reset
+    resetFrame() {
+      this.disable = false;
+      this.getMaterials();
+      this.getAllFrame();
+      this.getAllHeight();
+      this.dataAddFrameHeightMaterial.idMaterial = "";
+      this.dataAddFrameHeightMaterial.idFrame = "";
+      this.dataAddFrameHeightMaterial.idHeight = "";
+    },
+
+    //get vật liệu
+    getMaterials() {
+      vatLieuAdminService
+        .getMaterials()
+        .then((response) => {
+          this.dataMaterials = response.data.data;
         })
         .catch((e) => {
           console.log(e);
@@ -806,7 +840,15 @@ export default {
     },
 
     //show model Update
-    showModalEdit(name, idParameter, parameter, nameGroup, unit, company, price) {
+    showModalEdit(
+      name,
+      idParameter,
+      parameter,
+      nameGroup,
+      unit,
+      company,
+      price
+    ) {
       this.dataEditMaterial.name = name;
       this.dataEdit.idParameter = idParameter;
       this.dataEditMaterial.parameter = parameter;
@@ -929,10 +971,10 @@ export default {
     //thay đổi chiều cao theo MVL và khung
     getHeightsByMaterialAndFrame() {
       vatLieuAdminService
-        .getHeightsByMaterialAndFrame(this.dataHeightsByMaterialAndFrame)
+        .getHeightsByMaterialAndFrame(this.dataForm)
         .then((response) => {
           if (response.data.data) {
-            this.dataHeightsByMaterialAndFrame = response.data.data;
+            this.dataHeights = response.data.data;
             let type = "success";
             let message = "Bạn đã chọn mã vật liệu và khung";
             let description = response.data.message;
@@ -949,11 +991,148 @@ export default {
         });
     },
 
+    //thay đổi khung theo MVL và chiều cao
+    getFrameByMaterialAndHeight() {
+      vatLieuAdminService
+        .getFrameByMaterialAndHeight(this.dataForm)
+        .then((response) => {
+          if (response.data.data) {
+            this.dataFrameMaterials = response.data.data;
+            let type = "success";
+            let message = "Bạn đã chọn mã vật liệu và chiều cao";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Bạn đã chọn mã vật liệu và chiều cao";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
+    //thay đổi MVL theo khung và chiều cao
+    getMaterialByFrameAndHeight() {
+      vatLieuAdminService
+        .getMaterialByFrameAndHeight(this.dataForm)
+        .then((response) => {
+          if (response.data.data) {
+            this.dataMaterials = response.data.data;
+            let type = "success";
+            let message = "Bạn đã chọn khung và chiều cao";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Bạn đã chọn khung và chiều cao";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
     //thay đổi chiều cao theo MVL và khung
-    handleChieuCaoByMVLvaKhung(value1, value2) {
-      this.dataHeightsByMaterialAndFrame.name1 = value1;
-      this.dataHeightsByMaterialAndFrame.name2 = value2;
-      this.getHeightsByMaterialAndFrame();
+    handleChieuCaoByMVLvaKhung() {
+      let data = {
+        type: "height",
+        id: this.dataAddFrameHeightMaterial.idHeight,
+        name: "",
+      };
+      for (var i = 0; i < this.dataHeights.length; i++) {
+        if (
+          this.dataHeights[i].id == this.dataAddFrameHeightMaterial.idHeight
+        ) {
+          data.name = this.dataHeights[i].name;
+        }
+      }
+      this.dataSelect.push(data);
+      if (this.dataSelect.length == 2) {
+        this.dataForm.id1 = this.dataSelect[0].id;
+        this.dataForm.name1 = this.dataSelect[0].name;
+        this.dataForm.id2 = data.id;
+        this.dataForm.name2 = data.name;
+        if (this.dataSelect[0].type == "material") {
+          this.getFrameByMaterialAndHeight();
+        } else {
+          this.getMaterialByFrameAndHeight();
+        }
+      }
+      if (this.dataSelect.length == 3) {
+        this.disable = true;
+      }
+    },
+
+    //thay đổi khung theo MVL và chiều cao
+    handleKhungByMVLvaChieuCao() {
+      let data = {
+        type: "frame",
+        id: this.dataAddFrameHeightMaterial.idFrame,
+        name: "",
+      };
+      for (var i = 0; i < this.dataFrameMaterials.length; i++) {
+        if (
+          this.dataFrameMaterials[i].id ==
+          this.dataAddFrameHeightMaterial.idFrame
+        ) {
+          data.name = this.dataFrameMaterials[i].name;
+        }
+      }
+      this.dataSelect.push(data);
+      if (this.dataSelect.length == 2) {
+        if (this.dataSelect[0].type == "material") {
+          this.dataForm.id1 = this.dataSelect[0].id;
+          this.dataForm.name1 = this.dataSelect[0].name;
+          this.dataForm.id2 = data.id;
+          this.dataForm.name2 = data.name;
+          this.getHeightsByMaterialAndFrame();
+        } else {
+          this.dataForm.id1 = data.id;
+          this.dataForm.name1 = data.name;
+          this.dataForm.id2 = this.dataSelect[0].id;
+          this.dataForm.name2 = this.dataSelect[0].name;
+          this.getMaterialByFrameAndHeight();
+        }
+      }
+      if (this.dataSelect.length == 3) {
+        this.disable = true;
+      }
+    },
+
+    //thay đổi MVL theo khung và chiều cao
+    handleMVLByKhungvaChieuCao() {
+      let data = {
+        type: "material",
+        id: this.dataAddFrameHeightMaterial.idMaterial,
+        name: "",
+      };
+      for (var i = 0; i < this.dataMaterials.length; i++) {
+        if (
+          this.dataMaterials[i].id == this.dataAddFrameHeightMaterial.idMaterial
+        ) {
+          data.name = this.dataMaterials[i].name;
+        }
+      }
+      this.dataSelect.push(data);
+      if (this.dataSelect.length == 2) {
+        this.dataForm.id1 = data.id;
+        this.dataForm.name1 = data.name;
+        this.dataForm.id2 = this.dataSelect[0].id;
+        this.dataForm.name2 = this.dataSelect[0].name;
+        if (this.dataSelect[0].type == "frame") {
+          this.getHeightsByMaterialAndFrame();
+        } else {
+          this.getFrameByMaterialAndHeight();
+        }
+      }
+      if (this.dataSelect.length == 3) {
+        this.disable = true;
+      }
     },
 
     //submit add frame
@@ -983,6 +1162,12 @@ export default {
     //add khung
     showModalAddFrame() {
       this.visibleAddFrame = true;
+      this.getMaterials();
+      this.getAllFrame();
+      this.getAllHeight();
+      this.dataAddFrameHeightMaterial.idMaterial = "";
+      this.dataAddFrameHeightMaterial.idFrame = "";
+      this.dataAddFrameHeightMaterial.idHeight = "";
     },
     handleCancel() {
       this.visibleAdd = false;

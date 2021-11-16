@@ -31,6 +31,15 @@ class vatLieuAdminService {
     getHeightsByMaterialAndFrame(form) {
         return http.post(`/admin/material/getheightbymaterialandframe`, form);
     }
+    getFrameByMaterialAndHeight(form) {
+        return http.post(`/admin/material/getframebymaterialandheight`, form);
+    }
+    getMaterialByFrameAndHeight(form) {
+        return http.post(`/admin/material/getMaterialbyframeandheight`, form);
+    }
+    getMaterials() {
+        return http.get(`/admin/material/getmaterials`);
+    }
 }
 
 export default new vatLieuAdminService();

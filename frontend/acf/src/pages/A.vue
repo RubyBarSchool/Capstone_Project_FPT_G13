@@ -89,7 +89,7 @@ export default {
   },
   computed: {},
   created() {
-    this.loadImage();
+    // this.loadImage();
   },
   methods: {
     handleChange() {
