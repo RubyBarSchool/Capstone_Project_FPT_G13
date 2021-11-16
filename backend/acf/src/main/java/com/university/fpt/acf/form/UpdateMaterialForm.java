@@ -4,9 +4,6 @@ import lombok.Data;
 
 @Data
 public class UpdateMaterialForm {
-    private Long id;
+    private Long idParameter;
     private String price;
-    private Long idFrame;
-    private Long idHeight;
-    private Long idUnit;
 }

@@ -2,8 +2,7 @@ package com.university.fpt.acf.service;
 
 import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.vo.*;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+
 
 
 import java.util.List;
@@ -20,8 +19,12 @@ public interface MaterialService {
     Boolean addCoverSheet(AddMaterialForm addForm);
     Boolean deleteCoverSheet(Long id);
     Boolean updateCoverSheet(UpdateMaterialForm updateForm);
+
     Boolean addUnitInMaterial(AddUnitFrameHeightForm addForm);
     Boolean addUnitInCoverSheet(AddUnitFrameHeightForm addForm);
+    Boolean addFrameHeightMaterial(AddUnitFrameHeightForm addForm);
+    Boolean addFrameHeightCoverSheet(AddUnitFrameHeightForm addForm);
+
     List<GetAllMaterialVO> getAllMaterial();
     List<GetAllMaterialVO> getAllCoverSheet();
     List<UnitMeasureVO>getUnitsByMaterial(Long id);

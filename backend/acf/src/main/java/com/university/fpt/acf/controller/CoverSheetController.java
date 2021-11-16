@@ -304,7 +304,7 @@ public class CoverSheetController {
         String message="";
         Boolean checkAdd = false;
         try {
-            checkAdd = materialService.addUnitInCoverSheet(addForm);
+            checkAdd = materialService.addFrameHeightCoverSheet(addForm);
             if(checkAdd==true){
                 message="Thêm thành công!";
             }else{

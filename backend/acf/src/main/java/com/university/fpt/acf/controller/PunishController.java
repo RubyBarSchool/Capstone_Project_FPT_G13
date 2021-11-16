@@ -46,7 +46,7 @@ public class PunishController {
         }
     }
     @PostMapping("/add")
-    public ResponseEntity<ResponseCommon> addBonus(@RequestBody AddBonusAdminForm addForm){
+    public ResponseEntity<ResponseCommon> addPunish(@RequestBody AddBonusAdminForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();
         String message="";
         Boolean checkAdd = false;
@@ -74,7 +74,7 @@ public class PunishController {
         }
     }
     @DeleteMapping("/delete")
-    public ResponseEntity<ResponseCommon> deleteBonus(@RequestParam Long id){
+    public ResponseEntity<ResponseCommon> deletePunish(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();
         String message="";
         Boolean checkDelete = false;

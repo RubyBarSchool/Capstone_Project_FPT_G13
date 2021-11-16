@@ -304,7 +304,7 @@ public class MaterialController {
         String message="";
         Boolean checkAdd = false;
         try {
-            checkAdd = materialService.addUnitInMaterial(addForm);
+            checkAdd = materialService.addFrameHeightMaterial(addForm);
             if(checkAdd==true){
                 message="Thêm thành công!";
             }else{

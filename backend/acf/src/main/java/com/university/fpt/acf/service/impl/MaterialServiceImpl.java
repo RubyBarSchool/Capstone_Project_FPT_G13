@@ -168,13 +168,7 @@ public class MaterialServiceImpl implements MaterialService {
     public Boolean updateMaterial(UpdateMaterialForm updateForm) {
         Boolean check = false;
         try{
-            PriceMaterialForm pmf = new PriceMaterialForm();
-            pmf.setId(updateForm.getId());
-            pmf.setIdFrame(updateForm.getIdFrame());
-            pmf.setIdHeight(updateForm.getIdHeight());
-            pmf.setIdUnit(updateForm.getIdUnit());
-
-            PriceMaterial p = priceCustomRepository.getPriceMaterial(pmf);
+            PriceMaterial p = priceMaterialRepository.getPriceMaterialById(updateForm.getIdParameter());
             p.setPrice(updateForm.getPrice());
             AccountSercurity accountSercurity = new AccountSercurity();
             p.setModified_by(accountSercurity.getUserName());
@@ -262,7 +256,6 @@ public class MaterialServiceImpl implements MaterialService {
             m.setModified_date(LocalDate.now());
             materialRepository.save(m);
             check =true;
-
         }catch (Exception e){
             throw new RuntimeException("Không Xóa được ! ");
         }
@@ -273,21 +266,16 @@ public class MaterialServiceImpl implements MaterialService {
     public Boolean updateCoverSheet(UpdateMaterialForm updateForm) {
         Boolean check = false;
         try{
-            PriceMaterialForm pmf = new PriceMaterialForm();
-            pmf.setId(updateForm.getId());
-            pmf.setIdFrame(updateForm.getIdFrame());
-            pmf.setIdHeight(updateForm.getIdHeight());
-            pmf.setIdUnit(updateForm.getIdUnit());
-
-            PriceMaterial p = priceCustomRepository.getPriceCoverSheet(pmf);
+            PriceMaterial p = priceMaterialRepository.getPriceCoverSheetById(updateForm.getIdParameter());
+            if(p==null){
+                throw new RuntimeException("không tìm thấy để chỉnh sửa ");
+            }
             p.setPrice(updateForm.getPrice());
-
             AccountSercurity accountSercurity = new AccountSercurity();
             p.setModified_by(accountSercurity.getUserName());
             p.setModified_date(LocalDate.now());
             priceMaterialRepository.save(p);
             check =true;
-
         }catch (Exception e){
             throw new RuntimeException("Không chỉnh sửa được ! ");
         }
@@ -298,23 +286,20 @@ public class MaterialServiceImpl implements MaterialService {
     public Boolean addUnitInMaterial(AddUnitFrameHeightForm addForm) {
         Boolean check = false;
         try{
-            PriceMaterial pm = new PriceMaterial();
-            pm.setPrice(addForm.getPrice());
-            HeightMaterial h= new HeightMaterial();
-            h.setId(addForm.getIdHeight());
-            pm.setHeightMaterial(h);
-            UnitMeasure unit = new UnitMeasure();
-            unit.setId(addForm.getIdUnit());
-            pm.setUnitMeasure(unit);
-            FrameMaterial fm = new FrameMaterial();
-            fm.setId(addForm.getIdFrame());
-            pm.setFrameMaterial(fm);
-            AccountSercurity accountSercurity = new AccountSercurity();
-            pm.setModified_by(accountSercurity.getUserName());
-            pm.setCreated_by(accountSercurity.getUserName());
-            pm.setModified_date(LocalDate.now());
-            priceMaterialRepository.save(pm);
-            check =true;
+            List<PriceMaterial>list = priceMaterialRepository.getListPriceMaterialById(addForm.getIdMaterial());
+            for(int i=0;i<list.size();i++){
+                PriceMaterial pm = list.get(i);
+                pm.setId(null);
+                UnitMeasure unit = new UnitMeasure();
+                unit.setId(addForm.getIdUnit());
+                pm.setUnitMeasure(unit);
+                AccountSercurity accountSercurity = new AccountSercurity();
+                pm.setModified_by(accountSercurity.getUserName());
+                pm.setCreated_by(accountSercurity.getUserName());
+                pm.setCreated_date(LocalDate.now());
+                priceMaterialRepository.save(pm);
+                check =true;
+            }
         }catch (Exception e){
             throw new RuntimeException("Không thêm được ! ");
         }
@@ -325,23 +310,74 @@ public class MaterialServiceImpl implements MaterialService {
     public Boolean addUnitInCoverSheet(AddUnitFrameHeightForm addForm) {
         Boolean check = false;
         try{
-            PriceMaterial pm = new PriceMaterial();
-            pm.setPrice(addForm.getPrice());
-            HeightMaterial h= new HeightMaterial();
-            h.setId(addForm.getIdHeight());
-            pm.setHeightMaterial(h);
-            UnitMeasure unit = new UnitMeasure();
-            unit.setId(addForm.getIdUnit());
-            pm.setUnitMeasure(unit);
-            FrameMaterial fm = new FrameMaterial();
-            fm.setId(addForm.getIdFrame());
-            pm.setFrameMaterial(fm);
-            AccountSercurity accountSercurity = new AccountSercurity();
-            pm.setModified_by(accountSercurity.getUserName());
-            pm.setCreated_by(accountSercurity.getUserName());
-            pm.setModified_date(LocalDate.now());
-            priceMaterialRepository.save(pm);
-            check =true;
+            List<PriceMaterial>list = priceMaterialRepository.getListPriceCoverSheetById(addForm.getIdMaterial());
+            for(int i=0;i<list.size();i++){
+                PriceMaterial pm = list.get(i);
+                pm.setId(null);
+                UnitMeasure unit = new UnitMeasure();
+                unit.setId(addForm.getIdUnit());
+                pm.setUnitMeasure(unit);
+                AccountSercurity accountSercurity = new AccountSercurity();
+                pm.setModified_by(accountSercurity.getUserName());
+                pm.setCreated_by(accountSercurity.getUserName());
+                pm.setCreated_date(LocalDate.now());
+                priceMaterialRepository.save(pm);
+                check =true;
+            }
+        }catch (Exception e){
+            throw new RuntimeException("Không thêm được ! ");
+        }
+        return check;
+    }
+
+    @Override
+    public Boolean addFrameHeightMaterial(AddUnitFrameHeightForm addForm) {
+        Boolean check = false;
+        try{
+            List<PriceMaterial>list = priceMaterialRepository.getListPriceMaterialById(addForm.getIdMaterial());
+            for(int i=0;i<list.size();i++){
+                PriceMaterial pm = list.get(i);
+                pm.setId(null);
+                FrameMaterial frame = new FrameMaterial();
+                frame.setId(addForm.getIdFrame());
+                pm.setFrameMaterial(frame);
+                HeightMaterial h = new HeightMaterial();
+                h.setId(addForm.getIdHeight());
+                pm.setHeightMaterial(h);
+                AccountSercurity accountSercurity = new AccountSercurity();
+                pm.setModified_by(accountSercurity.getUserName());
+                pm.setCreated_by(accountSercurity.getUserName());
+                pm.setCreated_date(LocalDate.now());
+                priceMaterialRepository.save(pm);
+                check =true;
+            }
+        }catch (Exception e){
+            throw new RuntimeException("Không thêm được ! ");
+        }
+        return check;
+    }
+
+    @Override
+    public Boolean addFrameHeightCoverSheet(AddUnitFrameHeightForm addForm) {
+        Boolean check = false;
+        try{
+            List<PriceMaterial>list = priceMaterialRepository.getListPriceCoverSheetById(addForm.getIdMaterial());
+            for(int i=0;i<list.size();i++){
+                PriceMaterial pm = list.get(i);
+                pm.setId(null);
+                FrameMaterial frame = new FrameMaterial();
+                frame.setId(addForm.getIdFrame());
+                pm.setFrameMaterial(frame);
+                HeightMaterial h = new HeightMaterial();
+                h.setId(addForm.getIdHeight());
+                pm.setHeightMaterial(h);
+                AccountSercurity accountSercurity = new AccountSercurity();
+                pm.setModified_by(accountSercurity.getUserName());
+                pm.setCreated_by(accountSercurity.getUserName());
+                pm.setCreated_date(LocalDate.now());
+                priceMaterialRepository.save(pm);
+                check =true;
+            }
         }catch (Exception e){
             throw new RuntimeException("Không thêm được ! ");
         }

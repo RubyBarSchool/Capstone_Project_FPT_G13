@@ -8,5 +8,4 @@ public class AddUnitFrameHeightForm {
     private Long idUnit;
     private Long idFrame;
     private Long idHeight;
-    private String price;
 }
