@@ -6,9 +6,7 @@ import com.university.fpt.acf.form.AddUnitFrameHeightForm;
 import com.university.fpt.acf.form.SearchMaterialForm;
 import com.university.fpt.acf.form.UpdateMaterialForm;
 import com.university.fpt.acf.service.MaterialService;
-import com.university.fpt.acf.vo.GetAllMaterialVO;
-import com.university.fpt.acf.vo.MaterialVO;
-import com.university.fpt.acf.vo.UnitMeasureVO;
+import com.university.fpt.acf.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -121,6 +119,84 @@ public class CoverSheetController {
         } catch (Exception e) {
             message = e.getMessage();
             responseCommon.setData(listCoverSheet);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+    @PostMapping("/getheightbycoversheetandframe")
+    public ResponseEntity<ResponseCommon> getHeightsByCoverSheetAndFrame(@RequestBody Add2MaterialForm addForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<HeightMaterialVO> listUnits = new ArrayList<>();
+        try {
+            listUnits = materialService.getHeightByCoverSheetAndFrame(addForm.getId1(),addForm.getId2());
+            responseCommon.setData(listUnits);
+            total = listUnits.size();
+            message = "Thành công!";
+            if (total == 0) {
+                message = "Đã tồn tại tất cả chiều cao với mã tấm phủ"+addForm.getName1()+" và khung "+addForm.getName2();
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(listUnits);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+    @PostMapping("/getcoversheetbyframeandheight")
+    public ResponseEntity<ResponseCommon> getCoverSheetByFrameAndHeight(@RequestBody Add2MaterialForm addForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<GetAllMaterialVO> listUnits = new ArrayList<>();
+        try {
+            listUnits = materialService.getCoverSheetByHeightFrame(addForm.getId2(),addForm.getId1());
+            responseCommon.setData(listUnits);
+            total = listUnits.size();
+            message = "Thành công!";
+            if (total == 0) {
+                message = "Đã tồn tại tất cả mã tấm phủ với khung "+addForm.getName2()+" và chiều cao "+addForm.getName1();
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(listUnits);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+    @PostMapping("/getframebycoversheetandheight")
+    public ResponseEntity<ResponseCommon> getFrameByCoverSheetAndHeight(@RequestBody Add2MaterialForm addForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<FrameMaterialVO> listUnits = new ArrayList<>();
+        try {
+            listUnits = materialService.getFrameByCoverSheetAndHeight(addForm.getId1(), addForm.getId2());
+            responseCommon.setData(listUnits);
+            total = listUnits.size();
+            message = "Thành công!";
+            if (total == 0) {
+                message = "Đã tổn tại tất cả khung với mã tấm phủ "+addForm.getName1()+" chiều cao "+addForm.getName2();
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(listUnits);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);

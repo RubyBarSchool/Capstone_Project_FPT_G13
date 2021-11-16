@@ -1,10 +1,9 @@
 package com.university.fpt.acf.service;
 
 import com.university.fpt.acf.form.*;
-import com.university.fpt.acf.vo.GetAllMaterialVO;
-import com.university.fpt.acf.vo.MaterialVO;
-import com.university.fpt.acf.vo.SuggestMaterialVO;
-import com.university.fpt.acf.vo.UnitMeasureVO;
+import com.university.fpt.acf.vo.*;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 
 import java.util.List;
@@ -29,4 +28,12 @@ public interface MaterialService {
     List<UnitMeasureVO>getUnitsByCoverSheet(Long id);
     List<GetAllMaterialVO> getMaterialByUnit( Long id);
     List<GetAllMaterialVO> getCoverSheetByUnit(Long id);
+
+    List<HeightMaterialVO>getHeightSByMaterialAndFrame(Long idMaterial, Long idFrame);
+    List<HeightMaterialVO>getHeightByCoverSheetAndFrame(Long idMaterial,Long idFrame);
+    List<GetAllMaterialVO> getMaterialByHeightFrame(Long idHeight,Long idFrame);
+    List<GetAllMaterialVO> getCoverSheetByHeightFrame(Long idHeight, Long idFrame);
+    List<FrameMaterialVO> getFrameByMaterialAndHeight(Long idHeight,Long idMaterial);
+    List<FrameMaterialVO> getFrameByCoverSheetAndHeight(Long idHeight,Long idCoverSheet);
+
 }

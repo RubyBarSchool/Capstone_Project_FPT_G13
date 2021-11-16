@@ -3,9 +3,7 @@ package com.university.fpt.acf.controller;
 import com.university.fpt.acf.common.entity.ResponseCommon;
 import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.service.MaterialService;
-import com.university.fpt.acf.vo.GetAllMaterialVO;
-import com.university.fpt.acf.vo.MaterialVO;
-import com.university.fpt.acf.vo.UnitMeasureVO;
+import com.university.fpt.acf.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,13 +70,13 @@ public class MaterialController {
         }
     }
     @PostMapping("/getmaterialbyunit")
-    public ResponseEntity<ResponseCommon> searchMaterialByUnit(@RequestParam Long id){
+    public ResponseEntity<ResponseCommon> searchMaterialByUnit(@RequestParam Long unit){
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
         int total;
         List<GetAllMaterialVO> listUnits = new ArrayList<>();
         try {
-            listUnits = materialService.getMaterialByUnit(id);
+            listUnits = materialService.getMaterialByUnit(unit);
             responseCommon.setData(listUnits);
             total = listUnits.size();
             message = "Thành công!";
@@ -97,6 +95,87 @@ public class MaterialController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    @PostMapping("/getheightbymaterialandframe")
+    public ResponseEntity<ResponseCommon> getHeightsByMaterialAndFrame(@RequestBody Add2MaterialForm addForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<HeightMaterialVO> listUnits = new ArrayList<>();
+        try {
+            listUnits = materialService.getHeightSByMaterialAndFrame(addForm.getId1(),addForm.getId2());
+            responseCommon.setData(listUnits);
+            total = listUnits.size();
+            message = "Thành công!";
+            if (total == 0) {
+                message = "Đã tồn tại tất cả chiều cao với mã vật liệu "+addForm.getName1()+" và khung "+addForm.getName2();
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(listUnits);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+
+    @PostMapping("/getMaterialbyframeandheight")
+    public ResponseEntity<ResponseCommon> getMaterialByFrameAndHeight(@RequestBody Add2MaterialForm addForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<GetAllMaterialVO> listUnits = new ArrayList<>();
+        try {
+            listUnits = materialService.getMaterialByHeightFrame(addForm.getId2(), addForm.getId1());
+            responseCommon.setData(listUnits);
+            total = listUnits.size();
+            message = "Thành công!";
+            if (total == 0) {
+                message = "Đã tồn tại tất cả mã vật liệu với khung "+addForm.getName2()+" và chiều cao "+addForm.getName1();
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(listUnits);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+
+    @PostMapping("/getframebymaterialandheight")
+    public ResponseEntity<ResponseCommon> getFrameByMaterialAndHeight(@RequestBody Add2MaterialForm addForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<FrameMaterialVO> listUnits = new ArrayList<>();
+        try {
+            listUnits = materialService.getFrameByMaterialAndHeight(addForm.getId1(),addForm.getId2());
+            responseCommon.setData(listUnits);
+            total = listUnits.size();
+            message = "Thành công!";
+            if (total == 0) {
+                message = "Đã tổn tại tất cả khung với mã vật liệu "+addForm.getName1()+" chiều cao "+addForm.getName2();
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(listUnits);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+    
     @GetMapping("/getmaterials")
     public ResponseEntity<ResponseCommon> getMaterials(){
         ResponseCommon responseCommon = new ResponseCommon();

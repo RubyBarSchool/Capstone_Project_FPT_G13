@@ -5,10 +5,7 @@ import com.university.fpt.acf.entity.*;
 import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.repository.*;
 import com.university.fpt.acf.service.MaterialService;
-import com.university.fpt.acf.vo.GetAllMaterialVO;
-import com.university.fpt.acf.vo.MaterialVO;
-import com.university.fpt.acf.vo.SuggestMaterialVO;
-import com.university.fpt.acf.vo.UnitMeasureVO;
+import com.university.fpt.acf.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -418,4 +415,72 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return list;
     }
+
+    @Override
+    public List<HeightMaterialVO> getHeightSByMaterialAndFrame(Long idMaterial, Long idFrame) {
+        List<HeightMaterialVO> list= new ArrayList<>();
+        try{
+            list = materialRepository.getHeightSByMaterialAndFrame(idMaterial,idFrame);
+        }catch (Exception e){
+            throw new RuntimeException("Không tìm thấy! ");
+        }
+        return list;
+    }
+
+    @Override
+    public List<HeightMaterialVO> getHeightByCoverSheetAndFrame(Long idMaterial, Long idFrame) {
+        List<HeightMaterialVO> list= new ArrayList<>();
+        try{
+            list = materialRepository.getHeightByCoverSheetAndFrame(idMaterial,idFrame);
+        }catch (Exception e){
+            throw new RuntimeException("Không tìm thấy! ");
+        }
+        return list;
+    }
+
+    @Override
+    public List<GetAllMaterialVO> getMaterialByHeightFrame(Long idHeight, Long idFrame) {
+        List<GetAllMaterialVO> list= new ArrayList<>();
+        try{
+            list = materialRepository.getMaterialByHeightFrame(idHeight,idFrame);
+        }catch (Exception e){
+            throw new RuntimeException("Không tìm thấy! ");
+        }
+        return list;
+    }
+
+    @Override
+    public List<GetAllMaterialVO> getCoverSheetByHeightFrame(Long idHeight, Long idFrame) {
+        List<GetAllMaterialVO> list= new ArrayList<>();
+        try{
+            list = materialRepository.getCoverSheetByHeightFrame(idHeight,idFrame);
+        }catch (Exception e){
+            throw new RuntimeException("Không tìm thấy! ");
+        }
+        return list;
+    }
+
+    @Override
+    public List<FrameMaterialVO> getFrameByMaterialAndHeight(Long idHeight, Long idMaterial) {
+        List<FrameMaterialVO> list= new ArrayList<>();
+        try{
+            list = materialRepository.getFrameByMaterialAndHeight(idHeight,idMaterial);
+        }catch (Exception e){
+            throw new RuntimeException("Không tìm thấy! ");
+        }
+        return list;
+    }
+
+    @Override
+    public List<FrameMaterialVO> getFrameByCoverSheetAndHeight(Long idHeight, Long idCoverSheet) {
+        List<FrameMaterialVO> list= new ArrayList<>();
+        try{
+            list = materialRepository.getFrameByCoverSheetAndHeight(idHeight,idCoverSheet);
+        }catch (Exception e){
+            throw new RuntimeException("Không tìm thấy! ");
+        }
+        return list;
+    }
+
+
 }
