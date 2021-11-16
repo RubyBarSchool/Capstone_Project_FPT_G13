@@ -113,6 +113,17 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
+    public List<ContactVO> searchContactNotDone() {
+        List<ContactVO> contactVOS = new ArrayList<>();
+        try {
+            contactVOS = contactRepository.getContactNotDone();
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return contactVOS;
+    }
+
+    @Override
     public int getTotalSearchContact(ContactInSearchForm contactInSearchForm) {
         if (contactInSearchForm.getTotal() != null && contactInSearchForm.getTotal() != 0) {
             return contactInSearchForm.getTotal().intValue();
@@ -135,6 +146,17 @@ public class ContactServiceImpl implements ContactService {
             throw new RuntimeException(e.getMessage());
         }
         return SearchContactDetailVOS;
+    }
+
+    @Override
+    public List<MaterialInContactDetailVO> getMaterialInProduct(Long idProduct) {
+        List<MaterialInContactDetailVO> materialInContactDetailVOS = new ArrayList<>();
+        try{
+            materialInContactDetailVOS = contactRepository.getMaterialInProduct(idProduct);
+        }catch (Exception e){
+            throw new RuntimeException("Không thể lấy được vật liệu theo sản phẩm trong hợp đồng");
+        }
+        return materialInContactDetailVOS;
     }
 
     @Override

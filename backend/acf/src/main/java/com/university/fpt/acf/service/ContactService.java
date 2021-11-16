@@ -7,6 +7,7 @@ import com.university.fpt.acf.form.ContactInSearchForm;
 import com.university.fpt.acf.form.SearchContactDetailForm;
 import com.university.fpt.acf.vo.ContactVO;
 import com.university.fpt.acf.vo.FileContactVO;
+import com.university.fpt.acf.vo.MaterialInContactDetailVO;
 import com.university.fpt.acf.vo.SearchContactDetailVO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,9 +18,13 @@ public interface ContactService {
 
     List<ContactVO> searchContact(ContactInSearchForm contactInSearchForm);
 
+    List<ContactVO> searchContactNotDone();
+
     int getTotalSearchContact(ContactInSearchForm contactInSearchForm);
 
     List<SearchContactDetailVO> searchContactDetail(SearchContactDetailForm searchContactDetailForm);
+
+    List<MaterialInContactDetailVO> getMaterialInProduct(Long idProduct);
 
     int getTotalSearchContactDetail(SearchContactDetailForm searchContactDetailForm);
 

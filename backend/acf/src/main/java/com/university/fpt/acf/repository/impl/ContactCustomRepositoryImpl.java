@@ -55,7 +55,7 @@ public class ContactCustomRepositoryImpl extends CommonRepository implements Con
                 "CONCAT(p.length,'x',p.width,'x',p.height),p.count,p.note,p.price,p.status) FROM Contact c " +
                 " inner join c.products p where c.deleted = false and p.deleted = false ");
         if(searchContactDetailForm.getIdContact() != null && searchContactDetailForm.getIdContact().size() !=0){
-            sql.append(" and c.id = :id ");
+            sql.append(" and c.id in :id ");
             params.put("id",searchContactDetailForm.getIdContact());
         }
         if(!searchContactDetailForm.getNameProduct().isEmpty() && searchContactDetailForm.getNameProduct()!=null){

@@ -5,14 +5,12 @@ import com.university.fpt.acf.form.ContactInSearchForm;
 import com.university.fpt.acf.form.SearchContactDetailForm;
 import com.university.fpt.acf.service.ContactService;
 import com.university.fpt.acf.vo.ContactVO;
+import com.university.fpt.acf.vo.MaterialInContactDetailVO;
 import com.university.fpt.acf.vo.SearchContactDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -24,7 +22,7 @@ public class ContactDetailController {
     @Autowired
     private ContactService contactService;
 
-    @PostMapping("/getContactInSearch")
+    @PostMapping("/getcontactinsearch")
     public ResponseEntity<ResponseCommon> getContactInFormSearch(@Valid @RequestBody ContactInSearchForm contactInSearchForm) {
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
@@ -52,6 +50,31 @@ public class ContactDetailController {
         }
     }
 
+    @PostMapping("/getcontactinadd")
+    public ResponseEntity<ResponseCommon> getContactInFormAdd() {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        List<ContactVO> contacts = new ArrayList<>();
+        try {
+            contacts = contactService.searchContactNotDone();
+            responseCommon.setData(contacts);
+            responseCommon.setTotal(contacts.size());
+            message = "Lấy hợp đồng chưa bàn giao thành công";
+            if (contacts.size() == 0) {
+                message = "Không tìm thấy hợp đồng chưa bàn giao";
+            }
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = "Không thêm được hợp đồng chưa bàn giao";
+            responseCommon.setData(contacts);
+            responseCommon.setTotal(contacts.size());
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
     @PostMapping()
     public ResponseEntity<ResponseCommon> searchContactDetail(@Valid @RequestBody SearchContactDetailForm searchContactDetailForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -80,5 +103,29 @@ public class ContactDetailController {
         }
     }
 
+    @GetMapping("/getmaterial/{id}")
+    public ResponseEntity<ResponseCommon> getMaterialInProduct(@PathVariable Long id) {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        List<MaterialInContactDetailVO> materialInContactDetailVOS = new ArrayList<>();
+        try {
+            materialInContactDetailVOS = contactService.getMaterialInProduct(id);
+            responseCommon.setData(materialInContactDetailVOS);
+            message = "Lấy vật liệu trong sản phẩm thành công";
+            if (materialInContactDetailVOS.size() == 0) {
+                message = "Lấy vật liệu trong sản phẩm không thành công";
+            }
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = "Không thể tìm kiếm chi tiết hợp đồng";
+            responseCommon.setData(materialInContactDetailVOS);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
 
+    }
 }
+
