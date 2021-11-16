@@ -4,12 +4,12 @@ import com.university.fpt.acf.config.security.AccountSercurity;
 import com.university.fpt.acf.entity.*;
 import com.university.fpt.acf.form.AddContactForm;
 import com.university.fpt.acf.form.AttendanceNote;
+import com.university.fpt.acf.form.ContactInSearchForm;
+import com.university.fpt.acf.repository.ContactCustomRepository;
 import com.university.fpt.acf.repository.ContactRepository;
 import com.university.fpt.acf.repository.PriceMaterialRepository;
 import com.university.fpt.acf.service.ContactService;
-import com.university.fpt.acf.vo.FileContactVO;
-import com.university.fpt.acf.vo.FileMaterialVO;
-import com.university.fpt.acf.vo.FileProductVO;
+import com.university.fpt.acf.vo.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -32,6 +32,9 @@ public class ContactServiceImpl implements ContactService {
 
     @Autowired
     private ContactRepository contactRepository;
+
+    @Autowired
+    private ContactCustomRepository contactCustomRepository;
     @Override
     public Contact addContact(AddContactForm addContactForm) {
         Contact contact = new Contact();
@@ -94,6 +97,31 @@ public class ContactServiceImpl implements ContactService {
             throw new RuntimeException(ex.getMessage());
         }
         return contact;
+    }
+
+    @Override
+    public List<ContactVO> searchContact(ContactInSearchForm contactInSearchForm) {
+        List<ContactVO> contactVOS = new ArrayList<>();
+        try {
+            contactVOS = contactCustomRepository.searchContact(contactInSearchForm);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return contactVOS;
+    }
+
+    @Override
+    public int getTotalSearchContact(ContactInSearchForm contactInSearchForm) {
+        if (contactInSearchForm.getTotal() != null && contactInSearchForm.getTotal() != 0) {
+            return contactInSearchForm.getTotal().intValue();
+        }
+        int total = 0;
+        try {
+            total = contactCustomRepository.getTotalSearchContact(contactInSearchForm);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return total;
     }
 
     @Override
