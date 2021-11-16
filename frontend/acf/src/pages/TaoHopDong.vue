@@ -101,7 +101,6 @@
                 <a-col :span="8">
                   <input
                     type="file"
-                    value=""
                     accept=".xls, .xlsx"
                     @change="importFile($event)"
                   />

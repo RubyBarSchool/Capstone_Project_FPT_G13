@@ -185,13 +185,13 @@ export const router = new Router({
             component: () =>
                 import ("./pages/A.vue"),
         },
-{
+        {
             path: "/coverplate",
             name: "CoverPlate",
             // lazy-loaded
             component: () =>
                 import ("./pages/CoverPlate.vue"),
-        },        {
+        }, {
             path: "/materialsuggest",
             name: "MaterialSuggest",
             // lazy-loaded
@@ -218,6 +218,13 @@ export const router = new Router({
             // lazy-loaded
             component: () =>
                 import ("./pages/LichSuTamUng.vue"),
+        },
+        {
+            path: "/viewdetailcontact",
+            name: "ViewDetailContact",
+            // lazy-loaded
+            component: () =>
+                import ("./pages/ViewDetailContact.vue"),
         },
     ],
 });
