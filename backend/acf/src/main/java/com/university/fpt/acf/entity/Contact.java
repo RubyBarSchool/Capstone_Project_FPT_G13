@@ -22,6 +22,8 @@ public class Contact extends EntityCommon {
 
     private String numberFinish;
 
+    private Boolean statusDone = false;
+
     @ManyToOne
     @JoinColumn(name = "company_id")
     @EqualsAndHashCode.Exclude

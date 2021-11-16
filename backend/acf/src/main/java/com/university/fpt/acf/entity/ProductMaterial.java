@@ -15,6 +15,8 @@ public class ProductMaterial extends EntityCommon {
 
     private Integer count;
 
+    private String note;
+
     private String priceAtCreateContact;
 
     @ManyToOne

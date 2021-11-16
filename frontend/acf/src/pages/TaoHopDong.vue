@@ -53,27 +53,28 @@
           <a-modal v-model="visibleAdd" title="Thêm hợp đồng">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary"> Lưu </a-button>
+              <a-button key="submit" type="primary" @click="handleSubmit"> Lưu </a-button>
             </template>
             <a-form-model>
               <a-form-model-item label="Tên hợp đồng">
-                <a-input />
+                <a-input v-model="dataAdd.name" />
               </a-form-model-item>
               <a-form-model-item label="Khách hàng">
-                <a-select default-value="lucy" style="width: 100%">
-                  <a-select-option value="jack"> Jack </a-select-option>
-                  <a-select-option value="lucy"> Lucy </a-select-option>
-                  <a-select-option value="disabled" disabled>
-                    Disabled
+                <a-select v-model="dataAdd.idCompany" style="width: 100%">
+                  <a-select-option
+                    v-for="(company, index) in companys"
+                    :value="company.id"
+                    :key="index"
+                  >
+                    {{ company.name }}
                   </a-select-option>
-                  <a-select-option value="Yiminghe"> yiminghe </a-select-option>
                 </a-select>
               </a-form-model-item>
               <a-form-model-item label="Hạn hoàn">
-                <a-range-picker @change="onChange" :style="{ width: '100%' }" />
+               <a-date-picker v-model="dataAdd.time" />
               </a-form-model-item>
               <a-form-model-item label="Tổng giá trị">
-                <a-input />
+                <a-input v-model="fileExcel.priceContact" disabled/>
               </a-form-model-item>
               <a-form-model-item label="Ghi chú">
                 <a-textarea
@@ -81,30 +82,29 @@
                     minRows: 1,
                     maxRows: 6,
                   }"
+                  v-model="fileExcel.noteContact"
                   disabled
                 />
               </a-form-model-item>
-
+              <div
+                class="progress-bar progress-bar-info progress-bar-striped"
+                role="progressbar"
+                :aria-valuenow="progress"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                :style="{ width: progress + '%' }"
+              >
+                {{ progress }}%
+              </div>
               <a-row :gutter="[16, 16]">
-                <a-col :span="24"> Bảng chi tiết: </a-col>
-                <a-col :span="24">
-                  <a-upload-dragger
-                    name="file"
-                    :multiple="false"
-                    :action="importFile"
-                    :file-list="fileList"
-                    @change="handleChange"
-                  >
-                    <p class="ant-upload-drag-icon">
-                      <a-icon type="inbox" />
-                    </p>
-                    <p class="ant-upload-text">
-                      Chọn hoặc kéo tệp vào vùng
-                    </p>
-                    <p class="ant-upload-hint">
-                      Hỗ trợ tệp hợp đồng dạng .xlsx , .xlsm , .xlsb
-                    </p>
-                  </a-upload-dragger>
+                <a-col :span="8"> Bảng chi tiết: </a-col>
+                <a-col :span="8">
+                  <input
+                    type="file"
+                    value=""
+                    accept=".xls, .xlsx"
+                    @change="importFile($event)"
+                  />
                 </a-col>
               </a-row>
             </a-form-model>
@@ -120,7 +120,9 @@
 <script>
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
-import fileService from "@/service/fileService.js"
+import fileService from "@/service/fileService.js";
+import company from "@/service/companyService.js";
+import contact from "@/service/contactService.js";
 const columns = [
   {
     title: "Ngày tạo hợp đồng",
@@ -176,32 +178,83 @@ export default {
       data,
       fileList: [],
       columns,
+      fileExcel: {
+        noteContact: "",
+        priceContact: "",
+        fileProductVOList: [],
+      },
+      dataAdd: {
+        name: "",
+        idCompany: "",
+        time: "",
+        fileExcel: [],
+      },
+      companys: [],
+      dataCompany: {
+        address: "",
+        name: "",
+        phone: "",
+        pageIndex: 1,
+        pageSize: 10,
+      },
+      message: "",
+      progress: 0,
       visibleAdd: false,
     };
   },
-  created() {},
+  created() {
+    this.getAllCompany();
+  },
   methods: {
-    importFile(file){
-      console.log("thisdatafile",file)
-      return fileService.importContact(file);
+    getAllCompany() {
+      company
+        .searchCompany(this.dataCompany)
+        .then((response) => {
+          this.companys = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
-    handleChange(info) {
-      this.fileList = [...info.fileList].slice(-1);
-      const status = info.file.status;
-      if (status !== "uploading") {
-        console.log(info.file, info.fileList);
+    importFile(event1) {
+      if (event1.target.files[0]) {
+        this.progress = 0;
+        fileService
+          .importContact(event1.target.files[0], (event) => {
+            this.progress = Math.round((100 * event.loaded) / event.total);
+          })
+          .then((response) => {
+            this.message = response.data.message;
+            this.fileExcel = response.data.data;
+          })
+          .catch((e) => {
+            this.progress = 0;
+            this.message = "Could not upload the file!";
+            console.log(e);
+          });
       }
-      if (status === "done") {
-        this.$message.success(`${info.file.name} file uploaded successfully.`);
-      } else if (status === "error") {
-        this.$message.error(`${info.file.name} file upload failed.`);
-      }
+    },
+    handleSubmit(){
+      this.dataAdd.fileExcel = this.fileExcel;
+      contact.submitContact(this.dataAdd)
+        .then(() => {
+          this.visibleAdd = false;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     onChange(date, dateString) {
       console.log(date, dateString);
     },
     showModalAdd() {
       this.visibleAdd = true;
+      this.progress = 0;
+      this.dataAdd.name = "",
+      this.dataAdd.idCompany = "",
+      this.dataAdd.time = "",
+      this.fileExcel = []
+      // this.$refs.file.files = undefined
     },
     handleCancel() {
       this.visibleAdd = false;
