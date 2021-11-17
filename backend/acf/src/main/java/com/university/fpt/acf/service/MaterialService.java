@@ -11,6 +11,10 @@ public interface MaterialService {
     List<SuggestMaterialVO> searchSuggestMaterial(MaterialSuggestFrom materialSuggestFrom);
     List<MaterialVO> searchMaterial(SearchMaterialForm searchForm);
     int totalSearchMaterial(SearchMaterialForm searchForm);
+
+    List<MaterialInContactDetailVO> searchMaterialInAddProduct(SearchMaterialForm searchForm);
+    int totalSearchMaterialInAddProduct(SearchMaterialForm searchForm);
+
     List<MaterialVO> searchCoverSheet(SearchMaterialForm searchForm);
     int totalSearchCoverSheet(SearchMaterialForm searchForm);
     Boolean addMaterial(AddMaterialForm addForm);

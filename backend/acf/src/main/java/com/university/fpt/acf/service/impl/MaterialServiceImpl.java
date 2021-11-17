@@ -62,6 +62,28 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
+    public List<MaterialInContactDetailVO> searchMaterialInAddProduct(SearchMaterialForm searchForm) {
+        List<MaterialInContactDetailVO> list= new ArrayList<>();
+        try{
+            list = materialCustomRepository.searchMaterialInAddProduct(searchForm);
+        }catch (Exception e){
+            throw new RuntimeException("Không tìm thấy! ");
+        }
+        return list;
+    }
+
+    @Override
+    public int totalSearchMaterialInAddProduct(SearchMaterialForm searchForm) {
+        int size=0;
+        try{
+            size = materialCustomRepository.totalSearchMaterialInAddProduct(searchForm);
+        }catch (Exception e){
+            throw new RuntimeException("Không tìm thấy! ");
+        }
+        return size;
+    }
+
+    @Override
     public List<MaterialVO> searchCoverSheet(SearchMaterialForm searchForm) {
         List<MaterialVO> list= new ArrayList<>();
         try{

@@ -120,7 +120,12 @@
               <a-button key="back" @click="handleCancelAddProductDetail">
                 Đóng
               </a-button>
-              <a-button key="submit" type="primary" @click="submitAddProductDetail">
+              <a-button
+                key="submit"
+                type="primary"
+                :disabled="disableSave"
+                @click="submitAddProductDetail"
+              >
                 Lưu
               </a-button>
             </template>
@@ -184,7 +189,7 @@
               </a-form-model-item>
             </a-form-model>
           </a-modal>
-
+          <!-- hiển thị bảng mã vật liệu theo sản phẩm -->
           <a-modal
             v-model="showAddMaterialDetail"
             height="100%"
@@ -195,19 +200,64 @@
               <a-button key="back" @click="handleCancelAddMaterialDetail">
                 Đóng
               </a-button>
-              <a-button key="submit" type="primary" @click="submitAddMaterialDetail">
+              <a-button
+                key="submit"
+                type="primary"
+                :disabled="disableSave"
+                @click="submitAddMaterialDetail"
+              >
                 Lưu
               </a-button>
             </template>
+            <a-input
+              placeholder="Mã vật liệu"
+              style="width: 150px"
+              v-model="dataSearchAddMaterialDetail.codeMaterial"
+            />
+            <a-input
+              placeholder="Thông số"
+              style="width: 150px"
+              v-model="dataSearchAddMaterialDetail.frame"
+            />
+            <a-button
+              type="primary"
+              @click="searchAddMaterialDetail"
+              :style="{ 'margin-left': '5px' }"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'search']"
+                :style="{ 'margin-right': '5px' }"
+              />
+              Tìm kiếm
+            </a-button>
             <a-table
               :columns="columnsMaterialDetail"
-              :data-source="dataMaterialOfProduct"
+              :data-source="dataAddMaterialDetail"
               :rowKey="
                 (record, index) => {
-                  return index;
+                  return record.idMaterial;
                 }
               "
+              :pagination="false"
+              :scroll="{ y: 800 }"
+              :row-selection="{
+                selectedRowKeys: selectedRowKeys,
+                selectedRows: selectedRows,
+                onChange: onSelectChange,
+              }"
             >
+              <template slot="count" slot-scope="text, record">
+                <editable-cell
+                  :text="text"
+                  @change="onCellChangeCount(record.idMaterial, $event)"
+                />
+              </template>
+              <template slot="note" slot-scope="text, record">
+                <editable-cell
+                  :text="text"
+                  @change="onCellChangeNote(record.idMaterial, $event)"
+                />
+              </template>
             </a-table>
           </a-modal>
         </div>
@@ -220,11 +270,13 @@
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 import viewDetailContactService from "@/service/viewDetailContactService.js";
+import EditableCell from "@/components/EditableCell.vue";
 export default {
   name: "viewdetailcontact",
   components: {
     Header,
     Footer,
+    EditableCell,
   },
   data() {
     return {
@@ -352,22 +404,18 @@ export default {
           width: 150,
         },
         {
-          title: "Giá vật liệu hợp đồng",
-          dataIndex: "priceInContact",
-          key: "priceInContact",
-          width: 150,
-        },
-        {
           title: "Số lượng",
           dataIndex: "count",
           key: "count",
           width: 150,
+          scopedSlots: { customRender: "count" },
         },
         {
           title: "Ghi chú",
           dataIndex: "note",
           key: "note",
           width: 150,
+          scopedSlots: { customRender: "note" },
         },
       ],
       dataMaterialOfProduct: [],
@@ -386,6 +434,21 @@ export default {
       },
       dataContactInAdd: [],
       showAddMaterialDetail: false,
+      dataAddMaterialDetail: [],
+      dataSearchAddMaterialDetail: {
+        codeMaterial: "",
+        frame: "",
+        listGroupID: [],
+        listUnitId: [],
+        listIdCompany: [],
+        pageIndex: 1,
+        pageSize: 10,
+      },
+      selectedRowKeys: [],
+      selectedRows: [],
+      dataNote: [],
+      dataCount: [],
+      disableSave: true,
     };
   },
   computed: {},
@@ -394,16 +457,169 @@ export default {
     this.search();
   },
   methods: {
+    onCellChangeCount(key, value) {
+      console.log("key", key);
+      console.log("value", value);
+      if (!parseInt(value)) {
+        let task = "error";
+        let message = "Nhập đúng giá trị số";
+        let description =
+          "Bạn phải nhập giá trị số lượng là một số cụ thể cho mã vật liệu có mã:" +
+          key;
+        this.notifi(task, message, description);
+        value = 0;
+      }
+      for (let i = 0; i < this.addProductForm.materials.length; i++) {
+        if (this.addProductForm.materials[i].id == key) {
+          this.addProductForm.materials[i].count = parseInt(value);
+          break;
+        }
+      }
+      let check = true;
+      for (let i = 0; i < this.dataCount.length; i++) {
+        if (key == this.dataCount[i].id) {
+          this.dataCount[i].count = parseInt(value);
+          check = false;
+          break;
+        }
+      }
+      if (check) {
+        var data = {
+          id: key,
+          count: parseInt(value),
+        };
+        this.dataCount.push(data);
+      }
+      if (this.addProductForm.materials.length != 0) {
+        this.disableSave = false;
+      }
+    },
+    onCellChangeNote(key, value) {
+      console.log("key", key);
+      console.log("value", value);
+      for (let i = 0; i < this.addProductForm.materials.length; i++) {
+        if (this.addProductForm.materials[i].id == key) {
+          this.addProductForm.materials[i].note = value;
+          break;
+        }
+      }
+      let check = true;
+      for (let i = 0; i < this.dataNote.length; i++) {
+        if (key == this.dataNote[i].id) {
+          this.dataNote[i].note = value;
+          check = false;
+          break;
+        }
+      }
+      if (check) {
+        var data = {
+          id: key,
+          note: value,
+        };
+        this.dataNote.push(data);
+      }
+    },
+
+    onSelectChange(selectedRowKeys, selectedRows) {
+      console.log("selectedRowKeys", selectedRowKeys);
+      console.log("selectedRows", selectedRows);
+      this.selectedRowKeys = selectedRowKeys;
+      this.selectedRows = selectedRows;
+      this.addProductForm.materials = [];
+      for (let i = 0; i < selectedRows.length; i++) {
+        let data = {
+          id: selectedRows[i].idMaterial,
+          price: selectedRows[i].price,
+          note: "",
+          count: 0,
+        };
+        for (let j = 0; j < this.dataNote.length; j++) {
+          if (this.dataNote[j].id == selectedRows[i].idMaterial) {
+            data.note = this.dataNote[j].note;
+            break;
+          }
+        }
+        for (let j = 0; j < this.dataCount.length; j++) {
+          if (this.dataCount[j].id == selectedRows[i].idMaterial) {
+            data.count = this.dataCount[j].count;
+
+            break;
+          }
+        }
+        this.addProductForm.materials.push(data);
+      }
+      if (selectedRowKeys.length != 0) {
+        this.disableSave = false;
+      } else {
+        this.disableSave = true;
+      }
+    },
+    submitAddMaterialDetail() {
+      let price = 0;
+      let checkSuccess = true;
+      console.log("materials", this.addProductForm.materials);
+      for (let i = 0; i < this.addProductForm.materials.length; i++) {
+        if (this.addProductForm.materials[i].count == 0) {
+          this.disableSave = true;
+          let task = "error";
+          let text = "Thiếu số lượng";
+          let description =
+            "Bạn bắt buộc phải chọn số lượng cho vật liệu có mã: " +
+            this.addProductForm.materials[i].id;
+          this.notifi(task, text, description);
+          checkSuccess = false;
+          break;
+        }
+        price +=
+          this.addProductForm.materials[i].count *
+          parseInt(this.addProductForm.materials[i].price);
+      }
+      if (checkSuccess) {
+        this.addProductForm.priceProduct = price;
+        this.showAddMaterialDetail = false;
+      }
+    },
+    submitAddProductDetail() {
+      console.log("data product", this.addProductForm);
+      viewDetailContactService
+        .addProduct(this.addProductForm)
+        .then((response) => {
+          this.search();
+          this.handleCancelAddProductDetail();
+          let task = response.data.data ? "success" : "error";
+          let text = response.data.data ? "Thêm thành công" : "Thêm Không thành công";
+          let description = response.data.data ?
+            "Thêm thành công product "+this.addProductForm.nameProduct : "Thêm không thành công product "+this.addProductForm.nameProduct;
+          this.notifi(task, text, description);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     handleCancelAddMaterialDetail() {
       this.showAddMaterialDetail = false;
     },
     handleAddMaterialDetail() {
-      this.showAddMaterialDetail = true;
+      viewDetailContactService
+        .getMaterialInAddProduct(this.dataSearchAddMaterialDetail)
+        .then((response) => {
+          this.dataAddMaterialDetail = response.data.data;
+          this.showAddMaterialDetail = true;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
-    submitAddMaterialDetail(){
-
+    searchAddMaterialDetail() {
+      viewDetailContactService
+        .getMaterialInAddProduct(this.dataSearchAddMaterialDetail)
+        .then((response) => {
+          this.dataAddMaterialDetail = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
-    submitAddProductDetail() {},
     showModalAdd() {
       viewDetailContactService
         .searchContactInAdd()
@@ -417,6 +633,17 @@ export default {
     },
     handleCancelAddProductDetail() {
       this.showAddProductDetail = false;
+      this.addProductForm.idContact = "";
+      this.addProductForm.nameProduct = "";
+      this.addProductForm.countProduct = "";
+      this.addProductForm.lengthFrame = "";
+      this.addProductForm.widthFrame = "";
+      this.addProductForm.heightFrame = "";
+      this.addProductForm.noteProduct = "";
+      this.addProductForm.priceProduct = "";
+      this.addProductForm.materials = [];
+      (this.selectedRowKeys = []), (this.selectedRows = []);
+      this.dataAddMaterialDetail = [];
     },
     handleCancelViewMaterialDetail() {
       this.showViewMaterialDetail = false;
@@ -474,6 +701,12 @@ export default {
       this.dataSearch.pageIndex = 1;
       this.dataSearch.total = 0;
       this.searchContactDetail();
+    },
+    notifi(type, message, description) {
+      this.$notification[type]({
+        message: message,
+        description: description,
+      });
     },
   },
 };

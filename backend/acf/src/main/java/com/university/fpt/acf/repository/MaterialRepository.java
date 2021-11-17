@@ -46,6 +46,5 @@ public interface MaterialRepository extends JpaRepository<Material,Long> {
     @Query("select new com.university.fpt.acf.vo.FrameMaterialVO(m.id,concat(m.frameLength,'x',m.frameWidth) ) from FrameMaterial m where m.id not in (select distinct pm.frameMaterial.id from Material mm inner join mm.priceMaterials  pm  where pm.heightMaterial.id=:idHeight and mm.checkMaterial=false and mm.deleted=false and mm.id=:idCoverSheet and mm.checkMaterial=false ) ")
     List<FrameMaterialVO> getFrameByCoverSheetAndHeight(@Param("idHeight") Long idHeight,@Param("idCoverSheet") Long idCoverSheet);
 
-
 }
 

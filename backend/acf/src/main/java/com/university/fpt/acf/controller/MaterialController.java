@@ -43,6 +43,34 @@ public class MaterialController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+
+    @PostMapping("/searchmaterial")
+    public ResponseEntity<ResponseCommon> searchMaterialInAddProductDetail(@RequestBody SearchMaterialForm searchForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<MaterialInContactDetailVO> list = new ArrayList<>();
+        try {
+            list = materialService.searchMaterialInAddProduct(searchForm);
+            responseCommon.setData(list);
+            total= materialService.totalSearchMaterialInAddProduct(searchForm);
+            message = "Thành công!";
+            if(total==0){
+                message = "Không tìm thấy!";
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(list);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+
     @PostMapping("/getunitbymaterial")
     public ResponseEntity<ResponseCommon> getUnitByMaterial(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();

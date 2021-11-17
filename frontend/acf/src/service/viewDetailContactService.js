@@ -13,6 +13,12 @@ class viewDetailContactService {
     getMaterialOfProduct(id) {
         return http.get(`/admin/contactdetail/getmaterial/${id}`);
     }
+    getMaterialInAddProduct(form) {
+        return http.post(`/admin/material/searchmaterial`, form);
+    }
+    addProduct(form) {
+        return http.post(`/admin/product/addproduct`, form);
+    }
 }
 
 export default new viewDetailContactService();

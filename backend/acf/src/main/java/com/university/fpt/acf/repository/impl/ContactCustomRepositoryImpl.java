@@ -62,7 +62,7 @@ public class ContactCustomRepositoryImpl extends CommonRepository implements Con
             sql.append(" and LOWER(p.name) like :name ");
             params.put("name","%"+searchContactDetailForm.getNameProduct().toLowerCase()+"%");
         }
-        sql.append(" ORDER by c.id desc ");
+        sql.append(" ORDER by p.id desc ");
         TypedQuery<SearchContactDetailVO> query = super.createQuery(sql.toString(),params, SearchContactDetailVO.class);
         query.setFirstResult((searchContactDetailForm.getPageIndex()-1)* searchContactDetailForm.getPageSize());
         query.setMaxResults(searchContactDetailForm.getPageSize());

@@ -66,7 +66,7 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
             params.put("frame", "%"+searchForm.getFrame().toLowerCase()+"%");
         }
         if (searchForm.getListUnitId()!=null && !searchForm.getListUnitId().isEmpty() ){
-            sql.append(" and u.id= :idUnit ");
+            sql.append(" and u.id in :idUnit ");
             params.put("idUnit", searchForm.getListUnitId());
         }
         if (searchForm.getListGroupID()!=null && !searchForm.getListGroupID().isEmpty() ){
@@ -99,7 +99,7 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
             params.put("frame", "%"+searchForm.getFrame().toLowerCase()+"%");
         }
         if (searchForm.getListUnitId()!=null && !searchForm.getListUnitId().isEmpty() ){
-            sql.append(" and u.id= :idUnit ");
+            sql.append(" and u.id in :idUnit ");
             params.put("idUnit", searchForm.getListUnitId());
         }
         if (searchForm.getListGroupID()!=null && !searchForm.getListGroupID().isEmpty() ){
@@ -107,6 +107,72 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
             params.put("listGroupId", searchForm.getListGroupID());
         }
         sql.append(" ORDER by m.id desc ");
+        TypedQuery<Long> query = super.createQuery(sql.toString(), params, Long.class);
+        return query.getSingleResult().intValue();
+    }
+
+    @Override
+    public List<MaterialInContactDetailVO> searchMaterialInAddProduct(SearchMaterialForm searchForm) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append("select  new com.university.fpt.acf.vo.MaterialInContactDetailVO(pm.id,m.name," +
+                "concat(fm.frameLength,'x',fm.frameWidth,'x',hm.frameHeight),gm.name,um.name,c.name" +
+                ",pm.price) from Material m inner  join m.groupMaterial gm inner join m.company c " +
+                "inner join m.priceMaterials pm inner join pm.unitMeasure um inner join  pm.heightMaterial hm " +
+                "inner  join pm.frameMaterial fm where m.deleted = false");
+        if(searchForm.getCodeMaterial()!=null && !searchForm.getCodeMaterial().isEmpty()){
+            sql.append(" and LOWER(m.name) like :code ");
+            params.put("code", "%"+searchForm.getCodeMaterial().toLowerCase()+"%");
+        }
+        if (searchForm.getListIdCompany()!=null && !searchForm.getListIdCompany().isEmpty()){
+            sql.append(" and c.id in :listID ");
+            params.put("listID", searchForm.getListIdCompany());
+        }
+        if(searchForm.getFrame()!=null && !searchForm.getFrame().isEmpty()  ){
+            sql.append(" and concat(fm.frameLength,'x',fm.frameWidth,'x',hm.frameHeight) like :frame ");
+            params.put("frame", "%"+searchForm.getFrame().toLowerCase()+"%");
+        }
+        if (searchForm.getListUnitId()!=null && !searchForm.getListUnitId().isEmpty() ){
+            sql.append(" and um.id in :idUnit ");
+            params.put("idUnit", searchForm.getListUnitId());
+        }
+        if (searchForm.getListGroupID()!=null && !searchForm.getListGroupID().isEmpty() ){
+            sql.append(" and gm.id in :listGroupId ");
+            params.put("listGroupId", searchForm.getListGroupID());
+        }
+        sql.append(" ORDER by pm.id desc ");
+        TypedQuery<MaterialInContactDetailVO> query = super.createQuery(sql.toString(), params, MaterialInContactDetailVO.class);
+        return query.getResultList();
+    }
+
+    @Override
+    public int totalSearchMaterialInAddProduct(SearchMaterialForm searchForm) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append("select  COUNT(*) from Material m inner  join m.groupMaterial gm inner join m.company c " +
+                "inner join m.priceMaterials pm inner join pm.unitMeasure um inner join  pm.heightMaterial hm " +
+                "inner  join pm.frameMaterial fm where m.deleted = false");
+        if(searchForm.getCodeMaterial()!=null && !searchForm.getCodeMaterial().isEmpty()){
+            sql.append(" and LOWER(m.name) like :code ");
+            params.put("code", "%"+searchForm.getCodeMaterial().toLowerCase()+"%");
+        }
+        if (searchForm.getListIdCompany()!=null && !searchForm.getListIdCompany().isEmpty()){
+            sql.append(" and c.id in :listID ");
+            params.put("listID", searchForm.getListIdCompany());
+        }
+        if(searchForm.getFrame()!=null && !searchForm.getFrame().isEmpty()  ){
+            sql.append(" and concat(fm.frameLength,'x',fm.frameWidth,'x',hm.frameHeight) like :frame ");
+            params.put("frame", "%"+searchForm.getFrame().toLowerCase()+"%");
+        }
+        if (searchForm.getListUnitId()!=null && !searchForm.getListUnitId().isEmpty() ){
+            sql.append(" and um.id in :idUnit ");
+            params.put("idUnit", searchForm.getListUnitId());
+        }
+        if (searchForm.getListGroupID()!=null && !searchForm.getListGroupID().isEmpty() ){
+            sql.append(" and gm.id in :listGroupId ");
+            params.put("listGroupId", searchForm.getListGroupID());
+        }
+        sql.append(" ORDER by pm.id desc ");
         TypedQuery<Long> query = super.createQuery(sql.toString(), params, Long.class);
         return query.getSingleResult().intValue();
     }

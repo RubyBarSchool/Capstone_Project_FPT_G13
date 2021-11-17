@@ -1,6 +1,7 @@
 package com.university.fpt.acf.controller;
 
 import com.university.fpt.acf.common.entity.ResponseCommon;
+import com.university.fpt.acf.form.AddProductForm;
 import com.university.fpt.acf.form.ContactInSearchForm;
 import com.university.fpt.acf.form.SearchContactDetailForm;
 import com.university.fpt.acf.service.ContactService;
@@ -50,6 +51,8 @@ public class ContactDetailController {
         }
     }
 
+
+
     @PostMapping("/getcontactinadd")
     public ResponseEntity<ResponseCommon> getContactInFormAdd() {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -75,6 +78,8 @@ public class ContactDetailController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+
+
     @PostMapping()
     public ResponseEntity<ResponseCommon> searchContactDetail(@Valid @RequestBody SearchContactDetailForm searchContactDetailForm) {
         ResponseCommon responseCommon = new ResponseCommon();

@@ -18,4 +18,14 @@ public class MaterialInContactDetailVO {
     private String priceInContact;
     private String note;
     private Integer count;
+
+    public MaterialInContactDetailVO(Long idMaterial, String nameMaterial, String frame, String nameGroupMaterial, String unitMaterial, String nameCompany, String price) {
+        this.idMaterial = idMaterial;
+        this.nameMaterial = nameMaterial;
+        this.frame = frame;
+        this.nameGroupMaterial = nameGroupMaterial;
+        this.unitMaterial = unitMaterial;
+        this.nameCompany = nameCompany;
+        this.price = price;
+    }
 }
