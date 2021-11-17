@@ -2,6 +2,7 @@ package com.university.fpt.acf.repository;
 
 import com.university.fpt.acf.entity.Contact;
 import com.university.fpt.acf.vo.ContactVO;
+import com.university.fpt.acf.vo.GetCreateContactVO;
 import com.university.fpt.acf.vo.MaterialInContactDetailVO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -22,4 +23,5 @@ public interface ContactRepository extends JpaRepository<Contact,Long> {
 
     @Query(" select new com.university.fpt.acf.vo.ContactVO(c.id,c.name)  from Contact c where c.deleted = false and c.statusDone = false")
     List<ContactVO> getContactNotDone();
+
 }

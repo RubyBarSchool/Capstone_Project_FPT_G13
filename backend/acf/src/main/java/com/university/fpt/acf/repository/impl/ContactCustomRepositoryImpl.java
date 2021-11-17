@@ -4,9 +4,11 @@ import com.university.fpt.acf.common.repository.CommonRepository;
 import com.university.fpt.acf.form.AttendanceFrom;
 import com.university.fpt.acf.form.ContactInSearchForm;
 import com.university.fpt.acf.form.SearchContactDetailForm;
+import com.university.fpt.acf.form.SearchCreateContactFrom;
 import com.university.fpt.acf.repository.ContactCustomRepository;
 import com.university.fpt.acf.vo.CompanyVO;
 import com.university.fpt.acf.vo.ContactVO;
+import com.university.fpt.acf.vo.GetCreateContactVO;
 import com.university.fpt.acf.vo.SearchContactDetailVO;
 import org.springframework.stereotype.Repository;
 
@@ -81,6 +83,55 @@ public class ContactCustomRepositoryImpl extends CommonRepository implements Con
         if(!searchContactDetailForm.getNameProduct().isEmpty() && searchContactDetailForm.getNameProduct()!=null){
             sql.append(" and LOWER(p.name) like :name ");
             params.put("name","%"+searchContactDetailForm.getNameProduct().toLowerCase()+"%");
+        }
+        sql.append(" ORDER by c.id desc ");
+        TypedQuery<Long> query = super.createQuery(sql.toString(),params, Long.class);
+        return query.getSingleResult().intValue();
+    }
+
+    @Override
+    public List<GetCreateContactVO> searchCreateContact(SearchCreateContactFrom searchForm) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append("select new com.university.fpt.acf.vo.GetCreateContactVO(c.id,c.name,c.created_date,c.dateFinish,cp.id,cp.name,c.totalMoney,c.numberFinish,c.statusDone,c.note) " +
+                "from Contact c inner join c.company cp where c.deleted=false  ");
+        if(searchForm.getName() != null && !searchForm.getName().isEmpty()){
+            sql.append(" and c.name like :name ");
+            params.put("name","%"+searchForm.getName()+"%");
+        }
+        if(searchForm.getListIdCompany().size()!=0 && searchForm.getListIdCompany()!=null){
+            sql.append(" and cp.id in : listId ");
+            params.put("listId",searchForm.getListIdCompany());
+        }
+        if (searchForm.getListDate() != null && !searchForm.getListDate().isEmpty()) {
+            sql.append(" and  c.dateFinish BETWEEN :dateStart and :dateEnd ");
+            params.put("dateStart", searchForm.getListDate().get(0));
+            params.put("dateEnd", searchForm.getListDate().get(1));
+        }
+        sql.append(" ORDER by c.id desc ");
+        TypedQuery<GetCreateContactVO> query = super.createQuery(sql.toString(),params, GetCreateContactVO.class);
+        query.setFirstResult((searchForm.getPageIndex()-1)* searchForm.getPageSize());
+        query.setMaxResults(searchForm.getPageSize());
+        return query.getResultList();
+    }
+
+    @Override
+    public int totalSearchCreateContact(SearchCreateContactFrom searchForm) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append("select Count(*) from Contact c inner join c.company cp where c.deleted=false  ");
+        if(searchForm.getName() != null && !searchForm.getName().isEmpty()){
+            sql.append(" and c.name like :name ");
+            params.put("name","%"+searchForm.getName()+"%");
+        }
+        if(searchForm.getListIdCompany().size()!=0 && searchForm.getListIdCompany()!=null){
+            sql.append(" and cp.id in : listId ");
+            params.put("listId",searchForm.getListIdCompany());
+        }
+        if (searchForm.getListDate() != null && !searchForm.getListDate().isEmpty()) {
+            sql.append(" and  c.dateFinish BETWEEN :dateStart and :dateEnd ");
+            params.put("dateStart", searchForm.getListDate().get(0));
+            params.put("dateEnd", searchForm.getListDate().get(1));
         }
         sql.append(" ORDER by c.id desc ");
         TypedQuery<Long> query = super.createQuery(sql.toString(),params, Long.class);

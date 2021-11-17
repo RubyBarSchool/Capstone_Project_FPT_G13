@@ -2,10 +2,7 @@ package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.config.security.AccountSercurity;
 import com.university.fpt.acf.entity.*;
-import com.university.fpt.acf.form.AddContactForm;
-import com.university.fpt.acf.form.AttendanceNote;
-import com.university.fpt.acf.form.ContactInSearchForm;
-import com.university.fpt.acf.form.SearchContactDetailForm;
+import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.repository.ContactCustomRepository;
 import com.university.fpt.acf.repository.ContactRepository;
 import com.university.fpt.acf.repository.PriceMaterialRepository;
@@ -296,6 +293,28 @@ public class ContactServiceImpl implements ContactService {
         } catch (Exception e) {
             throw new RuntimeException("Không thể đọc tệp hợp đồng");
         }
+    }
+
+    @Override
+    public List<GetCreateContactVO> searchCreateContact(SearchCreateContactFrom searchForm) {
+        List<GetCreateContactVO> list = new ArrayList<>();
+        try {
+            list = contactCustomRepository.searchCreateContact(searchForm);
+        } catch (Exception e) {
+            throw new RuntimeException("Error contact repository " + e.getMessage());
+        }
+        return list;
+    }
+
+    @Override
+    public int totalSearchCreateContact(SearchCreateContactFrom search) {
+        int size=0;
+        try {
+            size = contactCustomRepository.totalSearchCreateContact(search);
+        } catch (Exception e) {
+            throw new RuntimeException("Error contact repository " + e.getMessage());
+        }
+        return size;
     }
 
     private String subString(String input) {

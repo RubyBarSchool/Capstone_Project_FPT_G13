@@ -4,9 +4,13 @@ import com.university.fpt.acf.common.entity.ResponseCommon;
 import com.university.fpt.acf.entity.Contact;
 import com.university.fpt.acf.form.AddContactForm;
 import com.university.fpt.acf.form.ContactInSearchForm;
+import com.university.fpt.acf.form.SearchCompanyForm;
+import com.university.fpt.acf.form.SearchCreateContactFrom;
 import com.university.fpt.acf.service.ContactService;
+import com.university.fpt.acf.vo.CompanyVO;
 import com.university.fpt.acf.vo.ContactVO;
 import com.university.fpt.acf.vo.FileContactVO;
+import com.university.fpt.acf.vo.GetCreateContactVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -74,6 +78,31 @@ public class ContactController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    @PostMapping("/search")
+    public ResponseEntity<ResponseCommon> searchCompany(@RequestBody SearchCreateContactFrom searchForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total=0;
+        List<GetCreateContactVO> list = new ArrayList<>();
+        try {
+            list = contactService.searchCreateContact(searchForm);
+            total = contactService.totalSearchCreateContact(searchForm);
+            responseCommon.setData(list);
+            message = "Thành công";
+            if(total==0){
+                message = "Không tìm thấy";
+            }
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(list);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
 
 }

@@ -1,14 +1,8 @@
 package com.university.fpt.acf.service;
 
 import com.university.fpt.acf.entity.Contact;
-import com.university.fpt.acf.form.AddContactForm;
-import com.university.fpt.acf.form.AttendanceFrom;
-import com.university.fpt.acf.form.ContactInSearchForm;
-import com.university.fpt.acf.form.SearchContactDetailForm;
-import com.university.fpt.acf.vo.ContactVO;
-import com.university.fpt.acf.vo.FileContactVO;
-import com.university.fpt.acf.vo.MaterialInContactDetailVO;
-import com.university.fpt.acf.vo.SearchContactDetailVO;
+import com.university.fpt.acf.form.*;
+import com.university.fpt.acf.vo.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -30,4 +24,8 @@ public interface ContactService {
     int getTotalSearchContactDetail(SearchContactDetailForm searchContactDetailForm);
 
     FileContactVO readFileContact(MultipartFile file);
+
+    List<GetCreateContactVO> searchCreateContact(SearchCreateContactFrom searchForm);
+
+    int totalSearchCreateContact(SearchCreateContactFrom search);
 }
