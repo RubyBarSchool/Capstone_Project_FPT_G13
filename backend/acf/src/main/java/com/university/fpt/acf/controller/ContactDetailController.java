@@ -130,7 +130,7 @@ public class ContactDetailController {
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
-
     }
+
 }
 

@@ -75,7 +75,7 @@
                     </a-button>
                   </a-col>
                   <a-col :span="8">
-                    <a-button id="edit" @click="showModalEdit(record)">
+                    <a-button v-if="record.status == 'Chưa làm'" id="edit" @click="showModalEdit(record)">
                       <font-awesome-icon :icon="['fas', 'edit']" />
                     </a-button>
                   </a-col>
@@ -111,10 +111,10 @@
             >
             </a-table>
           </a-modal>
-
+          <!-- form add -->
           <a-modal
             v-model="showAddProductDetail"
-            title="Xem chi tiết vật liệu của sản phẩm"
+            title="Thêm sản phẩm cho hợp đồng"
           >
             <template slot="footer">
               <a-button key="back" @click="handleCancelAddProductDetail">
@@ -133,7 +133,6 @@
               <a-form-model-item label="Tên hợp đồng">
                 <a-select
                   v-model="addProductForm.idContact"
-                  @change="changeSelect"
                   placeholder="Hợp đồng"
                   style="width: 80%"
                 >
@@ -259,6 +258,85 @@
                 />
               </template>
             </a-table>
+          </a-modal>
+
+          <!-- form edit -->
+          <a-modal
+            v-model="showEditProductDetail"
+            title="Sửa sản phẩm cho hợp đồng"
+          >
+            <template slot="footer">
+              <a-button key="back" @click="handleCancelAddProductDetail">
+                Đóng
+              </a-button>
+              <a-button
+                key="submit"
+                type="primary"
+                :disabled="disableSave"
+                @click="submitAddProductDetail"
+              >
+                Lưu
+              </a-button>
+            </template>
+            <a-form-model>
+              <a-form-model-item label="Tên hợp đồng">
+                <a-select
+                  v-model="addProductForm.idContact"
+                  disabled
+                  placeholder="Hợp đồng"
+                  style="width: 80%"
+                >
+                  <a-select-option
+                    v-for="(contact, index) in dataContactInAdd"
+                    :value="contact.id"
+                    :key="index"
+                  >
+                    {{ contact.name }}
+                  </a-select-option>
+                </a-select>
+              </a-form-model-item>
+              <a-form-model-item label="Tên sản phẩm">
+                <a-input
+                  v-model="addProductForm.nameProduct"
+                  placeholder="Nhập tên sản phẩm"
+                />
+              </a-form-model-item>
+              <a-form-model-item label="Số lượng">
+                <a-input
+                  v-model="addProductForm.countProduct"
+                  placeholder="Nhập số lượng sản phẩm"
+                />
+              </a-form-model-item>
+              <a-form-model-item label="Thông số">
+                <a-input
+                  v-model="addProductForm.lengthFrame"
+                  placeholder="Chiều rộng"
+                />
+                <a-input
+                  v-model="addProductForm.widthFrame"
+                  placeholder="Chiều dài"
+                />
+                <a-input
+                  v-model="addProductForm.heightFrame"
+                  placeholder="Chiều cao"
+                />
+              </a-form-model-item>
+              <a-form-model-item label="Ghi chú">
+                <a-textarea
+                  v-model="addProductForm.noteProduct"
+                  placeholder="Nhập ghi chú"
+                  :auto-size="{ minRows: 4, maxRows: 10 }"
+                />
+              </a-form-model-item>
+              <a-form-model-item label="Giá tiền">
+                <a-input v-model="addProductForm.priceProduct" disabled />
+              </a-form-model-item>
+              <a-form-model-item label="Bảng giá chi tiết">
+                <a-button type="primary" @click="handleEditMaterialDetail">
+                  Thêm vật liệu
+                </a-button>
+              </a-form-model-item>
+            </a-form-model>
           </a-modal>
         </div>
       </a-layout-content>
@@ -421,7 +499,9 @@ export default {
       dataMaterialOfProduct: [],
       showViewMaterialDetail: false,
       showAddProductDetail: false,
+      showEditProductDetail: false,
       addProductForm: {
+        idProduct: "",
         idContact: "",
         nameProduct: "",
         countProduct: "",
@@ -455,6 +535,7 @@ export default {
   created() {
     this.searchContact();
     this.search();
+    this.getContactInForm();
   },
   methods: {
     onCellChangeCount(key, value) {
@@ -557,7 +638,6 @@ export default {
     submitAddMaterialDetail() {
       let price = 0;
       let checkSuccess = true;
-      console.log("materials", this.addProductForm.materials);
       for (let i = 0; i < this.addProductForm.materials.length; i++) {
         if (this.addProductForm.materials[i].count == 0) {
           this.disableSave = true;
@@ -587,9 +667,13 @@ export default {
           this.search();
           this.handleCancelAddProductDetail();
           let task = response.data.data ? "success" : "error";
-          let text = response.data.data ? "Thêm thành công" : "Thêm Không thành công";
-          let description = response.data.data ?
-            "Thêm thành công product "+this.addProductForm.nameProduct : "Thêm không thành công product "+this.addProductForm.nameProduct;
+          let text = response.data.data
+            ? "Thêm thành công"
+            : "Thêm Không thành công";
+          let description = response.data.data
+            ? "Thêm thành công product " + this.addProductForm.nameProduct
+            : "Thêm không thành công product " +
+              this.addProductForm.nameProduct;
           this.notifi(task, text, description);
         })
         .catch((e) => {
@@ -610,6 +694,9 @@ export default {
           console.log(e);
         });
     },
+    handleEditMaterialDetail() {
+      this.showAddMaterialDetail = true;
+    },
     searchAddMaterialDetail() {
       viewDetailContactService
         .getMaterialInAddProduct(this.dataSearchAddMaterialDetail)
@@ -621,11 +708,14 @@ export default {
         });
     },
     showModalAdd() {
+      this.handleCancelAddProductDetail();
+      this.showAddProductDetail = true;
+    },
+    getContactInForm() {
       viewDetailContactService
         .searchContactInAdd()
         .then((response) => {
           this.dataContactInAdd = response.data.data;
-          this.showAddProductDetail = true;
         })
         .catch((e) => {
           console.log(e);
@@ -633,6 +723,8 @@ export default {
     },
     handleCancelAddProductDetail() {
       this.showAddProductDetail = false;
+      this.showEditProductDetail = false;
+      this.addProductForm.idProduct = "";
       this.addProductForm.idContact = "";
       this.addProductForm.nameProduct = "";
       this.addProductForm.countProduct = "";
@@ -642,8 +734,11 @@ export default {
       this.addProductForm.noteProduct = "";
       this.addProductForm.priceProduct = "";
       this.addProductForm.materials = [];
-      (this.selectedRowKeys = []), (this.selectedRows = []);
+      this.selectedRowKeys = [];
+      this.selectedRows = [];
       this.dataAddMaterialDetail = [];
+      this.dataNote = [];
+      this.dataCount = [];
     },
     handleCancelViewMaterialDetail() {
       this.showViewMaterialDetail = false;
@@ -661,7 +756,66 @@ export default {
         });
     },
     showModalEdit(record) {
-      console.log(record);
+      this.handleCancelAddProductDetail();
+      this.addProductForm.idProduct = record.idProduct;
+      this.addProductForm.idContact = record.idContact;
+      this.addProductForm.nameProduct = record.nameProduct;
+      this.addProductForm.countProduct = record.count;
+      let frame = record.frame.split('x');
+      this.addProductForm.lengthFrame = frame[0];
+      this.addProductForm.widthFrame = frame[1];
+      this.addProductForm.heightFrame = frame[2];
+      this.addProductForm.noteProduct = record.note;
+      this.addProductForm.priceProduct = record.price;
+      this.showEditProductDetail = true;
+      viewDetailContactService
+        .getMaterialOfProduct(record.idProduct)
+        .then((response) => {
+          let dataMaterial = response.data.data;
+          viewDetailContactService
+            .getMaterialInAddProduct(this.dataSearchAddMaterialDetail)
+            .then((response) => {
+              this.dataAddMaterialDetail = response.data.data;
+              for (let i = this.dataAddMaterialDetail.length - 1; i >= 0; i--) {
+                for (let j = 0; j < dataMaterial.length; j++) {
+                  if (
+                    this.dataAddMaterialDetail[i].idMaterial ==
+                    dataMaterial[j].idMaterial
+                  ) {
+                    this.dataAddMaterialDetail.splice(i, 1);
+                  }
+                }
+              }
+              this.selectedRowKeys = [];
+              for (let j = 0; j < dataMaterial.length; j++) {
+                let dataMaterialx = {
+                  id: dataMaterial[j].idMaterial,
+                  price: dataMaterial[j].price,
+                  note: dataMaterial[j].note,
+                  count: dataMaterial[j].count,
+                };
+                this.dataNote.push({
+                  id: dataMaterial[j].idMaterial,
+                  note: dataMaterial[j].note,
+                });
+                this.dataCount.push({
+                  id: dataMaterial[j].idMaterial,
+                  count: dataMaterial[j].count,
+                });
+                this.addProductForm.materials.push(dataMaterialx);
+                this.selectedRowKeys.push(dataMaterial[j].idMaterial);
+                dataMaterial[j].count = dataMaterial[j].count + "";
+                this.dataAddMaterialDetail.unshift(dataMaterial[j]);
+              }
+              console.log("data material", this.addProductForm.materials);
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     showModalDelete(record) {
       console.log(record);

@@ -4,6 +4,7 @@ import com.university.fpt.acf.config.security.AccountSercurity;
 import com.university.fpt.acf.entity.*;
 import com.university.fpt.acf.form.AddMaterialInProductForm;
 import com.university.fpt.acf.form.AddProductForm;
+import com.university.fpt.acf.repository.ProductMaterialRepository;
 import com.university.fpt.acf.repository.ProductRepository;
 import com.university.fpt.acf.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +18,20 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ProductMaterialRepository productMaterialRepository;
+
     @Override
     public Boolean addProductInContact(AddProductForm addProductForm) {
         AccountSercurity accountSercurity = new AccountSercurity();
         boolean check = false;
         try{
             Product product = new Product();
+            if(addProductForm.getIdProduct() != null){
+                product.setId(addProductForm.getIdProduct());
+                productMaterialRepository.deleteByIdProduct(product.getId());
+            }
             product.setCreated_by(accountSercurity.getUserName());
             product.setModified_by(accountSercurity.getUserName());
             product.setName(addProductForm.getNameProduct());

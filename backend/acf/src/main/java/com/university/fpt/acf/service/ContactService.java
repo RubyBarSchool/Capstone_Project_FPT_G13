@@ -26,6 +26,7 @@ public interface ContactService {
 
     List<MaterialInContactDetailVO> getMaterialInProduct(Long idProduct);
 
+
     int getTotalSearchContactDetail(SearchContactDetailForm searchContactDetailForm);
 
     FileContactVO readFileContact(MultipartFile file);

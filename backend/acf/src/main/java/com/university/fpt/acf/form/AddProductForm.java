@@ -14,6 +14,7 @@ public class AddProductForm {
     private String heightFrame;
     private String lengthFrame;
     private Long idContact;
+    private Long idProduct;
     private String nameProduct;
     private String noteProduct;
     private String priceProduct;

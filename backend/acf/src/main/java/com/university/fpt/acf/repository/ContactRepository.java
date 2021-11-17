@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface ContactRepository extends JpaRepository<Contact,Long> {
 
-    @Query(" select new com.university.fpt.acf.vo.MaterialInContactDetailVO(m.id,m.name,CONCAT(fm.frameLength,'x',fm.frameWidth,'x',hm.frameHeight) " +
+    @Query(" select new com.university.fpt.acf.vo.MaterialInContactDetailVO(prm.id,m.name,CONCAT(fm.frameLength,'x',fm.frameWidth,'x',hm.frameHeight) " +
             " ,gm.name,um.name,cm.name,prm.price,pm.priceAtCreateContact,pm.note,pm.count)  from Contact c " +
             " inner join c.products p  inner join p.productMaterials pm inner join  pm.priceMaterial prm " +
             " inner join prm.material m inner join m.groupMaterial gm inner join m.company cm inner join prm.frameMaterial fm " +
