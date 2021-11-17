@@ -67,4 +67,17 @@ public class ProductServiceImpl implements ProductService {
         }
         return check;
     }
+
+    @Override
+    public Boolean deleteProductInContact(Long id) {
+        boolean check = false;
+        try{
+            productMaterialRepository.deleteByIdProduct(id);
+            productRepository.deleteById(id);
+            check = true;
+        }catch (Exception ex){
+            throw new RuntimeException(ex.getMessage());
+        }
+        return check;
+    }
 }

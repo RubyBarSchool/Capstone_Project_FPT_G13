@@ -75,14 +75,23 @@
                     </a-button>
                   </a-col>
                   <a-col :span="8">
-                    <a-button v-if="record.status == 'Chưa làm'" id="edit" @click="showModalEdit(record)">
+                    <a-button
+                      v-if="record.status == 'Chưa làm'"
+                      id="edit"
+                      @click="showModalEdit(record)"
+                    >
                       <font-awesome-icon :icon="['fas', 'edit']" />
                     </a-button>
                   </a-col>
                   <a-col :span="8">
-                    <a-button id="delete" @click="showModalDelete(record)">
-                      <font-awesome-icon :icon="['fas', 'trash']" />
-                    </a-button>
+                    <a-popconfirm
+                      title="Bạn có chắc chắn muốn xóa không?"
+                      @confirm="deleteProduct(record.idProduct)"
+                    >
+                      <a-button v-if="record.status == 'Chưa làm'" id="delete">
+                        <font-awesome-icon :icon="['fas', 'trash']" />
+                      </a-button>
+                    </a-popconfirm>
                   </a-col>
                 </a-row>
               </template>
@@ -707,6 +716,24 @@ export default {
           console.log(e);
         });
     },
+    deleteProduct(id) {
+      viewDetailContactService
+        .deleteProduct(id)
+        .then((response) => {
+          let task = response.data.data ? "success" : "error";
+          let text = response.data.data
+            ? "Xóa thành công"
+            : "Xóa Không thành công";
+          let description = response.data.data
+            ? "Xóa thành công product " 
+            : "Xóa không thành công product " ;
+          this.notifi(task, text, description);
+          this.search();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     showModalAdd() {
       this.handleCancelAddProductDetail();
       this.showAddProductDetail = true;
@@ -761,7 +788,7 @@ export default {
       this.addProductForm.idContact = record.idContact;
       this.addProductForm.nameProduct = record.nameProduct;
       this.addProductForm.countProduct = record.count;
-      let frame = record.frame.split('x');
+      let frame = record.frame.split("x");
       this.addProductForm.lengthFrame = frame[0];
       this.addProductForm.widthFrame = frame[1];
       this.addProductForm.heightFrame = frame[2];

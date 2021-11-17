@@ -7,10 +7,7 @@ import com.university.fpt.acf.vo.ContactVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -43,6 +40,35 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
             message = "Không thêm được hợp đồng chưa bàn giao";
+            responseCommon.setData(check);
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseCommon> deleteProductIncontact(@PathVariable Long id) {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        Boolean check = false;
+        Integer total = 1;
+        try {
+            check = productService.deleteProductInContact(id);
+            message = "Xóa sản phẩm thành công";
+
+            if (check) {
+                message = "Xóa sản phẩm không thành công";
+                total = 0;
+            }
+            responseCommon.setData(check);
+            responseCommon.setTotal(total);
+            responseCommon.setMessage(message);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = "Không Xóa được sản phẩm";
             responseCommon.setData(check);
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());

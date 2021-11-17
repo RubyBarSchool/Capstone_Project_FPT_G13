@@ -19,6 +19,9 @@ class viewDetailContactService {
     addProduct(form) {
         return http.post(`/admin/product/addproduct`, form);
     }
+    deleteProduct(id) {
+        return http.delete(`/admin/product/${id}`);
+    }
 }
 
 export default new viewDetailContactService();
