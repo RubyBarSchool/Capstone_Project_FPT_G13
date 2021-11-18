@@ -68,6 +68,7 @@
               :columns="columns"
               :data-source="dataSourceTable"
               :pagination="pagination"
+              :scroll="{ x: 1500}"
               :rowKey="
                 (record, index) => {
                   return index;
