@@ -190,54 +190,48 @@
                 Lưu
               </a-button>
             </template>
-            <a-form-model>
-              <a-form-model-item label="Mã tấm phủ">
-                <div>
-                  <template v-for="(tag, index) in tags">
-                    <a-tooltip v-if="tag.length > 20" :key="tag" :title="tag">
-                      <a-tag
-                        :key="tag"
-                        :closable="index !== 0"
-                        @close="() => handleClose(tag)"
-                      >
-                        {{ `${tag.slice(0, 20)}...` }}
-                      </a-tag>
-                    </a-tooltip>
-                    <a-tag
-                      v-else
-                      :key="tag"
-                      :closable="true"
-                      @close="() => handleClose(tag)"
-                    >
-                      {{ tag }}
-                    </a-tag>
-                  </template>
-                  <a-input
-                    v-if="inputVisible"
-                    ref="input"
-                    type="text"
-                    size="small"
-                    :style="{ width: '78px' }"
-                    :value="inputValue"
-                    @change="handleInputChange"
-                    @blur="handleInputConfirm"
-                    @keyup.enter="handleInputConfirm"
-                  />
+            <a-row type="flex">
+              <a-col flex="100px">Mã tấm phủ</a-col>
+              <a-col flex="auto">
+                <template v-for="tag in tags">
                   <a-tag
-                    v-else
-                    style="background: #fff; borderstyle: dashed"
-                    @click="showInput"
+                    :key="tag"
+                    :closable="true"
+                    @close="() => handleClose(tag)"
                   >
-                    <a-icon type="plus" /> New Tag
+                    {{ tag }}
                   </a-tag>
-                </div>
-              </a-form-model-item>
-              <a-form-model-item label="Thông số">
+                </template>
+                <a-input
+                  v-if="inputVisible"
+                  ref="input"
+                  type="text"
+                  size="small"
+                  :style="{ width: '78px' }"
+                  :value="inputValue"
+                  @change="handleInputChange"
+                  @blur="handleInputConfirm"
+                  @keyup.enter="handleInputConfirm"
+                />
+                <a-tag
+                  v-else
+                  style="background: #fff; borderstyle: dashed"
+                  @click="showInput"
+                >
+                  <font-awesome-icon :icon="['fas', 'plus']" /> Thêm vật liệu
+                </a-tag>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">Thông số</a-col>
+              <a-col flex="auto">
                 <a-select
                   placeholder="Thông số"
                   mode="multiple"
                   v-model="dataAdd.listIdFrame"
                   :filter-option="false"
+                  @search="fetchFrame"
                   style="width: 100%"
                 >
                   <a-select-option
@@ -248,12 +242,17 @@
                     {{ frame.frame }}
                   </a-select-option>
                 </a-select>
-              </a-form-model-item>
-              <a-form-model-item label="Chiều cao">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">Chiều cao</a-col>
+              <a-col flex="auto">
                 <a-select
                   placeholder="Chiều cao"
                   mode="multiple"
                   v-model="dataAdd.listIdHeight"
+                  :filter-option="false"
                   style="width: 100%"
                 >
                   <a-select-option
@@ -264,12 +263,15 @@
                     {{ height.frameHeight }}
                   </a-select-option>
                 </a-select>
-              </a-form-model-item>
-              <a-form-model-item label="Nhóm tấm phủ">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">Nhóm tấm phủ</a-col>
+              <a-col flex="auto">
                 <a-select
                   placeholder="Nhóm tấm phủ"
                   v-model="dataAdd.idGroup"
-                  :filter-option="false"
                   style="width: 100%"
                 >
                   <a-select-option
@@ -280,12 +282,15 @@
                     {{ cover.name }}
                   </a-select-option>
                 </a-select>
-              </a-form-model-item>
-              <a-form-model-item label="Đơn vị">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">Đơn vị đo</a-col>
+              <a-col flex="auto">
                 <a-select
-                  placeholder="Đơn vị"
+                  placeholder="Đơn vị đo"
                   v-model="dataAdd.idUnit"
-                  :filter-option="false"
                   style="width: 100%"
                 >
                   <a-select-option
@@ -296,12 +301,15 @@
                     {{ unit.name }}
                   </a-select-option>
                 </a-select>
-              </a-form-model-item>
-              <a-form-model-item label="Công ty">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">Công ty</a-col>
+              <a-col flex="auto">
                 <a-select
                   placeholder="Công ty"
                   v-model="dataAdd.idCompany"
-                  :filter-option="false"
                   style="width: 100%"
                 >
                   <a-select-option
@@ -312,16 +320,17 @@
                     {{ company.name }}
                   </a-select-option>
                 </a-select>
-              </a-form-model-item>
-              <a-form-model-item label="Giá thành">
-                <a-input
-                  placeholder="Giá thành"
-                  style="width: 100%"
-                  v-model="dataAdd.price"
-                />
-              </a-form-model-item>
-            </a-form-model>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">Giá thành</a-col>
+              <a-col flex="auto">
+                <a-input v-model="dataAdd.price"
+              /></a-col>
+            </a-row>
           </a-modal>
+          
           <!-- popup add -->
 
           <!-- popup edit-->
@@ -710,10 +719,10 @@ export default {
           console.log(e);
         });
     },
-    // fetchFrame(value) {
-    //   this.dataFrame.length = value;
-    //   this.getAllGroupCoverPlate();
-    // },
+    fetchFrame(value) {
+      this.dataFrame.frame = value;
+      this.getAllFrame();
+    },
     getAllGroupCoverPlate() {
       coverSheetService
         .listGroupCoverPlate()
@@ -990,6 +999,14 @@ export default {
       // this.dataAddUnitCoverSheet.idUnit = "";
       this.getAllFrame();
       this.getAllFrameHeight();
+      this.dataAdd.idCompany = "";
+      this.dataAdd.idGroup = "";
+      this.dataAdd.idUnit = "";
+      this.dataAdd.listIdFrame = [];
+      this.dataAdd.listIdHeight = [];
+      this.dataAdd.listName = [];
+      this.dataAdd.price = "";
+      this.tags = [];
     },
     showModalAddUnit() {
       this.getAllCodeCoverSheet();
@@ -1043,13 +1060,7 @@ export default {
           console.log(e);
         });
       this.visibleAdd = false;
-      this.dataAdd.idCompany = "";
-      this.dataAdd.idGroup = "";
-      this.dataAdd.idUnit = "";
-      this.dataAdd.listIdFrame = [];
-      this.dataAdd.listIdHeight = [];
-      this.dataAdd.listName = [];
-      this.dataAdd.price = [];
+      
     },
     resetFrame() {
       this.disable = false;

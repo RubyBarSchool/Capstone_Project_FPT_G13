@@ -788,6 +788,13 @@ export default {
     showModalAdd() {
       this.tags = [];
       this.visibleAdd = true;
+      this.dataAddMaterial.idCompany = "";
+      this.dataAddMaterial.idGroup = "";
+      this.dataAddMaterial.idUnit = "";
+      this.dataAddMaterial.listIdFrame = [];
+      this.dataAddMaterial.listIdHeight = [];
+      this.dataAddMaterial.listName = [];
+      this.dataAddMaterial.price = "";
     },
 
     //submit add
@@ -886,6 +893,10 @@ export default {
     //add đơn vị
     showModalAddUnit() {
       this.visibleAddUnit = true;
+      this.dataAddUnitMaterial.idMaterial = "";
+      this.dataAddUnitMaterial.idUnit = "";
+      this.getAllUnit();
+      this.getMaterials();
     },
 
     //thay đổi đơn vị theo MVL
