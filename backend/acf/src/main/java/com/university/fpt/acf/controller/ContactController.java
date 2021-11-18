@@ -79,7 +79,7 @@ public class ContactController {
         }
     }
     @PostMapping("/search")
-    public ResponseEntity<ResponseCommon> searchCompany(@RequestBody SearchCreateContactFrom searchForm){
+    public ResponseEntity<ResponseCommon> searchCreateContact(@RequestBody SearchCreateContactFrom searchForm){
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
         int total=0;

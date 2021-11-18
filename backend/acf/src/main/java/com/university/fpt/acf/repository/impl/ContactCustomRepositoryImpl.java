@@ -100,7 +100,7 @@ public class ContactCustomRepositoryImpl extends CommonRepository implements Con
             params.put("name","%"+searchForm.getName()+"%");
         }
         if(searchForm.getListIdCompany().size()!=0 && searchForm.getListIdCompany()!=null){
-            sql.append(" and cp.id in : listId ");
+            sql.append(" and cp.id in :listId ");
             params.put("listId",searchForm.getListIdCompany());
         }
         if (searchForm.getListDate() != null && !searchForm.getListDate().isEmpty()) {
@@ -125,7 +125,7 @@ public class ContactCustomRepositoryImpl extends CommonRepository implements Con
             params.put("name","%"+searchForm.getName()+"%");
         }
         if(searchForm.getListIdCompany().size()!=0 && searchForm.getListIdCompany()!=null){
-            sql.append(" and cp.id in : listId ");
+            sql.append(" and cp.id in :listId ");
             params.put("listId",searchForm.getListIdCompany());
         }
         if (searchForm.getListDate() != null && !searchForm.getListDate().isEmpty()) {
