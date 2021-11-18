@@ -23,7 +23,7 @@ public class ContactCustomRepositoryImpl extends CommonRepository implements Con
     public List<ContactVO> searchContact(ContactInSearchForm contactInSearchForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append(" SELECT new com.university.fpt.acf.vo.ContactVO(c.id,c.name) FROM Contact c where c.deleted = false ");
+        sql.append(" SELECT new com.university.fpt.acf.vo.ContactVO(c.id,c.name) FROM Contact c where c.deleted = false and c.statusDone = false ");
         if(!contactInSearchForm.getName().isEmpty() && contactInSearchForm.getName()!=null){
             sql.append(" and LOWER(c.name) like :name ");
             params.put("name","%"+contactInSearchForm.getName().toLowerCase()+"%");
