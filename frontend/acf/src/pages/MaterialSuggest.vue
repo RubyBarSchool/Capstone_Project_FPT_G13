@@ -19,7 +19,24 @@
           </a-back-top>
 
           <!-- menu trên -->
+          <a-input
+            placeholder="Số lượng"
+            :style="{ width: '150px', 'margin-right': '5px' }"
+          />
 
+          <a-select default-value="thang" style="width: 120px">
+            <a-select-option value="thang"> Tháng </a-select-option>
+            <a-select-option value="quy"> Quý </a-select-option>
+            <a-select-option value="nam"> Năm </a-select-option>
+          </a-select>
+
+          <a-button type="primary" :style="{ 'margin-left': '5px' }">
+            <font-awesome-icon
+              :icon="['fas', 'search']"
+              :style="{ 'margin-right': '5px' }"
+            />
+            Tìm kiếm
+          </a-button>
           <!-- menu trên -->
 
           <!-- table content -->
@@ -74,8 +91,8 @@ export default {
   data() {
     return {
       dataSourceTable: [],
-      dataMaterialSuggest: {
-        count: 0,
+      dataSearch: {
+        count: "",
         type: "",
       },
       columns: [
@@ -137,7 +154,7 @@ export default {
   methods: {
     searchSuggestMaterial() {
       materialSuggestService
-        .searchSuggestMaterial()
+        .searchSuggestMaterial(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
         })
