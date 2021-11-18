@@ -39,7 +39,7 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
             HashMap<String,Object> stringObjectHashMap = defaultData(dateWorkEmployeeFrom);
             for(ProductionOrderViewWorkVO productionOrderViewWorkVO : productionOrderViewWorkVOS){
                 if(dataEmployee.get("id") != null  && !productionOrderViewWorkVO.getIdEmployee().equals(Long.parseLong(dataEmployee.get("id").toString()))){
-                    dataEmployee.put("average",count*1.0/stringObjectHashMap.size());
+                    dataEmployee.put("average", (double) Math.round((count*1.0/stringObjectHashMap.size())*10)/10);
                     dataEmployee = new HashMap<>();
                     mapList.add(dataEmployee);
                     dataEmployee.put("id",productionOrderViewWorkVO.getIdEmployee());
@@ -69,7 +69,7 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
                 Integer value = Integer.parseInt(dataEmployee.get(localDate.toString()).toString()) +1 ;
                 dataEmployee.put(localDate.toString(),value);
             }
-            dataEmployee.put("average",count*1.0/stringObjectHashMap.size());
+            dataEmployee.put("average", (double) Math.round((count*1.0/stringObjectHashMap.size())*10)/10);
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }
@@ -115,7 +115,7 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
         columnCommon.setTitle("STT");
         columnCommon.setDataIndex("id");
         columnCommon.setKey("id");
-        columnCommon.setWidth(50);
+        columnCommon.setWidth(80);
         columnCommon.setFixed("left");
         listColumn.add(columnCommon);
 
@@ -131,6 +131,7 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
         columnCommon2.setDataIndex("average");
         columnCommon2.setKey("average");
         columnCommon2.setWidth(150);
+        columnCommon2.getScopedSlots().setCustomRender("average");
         listColumn.add(columnCommon2);
 
         LocalDate localDate = dateWorkEmployeeFrom.getDateStart();

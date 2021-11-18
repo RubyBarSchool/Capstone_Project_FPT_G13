@@ -226,6 +226,13 @@ export const router = new Router({
             component: () =>
                 import ("./pages/ViewDetailContact.vue"),
         },
+        {
+            path: "/productionorder",
+            name: "ProductionOrder",
+            // lazy-loaded
+            component: () =>
+                import ("./pages/ProductionOrder.vue"),
+        },
     ],
 });
 
