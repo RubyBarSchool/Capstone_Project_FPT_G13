@@ -18,17 +18,50 @@
             </div>
           </a-back-top>
           <!-- menu trên -->
+          <a-input
+            placeholder="Tên hợp đồng"
+            :style="{ width: '150px', 'margin-right': '5px' }"
+            v-model="dataSearch.name"
+          />
           Ngày bàn giao
           <a-range-picker
             @change="onChange"
             :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
             :style="{ 'margin-right': '5px' }"
+            v-model="dataSearch.listDate"
           />
-          <a-input
+          <a-select
             placeholder="Khách hàng"
-            :style="{ width: '150px', 'margin-right': '5px' }"
-          />
-          <a-button type="primary" @click="showModalAdd">
+            mode="multiple"
+            v-model="dataSearch.listIdCompany"
+            :filter-option="false"
+            @search="fetchCompany"
+            style="width: 250px"
+          >
+            <a-select-option
+              v-for="(company, index) in companys"
+              :value="company.id"
+              :key="index"
+            >
+              {{ company.name }}
+            </a-select-option>
+          </a-select>
+          <a-button
+            type="primary"
+            @click="submitSearch"
+            :style="{ 'margin-left': '5px' }"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'search']"
+              :style="{ 'margin-right': '5px' }"
+            />
+            Tìm kiếm
+          </a-button>
+          <a-button
+            type="primary"
+            @click="showModalAdd"
+            :style="{ 'margin-left': '5px' }"
+          >
             <font-awesome-icon
               :icon="['fas', 'file-signature']"
               :style="{ 'margin-right': '5px' }"
@@ -39,12 +72,48 @@
 
           <!-- table content -->
           <div :style="{ 'padding-top': '10px' }">
-            <a-table :columns="columns" :data-source="data">
-              <a slot="action">
+            <a-table
+              :columns="columns"
+              :data-source="dataSourceTable"
+              :pagination="pagination"
+              :rowKey="
+                (record, index) => {
+                  return index;
+                }
+              "
+              @change="handleTableChange"
+            >
+              <template slot="name" slot-scope="text, record">
+                {{ record.name }}
+              </template>
+              <template slot="createDate" slot-scope="text, record">
+                {{ record.createDate }}
+              </template>
+              <template slot="dateFinish" slot-scope="text, record">
+                {{ record.dateFinish }}
+              </template>
+              <template slot="name" slot-scope="text, record">
+                {{ record.name }}
+              </template>
+              <template slot="totalMoney" slot-scope="text, record">
+                {{ record.totalMoney }}
+              </template>
+              <template slot="numberFinish" slot-scope="text, record">
+                {{ record.numberFinish }}
+              </template>
+              <template slot="statusDone" slot-scope="text, record">
+                <a-tag :color="record.statusDone ? 'green' : 'blue'">
+                  {{ record.statusDone ? "Đã bàn giao" : "Chưa bàn giao" }}
+                </a-tag>
+              </template>
+              <template slot="note" slot-scope="text, record">
+                {{ record.note }}
+              </template>
+              <template slot="action">
                 <a-button id="delete">
                   <font-awesome-icon :icon="['fas', 'trash']" />
                 </a-button>
-              </a>
+              </template>
             </a-table>
           </div>
           <!-- table content -->
@@ -53,7 +122,9 @@
           <a-modal v-model="visibleAdd" title="Thêm hợp đồng">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="handleSubmit"> Lưu </a-button>
+              <a-button key="submit" type="primary" @click="handleSubmit">
+                Lưu
+              </a-button>
             </template>
             <a-form-model>
               <a-form-model-item label="Tên hợp đồng">
@@ -71,10 +142,10 @@
                 </a-select>
               </a-form-model-item>
               <a-form-model-item label="Hạn hoàn">
-               <a-date-picker v-model="dataAdd.time" />
+                <a-date-picker v-model="dataAdd.time" />
               </a-form-model-item>
               <a-form-model-item label="Tổng giá trị">
-                <a-input v-model="fileExcel.priceContact" disabled/>
+                <a-input v-model="fileExcel.priceContact" disabled />
               </a-form-model-item>
               <a-form-model-item label="Ghi chú">
                 <a-textarea
@@ -122,50 +193,52 @@ import Footer from "@/layouts/Footer.vue";
 import fileService from "@/service/fileService.js";
 import company from "@/service/companyService.js";
 import contact from "@/service/contactService.js";
-const columns = [
-  {
-    title: "Ngày tạo hợp đồng",
-    dataIndex: "dateCreate",
-    key: "dateCreate",
-    fixed: "left",
-  },
-  { title: "Ngày bàn giao", dataIndex: "dateDelivery", key: "dateDelivery" },
-  { title: "Khách hàng", dataIndex: "customer", key: "customer" },
-  { title: "Tổng giá trị", dataIndex: "totalValue", key: "totalValue" },
-  { title: "Định mức hoàn thành", dataIndex: "quota", key: "quota" },
-  { title: "Trạng thái bàn giao", dataIndex: "status", key: "status" },
-  { title: "Ghi chú", dataIndex: "note", key: "note" },
-  {
-    title: "Action",
-    key: "operation",
-    fixed: "right",
-    width: 100,
-    scopedSlots: { customRender: "action" },
-  },
-];
+import contactService from "@/service/contactService";
 
-const data = [
-  {
-    key: "1",
-    dateCreate: "14/11/2021",
-    dateDelivery: "14/11/2021",
-    customer: "New York Park",
-    totalValue: "123456",
-    quota: "10",
-    status: "Nháp",
-    note: "Công khai",
-  },
-  {
-    key: "2",
-    dateCreate: "14/11/2021",
-    dateDelivery: "14/11/2021",
-    customer: "New York Park",
-    totalValue: "123456",
-    quota: "10",
-    status: "Nháp",
-    note: "Công khai",
-  },
-];
+// const columns = [
+//   {
+//     title: "Ngày tạo hợp đồng",
+//     dataIndex: "dateCreate",
+//     key: "dateCreate",
+//     fixed: "left",
+//   },
+//   { title: "Ngày bàn giao", dataIndex: "dateDelivery", key: "dateDelivery" },
+//   { title: "Khách hàng", dataIndex: "customer", key: "customer" },
+//   { title: "Tổng giá trị", dataIndex: "totalValue", key: "totalValue" },
+//   { title: "Định mức hoàn thành", dataIndex: "quota", key: "quota" },
+//   { title: "Trạng thái bàn giao", dataIndex: "status", key: "status" },
+//   { title: "Ghi chú", dataIndex: "note", key: "note" },
+//   {
+//     title: "",
+//     key: "operation",
+//     fixed: "right",
+//     width: 100,
+//     scopedSlots: { customRender: "action" },
+//   },
+// ];
+
+// const data = [
+//   {
+//     key: "1",
+//     dateCreate: "14/11/2021",
+//     dateDelivery: "14/11/2021",
+//     customer: "New York Park",
+//     totalValue: "123456",
+//     quota: "10",
+//     status: "Nháp",
+//     note: "Công khai",
+//   },
+//   {
+//     key: "2",
+//     dateCreate: "14/11/2021",
+//     dateDelivery: "14/11/2021",
+//     customer: "New York Park",
+//     totalValue: "123456",
+//     quota: "10",
+//     status: "Nháp",
+//     note: "Công khai",
+//   },
+// ];
 export default {
   name: "TaoHopDong",
   components: {
@@ -174,9 +247,14 @@ export default {
   },
   data() {
     return {
-      data,
+      // data,
+      pagination: {
+        current: 1,
+        pageSize: 10,
+        total: 0,
+      },
       fileList: [],
-      columns,
+      // columns,
       fileExcel: {
         noteContact: "",
         priceContact: "",
@@ -196,15 +274,97 @@ export default {
         pageIndex: 1,
         pageSize: 10,
       },
+      dataSearch: {
+        listDate: [],
+        listIdCompany: [],
+        name: "",
+        pageIndex: 1,
+        pageSize: 10,
+        total: 0,
+      },
       message: "",
       progress: 0,
       visibleAdd: false,
+      dataSourceTable: [],
+      columns: [
+        {
+          title: "Tên hợp đồng",
+          dataIndex: "name",
+          key: "name",
+          fixed: "left",
+        },
+        {
+          title: "Ngày tạo hợp đồng",
+          dataIndex: "createDate",
+          key: "createDate",
+        },
+        { title: "Ngày bàn giao", dataIndex: "dateFinish", key: "dateFinish" },
+        {
+          title: "Khách hàng",
+          dataIndex: "nameCompany",
+          key: "nameCompany",
+          width: 150,
+        },
+        { title: "Tổng giá trị", dataIndex: "totalMoney", key: "totalMoney" },
+        {
+          title: "Định mức hoàn thành",
+          dataIndex: "numberFinish",
+          key: "numberFinish",
+          width: 80,
+        },
+        {
+          title: "Trạng thái bàn giao",
+          dataIndex: "statusDone",
+          key: "statusDone",
+          width: 80,
+          scopedSlots: { customRender: "statusDone" },
+        },
+        { title: "Ghi chú", dataIndex: "note", key: "note" },
+        {
+          title: "",
+          key: "operation",
+          width: 40,
+          scopedSlots: { customRender: "action" },
+        },
+      ],
     };
   },
   created() {
     this.getAllCompany();
+    this.submitSearch();
   },
   methods: {
+    handleTableChange(pagination) {
+      this.dataSearch.pageIndex = pagination.current;
+      this.pagination = pagination;
+      contactService
+        .searchCompany(this.dataSearch)
+        .then((response) => {
+          this.dataSourceTable = response.data.data;
+          this.dataSearch.total = response.data.total;
+          this.pagination.total = response.data.total;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    submitSearch() {
+      this.dataSearch.total = 0;
+      contactService
+        .searchCompany(this.dataSearch)
+        .then((response) => {
+          this.dataSourceTable = response.data.data;
+          this.dataSearch.total = response.data.total;
+          this.pagination.total = response.data.total;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    fetchCompany(value) {
+      this.dataCompany.name = value;
+      this.getAllCompany();
+    },
     getAllCompany() {
       company
         .searchCompany(this.dataCompany)
@@ -228,14 +388,15 @@ export default {
           })
           .catch((e) => {
             this.progress = 0;
-            this.message = "Could not upload the file!";
+            this.message = "Không thể upload file";
             console.log(e);
           });
       }
     },
-    handleSubmit(){
+    handleSubmit() {
       this.dataAdd.fileExcel = this.fileExcel;
-      contact.submitContact(this.dataAdd)
+      contact
+        .submitContact(this.dataAdd)
         .then(() => {
           this.visibleAdd = false;
         })
@@ -249,10 +410,10 @@ export default {
     showModalAdd() {
       this.visibleAdd = true;
       this.progress = 0;
-      this.dataAdd.name = "",
-      this.dataAdd.idCompany = "",
-      this.dataAdd.time = "",
-      this.fileExcel = []
+      (this.dataAdd.name = ""),
+        (this.dataAdd.idCompany = ""),
+        (this.dataAdd.time = ""),
+        (this.fileExcel = []);
       // this.$refs.file.files = undefined
     },
     handleCancel() {

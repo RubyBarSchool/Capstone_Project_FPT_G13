@@ -9,6 +9,14 @@
             background: 'white',
           }"
         >
+          <a-back-top>
+            <div class="ant-back-top-inner">
+              <font-awesome-icon
+                :icon="['fas', 'angle-double-up']"
+                :style="{ width: '160px', height: '50px', color: '#15AABF' }"
+              />
+            </div>
+          </a-back-top>
           <!-- menu trên -->
           <a-select
             v-model="dataSearch.idContact"
@@ -725,8 +733,8 @@ export default {
             ? "Xóa thành công"
             : "Xóa Không thành công";
           let description = response.data.data
-            ? "Xóa thành công product " 
-            : "Xóa không thành công product " ;
+            ? "Xóa thành công product "
+            : "Xóa không thành công product ";
           this.notifi(task, text, description);
           this.search();
         })
