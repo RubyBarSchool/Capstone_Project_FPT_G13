@@ -2,9 +2,12 @@ package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.common.entity.ColumnCommon;
 import com.university.fpt.acf.form.DateWorkEmployeeFrom;
+import com.university.fpt.acf.form.SearchProductionOrderForm;
 import com.university.fpt.acf.repository.ProductionOrderCustomRepository;
 import com.university.fpt.acf.service.ProductionOrderService;
+import com.university.fpt.acf.vo.ContactVO;
 import com.university.fpt.acf.vo.ProductionOrderViewWorkVO;
+import com.university.fpt.acf.vo.SearchProductionOrderVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -72,6 +75,29 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
         }
         return data;
     }
+
+    @Override
+    public List<SearchProductionOrderVO> searchProductionOrder(SearchProductionOrderForm searchForm) {
+        List<SearchProductionOrderVO> list = new ArrayList<>();
+        try {
+            list = productionOrderCustomRepository.searchProductOrder(searchForm);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return list;
+    }
+
+    @Override
+    public int totalSearchProductionOrder(SearchProductionOrderForm searchForm) {
+        int size=0;
+        try {
+            size = productionOrderCustomRepository.totalSearchProductOrder(searchForm);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return size;
+    }
+
     private HashMap<String,Object> defaultData(DateWorkEmployeeFrom dateWorkEmployeeFrom){
         HashMap<String,Object> stringObjectHashMap = new HashMap<>();
         LocalDate localDate = dateWorkEmployeeFrom.getDateStart();
