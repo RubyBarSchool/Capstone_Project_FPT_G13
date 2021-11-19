@@ -10,6 +10,12 @@ class ProductionOrderService {
     getDetailProduction(id) {
         return http.get(`/admin/productionorder/getdetailproductionorder?idproduction=${id}`);
     }
+    addOrUpdateProductOrder(form) {
+        return http.post(`/admin/productionorder/add`, form);
+    }
+    updateProductOrder(form) {
+        return http.post(`/admin/productionorder/update`, form);
+    }
 }
 
 export default new ProductionOrderService();

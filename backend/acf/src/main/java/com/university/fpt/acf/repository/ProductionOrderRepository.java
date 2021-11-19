@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface ProductionOrderRepository extends JpaRepository<ProductionOrder,Long> {
 
-    @Query("select new com.university.fpt.acf.vo.ProductionOrderDetailVO(e.id,e.fullName) from  ProductionOrder po inner join po.employees e")
+    @Query("select new com.university.fpt.acf.vo.ProductionOrderDetailVO(e.id,e.fullName) from  ProductionOrder po inner join po.employees e where po.id = :idProductionOrder")
     List<ProductionOrderDetailVO> getProductionOrder(@Param("idProductionOrder") Long idProduction);
 }

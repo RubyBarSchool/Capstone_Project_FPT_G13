@@ -11,8 +11,9 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-
-
     @Query("select new com.university.fpt.acf.vo.ProductVO(p.id,p.name) from Product p inner  join  p.contact c where c.id = :idContact")
     List<ProductVO> getProductInContact(@Param("idContact") Long idContact);
+
+    @Query("select p from Product p where p.id = :id")
+    Product getProductByID(@Param("id") Long id);
 }

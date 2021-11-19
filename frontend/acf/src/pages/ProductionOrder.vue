@@ -260,6 +260,24 @@
                 </template>
               </a-table>
             </a-modal>
+
+            <!-- view detail -->
+            <a-modal v-model="showModalView" title="Xem nhân viên thực hiện">
+              <template slot="footer">
+                <a-button key="back" @click="handleModalView"> Đóng </a-button>
+              </template>
+              <a-table
+                :columns="columnsEmployee"
+                :data-source="dataSourceEmployee"
+                :pagination="false"
+                :rowKey="
+                  (record, index) => {
+                    return record.idEmployee;
+                  }
+                "
+              >
+              </a-table>
+            </a-modal>
           </div>
         </div>
       </a-layout-content>
@@ -305,7 +323,7 @@ export default {
         idProduct: "",
         dateStart: "",
         dateEnd: "",
-        idEmployee: [],
+        idEmployees: [],
       },
       dataContact: [],
       dataSourceTable: [],
@@ -381,6 +399,20 @@ export default {
           scopedSlots: { customRender: "action" },
         },
       ],
+      columnsEmployee: [
+        {
+          title: "Số thứ tự",
+          dataIndex: "idEmployee",
+          key: "idEmployee",
+          width: 150,
+        },
+        {
+          title: "Tên nhân viên",
+          dataIndex: "nameEmployee",
+          key: "nameEmployee",
+          width: 150,
+        },
+      ],
       columnsViewWork: [],
       dataTableViewWork: [],
       showModalAdd: false,
@@ -396,6 +428,8 @@ export default {
       disableddate: true,
       datestart: "",
       dateEnd: "",
+      dataSourceEmployee: [],
+      showModalView: false,
     };
   },
   computed: {},
@@ -404,6 +438,9 @@ export default {
     this.beforeSearch();
   },
   methods: {
+    handleModalView() {
+      this.showModalView = false;
+    },
     onSelectChange(selectedRowKeys, selectedRows) {
       console.log("selectedRowKeys", selectedRowKeys);
       console.log("selectedRows", selectedRows);
@@ -423,7 +460,7 @@ export default {
       this.showModalViewWork = false;
     },
     showWorkEmployee() {
-      this.selectedRowKeys = this.dataSubmit.idEmployee;
+      this.selectedRowKeys = this.dataSubmit.idEmployees;
       let countCheck = 0;
       if (this.dataSubmit.dateStart == "") {
         let type = "error";
@@ -458,10 +495,37 @@ export default {
     },
     submitAddProductionOrder() {
       console.log("data submit", this.dataSubmit);
+      ProductionOrderService.addOrUpdateProductOrder(this.dataSubmit)
+        .then((response) => {
+          this.showModalAdd = false;
+          this.beforeSearch();
+          let type = "success";
+          let message = "Thêm mới thành công";
+          let description = response.data.message;
+          this.notifi(type, message, description);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    submitUpdateProductionOrder() {
+      console.log("data submit", this.dataSubmit);
+      ProductionOrderService.addOrUpdateProductOrder(this.dataSubmit)
+        .then((response) => {
+          this.showModalAdd = false;
+          this.beforeSearch();
+          let type = "success";
+          let message = "sửa thành công";
+          let description = response.data.message;
+          this.notifi(type, message, description);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     submitAddEmployee() {
-      this.dataSubmit.idEmployee = this.idEmployeeChoose;
-      if (this.dataSubmit.idEmployee.length != 0) {
+      this.dataSubmit.idEmployees = this.idEmployeeChoose;
+      if (this.dataSubmit.idEmployees.length != 0) {
         this.disableSaveAdd = false;
       } else {
         this.disableSaveAdd = true;
@@ -476,18 +540,18 @@ export default {
       this.dataSubmit.idProduct = "";
       this.dataSubmit.dateStart = "";
       this.dataSubmit.dateEnd = "";
-      this.dataSubmit.idEmployee = [];
+      this.dataSubmit.idEmployees = [];
       this.dataContactInForm = [];
       this.dataProductIncontact = [];
       this.disableddate = true;
     },
-    showModelView(record){
-        // data detail
-        ProductionOrderService.getDetailProduction(record.id)
+    showModelView(record) {
+      // data detail
+      this.dataSourceEmployee = [];
+      ProductionOrderService.getDetailProduction(record.id)
         .then((response) => {
-          this.dataTableViewWork = response.data.data.data;
-          this.columnsViewWork = response.data.data.columns;
-          this.showModalViewWork = true;
+          this.dataSourceEmployee = response.data.data;
+          this.showModalView = true;
         })
         .catch((e) => {
           console.log(e);

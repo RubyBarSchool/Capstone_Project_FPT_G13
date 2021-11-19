@@ -24,7 +24,7 @@ public class BonusPenalty extends EntityCommon {
     private Boolean bonus;
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "employee_bonus_penalties",
             joinColumns = @JoinColumn(name = "bonus_penalty_id"),
             inverseJoinColumns = @JoinColumn(name = "employee_id")

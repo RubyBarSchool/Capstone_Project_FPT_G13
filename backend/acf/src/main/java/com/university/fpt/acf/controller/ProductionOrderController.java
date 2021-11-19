@@ -1,10 +1,7 @@
 package com.university.fpt.acf.controller;
 
 import com.university.fpt.acf.common.entity.ResponseCommon;
-import com.university.fpt.acf.form.AddProductForm;
-import com.university.fpt.acf.form.DateWorkEmployeeFrom;
-import com.university.fpt.acf.form.SearchCreateContactFrom;
-import com.university.fpt.acf.form.SearchProductionOrderForm;
+import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.service.ProductionOrderService;
 import com.university.fpt.acf.vo.GetCreateContactVO;
 import com.university.fpt.acf.vo.ProductVO;
@@ -25,6 +22,62 @@ import java.util.List;
 public class ProductionOrderController {
     @Autowired
     private ProductionOrderService productionOrderService;
+
+    @PostMapping("/add")
+    public ResponseEntity<ResponseCommon> addProductIncontact(@Valid @RequestBody AddProductionOrderFrom addProductionOrderFrom) {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        Boolean check = false;
+        Integer total = 1;
+        try {
+            check = productionOrderService.addProductionOrder(addProductionOrderFrom);
+            message = "Thêm lệnh sản xuất thành công";
+            if (!check) {
+                message = "Thêm lệnh sản xuất không thành công";
+                total = 0;
+            }
+            responseCommon.setData(check);
+            responseCommon.setTotal(total);
+            responseCommon.setMessage(message);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = "Không thể thêm lệnh sản xuất";
+            responseCommon.setData(check);
+            responseCommon.setTotal(0);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
+
+    @PostMapping("/update")
+    public ResponseEntity<ResponseCommon> updateProductIncontact(@Valid @RequestBody AddProductionOrderFrom addProductionOrderFrom) {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        Boolean check = false;
+        Integer total = 1;
+        try {
+            check = productionOrderService.updateProductionOrder(addProductionOrderFrom);
+            message = "Sửa lệnh sản xuất thành công";
+            if (!check) {
+                message = "Sửa lệnh sản xuất không thành công";
+                total = 0;
+            }
+            responseCommon.setData(check);
+            responseCommon.setTotal(total);
+            responseCommon.setMessage(message);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = "Không thể sửa lệnh sản xuất";
+            responseCommon.setData(check);
+            responseCommon.setTotal(0);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
 
     @PostMapping("/viewworkemployee")
     public ResponseEntity<ResponseCommon> viewWorkEmployee(@Valid @RequestBody DateWorkEmployeeFrom dateWorkEmployeeFrom) {
@@ -53,18 +106,19 @@ public class ProductionOrderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+
     @PostMapping("/search")
-    public ResponseEntity<ResponseCommon> searchProductOrder(@RequestBody SearchProductionOrderForm searchForm){
+    public ResponseEntity<ResponseCommon> searchProductOrder(@RequestBody SearchProductionOrderForm searchForm) {
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
-        int total=0;
+        int total = 0;
         List<SearchProductionOrderVO> list = new ArrayList<>();
         try {
             list = productionOrderService.searchProductionOrder(searchForm);
             total = productionOrderService.totalSearchProductionOrder(searchForm);
             responseCommon.setData(list);
             message = "Thành công";
-            if(total==0){
+            if (total == 0) {
                 message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);

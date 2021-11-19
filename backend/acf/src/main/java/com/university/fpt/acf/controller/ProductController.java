@@ -31,7 +31,7 @@ public class ProductController {
             check = productService.addProductInContact(addProductForm);
             message = "Thêm sản phẩm thành công";
 
-            if (check) {
+            if (!check) {
                 message = "Thêm sản phẩm không thành công";
                 total = 0;
             }

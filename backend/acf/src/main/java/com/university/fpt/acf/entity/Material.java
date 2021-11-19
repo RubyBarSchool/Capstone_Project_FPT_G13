@@ -37,7 +37,7 @@ public class Material extends EntityCommon {
     private GroupMaterial groupMaterial;
 
 
-    @OneToMany(mappedBy = "material",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "material",cascade = CascadeType.REMOVE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<PriceMaterial> priceMaterials;

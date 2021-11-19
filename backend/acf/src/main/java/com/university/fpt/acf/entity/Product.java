@@ -36,7 +36,7 @@ public class Product extends EntityCommon {
     private Contact contact;
 
 
-    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product",cascade = CascadeType.REMOVE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<ProductMaterial> productMaterials;

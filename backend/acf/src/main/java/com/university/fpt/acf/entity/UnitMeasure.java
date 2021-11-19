@@ -16,7 +16,7 @@ public class UnitMeasure extends EntityCommon {
     private String name;
 
 
-    @OneToMany(mappedBy = "unitMeasure",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "unitMeasure",cascade = CascadeType.REMOVE)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<PriceMaterial> priceMaterials;

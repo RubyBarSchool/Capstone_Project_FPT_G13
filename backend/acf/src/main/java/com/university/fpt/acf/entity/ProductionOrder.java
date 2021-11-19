@@ -21,16 +21,16 @@ public class ProductionOrder extends EntityCommon {
 
     private LocalDate dateEnd;
 
-    private Boolean status;
+    private Boolean status = false;
 
      private String numberFinish;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.REMOVE)
     @JoinTable(name = "production_oder_employee",
     joinColumns = @JoinColumn(name = "production_oder_id"),inverseJoinColumns = @JoinColumn(name = "employee_id"))
     private Collection<Employee> employees;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.REMOVE)
     @JoinColumn(name = "product_id")
     private Product products;
 

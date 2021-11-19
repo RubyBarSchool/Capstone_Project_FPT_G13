@@ -1,8 +1,14 @@
 package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.common.entity.ColumnCommon;
+import com.university.fpt.acf.config.security.AccountSercurity;
+import com.university.fpt.acf.entity.Employee;
+import com.university.fpt.acf.entity.Product;
+import com.university.fpt.acf.entity.ProductionOrder;
+import com.university.fpt.acf.form.AddProductionOrderFrom;
 import com.university.fpt.acf.form.DateWorkEmployeeFrom;
 import com.university.fpt.acf.form.SearchProductionOrderForm;
+import com.university.fpt.acf.repository.ProductRepository;
 import com.university.fpt.acf.repository.ProductionOrderCustomRepository;
 import com.university.fpt.acf.repository.ProductionOrderRepository;
 import com.university.fpt.acf.service.ProductionOrderService;
@@ -13,6 +19,7 @@ import com.university.fpt.acf.vo.SearchProductionOrderVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +32,9 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
     private ProductionOrderCustomRepository productionOrderCustomRepository;
     @Autowired
     private ProductionOrderRepository productionOrderRepository;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     @Override
     public HashMap<String, Object> viewWorkEmployee(DateWorkEmployeeFrom dateWorkEmployeeFrom) {
@@ -116,6 +126,63 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
             throw new RuntimeException(e.getMessage());
         }
         return size;
+    }
+
+    @Override
+    public Boolean addProductionOrder(AddProductionOrderFrom addProductionOrderFrom) {
+        Boolean check = false;
+        try {
+            AccountSercurity accountSercurity = new AccountSercurity();
+            ProductionOrder productionOrder = new ProductionOrder();
+            productionOrder.setCreated_by(accountSercurity.getUserName());
+            productionOrder.setModified_by(accountSercurity.getUserName());
+            productionOrder.setName(addProductionOrderFrom.getName());
+            Product product = productRepository.getProductByID(addProductionOrderFrom.getIdProduct());
+            product.setStatus("Đang làm");
+            product = productRepository.saveAndFlush(product);
+            productionOrder.setProducts(product);
+            productionOrder.setDateStart(addProductionOrderFrom.getDateStart());
+            productionOrder.setDateEnd(addProductionOrderFrom.getDateEnd());
+            productionOrder.setNumberFinish("0/"+product.getCount());
+            List<Employee> employees = new ArrayList<>();
+            for(Long idEmpl : addProductionOrderFrom.getIdEmployees()){
+                Employee employee = new Employee();
+                employee.setId(idEmpl);
+                employees.add(employee);
+            }
+            productionOrder.setEmployees(employees);
+            productionOrderRepository.saveAndFlush(productionOrder);
+            check = true;
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return check;
+    }
+
+    @Override
+    public Boolean updateProductionOrder(AddProductionOrderFrom addProductionOrderFrom) {
+        Boolean check = false;
+        try {
+            AccountSercurity accountSercurity = new AccountSercurity();
+            ProductionOrder productionOrder = productionOrderRepository.getById(addProductionOrderFrom.getId());
+            productionOrder.setModified_by(accountSercurity.getUserName());
+            productionOrder.setModified_date(LocalDate.now());
+            productionOrder.setName(addProductionOrderFrom.getName());
+            productionOrder.setDateStart(addProductionOrderFrom.getDateStart());
+            productionOrder.setDateEnd(addProductionOrderFrom.getDateEnd());
+            List<Employee> employees = new ArrayList<>();
+            for(Long idEmpl : addProductionOrderFrom.getIdEmployees()){
+                Employee employee = new Employee();
+                employee.setId(idEmpl);
+                employees.add(employee);
+            }
+            productionOrder.setEmployees(employees);
+            productionOrderRepository.saveAndFlush(productionOrder);
+            check = true;
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return check;
     }
 
     @Override
