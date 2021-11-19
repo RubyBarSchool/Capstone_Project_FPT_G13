@@ -12,6 +12,8 @@ public interface ContactService {
 
     List<ContactVO> searchContact(ContactInSearchForm contactInSearchForm);
 
+    List<ContactProductionVO> searchContactProduction();
+
     List<ContactVO> searchContactNotDone();
 
     int getTotalSearchContact(ContactInSearchForm contactInSearchForm);

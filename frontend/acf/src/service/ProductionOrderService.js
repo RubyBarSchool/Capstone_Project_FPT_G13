@@ -7,7 +7,9 @@ class ProductionOrderService {
     searchProductOrder(form) {
         return http.post(`/admin/productionorder/search`, form);
     }
-
+    getDetailProduction(id) {
+        return http.get(`/admin/productionorder/getdetailproductionorder?idproduction=${id}`);
+    }
 }
 
 export default new ProductionOrderService();

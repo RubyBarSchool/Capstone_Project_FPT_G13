@@ -7,6 +7,7 @@ import com.university.fpt.acf.form.AddProductForm;
 import com.university.fpt.acf.repository.ProductMaterialRepository;
 import com.university.fpt.acf.repository.ProductRepository;
 import com.university.fpt.acf.service.ProductService;
+import com.university.fpt.acf.vo.ProductVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -79,5 +80,17 @@ public class ProductServiceImpl implements ProductService {
             throw new RuntimeException(ex.getMessage());
         }
         return check;
+    }
+
+    @Override
+    public List<ProductVO> getProductInContact(Long idContact) {
+        List<ProductVO> productVOS = new ArrayList<>();
+
+        try{
+            productVOS = productRepository.getProductInContact(idContact);
+        }catch (Exception ex){
+            throw new RuntimeException(ex.getMessage());
+        }
+        return productVOS;
     }
 }

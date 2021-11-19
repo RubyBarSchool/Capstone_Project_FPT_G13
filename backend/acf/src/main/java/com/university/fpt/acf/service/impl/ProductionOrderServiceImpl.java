@@ -4,8 +4,10 @@ import com.university.fpt.acf.common.entity.ColumnCommon;
 import com.university.fpt.acf.form.DateWorkEmployeeFrom;
 import com.university.fpt.acf.form.SearchProductionOrderForm;
 import com.university.fpt.acf.repository.ProductionOrderCustomRepository;
+import com.university.fpt.acf.repository.ProductionOrderRepository;
 import com.university.fpt.acf.service.ProductionOrderService;
 import com.university.fpt.acf.vo.ContactVO;
+import com.university.fpt.acf.vo.ProductionOrderDetailVO;
 import com.university.fpt.acf.vo.ProductionOrderViewWorkVO;
 import com.university.fpt.acf.vo.SearchProductionOrderVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,8 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
 
     @Autowired
     private ProductionOrderCustomRepository productionOrderCustomRepository;
+    @Autowired
+    private ProductionOrderRepository productionOrderRepository;
 
     @Override
     public HashMap<String, Object> viewWorkEmployee(DateWorkEmployeeFrom dateWorkEmployeeFrom) {
@@ -112,6 +116,17 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
             throw new RuntimeException(e.getMessage());
         }
         return size;
+    }
+
+    @Override
+    public List<ProductionOrderDetailVO> getDetailProduction(Long idProduction) {
+        List<ProductionOrderDetailVO> productionOrderDetailVOS = new ArrayList<>();
+        try {
+            productionOrderDetailVOS = productionOrderRepository.getProductionOrder(idProduction);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return productionOrderDetailVOS;
     }
 
     private HashMap<String, Object> defaultData(DateWorkEmployeeFrom dateWorkEmployeeFrom) {

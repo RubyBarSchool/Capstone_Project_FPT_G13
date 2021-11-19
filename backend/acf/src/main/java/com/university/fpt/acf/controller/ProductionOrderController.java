@@ -7,14 +7,13 @@ import com.university.fpt.acf.form.SearchCreateContactFrom;
 import com.university.fpt.acf.form.SearchProductionOrderForm;
 import com.university.fpt.acf.service.ProductionOrderService;
 import com.university.fpt.acf.vo.GetCreateContactVO;
+import com.university.fpt.acf.vo.ProductVO;
+import com.university.fpt.acf.vo.ProductionOrderDetailVO;
 import com.university.fpt.acf.vo.SearchProductionOrderVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -78,6 +77,33 @@ public class ProductionOrderController {
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+
+    @GetMapping("/getdetailproductionorder")
+    public ResponseEntity<ResponseCommon> getProductInContact(@RequestParam("idproduction") Long idProduction) {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        List<ProductionOrderDetailVO> productionOrderDetailVOS = new ArrayList<>();
+        try {
+            productionOrderDetailVOS = productionOrderService.getDetailProduction(idProduction);
+            responseCommon.setData(productionOrderDetailVOS);
+            responseCommon.setTotal(1);
+            message = "Xem lệnh sản xuất thành công";
+            if (productionOrderDetailVOS.size() == 0) {
+                responseCommon.setTotal(0);
+                message = "Không xem được lệnh sản xuát";
+            }
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = "Không thêm được sản phẩm";
+            responseCommon.setData(productionOrderDetailVOS);
+            responseCommon.setTotal(0);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
 }

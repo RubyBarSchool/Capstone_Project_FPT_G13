@@ -152,53 +152,59 @@
                 <a-form-model-item label="Tên hợp đồng">
                   <a-select
                     v-model="dataSubmit.idContact"
+                    @change="changeContact"
                     placeholder="Hợp đồng"
                     style="width: 80%"
                   >
-                    <!-- <a-select-option
-                      v-for="(contact, index) in dataContactInAdd"
-                      :value="contact.id"
+                    <a-select-option
+                      v-for="(contact, index) in dataContactInForm"
+                      :value="contact.idContact"
                       :key="index"
                     >
                       {{ contact.name }}
-                    </a-select-option> -->
+                    </a-select-option>
                   </a-select>
                 </a-form-model-item>
 
                 <a-form-model-item label="Tên sản phẩm">
                   <a-select
                     v-model="dataSubmit.idProduct"
+                    :disabled="disableProduct"
                     placeholder="Hợp đồng"
                     style="width: 80%"
                   >
-                    <!-- <a-select-option
-                      v-for="(contact, index) in dataContactInAdd"
+                    <a-select-option
+                      v-for="(contact, index) in dataProductIncontact"
                       :value="contact.id"
                       :key="index"
                     >
                       {{ contact.name }}
-                    </a-select-option> -->
+                    </a-select-option>
                   </a-select>
                 </a-form-model-item>
                 <a-form-model-item label="Ngày bắt đầu">
-                  <a-date-picker v-model="dataSubmit.dateStart" />
+                  <a-date-picker
+                    :disabled="disableddate"
+                    :disabled-date="disableDateStart"
+                    v-model="dataSubmit.dateStart"
+                  />
                 </a-form-model-item>
                 <a-form-model-item label="Ngày hoàn thành">
-                  <a-date-picker v-model="dataSubmit.dateEnd" />
+                  <a-date-picker
+                    :disabled="disableddate"
+                    :disabled-date="disableDateEnd"
+                    v-model="dataSubmit.dateEnd"
+                  />
                 </a-form-model-item>
 
                 <a-form-model-item label="Xem công việc">
-                  <a-button type="primary" @click="showWorkEmployee">
+                  <a-button
+                    :disabled="disableddate"
+                    type="primary"
+                    @click="showWorkEmployee"
+                  >
                     Chi tiết công việc
                   </a-button>
-                </a-form-model-item>
-
-                <a-form-model-item label="Ghi chú">
-                  <a-textarea
-                    v-model="dataSubmit.note"
-                    placeholder="Nhập ghi chú"
-                    :auto-size="{ minRows: 4, maxRows: 10 }"
-                  />
                 </a-form-model-item>
               </a-form-model>
             </a-modal>
@@ -230,7 +236,7 @@
                 :scroll="{ x: 1500, y: 800 }"
                 :rowKey="
                   (record, index) => {
-                    return index;
+                    return record.id;
                   }
                 "
                 :row-selection="{
@@ -265,7 +271,10 @@
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 import viewDetailContactService from "@/service/viewDetailContactService.js";
+import ContactService from "@/service/contactService.js";
 import ProductionOrderService from "@/service/ProductionOrderService.js";
+import ProductService from "@/service/productService.js";
+import moment from "moment";
 // import EditableCell from "@/components/EditableCell.vue";
 export default {
   name: "productionorder",
@@ -297,7 +306,6 @@ export default {
         dateStart: "",
         dateEnd: "",
         idEmployee: [],
-        note: "",
       },
       dataContact: [],
       dataSourceTable: [],
@@ -378,11 +386,16 @@ export default {
       showModalAdd: false,
       showModalViewWork: false,
       disableSaveAdd: true,
-
+      disableProduct: true,
       selectedRowKeys: [],
       selectedRows: [],
       idEmployeeChoose: [],
       disableSaveAdd1: true,
+      dataContactInForm: [],
+      dataProductIncontact: [],
+      disableddate: true,
+      datestart: "",
+      dateEnd: "",
     };
   },
   computed: {},
@@ -410,11 +423,30 @@ export default {
       this.showModalViewWork = false;
     },
     showWorkEmployee() {
-      let fakeData = {
-        dateStart: "2022-02-01",
-        dateEnd: "2022-03-10",
+      this.selectedRowKeys = this.dataSubmit.idEmployee;
+      let countCheck = 0;
+      if (this.dataSubmit.dateStart == "") {
+        let type = "error";
+        let message = "Chưa chọn ngày bắt đầu";
+        let description = "Bạn hãy chọn ngày bắt đầu của lệnh sản xuất";
+        this.notifi(type, message, description);
+        countCheck++;
+      }
+      if (this.dataSubmit.dateEnd == "") {
+        let type = "error";
+        let message = "Chưa chọn ngày kết thúc";
+        let description = "Bạn hãy chọn ngày kết thúc của lệnh sản xuất";
+        this.notifi(type, message, description);
+        countCheck++;
+      }
+      if (countCheck != 0) {
+        return;
+      }
+      let data = {
+        dateStart: this.dataSubmit.dateStart,
+        dateEnd: this.dataSubmit.dateEnd,
       };
-      ProductionOrderService.viewWorkEmployee(fakeData)
+      ProductionOrderService.viewWorkEmployee(data)
         .then((response) => {
           this.dataTableViewWork = response.data.data.data;
           this.columnsViewWork = response.data.data.columns;
@@ -424,19 +456,47 @@ export default {
           console.log(e);
         });
     },
-    submitAddProductionOrder() {},
+    submitAddProductionOrder() {
+      console.log("data submit", this.dataSubmit);
+    },
     submitAddEmployee() {
       this.dataSubmit.idEmployee = this.idEmployeeChoose;
       if (this.dataSubmit.idEmployee.length != 0) {
-        this.disableSaveAdd1 = false;
+        this.disableSaveAdd = false;
       } else {
-        this.disableSaveAdd1 = true;
+        this.disableSaveAdd = true;
       }
-      console.log("data employee",this.idEmployeeChoose)
+      console.log("data employee", this.idEmployeeChoose);
       this.showModalViewWork = false;
+    },
+    cleanData() {
+      this.dataSubmit.id = "";
+      this.dataSubmit.name = "";
+      this.dataSubmit.idContact = "";
+      this.dataSubmit.idProduct = "";
+      this.dataSubmit.dateStart = "";
+      this.dataSubmit.dateEnd = "";
+      this.dataSubmit.idEmployee = [];
+      this.dataContactInForm = [];
+      this.dataProductIncontact = [];
+      this.disableddate = true;
+    },
+    showModelView(record){
+        // data detail
+        ProductionOrderService.getDetailProduction(record.id)
+        .then((response) => {
+          this.dataTableViewWork = response.data.data.data;
+          this.columnsViewWork = response.data.data.columns;
+          this.showModalViewWork = true;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     openModalAdd() {
       this.showModalAdd = true;
+      this.cleanData();
+      this.getContactInForm();
     },
     handleCancelAdd() {
       this.showModalAdd = false;
@@ -470,6 +530,49 @@ export default {
         .searchContactInAdd()
         .then((response) => {
           this.dataContact = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    getContactInForm() {
+      ContactService.searchContact()
+        .then((response) => {
+          this.dataContactInForm = response.data.data;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    disableDateStart(current) {
+      return (
+        current < moment().subtract(1, "days") || current > moment(this.dateEnd)
+      );
+    },
+    disableDateEnd(current) {
+      return (
+        current < moment().subtract(1, "days") ||
+        current > moment(this.dateEnd).add(1, "days")
+      );
+    },
+    changeContact() {
+      this.dataProductIncontact = [];
+      this.getProductInContact(this.dataSubmit.idContact);
+
+      this.disableProduct = false;
+      this.disableddate = false;
+      for (let i = 0; i < this.dataContactInForm.length; i++) {
+        this.datestart = this.dataContactInForm[i].dateCreate;
+        this.dateEnd = this.dataContactInForm[i].dateFinish;
+        break;
+      }
+      this.disableDateStart();
+      this.disableDateEnd();
+    },
+    getProductInContact(id) {
+      ProductService.getProductInContact(id)
+        .then((response) => {
+          this.dataProductIncontact = response.data.data;
         })
         .catch((e) => {
           console.log(e);

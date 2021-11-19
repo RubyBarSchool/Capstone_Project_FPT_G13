@@ -3,7 +3,9 @@ package com.university.fpt.acf.controller;
 import com.university.fpt.acf.common.entity.ResponseCommon;
 import com.university.fpt.acf.form.AddProductForm;
 import com.university.fpt.acf.service.ProductService;
+import com.university.fpt.acf.vo.ContactProductionVO;
 import com.university.fpt.acf.vo.ContactVO;
+import com.university.fpt.acf.vo.ProductVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -71,6 +73,32 @@ public class ProductController {
             message = "Không Xóa được sản phẩm";
             responseCommon.setData(check);
             responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
+
+    @GetMapping("/getproductincontact")
+    public ResponseEntity<ResponseCommon> getProductInContact(@RequestParam("idcontact") Long idContact) {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        List<ProductVO> productVOS = new ArrayList<>();
+        try {
+            productVOS = productService.getProductInContact(idContact);
+            responseCommon.setData(productVOS);
+            responseCommon.setTotal(productVOS.size());
+            message = "Lấy sản phẩm thành công";
+            if (productVOS.size() == 0) {
+                message = "Không tìm thấy sản phẩm";
+            }
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = "Không thêm được sản phẩm";
+            responseCommon.setData(productVOS);
+            responseCommon.setTotal(productVOS.size());
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);

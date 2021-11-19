@@ -2,6 +2,7 @@ package com.university.fpt.acf.service;
 
 import com.university.fpt.acf.form.DateWorkEmployeeFrom;
 import com.university.fpt.acf.form.SearchProductionOrderForm;
+import com.university.fpt.acf.vo.ProductionOrderDetailVO;
 import com.university.fpt.acf.vo.SearchProductionOrderVO;
 
 import java.util.HashMap;
@@ -12,4 +13,6 @@ public interface ProductionOrderService {
 
     List<SearchProductionOrderVO> searchProductionOrder(SearchProductionOrderForm searchForm);
     int totalSearchProductionOrder(SearchProductionOrderForm searchForm);
+
+    List<ProductionOrderDetailVO> getDetailProduction(Long idProduction);
 }

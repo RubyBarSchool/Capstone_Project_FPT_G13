@@ -7,10 +7,7 @@ import com.university.fpt.acf.form.ContactInSearchForm;
 import com.university.fpt.acf.form.SearchCompanyForm;
 import com.university.fpt.acf.form.SearchCreateContactFrom;
 import com.university.fpt.acf.service.ContactService;
-import com.university.fpt.acf.vo.CompanyVO;
-import com.university.fpt.acf.vo.ContactVO;
-import com.university.fpt.acf.vo.FileContactVO;
-import com.university.fpt.acf.vo.GetCreateContactVO;
+import com.university.fpt.acf.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -54,6 +51,31 @@ public class ContactController {
         }
     }
 
+    @PostMapping("/getcontact")
+    public ResponseEntity<ResponseCommon> getContactInFormSearch() {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        List<ContactProductionVO> contacts = new ArrayList<>();
+        try {
+            contacts = contactService.searchContactProduction();
+            responseCommon.setData(contacts);
+            responseCommon.setTotal(contacts.size());
+            message = "Lấy hợp đồng thành công";
+            if (contacts.size() == 0) {
+                message = "Không tìm thấy hợp đồng";
+            }
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = "Không thêm được hợp đồng";
+            responseCommon.setData(contacts);
+            responseCommon.setTotal(contacts.size());
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
 
     @PostMapping("/readexcel")
     public ResponseEntity<ResponseCommon> readFileContact(@RequestParam("file") MultipartFile file) {

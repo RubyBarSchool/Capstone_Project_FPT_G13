@@ -7,6 +7,9 @@ class contactService {
     searchCompany(form) {
         return http.post(`/admin/contact/search`, form);
     }
+    searchContact() {
+        return http.post(`/admin/contact/getcontact`);
+    }
 }
 
 export default new contactService();

@@ -6,10 +6,7 @@ import com.university.fpt.acf.form.ContactInSearchForm;
 import com.university.fpt.acf.form.SearchContactDetailForm;
 import com.university.fpt.acf.form.SearchCreateContactFrom;
 import com.university.fpt.acf.repository.ContactCustomRepository;
-import com.university.fpt.acf.vo.CompanyVO;
-import com.university.fpt.acf.vo.ContactVO;
-import com.university.fpt.acf.vo.GetCreateContactVO;
-import com.university.fpt.acf.vo.SearchContactDetailVO;
+import com.university.fpt.acf.vo.*;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
@@ -32,6 +29,17 @@ public class ContactCustomRepositoryImpl extends CommonRepository implements Con
         TypedQuery<ContactVO> query = super.createQuery(sql.toString(),params, ContactVO.class);
         query.setFirstResult((contactInSearchForm.getPageIndex()-1)* contactInSearchForm.getPageSize());
         query.setMaxResults(contactInSearchForm.getPageSize());
+        return query.getResultList();
+    }
+
+    @Override
+    public List<ContactProductionVO> searchContactProduction() {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append(" SELECT new com.university.fpt.acf.vo.ContactProductionVO(c.id,c.name,c.created_date,c.dateFinish)" +
+                " FROM Contact c where c.deleted = false and c.statusDone = false ");
+        sql.append(" ORDER by c.id desc ");
+        TypedQuery<ContactProductionVO> query = super.createQuery(sql.toString(),params, ContactProductionVO.class);
         return query.getResultList();
     }
 
