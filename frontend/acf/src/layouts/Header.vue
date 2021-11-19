@@ -109,6 +109,54 @@ export default {
           path: "/thuongadmin",
           name: "Quản lý đơn thưởng",
         },
+        {
+          path: "/viewthuongphat",
+          name: "Xem Thưởng phạt",
+        },
+        {
+          path: "/unitadmin",
+          name: "Quản lý đơn vị đo",
+        },
+        {
+          path: "/chieucao",
+          name: "Quản lý chiều cao",
+        },
+        {
+          path: "/groupcoverplate",
+          name: "Quản lý nhóm tấm phủ",
+        },
+        {
+          path: "/groupmaterial",
+          name: "Quản lý nhóm vật liệu",
+        },
+        {
+          path: "/frameadmin",
+          name: "Quản lý khung đo",
+        },
+        {
+          path: "/coverplate",
+          name: "Quản lý tấm phủ",
+        },
+        {
+          path: "/vatlieuadmin",
+          name: "Quản lý vật liệu",
+        },
+        {
+          path: "/materialsuggest",
+          name: "Gợi ý sản phẩm",
+        },
+        {
+          path: "/taohopdong",
+          name: "Tạo hợp đồng",
+        },
+        {
+          path: "/viewdetailcontact",
+          name: "Quản lý chi tiết hợp đồng",
+        },
+        {
+          path: "/ProductionOrder",
+          name: "Tạo Lệnh sản xuất",
+        },
       ],
       routerEmployee: [
         {

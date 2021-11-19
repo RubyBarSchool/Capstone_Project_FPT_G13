@@ -11,6 +11,7 @@ import com.university.fpt.acf.vo.SearchProductionOrderVO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,8 +35,27 @@ public class ProductionOrderCustomRepositoryImpl extends CommonRepository implem
         sqlAcc.append(" ORDER by e.id asc ");
         TypedQuery<ProductionOrderViewWorkVO> queryAcc = super.createQuery(sqlAcc.toString(), paramsAcc, ProductionOrderViewWorkVO.class);
         List<ProductionOrderViewWorkVO> resultList = queryAcc.getResultList();
+        resultList.addAll(this.getListNotWorkEmployee(resultList));
         return resultList;
     }
+
+    private List<ProductionOrderViewWorkVO> getListNotWorkEmployee(List<ProductionOrderViewWorkVO> resultList){
+        StringBuilder sqlAcc = new StringBuilder("");
+        Map<String, Object> paramsAcc = new HashMap<>();
+        sqlAcc.append(" select new com.university.fpt.acf.vo.ProductionOrderViewWorkVO(e.id,e.fullName) from Employee e inner join e.position p where e.deleted = false and p.code != 'GD'  ");
+        if (resultList != null && resultList.size() != 0) {
+            List<Long> idEmpl = new ArrayList<>();
+            for(ProductionOrderViewWorkVO productionOrderViewWorkVO : resultList){
+                idEmpl.add(productionOrderViewWorkVO.getIdEmployee());
+            }
+            sqlAcc.append(" and e.id not in :id ");
+            paramsAcc.put("id", idEmpl);
+        }
+        TypedQuery<ProductionOrderViewWorkVO> queryAcc = super.createQuery(sqlAcc.toString(), paramsAcc, ProductionOrderViewWorkVO.class);
+        List<ProductionOrderViewWorkVO> resultListEmployeeNotWork = queryAcc.getResultList();
+        return resultListEmployeeNotWork;
+    }
+
 
     @Override
     public List<SearchProductionOrderVO> searchProductOrder(SearchProductionOrderForm searchForm) {

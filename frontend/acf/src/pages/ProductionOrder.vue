@@ -149,62 +149,56 @@
                   />
                 </a-form-model-item>
 
-                <!-- <a-form-model-item label="Tên hợp đồng">
+                <a-form-model-item label="Tên hợp đồng">
                   <a-select
-                    v-model="addProductForm.idContact"
+                    v-model="dataSubmit.idContact"
                     placeholder="Hợp đồng"
                     style="width: 80%"
                   >
-                    <a-select-option
+                    <!-- <a-select-option
                       v-for="(contact, index) in dataContactInAdd"
                       :value="contact.id"
                       :key="index"
                     >
                       {{ contact.name }}
-                    </a-select-option>
+                    </a-select-option> -->
                   </a-select>
                 </a-form-model-item>
 
                 <a-form-model-item label="Tên sản phẩm">
-                  <a-input
-                    v-model="addProductForm.nameProduct"
-                    placeholder="Nhập tên sản phẩm"
-                  />
+                  <a-select
+                    v-model="dataSubmit.idProduct"
+                    placeholder="Hợp đồng"
+                    style="width: 80%"
+                  >
+                    <!-- <a-select-option
+                      v-for="(contact, index) in dataContactInAdd"
+                      :value="contact.id"
+                      :key="index"
+                    >
+                      {{ contact.name }}
+                    </a-select-option> -->
+                  </a-select>
                 </a-form-model-item>
-                <a-form-model-item label="Số lượng">
-                  <a-input
-                    v-model="addProductForm.countProduct"
-                    placeholder="Nhập số lượng sản phẩm"
-                  />
+                <a-form-model-item label="Ngày bắt đầu">
+                  <a-date-picker v-model="dataSubmit.dateStart" />
                 </a-form-model-item>
-                <a-form-model-item label="Thông số">
-                  <a-input
-                    v-model="addProductForm.lengthFrame"
-                    placeholder="Chiều rộng"
-                  />
-                  <a-input
-                    v-model="addProductForm.widthFrame"
-                    placeholder="Chiều dài"
-                  />
-                  <a-input
-                    v-model="addProductForm.heightFrame"
-                    placeholder="Chiều cao"
-                  />
+                <a-form-model-item label="Ngày hoàn thành">
+                  <a-date-picker v-model="dataSubmit.dateEnd" />
                 </a-form-model-item>
-                <a-form-model-item label="Ghi chú">
-                  <a-textarea
-                    v-model="addProductForm.noteProduct"
-                    placeholder="Nhập ghi chú"
-                    :auto-size="{ minRows: 4, maxRows: 10 }"
-                  />
-                </a-form-model-item>
-                <a-form-model-item label="Giá tiền">
-                  <a-input v-model="addProductForm.priceProduct" disabled />
-                </a-form-model-item> -->
+
                 <a-form-model-item label="Xem công việc">
                   <a-button type="primary" @click="showWorkEmployee">
                     Chi tiết công việc
                   </a-button>
+                </a-form-model-item>
+
+                <a-form-model-item label="Ghi chú">
+                  <a-textarea
+                    v-model="dataSubmit.note"
+                    placeholder="Nhập ghi chú"
+                    :auto-size="{ minRows: 4, maxRows: 10 }"
+                  />
                 </a-form-model-item>
               </a-form-model>
             </a-modal>
@@ -223,8 +217,8 @@
                 <a-button
                   key="submit"
                   type="primary"
-                  :disabled="disableSaveAdd"
-                  @click="submitAddProductionOrder"
+                  :disabled="disableSaveAdd1"
+                  @click="submitAddEmployee"
                 >
                   Lưu
                 </a-button>
@@ -233,12 +227,17 @@
                 :columns="columnsViewWork"
                 :data-source="dataTableViewWork"
                 :pagination="false"
-                :scroll="{ x: 1500 ,y: 800 }"
+                :scroll="{ x: 1500, y: 800 }"
                 :rowKey="
                   (record, index) => {
                     return index;
                   }
                 "
+                :row-selection="{
+                  selectedRowKeys: selectedRowKeys,
+                  selectedRows: selectedRows,
+                  onChange: onSelectChange,
+                }"
               >
                 <template slot="average" slot-scope="text, record">
                   <a-tag
@@ -378,7 +377,12 @@ export default {
       dataTableViewWork: [],
       showModalAdd: false,
       showModalViewWork: false,
-      disableSaveAdd: false,
+      disableSaveAdd: true,
+
+      selectedRowKeys: [],
+      selectedRows: [],
+      idEmployeeChoose: [],
+      disableSaveAdd1: true,
     };
   },
   computed: {},
@@ -387,13 +391,28 @@ export default {
     this.beforeSearch();
   },
   methods: {
+    onSelectChange(selectedRowKeys, selectedRows) {
+      console.log("selectedRowKeys", selectedRowKeys);
+      console.log("selectedRows", selectedRows);
+      this.selectedRowKeys = selectedRowKeys;
+      this.selectedRows = selectedRows;
+      this.idEmployeeChoose = [];
+      for (let i = 0; i < selectedRows.length; i++) {
+        this.idEmployeeChoose.push(selectedRows[i].id);
+      }
+      if (selectedRowKeys.length != 0) {
+        this.disableSaveAdd1 = false;
+      } else {
+        this.disableSaveAdd1 = true;
+      }
+    },
     handleCancelViewWork() {
       this.showModalViewWork = false;
     },
     showWorkEmployee() {
       let fakeData = {
-        dateStart: "2022-02-10",
-        dateEnd: "2022-03-01",
+        dateStart: "2022-02-01",
+        dateEnd: "2022-03-10",
       };
       ProductionOrderService.viewWorkEmployee(fakeData)
         .then((response) => {
@@ -406,6 +425,16 @@ export default {
         });
     },
     submitAddProductionOrder() {},
+    submitAddEmployee() {
+      this.dataSubmit.idEmployee = this.idEmployeeChoose;
+      if (this.dataSubmit.idEmployee.length != 0) {
+        this.disableSaveAdd1 = false;
+      } else {
+        this.disableSaveAdd1 = true;
+      }
+      console.log("data employee",this.idEmployeeChoose)
+      this.showModalViewWork = false;
+    },
     openModalAdd() {
       this.showModalAdd = true;
     },

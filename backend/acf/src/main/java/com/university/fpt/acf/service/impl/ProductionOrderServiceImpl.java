@@ -27,50 +27,66 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
         List<ColumnCommon> listColumn = new ArrayList<>();
         HashMap<String, Object> data = new HashMap<>();
         List<HashMap<String, Object>> mapList = new ArrayList<>();
-        data.put("data",mapList);
-        try{
+        data.put("data", mapList);
+        try {
             listColumn = generateColumn(dateWorkEmployeeFrom);
-            data.put("columns",listColumn);
+            data.put("columns", listColumn);
             List<ProductionOrderViewWorkVO> productionOrderViewWorkVOS = productionOrderCustomRepository.getListWorkEmployee(dateWorkEmployeeFrom);
             System.out.println(productionOrderViewWorkVOS.toString());
-            HashMap<String,Object> dataEmployee = new HashMap<>();
-            dataEmployee.put("id",0);
+            HashMap<String, Object> dataEmployee = new HashMap<>();
+            dataEmployee.put("id", 0);
             int count = 0;
-            HashMap<String,Object> stringObjectHashMap = defaultData(dateWorkEmployeeFrom);
-            for(ProductionOrderViewWorkVO productionOrderViewWorkVO : productionOrderViewWorkVOS){
-                if(dataEmployee.get("id") != null  && !productionOrderViewWorkVO.getIdEmployee().equals(Long.parseLong(dataEmployee.get("id").toString()))){
-                    dataEmployee.put("average", (double) Math.round((count*1.0/stringObjectHashMap.size())*10)/10);
+            HashMap<String, Object> stringObjectHashMap = defaultData(dateWorkEmployeeFrom);
+            for (ProductionOrderViewWorkVO productionOrderViewWorkVO : productionOrderViewWorkVOS) {
+                Boolean checkNewEmpl = false;
+                if (dataEmployee.get("id") != null && !productionOrderViewWorkVO.getIdEmployee().equals(Long.parseLong(dataEmployee.get("id").toString()))) {
+                    checkNewEmpl = true;
+                    dataEmployee.put("average", (double) Math.round((count * 1.0 / stringObjectHashMap.size()) * 10) / 10);
                     dataEmployee = new HashMap<>();
                     mapList.add(dataEmployee);
-                    dataEmployee.put("id",productionOrderViewWorkVO.getIdEmployee());
-                    dataEmployee.put("name",productionOrderViewWorkVO.getNameEmployee());
+                    dataEmployee.put("id", productionOrderViewWorkVO.getIdEmployee());
+                    dataEmployee.put("name", productionOrderViewWorkVO.getNameEmployee());
+                    dataEmployee.put("idProductionOrder", productionOrderViewWorkVO.getIdProductionOrder());
+                    dataEmployee.put("nameProductionOrder", productionOrderViewWorkVO.getNameProductionOrder());
                     count = 0;
-                    dataEmployee.put("idProductionOrder",productionOrderViewWorkVO.getIdEmployee());
-                    dataEmployee.put("nameProductionOrder",productionOrderViewWorkVO.getNameEmployee());
                     dataEmployee.putAll(stringObjectHashMap);
                 }
-
-                if(productionOrderViewWorkVO.getDateStart().isBefore(dateWorkEmployeeFrom.getDateStart())){
+                if (productionOrderViewWorkVO.getDateStart() == null || productionOrderViewWorkVO.getDateEnd() == null) {
+                    continue;
+                }
+                if(!checkNewEmpl){
+                    String idPro = dataEmployee.get("idProductionOrder").toString();
+                    String namePro = dataEmployee.get("nameProductionOrder").toString();
+                    dataEmployee.put("idProductionOrder", idPro +","+ productionOrderViewWorkVO.getIdProductionOrder());
+                    dataEmployee.put("nameProductionOrder",namePro+","+ productionOrderViewWorkVO.getNameProductionOrder());
+                }
+                if (productionOrderViewWorkVO.getDateStart().isBefore(dateWorkEmployeeFrom.getDateStart())) {
                     productionOrderViewWorkVO.setDateStart(dateWorkEmployeeFrom.getDateStart());
                 }
 
-                if(productionOrderViewWorkVO.getDateEnd().isAfter(dateWorkEmployeeFrom.getDateEnd())){
+                if (productionOrderViewWorkVO.getDateEnd().isAfter(dateWorkEmployeeFrom.getDateEnd())) {
                     productionOrderViewWorkVO.setDateEnd(dateWorkEmployeeFrom.getDateEnd());
                 }
 
                 LocalDate localDate = productionOrderViewWorkVO.getDateStart();
-                while (localDate.isBefore(productionOrderViewWorkVO.getDateEnd())){
+                Boolean checkExitDate = false;
+                while (localDate.isBefore(productionOrderViewWorkVO.getDateEnd())) {
+                    checkExitDate = true;
                     count++;
-                    Integer value = Integer.parseInt(dataEmployee.get(localDate.toString()).toString()) +1 ;
-                    dataEmployee.put(localDate.toString(),value);
+                    Integer value = Integer.parseInt(dataEmployee.get(localDate.toString()).toString()) + 1;
+                    dataEmployee.put(localDate.toString(), value);
                     localDate = localDate.plusDays(1);
                 }
-                count++;
-                Integer value = Integer.parseInt(dataEmployee.get(localDate.toString()).toString()) +1 ;
-                dataEmployee.put(localDate.toString(),value);
+                if (checkExitDate || productionOrderViewWorkVO.getDateStart().isEqual(productionOrderViewWorkVO.getDateEnd())) {
+                    count++;
+                    Integer value = Integer.parseInt(dataEmployee.get(localDate.toString()).toString()) + 1;
+                    dataEmployee.put(localDate.toString(), value);
+                }
             }
-            dataEmployee.put("average", (double) Math.round((count*1.0/stringObjectHashMap.size())*10)/10);
-        }catch (Exception e){
+            dataEmployee.put("average", (double) Math.round((count * 1.0 / stringObjectHashMap.size()) * 10) / 10);
+
+
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
         return data;
@@ -89,7 +105,7 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
 
     @Override
     public int totalSearchProductionOrder(SearchProductionOrderForm searchForm) {
-        int size=0;
+        int size = 0;
         try {
             size = productionOrderCustomRepository.totalSearchProductOrder(searchForm);
         } catch (Exception e) {
@@ -98,17 +114,18 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
         return size;
     }
 
-    private HashMap<String,Object> defaultData(DateWorkEmployeeFrom dateWorkEmployeeFrom){
-        HashMap<String,Object> stringObjectHashMap = new HashMap<>();
+    private HashMap<String, Object> defaultData(DateWorkEmployeeFrom dateWorkEmployeeFrom) {
+        HashMap<String, Object> stringObjectHashMap = new HashMap<>();
         LocalDate localDate = dateWorkEmployeeFrom.getDateStart();
-        while (localDate.isBefore(dateWorkEmployeeFrom.getDateEnd())){
-            stringObjectHashMap.put(localDate.toString(),0);
+        while (localDate.isBefore(dateWorkEmployeeFrom.getDateEnd())) {
+            stringObjectHashMap.put(localDate.toString(), 0);
             localDate = localDate.plusDays(1);
         }
-        stringObjectHashMap.put(localDate.toString(),0);
+        stringObjectHashMap.put(localDate.toString(), 0);
         return stringObjectHashMap;
     }
-    private List<ColumnCommon> generateColumn(DateWorkEmployeeFrom dateWorkEmployeeFrom){
+
+    private List<ColumnCommon> generateColumn(DateWorkEmployeeFrom dateWorkEmployeeFrom) {
         List<ColumnCommon> listColumn = new ArrayList<>();
 
         ColumnCommon columnCommon = new ColumnCommon();
@@ -135,9 +152,9 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
         listColumn.add(columnCommon2);
 
         LocalDate localDate = dateWorkEmployeeFrom.getDateStart();
-        while (localDate.isBefore(dateWorkEmployeeFrom.getDateEnd())){
+        while (localDate.isBefore(dateWorkEmployeeFrom.getDateEnd())) {
             ColumnCommon columnCommonDate = new ColumnCommon();
-            columnCommonDate.setTitle(localDate.getDayOfMonth()+"-"+localDate.getMonthValue()+"-"+localDate.getYear());
+            columnCommonDate.setTitle(localDate.getDayOfMonth() + "-" + localDate.getMonthValue() + "-" + localDate.getYear());
             columnCommonDate.setDataIndex(localDate.toString());
             columnCommonDate.setKey(localDate.toString());
             columnCommonDate.setWidth(150);
@@ -145,12 +162,12 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
             localDate = localDate.plusDays(1);
         }
         ColumnCommon columnCommonDateEnd = new ColumnCommon();
-        columnCommonDateEnd.setTitle(localDate.getDayOfMonth()+"-"+localDate.getMonthValue()+"-"+localDate.getYear());
+        columnCommonDateEnd.setTitle(localDate.getDayOfMonth() + "-" + localDate.getMonthValue() + "-" + localDate.getYear());
         columnCommonDateEnd.setDataIndex(localDate.toString());
         columnCommonDateEnd.setKey(localDate.toString());
         columnCommonDateEnd.setWidth(150);
         listColumn.add(columnCommonDateEnd);
 
-        return  listColumn;
+        return listColumn;
     }
 }

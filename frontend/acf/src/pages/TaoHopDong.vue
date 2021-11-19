@@ -417,6 +417,7 @@ export default {
         .submitContact(this.dataAdd)
         .then(() => {
           this.visibleAdd = false;
+          this.submitSearch();
         })
         .catch((e) => {
           console.log(e);

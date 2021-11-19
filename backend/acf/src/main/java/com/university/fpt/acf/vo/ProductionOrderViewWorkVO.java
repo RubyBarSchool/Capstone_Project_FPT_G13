@@ -16,4 +16,9 @@ public class ProductionOrderViewWorkVO {
     private String nameProductionOrder;
     private LocalDate dateStart;
     private LocalDate dateEnd;
+
+    public ProductionOrderViewWorkVO(Long idEmployee, String nameEmployee) {
+        this.idEmployee = idEmployee;
+        this.nameEmployee = nameEmployee;
+    }
 }
