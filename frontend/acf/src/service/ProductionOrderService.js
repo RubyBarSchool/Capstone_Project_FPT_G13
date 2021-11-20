@@ -16,6 +16,9 @@ class ProductionOrderService {
     updateProductOrder(form) {
         return http.post(`/admin/productionorder/update`, form);
     }
+    deleteProductOrder(id) {
+        return http.delete(`/admin/productionorder/${id}`);
+    }
 }
 
 export default new ProductionOrderService();

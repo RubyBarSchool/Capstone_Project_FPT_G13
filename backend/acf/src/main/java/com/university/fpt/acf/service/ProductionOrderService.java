@@ -16,5 +16,6 @@ public interface ProductionOrderService {
     int totalSearchProductionOrder(SearchProductionOrderForm searchForm);
     Boolean addProductionOrder(AddProductionOrderFrom addProductionOrderFrom);
     Boolean updateProductionOrder(AddProductionOrderFrom addProductionOrderFrom);
+    Boolean deleteProductionOrder(Long id);
     List<ProductionOrderDetailVO> getDetailProduction(Long idProduction);
 }

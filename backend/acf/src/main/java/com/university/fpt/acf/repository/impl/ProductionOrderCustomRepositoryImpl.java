@@ -72,8 +72,8 @@ public class ProductionOrderCustomRepositoryImpl extends CommonRepository implem
             sql.append(" and c.id in :listIdContact ");
             params.put("listIdContact",searchForm.getListIdContact());
         }
-        if(searchForm.getStatus()!=null){
-            sql.append(" and po.status=:status ");
+        if(searchForm.getStatus()!=null && !searchForm.getStatus().equals("")){
+            sql.append(" and po.status =: status ");
             params.put("status",searchForm.getStatus());
         }
         if (searchForm.getDateList() != null && !searchForm.getDateList().isEmpty()) {

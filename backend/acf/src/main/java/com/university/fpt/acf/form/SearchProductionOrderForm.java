@@ -10,7 +10,7 @@ public class SearchProductionOrderForm {
     private List<Long> listIdContact;
     private String nameProduction;
     private List<LocalDate> dateList;
-    private Boolean status;
+    private String status;
     private int pageIndex;
     private int pageSize;
 }

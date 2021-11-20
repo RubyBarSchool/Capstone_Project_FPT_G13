@@ -186,6 +186,18 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
     }
 
     @Override
+    public Boolean deleteProductionOrder(Long id) {
+        Boolean check = false;
+        try {
+            productionOrderRepository.deleteById(id);
+            check = true;
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return check;
+    }
+
+    @Override
     public List<ProductionOrderDetailVO> getDetailProduction(Long idProduction) {
         List<ProductionOrderDetailVO> productionOrderDetailVOS = new ArrayList<>();
         try {

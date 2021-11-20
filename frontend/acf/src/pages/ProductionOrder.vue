@@ -50,8 +50,9 @@
             style="width: 10%"
           >
             <a-select-option key=""> Tất Cả </a-select-option>
-            <a-select-option key="false"> Chưa hoàn thành </a-select-option>
-            <a-select-option key="true"> Đã hoàn thành </a-select-option>
+            <a-select-option key="-1"> Đang chờ xác nhận </a-select-option>
+            <a-select-option key="0"> Đang làm </a-select-option>
+            <a-select-option key="1"> Hoàn thành </a-select-option>
           </a-select>
           <a-button
             type="primary"
@@ -89,10 +90,11 @@
               @change="handleTableChange"
             >
               <template slot="status" slot-scope="text, record">
-                <a-tag :color="record.status ? 'green' : 'red'">
-                  {{ record.status ? "Đã hoàn thành" : "Chưa hoàn thành" }}
+                <a-tag :color="record.status == '1' ? 'green' : (record.status == '0' ?  'orange':  'red')">
+                  {{ record.status == '1' ? 'Đã hoàn thành' : (record.status == '0' ?  'Đang làm':  'Đang chờ xác nhận') }}
                 </a-tag>
               </template>
+
               <template slot="action" slot-scope="text, record">
                 <a-row>
                   <a-col :span="8">
@@ -107,7 +109,7 @@
                   <a-col :span="8">
                     <a-button
                       id="edit"
-                      @click="showModalEdit(record)"
+                      @click="showEditForm(record)"
                       :style="{ width: '44.25px' }"
                     >
                       <font-awesome-icon :icon="['fas', 'edit']" />
@@ -115,9 +117,9 @@
                   </a-col>
                   <a-col :span="8">
                     <a-popconfirm
-                      v-if="dataSourceTable.length"
+                      v-if="record.status == '-1'"
                       title="Bạn có chắc chắn muốn xóa không?"
-                      @confirm="deletePersonalApplication(record)"
+                      @confirm="deleteProductionOrder(record)"
                     >
                       <a-button id="delete">
                         <font-awesome-icon :icon="['fas', 'trash']" />
@@ -184,14 +186,14 @@
                 </a-form-model-item>
                 <a-form-model-item label="Ngày bắt đầu">
                   <a-date-picker
-                    :disabled="disableddate"
+                    :disabled="disabledDate"
                     :disabled-date="disableDateStart"
                     v-model="dataSubmit.dateStart"
                   />
                 </a-form-model-item>
                 <a-form-model-item label="Ngày hoàn thành">
                   <a-date-picker
-                    :disabled="disableddate"
+                    :disabled="disabledDate"
                     :disabled-date="disableDateEnd"
                     v-model="dataSubmit.dateEnd"
                   />
@@ -199,7 +201,7 @@
 
                 <a-form-model-item label="Xem công việc">
                   <a-button
-                    :disabled="disableddate"
+                    :disabled="disabledDate"
                     type="primary"
                     @click="showWorkEmployee"
                   >
@@ -277,6 +279,91 @@
                 "
               >
               </a-table>
+            </a-modal>
+
+            <!-- chỉnh sửa lệnh sản xuất -->
+            <a-modal v-model="showModalEdit" title="Chỉnh sửa lệnh sản xuất">
+              <template slot="footer">
+                <a-button key="back" @click="handleCancelEdit"> Đóng </a-button>
+                <a-button
+                  key="submit"
+                  type="primary"
+                  :disabled="disableSaveEdit"
+                  @click="submitAddProductionOrder"
+                >
+                  Lưu
+                </a-button>
+              </template>
+              <a-form-model>
+                <a-form-model-item label="Lệnh sản xuất">
+                  <a-input
+                    v-model="dataSubmit.name"
+                    @change="change"
+                    placeholder="Nhập tên lệnh sản xuất"
+                  />
+                </a-form-model-item>
+
+                <a-form-model-item label="Tên hợp đồng">
+                  <a-select
+                    v-model="dataSubmit.idContact"
+                    disabled
+                    @change="changeContact"
+                    placeholder="Hợp đồng"
+                    style="width: 80%"
+                  >
+                    <a-select-option
+                      v-for="(contact, index) in dataContactInForm"
+                      :value="contact.idContact"
+                      :key="index"
+                    >
+                      {{ contact.name }}
+                    </a-select-option>
+                  </a-select>
+                </a-form-model-item>
+
+                <a-form-model-item label="Tên sản phẩm">
+                  <a-select
+                    v-model="dataSubmit.idProduct"
+                    disabled
+                    placeholder="Hợp đồng"
+                    style="width: 80%"
+                  >
+                    <a-select-option
+                      v-for="(contact, index) in dataProductIncontact"
+                      :value="contact.id"
+                      :key="index"
+                    >
+                      {{ contact.name }}
+                    </a-select-option>
+                  </a-select>
+                </a-form-model-item>
+                <a-form-model-item label="Ngày bắt đầu">
+                  <a-date-picker
+                    :disabled="disabledDate"
+                    @change="change"
+                    :disabled-date="disableDateStart"
+                    v-model="dataSubmit.dateStart"
+                  />
+                </a-form-model-item>
+                <a-form-model-item label="Ngày hoàn thành">
+                  <a-date-picker
+                    :disabled="disabledDate"
+                    @change="change"
+                    :disabled-date="disableDateEnd"
+                    v-model="dataSubmit.dateEnd"
+                  />
+                </a-form-model-item>
+
+                <a-form-model-item label="Xem công việc">
+                  <a-button
+                    :disabled="disabledDate"
+                    type="primary"
+                    @click="showWorkEmployeeEdit"
+                  >
+                    Chi tiết công việc
+                  </a-button>
+                </a-form-model-item>
+              </a-form-model>
             </a-modal>
           </div>
         </div>
@@ -419,17 +506,20 @@ export default {
       showModalViewWork: false,
       disableSaveAdd: true,
       disableProduct: true,
+      disableContact: true,
       selectedRowKeys: [],
       selectedRows: [],
       idEmployeeChoose: [],
       disableSaveAdd1: true,
       dataContactInForm: [],
       dataProductIncontact: [],
-      disableddate: true,
-      datestart: "",
-      dateEnd: "",
+      disabledDate: true,
+      datestart: "2021-11-11",
+      dateEnd: "2021-11-11",
       dataSourceEmployee: [],
       showModalView: false,
+      showModalEdit: false,
+      disableSaveEdit: true,
     };
   },
   computed: {},
@@ -438,6 +528,36 @@ export default {
     this.beforeSearch();
   },
   methods: {
+    change() {
+      this.disableSaveEdit = false;
+    },
+    showEditForm(record) {
+      this.cleanData();
+      this.dataSubmit.id = record.id;
+      this.dataSubmit.name = record.name;
+      this.dataSubmit.idContact = record.idContact;
+      this.dataSubmit.idProduct = record.idProduct;
+      this.dataSubmit.dateStart = record.dateStart;
+      this.dataSubmit.dateEnd = record.dateEnd;
+      this.dataSubmit.name = record.name;
+      this.dataSubmit.name = record.name;
+      this.getEmployeeInProductionOrder(record.id);
+      this.getContactEdit();
+      this.disabledDate = false;
+      this.showModalEdit = true;
+    },
+    getEmployeeInProductionOrder(id) {
+      ProductionOrderService.getDetailProduction(id)
+        .then((response) => {
+          let data = response.data.data;
+          for (let i = 0; i < data.length; i++) {
+            this.dataSubmit.idEmployees.push(data[i].idEmployee);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     handleModalView() {
       this.showModalView = false;
     },
@@ -460,6 +580,40 @@ export default {
       this.showModalViewWork = false;
     },
     showWorkEmployee() {
+      this.selectedRowKeys = this.dataSubmit.idEmployees;
+      let countCheck = 0;
+      if (this.dataSubmit.dateStart == "") {
+        let type = "error";
+        let message = "Chưa chọn ngày bắt đầu";
+        let description = "Bạn hãy chọn ngày bắt đầu của lệnh sản xuất";
+        this.notifi(type, message, description);
+        countCheck++;
+      }
+      if (this.dataSubmit.dateEnd == "") {
+        let type = "error";
+        let message = "Chưa chọn ngày kết thúc";
+        let description = "Bạn hãy chọn ngày kết thúc của lệnh sản xuất";
+        this.notifi(type, message, description);
+        countCheck++;
+      }
+      if (countCheck != 0) {
+        return;
+      }
+      let data = {
+        dateStart: this.dataSubmit.dateStart,
+        dateEnd: this.dataSubmit.dateEnd,
+      };
+      ProductionOrderService.viewWorkEmployee(data)
+        .then((response) => {
+          this.dataTableViewWork = response.data.data.data;
+          this.columnsViewWork = response.data.data.columns;
+          this.showModalViewWork = true;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    showWorkEmployeeEdit() {
       this.selectedRowKeys = this.dataSubmit.idEmployees;
       let countCheck = 0;
       if (this.dataSubmit.dateStart == "") {
@@ -543,7 +697,17 @@ export default {
       this.dataSubmit.idEmployees = [];
       this.dataContactInForm = [];
       this.dataProductIncontact = [];
-      this.disableddate = true;
+      this.disabledDate = true;
+      this.disableSaveEdit = true;
+    },
+    deleteProductionOrder(record){
+      ProductionOrderService.deleteProductOrder(record.id)
+        .then(() => {
+          this.beforeSearch();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
     },
     showModelView(record) {
       // data detail
@@ -564,6 +728,9 @@ export default {
     },
     handleCancelAdd() {
       this.showModalAdd = false;
+    },
+    handleCancelEdit() {
+      this.showModalEdit = false;
     },
     changeSearch() {
       this.beforeSearch();
@@ -608,9 +775,20 @@ export default {
           console.log(e);
         });
     },
+    getContactEdit() {
+      ContactService.searchContact()
+        .then((response) => {
+          this.dataContactInForm = response.data.data;
+          this.changeContact();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     disableDateStart(current) {
       return (
-        current < moment().subtract(1, "days") || current > moment(this.dateEnd)
+        current < moment().subtract(1, "days") ||
+        current > moment(this.dateEnd).add(1, "days")
       );
     },
     disableDateEnd(current) {
@@ -624,12 +802,16 @@ export default {
       this.getProductInContact(this.dataSubmit.idContact);
 
       this.disableProduct = false;
-      this.disableddate = false;
+      this.disabledDate = false;
       for (let i = 0; i < this.dataContactInForm.length; i++) {
-        this.datestart = this.dataContactInForm[i].dateCreate;
-        this.dateEnd = this.dataContactInForm[i].dateFinish;
-        break;
+        if (this.dataContactInForm[i].idContact == this.dataSubmit.idContact) {
+          this.dateStart = this.dataContactInForm[i].dateCreate;
+          this.dateEnd = this.dataContactInForm[i].dateFinish;
+          break;
+        }
       }
+      console.log("data date start",this.dateStart);
+      console.log("data date end",this.dateEnd);
       this.disableDateStart();
       this.disableDateEnd();
     },
