@@ -23,10 +23,10 @@
             style="width: 10%"
           >
             <a-select-option key=""> Tất Cả </a-select-option>
+            <a-select-option key="-2"> Chờ duyệt </a-select-option>
             <a-select-option key="-1"> Đang chờ xác nhận </a-select-option>
             <a-select-option key="0"> Đang làm </a-select-option>
-            <a-select-option key="1"> Chờ duyệt </a-select-option>
-            <a-select-option key="2"> Hoàn thành </a-select-option>
+            <a-select-option key="1"> Hoàn thành </a-select-option>
           </a-select>
           <div :style="{ 'padding-top': '10px' }">
             <a-table
@@ -43,25 +43,41 @@
               <template slot="status" slot-scope="text, record">
                 <a-tag
                   :color="
-                    record.status == '1'
-                      ? 'green'
+                    record.status == '-2'
+                      ? '#108ee9'
+                      : record.status == '-1'
+                      ? '#f50'
                       : record.status == '0'
-                      ? 'orange'
-                      : 'red'
+                      ? '#2db7f5'
+                      : '#87d068'
                   "
                 >
                   {{
-                    record.status == "1"
-                      ? "Đã hoàn thành"
+                    record.status == "-2"
+                      ? "Đang chờ duyệt"
+                      : record.status == "-1"
+                      ? "Đang chờ xác nhận"
                       : record.status == "0"
                       ? "Đang làm"
-                      : "Đang chờ xác nhận"
+                      : "Hoàn thành"
                   }}
                 </a-tag>
               </template>
 
               <template slot="action" slot-scope="text, record">
-                <a-row>
+                <a-row v-if="record.status == -1">
+                  <a-col :span="8">
+                    <a-button
+                      id="confirm"
+                      @click="confirmWork(record)"
+                      :style="{ width: '44.25px', 'margin-right': '100px' }"
+                    >
+                      <font-awesome-icon :icon="['fas', 'check-circle']" />
+                    </a-button>
+                  </a-col>
+                </a-row>
+
+                <a-row v-if="record.status != -1">
                   <a-col :span="8">
                     <a-button
                       id="view"
@@ -80,20 +96,27 @@
                       <font-awesome-icon :icon="['fas', 'edit']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="8">
-                    <a-popconfirm
-                      v-if="record.status == '-1'"
-                      title="Bạn có chắc chắn muốn xóa không?"
-                      @confirm="deleteProductionOrder(record)"
-                    >
-                      <a-button id="delete">
-                        <font-awesome-icon :icon="['fas', 'trash']" />
-                      </a-button>
-                    </a-popconfirm>
-                  </a-col>
                 </a-row>
               </template>
             </a-table>
+
+            <a-modal   width="80%" v-model="showModalView" title="Xem vật liệu của sản phẩm">
+              <template slot="footer">
+                <a-button key="back" @click="handleCancelview"> Đóng </a-button>
+              </template>
+              <a-table
+                :columns="columnsView"
+                :data-source="dataSourceTableView"
+                :pagination="false"
+                :scroll="{x: 1500, y: 800 }"
+                :rowKey="
+                  (record, index) => {
+                    return index;
+                  }
+                "
+              >
+              </a-table>
+            </a-modal>
           </div>
         </div>
       </a-layout-content>
@@ -104,16 +127,12 @@
 <script>
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
-import viewDetailContactService from "@/service/viewDetailContactService.js";
-import ContactService from "@/service/contactService.js";
-import ProductionOrderService from "@/service/ProductionOrderService.js";
-import ProductService from "@/service/productService.js";
-import moment from "moment";
+import ViewWorkEmployee from "@/service/viewWorkEmployeeService.js";
 export default {
-  name: "viewworkemployee",
+  name: "ViewWorkEmployee",
   components: {
     Header,
-    Footer
+    Footer,
   },
   data() {
     return {
@@ -126,7 +145,7 @@ export default {
         status: "",
         pageIndex: 1,
         pageSize: 10,
-        total: 0
+        total: 0,
       },
       dataSubmit: {
         id: "",
@@ -138,13 +157,145 @@ export default {
         idEmployees: [],
       },
       dataSourceTable: [],
-      columns: [],
+      dataSourceTableView: [],
+      columns: [
+        {
+          title: "STT",
+          width: 100,
+          dataIndex: "id",
+          key: "id",
+          fixed: "left",
+        },
+        {
+          title: "Lệnh sản xuất",
+          dataIndex: "nameProductionOrder",
+          key: "nameProductionOrder",
+          width: 150,
+        },
+        {
+          title: "Sản phẩm",
+          dataIndex: "nameProduct",
+          key: "nameProduct",
+          width: 150,
+        },
+        {
+          title: "Thông số",
+          dataIndex: "frame",
+          key: "frame",
+          width: 150,
+        },
+        {
+          title: "Số lượng",
+          dataIndex: "countProduct",
+          key: "countProduct",
+          width: 150,
+        },
+        {
+          title: "Tiến độ",
+          dataIndex: "numberFinish",
+          key: "numberFinish",
+          width: 150,
+        },
+        {
+          title: "Ngày bắt đầu",
+          dataIndex: "dateStart",
+          key: "dateStart",
+          width: 150,
+        },
+        {
+          title: "Ngày hoàn thành",
+          dataIndex: "dateEnd",
+          key: "dateEnd",
+          width: 150,
+        },
+        {
+          title: "Trạng thái",
+          dataIndex: "status",
+          key: "status",
+          width: 150,
+          scopedSlots: { customRender: "status" },
+        },
+        {
+          title: "",
+          dataIndex: "action",
+          key: "action",
+          fixed: "right",
+          width: 150,
+          scopedSlots: { customRender: "action" },
+        },
+      ],
+      columnsView: [
+        {
+          title: "STT",
+          width: 100,
+          dataIndex: "idMaterial",
+          key: "idMaterial",
+          fixed: "left",
+        },
+        {
+          title: "Mã vật liệu",
+          dataIndex: "nameMaterial",
+          key: "nameMaterial",
+          width: 150,
+        },
+        {
+          title: "Thông số",
+          dataIndex: "frameMaterial",
+          key: "frameMaterial",
+          width: 150,
+        },
+        {
+          title: "Đơn vị đo",
+          dataIndex: "unitMaterial",
+          key: "unitMaterial",
+          width: 150,
+        },
+        {
+          title: "Số lượng",
+          dataIndex: "count",
+          key: "count",
+          width: 150,
+        },
+        {
+          title: "Tên nhóm vật liệu",
+          dataIndex: "nameGroupMaterial",
+          key: "nameGroupMaterial",
+          width: 150,
+        },
+        {
+          title: "Tên công ty",
+          dataIndex: "nameCompany",
+          key: "nameCompany",
+          width: 150,
+        },
+        {
+          title: "Ghi chú",
+          dataIndex: "note",
+          key: "note",
+          width: 150,
+        },
+      ],
+      showModalView: false,
     };
   },
   computed: {},
   created() {
+    this.beforeSearch();
   },
   methods: {
+    showModelView(record) {
+      ViewWorkEmployee.searchMaterialInWork(record.id)
+        .then((response) => {
+          this.dataSourceTableView = response.data.data;
+          this.showModalView = true;
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    handleCancelview() {
+      this.showModalView = false;
+    },
     changeSearch() {
       this.beforeSearch();
     },
@@ -158,80 +309,29 @@ export default {
       this.pagination.current = 1;
       this.search();
     },
+    confirmWork(record) {
+      ViewWorkEmployee.confirmWork(record.id)
+        .then((response) => {
+          let task = response.data.data ? "success" : "error";
+          let text = response.data.data
+            ? "Xác nhận công việc thành công"
+            : "Xác nhận công việc không thành công";
+          let description = response.data.data
+            ? "Xác nhận công việc thành công:  " + record.id
+            : "Xác nhận công việc không thành công: " + record.id;
+          this.notifi(task, text, description);
+          this.beforeSearch();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     search() {
-      ProductionOrderService.searchProductOrder(this.dataSearch)
+      ViewWorkEmployee.searchWorkEmployee(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
           this.dataSearch.total = response.data.total;
           this.pagination.total = response.data.total;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    getContact() {
-      viewDetailContactService
-        .searchContactInAdd()
-        .then((response) => {
-          this.dataContact = response.data.data;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    getContactInForm() {
-      ContactService.searchContact()
-        .then((response) => {
-          this.dataContactInForm = response.data.data;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    getContactEdit() {
-      ContactService.searchContact()
-        .then((response) => {
-          this.dataContactInForm = response.data.data;
-          this.changeContact();
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    disableDateStart(current) {
-      return (
-        current < moment().subtract(1, "days") ||
-        current > moment(this.dateEnd).add(1, "days")
-      );
-    },
-    disableDateEnd(current) {
-      return (
-        current < moment().subtract(1, "days") ||
-        current > moment(this.dateEnd).add(1, "days")
-      );
-    },
-    changeContact() {
-      this.dataProductIncontact = [];
-      this.getProductInContact(this.dataSubmit.idContact);
-
-      this.disableProduct = false;
-      this.disabledDate = false;
-      for (let i = 0; i < this.dataContactInForm.length; i++) {
-        if (this.dataContactInForm[i].idContact == this.dataSubmit.idContact) {
-          this.dateStart = this.dataContactInForm[i].dateCreate;
-          this.dateEnd = this.dataContactInForm[i].dateFinish;
-          break;
-        }
-      }
-      console.log("data date start", this.dateStart);
-      console.log("data date end", this.dateEnd);
-      this.disableDateStart();
-      this.disableDateEnd();
-    },
-    getProductInContact(id) {
-      ProductService.getProductInContact(id)
-        .then((response) => {
-          this.dataProductIncontact = response.data.data;
         })
         .catch((e) => {
           console.log(e);

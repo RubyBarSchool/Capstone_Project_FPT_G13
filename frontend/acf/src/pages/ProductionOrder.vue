@@ -50,10 +50,10 @@
             style="width: 10%"
           >
             <a-select-option key=""> Tất Cả </a-select-option>
+            <a-select-option key="-2"> Chờ duyệt </a-select-option>
             <a-select-option key="-1"> Đang chờ xác nhận </a-select-option>
             <a-select-option key="0"> Đang làm </a-select-option>
-            <a-select-option key="1"> Chờ duyệt </a-select-option>
-                        <a-select-option key="2"> Hoàn thành </a-select-option>
+            <a-select-option key="1"> Hoàn thành </a-select-option>
           </a-select>
           <a-button
             type="primary"
@@ -91,8 +91,26 @@
               @change="handleTableChange"
             >
               <template slot="status" slot-scope="text, record">
-                <a-tag :color="record.status == '1' ? 'green' : (record.status == '0' ?  'orange':  'red')">
-                  {{ record.status == '1' ? 'Đã hoàn thành' : (record.status == '0' ?  'Đang làm':  'Đang chờ xác nhận') }}
+                <a-tag
+                  :color="
+                    record.status == '-2'
+                      ? '#108ee9'
+                      : record.status == '-1'
+                      ? '#f50'
+                      : record.status == '0'
+                      ? '#2db7f5'
+                      : '#87d068'
+                  "
+                >
+                  {{
+                    record.status == "-2"
+                      ? "Đang chờ duyệt"
+                      : record.status == "-1"
+                      ? "Đang chờ xác nhận"
+                      : record.status == "0"
+                      ? "Đang làm"
+                      : "Hoàn thành"
+                  }}
                 </a-tag>
               </template>
 
@@ -701,7 +719,7 @@ export default {
       this.disabledDate = true;
       this.disableSaveEdit = true;
     },
-    deleteProductionOrder(record){
+    deleteProductionOrder(record) {
       ProductionOrderService.deleteProductOrder(record.id)
         .then(() => {
           this.beforeSearch();
@@ -811,8 +829,8 @@ export default {
           break;
         }
       }
-      console.log("data date start",this.dateStart);
-      console.log("data date end",this.dateEnd);
+      console.log("data date start", this.dateStart);
+      console.log("data date end", this.dateEnd);
       this.disableDateStart();
       this.disableDateEnd();
     },

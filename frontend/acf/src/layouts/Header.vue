@@ -171,6 +171,10 @@ export default {
           path: "/xinnghi",
           name: "Đơn xin nghỉ",
         },
+        {
+          path: "/viewwork",
+          name: "Xem công việc",
+        },
       ],
     };
   },

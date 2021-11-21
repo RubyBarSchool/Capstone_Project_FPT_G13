@@ -233,6 +233,13 @@ export const router = new Router({
             component: () =>
                 import ("./pages/ProductionOrder.vue"),
         },
+        {
+            path: "/viewwork",
+            name: "ViewWorkEmployee",
+            // lazy-loaded
+            component: () =>
+                import ("./pages/ViewWorkEmployee.vue"),
+        },
     ],
 });
 
