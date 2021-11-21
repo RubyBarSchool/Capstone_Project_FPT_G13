@@ -52,7 +52,8 @@
             <a-select-option key=""> Tất Cả </a-select-option>
             <a-select-option key="-1"> Đang chờ xác nhận </a-select-option>
             <a-select-option key="0"> Đang làm </a-select-option>
-            <a-select-option key="1"> Hoàn thành </a-select-option>
+            <a-select-option key="1"> Chờ duyệt </a-select-option>
+                        <a-select-option key="2"> Hoàn thành </a-select-option>
           </a-select>
           <a-button
             type="primary"

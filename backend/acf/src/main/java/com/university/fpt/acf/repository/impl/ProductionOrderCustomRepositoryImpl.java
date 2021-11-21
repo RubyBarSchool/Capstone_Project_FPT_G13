@@ -3,11 +3,9 @@ package com.university.fpt.acf.repository.impl;
 import com.university.fpt.acf.common.repository.CommonRepository;
 import com.university.fpt.acf.form.DateWorkEmployeeFrom;
 import com.university.fpt.acf.form.SearchProductionOrderForm;
+import com.university.fpt.acf.form.SearchWorkEmployeeForm;
 import com.university.fpt.acf.repository.ProductionOrderCustomRepository;
-import com.university.fpt.acf.vo.AttendanceVO;
-import com.university.fpt.acf.vo.GetCreateContactVO;
-import com.university.fpt.acf.vo.ProductionOrderViewWorkVO;
-import com.university.fpt.acf.vo.SearchProductionOrderVO;
+import com.university.fpt.acf.vo.*;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
@@ -113,5 +111,59 @@ public class ProductionOrderCustomRepositoryImpl extends CommonRepository implem
         sql.append(" ORDER by po.id desc ");
         TypedQuery<Long> query = super.createQuery(sql.toString(),params, Long.class);
         return query.getSingleResult().intValue();
+    }
+
+    @Override
+    public List<ViewWorkVO> searchProductOrderEmployee(SearchWorkEmployeeForm searchWorkEmployeeForm, String username) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append("select new com.university.fpt.acf.vo.ViewWorkVO" +
+                "(po.id,po.name,p.name,CONCAT(p.length,'x',p.width,'x',p.height),p.count,po.numberFinish,po.dateStart,po.dateEnd,po.status) from Account a " +
+                "inner join a.employee e inner join e.productionOrders po inner join po.products p " +
+                "where a.username = :username");
+        params.put("username",username);
+        if(searchWorkEmployeeForm.getStatus() != null){
+            sql.append(" and po.status = :status ");
+            params.put("status",searchWorkEmployeeForm.getStatus());
+        }
+        sql.append(" ORDER by po.status asc ");
+        TypedQuery<ViewWorkVO> query = super.createQuery(sql.toString(),params, ViewWorkVO.class);
+        query.setFirstResult((searchWorkEmployeeForm.getPageIndex()-1)* searchWorkEmployeeForm.getPageSize());
+        query.setMaxResults(searchWorkEmployeeForm.getPageSize());
+        return query.getResultList();
+    }
+
+    @Override
+    public int totalSearchProductOrderEmployee(SearchWorkEmployeeForm searchWorkEmployeeForm, String username) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append("select COUNT(*) from Account a " +
+                "inner join a.employee e inner join e.productionOrders po inner join po.products p " +
+                "where a.username = :username");
+        params.put("username",username);
+        if(searchWorkEmployeeForm.getStatus() != null){
+            sql.append(" and po.status = :status ");
+            params.put("status",searchWorkEmployeeForm.getStatus());
+        }
+        sql.append(" ORDER by po.status asc ");
+        TypedQuery<Long> query = super.createQuery(sql.toString(),params, Long.class);
+        return query.getSingleResult().intValue();
+    }
+
+    @Override
+    public List<ViewWorkDetailVO> searchProductOrderDetailEmployee(String username,Long idProducttionOrder) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append("select new com.university.fpt.acf.vo.ViewWorkDetailVO" +
+                "(pm.id,m.name,CONCAT(fm.frameLength,'x',fm.frameWidth,'x',hm.frameHeight),gm.name, prm.count, um.name,c.name, prm.note) " +
+                " from  Account a inner join  a.employee e inner  join e.productionOrders po inner join po.products p inner join  p.productMaterials prm  " +
+                " inner  join  prm.priceMaterial pm inner  join  pm.material m inner join pm.frameMaterial fm " +
+                " inner  join  pm.heightMaterial hm inner  join m.groupMaterial gm inner join pm.unitMeasure um " +
+                " inner join m.company c where po.id = :idProductionOrder and a.username = :username ");
+        params.put("username",username);
+        params.put("idProductionOrder",idProducttionOrder);
+        sql.append(" ORDER by m.id asc ");
+        TypedQuery<ViewWorkDetailVO> query = super.createQuery(sql.toString(),params, ViewWorkDetailVO.class);
+        return query.getResultList();
     }
 }

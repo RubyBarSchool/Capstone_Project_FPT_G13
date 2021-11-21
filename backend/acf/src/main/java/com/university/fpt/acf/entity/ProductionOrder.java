@@ -21,7 +21,7 @@ public class ProductionOrder extends EntityCommon {
 
     private LocalDate dateEnd;
 
-    private String status = "-1";
+    private Integer status = -1;
 
      private String numberFinish;
 

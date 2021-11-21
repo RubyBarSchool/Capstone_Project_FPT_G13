@@ -8,18 +8,15 @@ import com.university.fpt.acf.entity.ProductionOrder;
 import com.university.fpt.acf.form.AddProductionOrderFrom;
 import com.university.fpt.acf.form.DateWorkEmployeeFrom;
 import com.university.fpt.acf.form.SearchProductionOrderForm;
+import com.university.fpt.acf.form.SearchWorkEmployeeForm;
 import com.university.fpt.acf.repository.ProductRepository;
 import com.university.fpt.acf.repository.ProductionOrderCustomRepository;
 import com.university.fpt.acf.repository.ProductionOrderRepository;
 import com.university.fpt.acf.service.ProductionOrderService;
-import com.university.fpt.acf.vo.ContactVO;
-import com.university.fpt.acf.vo.ProductionOrderDetailVO;
-import com.university.fpt.acf.vo.ProductionOrderViewWorkVO;
-import com.university.fpt.acf.vo.SearchProductionOrderVO;
+import com.university.fpt.acf.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -126,6 +123,45 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
             throw new RuntimeException(e.getMessage());
         }
         return size;
+    }
+
+    @Override
+    public List<ViewWorkVO> searchProductionOrderEmployee(SearchWorkEmployeeForm searchWorkEmployeeForm) {
+        List<ViewWorkVO> list = new ArrayList<>();
+        try {
+            AccountSercurity accountSercurity = new AccountSercurity();
+            list = productionOrderCustomRepository.searchProductOrderEmployee(searchWorkEmployeeForm,accountSercurity.getUserName());
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return list;
+    }
+
+    @Override
+    public int totalSearchProductionOrderEmployee(SearchWorkEmployeeForm searchWorkEmployeeForm) {
+        if (searchWorkEmployeeForm.getTotal() != null && searchWorkEmployeeForm.getTotal() != 0) {
+            return searchWorkEmployeeForm.getTotal().intValue();
+        }
+        int total = 0;
+        try {
+            AccountSercurity accountSercurity = new AccountSercurity();
+            total = productionOrderCustomRepository.totalSearchProductOrderEmployee(searchWorkEmployeeForm, accountSercurity.getUserName());
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return total;
+    }
+
+    @Override
+    public List<ViewWorkDetailVO> searchProductionOrderDetailEmployee(Long id) {
+        List<ViewWorkDetailVO> list = new ArrayList<>();
+        try {
+            AccountSercurity accountSercurity = new AccountSercurity();
+            list = productionOrderCustomRepository.searchProductOrderDetailEmployee(accountSercurity.getUserName(),id);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return list;
     }
 
     @Override
