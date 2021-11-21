@@ -20,6 +20,6 @@ public class SearchProductionOrderVO {
     private Integer count;
     private LocalDate dateStart;
     private LocalDate dateEnd;
-    private String status;
+    private Integer status;
     private String numberFinish;
 }

@@ -75,4 +75,32 @@ public class ViewWorkEmployeeController {
         }
     }
 
+    @PostMapping("/confirm/{id}")
+    public ResponseEntity<ResponseCommon> confirmWork(@PathVariable("id") Long id) {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        Boolean check = false;
+        Integer total = 1;
+        try {
+            check = productionOrderService.confirmWork(id);
+            message = "Xác nhận công việc thành công";
+            if (!check) {
+                message = "Xác nhận công việc không thành công";
+                total = 0;
+            }
+            responseCommon.setData(check);
+            responseCommon.setTotal(total);
+            responseCommon.setMessage(message);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = "Không thể xác nhận công việc";
+            responseCommon.setData(check);
+            responseCommon.setTotal(0);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
+
 }

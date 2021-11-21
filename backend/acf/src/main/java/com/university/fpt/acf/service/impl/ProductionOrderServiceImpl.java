@@ -222,6 +222,23 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
     }
 
     @Override
+    public Boolean confirmWork(Long id) {
+        Boolean check = false;
+        try {
+            AccountSercurity accountSercurity = new AccountSercurity();
+            ProductionOrder productionOrder = productionOrderRepository.getProductionOrderByID(id);
+            productionOrder.setModified_by(accountSercurity.getUserName());
+            productionOrder.setModified_date(LocalDate.now());
+            productionOrder.setStatus(0);
+            productionOrderRepository.saveAndFlush(productionOrder);
+            check = true;
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return check;
+    }
+
+    @Override
     public Boolean deleteProductionOrder(Long id) {
         Boolean check = false;
         try {

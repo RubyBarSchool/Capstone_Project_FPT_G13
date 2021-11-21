@@ -70,7 +70,7 @@ public class ProductionOrderCustomRepositoryImpl extends CommonRepository implem
             sql.append(" and c.id in :listIdContact ");
             params.put("listIdContact",searchForm.getListIdContact());
         }
-        if(searchForm.getStatus()!=null && !searchForm.getStatus().equals("")){
+        if(searchForm.getStatus()!=null){
             sql.append(" and po.status =: status ");
             params.put("status",searchForm.getStatus());
         }
@@ -79,7 +79,7 @@ public class ProductionOrderCustomRepositoryImpl extends CommonRepository implem
             params.put("dateStart", searchForm.getDateList().get(0));
             params.put("dateEnd", searchForm.getDateList().get(1));
         }
-        sql.append(" ORDER by po.id desc ");
+        sql.append(" ORDER by po.status asc ");
         TypedQuery<SearchProductionOrderVO> query = super.createQuery(sql.toString(),params, SearchProductionOrderVO.class);
         query.setFirstResult((searchForm.getPageIndex()-1)* searchForm.getPageSize());
         query.setMaxResults(searchForm.getPageSize());
@@ -100,7 +100,7 @@ public class ProductionOrderCustomRepositoryImpl extends CommonRepository implem
             params.put("listIdContact",searchForm.getListIdContact());
         }
         if(searchForm.getStatus()!=null){
-            sql.append(" and po.status=:status ");
+            sql.append(" and po.status = :status ");
             params.put("status",searchForm.getStatus());
         }
         if (searchForm.getDateList() != null && !searchForm.getDateList().isEmpty()) {
@@ -108,7 +108,7 @@ public class ProductionOrderCustomRepositoryImpl extends CommonRepository implem
             params.put("dateStart", searchForm.getDateList().get(0));
             params.put("dateEnd", searchForm.getDateList().get(1));
         }
-        sql.append(" ORDER by po.id desc ");
+        sql.append(" ORDER by po.status asc ");
         TypedQuery<Long> query = super.createQuery(sql.toString(),params, Long.class);
         return query.getSingleResult().intValue();
     }

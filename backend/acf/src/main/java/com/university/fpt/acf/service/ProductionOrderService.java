@@ -25,6 +25,7 @@ public interface ProductionOrderService {
 
     Boolean addProductionOrder(AddProductionOrderFrom addProductionOrderFrom);
     Boolean updateProductionOrder(AddProductionOrderFrom addProductionOrderFrom);
+    Boolean confirmWork(Long id);
     Boolean deleteProductionOrder(Long id);
     List<ProductionOrderDetailVO> getDetailProduction(Long idProduction);
 }
