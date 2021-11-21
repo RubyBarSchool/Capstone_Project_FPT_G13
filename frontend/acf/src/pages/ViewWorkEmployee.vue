@@ -77,7 +77,7 @@
                   </a-col>
                 </a-row>
 
-                <a-row v-if="record.status != -1">
+                <a-row v-if="record.status != -1 && record.status != -2">
                   <a-col :span="8">
                     <a-button
                       id="view"
@@ -87,7 +87,8 @@
                       <font-awesome-icon :icon="['fas', 'eye']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="8">
+
+                  <a-col :span="8" v-if="record.status == 0">
                     <a-button
                       id="edit"
                       @click="showEditForm(record)"
@@ -100,7 +101,11 @@
               </template>
             </a-table>
 
-            <a-modal   width="80%" v-model="showModalView" title="Xem vật liệu của sản phẩm">
+            <a-modal
+              width="80%"
+              v-model="showModalView"
+              title="Xem vật liệu của sản phẩm"
+            >
               <template slot="footer">
                 <a-button key="back" @click="handleCancelview"> Đóng </a-button>
               </template>
@@ -108,7 +113,7 @@
                 :columns="columnsView"
                 :data-source="dataSourceTableView"
                 :pagination="false"
-                :scroll="{x: 1500, y: 800 }"
+                :scroll="{ x: 1500, y: 800 }"
                 :rowKey="
                   (record, index) => {
                     return index;
@@ -116,6 +121,28 @@
                 "
               >
               </a-table>
+            </a-modal>
+
+            <a-modal
+              v-model="showModalEdit"
+              title="Xập nhật số lượng sản phẩm đã làm xong"
+            >
+              <template slot="footer">
+                <a-button key="back" @click="handleCancelEdit"> Đóng </a-button>
+                <a-button
+                  key="submit"
+                  type="primary"
+                  @click="editNumberProduct"
+                >
+                  Lưu
+                </a-button>
+              </template>
+              <a-input
+                type="number"
+                v-model="dataEdit.number"
+                :min="0"
+                :max="maxNumber"
+              />
             </a-modal>
           </div>
         </div>
@@ -276,6 +303,13 @@ export default {
         },
       ],
       showModalView: false,
+      showModalEdit: false,
+      dataEdit: {
+        id: "",
+        number: "",
+      },
+      maxNumber: "0",
+      nameProductEdit:""
     };
   },
   computed: {},
@@ -283,6 +317,33 @@ export default {
     this.beforeSearch();
   },
   methods: {
+    showEditForm(record) {
+      this.dataEdit.id = record.id;
+      this.maxNumber = record.countProduct;
+      this.nameProductEdit = record.nameProduct;
+      let number = record.numberFinish.split("/");
+      this.dataEdit.number = number[0];
+      console.log("dataEdit", this.dataEdit);
+      this.showModalEdit = true;
+    },
+    editNumberProduct() {
+        ViewWorkEmployee.updateWorkEmployee(this.dataEdit)
+        .then((response) => {
+          let task = response.data.data ? "success" : "error";
+          let text = response.data.data
+            ? "Chỉnh sửa khối lượng công việc thành công"
+            : "Chỉnh sửa khối lượng công việc không thành công";
+          let description = response.data.data
+            ? "Chỉnh sửa khối lượng công việc thành công:  " + this.nameProductEdit
+            : "Chỉnh sửa khối lượng công việc không thành công: " + this.nameProductEdit;
+          this.notifi(task, text, description);
+          this.showModalEdit = false;
+          this.beforeSearch();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     showModelView(record) {
       ViewWorkEmployee.searchMaterialInWork(record.id)
         .then((response) => {
@@ -295,6 +356,9 @@ export default {
     },
     handleCancelview() {
       this.showModalView = false;
+    },
+    handleCancelEdit() {
+      this.showModalEdit = false;
     },
     changeSearch() {
       this.beforeSearch();

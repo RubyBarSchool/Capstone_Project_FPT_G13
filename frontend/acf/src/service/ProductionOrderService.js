@@ -19,6 +19,9 @@ class ProductionOrderService {
     deleteProductOrder(id) {
         return http.delete(`/admin/productionorder/${id}`);
     }
+    confirmProductionOrder(id) {
+        return http.post(`/admin/productionorder/confirm/${id}`);
+    }
 }
 
 export default new ProductionOrderService();

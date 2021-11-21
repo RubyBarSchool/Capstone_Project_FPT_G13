@@ -1,9 +1,6 @@
 package com.university.fpt.acf.service;
 
-import com.university.fpt.acf.form.AddProductionOrderFrom;
-import com.university.fpt.acf.form.DateWorkEmployeeFrom;
-import com.university.fpt.acf.form.SearchProductionOrderForm;
-import com.university.fpt.acf.form.SearchWorkEmployeeForm;
+import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.vo.ProductionOrderDetailVO;
 import com.university.fpt.acf.vo.SearchProductionOrderVO;
 import com.university.fpt.acf.vo.ViewWorkDetailVO;
@@ -26,6 +23,8 @@ public interface ProductionOrderService {
     Boolean addProductionOrder(AddProductionOrderFrom addProductionOrderFrom);
     Boolean updateProductionOrder(AddProductionOrderFrom addProductionOrderFrom);
     Boolean confirmWork(Long id);
+    Boolean confirmWorkDone(Long id);
+    Boolean updateWork(UpdateWorkEmployeeFrom updateWorkEmployeeFrom);
     Boolean deleteProductionOrder(Long id);
     List<ProductionOrderDetailVO> getDetailProduction(Long idProduction);
 }

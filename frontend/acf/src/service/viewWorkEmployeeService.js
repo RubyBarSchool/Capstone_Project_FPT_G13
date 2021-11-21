@@ -10,6 +10,9 @@ class viewWorkEmployeeService {
     confirmWork(id) {
         return http.post(`/employee/viewwork/confirm/${id}`);
     }
+    updateWorkEmployee(form) {
+        return http.put(`/employee/viewwork`, form);
+    }
 }
 
 export default new viewWorkEmployeeService();

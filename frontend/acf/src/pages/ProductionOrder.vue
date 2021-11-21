@@ -115,7 +115,18 @@
               </template>
 
               <template slot="action" slot-scope="text, record">
-                <a-row>
+                <a-row v-if="record.status == -2" >
+                  <a-col :span="8" >
+                    <a-button
+                      id="view"
+                      @click="confirm(record)"
+                      :style="{ width: '44.25px', 'margin-right': '100px' }"
+                    >
+                      <font-awesome-icon :icon="['fas', 'check-circle']" />
+                    </a-button>
+                  </a-col>
+                </a-row>
+                <a-row v-if="record.status != -2">
                   <a-col :span="8">
                     <a-button
                       id="view"
@@ -125,7 +136,7 @@
                       <font-awesome-icon :icon="['fas', 'eye']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="8">
+                  <a-col :span="8" v-if="record.status == -1">
                     <a-button
                       id="edit"
                       @click="showEditForm(record)"
@@ -134,7 +145,7 @@
                       <font-awesome-icon :icon="['fas', 'edit']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="8">
+                  <a-col :span="8" v-if="record.status == -1">
                     <a-popconfirm
                       v-if="record.status == '-1'"
                       title="Bạn có chắc chắn muốn xóa không?"
@@ -547,6 +558,23 @@ export default {
     this.beforeSearch();
   },
   methods: {
+    confirm(record){
+      ProductionOrderService.confirmProductionOrder(record.id)
+        .then((response) => {
+          let task = response.data.data ? "success" : "error";
+          let text = response.data.data
+            ? "Xác nhận lệnh sản xuất thành công"
+            : "Xác nhận lệnh sản xuất không thành công";
+          let description = response.data.data
+            ? "Xác nhận lệnh sản xuất thành công:  " + record.name
+            : "Xác nhận lệnh sản xuất không thành công: " + record.name;
+          this.notifi(task, text, description);
+          this.beforeSearch();
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     change() {
       this.disableSaveEdit = false;
     },

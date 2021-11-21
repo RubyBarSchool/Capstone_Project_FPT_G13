@@ -5,10 +5,7 @@ import com.university.fpt.acf.config.security.AccountSercurity;
 import com.university.fpt.acf.entity.Employee;
 import com.university.fpt.acf.entity.Product;
 import com.university.fpt.acf.entity.ProductionOrder;
-import com.university.fpt.acf.form.AddProductionOrderFrom;
-import com.university.fpt.acf.form.DateWorkEmployeeFrom;
-import com.university.fpt.acf.form.SearchProductionOrderForm;
-import com.university.fpt.acf.form.SearchWorkEmployeeForm;
+import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.repository.ProductRepository;
 import com.university.fpt.acf.repository.ProductionOrderCustomRepository;
 import com.university.fpt.acf.repository.ProductionOrderRepository;
@@ -230,6 +227,45 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
             productionOrder.setModified_by(accountSercurity.getUserName());
             productionOrder.setModified_date(LocalDate.now());
             productionOrder.setStatus(0);
+            productionOrderRepository.saveAndFlush(productionOrder);
+            check = true;
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return check;
+    }
+
+    @Override
+    public Boolean confirmWorkDone(Long id) {
+        Boolean check = false;
+        try {
+            AccountSercurity accountSercurity = new AccountSercurity();
+            ProductionOrder productionOrder = productionOrderRepository.getProductionOrderByID(id);
+            productionOrder.setModified_by(accountSercurity.getUserName());
+            productionOrder.setModified_date(LocalDate.now());
+            productionOrder.setStatus(1);
+            productionOrderRepository.saveAndFlush(productionOrder);
+            check = true;
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return check;
+    }
+
+    @Override
+    public Boolean updateWork(UpdateWorkEmployeeFrom updateWorkEmployeeFrom) {
+        Boolean check = false;
+        try {
+            AccountSercurity accountSercurity = new AccountSercurity();
+            ProductionOrder productionOrder = productionOrderRepository.getProductionOrderByID(updateWorkEmployeeFrom.getId());
+            productionOrder.setModified_by(accountSercurity.getUserName());
+            productionOrder.setModified_date(LocalDate.now());
+            String[] numberfinish = productionOrder.getNumberFinish().split("/");
+            Integer numberProduct = Integer.parseInt(numberfinish[1]);
+            if(numberProduct.intValue() == updateWorkEmployeeFrom.getNumber().intValue()){
+                productionOrder.setStatus(-2);
+            }
+            productionOrder.setNumberFinish(updateWorkEmployeeFrom.getNumber()+"/"+numberProduct);
             productionOrderRepository.saveAndFlush(productionOrder);
             check = true;
         } catch (Exception e) {
