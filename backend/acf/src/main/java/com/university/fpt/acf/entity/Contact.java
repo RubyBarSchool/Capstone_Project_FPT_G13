@@ -22,7 +22,7 @@ public class Contact extends EntityCommon {
 
     private String numberFinish;
 
-    private Boolean statusDone = false;
+    private Integer statusDone = -2;
 
     @ManyToOne
     @JoinColumn(name = "company_id")

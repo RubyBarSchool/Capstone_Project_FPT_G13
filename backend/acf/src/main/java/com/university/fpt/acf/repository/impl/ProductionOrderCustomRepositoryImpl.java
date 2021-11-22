@@ -21,7 +21,7 @@ public class ProductionOrderCustomRepositoryImpl extends CommonRepository implem
         StringBuilder sqlAcc = new StringBuilder("");
         Map<String, Object> paramsAcc = new HashMap<>();
         sqlAcc.append(" select new com.university.fpt.acf.vo.ProductionOrderViewWorkVO(e.id,e.fullName,po.id,po.name,po.dateStart,po.dateEnd) " +
-                " from ProductionOrder po inner join po.employees e where po.deleted = false and po.status = false  ");
+                " from ProductionOrder po inner join po.employees e where po.deleted = false and po.status in (-1,0)  ");
         if (dateWorkEmployeeFrom.getDateStart() != null) {
             sqlAcc.append(" and po.dateEnd >= :dateStart ");
             paramsAcc.put("dateStart", dateWorkEmployeeFrom.getDateStart());

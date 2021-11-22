@@ -16,5 +16,5 @@ public class SearchContactDetailVO {
     private Integer count;
     private String note;
     private String price;
-    private String status;
+    private Integer status;
 }

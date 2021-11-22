@@ -11,4 +11,6 @@ public interface ProductService {
     Boolean addProductInContact(AddProductForm addProductForm);
     Boolean deleteProductInContact(Long id);
     List<ProductVO> getProductInContact(Long idContact);
+
+    List<ProductVO> getProductInContactAll(Long idContact);
 }

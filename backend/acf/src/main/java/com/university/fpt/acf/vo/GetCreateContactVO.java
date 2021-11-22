@@ -18,6 +18,6 @@ public class GetCreateContactVO {
     private String nameCompany;
     private String totalMoney;
     private String numberFinish;
-    private Boolean statusDone;
+    private Integer statusDone;
     private String note;
 }

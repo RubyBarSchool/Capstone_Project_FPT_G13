@@ -83,34 +83,34 @@
               "
               @change="handleTableChange"
             >
-              <template slot="name" slot-scope="text, record">
-                {{ record.name }}
-              </template>
-              <template slot="createDate" slot-scope="text, record">
-                {{ record.createDate }}
-              </template>
-              <template slot="dateFinish" slot-scope="text, record">
-                {{ record.dateFinish }}
-              </template>
-              <template slot="name" slot-scope="text, record">
-                {{ record.name }}
-              </template>
-              <template slot="totalMoney" slot-scope="text, record">
-                {{ record.totalMoney }}
-              </template>
-              <template slot="numberFinish" slot-scope="text, record">
-                {{ record.numberFinish }}
-              </template>
               <template slot="statusDone" slot-scope="text, record">
-                <a-tag :color="record.statusDone ? 'green' : 'blue'">
-                  {{ record.statusDone ? "Đã bàn giao" : "Chưa bàn giao" }}
+                <a-tag
+                  :color="
+                    record.statusDone == -2
+                      ? '#5DDFDF'
+                      : record.statusDone == -1
+                      ? '#DF5B5B'
+                      : record.statusDone == -0
+                      ? '#DFDF5D'
+                      : '#5D5DDF'
+                  "
+                >
+                  {{
+                    record.statusDone == -2
+                      ? "Mới tạo"
+                      : record.statusDone == -1
+                      ? "Đang thực hiện"
+                      : record.statusDone == -0
+                      ? "Chờ bàn giao"
+                      : "Đã bàn giao"
+                  }}
                 </a-tag>
               </template>
               <template slot="note" slot-scope="text, record">
                 {{ record.note }}
               </template>
-              <template slot="action">
-                <a-button id="delete">
+              <template slot="action" slot-scope="text, record">
+                <a-button id="delete" v-if="record.statusDone == -2" >
                   <font-awesome-icon :icon="['fas', 'trash']" />
                 </a-button>
               </template>
@@ -141,7 +141,7 @@
                   </a-select-option>
                 </a-select>
               </a-form-model-item>
-              <a-form-model-item label="Hạn hoàn">
+              <a-form-model-item label="Hạn hoàn thành">
                 <a-date-picker v-model="dataAdd.time" />
               </a-form-model-item>
               <a-form-model-item label="Tổng giá trị">
@@ -195,50 +195,6 @@ import company from "@/service/companyService.js";
 import contact from "@/service/contactService.js";
 import contactService from "@/service/contactService";
 
-// const columns = [
-//   {
-//     title: "Ngày tạo hợp đồng",
-//     dataIndex: "dateCreate",
-//     key: "dateCreate",
-//     fixed: "left",
-//   },
-//   { title: "Ngày bàn giao", dataIndex: "dateDelivery", key: "dateDelivery" },
-//   { title: "Khách hàng", dataIndex: "customer", key: "customer" },
-//   { title: "Tổng giá trị", dataIndex: "totalValue", key: "totalValue" },
-//   { title: "Định mức hoàn thành", dataIndex: "quota", key: "quota" },
-//   { title: "Trạng thái bàn giao", dataIndex: "status", key: "status" },
-//   { title: "Ghi chú", dataIndex: "note", key: "note" },
-//   {
-//     title: "",
-//     key: "operation",
-//     fixed: "right",
-//     width: 100,
-//     scopedSlots: { customRender: "action" },
-//   },
-// ];
-
-// const data = [
-//   {
-//     key: "1",
-//     dateCreate: "14/11/2021",
-//     dateDelivery: "14/11/2021",
-//     customer: "New York Park",
-//     totalValue: "123456",
-//     quota: "10",
-//     status: "Nháp",
-//     note: "Công khai",
-//   },
-//   {
-//     key: "2",
-//     dateCreate: "14/11/2021",
-//     dateDelivery: "14/11/2021",
-//     customer: "New York Park",
-//     totalValue: "123456",
-//     quota: "10",
-//     status: "Nháp",
-//     note: "Công khai",
-//   },
-// ];
 export default {
   name: "TaoHopDong",
   components: {
@@ -331,7 +287,7 @@ export default {
           width: 150,
         },
         {
-          title: "Trạng thái bàn giao",
+          title: "Trạng thái",
           dataIndex: "statusDone",
           key: "statusDone",
           width: 150,

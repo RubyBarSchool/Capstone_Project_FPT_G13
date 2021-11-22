@@ -68,7 +68,7 @@
               :columns="columns"
               :data-source="dataSourceTable"
               :pagination="pagination"
-              :scroll="{ x: 1500}"
+              :scroll="{ x: 1500 }"
               :rowKey="
                 (record, index) => {
                   return index;
@@ -76,6 +76,29 @@
               "
               @change="handleTableChange"
             >
+              <template slot="status" slot-scope="text, record">
+                <a-tag
+                  :color="
+                    record.status == '-2'
+                      ? '#108ee9'
+                      : record.status == '-1'
+                      ? '#f50'
+                      : record.status == '0'
+                      ? '#2db7f5'
+                      : '#87d068'
+                  "
+                >
+                  {{
+                    record.status == "-2"
+                      ? "Chưa tạo lệnh sản xuất"
+                      : record.status == "-1"
+                      ? "Đã tạo lệnh sản xuất"
+                      : record.status == "0"
+                      ? "Đang làm"
+                      : "Hoàn thành"
+                  }}
+                </a-tag>
+              </template>
               <template slot="action" slot-scope="text, record">
                 <a-row>
                   <a-col :span="8">
@@ -85,7 +108,7 @@
                   </a-col>
                   <a-col :span="8">
                     <a-button
-                      v-if="record.status == 'Chưa làm'"
+                      v-if="record.status == '-2' || record.status == '-1'"
                       id="edit"
                       @click="showModalEdit(record)"
                     >
@@ -97,7 +120,7 @@
                       title="Bạn có chắc chắn muốn xóa không?"
                       @confirm="deleteProduct(record.idProduct)"
                     >
-                      <a-button v-if="record.status == 'Chưa làm'" id="delete">
+                      <a-button v-if="record.status == '-2' || record.status == '-1'" id="delete">
                         <font-awesome-icon :icon="['fas', 'trash']" />
                       </a-button>
                     </a-popconfirm>
@@ -445,6 +468,7 @@ export default {
           dataIndex: "status",
           key: "status",
           width: 150,
+          scopedSlots: { customRender: "status" },
         },
         {
           title: "Hành động",

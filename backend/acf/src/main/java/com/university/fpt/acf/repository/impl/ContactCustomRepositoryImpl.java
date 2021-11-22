@@ -20,7 +20,7 @@ public class ContactCustomRepositoryImpl extends CommonRepository implements Con
     public List<ContactVO> searchContact(ContactInSearchForm contactInSearchForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append(" SELECT new com.university.fpt.acf.vo.ContactVO(c.id,c.name) FROM Contact c where c.deleted = false and c.statusDone = false ");
+        sql.append(" SELECT new com.university.fpt.acf.vo.ContactVO(c.id,c.name) FROM Contact c where c.deleted = false and c.statusDone in (-2,-1,0,1) ");
         if(!contactInSearchForm.getName().isEmpty() && contactInSearchForm.getName()!=null){
             sql.append(" and LOWER(c.name) like :name ");
             params.put("name","%"+contactInSearchForm.getName().toLowerCase()+"%");
@@ -37,7 +37,7 @@ public class ContactCustomRepositoryImpl extends CommonRepository implements Con
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
         sql.append(" SELECT new com.university.fpt.acf.vo.ContactProductionVO(c.id,c.name,c.created_date,c.dateFinish)" +
-                " FROM Contact c where c.deleted = false and c.statusDone = false ");
+                " FROM Contact c where c.deleted = false and c.statusDone in (-2,-1) ");
         sql.append(" ORDER by c.id desc ");
         TypedQuery<ContactProductionVO> query = super.createQuery(sql.toString(),params, ContactProductionVO.class);
         return query.getResultList();
@@ -72,7 +72,7 @@ public class ContactCustomRepositoryImpl extends CommonRepository implements Con
             sql.append(" and LOWER(p.name) like :name ");
             params.put("name","%"+searchContactDetailForm.getNameProduct().toLowerCase()+"%");
         }
-        sql.append(" ORDER by p.id desc ");
+        sql.append(" ORDER by p.status asc ");
         TypedQuery<SearchContactDetailVO> query = super.createQuery(sql.toString(),params, SearchContactDetailVO.class);
         query.setFirstResult((searchContactDetailForm.getPageIndex()-1)* searchContactDetailForm.getPageSize());
         query.setMaxResults(searchContactDetailForm.getPageSize());
@@ -92,7 +92,7 @@ public class ContactCustomRepositoryImpl extends CommonRepository implements Con
             sql.append(" and LOWER(p.name) like :name ");
             params.put("name","%"+searchContactDetailForm.getNameProduct().toLowerCase()+"%");
         }
-        sql.append(" ORDER by c.id desc ");
+        sql.append(" ORDER by p.status asc ");
         TypedQuery<Long> query = super.createQuery(sql.toString(),params, Long.class);
         return query.getSingleResult().intValue();
     }

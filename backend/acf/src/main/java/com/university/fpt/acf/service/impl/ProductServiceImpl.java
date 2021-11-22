@@ -4,6 +4,7 @@ import com.university.fpt.acf.config.security.AccountSercurity;
 import com.university.fpt.acf.entity.*;
 import com.university.fpt.acf.form.AddMaterialInProductForm;
 import com.university.fpt.acf.form.AddProductForm;
+import com.university.fpt.acf.repository.ContactRepository;
 import com.university.fpt.acf.repository.ProductMaterialRepository;
 import com.university.fpt.acf.repository.ProductRepository;
 import com.university.fpt.acf.service.ProductService;
@@ -22,6 +23,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductMaterialRepository productMaterialRepository;
+
+    @Autowired
+    private ContactRepository contactRepository;
 
     @Override
     public Boolean addProductInContact(AddProductForm addProductForm) {
@@ -43,8 +47,16 @@ public class ProductServiceImpl implements ProductService {
             product.setNote(addProductForm.getNoteProduct());
             product.setPrice(addProductForm.getPriceProduct());
             product.setPriceInContact(addProductForm.getPriceProduct());
-            Contact contact = new Contact();
-            contact.setId(addProductForm.getIdContact());
+            Contact contact = contactRepository.getContactByID(addProductForm.getIdContact());
+            if(contact.getStatusDone() == 0 ){
+                contact.setStatusDone(-2);
+            }
+
+            String[] number = contact.getNumberFinish().split("/");
+            Integer numberDone = Integer.parseInt(number[0]);
+            Integer numberTotal = Integer.parseInt(number[1])+1;
+            contact.setNumberFinish(numberDone+"/"+numberTotal);
+            contact = contactRepository.saveAndFlush(contact);
             product.setContact(contact);
             List<ProductMaterial> productMaterials = new ArrayList<>();
             for(AddMaterialInProductForm addMaterialInProductForm : addProductForm.getMaterials()){
@@ -73,8 +85,25 @@ public class ProductServiceImpl implements ProductService {
     public Boolean deleteProductInContact(Long id) {
         boolean check = false;
         try{
-            productMaterialRepository.deleteByIdProduct(id);
-            productRepository.deleteById(id);
+            AccountSercurity accountSercurity = new AccountSercurity();
+            Product product = productRepository.getProductByID(id);
+
+            Contact contact = product.getContact();
+            String[] number = contact.getNumberFinish().split("/");
+            Integer numberDone = Integer.parseInt(number[0]);
+            Integer numberTotal = Integer.parseInt(number[1])-1;
+            if(numberTotal == 0){
+                productMaterialRepository.deleteByIdProduct(product.getId());
+                productRepository.deleteProductInContact(product.getId());
+                contactRepository.deleteContact(contact.getId());
+            }else{
+                contact.setNumberFinish(numberDone+"/"+numberTotal);
+                contact.setModified_by(accountSercurity.getUserName());
+                contact.setModified_date(LocalDate.now());
+                contact = contactRepository.saveAndFlush(contact);
+                productMaterialRepository.deleteByIdProduct(product.getId());
+                productRepository.deleteProductInContact(product.getId());
+            }
             check = true;
         }catch (Exception ex){
             throw new RuntimeException(ex.getMessage());
@@ -88,6 +117,18 @@ public class ProductServiceImpl implements ProductService {
 
         try{
             productVOS = productRepository.getProductInContact(idContact);
+        }catch (Exception ex){
+            throw new RuntimeException(ex.getMessage());
+        }
+        return productVOS;
+    }
+
+    @Override
+    public List<ProductVO> getProductInContactAll(Long idContact) {
+        List<ProductVO> productVOS = new ArrayList<>();
+
+        try{
+            productVOS = productRepository.getProductInContactAll(idContact);
         }catch (Exception ex){
             throw new RuntimeException(ex.getMessage());
         }

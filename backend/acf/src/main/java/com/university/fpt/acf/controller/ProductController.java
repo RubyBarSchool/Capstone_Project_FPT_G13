@@ -104,4 +104,30 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+
+    @GetMapping("/getproductincontactall")
+    public ResponseEntity<ResponseCommon> getProductInContactAll(@RequestParam("idcontact") Long idContact) {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        List<ProductVO> productVOS = new ArrayList<>();
+        try {
+            productVOS = productService.getProductInContactAll(idContact);
+            responseCommon.setData(productVOS);
+            responseCommon.setTotal(productVOS.size());
+            message = "Lấy sản phẩm thành công";
+            if (productVOS.size() == 0) {
+                message = "Không tìm thấy sản phẩm";
+            }
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = "Không thêm được sản phẩm";
+            responseCommon.setData(productVOS);
+            responseCommon.setTotal(productVOS.size());
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
 }

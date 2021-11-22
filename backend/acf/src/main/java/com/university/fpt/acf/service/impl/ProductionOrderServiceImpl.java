@@ -2,16 +2,19 @@ package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.common.entity.ColumnCommon;
 import com.university.fpt.acf.config.security.AccountSercurity;
+import com.university.fpt.acf.entity.Contact;
 import com.university.fpt.acf.entity.Employee;
 import com.university.fpt.acf.entity.Product;
 import com.university.fpt.acf.entity.ProductionOrder;
 import com.university.fpt.acf.form.*;
+import com.university.fpt.acf.repository.ContactRepository;
 import com.university.fpt.acf.repository.ProductRepository;
 import com.university.fpt.acf.repository.ProductionOrderCustomRepository;
 import com.university.fpt.acf.repository.ProductionOrderRepository;
 import com.university.fpt.acf.service.ProductionOrderService;
 import com.university.fpt.acf.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -29,6 +32,9 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private ContactRepository contactRepository;
 
     @Override
     public HashMap<String, Object> viewWorkEmployee(DateWorkEmployeeFrom dateWorkEmployeeFrom) {
@@ -167,11 +173,14 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
         try {
             AccountSercurity accountSercurity = new AccountSercurity();
             ProductionOrder productionOrder = new ProductionOrder();
+            if(addProductionOrderFrom.getId() != null){
+                productionOrder.setId(addProductionOrderFrom.getId());
+            }
             productionOrder.setCreated_by(accountSercurity.getUserName());
             productionOrder.setModified_by(accountSercurity.getUserName());
             productionOrder.setName(addProductionOrderFrom.getName());
             Product product = productRepository.getProductByID(addProductionOrderFrom.getIdProduct());
-            product.setStatus("Đang làm");
+            product.setStatus(-1);
             product = productRepository.saveAndFlush(product);
             productionOrder.setProducts(product);
             productionOrder.setDateStart(addProductionOrderFrom.getDateStart());
@@ -228,6 +237,20 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
             productionOrder.setModified_date(LocalDate.now());
             productionOrder.setStatus(0);
             productionOrderRepository.saveAndFlush(productionOrder);
+
+            Product product = productionOrder.getProducts();
+            product.setModified_by(accountSercurity.getUserName());
+            product.setModified_date(LocalDate.now());
+            product.setStatus(0);
+            productRepository.saveAndFlush(product);
+
+            Contact contact = product.getContact();
+            if(contact.getStatusDone() != -1){
+                contact.setModified_by(accountSercurity.getUserName());
+                contact.setModified_date(LocalDate.now());
+                contact.setStatusDone(-1);
+                contactRepository.saveAndFlush(contact);
+            }
             check = true;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
@@ -244,7 +267,27 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
             productionOrder.setModified_by(accountSercurity.getUserName());
             productionOrder.setModified_date(LocalDate.now());
             productionOrder.setStatus(1);
+
+            // change status product
+            Product product = productionOrder.getProducts();
+            product.setModified_by(accountSercurity.getUserName());
+            product.setModified_date(LocalDate.now());
+            product.setStatus(1);
+
+            Contact contact = product.getContact();
+            String[] number = contact.getNumberFinish().split("/");
+            Integer numberDone = Integer.parseInt(number[0])+1;
+            Integer numberAll = Integer.parseInt(number[1]);
+            if(numberDone==numberAll){
+                contact.setStatusDone(0);
+            }
+            contact.setNumberFinish(numberDone+"/"+numberAll);
+            contact.setModified_by(accountSercurity.getUserName());
+            contact.setModified_date(LocalDate.now());
+
             productionOrderRepository.saveAndFlush(productionOrder);
+            productRepository.saveAndFlush(product);
+            contactRepository.saveAndFlush(contact);
             check = true;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
@@ -278,7 +321,15 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
     public Boolean deleteProductionOrder(Long id) {
         Boolean check = false;
         try {
-            productionOrderRepository.deleteById(id);
+            AccountSercurity accountSercurity = new AccountSercurity();
+            ProductionOrder productionOrder = productionOrderRepository.getProductionOrderByID(id);
+            // change status product
+            Product product = productionOrder.getProducts();
+            product.setModified_by(accountSercurity.getUserName());
+            product.setModified_date(LocalDate.now());
+            product.setStatus(-2);
+            productRepository.saveAndFlush(product);
+            productionOrderRepository.deleteProductionOrderById(productionOrder.getId());
             check = true;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());

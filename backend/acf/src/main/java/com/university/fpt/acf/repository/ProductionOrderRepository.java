@@ -4,10 +4,12 @@ import com.university.fpt.acf.entity.ProductionOrder;
 import com.university.fpt.acf.vo.ProductionOrderDetailVO;
 import com.university.fpt.acf.vo.ViewWorkDetailVO;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
@@ -18,5 +20,10 @@ public interface ProductionOrderRepository extends JpaRepository<ProductionOrder
 
     @Query("select po  from  ProductionOrder po  where po.id = :id")
     ProductionOrder getProductionOrderByID(@Param("id") Long id);
+
+    @Modifying
+    @Transactional
+    @Query("delete from ProductionOrder po where po.id = :id")
+    void deleteProductionOrderById(@Param("id") Long id);
 
 }

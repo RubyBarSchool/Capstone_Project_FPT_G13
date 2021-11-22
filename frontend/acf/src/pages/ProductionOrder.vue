@@ -115,8 +115,8 @@
               </template>
 
               <template slot="action" slot-scope="text, record">
-                <a-row v-if="record.status == -2" >
-                  <a-col :span="8" >
+                <a-row v-if="record.status == -2">
+                  <a-col :span="8">
                     <a-button
                       id="view"
                       @click="confirm(record)"
@@ -471,6 +471,12 @@ export default {
           width: 150,
         },
         {
+          title: "Mã Sản phẩm",
+          dataIndex: "idProduct",
+          key: "idProduct",
+          width: 150,
+        },
+        {
           title: "Sản phẩm",
           dataIndex: "nameProduct",
           key: "nameProduct",
@@ -550,6 +556,12 @@ export default {
       showModalView: false,
       showModalEdit: false,
       disableSaveEdit: true,
+      dataSearchContact: {
+        name: "",
+        pageIndex: 1,
+        pageSize: 10,
+        total: 0,
+      },
     };
   },
   computed: {},
@@ -558,7 +570,7 @@ export default {
     this.beforeSearch();
   },
   methods: {
-    confirm(record){
+    confirm(record) {
       ProductionOrderService.confirmProductionOrder(record.id)
         .then((response) => {
           let task = response.data.data ? "success" : "error";
@@ -704,6 +716,7 @@ export default {
           let message = "Thêm mới thành công";
           let description = response.data.message;
           this.notifi(type, message, description);
+          this.showModalEdit = false;
         })
         .catch((e) => {
           console.log(e);
@@ -803,9 +816,13 @@ export default {
           console.log(e);
         });
     },
+    changeSelect(value) {
+      this.dataSearchContact.name = value;
+      this.getContact();
+    },
     getContact() {
       viewDetailContactService
-        .searchContactInAdd()
+        .searchContactInSearch(this.dataSearchContact)
         .then((response) => {
           this.dataContact = response.data.data;
         })
@@ -863,7 +880,7 @@ export default {
       this.disableDateEnd();
     },
     getProductInContact(id) {
-      ProductService.getProductInContact(id)
+      ProductService.getProductInContactAll(id)
         .then((response) => {
           this.dataProductIncontact = response.data.data;
         })

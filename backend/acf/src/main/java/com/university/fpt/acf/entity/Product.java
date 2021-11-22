@@ -13,7 +13,7 @@ import java.util.Collection;
 public class Product extends EntityCommon {
     private String name;
 
-    private String status = "Chưa làm";
+    private Integer status = -2;
 
     private Integer count;
 
