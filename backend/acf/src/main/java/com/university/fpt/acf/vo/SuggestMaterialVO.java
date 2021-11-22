@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SuggestMaterialVO {
     private String groupMaterial;
-    private String idMaterial;
-    private String frameMaterial;
-    private String unitOFMaterial;
+    private Long idMaterial;
+    private String nameMaterial;
     private String company;
     private Double percentChoose;
 }

@@ -18,6 +18,7 @@ public class Contact extends EntityCommon {
 
     private String totalMoney;
 
+    @Column(columnDefinition = "TEXT")
     private String note;
 
     private String numberFinish;

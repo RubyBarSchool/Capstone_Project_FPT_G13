@@ -3,6 +3,7 @@ package com.university.fpt.acf.entity;
 import com.university.fpt.acf.common.entity.EntityCommon;
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -15,6 +16,7 @@ public class ProductMaterial extends EntityCommon {
 
     private Integer count;
 
+    @Column(columnDefinition = "TEXT")
     private String note;
 
     private String priceAtCreateContact;

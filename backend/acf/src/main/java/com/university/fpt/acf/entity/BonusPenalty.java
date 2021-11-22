@@ -17,6 +17,7 @@ import java.util.Collection;
 public class BonusPenalty extends EntityCommon {
 
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String reason;
     private String money;
     private Boolean status;

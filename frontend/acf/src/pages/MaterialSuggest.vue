@@ -21,16 +21,17 @@
           <!-- menu trên -->
           <a-input
             placeholder="Số lượng"
+            v-model="dataSearch.count"
             :style="{ width: '150px', 'margin-right': '5px' }"
           />
 
-          <a-select default-value="thang" style="width: 120px">
+          <a-select @change="searchSuggestMaterial()" default-value="thang" v-model="dataSearch.type" style="width: 120px">
             <a-select-option value="thang"> Tháng </a-select-option>
             <a-select-option value="quy"> Quý </a-select-option>
             <a-select-option value="nam"> Năm </a-select-option>
           </a-select>
 
-          <a-button type="primary" :style="{ 'margin-left': '5px' }">
+          <a-button type="primary" @click="searchSuggestMaterial()" :style="{ 'margin-left': '5px' }">
             <font-awesome-icon
               :icon="['fas', 'search']"
               :style="{ 'margin-right': '5px' }"
@@ -50,24 +51,6 @@
                 }
               "
             >
-              <template slot="type" slot-scope="text, record">
-                {{ record.height }}
-              </template>
-              <template slot="code" slot-scope="text, record">
-                {{ record.code }}
-              </template>
-              <template slot="frame" slot-scope="text, record">
-                {{ record.frame }}
-              </template>
-              <template slot="unit" slot-scope="text, record">
-                {{ record.unit }}
-              </template>
-              <template slot="company" slot-scope="text, record">
-                {{ record.company }}
-              </template>
-              <template slot="percent" slot-scope="text, record">
-                {{ record.percent }}
-              </template>
             </a-table>
           </div>
           <!-- table content -->
@@ -92,58 +75,40 @@ export default {
     return {
       dataSourceTable: [],
       dataSearch: {
-        count: "",
-        type: "",
+        count: 10,
+        type: "thang",
       },
       columns: [
-        {
+                {
           title: "STT",
+          dataIndex: "idMaterial",
+          key: "idMaterial",
           width: 100,
-          dataIndex: "id",
-          key: "id",
-          fixed: "left",
-        },
-        {
-          title: "Nhóm tấm phủ",
-          dataIndex: "type",
-          key: "type",
-          width: 150,
-          scopedSlots: { customRender: "type" },
+          fixed:"left"
         },
         {
           title: "Mã tấm phủ",
-          dataIndex: "code",
-          key: "code",
+          dataIndex: "nameMaterial",
+          key: "nameMaterial",
           width: 150,
-          scopedSlots: { customRender: "code" },
         },
         {
-          title: "Khung",
-          dataIndex: "frame",
-          key: "frame",
+          title: "Nhóm tấm phủ",
+          dataIndex: "groupMaterial",
+          key: "groupMaterial",
           width: 150,
-          scopedSlots: { customRender: "frame" },
-        },
-        {
-          title: "Đơn vị đo",
-          dataIndex: "unit",
-          key: "unit",
-          width: 150,
-          scopedSlots: { customRender: "unit" },
         },
         {
           title: "Công ty",
           dataIndex: "company",
           key: "company",
           width: 150,
-          scopedSlots: { customRender: "company" },
         },
         {
           title: "Tỉ lệ lựa chọn",
-          dataIndex: "count",
-          key: "count",
+          dataIndex: "percentChoose",
+          key: "percentChoose",
           width: 150,
-          scopedSlots: { customRender: "count" },
         },
       ],
     };
