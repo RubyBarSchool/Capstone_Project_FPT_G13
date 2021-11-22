@@ -3,6 +3,7 @@ package com.university.fpt.acf.controller;
 import com.university.fpt.acf.common.entity.ResponseCommon;
 import com.university.fpt.acf.form.BonusPunishForm;
 import com.university.fpt.acf.form.SearchBonusAdminForm;
+import com.university.fpt.acf.form.SearchBonusAndPunishForm;
 import com.university.fpt.acf.service.BonusService;
 import com.university.fpt.acf.service.PunishService;
 import com.university.fpt.acf.service.SalaryService;
@@ -119,14 +120,14 @@ public class SalaryEmployeeController {
 
 
     @PostMapping("/bonusandpunish")
-    public ResponseEntity<ResponseCommon> getBonusAndPunish(@Valid @RequestBody SearchBonusAdminForm searchForm) {
+    public ResponseEntity<ResponseCommon> getBonusAndPunish(@Valid @RequestBody SearchBonusAndPunishForm searchBonusAndPunishForm) {
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
         int total = 0;
         List<SearchBonusAndPunishVO> list = new ArrayList<>();
         try {
-            list = bonusService.searchBonusAndPunish(searchForm);
-            total = bonusService.totalSearchBonusAndPunish(searchForm);
+            list = bonusService.searchBonusAndPunish(searchBonusAndPunishForm);
+            total = bonusService.totalSearchBonusAndPunish(searchBonusAndPunishForm);
             responseCommon.setData(list);
             message = "Thành công!";
             if (total == 0) {

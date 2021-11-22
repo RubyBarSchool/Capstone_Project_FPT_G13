@@ -2,10 +2,7 @@ package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.config.security.AccountSercurity;
 import com.university.fpt.acf.entity.BonusPenalty;
-import com.university.fpt.acf.form.AddBonusAdminForm;
-import com.university.fpt.acf.form.BonusPunishForm;
-import com.university.fpt.acf.form.SearchBonusAdminForm;
-import com.university.fpt.acf.form.UpdateBonusForm;
+import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.repository.BonusCustomRepository;
 import com.university.fpt.acf.repository.BonusRepository;
 import com.university.fpt.acf.repository.EmployeeRepository;
@@ -158,10 +155,11 @@ public class BonusServiceImpl implements BonusService {
 //    }
 
     @Override
-    public List<SearchBonusAndPunishVO> searchBonusAndPunish(SearchBonusAdminForm searchBonus) {
+    public List<SearchBonusAndPunishVO> searchBonusAndPunish(SearchBonusAndPunishForm searchBonusAndPunishForm) {
         List<SearchBonusAndPunishVO> list = new ArrayList<>();
         try {
-            list = bonusCustomRepository.searchBonusAndPunish(searchBonus);
+            AccountSercurity accountSercurity = new AccountSercurity();
+            list = bonusCustomRepository.searchBonusAndPunish(accountSercurity.getUserName(),searchBonusAndPunishForm);
         } catch (Exception e) {
             throw new RuntimeException("Error bonus repository " + e.getMessage());
         }
@@ -169,10 +167,11 @@ public class BonusServiceImpl implements BonusService {
     }
 
     @Override
-    public int totalSearchBonusAndPunish(SearchBonusAdminForm searchBonus) {
+    public int totalSearchBonusAndPunish(SearchBonusAndPunishForm searchBonusAndPunishForm) {
         int size;
         try {
-            size = bonusCustomRepository.totalSearchBonusAndPunish(searchBonus);
+            AccountSercurity accountSercurity = new AccountSercurity();
+            size = bonusCustomRepository.totalSearchBonusAndPunish(accountSercurity.getUserName(),searchBonusAndPunishForm);
         } catch (Exception e) {
             throw new RuntimeException("Error bonus  repository " + e.getMessage());
         }

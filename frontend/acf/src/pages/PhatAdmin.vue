@@ -36,7 +36,7 @@
           <a-range-picker
             @change="search"
             v-model="dataSearch.date"
-            :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+            :placeholder="['Ngày hiệu lực', 'Ngày hiệu lực']"
             format="DD/MM/YYYY"
           />
           <a-button
@@ -347,7 +347,7 @@ export default {
           scopedSlots: { customRender: "status" },
         },
         {
-          title: "",
+          title: "Hành động",
           dataIndex: "action",
           key: "action",
           fixed: "right",

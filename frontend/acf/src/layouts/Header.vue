@@ -110,10 +110,6 @@ export default {
           name: "Quản lý đơn thưởng",
         },
         {
-          path: "/viewthuongphat",
-          name: "Xem Thưởng phạt",
-        },
-        {
           path: "/unitadmin",
           name: "Quản lý đơn vị đo",
         },
@@ -170,6 +166,10 @@ export default {
         {
           path: "/xinnghi",
           name: "Đơn xin nghỉ",
+        },
+        {
+          path: "/viewthuongphat",
+          name: "Xem Thưởng phạt",
         },
         {
           path: "/viewwork",

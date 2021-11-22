@@ -18,14 +18,42 @@
             </div>
           </a-back-top>
           <!-- menu trên -->
-          <a-input placeholder="Tiêu đề" style="width: 150px" />
-          <a-select placeholder="Trạng thái" style="width: 150px">
+          <a-input
+            v-model="dataSearch.title"
+            placeholder="Tiêu đề"
+            style="width: 150px"
+          />
+          <a-select
+            v-model="dataSearch.bonus"
+            @change="submitSearch"
+            placeholder="Loại đơn"
+            style="width: 150px"
+          >
+            <a-select-option value=""> Tất cả </a-select-option>
+            <a-select-option value="false"> Phạt </a-select-option>
+            <a-select-option value="true"> Thưởng </a-select-option>
+          </a-select>
+          <a-select
+            v-model="dataSearch.status"
+            @change="submitSearch"
+            placeholder="Trạng thái"
+            style="width: 150px"
+          >
+            <a-select-option value=""> Tất cả </a-select-option>
             <a-select-option value="false"> Chờ duyệt </a-select-option>
             <a-select-option value="true"> Đã duyệt </a-select-option>
           </a-select>
-          <a-date-picker format="YYYY-MM-DD" valueFormat="YYYY-MM-DD">
-          </a-date-picker>
-          <a-button type="primary" :style="{ 'margin-left': '5px' }">
+          <a-range-picker
+            @change="submitSearch"
+            v-model="dataSearch.date"
+            :placeholder="['Ngày hiệu lực', 'Ngày hiệu lực']"
+            format="DD/MM/YYYY"
+          />
+          <a-button
+            @click="submitSearch()"
+            type="primary"
+            :style="{ 'margin-left': '5px' }"
+          >
             <font-awesome-icon
               :icon="['fas', 'search']"
               :style="{ 'margin-right': '5px' }"
@@ -47,15 +75,6 @@
               "
               @change="handleTableChange"
             >
-              <template slot="effectiveDate" slot-scope="text, record">
-                {{ record.effectiveDate }}
-              </template>
-              <template slot="titlee" slot-scope="text, record">
-                {{ record.title }}
-              </template>
-              <template slot="money" slot-scope="text, record">
-                {{ record.money }}
-              </template>
               <template slot="status" slot-scope="text, record">
                 <a-tag :color="record.status ? 'green' : 'orange'">
                   {{ record.status ? "Đã duyệt" : "Chờ duyệt" }}
@@ -69,12 +88,7 @@
               <template slot="action" slot-scope="text, record">
                 <a-button
                   id="view"
-                  @click="checkType(
-                    record.title,
-                    record.reason,
-                    record.money,
-                    record.status,
-                    record.effectiveDate)"
+                  @click="checkType(record)"
                   :style="{ width: '44.25px', 'margin-right': '100px' }"
                 >
                   <font-awesome-icon :icon="['fas', 'eye']" />
@@ -85,9 +99,9 @@
           </div>
 
           <!-- popup view -->
-          <a-modal v-model="visibleView" title="Đơn thưởng">
+          <a-modal v-model="visibleView" :title="titleView">
             <template slot="footer">
-              <a-button key="a" hidden></a-button>
+              <a-button @click="handelCancel">Đóng</a-button>
             </template>
             <a-form-model>
               <a-form-model-item label="Tiêu đề">
@@ -100,35 +114,23 @@
                 <a-input v-model="dataDetail.money" disabled />
               </a-form-model-item>
               <a-form-model-item label="Trạng thái">
-                <a-input v-model="dataDetail.status" disabled />
+                <a-radio-group
+                  name="radioGroup"
+                  disabled
+                  v-model="dataDetail.status"
+                >
+                  <a-radio :value="false"> Chờ duyệt </a-radio>
+                  <a-radio :value="true"> Đã duyệt </a-radio>
+                </a-radio-group>
               </a-form-model-item>
               <a-form-model-item label="Ngày hiệu lực">
-                <a-input v-model="dataDetail.effectiveDate" disabled />
-              </a-form-model-item>
-            </a-form-model>
-          </a-modal>
-          <!-- popup view -->
-
-           <!-- popup view -->
-          <a-modal v-model="visibleView1" title="Đơn phạt">
-            <template slot="footer">
-              <a-button key="a" hidden></a-button>
-            </template>
-            <a-form-model>
-              <a-form-model-item label="Tiêu đề">
-                <a-input v-model="dataDetail.title" disabled />
-              </a-form-model-item>
-              <a-form-model-item label="Lý do">
-                <a-textarea v-model="dataDetail.reason" disabled :row="4" />
-              </a-form-model-item>
-              <a-form-model-item label="Số tiền">
-                <a-input v-model="dataDetail.money" disabled />
-              </a-form-model-item>
-              <a-form-model-item label="Trạng thái">
-                <a-input v-model="dataDetail.status" disabled />
-              </a-form-model-item>
-              <a-form-model-item label="Ngày hiệu lực">
-                <a-input v-model="dataDetail.effectiveDate" disabled />
+                <a-date-picker
+                  v-model="dataDetail.effectiveDate"
+                  format="YYYY-MM-DD"
+                  valueFormat="YYYY-MM-DD"
+                  disabled
+                >
+                </a-date-picker>
               </a-form-model-item>
             </a-form-model>
           </a-modal>
@@ -162,6 +164,7 @@ export default {
         date: [],
         pageIndex: 1,
         pageSize: 10,
+        bonus: "",
         status: "",
         title: "",
         total: 0,
@@ -170,7 +173,7 @@ export default {
         title: "",
         reason: "",
         money: "",
-        status: "",
+        status: false,
         effectiveDate: "",
       },
       dataSourceTable: [],
@@ -183,25 +186,29 @@ export default {
           fixed: "left",
         },
         {
-          title: "Ngày hiệu lực",
-          dataIndex: "effectiveDate",
-          key: "effectiveDate",
-          width: 150,
-          scopedSlots: { customRender: "effectiveDate" },
-        },
-        {
           title: "Tiêu đề",
-          dataIndex: "titlee",
-          key: "titlee",
+          dataIndex: "title",
+          key: "title",
           width: 150,
-          scopedSlots: { customRender: "titlee" },
         },
         {
           title: "Số tiền",
           dataIndex: "money",
           key: "money",
           width: 150,
-          scopedSlots: { customRender: "money" },
+        },
+        {
+          title: "Loại đơn",
+          dataIndex: "bonus",
+          key: "bonus",
+          width: 150,
+          scopedSlots: { customRender: "bonus" },
+        },
+        {
+          title: "Ngày hiệu lực",
+          dataIndex: "effectiveDate",
+          key: "effectiveDate",
+          width: 150,
         },
         {
           title: "Trạng thái",
@@ -211,14 +218,7 @@ export default {
           scopedSlots: { customRender: "status" },
         },
         {
-          title: "Loại",
-          dataIndex: "bonus",
-          key: "bonus",
-          width: 150,
-          scopedSlots: { customRender: "bonus" },
-        },
-        {
-          title: "",
+          title: "Hành động",
           dataIndex: "action",
           key: "action",
           fixed: "right",
@@ -227,7 +227,7 @@ export default {
         },
       ],
       visibleView: false,
-      visibleView1: false,
+      titleView: "",
     };
   },
   created() {
@@ -261,39 +261,23 @@ export default {
           console.log(e);
         });
     },
-    showModelView(title, reason, money, status, effectiveDate){
-      this.dataDetail.title = title;
-      this.dataDetail.reason = reason;
-      this.dataDetail.money = money;
-      if(status == true){
-          this.dataDetail.status = 'Thưởng';
+
+    checkType(record) {
+      if (record.bonus == true) {
+        this.titleView = "Đơn thưởng";
       } else {
-        this.dataDetail.status = 'Phạt';
+        this.titleView = "Đơn phạt";
       }
-      this.dataDetail.effectiveDate = effectiveDate;
+      this.dataDetail.title = record.title;
+      this.dataDetail.reason = record.reason;
+      this.dataDetail.money = record.money;
+      this.dataDetail.status = record.status;
+      this.dataDetail.effectiveDate = record.effectiveDate;
       this.visibleView = true;
     },
-
-    showModelView1(title, reason, money, status, effectiveDate){
-      this.dataDetail.title = title;
-      this.dataDetail.reason = reason;
-      this.dataDetail.money = money;
-      if(status == true){
-          this.dataDetail.status = 'Thưởng';
-      } else {
-        this.dataDetail.status = 'Phạt';
-      }
-      this.dataDetail.effectiveDate = effectiveDate;
-      this.visibleView1 = true;
+    handelCancel() {
+      this.visibleView = false;
     },
-
-    checkType(title, reason, money, status, effectiveDate){
-      if(status == true){
-        this.showModelView(title, reason, money, status, effectiveDate);
-      } else {
-        this.showModelView1(title, reason, money, status, effectiveDate);
-      }
-    }
   },
 };
 </script>

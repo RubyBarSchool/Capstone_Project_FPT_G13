@@ -3,6 +3,7 @@ package com.university.fpt.acf.repository.impl;
 import com.university.fpt.acf.common.repository.CommonRepository;
 import com.university.fpt.acf.form.BonusPunishForm;
 import com.university.fpt.acf.form.SearchBonusAdminForm;
+import com.university.fpt.acf.form.SearchBonusAndPunishForm;
 import com.university.fpt.acf.repository.BonusCustomRepository;
 import com.university.fpt.acf.vo.SearchBonusAdminVO;
 import com.university.fpt.acf.vo.SearchBonusAndPunishVO;
@@ -69,49 +70,59 @@ public class BonusCustomRepositoryImpl extends CommonRepository implements Bonus
     }
 
     @Override
-    public List<SearchBonusAndPunishVO> searchBonusAndPunish(SearchBonusAdminForm searchForm) {
+    public List<SearchBonusAndPunishVO> searchBonusAndPunish(String userName,SearchBonusAndPunishForm searchBonusAndPunishForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select  new com.university.fpt.acf.vo.SearchBonusAndPunishVO(b.id,b.title,b.reason,b.money,b.status,b.effectiveDate,b.bonus) from BonusPenalty b where b.deleted=false");
-
-        if (searchForm.getTitle() != null && !searchForm.getTitle().isEmpty()) {
+        sql.append("select  new com.university.fpt.acf.vo.SearchBonusAndPunishVO(b.id,b.title,b.reason,b.money,b.status,b.effectiveDate,b.bonus) from Account a inner  join  a.employee e inner  join  e.bonusPenalties b where b.deleted=false ");
+        sql.append(" and a.username =: username");
+        params.put("username", userName);
+        if (searchBonusAndPunishForm.getTitle() != null && !searchBonusAndPunishForm.getTitle().isEmpty()) {
             sql.append(" and LOWER(b.title) like :title ");
-            params.put("title", "%" + searchForm.getTitle().toLowerCase() + "%");
+            params.put("title", "%" + searchBonusAndPunishForm.getTitle().toLowerCase() + "%");
         }
-        if (searchForm.getStatus() != null) {
+        if (searchBonusAndPunishForm.getStatus() != null) {
             sql.append(" and b.status = :status ");
-            params.put("status", searchForm.getStatus());
+            params.put("status", searchBonusAndPunishForm.getStatus());
         }
-        if (searchForm.getDate() != null && !searchForm.getDate().isEmpty()) {
+        if (searchBonusAndPunishForm.getBonus() != null) {
+            sql.append(" and b.bonus = :bonus ");
+            params.put("bonus", searchBonusAndPunishForm.getBonus());
+        }
+        if (searchBonusAndPunishForm.getDate() != null && !searchBonusAndPunishForm.getDate().isEmpty()) {
             sql.append(" and  b.effectiveDate BETWEEN :dateStart and :dateEnd ");
-            params.put("dateStart", searchForm.getDate().get(0));
-            params.put("dateEnd", searchForm.getDate().get(1));
+            params.put("dateStart", searchBonusAndPunishForm.getDate().get(0));
+            params.put("dateEnd", searchBonusAndPunishForm.getDate().get(1));
         }
         sql.append(" ORDER by b.id desc ");
         TypedQuery<SearchBonusAndPunishVO> query = super.createQuery(sql.toString(), params, SearchBonusAndPunishVO.class);
-        query.setFirstResult((searchForm.getPageIndex() - 1) * searchForm.getPageSize());
-        query.setMaxResults(searchForm.getPageSize());
+        query.setFirstResult((searchBonusAndPunishForm.getPageIndex() - 1) * searchBonusAndPunishForm.getPageSize());
+        query.setMaxResults(searchBonusAndPunishForm.getPageSize());
         return query.getResultList();
     }
 
     @Override
-    public int totalSearchBonusAndPunish(SearchBonusAdminForm searchForm) {
+    public int totalSearchBonusAndPunish(String userName,SearchBonusAndPunishForm searchBonusAndPunishForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select  COUNT(*) from BonusPenalty b where b.deleted=false");
-
-        if (searchForm.getTitle() != null && !searchForm.getTitle().isEmpty()) {
+        sql.append("select  COUNT(*) from Account a inner  join  a.employee e inner  join  e.bonusPenalties b where b.deleted=false");
+        sql.append(" and a.username =: username");
+        params.put("username", userName);
+        if (searchBonusAndPunishForm.getTitle() != null && !searchBonusAndPunishForm.getTitle().isEmpty()) {
             sql.append(" and LOWER(b.title) like :title ");
-            params.put("title", "%" + searchForm.getTitle().toLowerCase() + "%");
+            params.put("title", "%" + searchBonusAndPunishForm.getTitle().toLowerCase() + "%");
         }
-        if (searchForm.getStatus() != null) {
+        if (searchBonusAndPunishForm.getStatus() != null) {
             sql.append(" and b.status = :status ");
-            params.put("status", searchForm.getStatus());
+            params.put("status", searchBonusAndPunishForm.getStatus());
         }
-        if (searchForm.getDate() != null && !searchForm.getDate().isEmpty()) {
+        if (searchBonusAndPunishForm.getBonus() != null) {
+            sql.append(" and b.bonus = :bonus ");
+            params.put("bonus", searchBonusAndPunishForm.getBonus());
+        }
+        if (searchBonusAndPunishForm.getDate() != null && !searchBonusAndPunishForm.getDate().isEmpty()) {
             sql.append(" and  b.effectiveDate BETWEEN :dateStart and :dateEnd ");
-            params.put("dateStart", searchForm.getDate().get(0));
-            params.put("dateEnd", searchForm.getDate().get(1));
+            params.put("dateStart", searchBonusAndPunishForm.getDate().get(0));
+            params.put("dateEnd", searchBonusAndPunishForm.getDate().get(1));
         }
         sql.append(" ORDER by b.id desc ");
         TypedQuery<Long> query = super.createQuery(sql.toString(), params, Long.class);
