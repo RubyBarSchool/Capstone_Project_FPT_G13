@@ -27,11 +27,11 @@ public class PunishCustomRepositoryImpl extends CommonRepository implements Puni
             params.put("title","%"+searchForm.getTitle().toLowerCase()+"%");
         }
         if(searchForm.getStatus()!=null){
-            sql.append(" and LOWER(b.status) =:status ");
+            sql.append(" and b.status =:status ");
             params.put("status",searchForm.getStatus());
         }
         if (searchForm.getDate() != null && !searchForm.getDate().isEmpty()) {
-            sql.append(" and  b.effective_date BETWEEN :dateStart and :dateEnd ");
+            sql.append(" and  b.effectiveDate BETWEEN :dateStart and :dateEnd ");
             params.put("dateStart", searchForm.getDate().get(0));
             params.put("dateEnd", searchForm.getDate().get(1));
         }
@@ -53,11 +53,11 @@ public class PunishCustomRepositoryImpl extends CommonRepository implements Puni
             params.put("title","%"+searchForm.getTitle().toLowerCase()+"%");
         }
         if(searchForm.getStatus()!=null ){
-            sql.append(" and LOWER(b.status) =:status ");
+            sql.append(" and b.status =:status ");
             params.put("status",searchForm.getStatus());
         }
         if (searchForm.getDate() != null && !searchForm.getDate().isEmpty()) {
-            sql.append(" and  b.effective_date BETWEEN :dateStart and :dateEnd ");
+            sql.append(" and  b.effectiveDate BETWEEN :dateStart and :dateEnd ");
             params.put("dateStart", searchForm.getDate().get(0));
             params.put("dateEnd", searchForm.getDate().get(1));
         }

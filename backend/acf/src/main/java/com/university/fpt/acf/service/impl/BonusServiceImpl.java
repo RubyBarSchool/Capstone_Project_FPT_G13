@@ -223,7 +223,7 @@ public class BonusServiceImpl implements BonusService {
             bonus.setEmployees(employeeRepository.getEmployeeByIdS(addBonus.getListIdEmployee()));
             AccountSercurity accountSercurity = new AccountSercurity();
             bonus.setCreated_by(accountSercurity.getUserName());
-            bonus.setCreated_date(LocalDate.now());
+            bonus.setModified_by(accountSercurity.getUserName());
             bonusRepository.saveAndFlush(bonus);
             check = true;
 
@@ -240,8 +240,8 @@ public class BonusServiceImpl implements BonusService {
             BonusPenalty bonus = bonusRepository.getBonusById(id);
             bonus.setDeleted(true);
             AccountSercurity accountSercurity = new AccountSercurity();
-            bonus.setCreated_by(accountSercurity.getUserName());
-            bonus.setCreated_date(LocalDate.now());
+            bonus.setModified_by(accountSercurity.getUserName());
+            bonus.setModified_date(LocalDate.now());
             bonusRepository.save(bonus);
             check = true;
 
@@ -265,7 +265,7 @@ public class BonusServiceImpl implements BonusService {
             bonus.setEmployees(employeeRepository.getEmployeeByIdS(updateBonus.getListIdEmployee()));
             AccountSercurity accountSercurity = new AccountSercurity();
             bonus.setCreated_by(accountSercurity.getUserName());
-            bonus.setCreated_date(LocalDate.now());
+            bonus.setModified_by(accountSercurity.getUserName());
             bonusRepository.saveAndFlush(bonus);
             check = true;
 

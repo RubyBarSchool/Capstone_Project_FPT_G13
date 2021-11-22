@@ -38,40 +38,6 @@ public class PunishServiceImpl implements PunishService {
         int dem=0;
         try {
             list = punishCustomRepository.searchPunish(searchBonus);
-//            for(int i=dem;i<list.size();i++){
-//                dem++;
-//                List<GetAllEmployeeVO> listId = new ArrayList<>();
-//                ResultSearchBonusAdminVO re = new ResultSearchBonusAdminVO();
-//                re.setId(list.get(i).getId());
-//                re.setMoney(list.get(i).getMoney());
-//                re.setReason(list.get(i).getReason());
-//                re.setTitle(list.get(i).getTitle());
-//                re.setEffectiveDate(list.get(i).getEffectiveDate());
-//                re.setStatus(list.get(i).getStatus());
-//                Long idBonus = list.get(i).getId();
-//                GetAllEmployeeVO em = new GetAllEmployeeVO();
-//                em.setId(list.get(i).getIdEmployee());
-//                em.setName(list.get(i).getNameEmployee());
-//                listId.add(em);
-//                for(int j=i+1;j< list.size();j++){
-//                    if(list.get(j).getId()==idBonus){
-//                        dem=j;
-//                        GetAllEmployeeVO employeeVO = new GetAllEmployeeVO();
-//                        employeeVO.setId(list.get(j).getIdEmployee());
-//                        employeeVO.setName(list.get(j).getNameEmployee());
-//                        listId.add(employeeVO);
-//                    }else {
-//                        break;
-//                    }
-//                }
-//                re.setListIdEmployee(listId);
-//                listResult.add(re);
-//                if(dem<list.size()){
-//                    i=dem;
-//                }else{
-//                    break;
-//                }
-//            }
             ResultSearchBonusAdminVO re = new ResultSearchBonusAdminVO();
             for(int i=0;i< list.size();i++){
                 if(i==0){
@@ -167,7 +133,7 @@ public class PunishServiceImpl implements PunishService {
             punish.setEmployees(employeeRepository.getEmployeeByIdS(addPunish.getListIdEmployee()));
             AccountSercurity accountSercurity = new AccountSercurity();
             punish.setCreated_by(accountSercurity.getUserName());
-            punish.setCreated_date(LocalDate.now());
+            punish.setModified_by(accountSercurity.getUserName());
             punishRepository.saveAndFlush(punish);
             check=true;
 
@@ -184,8 +150,8 @@ public class PunishServiceImpl implements PunishService {
             BonusPenalty bonus = punishRepository.getPunishById(id);
             bonus.setDeleted(true);
             AccountSercurity accountSercurity = new AccountSercurity();
-            bonus.setCreated_by(accountSercurity.getUserName());
-            bonus.setCreated_date(LocalDate.now());
+            bonus.setModified_by(accountSercurity.getUserName());
+            bonus.setModified_date(LocalDate.now());
             punishRepository.save(bonus);
             check=true;
 
@@ -209,7 +175,7 @@ public class PunishServiceImpl implements PunishService {
             bonus.setEmployees(employeeRepository.getEmployeeByIdS(updateForm.getListIdEmployee()));
             AccountSercurity accountSercurity = new AccountSercurity();
             bonus.setCreated_by(accountSercurity.getUserName());
-            bonus.setCreated_date(LocalDate.now());
+            bonus.setModified_by(accountSercurity.getUserName());
             punishRepository.saveAndFlush(bonus);
             check=true;
 

@@ -26,8 +26,10 @@
           <a-select
             placeholder="Trạng thái"
             v-model="dataSearch.status"
+            @change="search"
             style="width: 150px"
           >
+            <a-select-option value=""> All </a-select-option>
             <a-select-option :value="false"> Nháp </a-select-option>
             <a-select-option :value="true"> Công khai </a-select-option>
           </a-select>
@@ -39,7 +41,7 @@
           />
           <a-button
             type="primary"
-            @click="submitSearch"
+            @click="search"
             :style="{ 'margin-left': '5px' }"
           >
             <font-awesome-icon
@@ -66,6 +68,7 @@
               :columns="columns"
               :data-source="dataSourceTable"
               :pagination="pagination"
+              :scroll="{ x: 1500 }"
               :rowKey="
                 (record, index) => {
                   return index;
@@ -73,23 +76,23 @@
               "
               @change="handleTableChange"
             >
-              <template slot="titlee" slot-scope="text, record">
-                {{ record.title }}
-              </template>
-              <template slot="money" slot-scope="text, record">
-                {{ record.money }}
-              </template>
               <template slot="status" slot-scope="text, record">
                 <a-tag :color="record.status ? 'green' : 'blue'">
                   {{ record.status ? "Công khai" : "Nháp" }}
                 </a-tag>
               </template>
-              <template slot="time" slot-scope="text, record">
-                {{ record.effectiveDate }}
+              <template slot="listIdEmployee" slot-scope="text, record">
+                <div
+                  :key="index"
+                  v-for="(data, index) in record.listIdEmployee"
+                >
+                  <!-- <div v-if="index != 0">,</div> -->
+                  <div>{{ data.name }}</div>
+                </div>
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-row>
-                  <a-col :span="9">
+                  <a-col :span="9" v-if="checkEditOrDelete(record)">
                     <a-button
                       id="edit"
                       @click="
@@ -108,7 +111,7 @@
                       <font-awesome-icon :icon="['fas', 'edit']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="9">
+                  <a-col :span="9" v-if="checkEditOrDelete(record)">
                     <a-popconfirm
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
@@ -162,7 +165,7 @@
                 />
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
-                <a-input v-model="dataAdd.money" />
+                <a-input-number v-model="dataAdd.money" :min="100000" />
               </a-form-model-item>
               <a-form-model-item label="Trạng thái">
                 <a-radio-group name="radioGroup" v-model="dataAdd.status">
@@ -173,6 +176,7 @@
               <a-form-model-item label="Ngày hiệu lực">
                 <a-date-picker
                   v-model="dataAdd.effectiveDate"
+                  :disabled-date="disableDateStart"
                   format="DD/MM/YYYY"
                 >
                 </a-date-picker>
@@ -218,7 +222,7 @@
                 />
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
-                <a-input v-model="dataEdit.money" />
+                <a-input-number v-model="dataEdit.money" :min="100000" />
               </a-form-model-item>
               <a-form-model-item label="Trạng thái">
                 <a-radio-group name="radioGroup" v-model="dataEdit.status">
@@ -229,6 +233,7 @@
               <a-form-model-item label="Ngày hiệu lực">
                 <a-date-picker
                   v-model="dataEdit.effectiveDate"
+                  :disabled-date="disableDateStart"
                   format="DD/MM/YYYY"
                   valueFormat="YYYY-MM-DD"
                 >
@@ -247,7 +252,7 @@
 import thuongAdminService from "../service/thuongAdminService";
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
-
+import moment from "moment";
 export default {
   name: "ThuongAdmin",
   components: {
@@ -304,25 +309,35 @@ export default {
           fixed: "left",
         },
         {
-          title: "Ngày hiệu lực",
-          dataIndex: "time",
-          key: "time",
-          width: 150,
-          scopedSlots: { customRender: "time" },
-        },
-        {
           title: "Tiêu đề",
-          dataIndex: "titlee",
-          key: "titlee",
+          dataIndex: "title",
+          key: "title",
           width: 150,
-          scopedSlots: { customRender: "titlee" },
         },
         {
           title: "Số tiền",
           dataIndex: "money",
           key: "money",
           width: 150,
-          scopedSlots: { customRender: "money" },
+        },
+        {
+          title: "Lý do",
+          dataIndex: "reason",
+          key: "reason",
+          width: 150,
+        },
+        {
+          title: "Nhân viên được khen thưởng",
+          dataIndex: "listIdEmployee",
+          key: "listIdEmployee",
+          width: 150,
+          scopedSlots: { customRender: "listIdEmployee" },
+        },
+        {
+          title: "Ngày hiệu lực",
+          dataIndex: "effectiveDate",
+          key: "effectiveDate",
+          width: 150,
         },
         {
           title: "Trạng thái",
@@ -348,6 +363,31 @@ export default {
     this.submitSearch();
   },
   methods: {
+    checkEditOrDelete(record) {
+      let date = record.effectiveDate.split("-")[2];
+      if (parseInt(date) > 10) {
+        let dateNow = moment();
+        let dateLast = moment(record.effectiveDate)
+          .add(1, "months")
+          .set("date", 10);
+        if (dateNow <= dateLast) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        let dateNow1 = moment();
+        let dateLast1 = moment(record.effectiveDate).set("date", 10);
+        if (dateNow1 <= dateLast1) {
+          return true;
+        } else {
+          return false;
+        }
+      }
+    },
+    disableDateStart(current) {
+      return current < moment().subtract(1, "days");
+    },
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;
