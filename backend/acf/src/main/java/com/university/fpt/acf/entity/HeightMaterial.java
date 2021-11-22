@@ -16,7 +16,7 @@ import java.util.Collection;
 public class HeightMaterial extends EntityCommon {
     private String frameHeight;
 
-    @OneToMany(mappedBy = "heightMaterial",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "heightMaterial",cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<PriceMaterial> priceMaterials;

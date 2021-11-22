@@ -25,12 +25,12 @@ public class ProductionOrder extends EntityCommon {
 
      private String numberFinish;
 
-    @ManyToMany(cascade = CascadeType.REMOVE)
+    @ManyToMany()
     @JoinTable(name = "production_oder_employee",
     joinColumns = @JoinColumn(name = "production_oder_id"),inverseJoinColumns = @JoinColumn(name = "employee_id"))
     private Collection<Employee> employees;
 
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne()
     @JoinColumn(name = "product_id")
     private Product products;
 

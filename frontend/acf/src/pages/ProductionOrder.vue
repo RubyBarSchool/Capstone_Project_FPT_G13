@@ -83,6 +83,7 @@
               :columns="columns"
               :data-source="dataSourceTable"
               :pagination="pagination"
+              :scroll="{ x: 1500 }"
               :rowKey="
                 (record, index) => {
                   return index;
@@ -880,7 +881,7 @@ export default {
       this.disableDateEnd();
     },
     getProductInContact(id) {
-      ProductService.getProductInContactAll(id)
+      ProductService.getProductInContact(id)
         .then((response) => {
           this.dataProductIncontact = response.data.data;
         })

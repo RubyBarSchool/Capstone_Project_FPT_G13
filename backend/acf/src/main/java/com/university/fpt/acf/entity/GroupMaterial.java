@@ -17,7 +17,7 @@ public class GroupMaterial extends EntityCommon {
 
     private Boolean checkGroupMaterial = true;
 
-    @OneToMany(mappedBy = "groupMaterial", cascade =  CascadeType.REMOVE)
+    @OneToMany(mappedBy = "groupMaterial", cascade =  CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<Material> materials;

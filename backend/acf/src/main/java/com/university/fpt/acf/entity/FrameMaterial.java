@@ -16,7 +16,7 @@ public class FrameMaterial extends EntityCommon {
     private String frameWidth;
 
 
-    @OneToMany(mappedBy = "frameMaterial",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "frameMaterial",cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<PriceMaterial> priceMaterials;

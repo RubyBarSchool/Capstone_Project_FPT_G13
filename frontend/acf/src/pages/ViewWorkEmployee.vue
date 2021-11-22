@@ -33,6 +33,7 @@
               :columns="columns"
               :data-source="dataSourceTable"
               :pagination="pagination"
+              :scroll="{ x: 1500 }"
               :rowKey="
                 (record, index) => {
                   return index;
@@ -309,7 +310,7 @@ export default {
         number: "",
       },
       maxNumber: "0",
-      nameProductEdit:""
+      nameProductEdit: "",
     };
   },
   computed: {},
@@ -327,15 +328,17 @@ export default {
       this.showModalEdit = true;
     },
     editNumberProduct() {
-        ViewWorkEmployee.updateWorkEmployee(this.dataEdit)
+      ViewWorkEmployee.updateWorkEmployee(this.dataEdit)
         .then((response) => {
           let task = response.data.data ? "success" : "error";
           let text = response.data.data
             ? "Chỉnh sửa khối lượng công việc thành công"
             : "Chỉnh sửa khối lượng công việc không thành công";
           let description = response.data.data
-            ? "Chỉnh sửa khối lượng công việc thành công:  " + this.nameProductEdit
-            : "Chỉnh sửa khối lượng công việc không thành công: " + this.nameProductEdit;
+            ? "Chỉnh sửa khối lượng công việc thành công:  " +
+              this.nameProductEdit
+            : "Chỉnh sửa khối lượng công việc không thành công: " +
+              this.nameProductEdit;
           this.notifi(task, text, description);
           this.showModalEdit = false;
           this.beforeSearch();

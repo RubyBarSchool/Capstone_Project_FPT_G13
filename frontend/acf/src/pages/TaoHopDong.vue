@@ -76,6 +76,7 @@
               :columns="columns"
               :data-source="dataSourceTable"
               :pagination="pagination"
+              :scroll="{ x: 1500 }"
               :rowKey="
                 (record, index) => {
                   return index;
@@ -110,7 +111,7 @@
                 {{ record.note }}
               </template>
               <template slot="action" slot-scope="text, record">
-                <a-button id="delete" v-if="record.statusDone == -2" >
+                <a-button id="delete" v-if="record.statusDone == -2">
                   <font-awesome-icon :icon="['fas', 'trash']" />
                 </a-button>
               </template>

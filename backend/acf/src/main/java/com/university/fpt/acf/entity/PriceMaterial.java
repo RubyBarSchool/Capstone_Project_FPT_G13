@@ -39,7 +39,7 @@ public class PriceMaterial extends EntityCommon {
     @ToString.Exclude
     private HeightMaterial heightMaterial;
 
-    @OneToMany(mappedBy = "priceMaterial",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "priceMaterial",cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<ProductMaterial> productMaterials;

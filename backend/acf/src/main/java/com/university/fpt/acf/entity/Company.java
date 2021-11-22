@@ -20,13 +20,13 @@ public class Company extends EntityCommon {
     private String phone;
     private String email;
 
-    @OneToMany(mappedBy = "company", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "company", cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<Material> materials;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "company",cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "company",cascade = CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<Contact> contacts;

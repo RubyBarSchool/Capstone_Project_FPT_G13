@@ -30,7 +30,7 @@ public class Contact extends EntityCommon {
     @ToString.Exclude
     private Company company;
 
-    @OneToMany(mappedBy = "contact", cascade =  CascadeType.REMOVE)
+    @OneToMany(mappedBy = "contact", cascade =  CascadeType.ALL)
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<Product> products;
