@@ -73,8 +73,8 @@ public class AdvanceSalaryEmployeeServiceImpl implements AdvanceSalaryEmployeeSe
             Employee e = new Employee();
             e.setId(id);
             p.setEmployee(e);
-            p.setCreated_date(LocalDate.now());;
             p.setCreated_by(accountSercurity.getUserName());
+            p.setModified_by(accountSercurity.getUserName());
             advanceSalaryEmployeeRepository.save(p);
             check=true;
 

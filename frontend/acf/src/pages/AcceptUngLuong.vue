@@ -30,15 +30,18 @@
           />
           <a-select
             placeholder="Trạng thái"
+            @change="submitSearch"
             v-model="dataSearch.accept"
             style="width: 150px"
           >
+            <a-select-option value=""> Tất cả </a-select-option>
             <a-select-option value="-1"> Chờ duyệt </a-select-option>
             <a-select-option value="1"> Đã duyệt </a-select-option>
             <a-select-option value="0"> Từ chối </a-select-option>
           </a-select>
           <a-range-picker
             v-model="dataSearch.date"
+            @change="submitSearch"
             :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
             format="DD/MM/YYYY"
           />
@@ -99,20 +102,7 @@
                 </a-tag>
               </template>
               <template slot="action" slot-scope="text, record">
-                <a-button
-                  id="view"
-                  @click="
-                    showModalView(
-                      record.id,
-                      record.nameEmployee,
-                      record.title,
-                      record.advanceSalary,
-                      record.content,
-                      record.comment,
-                      record.dateAccept
-                    )
-                  "
-                >
+                <a-button id="view" @click="showModalView(record)">
                   <font-awesome-icon :icon="['fas', 'eye']" />
                 </a-button>
               </template>
@@ -129,11 +119,13 @@
             <template slot="footer">
               <a-button key="back" @click="handleCancel">Hủy</a-button>
               <a-button
+                v-if="dataDetail.status == -1"
                 type="danger"
                 @click="submitReject(dataDetail.id, dataDetail.comment)"
                 >Loại bỏ</a-button
               >
               <a-button
+                v-if="dataDetail.status == -1"
                 type="primary"
                 @click="submitAccept(dataDetail.id, dataDetail.comment)"
               >
@@ -156,6 +148,7 @@
               <a-form-model-item label="Ghi chú">
                 <a-textarea
                   v-model="dataDetail.comment"
+                  :disabled="dataDetail.status != -1"
                   placeholder="Nhận xét như nào thì viết vào đây"
                   :rows="4"
                 />
@@ -300,22 +293,17 @@ export default {
           console.log(e);
         });
     },
-    showModalView(
-      id,
-      nameEmployee,
-      title,
-      advanceSalary,
-      content,
-      comment,
-      dataAccept
-    ) {
-      this.dataDetail.id = id;
-      this.dataDetail.nameEmployee = nameEmployee;
-      this.dataDetail.title = title;
-      this.dataDetail.advanceSalary = advanceSalary;
-      this.dataDetail.content = content;
-      this.dataDetail.comment = comment;
-      this.dataDetail.dataAccept = dataAccept;
+    showModalView(record) {
+      this.dataDetail.id = record.id;
+      this.dataDetail.nameEmployee = record.nameEmployee;
+      this.dataDetail.title = record.title;
+      this.dataDetail.advanceSalary = record.advanceSalary;
+      this.dataDetail.content = record.content;
+      this.dataDetail.comment = record.comment;
+      this.dataDetail.dataAccept = record.dataAccept;
+      this.dataDetail.date = record.date;
+      this.dataDetail.idEmployee = record.idEmployee;
+      this.dataDetail.status = record.status;
       this.visibleView = true;
     },
     handAccept() {

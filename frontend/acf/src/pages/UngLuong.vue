@@ -25,17 +25,19 @@
           />
           <a-select
             placeholder="Trạng thái"
-            v-model="dataSearch.status"
+            @change="submitSearch"
+            v-model="dataSearch.accept"
             style="width: 150px"
           >
+            <a-select-option value=""> Tất cả </a-select-option>
             <a-select-option value="-1"> Chờ duyệt </a-select-option>
             <a-select-option value="0"> Từ chối </a-select-option>
             <a-select-option value="1"> Đã duyệt </a-select-option>
           </a-select>
           <a-range-picker
             v-model="dataSearch.date"
+            @change="submitSearch"
             :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-            :show-time="{ format: 'DD/MM/YYYY' }"
             format="DD/MM/YYYY"
           />
           <a-button
@@ -110,13 +112,13 @@
                   <a-col :span="8">
                     <a-button
                       id="view"
-                      @click="showModalView(record.id,record.title, record.advanceSalary, record.content)"
+                      @click="showModalView(record)"
                       :style="{ width: '44.25px', 'margin-right': '100px' }"
                     >
                       <font-awesome-icon :icon="['fas', 'eye']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="8">
+                  <a-col :span="8" v-if="record.accept==-1">
                     <a-button
                       id="edit"
                       @click="
@@ -132,7 +134,7 @@
                       <font-awesome-icon :icon="['fas', 'edit']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="8">
+                  <a-col :span="8" v-if="record.accept==-1">
                     <a-popconfirm
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
@@ -164,7 +166,7 @@
                 </div>
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
-                <a-input v-model="dataAdd.advanceSalary" />
+                <a-input-number v-model="dataAdd.advanceSalary" :min="0" />
                 <div style="color: red" v-if="checkInputSalary.show">
                   {{ checkInputSalary.message }}
                 </div>
@@ -197,7 +199,7 @@
                 <a-input v-model="dataEdit.title" />
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
-                <a-input v-model="dataEdit.advanceSalary" />
+                <a-input-number v-model="dataEdit.advanceSalary" :min="0" />
               </a-form-model-item>
               <a-form-model-item label="Nội dung">
                 <a-textarea
@@ -214,26 +216,58 @@
           <a-modal v-model="visibleView" class="view">
             <template slot="footer">
               <a-button key="a" hidden></a-button>
-              <a-button key="submit" type="primary" @click="handleCancel"
-                >Lưu</a-button
-              >
+              <a-button key="submit" @click="handleCancel">Đóng</a-button>
             </template>
             <a-form-model>
               <a-form-model-item label="Tiêu đề">
                 <a-input v-model="dataDetail.title" disabled />
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
-                <a-input
-                  v-model="dataDetail.advanceSalary"
-                  disabled
-                />
+                <a-input v-model="dataDetail.advanceSalary" disabled />
               </a-form-model-item>
               <a-form-model-item label="Nội dung">
-                <a-textarea
-                  v-model="dataDetail.content"
-                  :row="4"
+                <a-textarea v-model="dataDetail.content" :row="4" disabled />
+              </a-form-model-item>
+              <a-form-model-item label="Trạng thái">
+                <a-tag
+                  :color="
+                    dataDetail.accept == '-1'
+                      ? 'orange'
+                      : dataDetail.accept == '0'
+                      ? 'red'
+                      : 'green'
+                  "
+                >
+                  {{
+                    dataDetail.accept == "-1"
+                      ? "Chờ duyệt"
+                      : dataDetail.accept == "0"
+                      ? "Từ chối"
+                      : "Đã duyệt"
+                  }}
+                </a-tag>
+              </a-form-model-item>
+              <a-form-model-item label="Ngày tạo">
+                <a-date-picker
                   disabled
-                />
+                  v-model="dataDetail.dateCreate"
+                  format="DD/MM/YYYY"
+                >
+                </a-date-picker>
+              </a-form-model-item>
+              <a-form-model-item label="Quản lý xác nhận">
+                <a-input v-model="dataDetail.employeeAccept" disabled />
+              </a-form-model-item>
+              <a-form-model-item label="Ngày xác nhận">
+                <a-date-picker
+                  disabled
+                  v-model="dataDetail.dateAccept"
+                  format="DD/MM/YYYY"
+                >
+                </a-date-picker>
+              </a-form-model-item>
+              <a-form-model-item label="Ghi chú của quản lý">
+                <a-textarea v-model="dataDetail.comment" :row="4" disabled />
               </a-form-model-item>
             </a-form-model>
           </a-modal>
@@ -288,6 +322,11 @@ export default {
         title: "",
         content: "",
         advanceSalary: "",
+        accept: "",
+        comment: "",
+        dateAccept: "",
+        dateCreate: "",
+        employeeAccept: "",
       },
       checkInputTitle: {
         show: false,
@@ -480,11 +519,16 @@ export default {
           console.log(e);
         });
     },
-    showModalView(id, title, advanceSalary, content) {
-      this.dataDetail.id = id;
-      this.dataDetail.title = title;
-      this.dataDetail.content = content;
-      this.dataDetail.advanceSalary = advanceSalary;
+    showModalView(record) {
+      this.dataDetail.id = record.id;
+      this.dataDetail.title = record.title;
+      this.dataDetail.content = record.content;
+      this.dataDetail.advanceSalary = record.advanceSalary;
+      this.dataDetail.accept = record.accept;
+      this.dataDetail.comment = record.comment;
+      this.dataDetail.dateAccept = record.dateAccept;
+      this.dataDetail.dateCreate = record.dateCreate;
+      this.dataDetail.employeeAccept = record.employeeAccept;
       this.visibleView = true;
     },
     notifi(type, message, description) {
@@ -501,24 +545,32 @@ export default {
         this.checkInputTitle.show = false;
         this.checkInputTitle.message = "";
       }
-      if(this.dataAdd.advanceSalary == null || this.dataAdd.advanceSalary == "") {
+      if (
+        this.dataAdd.advanceSalary == null ||
+        this.dataAdd.advanceSalary == ""
+      ) {
         this.checkInputSalary.show = true;
         this.checkInputSalary.message = "Bạn phải điền vào chỗ trống";
-      }else {
+      } else {
         this.checkInputSalary.show = false;
         this.checkInputSalary.message = "";
       }
-      if(this.dataAdd.content == null || this.dataAdd.content == "") {
+      if (this.dataAdd.content == null || this.dataAdd.content == "") {
         this.checkInputContent.show = true;
         this.checkInputContent.message = "Bạn phải điền vào chỗ trống";
-      }else{
+      } else {
         this.checkInputContent.show = false;
         this.checkInputContent.message = "";
         this.submitAdd();
       }
-      if(this.dataAdd.content != null && this.dataAdd.content != ""
-      && this.dataAdd.advanceSalary != null && this.dataAdd.advanceSalary != ""
-      && this.dataAdd.content != null && this.dataAdd.content != ""){
+      if (
+        this.dataAdd.content != null &&
+        this.dataAdd.content != "" &&
+        this.dataAdd.advanceSalary != null &&
+        this.dataAdd.advanceSalary != "" &&
+        this.dataAdd.content != null &&
+        this.dataAdd.content != ""
+      ) {
         this.checkInputContent.show = false;
         this.checkInputSalary.show = false;
         this.checkInputTitle.show = false;
