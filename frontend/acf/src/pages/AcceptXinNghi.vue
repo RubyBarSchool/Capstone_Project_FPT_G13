@@ -28,16 +28,22 @@
             style="width: 150px"
             v-model="dataSearch.title"
           />
+          Trạng thái
           <a-select
             placeholder="Trạng thái"
+            @change="submitSearch"
             v-model="dataSearch.status"
             style="width: 150px"
           >
-            <a-select-option value="false"> Chờ duyệt </a-select-option>
-            <a-select-option value="true"> Đã duyệt </a-select-option>
+            <a-select-option value=""> Tất cả </a-select-option>
+            <a-select-option value="-1"> Chờ duyệt </a-select-option>
+            <a-select-option value="1"> Đã duyệt </a-select-option>
+            <a-select-option value="0"> Từ chối </a-select-option>
           </a-select>
+          Ngày tạo
           <a-range-picker
             v-model="dataSearch.date"
+            @change="submitSearch"
             :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
             format="YYYY-MM-DD"
           >
@@ -128,11 +134,11 @@
           <!-- popup view -->
           <a-modal v-model="visibleView" title="Xét đơn xin nghỉ">
             <template slot="footer">
-              <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button type="danger" @click="submitReject()">
+              <a-button key="back" @click="handleCancel"> Đóng </a-button>
+              <a-button v-if="dataDetail.statusAccept == -1" type="danger" @click="submitReject()">
                 Loại bỏ
               </a-button>
-              <a-button type="primary" @click="submitAccept()">
+              <a-button v-if="dataDetail.statusAccept == -1"  type="primary" @click="submitAccept()">
                 Chấp nhận
               </a-button>
             </template>
@@ -174,6 +180,7 @@
                 <a-form-model-item label="Ghi chú">
                   <a-textarea
                     placeholder="Viết ghi chú....."
+                    :disabled="dataDetail.statusAccept != -1"
                     v-model="dataDetail.comment"
                     :rows="4"
                   />

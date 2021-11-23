@@ -20,4 +20,6 @@ public class SearchPersonalApplicationEmployeeVO {
     private String comment;
     private String content;
     private String statusAccept;
+    private Long idEmployeeAccess;
+    private String nameEmployeeAccess;
 }

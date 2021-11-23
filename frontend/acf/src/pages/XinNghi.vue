@@ -23,19 +23,23 @@
             style="width: 150px"
             v-model="dataSearch.title"
           />
+          Trạng thái
           <a-select
             v-model="dataSearch.status"
+            @change="submitSearch"
             style="width: 150px"
             placeholder="Trạng thái"
           >
+            <a-select-option value=""> Tất cả </a-select-option>
             <a-select-option value="-1"> Chờ duyệt </a-select-option>
             <a-select-option value="0"> Hủy bỏ </a-select-option>
             <a-select-option value="1"> Đã duyệt </a-select-option>
           </a-select>
+          Ngày tạo
           <a-range-picker
             v-model="dataSearch.date"
+            @change="submitSearch"
             :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-            :show-time="{ format: 'DD/MM/YYYY' }"
             format="DD/MM/YYYY"
           />
           <a-button
@@ -113,37 +117,24 @@
                   <a-col :span="8">
                     <a-button
                       id="view"
-                      @click="
-                        showModelView(
-                          record.title,
-                          record.dateCreate,
-                          record.content,
-                          record.dateStart,
-                          record.dateEnd
-                        )
-                      "
+                      @click="showModelView(record)"
                       :style="{ width: '44.25px', 'margin-right': '100px' }"
                     >
                       <font-awesome-icon :icon="['fas', 'eye']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="8">
+                  <a-col :span="8" v-if="record.statusAccept==-1">
                     <a-button
                       id="edit"
                       @click="
-                        showModalEdit(
-                          record.idApplication,
-                          record.title,
-                          record.content,
-                          record.date
-                        )
+                        showModalEdit(record)
                       "
                       :style="{ width: '44.25px' }"
                     >
                       <font-awesome-icon :icon="['fas', 'edit']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="8">
+                  <a-col :span="8" v-if="record.statusAccept==-1">
                     <a-popconfirm
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
@@ -213,7 +204,6 @@
                 <a-range-picker
                   v-model="dataEdit.date"
                   :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-                  format="DD/MM/YYYY"
                   :style="{ width: '472px' }"
                 />
               </a-form-model-item>
@@ -231,7 +221,7 @@
           <!-- popup view-->
           <a-modal v-model="visibleView" class="view">
             <template slot="footer">
-              <a-button key="a" hidden></a-button>
+              <a-button key="submit" @click="handleCancel">Đóng</a-button>
             </template>
             <a-form-model>
               <a-form-model-item label="Tiêu đề">
@@ -240,23 +230,21 @@
                   disabled
                 />
               </a-form-model-item>
-              <a-form-model-item label="Ngày tạo">
-                <a-input
-                  v-model="dataPersonalLeaveEmployeeDetail.dateCreate"
-                  disabled
-                />
-              </a-form-model-item>
               <a-form-model-item label="Ngày bắt đầu">
-                <a-input
-                  v-model="dataPersonalLeaveEmployeeDetail.dateStart"
+                <a-date-picker
                   disabled
-                />
+                  v-model="dataPersonalLeaveEmployeeDetail.dateStart"
+                  format="DD/MM/YYYY"
+                >
+                </a-date-picker>
               </a-form-model-item>
               <a-form-model-item label="Ngày kết thúc">
-                <a-input
-                  v-model="dataPersonalLeaveEmployeeDetail.dateEnd"
+                <a-date-picker
                   disabled
-                />
+                  v-model="dataPersonalLeaveEmployeeDetail.dateEnd"
+                  format="DD/MM/YYYY"
+                >
+                </a-date-picker>
               </a-form-model-item>
               <a-form-model-item label="Nội dung">
                 <a-textarea
@@ -264,6 +252,47 @@
                   :row="4"
                   disabled
                 />
+              </a-form-model-item>
+              <a-form-model-item label="Nội dung">
+                <a-tag
+                  :color="
+                    dataPersonalLeaveEmployeeDetail.statusAccept == '-1'
+                      ? 'orange'
+                      : dataPersonalLeaveEmployeeDetail.statusAccept == '0'
+                      ? 'red'
+                      : 'green'
+                  "
+                >
+                  {{
+                    dataPersonalLeaveEmployeeDetail.statusAccept == "-1"
+                      ? "Chờ duyệt"
+                      : dataPersonalLeaveEmployeeDetail.statusAccept == "0"
+                      ? "Hủy bỏ"
+                      : "Đã duyệt"
+                  }}
+                </a-tag>
+              </a-form-model-item>
+              <a-form-model-item label="Ngày tạo">
+                <a-date-picker
+                  disabled
+                  v-model="dataPersonalLeaveEmployeeDetail.dateCreate"
+                  format="DD/MM/YYYY"
+                >
+                </a-date-picker>
+              </a-form-model-item>
+              <a-form-model-item label="Quản lý xác nhận">
+                <a-input v-model="dataPersonalLeaveEmployeeDetail.nameEmployeeAccess" disabled />
+              </a-form-model-item>
+              <a-form-model-item label="Ngày xác nhận">
+                <a-date-picker
+                  disabled
+                  v-model="dataPersonalLeaveEmployeeDetail.dateAccept"
+                  format="DD/MM/YYYY"
+                >
+                </a-date-picker>
+              </a-form-model-item>
+              <a-form-model-item label="Ghi chú của quản lý">
+                <a-textarea v-model="dataPersonalLeaveEmployeeDetail.comment" :row="4" disabled />
               </a-form-model-item>
             </a-form-model>
           </a-modal>
@@ -278,7 +307,7 @@
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 import xinNghiService from "@/service/xinNghiService";
-
+import moment from "moment";
 export default {
   name: "XinNghi",
   components: {
@@ -321,6 +350,12 @@ export default {
         date: [],
         dateStart: "",
         dateEnd: "",
+        comment: "",
+        dateAccept: "",
+        dateCreate: "",
+        statusAccept: "",
+        idEmployeeAccess: "",
+        nameEmployeeAccess: "",
       },
       columns: [
         {
@@ -476,14 +511,21 @@ export default {
       this.visibleEdit = false;
       this.visibleView = false;
     },
-    showModalEdit(idApplication, title, content, date) {
-      this.dataEdit.idApplication = idApplication;
-      this.dataEdit.title = title;
-      this.dataEdit.content = content;
+    showModalEdit(record) {
+      this.dataEdit.idApplication = record.idApplication;
+      this.dataEdit.title = record.title;
+      this.dataEdit.content = record.content;
+      let date = [];
+      date.push(moment(record.dateStart));
+      date.push(moment(record.dateEnd));
       this.dataEdit.date = date;
       this.visibleEdit = true;
     },
     submitUpdate() {
+      let date = [];
+      date.push(moment(this.dataEdit.date[0]).add('1','days'));
+      date.push(moment(this.dataEdit.date[1]).add('1','days'));
+      this.dataEdit.date = date;
       xinNghiService
         .updatePersonalApplication(this.dataEdit)
         .then((response) => {
@@ -529,12 +571,21 @@ export default {
         });
     },
 
-    showModelView(title, dateCreate, content, dateStart, dateEnd) {
-      this.dataPersonalLeaveEmployeeDetail.title = title;
-      this.dataPersonalLeaveEmployeeDetail.dateCreate = dateCreate;
-      this.dataPersonalLeaveEmployeeDetail.content = content;
-      this.dataPersonalLeaveEmployeeDetail.dateStart = dateStart;
-      this.dataPersonalLeaveEmployeeDetail.dateEnd = dateEnd;
+    showModelView(record) {
+      console.log("datarow", record);
+      this.dataPersonalLeaveEmployeeDetail.title = record.title;
+      this.dataPersonalLeaveEmployeeDetail.dateCreate = record.dateCreate;
+      this.dataPersonalLeaveEmployeeDetail.content = record.content;
+      this.dataPersonalLeaveEmployeeDetail.dateStart = record.dateStart;
+      this.dataPersonalLeaveEmployeeDetail.dateEnd = record.dateEnd;
+      this.dataPersonalLeaveEmployeeDetail.id = record.idApplication;
+      this.dataPersonalLeaveEmployeeDetail.comment = record.comment;
+      this.dataPersonalLeaveEmployeeDetail.dateAccept = record.dateAccept;
+      this.dataPersonalLeaveEmployeeDetail.statusAccept = record.statusAccept;
+      this.dataPersonalLeaveEmployeeDetail.idEmployeeAccess =
+        record.idEmployeeAccess;
+      this.dataPersonalLeaveEmployeeDetail.nameEmployeeAccess =
+        record.nameEmployeeAccess;
       this.visibleView = true;
     },
 

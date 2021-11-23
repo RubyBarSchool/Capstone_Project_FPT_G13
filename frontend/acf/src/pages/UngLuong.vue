@@ -215,7 +215,6 @@
           <!-- popup view-->
           <a-modal v-model="visibleView" class="view">
             <template slot="footer">
-              <a-button key="a" hidden></a-button>
               <a-button key="submit" @click="handleCancel">Đóng</a-button>
             </template>
             <a-form-model>
@@ -378,8 +377,8 @@ export default {
         },
         {
           title: "Trạng thái",
-          dataIndex: "status",
-          key: "status",
+          dataIndex: "statusAccept",
+          key: "statusAccept",
           width: 150,
           scopedSlots: { customRender: "status" },
         },
