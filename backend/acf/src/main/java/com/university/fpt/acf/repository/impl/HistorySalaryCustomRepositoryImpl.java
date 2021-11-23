@@ -3,8 +3,7 @@ package com.university.fpt.acf.repository.impl;
 import com.university.fpt.acf.common.repository.CommonRepository;
 import com.university.fpt.acf.form.BonusPunishForm;
 import com.university.fpt.acf.form.SearchSalaryForm;
-import com.university.fpt.acf.repository.SalaryCustomRepository;
-import com.university.fpt.acf.vo.AttendanceVO;
+import com.university.fpt.acf.repository.HistorySalaryCustomRepository;
 import com.university.fpt.acf.vo.SearchSalaryVO;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-public class SalaryCustomRepositoryImpl extends CommonRepository implements SalaryCustomRepository {
+public class HistorySalaryCustomRepositoryImpl extends CommonRepository implements HistorySalaryCustomRepository {
     @Override
     public List<SearchSalaryVO> searchSalary(BonusPunishForm bonusPunishForm) {
         StringBuilder sqlAcc = new StringBuilder("");
@@ -205,7 +204,7 @@ public class SalaryCustomRepositoryImpl extends CommonRepository implements Sala
             paramsAcc.put("dateStart", searchSalaryForm.getDate().get(0));
             paramsAcc.put("dateEnd", searchSalaryForm.getDate().get(1));
         }
-        sqlAcc.append(" ORDER by hs.created_date desc ");
+        sqlAcc.append(" ORDER by hs.created_date asc ");
         TypedQuery<SearchSalaryVO> queryAcc = super.createQuery(sqlAcc.toString(), paramsAcc, SearchSalaryVO.class);
         queryAcc.setFirstResult((searchSalaryForm.getPageIndex() - 1) * searchSalaryForm.getPageSize());
         queryAcc.setMaxResults(searchSalaryForm.getPageSize());

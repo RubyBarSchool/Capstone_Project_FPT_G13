@@ -96,12 +96,11 @@
             </template>
             <template slot="action" slot-scope="text, record">
               <a-popconfirm
-                v-if="dataSourceTable.length"
-                title="Bạn có chắc chắn muốn xóa không?"
+                :disabled="!checkShow(record)"
+                title="Bạn có chắc chắn muốn thanh toán tiền lương không?"
+                @confirm="bill(record.id)"
               >
-                <a-button type="primary" @click="bill(record.id)">
-                  Thanh toán
-                </a-button>
+                <a-button :disabled="!checkShow(record)" type="primary"> Thanh toán </a-button>
               </a-popconfirm>
             </template>
           </a-table>
@@ -118,6 +117,7 @@ import userService from "../service/userService";
 import accecptLuongAdminService from "@/service/accecptLuongAdminService.js";
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
+import moment from "moment";
 export default {
   name: "acceptluongadmin",
   components: {
@@ -225,7 +225,7 @@ export default {
           scopedSlots: { customRender: "status" },
         },
         {
-          title: "",
+          title: "Hành động",
           dataIndex: "action",
           key: "action",
           fixed: "right",
@@ -240,6 +240,13 @@ export default {
     this.getAllPosition();
   },
   methods: {
+    checkShow(record) {
+      let date = moment(record.date).add("1", "months");
+      if (moment() >= date) {
+        return true;
+      }
+      return false;
+    },
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;

@@ -7,7 +7,7 @@ import com.university.fpt.acf.vo.SearchSalaryVO;
 
 import java.util.List;
 
-public interface SalaryCustomRepository {
+public interface HistorySalaryCustomRepository {
     List<SearchSalaryVO> searchSalary(BonusPunishForm bonusPunishForm);
     int getTotalSearchSalary(BonusPunishForm bonusPunishForm);
 

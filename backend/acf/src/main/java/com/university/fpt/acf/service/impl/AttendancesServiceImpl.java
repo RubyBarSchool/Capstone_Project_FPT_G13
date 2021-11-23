@@ -39,6 +39,7 @@ public class AttendancesServiceImpl implements AttendancesService {
     @Autowired
     private AttendancesCustomRepository attendancesCustomRepository;
 
+
     @Override
     public List<AttendanceVO> getAllAttendance(AttendanceFrom attendanceFrom) {
         List<AttendanceVO> attendanceVOS = new ArrayList<>();

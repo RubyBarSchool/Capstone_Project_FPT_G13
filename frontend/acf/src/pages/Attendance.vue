@@ -21,16 +21,6 @@
           <div class="container">
             <div class="row">
               <div class="col">
-                <a-date-picker
-                  v-model="dataGetEmployee.date"
-                  @change="onChangeDate"
-                  format="YYYY-MM-DD"
-                  valueFormat="YYYY-MM-DD"
-                  :open="true"
-                >
-                </a-date-picker>
-              </div>
-              <div class="col">
                 <a-form-model-item label="Attendance type">
                   <a-select v-model="typeAttendance" style="width: 100%">
                     <a-select-option key="1"> Cả ngày </a-select-option>
@@ -43,7 +33,8 @@
                 <a-table
                   :columns="columns"
                   :data-source="dataTable"
-                  :pagination="pagination"
+                  :pagination="false"
+                  :scroll="{ x: 800, y: 800 }"
                   :rowKey="
                     (record, index) => {
                       return record.id;
@@ -160,6 +151,7 @@ export default {
     reset() {
       this.reloadSelect();
       this.typeAttendance = "1";
+      this.disableSave = true;
       this.getDate();
       this.onChangeDate();
     },
@@ -245,6 +237,7 @@ export default {
     },
     onChangeDate() {
       this.reloadSelect();
+      this.dataTable = [];
       attendanceService
         .getEmployee(this.dataGetEmployee)
         .then((response) => {

@@ -13,8 +13,8 @@ class attendanceService {
     updateAttendance(form) {
         return http.put(`/admin/attendances`, form);
     }
-    priviewExcel(form) {
-        return http.post(`/admin/attendances/priview`, form);
+    previewExcel(form) {
+        return http.post(`/admin/attendances/preview`, form);
     }
     downExcel(form) {
         return http.post(`/admin/attendances/down`, form, { responseType: 'blob' });

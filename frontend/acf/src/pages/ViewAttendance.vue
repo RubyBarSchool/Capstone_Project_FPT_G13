@@ -9,7 +9,7 @@
             background: 'white',
           }"
         >
-         <a-back-top>
+          <a-back-top>
             <div class="ant-back-top-inner">
               <font-awesome-icon
                 :icon="['fas', 'angle-double-up']"
@@ -18,50 +18,54 @@
             </div>
           </a-back-top>
           <!-- menu trên -->
-              <a-input
-                v-model="dataSearch.name"
-                placeholder="Tên  nhân viên"
-                style="width: 15%"
-              />
-              <a-range-picker
-                @change="search"
-                v-model="dataSearch.date"
-                :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-                format="DD/MM/YYYY"
-              />
-              <a-select
-                v-model="dataSearch.type"
-                @change="search"
-                style="width: 10%"
-              >
-                <a-select-option key=""> Tất Cả </a-select-option>
-                <a-select-option key="1"> Cả ngày </a-select-option>
-                <a-select-option key="0.5"> Nửa ngày </a-select-option>
-                <a-select-option key="0"> Nghỉ </a-select-option>
-              </a-select>
-              <a-input
-                v-model="dataSearch.note"
-                placeholder="Ghi Chú"
-                style="width: 15%"
-              />
-              <a-button
-                type="primary"
-                @click="search"
-                :style="{ 'margin-left': '5px' }"
-              >
-                <font-awesome-icon
-                  :icon="['fas', 'search']"
-                  :style="{ 'margin-right': '5px' }"
-                />
-                Tìm Kiếm
-              </a-button>
-              <a-button type="primary" @click="showExport" :style="{ 'margin-left': '5px' }">
-                Xuất File
-                <font-awesome-icon
-                  :icon="['fas', 'download']"
-                  :style="{ 'margin-left': '10px' }"
-                />
-              </a-button>
+          <a-input
+            v-model="dataSearch.name"
+            placeholder="Tên  nhân viên"
+            style="width: 15%"
+          />
+          <a-range-picker
+            @change="search"
+            v-model="dataSearch.date"
+            :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+            format="DD/MM/YYYY"
+          />
+          <a-select
+            v-model="dataSearch.type"
+            @change="search"
+            style="width: 10%"
+          >
+            <a-select-option key=""> Tất Cả </a-select-option>
+            <a-select-option key="1"> Cả ngày </a-select-option>
+            <a-select-option key="0.5"> Nửa ngày </a-select-option>
+            <a-select-option key="0"> Nghỉ </a-select-option>
+          </a-select>
+          <a-input
+            v-model="dataSearch.note"
+            placeholder="Ghi Chú"
+            style="width: 15%"
+          />
+          <a-button
+            type="primary"
+            @click="search"
+            :style="{ 'margin-left': '5px' }"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'search']"
+              :style="{ 'margin-right': '5px' }"
+            />
+            Tìm Kiếm
+          </a-button>
+          <a-button
+            type="primary"
+            @click="showExport"
+            :style="{ 'margin-left': '5px' }"
+          >
+            Xuất File
+            <font-awesome-icon
+              :icon="['fas', 'download']"
+              :style="{ 'margin-left': '10px' }"
+            />
+          </a-button>
 
           <!-- table content -->
           <div :style="{ 'padding-top': '10px' }">
@@ -144,7 +148,7 @@
         <a-modal v-model="visibleExport" title="Tùy Chỉnh Xuất">
           <template slot="footer">
             <a-button key="back" @click="handleCancel"> Hủy </a-button>
-            <a-button type="danger" @click="priviewExcel">
+            <a-button type="danger" @click="previewExcel">
               Xem Trước
               <font-awesome-icon
                 :icon="['fas', 'eye']"
@@ -315,17 +319,33 @@ export default {
   },
   computed: {},
   created() {
-    this.search();
+    this.getDate();
   },
   methods: {
+    getDate() {
+      let datex = new Date();
+      let month =
+        (datex.getMonth() + 1 + "").length == 1
+          ? "0" + datex.getMonth() + 1
+          : datex.getMonth() + 1;
+      let date =
+        (datex.getDate() + "").length == 1
+          ? "0" + datex.getDate()
+          : datex.getDate();
+      this.dataSearch.date = [
+        datex.getFullYear() + "-" + month + "-" + date,
+        datex.getFullYear() + "-" + month + "-" + date,
+      ];
+      this.search();
+    },
     handleCancelPriview() {
       this.visiblePriviewExport = false;
     },
-    priviewExcel() {
+    previewExcel() {
       this.dataPriviewExcel = [];
       this.dataExport.dataSearch = this.dataSearch;
       attendanceService
-        .priviewExcel(this.dataExport)
+        .previewExcel(this.dataExport)
         .then((response) => {
           this.dataPriviewExcel = response.data.data;
           this.visiblePriviewExport = true;
@@ -476,5 +496,4 @@ export default {
   background-color: rgb(42, 253, 0);
   color: white;
 }
-
 </style>

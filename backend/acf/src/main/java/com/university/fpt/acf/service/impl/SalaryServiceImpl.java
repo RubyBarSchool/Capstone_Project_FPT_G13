@@ -4,10 +4,9 @@ import com.university.fpt.acf.config.security.AccountSercurity;
 import com.university.fpt.acf.entity.HistorySalary;
 import com.university.fpt.acf.form.BonusPunishForm;
 import com.university.fpt.acf.form.SearchSalaryForm;
-import com.university.fpt.acf.repository.SalaryCustomRepository;
-import com.university.fpt.acf.repository.SalaryRepository;
+import com.university.fpt.acf.repository.HistorySalaryCustomRepository;
+import com.university.fpt.acf.repository.HistorySalaryRepository;
 import com.university.fpt.acf.service.SalaryService;
-import com.university.fpt.acf.vo.AttendanceVO;
 import com.university.fpt.acf.vo.SearchSalaryVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,16 +20,16 @@ import java.util.List;
 public class SalaryServiceImpl implements SalaryService {
 
     @Autowired
-    private SalaryCustomRepository salaryCustomRepository;
+    private HistorySalaryCustomRepository historySalaryCustomRepository;
 
     @Autowired
-    private SalaryRepository salaryRepository;
+    private HistorySalaryRepository historySalaryRepository;
 
     @Override
     public List<SearchSalaryVO> searchSalary(BonusPunishForm bonusPunishForm) {
         List<SearchSalaryVO> searchSalaryVOS = new ArrayList<>();
         try {
-            searchSalaryVOS = salaryCustomRepository.searchSalary(bonusPunishForm);
+            searchSalaryVOS = historySalaryCustomRepository.searchSalary(bonusPunishForm);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -44,7 +43,7 @@ public class SalaryServiceImpl implements SalaryService {
         }
         int total = 0;
         try {
-            total = salaryCustomRepository.getTotalSearchSalary(bonusPunishForm);
+            total = historySalaryCustomRepository.getTotalSearchSalary(bonusPunishForm);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -55,7 +54,7 @@ public class SalaryServiceImpl implements SalaryService {
     public List<SearchSalaryVO> searchSalaryHistory(SearchSalaryForm searchSalaryForm) {
         List<SearchSalaryVO> searchSalaryVOS = new ArrayList<>();
         try {
-            searchSalaryVOS = salaryCustomRepository.searchSalaryHistory(searchSalaryForm);
+            searchSalaryVOS = historySalaryCustomRepository.searchSalaryHistory(searchSalaryForm);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -69,7 +68,7 @@ public class SalaryServiceImpl implements SalaryService {
         }
         int total = 0;
         try {
-            total = salaryCustomRepository.getTotalSearchSalaryHistory(searchSalaryForm);
+            total = historySalaryCustomRepository.getTotalSearchSalaryHistory(searchSalaryForm);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -80,7 +79,7 @@ public class SalaryServiceImpl implements SalaryService {
     public List<SearchSalaryVO> searchSalaryAccept(SearchSalaryForm searchSalaryForm) {
         List<SearchSalaryVO> searchSalaryVOS = new ArrayList<>();
         try {
-            searchSalaryVOS = salaryCustomRepository.searchSalaryAccept(searchSalaryForm);
+            searchSalaryVOS = historySalaryCustomRepository.searchSalaryAccept(searchSalaryForm);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -94,7 +93,7 @@ public class SalaryServiceImpl implements SalaryService {
         }
         int total = 0;
         try {
-            total = salaryCustomRepository.getTotalSearchSalaryAccept(searchSalaryForm);
+            total = historySalaryCustomRepository.getTotalSearchSalaryAccept(searchSalaryForm);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -106,7 +105,7 @@ public class SalaryServiceImpl implements SalaryService {
     public Boolean acceptSalary(Long id) {
         try{
             AccountSercurity accountSercurity = new AccountSercurity();
-            HistorySalary historySalary = salaryRepository.getById(id);
+            HistorySalary historySalary = historySalaryRepository.getById(id);
             if(historySalary != null){
                 historySalary.setStatus(true);
                 historySalary.setModified_by(accountSercurity.getUserName());
@@ -116,7 +115,7 @@ public class SalaryServiceImpl implements SalaryService {
             }else {
                 throw new RuntimeException("id not exit");
             }
-            salaryRepository.save(historySalary);
+            historySalaryRepository.save(historySalary);
             return true;
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
