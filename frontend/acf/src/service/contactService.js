@@ -10,6 +10,12 @@ class contactService {
     searchContact() {
         return http.post(`/admin/contact/getcontact`);
     }
+    updateContact(data) {
+        return http.put(`/admin/contact`, data);
+    }
+    deleteContact(id) {
+        return http.delete(`/admin/contact?id=${id}`);
+    }
 }
 
 export default new contactService();
