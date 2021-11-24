@@ -20,10 +20,10 @@
         <a-select
           placeholder="Chức vụ"
           :filter-option="false"
+          @change="search"
           @search="fetchPosition"
           style="width: 140px"
           v-model="dataSearch.idPosition"
-          show-search
         >
           <a-select-option
             v-for="(position, index) in dataPositions"
@@ -39,10 +39,13 @@
           :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
           format="DD/MM/YYYY"
         />
-        <a-button type="primary" :style="{ 'margin-left': '5px' }">
+        <a-button
+          @click="search"
+          type="primary"
+          :style="{ 'margin-left': '5px' }"
+        >
           <font-awesome-icon
             :icon="['fas', 'search']"
-            @click="submitSearch"
             :style="{ 'margin-right': '5px' }"
           />
           Tìm kiếm

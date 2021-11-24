@@ -71,7 +71,7 @@ public class PunishCustomRepositoryImpl extends CommonRepository implements Puni
         Map<String, Object> params = new HashMap<>();
 
         sql.append("select  new com.university.fpt.acf.vo.SearchBonusAdminVO(b.id,b.title,b.reason,b.money,b.status," +
-                "b.effectiveDate) from Account a inner join a.employee e inner join e.bonusPenalties b  where b.deleted" +
+                "b.effectiveDate,e.id,e.fullName) from Account a inner join a.employee e inner join e.bonusPenalties b  where b.deleted" +
                 " = false and b.status = true and b.bonus = false and a.username = :username");
 
 
