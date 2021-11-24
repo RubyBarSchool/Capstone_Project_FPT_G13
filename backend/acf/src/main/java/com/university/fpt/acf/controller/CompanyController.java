@@ -78,7 +78,7 @@ public class CompanyController {
         Boolean checkUpdate = false;
         try{
             if(updateCompanyForm.getName()==null || updateCompanyForm.getName()==""){
-                message="Tên màu sắc chống";
+                message="Tên công ty trống";
             }else {
                 checkUpdate =companyService.updateCompany(updateCompanyForm);
                 if(checkUpdate==false){

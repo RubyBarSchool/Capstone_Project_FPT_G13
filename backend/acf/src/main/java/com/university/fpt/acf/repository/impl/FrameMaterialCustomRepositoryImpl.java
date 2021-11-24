@@ -23,7 +23,7 @@ public class FrameMaterialCustomRepositoryImpl extends CommonRepository implemen
     public List<SearchFrameMaterialVO> searchFrame(SearchFrameMaterialForm searchForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select new com.university.fpt.acf.vo.SearchFrameMaterialVO(f.id,f.frameLength,f.frameWidth) from FrameMaterial f where 1=1  ");
+        sql.append("select new com.university.fpt.acf.vo.SearchFrameMaterialVO(f.id,f.frameLength,f.frameWidth) from FrameMaterial f where f.deleted = false  ");
         if(searchForm.getLength()!=null && !searchForm.getLength().isEmpty()){
             sql.append(" and LOWER(f.frameLength) like :length ");
             params.put("length", "%"+searchForm.getLength().toLowerCase()+"%");
@@ -43,7 +43,7 @@ public class FrameMaterialCustomRepositoryImpl extends CommonRepository implemen
     public List<FrameMaterialVO> searchAllFrame(SearchAllFrame searchForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select new com.university.fpt.acf.vo.FrameMaterialVO(f.id,concat(f.frameLength,'x',f.frameWidth)) from FrameMaterial f where 1=1  ");
+        sql.append("select new com.university.fpt.acf.vo.FrameMaterialVO(f.id,concat(f.frameLength,'x',f.frameWidth)) from FrameMaterial f where f.deleted = false  ");
         if(searchForm.getFrame()!=null && !searchForm.getFrame().isEmpty()){
             sql.append(" and concat(f.frameLength,'x',f.frameWidth) like :frame ");
             params.put("frame", "%"+searchForm.getFrame().toLowerCase()+"%");
@@ -59,7 +59,7 @@ public class FrameMaterialCustomRepositoryImpl extends CommonRepository implemen
     public int totalSearchFrame(SearchFrameMaterialForm searchForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select COUNT(*) from FrameMaterial f  where 1=1  ");
+        sql.append("select COUNT(*) from FrameMaterial f  where f.deleted = false  ");
         if(searchForm.getLength()!=null && !searchForm.getLength().isEmpty()){
             sql.append(" and f.frameLength=:length ");
             params.put("length", searchForm.getLength().toLowerCase());
@@ -77,7 +77,7 @@ public class FrameMaterialCustomRepositoryImpl extends CommonRepository implemen
     public int totalsearchAllFrame(SearchAllFrame searchForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select COUNT(*) from FrameMaterial f where 1=1  ");
+        sql.append("select COUNT(*) from FrameMaterial f where f.deleted = false  ");
         if(searchForm.getFrame()!=null && !searchForm.getFrame().isEmpty()){
             sql.append(" and concat(f.frameLength,'x',f.frameWidth) like :frame ");
             params.put("frame", "%"+searchForm.getFrame().toLowerCase()+"%");

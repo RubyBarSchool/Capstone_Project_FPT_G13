@@ -93,7 +93,11 @@ public class FrameMaterialServiceImpl implements FrameMaterialService {
             if(frame==null ){
                 throw new Exception("Khung không tồn tại");
             }
-            repository.delete(frame);
+            AccountSercurity accountSercurity = new AccountSercurity();
+            frame.setModified_date(LocalDate.now());
+            frame.setModified_by(accountSercurity.getUserName());
+            frame.setDeleted(true);
+            repository.save(frame);
             check = true;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());

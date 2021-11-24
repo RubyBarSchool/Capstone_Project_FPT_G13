@@ -47,7 +47,11 @@ public class HeightMaterialServiceImpl implements HeightMaterialService {
             if(h==null ){
                 throw new Exception("Chiều cao không tồn tại");
             }
-            heightMaterialRepository.delete(h);
+            AccountSercurity accountSercurity = new AccountSercurity();
+            h.setCreated_date(LocalDate.now());
+            h.setModified_by(accountSercurity.getUserName());
+            h.setDeleted(true);
+            heightMaterialRepository.save(h);
             delete = true;
         }catch (Exception e){
             e.getMessage();
