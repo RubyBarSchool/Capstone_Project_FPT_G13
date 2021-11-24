@@ -3,14 +3,17 @@ package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.config.security.AccountSercurity;
 import com.university.fpt.acf.entity.Employee;
+import com.university.fpt.acf.entity.HistorySalary;
 import com.university.fpt.acf.entity.TimeKeep;
 import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.repository.AttendanceRepository;
 import com.university.fpt.acf.repository.AttendancesCustomRepository;
+import com.university.fpt.acf.repository.HistorySalaryRepository;
 import com.university.fpt.acf.service.AttendancesService;
 import com.university.fpt.acf.vo.AttendanceVO;
 import com.university.fpt.acf.vo.GetAllEmployeeVO;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.batik.gvt.CanvasGraphicsNode;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -38,6 +41,9 @@ public class AttendancesServiceImpl implements AttendancesService {
 
     @Autowired
     private AttendancesCustomRepository attendancesCustomRepository;
+
+    @Autowired
+    private HistorySalaryRepository historySalaryRepository;
 
 
     @Override
@@ -76,6 +82,7 @@ public class AttendancesServiceImpl implements AttendancesService {
                     addAttendanceForm.getAttendance().remove(i);
                 }
             }
+            List<HistorySalary> historySalaryrs = new ArrayList<>();
             for (AttendanceNote addAttendanceForm1 : addAttendanceForm.getAttendance()) {
                 TimeKeep timeKeep = new TimeKeep();
                 timeKeep.setCreated_by(accountSercurity.getUserName());
@@ -83,6 +90,32 @@ public class AttendancesServiceImpl implements AttendancesService {
                 timeKeep.setDate(addAttendanceForm.getDate());
                 timeKeep.setType(addAttendanceForm.getType());
                 timeKeep.setNote(addAttendanceForm1.getNote());
+
+
+                LocalDate date = addAttendanceForm.getDate();
+                HistorySalary historySalary = new HistorySalary();
+                if (date.getDayOfMonth() <= 10) {
+                    date = date.minusMonths(1);
+                    date = LocalDate.of(date.getYear(), date.getMonthValue(), 10);
+                    historySalary = historySalaryRepository.getSalaryByEmployee(addAttendanceForm1.getId(), date);
+
+                } else {
+                    date = LocalDate.of(date.getYear(), date.getMonthValue(), 10);
+                    historySalary = historySalaryRepository.getSalaryByEmployee(addAttendanceForm1.getId(), date);
+                }
+                Double aDouble = historySalary.getCountWork();
+                String total = historySalary.getTotalMoney();
+                Integer salary = Integer.parseInt(historySalary.getSalary());
+                String totalResult = Double.parseDouble(total) + Double.parseDouble(addAttendanceForm.getType()) * salary + "";
+                if(totalResult.length()>2 && (totalResult.indexOf(".") == (totalResult.length() - 2)) && (totalResult.lastIndexOf("0") == (totalResult.length() - 1))){
+                    totalResult = totalResult.substring(0,totalResult.length()-2);
+                }
+                historySalary.setCountWork(aDouble + Double.parseDouble(addAttendanceForm.getType()));
+                historySalary.setTotalMoney(totalResult + "");
+                if (historySalary != null) {
+                    historySalaryrs.add(historySalary);
+                }
+
                 Employee e = new Employee();
                 e.setId(addAttendanceForm1.getId());
                 timeKeep.setEmployee(e);
@@ -90,6 +123,7 @@ public class AttendancesServiceImpl implements AttendancesService {
             }
             if (timeKeeps.size() != 0) {
                 timeKeeps = attendanceRepository.saveAll(timeKeeps);
+                historySalaryRepository.saveAll(historySalaryrs);
             }
         } catch (Exception ex) {
             log.error("error save Attendance");
@@ -104,11 +138,52 @@ public class AttendancesServiceImpl implements AttendancesService {
         AccountSercurity accountSercurity = new AccountSercurity();
         try {
             timeKeep = attendanceRepository.getById(updateAttendanceForm.getId());
+            LocalDate dateCheck = LocalDate.now();
+            if(dateCheck.getDayOfMonth() <= 10){
+                dateCheck = dateCheck.minusMonths(1);
+                dateCheck = LocalDate.of(dateCheck.getYear(),dateCheck.getMonthValue(),10);
+            }else{
+                dateCheck = LocalDate.of(dateCheck.getYear(),dateCheck.getMonthValue(),10);
+            }
+            if(timeKeep.getDate().isBefore(dateCheck)){
+                throw new RuntimeException("Không thể sửa điểm danh của tháng trước");
+            }
+
+            LocalDate date = timeKeep.getDate();
+            HistorySalary historySalary = new HistorySalary();
+            if (date.getDayOfMonth() <= 10) {
+                date = date.minusMonths(1);
+                date = LocalDate.of(date.getYear(), date.getMonthValue(), 10);
+                historySalary = historySalaryRepository.getSalaryByEmployee(timeKeep.getEmployee().getId(), date);
+
+            } else {
+                date = LocalDate.of(date.getYear(), date.getMonthValue(), 10);
+                historySalary = historySalaryRepository.getSalaryByEmployee(timeKeep.getEmployee().getId(), date);
+            }
+            Double aDouble = historySalary.getCountWork();
+            String total = historySalary.getTotalMoney();
+            Integer salary = Integer.parseInt(historySalary.getSalary());
+
+            Double countOld = aDouble - Double.parseDouble(timeKeep.getType());
+
+            Double typeOld = Double.parseDouble(timeKeep.getType());
+
+            Double totalOld = Double.parseDouble(total) - typeOld*salary;
+
+            String totalResult = totalOld + Double.parseDouble(updateAttendanceForm.getType()) * salary + "";
+
+            if(totalResult.length()>2 && (totalResult.indexOf(".") == (totalResult.length() - 2)) && (totalResult.lastIndexOf("0") == (totalResult.length() - 1))){
+                totalResult = totalResult.substring(0,totalResult.length()-2);
+            }
+            historySalary.setCountWork(countOld + Double.parseDouble(updateAttendanceForm.getType()));
+            historySalary.setTotalMoney(totalResult + "");
+
             timeKeep.setModified_by(accountSercurity.getUserName());
             timeKeep.setModified_date(LocalDate.now());
             timeKeep.setType(updateAttendanceForm.getType());
             timeKeep.setNote(updateAttendanceForm.getNote());
             timeKeep = attendanceRepository.save(timeKeep);
+            historySalaryRepository.save(historySalary);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -276,20 +351,20 @@ public class AttendancesServiceImpl implements AttendancesService {
             }
             XSSFWorkbook workbook = new XSSFWorkbook();
             XSSFSheet sheet = workbook.createSheet("Attendance");
-            int rowIndex = 0 ;
+            int rowIndex = 0;
             for (int i = 0; i < row.size(); i++) {
                 int cellIndex = 0;
-                if(i == 0 ){
+                if (i == 0) {
                     Row rowx = sheet.createRow(rowIndex++);
-                    for(String nameCollumn : row.get(i).keySet() ){
+                    for (String nameCollumn : row.get(i).keySet()) {
                         Cell cell1 = rowx.createCell(cellIndex);
                         cell1.setCellValue(nameCollumn);
                         cellIndex++;
                     }
-                    cellIndex=0;
+                    cellIndex = 0;
                 }
                 Row rowx = sheet.createRow(rowIndex++);
-                for(String nameCollumn : row.get(i).keySet() ){
+                for (String nameCollumn : row.get(i).keySet()) {
                     Cell cell1 = rowx.createCell(cellIndex);
                     cell1.setCellValue(row.get(i).get(nameCollumn));
                     cellIndex++;

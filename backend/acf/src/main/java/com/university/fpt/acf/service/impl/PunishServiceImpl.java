@@ -148,12 +148,39 @@ public class PunishServiceImpl implements PunishService {
         boolean check = false;
         try{
             BonusPenalty bonus = punishRepository.getPunishById(id);
-            bonus.setDeleted(true);
-            AccountSercurity accountSercurity = new AccountSercurity();
-            bonus.setModified_by(accountSercurity.getUserName());
-            bonus.setModified_date(LocalDate.now());
-            punishRepository.save(bonus);
-            check=true;
+            if(!bonus.getStatus()){
+                bonus.setDeleted(true);
+                AccountSercurity accountSercurity = new AccountSercurity();
+                bonus.setModified_by(accountSercurity.getUserName());
+                bonus.setModified_date(LocalDate.now());
+                punishRepository.save(bonus);
+                check = true;
+            }else{
+                LocalDate date = LocalDate.now();
+                int day = date.getDayOfMonth();
+                if(day < 10){
+                    date = date.minusMonths(1);
+                    LocalDate dateStart = LocalDate.of(date.getYear(),date.getMonthValue(),10);
+                    if(dateStart.isBefore(bonus.getEffectiveDate())){
+                        bonus.setDeleted(true);
+                        AccountSercurity accountSercurity = new AccountSercurity();
+                        bonus.setModified_by(accountSercurity.getUserName());
+                        bonus.setModified_date(LocalDate.now());
+                        punishRepository.save(bonus);
+                        check = true;
+                    }
+                }else{
+                    LocalDate dateStart = LocalDate.of(date.getYear(),date.getMonthValue(),10);
+                    if(dateStart.isBefore(bonus.getEffectiveDate())){
+                        bonus.setDeleted(true);
+                        AccountSercurity accountSercurity = new AccountSercurity();
+                        bonus.setModified_by(accountSercurity.getUserName());
+                        bonus.setModified_date(LocalDate.now());
+                        punishRepository.save(bonus);
+                        check = true;
+                    }
+                }
+            }
 
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
@@ -166,18 +193,61 @@ public class PunishServiceImpl implements PunishService {
         boolean check = false;
         try{
             BonusPenalty bonus = punishRepository.getPunishById(updateForm.getId());
-            bonus.setBonus(false);
-            bonus.setTitle(updateForm.getTitle());
-            bonus.setMoney(updateForm.getMoney());
-            bonus.setReason(updateForm.getReason());
-            bonus.setStatus(updateForm.getStatus());
-            bonus.setEffectiveDate(updateForm.getEffectiveDate());
-            bonus.setEmployees(employeeRepository.getEmployeeByIdS(updateForm.getListIdEmployee()));
-            AccountSercurity accountSercurity = new AccountSercurity();
-            bonus.setCreated_by(accountSercurity.getUserName());
-            bonus.setModified_by(accountSercurity.getUserName());
-            punishRepository.saveAndFlush(bonus);
-            check=true;
+
+            if(!bonus.getStatus()){
+                bonus.setBonus(false);
+                bonus.setTitle(updateForm.getTitle());
+                bonus.setMoney(updateForm.getMoney());
+                bonus.setReason(updateForm.getReason());
+                bonus.setStatus(updateForm.getStatus());
+                bonus.setEffectiveDate(updateForm.getEffectiveDate());
+                bonus.setEmployees(employeeRepository.getEmployeeByIdS(updateForm.getListIdEmployee()));
+                AccountSercurity accountSercurity = new AccountSercurity();
+                bonus.setCreated_by(accountSercurity.getUserName());
+                bonus.setModified_by(accountSercurity.getUserName());
+                punishRepository.saveAndFlush(bonus);
+                check=true;
+            }else{
+                LocalDate date = LocalDate.now();
+                int day = date.getDayOfMonth();
+                if(day < 10){
+                    date = date.minusMonths(1);
+                    LocalDate dateStart = LocalDate.of(date.getYear(),date.getMonthValue(),10);
+                    if(dateStart.isBefore(bonus.getEffectiveDate()) ){
+                        bonus.setBonus(false);
+                        bonus.setTitle(updateForm.getTitle());
+                        bonus.setMoney(updateForm.getMoney());
+                        bonus.setReason(updateForm.getReason());
+                        bonus.setStatus(updateForm.getStatus());
+                        bonus.setEffectiveDate(updateForm.getEffectiveDate());
+                        bonus.setEmployees(employeeRepository.getEmployeeByIdS(updateForm.getListIdEmployee()));
+                        AccountSercurity accountSercurity = new AccountSercurity();
+                        bonus.setCreated_by(accountSercurity.getUserName());
+                        bonus.setModified_by(accountSercurity.getUserName());
+                        punishRepository.saveAndFlush(bonus);
+                        check=true;
+                    }
+                }else{
+                    LocalDate dateStart = LocalDate.of(date.getYear(),date.getMonthValue(),10);
+                    if(dateStart.isBefore(bonus.getEffectiveDate())){
+                        bonus.setBonus(false);
+                        bonus.setTitle(updateForm.getTitle());
+                        bonus.setMoney(updateForm.getMoney());
+                        bonus.setReason(updateForm.getReason());
+                        bonus.setStatus(updateForm.getStatus());
+                        bonus.setEffectiveDate(updateForm.getEffectiveDate());
+                        bonus.setEmployees(employeeRepository.getEmployeeByIdS(updateForm.getListIdEmployee()));
+                        AccountSercurity accountSercurity = new AccountSercurity();
+                        bonus.setCreated_by(accountSercurity.getUserName());
+                        bonus.setModified_by(accountSercurity.getUserName());
+                        punishRepository.saveAndFlush(bonus);
+                        check=true;
+                    }
+                }
+            }
+
+
+
 
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
