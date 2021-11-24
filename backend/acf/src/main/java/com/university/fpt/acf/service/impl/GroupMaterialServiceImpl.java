@@ -47,7 +47,11 @@ public class GroupMaterialServiceImpl implements GroupMaterialService {
             if(h==null ){
                 throw new Exception("Nhóm vật liệu không tồn tại");
             }
-            repository.delete(h);
+            AccountSercurity accountSercurity = new AccountSercurity();
+            h.setModified_by(accountSercurity.getUserName());
+            h.setModified_date(LocalDate.now());
+            h.setDeleted(true);
+            repository.save(h);
             delete = true;
         }catch (Exception e){
             e.getMessage();
@@ -99,7 +103,11 @@ public class GroupMaterialServiceImpl implements GroupMaterialService {
             if(h==null ){
                 throw new Exception("Nhóm tấm phủ không tồn tại");
             }
-            repository.delete(h);
+            AccountSercurity accountSercurity = new AccountSercurity();
+            h.setModified_by(accountSercurity.getUserName());
+            h.setModified_date(LocalDate.now());
+            h.setDeleted(true);
+            repository.save(h);
             delete = true;
         }catch (Exception e){
             e.getMessage();

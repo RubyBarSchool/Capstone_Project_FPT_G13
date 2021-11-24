@@ -49,7 +49,11 @@ public class UnitMeasureServiceImpl implements UnitMeasureService {
             if(u==null ){
                 throw new Exception("Đơn vị không tồn tại");
             }
-            unitMeasureRepository.delete(u);
+            u.setDeleted(true);
+            AccountSercurity accountSercurity = new AccountSercurity();
+            u.setModified_date(LocalDate.now());
+            u.setModified_by(accountSercurity.getUserName());
+            unitMeasureRepository.save(u);
             delete = true;
         }catch (Exception e){
             e.getMessage();
