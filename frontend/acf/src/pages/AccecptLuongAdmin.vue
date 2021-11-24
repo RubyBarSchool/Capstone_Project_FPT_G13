@@ -55,6 +55,7 @@
             :columns="columns"
             :data-source="dataSourceTable"
             :pagination="pagination"
+            :scroll="{ x: 1500 }"
             :rowKey="
               (record, index) => {
                 return index;
@@ -100,7 +101,9 @@
                 title="Bạn có chắc chắn muốn thanh toán tiền lương không?"
                 @confirm="bill(record.id)"
               >
-                <a-button :disabled="!checkShow(record)" type="primary"> Thanh toán </a-button>
+                <a-button :disabled="!checkShow(record)" type="primary">
+                  Thanh toán
+                </a-button>
               </a-popconfirm>
             </template>
           </a-table>

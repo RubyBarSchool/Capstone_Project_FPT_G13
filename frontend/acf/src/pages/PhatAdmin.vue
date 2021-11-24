@@ -203,6 +203,7 @@
                 <a-select
                   placeholder="Họ và tên"
                   mode="multiple"
+                  disabled
                   v-model="dataEdit.listIdEmployee"
                   :filter-option="false"
                   @search="fetchEmployees"
@@ -237,6 +238,7 @@
                   v-model="dataEdit.effectiveDate"
                   :disabled-date="disableDateStart"
                   format="DD/MM/YYYY"
+                  valueFormat="YYYY-MM-DD"
                 />
               </a-form-model-item>
             </a-form-model>

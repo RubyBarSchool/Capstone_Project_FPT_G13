@@ -156,6 +156,8 @@ public class PunishServiceImpl implements PunishService {
                             punishMoney += Integer.valueOf(addPunish.getMoney());
                             historySalary.setPenalty(punishMoney + "");
                             historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) - Integer.valueOf(addPunish.getMoney())) + "");
+                            historySalary.setModified_by(accountSercurity.getUserName());
+                            historySalary.setModified_date(LocalDate.now());
                             historySalaryRepository.save(historySalary);
                         }
                     }
@@ -170,6 +172,8 @@ public class PunishServiceImpl implements PunishService {
                             punishMoney += Integer.valueOf(addPunish.getMoney());
                             historySalary.setPenalty(punishMoney + "");
                             historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) - Integer.valueOf(addPunish.getMoney())) + "");
+                            historySalary.setModified_by(accountSercurity.getUserName());
+                            historySalary.setModified_date(LocalDate.now());
                             historySalaryRepository.save(historySalary);
                         }
                     }
@@ -219,8 +223,10 @@ public class PunishServiceImpl implements PunishService {
                                 HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(idEmpl.getId(), LocalDate.of(date.getYear(), date.getMonthValue(), 10));
                                 Integer punishMoney = Integer.parseInt(historySalary.getPenalty());
                                 punishMoney -= Integer.valueOf(bonus.getMoney());
-                                historySalary.setBonus(punishMoney + "");
+                                historySalary.setPenalty(punishMoney + "");
                                 historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) + Integer.valueOf(bonus.getMoney())) + "");
+                                historySalary.setModified_by(accountSercurity.getUserName());
+                                historySalary.setModified_date(LocalDate.now());
                                 historySalaryRepository.save(historySalary);
                             }
                         }
@@ -246,8 +252,10 @@ public class PunishServiceImpl implements PunishService {
                                 HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(idEmpl.getId(), LocalDate.of(dateStart.getYear(), dateStart.getMonthValue(), 10));
                                 Integer punishMoney = Integer.parseInt(historySalary.getPenalty());
                                 punishMoney -= Integer.valueOf(bonus.getMoney());
-                                historySalary.setBonus(punishMoney + "");
+                                historySalary.setPenalty(punishMoney + "");
                                 historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) + Integer.valueOf(bonus.getMoney())) + "");
+                                historySalary.setModified_by(accountSercurity.getUserName());
+                                historySalary.setModified_date(LocalDate.now());
                                 historySalaryRepository.save(historySalary);
                             }
                         }
@@ -269,108 +277,177 @@ public class PunishServiceImpl implements PunishService {
     public Boolean updatePunish(UpdateBonusForm updateForm) {
         boolean check = false;
         try {
+            AccountSercurity accountSercurity = new AccountSercurity();
             BonusPenalty bonus = punishRepository.getPunishById(updateForm.getId());
-
             LocalDate date = LocalDate.now();
             int day = date.getDayOfMonth();
+
             if (day < 10) {
                 LocalDate dateEnd = LocalDate.of(date.getYear(), date.getMonthValue(), 10);
                 date = date.minusMonths(1);
                 LocalDate dateStart = LocalDate.of(date.getYear(), date.getMonthValue(), 9);
-                if (dateStart.isBefore(bonus.getEffectiveDate())) {
-                    // update salary
-                    if(!bonus.getStatus()){
-                        if(updateForm.getStatus()){
-                            if (dateStart.isBefore(bonus.getEffectiveDate()) && dateEnd.isAfter(bonus.getEffectiveDate())) {
-                                for (Employee idEmpl : bonus.getEmployees()) {
-                                    HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(idEmpl.getId(), LocalDate.of(date.getYear(), date.getMonthValue(), 10));
-                                    Integer penaltyMoney = Integer.parseInt(historySalary.getPenalty());
-                                    penaltyMoney += Integer.valueOf(updateForm.getMoney());
-                                    historySalary.setBonus(penaltyMoney + "");
-                                    historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) - Integer.valueOf(updateForm.getMoney())) + "");
-                                    historySalaryRepository.save(historySalary);
-                                }
+
+                if (!bonus.getStatus()) {
+                    if (updateForm.getStatus()) {
+                        if (dateStart.isBefore(updateForm.getEffectiveDate()) && dateEnd.isAfter(updateForm.getEffectiveDate())) {
+                            for (Employee idEmpl : bonus.getEmployees()) {
+                                HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(idEmpl.getId(), LocalDate.of(date.getYear(), date.getMonthValue(), 10));
+                                Integer punishMoney = Integer.parseInt(historySalary.getPenalty());
+                                punishMoney += Integer.valueOf(updateForm.getMoney());
+                                historySalary.setPenalty(punishMoney + "");
+                                historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) - Integer.valueOf(updateForm.getMoney())) + "");
+                                historySalary.setModified_by(accountSercurity.getUserName());
+                                historySalary.setModified_date(LocalDate.now());
+                                historySalaryRepository.save(historySalary);
                             }
                         }
-                    }else{
-                        if(!updateForm.getStatus()){
-                            if (dateStart.isBefore(bonus.getEffectiveDate()) && dateEnd.isAfter(bonus.getEffectiveDate())) {
+                    }
+                } else {
+                    if (!updateForm.getStatus()) {
+                        if (dateStart.isBefore(bonus.getEffectiveDate()) && dateEnd.isAfter(bonus.getEffectiveDate())) {
+                            for (Employee idEmpl : bonus.getEmployees()) {
+                                HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(idEmpl.getId(), LocalDate.of(date.getYear(), date.getMonthValue(), 10));
+                                Integer punishMoney = Integer.parseInt(historySalary.getPenalty());
+                                punishMoney -= Integer.valueOf(bonus.getMoney());
+                                historySalary.setPenalty(punishMoney + "");
+                                historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) + Integer.valueOf(bonus.getMoney())) + "");
+                                historySalary.setModified_by(accountSercurity.getUserName());
+                                historySalary.setModified_date(LocalDate.now());
+                                historySalaryRepository.save(historySalary);
+                            }
+                        }
+                    } else {
+                        if (dateStart.isBefore(bonus.getEffectiveDate()) && dateEnd.isAfter(bonus.getEffectiveDate())) {
+                            if (dateStart.isBefore(updateForm.getEffectiveDate()) && dateEnd.isAfter(updateForm.getEffectiveDate())) {
                                 for (Employee idEmpl : bonus.getEmployees()) {
                                     HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(idEmpl.getId(), LocalDate.of(date.getYear(), date.getMonthValue(), 10));
                                     Integer punishMoney = Integer.parseInt(historySalary.getPenalty());
-                                    punishMoney -= Integer.valueOf(updateForm.getMoney());
-                                    historySalary.setBonus(punishMoney + "");
-                                    historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) + Integer.valueOf(updateForm.getMoney())) + "");
+                                    punishMoney -= Integer.valueOf(bonus.getMoney());
+                                    punishMoney += Integer.valueOf(updateForm.getMoney());
+                                    historySalary.setPenalty(punishMoney + "");
+                                    historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) + Integer.valueOf(bonus.getMoney()) - Integer.valueOf(updateForm.getMoney())) + "");
+                                    historySalary.setModified_by(accountSercurity.getUserName());
+                                    historySalary.setModified_date(LocalDate.now());
+                                    historySalaryRepository.save(historySalary);
+                                }
+                            } else {
+                                for (Employee idEmpl : bonus.getEmployees()) {
+                                    HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(idEmpl.getId(), LocalDate.of(date.getYear(), date.getMonthValue(), 10));
+                                    Integer punishMoney = Integer.parseInt(historySalary.getPenalty());
+                                    punishMoney -= Integer.valueOf(bonus.getMoney());
+                                    historySalary.setPenalty(punishMoney + "");
+                                    historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) + Integer.valueOf(bonus.getMoney())) + "");
+                                    historySalary.setModified_by(accountSercurity.getUserName());
+                                    historySalary.setModified_date(LocalDate.now());
+                                    historySalaryRepository.save(historySalary);
+                                }
+                            }
+                        } else {
+                            if (dateStart.isBefore(updateForm.getEffectiveDate()) && dateEnd.isAfter(updateForm.getEffectiveDate())) {
+                                for (Employee idEmpl : bonus.getEmployees()) {
+                                    HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(idEmpl.getId(), LocalDate.of(date.getYear(), date.getMonthValue(), 10));
+                                    Integer punishMoney = Integer.parseInt(historySalary.getPenalty());
+                                    punishMoney += Integer.valueOf(updateForm.getMoney());
+                                    historySalary.setPenalty(punishMoney + "");
+                                    historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) - Integer.valueOf(updateForm.getMoney())) + "");
+                                    historySalary.setModified_by(accountSercurity.getUserName());
+                                    historySalary.setModified_date(LocalDate.now());
                                     historySalaryRepository.save(historySalary);
                                 }
                             }
                         }
                     }
-
-                    bonus.setBonus(false);
-                    bonus.setTitle(updateForm.getTitle());
-                    bonus.setMoney(updateForm.getMoney());
-                    bonus.setReason(updateForm.getReason());
-                    bonus.setStatus(updateForm.getStatus());
-                    bonus.setEffectiveDate(updateForm.getEffectiveDate());
-                    bonus.setEmployees(employeeRepository.getEmployeeByIdS(updateForm.getListIdEmployee()));
-                    AccountSercurity accountSercurity = new AccountSercurity();
-                    bonus.setCreated_by(accountSercurity.getUserName());
-                    bonus.setModified_by(accountSercurity.getUserName());
-                    punishRepository.saveAndFlush(bonus);
-                    check = true;
-
                 }
+
             } else {
                 LocalDate dateStart = LocalDate.of(date.getYear(), date.getMonthValue(), 9);
                 date = date.plusMonths(1);
                 LocalDate dateEnd = LocalDate.of(date.getYear(), date.getMonthValue(), 10);
-                if (dateStart.isBefore(bonus.getEffectiveDate())) {
-                    // update salary
-                    if(!bonus.getStatus()){
-                        if(updateForm.getStatus()){
-                            if (dateStart.isBefore(bonus.getEffectiveDate()) && dateEnd.isAfter(bonus.getEffectiveDate())) {
+
+                if (!bonus.getStatus()) {
+                    if (updateForm.getStatus()) {
+                        if (dateStart.isBefore(updateForm.getEffectiveDate()) && dateEnd.isAfter(updateForm.getEffectiveDate())) {
+                            for (Employee idEmpl : bonus.getEmployees()) {
+                                HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(idEmpl.getId(), LocalDate.of(dateStart.getYear(), dateStart.getMonthValue(), 10));
+                                Integer punishMoney = Integer.parseInt(historySalary.getPenalty());
+                                punishMoney += Integer.valueOf(updateForm.getMoney());
+                                historySalary.setPenalty(punishMoney + "");
+                                historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) - Integer.valueOf(updateForm.getMoney())) + "");
+                                historySalary.setModified_by(accountSercurity.getUserName());
+                                historySalary.setModified_date(LocalDate.now());
+                                historySalaryRepository.save(historySalary);
+                            }
+                        }
+                    }
+                } else {
+                    if (!updateForm.getStatus()) {
+                        if (dateStart.isBefore(bonus.getEffectiveDate()) && dateEnd.isAfter(bonus.getEffectiveDate())) {
+                            for (Employee idEmpl : bonus.getEmployees()) {
+                                HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(idEmpl.getId(), LocalDate.of(dateStart.getYear(), dateStart.getMonthValue(), 10));
+                                Integer punishMoney = Integer.parseInt(historySalary.getPenalty());
+                                punishMoney -= Integer.valueOf(bonus.getMoney());
+                                historySalary.setPenalty(punishMoney + "");
+                                historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) + Integer.valueOf(bonus.getMoney())) + "");
+                                historySalary.setModified_by(accountSercurity.getUserName());
+                                historySalary.setModified_date(LocalDate.now());
+                                historySalaryRepository.save(historySalary);
+                            }
+                        }
+                    } else {
+                        if (dateStart.isBefore(bonus.getEffectiveDate()) && dateEnd.isAfter(bonus.getEffectiveDate())) {
+                            if (dateStart.isBefore(updateForm.getEffectiveDate()) && dateEnd.isAfter(updateForm.getEffectiveDate())) {
                                 for (Employee idEmpl : bonus.getEmployees()) {
-                                    HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(idEmpl.getId(), LocalDate.of(date.getYear(), date.getMonthValue(), 10));
-                                    Integer penaltyMoney = Integer.parseInt(historySalary.getPenalty());
-                                    penaltyMoney += Integer.valueOf(updateForm.getMoney());
-                                    historySalary.setBonus(penaltyMoney + "");
-                                    historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) - Integer.valueOf(updateForm.getMoney())) + "");
+                                    HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(idEmpl.getId(), LocalDate.of(dateStart.getYear(), dateStart.getMonthValue(), 10));
+                                    Integer punishMoney = Integer.parseInt(historySalary.getPenalty());
+                                    punishMoney -= Integer.valueOf(bonus.getMoney());
+                                    punishMoney += Integer.valueOf(updateForm.getMoney());
+                                    historySalary.setPenalty(punishMoney + "");
+                                    historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) + Integer.valueOf(bonus.getMoney()) - Integer.valueOf(updateForm.getMoney())) + "");
+                                    historySalary.setModified_by(accountSercurity.getUserName());
+                                    historySalary.setModified_date(LocalDate.now());
+                                    historySalaryRepository.save(historySalary);
+                                }
+                            } else {
+                                for (Employee idEmpl : bonus.getEmployees()) {
+                                    HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(idEmpl.getId(), LocalDate.of(dateStart.getYear(), dateStart.getMonthValue(), 10));
+                                    Integer punishMoney = Integer.parseInt(historySalary.getPenalty());
+                                    punishMoney -= Integer.valueOf(bonus.getMoney());
+                                    historySalary.setPenalty(punishMoney + "");
+                                    historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) + Integer.valueOf(bonus.getMoney())) + "");
+                                    historySalary.setModified_by(accountSercurity.getUserName());
+                                    historySalary.setModified_date(LocalDate.now());
                                     historySalaryRepository.save(historySalary);
                                 }
                             }
-                        }
-                    }else{
-                        if(!updateForm.getStatus()){
-                            if (dateStart.isBefore(bonus.getEffectiveDate()) && dateEnd.isAfter(bonus.getEffectiveDate())) {
+                        } else {
+                            if (dateStart.isBefore(updateForm.getEffectiveDate()) && dateEnd.isAfter(updateForm.getEffectiveDate())) {
                                 for (Employee idEmpl : bonus.getEmployees()) {
-                                    HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(idEmpl.getId(), LocalDate.of(date.getYear(), date.getMonthValue(), 10));
+                                    HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(idEmpl.getId(), LocalDate.of(dateStart.getYear(), dateStart.getMonthValue(), 10));
                                     Integer punishMoney = Integer.parseInt(historySalary.getPenalty());
-                                    punishMoney -= Integer.valueOf(updateForm.getMoney());
-                                    historySalary.setBonus(punishMoney + "");
-                                    historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) + Integer.valueOf(updateForm.getMoney())) + "");
+                                    punishMoney += Integer.valueOf(updateForm.getMoney());
+                                    historySalary.setPenalty(punishMoney + "");
+                                    historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) - Integer.valueOf(updateForm.getMoney())) + "");
+                                    historySalary.setModified_by(accountSercurity.getUserName());
+                                    historySalary.setModified_date(LocalDate.now());
                                     historySalaryRepository.save(historySalary);
                                 }
                             }
                         }
                     }
-
-                    bonus.setBonus(false);
-                    bonus.setTitle(updateForm.getTitle());
-                    bonus.setMoney(updateForm.getMoney());
-                    bonus.setReason(updateForm.getReason());
-                    bonus.setStatus(updateForm.getStatus());
-                    bonus.setEffectiveDate(updateForm.getEffectiveDate());
-                    bonus.setEmployees(employeeRepository.getEmployeeByIdS(updateForm.getListIdEmployee()));
-                    AccountSercurity accountSercurity = new AccountSercurity();
-                    bonus.setCreated_by(accountSercurity.getUserName());
-                    bonus.setModified_by(accountSercurity.getUserName());
-                    punishRepository.saveAndFlush(bonus);
-                    check = true;
                 }
             }
 
-
+            bonus.setBonus(false);
+            bonus.setTitle(updateForm.getTitle());
+            bonus.setMoney(updateForm.getMoney());
+            bonus.setReason(updateForm.getReason());
+            bonus.setStatus(updateForm.getStatus());
+            bonus.setEffectiveDate(updateForm.getEffectiveDate());
+            bonus.setEmployees(employeeRepository.getEmployeeByIdS(updateForm.getListIdEmployee()));
+            bonus.setCreated_by(accountSercurity.getUserName());
+            bonus.setModified_by(accountSercurity.getUserName());
+            punishRepository.saveAndFlush(bonus);
+            check = true;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

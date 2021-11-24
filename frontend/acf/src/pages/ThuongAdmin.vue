@@ -199,6 +199,7 @@
               </a-form-model-item>
               <a-form-model-item label="Họ và tên">
                 <a-select
+                  :disabled="true"
                   placeholder="Họ và tên"
                   mode="multiple"
                   v-model="dataEdit.listIdEmployee"

@@ -18,21 +18,21 @@
           v-model="dataSearch.name"
         />
         <a-select
-            placeholder="Chức vụ"
-            :filter-option="false"
-            @search="fetchPosition"
-            style="width: 140px"
-            v-model="dataSearch.idPosition"
-            show-search
+          placeholder="Chức vụ"
+          :filter-option="false"
+          @search="fetchPosition"
+          style="width: 140px"
+          v-model="dataSearch.idPosition"
+          show-search
+        >
+          <a-select-option
+            v-for="(position, index) in dataPositions"
+            :value="position.id"
+            :key="index"
           >
-            <a-select-option
-              v-for="(position, index) in dataPositions"
-              :value="position.id"
-              :key="index"
-            >
-              {{ position.name }}
-            </a-select-option>
-          </a-select>
+            {{ position.name }}
+          </a-select-option>
+        </a-select>
         <a-range-picker
           @change="search"
           v-model="dataSearch.date"
@@ -55,6 +55,7 @@
             :columns="columns"
             :data-source="dataSourceTable"
             :pagination="pagination"
+            :scroll="{ x: 1500 }"
             :rowKey="
               (record, index) => {
                 return index;

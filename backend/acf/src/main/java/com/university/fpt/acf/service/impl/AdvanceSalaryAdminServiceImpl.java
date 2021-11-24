@@ -3,11 +3,13 @@ package com.university.fpt.acf.service.impl;
 import com.university.fpt.acf.config.security.AccountSercurity;
 import com.university.fpt.acf.entity.AdvaceSalary;
 
+import com.university.fpt.acf.entity.HistorySalary;
 import com.university.fpt.acf.form.AcceptAdvanceSalaryAdminForm;
 import com.university.fpt.acf.form.SearchAdvanceSalaryAdminForm;
 import com.university.fpt.acf.repository.AccountManagerRepository;
 import com.university.fpt.acf.repository.AdvanceSalaryAdminCustomRepository;
 import com.university.fpt.acf.repository.AdvanceSalaryAdminRepository;
+import com.university.fpt.acf.repository.HistorySalaryRepository;
 import com.university.fpt.acf.service.AdvanceSalaryAdminService;
 import com.university.fpt.acf.vo.DetailAdvanceSalaryAdminVO;
 import com.university.fpt.acf.vo.SearchAdvanceSalaryAdminVO;
@@ -26,6 +28,9 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
     private AdvanceSalaryAdminRepository adminRepository;
     @Autowired
     private AccountManagerRepository accountManagerRepository;
+    @Autowired
+    private HistorySalaryRepository historySalaryRepository;
+
     @Override
     public List<SearchAdvanceSalaryAdminVO> searchAdvanceSalaryAdmin(SearchAdvanceSalaryAdminForm searchForm) {
         List<SearchAdvanceSalaryAdminVO> list = new ArrayList<>();
@@ -76,7 +81,20 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
             data.setModified_date(LocalDate.now());
             adminRepository.save(data);
             check=true;
+            LocalDate date = LocalDate.now();
+            if(date.getDayOfMonth() < 10){
+                date = date.minusMonths(1);
+                date = LocalDate.of(date.getYear(),date.getMonthValue(),10);
+            }else{
+                date = LocalDate.of(date.getYear(),date.getMonthValue(),10);
 
+            }
+            HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(id, date);
+            historySalary.setAdvanceSalary((Integer.parseInt(historySalary.getAdvanceSalary())+Integer.parseInt(data.getAdvaceSalary()))+"");
+            historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) - Integer.parseInt(data.getAdvaceSalary()))+"");
+            historySalary.setModified_by(accountSercurity.getUserName());
+            historySalary.setModified_date(LocalDate.now());
+            historySalaryRepository.save(historySalary);
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }
