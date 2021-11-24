@@ -51,19 +51,19 @@ public class CompanyServiceImpl implements CompanyService {
         try {
             if (addCompanyForm.getAddress() == null && addCompanyForm.getName() == null
                     && addCompanyForm.getPhone() == null && addCompanyForm.getEmail() == null) {
-                throw new Exception("Data company is null");
+                throw new Exception("Dữ liệu đang trống");
             }
             String checkNameCompany = companyRespository.checkExitCompanyByName(addCompanyForm.getName());
             if (checkNameCompany != null && !checkNameCompany.isEmpty()) {
-                throw new Exception("Company da ton tai");
+                throw new Exception("Công ty đã tồn tại");
             }
             String checkPhone = companyRespository.checkExitPhoneCompanyByPhone(addCompanyForm.getPhone());
             if (checkPhone != null && !checkPhone.isEmpty()) {
-                throw new Exception("phone da ton tai");
+                throw new Exception("SĐT đã tồn tại");
             }
             String checkEmail = companyRespository.checkExitEmailCompanyByEmail(addCompanyForm.getEmail());
             if (checkEmail != null && !checkEmail.isEmpty()) {
-                throw new Exception("email da ton tai");
+                throw new Exception("Email đã tồn tại");
             }
             Company c = new Company();
             c.setName(addCompanyForm.getName());
