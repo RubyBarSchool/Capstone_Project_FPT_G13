@@ -332,7 +332,7 @@ public class ContactServiceImpl implements ContactService {
     public Boolean updateContact(UpdateContractForm updateForm) {
         Boolean check = false;
         try{
-            Contact c = contactRepository.getContactById(updateForm.getId());
+            Contact c = contactRepository.getContactByID(updateForm.getId());
             c.setName(updateForm.getName());
             c.setDateFinish(updateForm.getDateFinish());
             contactRepository.save(c);
@@ -348,7 +348,7 @@ public class ContactServiceImpl implements ContactService {
     public Boolean deleteContact(Long id) {
         Boolean check = false;
         try{
-            Contact c = contactRepository.getContactById(id);
+            Contact c = contactRepository.getContactByID(id);
             String numberFinish = c.getNumberFinish().strip();
             if(c.getStatusDone()==-2 && numberFinish.startsWith("0")){
                 contactRepository.delete(c);

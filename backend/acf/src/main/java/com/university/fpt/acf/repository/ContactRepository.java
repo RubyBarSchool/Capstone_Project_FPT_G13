@@ -26,9 +26,6 @@ public interface ContactRepository extends JpaRepository<Contact,Long> {
 
     @Query(" select new com.university.fpt.acf.vo.ContactVO(c.id,c.name)  from Contact c where c.deleted = false and c.statusDone in (-2,-1,0)")
     List<ContactVO> getContactNotDone();
-    @Query("select c from Contact c where c.id=:id ")
-    Contact getContactById(@Param("id")Long id);
-
 
     @Query("select c from  Contact c where c.id =:id")
     Contact getContactByID(@Param("id") Long id);
