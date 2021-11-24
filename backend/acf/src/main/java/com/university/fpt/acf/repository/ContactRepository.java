@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
@@ -25,6 +26,8 @@ public interface ContactRepository extends JpaRepository<Contact,Long> {
 
     @Query(" select new com.university.fpt.acf.vo.ContactVO(c.id,c.name)  from Contact c where c.deleted = false and c.statusDone in (-2,-1,0)")
     List<ContactVO> getContactNotDone();
+    @Query("select c from Contact c where c.id=:id ")
+    Contact getContactById(@Param("id")Long id);
 
 
     @Query("select c from  Contact c where c.id =:id")

@@ -328,6 +328,38 @@ public class ContactServiceImpl implements ContactService {
         return size;
     }
 
+    @Override
+    public Boolean updateContact(UpdateContractForm updateForm) {
+        Boolean check = false;
+        try{
+            Contact c = contactRepository.getContactById(updateForm.getId());
+            c.setName(updateForm.getName());
+            c.setDateFinish(updateForm.getDateFinish());
+            contactRepository.save(c);
+            check=true;
+
+        }catch (Exception e){
+            throw new RuntimeException("Error contact repository " + e.getMessage());
+        }
+        return check;
+    }
+
+    @Override
+    public Boolean deleteContact(Long id) {
+        Boolean check = false;
+        try{
+            Contact c = contactRepository.getContactById(id);
+            String numberFinish = c.getNumberFinish().strip();
+            if(c.getStatusDone()==-2 && numberFinish.startsWith("0")){
+                contactRepository.delete(c);
+                check = true;
+            }
+        }catch (Exception e){
+            throw new RuntimeException("Error contact repository " + e.getMessage());
+        }
+        return check;
+    }
+
     private String subString(String input) {
         if (input.endsWith(".0")) {
             input = input.substring(0, input.length() - 2);

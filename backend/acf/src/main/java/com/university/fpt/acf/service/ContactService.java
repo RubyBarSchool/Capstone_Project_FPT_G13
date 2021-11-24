@@ -30,4 +30,6 @@ public interface ContactService {
     List<GetCreateContactVO> searchCreateContact(SearchCreateContactFrom searchForm);
 
     int totalSearchCreateContact(SearchCreateContactFrom search);
+    Boolean updateContact(UpdateContractForm updateForm);
+    Boolean deleteContact(Long id);
 }

@@ -2,10 +2,7 @@ package com.university.fpt.acf.controller;
 
 import com.university.fpt.acf.common.entity.ResponseCommon;
 import com.university.fpt.acf.entity.Contact;
-import com.university.fpt.acf.form.AddContactForm;
-import com.university.fpt.acf.form.ContactInSearchForm;
-import com.university.fpt.acf.form.SearchCompanyForm;
-import com.university.fpt.acf.form.SearchCreateContactFrom;
+import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.service.ContactService;
 import com.university.fpt.acf.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +41,52 @@ public class ContactController {
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
             message = "Không thêm được hợp đồng";
+            responseCommon.setData(false);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
+    @PutMapping()
+    public ResponseEntity<ResponseCommon> updateContact(@Valid @RequestBody UpdateContractForm updateContactForm) {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        Boolean result = false;
+        try {
+            result = contactService.updateContact(updateContactForm);
+            if (result == false) {
+                message = " Chỉnh sửa hợp đồng lỗi";
+            }
+            message = "Chỉnh sửa hợp đồng thành công";
+            responseCommon.setData(result);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = "Chỉnh sửa hợp đồng lỗi";
+            responseCommon.setData(false);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
+    @DeleteMapping()
+    public ResponseEntity<ResponseCommon> deleteContact(@RequestParam Long id) {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        Boolean result = false;
+        try {
+            result = contactService.deleteContact(id);
+            if (result == false) {
+                message = "Xóa hợp đồng không thành công";
+            }
+            message = "Xóa hợp đồng thành công";
+            responseCommon.setData(result);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = "Xóa hợp đồng không thành công";
             responseCommon.setData(false);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);

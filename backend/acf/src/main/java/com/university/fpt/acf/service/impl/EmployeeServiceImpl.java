@@ -11,13 +11,10 @@ import com.university.fpt.acf.service.EmployeeService;
 import com.university.fpt.acf.util.EmployeeValidate.EmployeeValidate;
 import com.university.fpt.acf.vo.EmployeeDetailVO;
 import com.university.fpt.acf.vo.GetAllEmployeeVO;
-import com.university.fpt.acf.vo.PositionResponseVO;
 import com.university.fpt.acf.vo.SearchEmployeeVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
