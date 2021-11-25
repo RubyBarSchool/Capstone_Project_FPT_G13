@@ -3,7 +3,9 @@ package com.university.fpt.acf.controller;
 import com.university.fpt.acf.common.entity.ResponseCommon;
 import com.university.fpt.acf.form.MaterialSuggestFrom;
 import com.university.fpt.acf.form.SearchAllEmployeeForm;
+import com.university.fpt.acf.repository.MaterialRepository;
 import com.university.fpt.acf.service.MaterialService;
+import com.university.fpt.acf.vo.MaterialSuggestVO;
 import com.university.fpt.acf.vo.SearchEmployeeVO;
 import com.university.fpt.acf.vo.SuggestMaterialVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +26,7 @@ public class MaterialSuggestController {
 
     @Autowired
     private MaterialService materialService;
+
 
     @PostMapping("/search")
     public ResponseEntity<ResponseCommon> searchSuggestMaterial(@RequestBody MaterialSuggestFrom materialSuggestFrom){

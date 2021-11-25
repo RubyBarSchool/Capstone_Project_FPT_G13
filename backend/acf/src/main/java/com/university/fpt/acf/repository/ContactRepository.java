@@ -4,6 +4,7 @@ import com.university.fpt.acf.entity.Contact;
 import com.university.fpt.acf.vo.ContactVO;
 import com.university.fpt.acf.vo.GetCreateContactVO;
 import com.university.fpt.acf.vo.MaterialInContactDetailVO;
+import com.university.fpt.acf.vo.MaterialSuggestVO;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +13,7 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -34,5 +36,8 @@ public interface ContactRepository extends JpaRepository<Contact,Long> {
     @Transactional
     @Query("delete from Contact c where c.id =:id")
     void deleteContact(@Param("id") Long id);
+
+    @Query("select SUM(p.count) from Contact c inner join c.products p  where c.statusDone = '1' and c.dateFinish between :dateStart and :dateEnd group by p.count ")
+    Long getTotalProduct(@Param("dateStart") LocalDate dateStart, @Param("dateEnd") LocalDate dateEnd);
 
 }

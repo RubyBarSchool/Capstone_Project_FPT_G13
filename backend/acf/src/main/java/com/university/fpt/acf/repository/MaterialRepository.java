@@ -2,15 +2,14 @@ package com.university.fpt.acf.repository;
 
 import com.university.fpt.acf.entity.Material;
 import com.university.fpt.acf.entity.PriceMaterial;
-import com.university.fpt.acf.vo.FrameMaterialVO;
-import com.university.fpt.acf.vo.GetAllMaterialVO;
-import com.university.fpt.acf.vo.HeightMaterialVO;
-import com.university.fpt.acf.vo.UnitMeasureVO;
+import com.university.fpt.acf.vo.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -46,5 +45,10 @@ public interface MaterialRepository extends JpaRepository<Material,Long> {
     @Query("select new com.university.fpt.acf.vo.FrameMaterialVO(m.id,concat(m.frameLength,'x',m.frameWidth) ) from FrameMaterial m where m.id not in (select distinct pm.frameMaterial.id from Material mm inner join mm.priceMaterials  pm  where pm.heightMaterial.id=:idHeight and mm.checkMaterial=false and mm.deleted=false and mm.id=:idCoverSheet and mm.checkMaterial=false ) ")
     List<FrameMaterialVO> getFrameByCoverSheetAndHeight(@Param("idHeight") Long idHeight,@Param("idCoverSheet") Long idCoverSheet);
 
+    @Query("select new com.university.fpt.acf.vo.MaterialSuggestVO(pm.material.id,SUM(prm.count*p.count)) from Contact c inner join c.products p inner  join  p.productMaterials prm inner join  prm.priceMaterial pm where c.statusDone = '1' and c.dateFinish between :dateStart and :dateEnd group by pm.material.id order by pm.material.id asc")
+    List<MaterialSuggestVO> getMaterialSuggest(@Param("dateStart") LocalDate dateStart,@Param("dateEnd") LocalDate dateEnd);
+
+    @Query("select m from Material m where m.id in :id order by id asc")
+    List<Material> getMaterialByIds(@Param("id")List<Long> id);
 }
 

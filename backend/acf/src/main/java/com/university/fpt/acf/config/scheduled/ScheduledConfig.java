@@ -1,7 +1,6 @@
 package com.university.fpt.acf.config.scheduled;
 
-import com.university.fpt.acf.config.scheduled.job.AttendanceAutoJob;
-import com.university.fpt.acf.config.scheduled.job.AttendanceCheckJob;
+import com.university.fpt.acf.config.scheduled.job.*;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -30,7 +29,7 @@ public class ScheduledConfig {
                 .newTrigger()
                 .forJob(jobCheckAttendance())
                 .withIdentity(TriggerKey.triggerKey("checkAttendance"))
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0/1 10 * * ?"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0/15 18 * * ?"))
                 .build();
     }
 
@@ -49,7 +48,83 @@ public class ScheduledConfig {
                 .newTrigger()
                 .forJob(jobAttendanceAuto())
                 .withIdentity(TriggerKey.triggerKey("attendaneAuto"))
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0/2 10 * * ?"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 23 * * ?"))
+                .build();
+    }
+
+    @Bean
+    public JobDetail jobCalculatorMaterialInMonth() {
+        return JobBuilder
+                .newJob(CalculatorMaterialInMonthJob.class)
+                .withIdentity(JobKey.jobKey("calculatorMaterialInMonth"))
+                .storeDurably()
+                .build();
+    }
+
+    @Bean
+    public Trigger triggerCalculatorMaterialInMonth() {
+        return TriggerBuilder
+                .newTrigger()
+                .forJob(jobCalculatorMaterialInMonth())
+                .withIdentity(TriggerKey.triggerKey("calculatorMaterialInMonth"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 1 0/1 ?"))
+                .build();
+    }
+
+    @Bean
+    public JobDetail jobCalculatorMaterialnQuarterOfYear() {
+        return JobBuilder
+                .newJob(CalculatorMaterialnQuarterOfYearJob.class)
+                .withIdentity(JobKey.jobKey("calculatorMaterialnQuarterOfYear"))
+                .storeDurably()
+                .build();
+    }
+
+    @Bean
+    public Trigger triggerCalculatorMaterialnQuarterOfYear() {
+        return TriggerBuilder
+                .newTrigger()
+                .forJob(jobCalculatorMaterialnQuarterOfYear())
+                .withIdentity(TriggerKey.triggerKey("calculatorMaterialnQuarterOfYear"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 1 1,4,7,10 ?"))
+                .build();
+    }
+
+    @Bean
+    public JobDetail jobCalculatorMaterialInYear() {
+        return JobBuilder
+                .newJob(CalculatorMaterialnQuarterOfYearJob.class)
+                .withIdentity(JobKey.jobKey("calculatorMaterialInYear"))
+                .storeDurably()
+                .build();
+    }
+
+    @Bean
+    public Trigger triggerCalculatorMaterialInYear() {
+        return TriggerBuilder
+                .newTrigger()
+                .forJob(jobCalculatorMaterialInYear())
+                .withIdentity(TriggerKey.triggerKey("calculatorMaterialInYear"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 1 1 ?"))
+                .build();
+    }
+
+    @Bean
+    public JobDetail jobSalary() {
+        return JobBuilder
+                .newJob(SalaryAutoJob.class)
+                .withIdentity(JobKey.jobKey("salary"))
+                .storeDurably()
+                .build();
+    }
+
+    @Bean
+    public Trigger triggerSalary() {
+        return TriggerBuilder
+                .newTrigger()
+                .forJob(jobSalary())
+                .withIdentity(TriggerKey.triggerKey("salary"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 10 * ?"))
                 .build();
     }
 
