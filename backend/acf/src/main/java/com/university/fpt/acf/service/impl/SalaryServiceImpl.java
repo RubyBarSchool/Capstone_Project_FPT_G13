@@ -29,7 +29,8 @@ public class SalaryServiceImpl implements SalaryService {
     public List<SearchSalaryVO> searchSalary(BonusPunishForm bonusPunishForm) {
         List<SearchSalaryVO> searchSalaryVOS = new ArrayList<>();
         try {
-            searchSalaryVOS = historySalaryCustomRepository.searchSalary(bonusPunishForm);
+            AccountSercurity accountSercurity = new AccountSercurity();
+            searchSalaryVOS = historySalaryCustomRepository.searchSalary(accountSercurity.getUserName(),bonusPunishForm);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -43,7 +44,8 @@ public class SalaryServiceImpl implements SalaryService {
         }
         int total = 0;
         try {
-            total = historySalaryCustomRepository.getTotalSearchSalary(bonusPunishForm);
+            AccountSercurity accountSercurity = new AccountSercurity();
+            total = historySalaryCustomRepository.getTotalSearchSalary(accountSercurity.getUserName(),bonusPunishForm);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

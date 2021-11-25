@@ -1,7 +1,10 @@
 package com.university.fpt.acf.config.scheduled.service.impl;
 
 import com.university.fpt.acf.config.scheduled.service.AttendanceCheckService;
+import com.university.fpt.acf.entity.Employee;
+import com.university.fpt.acf.entity.TimeKeep;
 import com.university.fpt.acf.repository.AccountManagerRepository;
+import com.university.fpt.acf.repository.AttendanceRepository;
 import com.university.fpt.acf.repository.EmployeeCustomRepository;
 import com.university.fpt.acf.vo.GetAllEmployeeVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,8 @@ import org.springframework.stereotype.Service;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,10 +30,11 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
     @Autowired
     private JavaMailSender emailSender;
 
+    @Autowired
+    private AttendanceRepository attendanceRepository;
+
     @Override
     public void checkAttendance() {
-
-
         try {
             List<GetAllEmployeeVO> getAllEmployeeVOList = employeeCustomRepository.getAllEmployeeNotAttendanceJob();
 
@@ -48,6 +54,30 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
         } catch (MessagingException e) {
             throw new IllegalStateException("failed to send email");
         }
+    }
+
+    @Override
+    public void autoAttendance() {
+        try{
+            List<GetAllEmployeeVO> getAllEmployeeVOList = employeeCustomRepository.getAllEmployeeNotAttendanceJob();
+            List<TimeKeep> timeKeeps = new ArrayList<>();
+            for(GetAllEmployeeVO getAllEmployeeVO : getAllEmployeeVOList){
+                TimeKeep timeKeep = new TimeKeep();
+                timeKeep.setCreated_by("JOB_AUTO");
+                timeKeep.setModified_by("JOB_AUTO");
+                timeKeep.setDate(LocalDate.now());
+                timeKeep.setType("0");
+                timeKeep.setNote("Điểm danh tự động");
+                Employee employee = new Employee();
+                employee.setId(getAllEmployeeVO.getId());
+                timeKeep.setEmployee(employee);
+                timeKeeps.add(timeKeep);
+            }
+            attendanceRepository.saveAll(timeKeeps);
+        }catch (Exception ex){
+            throw new IllegalStateException("Không thể chạy tự động");
+        }
+
     }
 
     private String buildEmail(List<GetAllEmployeeVO> getAllEmployeeVOList, String link) {

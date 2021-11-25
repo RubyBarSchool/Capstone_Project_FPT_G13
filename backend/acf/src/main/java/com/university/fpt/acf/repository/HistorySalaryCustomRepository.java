@@ -8,8 +8,8 @@ import com.university.fpt.acf.vo.SearchSalaryVO;
 import java.util.List;
 
 public interface HistorySalaryCustomRepository {
-    List<SearchSalaryVO> searchSalary(BonusPunishForm bonusPunishForm);
-    int getTotalSearchSalary(BonusPunishForm bonusPunishForm);
+    List<SearchSalaryVO> searchSalary(String username,BonusPunishForm bonusPunishForm);
+    int getTotalSearchSalary(String username,BonusPunishForm bonusPunishForm);
 
     List<SearchSalaryVO> searchSalaryHistory(SearchSalaryForm searchSalaryForm);
     int getTotalSearchSalaryHistory(SearchSalaryForm searchSalaryForm);

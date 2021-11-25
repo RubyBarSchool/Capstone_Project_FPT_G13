@@ -16,12 +16,14 @@ import java.util.Map;
 @Repository
 public class HistorySalaryCustomRepositoryImpl extends CommonRepository implements HistorySalaryCustomRepository {
     @Override
-    public List<SearchSalaryVO> searchSalary(BonusPunishForm bonusPunishForm) {
+    public List<SearchSalaryVO> searchSalary(String username,BonusPunishForm bonusPunishForm) {
         StringBuilder sqlAcc = new StringBuilder("");
         Map<String, Object> paramsAcc = new HashMap<>();
-        sqlAcc.append(" select new com.university.fpt.acf.vo.SearchSalaryVO(hs.id,hs.created_date,e.fullName,p.name,hs.countWork,hs.salary" +
-                ",hs.bonus,hs.penalty,hs.advanceSalary,hs.totalMoney,hs.status,hs.accountAccept,hs.dateAccept) " +
-                " from HistorySalary hs inner join hs.employee e inner join e.position p where  hs.deleted = false ");
+        sqlAcc.append(" select new com.university.fpt.acf.vo.SearchSalaryVO(hs.id,hs.created_date,e.fullName," +
+                "p.name,hs.countWork,hs.salary,hs.bonus,hs.penalty,hs.advanceSalary,hs.totalMoney,hs.status" +
+                ",hs.accountAccept,hs.dateAccept)  from Account  a inner  join  a.employee e inner  join e.historySalaries hs" +
+                " inner join e.position p where  hs.deleted = false and a.username = :username");
+        paramsAcc.put("username", username);
         if (bonusPunishForm.getCheckNow()) {
             LocalDate localDate = LocalDate.now();
             int day = localDate.getDayOfMonth();
@@ -71,11 +73,12 @@ public class HistorySalaryCustomRepositoryImpl extends CommonRepository implemen
     }
 
     @Override
-    public int getTotalSearchSalary(BonusPunishForm bonusPunishForm) {
+    public int getTotalSearchSalary(String username,BonusPunishForm bonusPunishForm) {
         StringBuilder sqlAcc = new StringBuilder("");
         Map<String, Object> paramsAcc = new HashMap<>();
-        sqlAcc.append(" select COUNT(*)  from HistorySalary hs inner join hs.employee e inner join e.position p " +
-                "where  hs.deleted = false  ");
+        sqlAcc.append(" select COUNT(*)  from Account  a inner  join  a.employee e inner  join e.historySalaries hs" +
+                " inner join e.position p where  hs.deleted = false and a.username = :username");
+        paramsAcc.put("username", username);
         if (bonusPunishForm.getCheckNow()) {
             LocalDate localDate = LocalDate.now();
             int day = localDate.getDayOfMonth();

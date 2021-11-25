@@ -18,7 +18,7 @@
             <a-table
               :columns="columnsSalaryNow"
               :data-source="datasalaryNow"
-              :pagination="paginationSalaryNow"
+              :pagination="false"
               :rowKey="
                 (record, index) => {
                   return index;
@@ -50,7 +50,7 @@
                     <template slot="status" slot-scope="text, record">
                       <a-tag :color="record.status ? 'green' : 'blue'">
                         {{
-                          record.status ? "Chưa có hiệu lực" : "Đã có hiệu lực"
+                         record.status ? "Đã có hiệu lực" : "Chưa có hiệu lực"
                         }}
                       </a-tag>
                     </template>
@@ -72,7 +72,7 @@
                     <template slot="status" slot-scope="text, record">
                       <a-tag :color="record.status ? 'green' : 'blue'">
                         {{
-                          record.status ? "Chưa có hiệu lực" : "Đã có hiệu lực"
+                          record.status ? "Đã có hiệu lực" : "Chưa có hiệu lực"
                         }}
                       </a-tag>
                     </template>
