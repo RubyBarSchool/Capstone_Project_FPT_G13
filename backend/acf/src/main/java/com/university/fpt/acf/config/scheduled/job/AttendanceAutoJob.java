@@ -14,8 +14,7 @@ public class AttendanceAutoJob  extends QuartzJobBean{
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-//        attendanceCheckService.autoAttendance();
-        System.out.println("job1");
+        attendanceCheckService.autoAttendance();
     }
 
 }

@@ -239,6 +239,12 @@ export const router = new Router({
             // lazy-loaded
             component: () =>
                 import ("./pages/ViewWorkEmployee.vue"),
+        }, {
+            path: "/contactmoney",
+            name: "ContactMoney",
+            // lazy-loaded
+            component: () =>
+                import ("./pages/ContactMoney.vue"),
         },
     ],
 });

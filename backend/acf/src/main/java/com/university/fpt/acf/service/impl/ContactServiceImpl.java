@@ -111,6 +111,17 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
+    public List<ContactVO> searchContactMmoney(ContactInSearchForm contactInSearchForm) {
+        List<ContactVO> contactVOS = new ArrayList<>();
+        try {
+            contactVOS = contactCustomRepository.searchContactMmoney(contactInSearchForm);
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return contactVOS;
+    }
+
+    @Override
     public List<ContactProductionVO> searchContactProduction() {
         List<ContactProductionVO> contactVOS = new ArrayList<>();
         try {

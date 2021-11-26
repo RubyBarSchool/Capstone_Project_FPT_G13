@@ -14,6 +14,8 @@ import java.util.List;
 public interface ContactCustomRepository {
     List<ContactVO> searchContact(ContactInSearchForm contactInSearchForm);
 
+    List<ContactVO> searchContactMmoney(ContactInSearchForm contactInSearchForm);
+
     List<ContactProductionVO> searchContactProduction();
 
     int getTotalSearchContact(ContactInSearchForm contactInSearchForm);

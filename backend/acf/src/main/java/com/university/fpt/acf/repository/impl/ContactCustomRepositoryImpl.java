@@ -33,6 +33,22 @@ public class ContactCustomRepositoryImpl extends CommonRepository implements Con
     }
 
     @Override
+    public List<ContactVO> searchContactMmoney(ContactInSearchForm contactInSearchForm) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append(" SELECT new com.university.fpt.acf.vo.ContactVO(c.id,c.name) FROM Contact c where c.deleted = false and c.statusDone in (-2,-1,0) ");
+        if(!contactInSearchForm.getName().isEmpty() && contactInSearchForm.getName()!=null){
+            sql.append(" and LOWER(c.name) like :name ");
+            params.put("name","%"+contactInSearchForm.getName().toLowerCase()+"%");
+        }
+        sql.append(" ORDER by c.id desc ");
+        TypedQuery<ContactVO> query = super.createQuery(sql.toString(),params, ContactVO.class);
+        query.setFirstResult((contactInSearchForm.getPageIndex()-1)* contactInSearchForm.getPageSize());
+        query.setMaxResults(contactInSearchForm.getPageSize());
+        return query.getResultList();
+    }
+
+    @Override
     public List<ContactProductionVO> searchContactProduction() {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();

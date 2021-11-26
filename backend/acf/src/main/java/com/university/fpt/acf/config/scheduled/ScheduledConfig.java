@@ -67,7 +67,7 @@ public class ScheduledConfig {
                 .newTrigger()
                 .forJob(jobCalculatorMaterialInMonth())
                 .withIdentity(TriggerKey.triggerKey("calculatorMaterialInMonth"))
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 1 0/1 ?"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 1 * ?"))
                 .build();
     }
 
@@ -105,7 +105,7 @@ public class ScheduledConfig {
                 .newTrigger()
                 .forJob(jobCalculatorMaterialInYear())
                 .withIdentity(TriggerKey.triggerKey("calculatorMaterialInYear"))
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 1 1 ?"))
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 1 1 ? *"))
                 .build();
     }
 

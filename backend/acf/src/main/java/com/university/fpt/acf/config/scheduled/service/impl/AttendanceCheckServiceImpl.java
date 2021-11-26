@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +38,19 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
     @Override
     public void checkAttendance() {
         try {
+            LocalDateTime dateTime = LocalDateTime.now();
+            int count = 0;
+            if (dateTime.isBefore(LocalDateTime.of(dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth(), 18, 55))) {
+                count = 3;
+            } else if (dateTime.isAfter(LocalDateTime.of(dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth(), 18, 40))) {
+                count = 2;
+            } else if(dateTime.isAfter(LocalDateTime.of(dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth(), 18, 25))){
+                count = 1;
+            }
+            DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+            String dateTimeAfterFormat = dateTime.format(dateTimeFormat);
+
             List<GetAllEmployeeVO> getAllEmployeeVOList = employeeCustomRepository.getAllEmployeeNotAttendanceJob();
 
             if (getAllEmployeeVOList != null && getAllEmployeeVOList.size() != 0) {
@@ -47,7 +62,7 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
                             new MimeMessageHelper(mimeMessage, "utf-8");
                     helper.setText(this.buildEmail(getAllEmployeeVOList, "http://acf-client.s3-website.us-east-2.amazonaws.com/#/attendance"), true);
                     helper.setTo(s);
-                    helper.setSubject("Chấm công");
+                    helper.setSubject((count==0?"":"[Nhắc lại lần " + count + "]")+ "Thư nhắc nhở chấm công ngày " + dateTimeAfterFormat);
                     emailSender.send(mimeMessage);
                 }
             }
@@ -58,10 +73,10 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
 
     @Override
     public void autoAttendance() {
-        try{
+        try {
             List<GetAllEmployeeVO> getAllEmployeeVOList = employeeCustomRepository.getAllEmployeeNotAttendanceJob();
             List<TimeKeep> timeKeeps = new ArrayList<>();
-            for(GetAllEmployeeVO getAllEmployeeVO : getAllEmployeeVOList){
+            for (GetAllEmployeeVO getAllEmployeeVO : getAllEmployeeVOList) {
                 TimeKeep timeKeep = new TimeKeep();
                 timeKeep.setCreated_by("JOB_AUTO");
                 timeKeep.setModified_by("JOB_AUTO");
@@ -74,13 +89,18 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
                 timeKeeps.add(timeKeep);
             }
             attendanceRepository.saveAll(timeKeeps);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw new IllegalStateException("Không thể chạy tự động");
         }
 
     }
 
     private String buildEmail(List<GetAllEmployeeVO> getAllEmployeeVOList, String link) {
+        LocalDateTime dateTime = LocalDateTime.now();
+        DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
+
+        String dateTimeAfterFormat = dateTime.format(dateTimeFormat);
+
         StringBuilder sql = new StringBuilder("");
         sql.append("<div style=\" width:80%; margin: 0 auto;\">\n" +
                 "        <img src=\"\">\n" +
@@ -92,10 +112,10 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
                 "                <td>Hiện tại hệ thống có kiểm tra phần chấm công muốn thông báo đến bạn một số thông tin:</td>\n" +
                 "            </tr>\n" +
                 "            <tr>\n" +
-                "                <td style=\"padding-left: 30px;\">- Thời gian: (6h-28/10/2021)</td>\n" +
+                "                <td style=\"padding-left: 30px;\">- Thời gian: " + dateTimeAfterFormat + "</td>\n" +
                 "            </tr>\n" +
                 "            <tr>\n" +
-                "                <td style=\"padding-left: 30px;\">- Hệ thống có: (12) người chưa được chấm công</td>\n" +
+                "                <td style=\"padding-left: 30px;\">- Hệ thống có: " + getAllEmployeeVOList.size() + " người chưa được chấm công</td>\n" +
                 "            </tr>\n" +
                 "        </table>\n" +
                 "        <br>\n" +

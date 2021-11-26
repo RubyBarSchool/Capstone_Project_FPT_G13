@@ -1,5 +1,6 @@
 package com.university.fpt.acf.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.university.fpt.acf.common.entity.EntityCommon;
 import lombok.*;
 
@@ -36,4 +37,9 @@ public class Contact extends EntityCommon {
     @ToString.Exclude
     private Collection<Product> products;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "contact",cascade = CascadeType.ALL)
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    private Collection<ContactMoney> contactMonies;
 }

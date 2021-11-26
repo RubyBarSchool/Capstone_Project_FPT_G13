@@ -150,8 +150,12 @@ export default {
           name: "Quản lý chi tiết hợp đồng",
         },
         {
-          path: "/ProductionOrder",
+          path: "/productionorder",
           name: "Tạo Lệnh sản xuất",
+        },
+        {
+          path: "/contactmoney",
+          name: "Tạm ứng tiền hợp đồng",
         },
       ],
       routerEmployee: [
