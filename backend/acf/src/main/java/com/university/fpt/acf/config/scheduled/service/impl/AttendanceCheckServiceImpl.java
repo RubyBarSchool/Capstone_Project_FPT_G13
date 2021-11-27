@@ -40,11 +40,11 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
         try {
             LocalDateTime dateTime = LocalDateTime.now();
             int count = 0;
-            if (dateTime.isBefore(LocalDateTime.of(dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth(), 18, 55))) {
+            if (dateTime.isAfter(LocalDateTime.of(dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth(), 18, 40))) {
                 count = 3;
-            } else if (dateTime.isAfter(LocalDateTime.of(dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth(), 18, 40))) {
+            } else if (dateTime.isAfter(LocalDateTime.of(dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth(), 18, 25))) {
                 count = 2;
-            } else if(dateTime.isAfter(LocalDateTime.of(dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth(), 18, 25))){
+            } else if(dateTime.isAfter(LocalDateTime.of(dateTime.getYear(), dateTime.getMonthValue(), dateTime.getDayOfMonth(), 18, 10))){
                 count = 1;
             }
             DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy");

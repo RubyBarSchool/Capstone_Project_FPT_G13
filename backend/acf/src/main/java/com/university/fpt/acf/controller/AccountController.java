@@ -21,7 +21,7 @@ public class AccountController {
     private AccountManagerService accountService;
 
     @PostMapping(path = "/search")
-    public ResponseEntity<ResponseCommon> searchAccount(@RequestBody SearchAccountForm searchAccountForm){
+    public ResponseEntity<ResponseCommon> searchAccount(@RequestBody SearchAccountForm searchAccountForm) {
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
         List<GetAllAccountResponseVO> getAllAccountResponseVOS = new ArrayList<>();
@@ -32,7 +32,7 @@ public class AccountController {
             responseCommon.setData(getAllAccountResponseVOS);
             responseCommon.setTotal(total);
             message = "Thành công";
-            if(total.intValue()==0){
+            if (total.intValue() == 0) {
                 message = "Không tìm thấy";
             }
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -49,23 +49,23 @@ public class AccountController {
 
 
     @PostMapping("/getAcc")
-    public ResponseEntity<ResponseCommon> GetAccountByID(@RequestParam Long id){
+    public ResponseEntity<ResponseCommon> GetAccountByID(@RequestParam Long id) {
         ResponseCommon responseCommon = new ResponseCommon();
-        String message="";
+        String message = "";
         GetAccountDetailResponeVO getAccountDetailResponeVO = new GetAccountDetailResponeVO();
         try {
             getAccountDetailResponeVO = accountService.getAccountById(id);
-            if(getAccountDetailResponeVO==null){
-                message="Tài khoản không tồn tại";
-            }else {
-                message="Thành công";
+            if (getAccountDetailResponeVO == null) {
+                message = "Tài khoản không tồn tại";
+            } else {
+                message = "Thành công";
 
             }
             responseCommon.setMessage(message);
             responseCommon.setData(getAccountDetailResponeVO);
             responseCommon.setStatus(HttpStatus.OK.value());
-            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
-        }catch (Exception e){
+            return new ResponseEntity<>(responseCommon, HttpStatus.OK);
+        } catch (Exception e) {
             message = e.getMessage();
             responseCommon.setData(getAccountDetailResponeVO);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -75,40 +75,17 @@ public class AccountController {
     }
 
     @PostMapping("/add")
-    public  ResponseEntity<ResponseCommon> addAccount(@RequestBody AddAccountForm addAccountForm){
+    public ResponseEntity<ResponseCommon> addAccount(@RequestBody AddAccountForm addAccountForm) {
         ResponseCommon responseCommon = new ResponseCommon();
-        String message="";
+        String message = "";
         Boolean checkAdd = false;
         try {
-            if(addAccountForm.getUsername()!=null && !addAccountForm.getUsername().isEmpty()){
-                if(addAccountForm.getListRole()!=null && !addAccountForm.getListRole().isEmpty()){
-                    if(addAccountForm.getPassword()!=null&&!addAccountForm.getPassword().isEmpty()){
-                        AddAccountValidate cv = new AddAccountValidate();
-                        if(cv.checkPassword(addAccountForm.getPassword())){
-                            checkAdd =accountService.insertAccount(addAccountForm);
-                            if(checkAdd==false){
-                                message="Lỗi thêm tài khoản!";
-                            }else{
-                                message="Thêm tài khoản thành công";
-                            }
-                        }else{
-                            message="Mật khẩu phải có ít nhất 8 kí tự, 1 số,1 chữ viết hoa và 1 kí tự đặc biệt(@#$%^&+=)";
-                        }
-                    }else{
-                        message="Password chống!";
-                    }
-                }else {
-                    message="Chức Vụ không được để chống!";
-                }
-
-            }else{
-                message="Tên tài khoản chống!";
-            }
+            checkAdd = checkAdd = accountService.insertAccount(addAccountForm);
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
             responseCommon.setStatus(HttpStatus.OK.value());
-            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
-        }catch (Exception e){
+            return new ResponseEntity<>(responseCommon, HttpStatus.OK);
+        } catch (Exception e) {
             message = e.getMessage();
             responseCommon.setData(checkAdd);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -116,24 +93,25 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+
     @PutMapping("/update")
-    public  ResponseEntity<ResponseCommon> updateAccount(@RequestBody UpdateAccountForm updateAccountForm){
+    public ResponseEntity<ResponseCommon> updateAccount(@RequestBody UpdateAccountForm updateAccountForm) {
         ResponseCommon responseCommon = new ResponseCommon();
-        String message="";
+        String message = "";
         Boolean checkUpdate = false;
-        try{
-            checkUpdate =accountService.updateAccount(updateAccountForm);
-            if(checkUpdate==false){
-                message="Chỉnh sửa không thành công!";
-            }else{
-                message="Chỉnh sửa thành công!";
+        try {
+            checkUpdate = accountService.updateAccount(updateAccountForm);
+            if (checkUpdate == false) {
+                message = "Chỉnh sửa không thành công!";
+            } else {
+                message = "Chỉnh sửa thành công!";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkUpdate);
             responseCommon.setStatus(HttpStatus.OK.value());
-            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
-        }catch (Exception e){
-            message =e.getMessage();
+            return new ResponseEntity<>(responseCommon, HttpStatus.OK);
+        } catch (Exception e) {
+            message = e.getMessage();
             responseCommon.setData(checkUpdate);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
@@ -142,22 +120,22 @@ public class AccountController {
     }
 
     @DeleteMapping("/delete")
-    public  ResponseEntity<ResponseCommon> deleteAccount(@RequestParam Long id){
+    public ResponseEntity<ResponseCommon> deleteAccount(@RequestParam Long id) {
         ResponseCommon responseCommon = new ResponseCommon();
-        String message="";
+        String message = "";
         Boolean checkDelete = false;
-        try{
+        try {
             checkDelete = accountService.deleteAccount(id);
-            if(checkDelete==false){
-                message="Xóa không thành công";
-            }else{
-                message="Xóa thành công";
+            if (checkDelete == false) {
+                message = "Xóa không thành công";
+            } else {
+                message = "Xóa thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkDelete);
             responseCommon.setStatus(HttpStatus.OK.value());
-            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
-        }catch (Exception e){
+            return new ResponseEntity<>(responseCommon, HttpStatus.OK);
+        } catch (Exception e) {
             message = e.getMessage();
             responseCommon.setData(checkDelete);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -167,21 +145,21 @@ public class AccountController {
     }
 
     @GetMapping("/generateUsername")
-    public ResponseEntity<ResponseCommon> generateUsername(@RequestParam Long id){
+    public ResponseEntity<ResponseCommon> generateUsername(@RequestParam Long id) {
         ResponseCommon responseCommon = new ResponseCommon();
-        String message ="";
-        String genUsername="";
+        String message = "";
+        String genUsername = "";
         try {
             genUsername = accountService.GenerateUsername(id);
-            message="Generate tên tài khoản thành công";
-            if(genUsername==null ||  genUsername.isEmpty()){
-                message ="Generate tên tài khoản không thành công";
+            message = "Generate tên tài khoản thành công";
+            if (genUsername == null || genUsername.isEmpty()) {
+                message = "Generate tên tài khoản không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(accountService.GenerateUsername(id));
             responseCommon.setStatus(HttpStatus.OK.value());
-            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
-        }catch (Exception e){
+            return new ResponseEntity<>(responseCommon, HttpStatus.OK);
+        } catch (Exception e) {
             message = e.getMessage();
             responseCommon.setData(genUsername);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -189,9 +167,6 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
-
-
 
 
 }

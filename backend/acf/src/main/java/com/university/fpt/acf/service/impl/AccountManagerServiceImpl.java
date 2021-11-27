@@ -11,14 +11,21 @@ import com.university.fpt.acf.repository.EmployeeRepository;
 import com.university.fpt.acf.service.AccountManagerService;
 import com.university.fpt.acf.util.AccountValidate.AddAccountValidate;
 import com.university.fpt.acf.vo.*;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import javax.mail.internet.MimeMessage;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +44,14 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private JavaMailSender emailSender;
+
+    private String generatePassword(){
+        String result = "";
+        result = RandomStringUtils.random(8,true,true);
+        return  result;
+    }
 
     @Override
     public Boolean insertAccount(AddAccountForm addAccountForm) {
@@ -49,7 +64,8 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                 String generateUserByIdEmployee = this.GenerateUsername(addAccountForm.getEmployee());
                 if (generateUserByIdEmployee.equals(addAccountForm.getUsername())) {
                     Account ac = new Account();
-                    ac.setPassword(passwordEncoder.encode(addAccountForm.getPassword()));
+                    String password = generatePassword();
+                    ac.setPassword(passwordEncoder.encode(password));
                     ac.setUsername(addAccountForm.getUsername());
                     AccountSercurity accountSercurity = new AccountSercurity();
                     ac.setCreated_date(LocalDate.now());
@@ -61,10 +77,21 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                         listRole.add(role);
                     }
                     ac.setRoles(listRole);
-                    Employee em = new Employee();
-                    em.setId(addAccountForm.getEmployee());
+                    Employee em = employeeRepository.getEmployeeToUpdateById(addAccountForm.getEmployee());
                     ac.setEmployee(em);
                     accountManagerRepository.save(ac);
+
+                    // send mail
+
+                    MimeMessage mimeMessage = emailSender.createMimeMessage();
+                    MimeMessageHelper helper =
+                            new MimeMessageHelper(mimeMessage, "utf-8");
+                    helper.setText(this.buildEmail(addAccountForm.getUsername(),password,em.getFullName(), "http://acf-client.s3-website.us-east-2.amazonaws.com/#/login"), true);
+                    helper.setTo(em.getEmail());
+                    helper.setSubject("Kích hoạt tài khoản thành công trên hệ thống công ty ANH CHUNG FURNITURE");
+                    emailSender.send(mimeMessage);
+
+
                     insert = true;
                 } else {
                     throw new Exception("Username not correct!");
@@ -75,8 +102,35 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         }catch (Exception e){
             e.getMessage();
         }
-
         return insert;
+    }
+
+    private String buildEmail(String username,String password,String name, String link) {
+        StringBuilder sql = new StringBuilder("");
+        sql.append("<div style=\" width:80%; margin: 0 auto;\">\n" +
+                "        <img src=\"\">\n" +
+                "        <table style=\"width:100%;\">\n" +
+                "            <tr>\n" +
+                "                <td colspan=\" 2 \">Xin chào "+name+", </td>\n" +
+                "            </tr>\n" +
+                "            <tr>\n" +
+                "                <td>Chúc mừng bạn đã trở thành một nhân tố quan trọng của công ty ANH CHUNG FURNITURE</td>\n" +
+                "            </tr>\n" +
+                "            <tr>\n" +
+                "                <td style=\"padding-left: 30px;\">- Tài khoản: " + username + "</td>\n" +
+                "            </tr>\n" +
+                "            <tr>\n" +
+                "                <td style=\"padding-left: 30px;\">- Mật Khẩu: " + password + "</td>\n" +
+                "            </tr>\n" +
+                "        </table>\n" +
+                "        <br>\n" +
+                "        <p>vui lòng mời bạn nhấn vào đường dẫn bên dưới để đến với trang mạng của công ty. </p>\n" +
+                "        <button style=\"display: block; margin-left: auto; margin-right: auto; background-color: #40A9FF; color: white;\">" +
+                "      <a href=\"" + link + "\">Đăng nhập!</a></button>\n" +
+                "        <p>Trân trọng,</p>\n" +
+                "        <h3 style=\"font-family: 'Courier New', Courier, monospace \">Anh Chung Furniture</h3>\n" +
+                "    </div>");
+        return sql.toString();
     }
 
     @Override

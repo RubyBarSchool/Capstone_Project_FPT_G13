@@ -90,15 +90,15 @@ public class CompanyServiceImpl implements CompanyService {
                 throw new Exception("Data company is null");
             }
             Long id = companyRespository.checkExitCompanyById(updateCompanyForm.getName());
-            if (id != updateCompanyForm.getId() && id != null) {
+            if (id != null && id.intValue() !=  updateCompanyForm.getId().intValue()) {
                 throw new Exception("Company da ton tai");
             }
             Long checkPhone = companyRespository.checkExitPhoneCompanyById(updateCompanyForm.getPhone());
-            if (checkPhone != updateCompanyForm.getId() && checkPhone != null) {
+            if ( checkPhone != null && checkPhone.intValue() != updateCompanyForm.getId().intValue()  ) {
                 throw new Exception("Phone da ton tai");
             }
             Long checkEmail = companyRespository.checkExitEmailCompanyById(updateCompanyForm.getEmail());
-            if (checkEmail != updateCompanyForm.getId() && checkEmail != null) {
+            if (checkEmail != null &&  checkEmail.intValue() != updateCompanyForm.getId().intValue()) {
                 throw new Exception("Email da ton tai");
             }
             Company c = companyRespository.getCompanyById(updateCompanyForm.getId());
