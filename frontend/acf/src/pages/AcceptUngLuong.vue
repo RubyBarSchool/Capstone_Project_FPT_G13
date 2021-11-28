@@ -363,6 +363,12 @@ export default {
     handleCancel() {
       this.visibleView = false;
     },
+        notifi(type, message, description) {
+      this.$notification[type]({
+        message: message,
+        description: description,
+      });
+    },
   },
 };
 </script>

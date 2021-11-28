@@ -51,11 +51,11 @@ public class PositionServiceImpl implements PositionService {
         boolean check = false;
         try{
             if(addPositionForm.getCode()==null && addPositionForm.getName()==null){
-                throw new Exception("Data position is null");
+                throw new Exception("Dữ liệu chức vụ không được trống");
             }else{
                 if(positionRespository.checkExitPosition(addPositionForm.getName())==null){
                     Position p = new Position();
-                    p.setName(addPositionForm.getName());
+                    p.setName(addPositionForm.getName().toLowerCase());
                     p.setCode(addPositionForm.getCode());
                     AccountSercurity accountSercurity = new AccountSercurity();
                     p.setCreated_date(LocalDate.now());
@@ -63,7 +63,7 @@ public class PositionServiceImpl implements PositionService {
                     positionRespository.save(p);
                     check =true;
                 }else {
-                    throw new Exception("Position is existed");
+                    throw new Exception("chức vụ đã tồn tại");
                 }
 
             }
@@ -79,7 +79,7 @@ public class PositionServiceImpl implements PositionService {
         boolean check = false;
         try{
             if(updatePositionForm.getCode()==null && updatePositionForm.getName()==null){
-                throw new Exception("Data update position is null");
+                throw new Exception("dữ liệu chức vụ không được để trống");
             }else{
                 if(positionRespository.checkDeletePositionById(updatePositionForm.getId())==null){
                        if(positionRespository.CheckExitPositionById(updatePositionForm.getId())!=null){
@@ -93,14 +93,14 @@ public class PositionServiceImpl implements PositionService {
                                positionRespository.save(p);
                                check =true;
                            }else{
-                               throw new Exception("Position name is  existed");
+                               throw new Exception("đã tồn tại tên chức vụ");
                            }
 
                     }else{
-                        throw new Exception("Position is not existed");
+                        throw new Exception("chức vụ không tồn tại trong hệ thống");
                     }
                 }else {
-                    throw new Exception("Position is deleted");
+                    throw new Exception("chức vụ đã bị xóa");
                 }
             }
         }catch (Exception e){

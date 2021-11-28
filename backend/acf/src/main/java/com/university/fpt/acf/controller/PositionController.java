@@ -79,7 +79,7 @@ public class PositionController {
         Boolean checkUpdate = false;
         try{
             if(updatePositionForm.getName()==null || updatePositionForm.getName()==""){
-                message="Dữ liệu Null hoặc chống!";
+                message="Dữ liệu Null hoặc trống!";
             }else {
                 checkUpdate =positionService.updatePosition(updatePositionForm);
                 if(checkUpdate==false){

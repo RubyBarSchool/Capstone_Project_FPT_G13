@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface PositionRespository extends JpaRepository<Position,Long> {
-    @Query("SELECT p.name FROM Position p where p.deleted = false and p.name =:name")
+    @Query("SELECT p.name FROM Position p where p.deleted = false and LOWER(p.name) =:name")
     String checkExitPosition(@Param("name") String name);
     @Query("SELECT p.name FROM Position p where p.deleted = false and p.id=:id")
     String CheckExitPositionById(@Param("id") Long id);

@@ -104,13 +104,19 @@
               <a-modal v-model="visibleAdd" title="Thêm chức vụ">
                 <template slot="footer">
                   <a-button key="back" @click="handleCancel"> Hủy </a-button>
-                  <a-button key="submit" type="primary" @click="checkFormAdd">
+                  <a-button
+                    key="submit"
+                    :disabled="diableButtom"
+                    type="primary"
+                    @click="checkFormAdd"
+                  >
                     Lưu
                   </a-button>
                 </template>
                 <a-form-model>
-                  <a-form-model-item label="Tên chức vụ">
-                    <a-input v-model="dataAdd.name" />
+                  <span style="color: red">*</span> Tên chức vụ :
+                  <a-form-model-item>
+                    <a-input @change="inputNameAdd" v-model="dataAdd.name" />
                     <div style="color: red" v-if="checkDataInputName.show">
                       {{ checkDataInputName.message }}
                     </div>
@@ -121,13 +127,22 @@
               <a-modal v-model="visibleEdit" title="Chỉnh sửa chức vụ">
                 <template slot="footer">
                   <a-button key="back" @click="handleCancel"> Hủy </a-button>
-                  <a-button key="submit" type="primary" @click="submitUpdate">
+                  <a-button
+                    key="submit"
+                    :disabled="diableButtom"
+                    type="primary"
+                    @click="submitUpdate"
+                  >
                     Lưu
                   </a-button>
                 </template>
                 <a-form-model>
-                  <a-form-model-item label="Chức vụ">
-                    <a-input v-model="dataEdit.name" />
+                  <span style="color: red">*</span> Tên chức vụ :
+                  <a-form-model-item>
+                    <a-input @change="inputNameEdit" v-model="dataEdit.name" />
+                    <div style="color: red" v-if="checkDataInputName.show">
+                      {{ checkDataInputName.message }}
+                    </div>
                   </a-form-model-item>
                 </a-form-model>
               </a-modal>
@@ -206,6 +221,7 @@ export default {
         show: false,
         message: "",
       },
+      diableButtom: true,
     };
   },
   created() {
@@ -240,49 +256,89 @@ export default {
         });
     },
     showModalAdd() {
+      this.dataAdd.name = "";
       this.visibleAdd = true;
       this.checkDataInputName.show = false;
       this.checkDataInputName.message = "";
+      this.diableButtom = true;
     },
     checkFormAdd() {
       if (this.dataAdd.name != null && this.dataAdd.name != "") {
-        // if (this.dataAdd.name.length < 8) {
-        //   this.checkDataInputName.show = true;
-        //   this.checkDataInputName.message =
-        //     "Mày phải didenf vào chỗ trống ddooj dai lon hon 8";
-        // } else {
-          this.checkDataInputName.show = false;
-          this.checkDataInputName.message = "";
-          this.submitAdd();
-        // }
+        this.checkDataInputName.show = false;
+        this.checkDataInputName.message = "";
+        this.submitAdd();
       } else {
         this.checkDataInputName.show = true;
-        this.checkDataInputName.message = "Bạn phải điền vào chỗ trống";
+        this.checkDataInputName.message = "Bạn phải điền vào ô tên chức vụ";
+      }
+    },
+    checkFormEdit() {
+      if (this.dataAdd.name != null && this.dataAdd.name != "") {
+        this.checkDataInputName.show = false;
+        this.checkDataInputName.message = "";
+        this.submitUpdate();
+      } else {
+        this.checkDataInputName.show = true;
+        this.checkDataInputName.message = "Bạn phải điền vào ô tên chức vụ";
+      }
+    },
+    inputNameAdd() {
+      if (this.dataAdd.name != null && this.dataAdd.name != "") {
+        this.checkDataInputName.show = false;
+        this.checkDataInputName.message = "";
+        this.diableButtom = false;
+      } else {
+        this.checkDataInputName.show = true;
+        this.checkDataInputName.message = "Bạn phải điền vào ô tên chức vụ";
+        this.diableButtom = true;
+      }
+    },
+    inputNameEdit() {
+      if (this.dataEdit.name != null && this.dataEdit.name != "") {
+        this.checkDataInputName.show = false;
+        this.checkDataInputName.message = "";
+        this.diableButtom = false;
+      } else {
+        this.checkDataInputName.show = true;
+        this.checkDataInputName.message = "Bạn phải điền vào ô tên chức vụ";
+      this.diableButtom = true;
       }
     },
     submitAdd() {
       positionService
         .addPosition(this.dataAdd)
         .then((response) => {
-          this.dataPosition = response.data.data;
           if (response.data.data) {
-            this.submitSearch();
-            var task = "success";
-            var text = "Thêm";
-            this.notifi(task, text);
+            let type = "success";
+            let message = "Thêm chức vụ";
+            let description =
+              "Thêm chức vụ : " + this.dataAdd.name + " thành công";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Thêm chức vụ";
+            let description =
+              "Thêm chức vụ : " + this.dataAdd.name + " không thành công";
+            this.notifi(type, message, description);
           }
           this.submitSearch();
+          this.visibleAdd = false;
+          this.dataAdd.name = "";
         })
-        .catch((e) => {
-          console.log(e);
+        .catch(() => {
+          let type = "error";
+          let message = "Thêm chức vụ";
+          let description =
+            "Thêm chức vụ : " + this.dataAdd.name + " không thành công";
+          this.notifi(type, message, description);
+          this.visibleAdd = false;
+          this.dataAdd.name = "";
         });
-      this.visibleAdd = false;
-      this.dataAdd.name = "";
     },
-    notifi(task, text) {
-      this.$notification[task]({
-        message: "Thông báo",
-        description: text + " thành công",
+    notifi(type, message, description) {
+      this.$notification[type]({
+        message: message,
+        description: description,
       });
     },
     deletePosition(id) {
@@ -290,35 +346,58 @@ export default {
         .deletePosition(id)
         .then((response) => {
           if (response.data.data) {
-            var task = "success";
-            var text = "Xóa";
-            this.notifi(task, text);
-            this.submitSearch();
+            let type = "success";
+            let message = "Xóa chức vụ";
+            let description = "Xóa chức vụ thành công";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Xóa chức vụ";
+            let description = "Xóa chức vụ không thành công";
+            this.notifi(type, message, description);
           }
+          this.submitSearch();
         })
-        .catch((e) => {
-          console.log(e);
+        .catch(() => {
+          let type = "error";
+          let message = "Xóa chức vụ";
+          let description = "Xóa chức vụ không thành công";
+          this.notifi(type, message, description);
         });
     },
     showModalEdit(id, name) {
       this.dataEdit.id = id;
       this.dataEdit.name = name;
       this.visibleEdit = true;
+      this.checkDataInputName.show = false;
+      this.checkDataInputName.message = "";
+      this.diableButtom = true;
     },
     submitUpdate() {
       positionService
         .updatePosition(this.dataEdit)
         .then((response) => {
           if (response.data.data) {
-            this.submitSearch();
-            var task = "success";
-            var text = "Sửa";
-            this.notifi(task, text);
-            this.submitSearch();
+            let type = "success";
+            let message = "Sửa chức vụ";
+            let description =
+              "Sửa chức vụ : " + this.dataEdit.name + " thành công";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Sửa chức vụ";
+            let description =
+              "Sửa chức vụ : " + this.dataEdit.name + " không thành công";
+            this.notifi(type, message, description);
           }
+          this.submitSearch();
         })
-        .catch((e) => {
-          console.log(e);
+        .catch(() => {
+          let type = "error";
+          let message = "Sửa chức vụ";
+          let description =
+            "Sửa chức vụ : " + this.dataEdit.name + " không thành công";
+          this.notifi(type, message, description);
         });
       this.visibleEdit = false;
     },
