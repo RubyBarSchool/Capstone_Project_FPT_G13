@@ -88,7 +88,7 @@ public class EmployeeController {
         String message="";
         Boolean checkAdd = false;
         try {
-            checkAdd =employeeService.AddEmployee(addEmployeeForm);
+//            checkAdd =employeeService.AddEmployee(addEmployeeForm);
             if(checkAdd==false){
                 message="Thêm nhân viên không thành công";
             }else{

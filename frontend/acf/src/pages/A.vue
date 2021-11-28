@@ -2,8 +2,8 @@
   <div class="attendance">
     <a-layout :style="{ background: 'white' }">
       <Header />
-      <!-- <a-layout-content :style="{ margin: '30px 16px 0' }">
-          <img alt="example" style="width: 100%" :src="url" /> </a-layout-content> -->
+      <a-layout-content :style="{ margin: '30px 16px 0' }">
+          <img alt="example" style="width: 100%" :src="url" /> </a-layout-content>
       <a-button
         type="primary"
         @click="showmodal"
@@ -94,7 +94,7 @@ export default {
   },
   computed: {},
   created() {
-    // this.loadImage();
+    this.loadImage();
   },
   methods: {
     handleChange() {

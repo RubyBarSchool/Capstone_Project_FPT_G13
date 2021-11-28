@@ -32,15 +32,15 @@ public class PositionServiceImpl implements PositionService {
         } catch (Exception e) {
             throw new RuntimeException("Error position repository " + e.getMessage());
         }
-        return  getAlPositionVOS;
+        return getAlPositionVOS;
     }
 
     @Override
     public int totalSearchPosition(PositionForm positionForm) {
-        int total=0;
+        int total = 0;
         try {
             total = positionCustomRepository.totalSearchPosition(positionForm);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
         }
         return total;
@@ -49,11 +49,11 @@ public class PositionServiceImpl implements PositionService {
     @Override
     public Boolean addPosition(AddPositionForm addPositionForm) {
         boolean check = false;
-        try{
-            if(addPositionForm.getCode()==null && addPositionForm.getName()==null){
+        try {
+            if (addPositionForm.getCode() == null && addPositionForm.getName() == null) {
                 throw new Exception("Dữ liệu chức vụ không được trống");
-            }else{
-                if(positionRespository.checkExitPosition(addPositionForm.getName())==null){
+            } else {
+                if (positionRespository.checkExitPosition(addPositionForm.getName()) == null) {
                     Position p = new Position();
                     p.setName(addPositionForm.getName().toLowerCase());
                     p.setCode(addPositionForm.getCode());
@@ -61,15 +61,15 @@ public class PositionServiceImpl implements PositionService {
                     p.setCreated_date(LocalDate.now());
                     p.setCreated_by(accountSercurity.getUserName());
                     positionRespository.save(p);
-                    check =true;
-                }else {
+                    check = true;
+                } else {
                     throw new Exception("chức vụ đã tồn tại");
                 }
 
             }
 
-        }catch (Exception e){
-            throw  new RuntimeException(e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
         }
         return check;
     }
@@ -77,33 +77,33 @@ public class PositionServiceImpl implements PositionService {
     @Override
     public Boolean updatePosition(UpdatePositionForm updatePositionForm) {
         boolean check = false;
-        try{
-            if(updatePositionForm.getCode()==null && updatePositionForm.getName()==null){
+        try {
+            if (updatePositionForm.getCode() == null && updatePositionForm.getName() == null) {
                 throw new Exception("dữ liệu chức vụ không được để trống");
-            }else{
-                if(positionRespository.checkDeletePositionById(updatePositionForm.getId())==null){
-                       if(positionRespository.CheckExitPositionById(updatePositionForm.getId())!=null){
-                           if(positionRespository.checkExitPosition(updatePositionForm.getName())== null ||
-                           positionRespository.checkExitPosition(updatePositionForm.getName())== updatePositionForm.getName()){
-                               Position p  = positionRespository.getPositionById(updatePositionForm.getId());
-                               p.setName(updatePositionForm.getName());
-                               p.setCode(updatePositionForm.getCode());
-                               AccountSercurity accountSercurity = new AccountSercurity();
-                               p.setModified_by(accountSercurity.getUserName());
-                               positionRespository.save(p);
-                               check =true;
-                           }else{
-                               throw new Exception("đã tồn tại tên chức vụ");
-                           }
+            } else {
+                if (positionRespository.checkDeletePositionById(updatePositionForm.getId()) == null) {
+                    if (positionRespository.CheckExitPositionById(updatePositionForm.getId()) != null) {
+                        if (positionRespository.checkExitPosition(updatePositionForm.getName()) == null ||
+                                positionRespository.checkExitPosition(updatePositionForm.getName()) == updatePositionForm.getName()) {
+                            Position p = positionRespository.getPositionById(updatePositionForm.getId());
+                            p.setName(updatePositionForm.getName());
+                            p.setCode(updatePositionForm.getCode());
+                            AccountSercurity accountSercurity = new AccountSercurity();
+                            p.setModified_by(accountSercurity.getUserName());
+                            positionRespository.save(p);
+                            check = true;
+                        } else {
+                            throw new Exception("đã tồn tại tên chức vụ");
+                        }
 
-                    }else{
+                    } else {
                         throw new Exception("chức vụ không tồn tại trong hệ thống");
                     }
-                }else {
+                } else {
                     throw new Exception("chức vụ đã bị xóa");
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
         return check;
@@ -112,18 +112,16 @@ public class PositionServiceImpl implements PositionService {
     @Override
     public Boolean deletePosition(Long id) {
         boolean check = false;
-        try{
-            if(positionRespository.checkPositionInEmployeeToDeletePosition(id)==0){
-                Position p = positionRespository.getPositionById(id);
-                if(p != null) {
-                    p.setDeleted(true);
-                    AccountSercurity accountSercurity = new AccountSercurity();
-                    p.setModified_by(accountSercurity.getUserName());
-                    positionRespository.save(p);
-                    check = true;
-                }
+        try {
+            Position p = positionRespository.getPositionById(id);
+            if (p != null) {
+                p.setDeleted(true);
+                AccountSercurity accountSercurity = new AccountSercurity();
+                p.setModified_by(accountSercurity.getUserName());
+                positionRespository.save(p);
+                check = true;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Position is not existed");
         }
         return check;

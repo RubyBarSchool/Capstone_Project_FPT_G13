@@ -25,12 +25,12 @@
           />
           <a-select
             placeholder="Chức vụ"
-            :filter-option="false"
-            @search="fetchPosition"
             style="width: 140px"
+            default-value=""
+            @change="submitSearch"
             v-model="dataSearch.idPosition"
-            show-search
           >
+            <a-select-option value=""> Tất cả </a-select-option>
             <a-select-option
               v-for="(position, index) in dataPositions"
               :value="position.id"
@@ -40,10 +40,13 @@
             </a-select-option>
           </a-select>
           <a-select
+            @change="submitSearch"
             placeholder="Trạng thái"
             style="width: 150px"
+            default-value=""
             v-model="dataSearch.statusDelete"
           >
+            <a-select-option value=""> Tất cả </a-select-option>
             <a-select-option value="false"> Đang làm </a-select-option>
             <a-select-option value="true"> Nghỉ </a-select-option>
           </a-select>
@@ -105,7 +108,7 @@
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-row>
-                  <a-col :span="8">
+                  <!-- <a-col :span="8">
                     <a-button
                       id="user"
                       @click="showDetail(record.id)"
@@ -113,7 +116,7 @@
                     >
                       <font-awesome-icon :icon="['fas', 'user']" />
                     </a-button>
-                  </a-col>
+                  </a-col> -->
                   <a-col :span="8">
                     <a-button
                       id="edit"
@@ -150,30 +153,44 @@
             </template>
             <div class="container">
               <a-form-model>
+                <div class="row" v-if="showImage">
+                  <img
+                    alt="example"
+                    style="width: 50%; margin-left: auto; margin-right: auto"
+                    :src="url"
+                  />
+                </div>
                 <div class="row">
                   <div class="col">
-                    <a-form-model-item label="Họ Và Tên">
-                      <a-input v-model="dataAdd.fullName" />
+                    <span style="color: red">*</span> Họ Và Tên :
+                    <a-form-model-item>
+                      <a-input style="width: 100%" v-model="dataAdd.fullName" />
                     </a-form-model-item>
-                    <a-form-model-item label="Ngày Sinh">
-                      <a-date-picker v-model="dataAdd.dob">
+
+                    <span style="color: red">*</span> Ngày Sinh :
+                    <a-form-model-item>
+                      <a-date-picker style="width: 100%" v-model="dataAdd.dob">
                         <a-icon slot="suffixIcon" type="smile" />
                       </a-date-picker>
                     </a-form-model-item>
-                    <a-form-model-item label="Giới Tính">
-                      <a-radio-group v-model="dataAdd.gender">
+
+                    <span style="color: red">*</span> Giới tính :
+                    <a-form-model-item>
+                      <a-radio-group
+                        style="width: 100%"
+                        v-model="dataAdd.gender"
+                      >
                         <a-radio :value="true"> Nam </a-radio>
                         <a-radio :value="false"> Nữ </a-radio>
                       </a-radio-group>
                     </a-form-model-item>
-                    <a-form-model-item label="Chức Vụ">
+
+                    <span style="color: red">*</span> Chức Vụ :
+                    <a-form-model-item>
                       <a-select
                         placeholder="Chức vụ"
-                        :filter-option="false"
-                        @search="fetchPosition"
-                        style="width: 120px"
+                        style="width: 100%"
                         v-model="dataAdd.idPosition"
-                        show-search
                       >
                         <a-select-option
                           v-for="(position, index) in dataPositions"
@@ -184,25 +201,47 @@
                         </a-select-option>
                       </a-select>
                     </a-form-model-item>
-                    <a-form-model-item label="Số Điện Thoại">
-                      <a-input v-model="dataAdd.phone" />
+
+                    <span style="color: red">*</span> Số điện thoại :
+                    <a-form-model-item>
+                      <a-input-number
+                        style="width: 100%"
+                        v-model="dataAdd.phone"
+                      />
                     </a-form-model-item>
                   </div>
                   <div class="col">
-                    <a-form-model-item label="Email">
-                      <a-input v-model="dataAdd.email" />
+                    <span style="color: red">*</span> Email :
+                    <a-form-model-item>
+                      <a-input style="width: 100%" v-model="dataAdd.email" />
                     </a-form-model-item>
-                    <a-form-model-item label="Địa chỉ">
-                      <a-input v-model="dataAdd.address" />
+
+                    <span style="color: red">*</span> Địa chỉ :
+                    <a-form-model-item>
+                      <a-input style="width: 100%" v-model="dataAdd.address" />
                     </a-form-model-item>
-                    <a-form-model-item label="Dân Tộc">
-                      <a-input v-model="dataAdd.nation" />
+
+                    <span style="color: red">*</span> Dân tộc :
+                    <a-form-model-item>
+                      <a-input style="width: 100%" v-model="dataAdd.nation" />
                     </a-form-model-item>
-                    <a-form-model-item label="Lương">
-                      <a-input v-model="dataAdd.salary" />
+
+                    <span style="color: red">*</span> Lương :
+                    <a-form-model-item>
+                      <a-input-number
+                        style="width: 100%"
+                        v-model="dataAdd.salary"
+                      />
                     </a-form-model-item>
-                    <a-form-model-item label="Ảnh">
-                      <a-input v-model="dataAdd.image" />
+
+                    Ảnh :
+                    <a-form-model-item>
+                      <input
+                        type="file"
+                        accept=".jpg, .png"
+                        @change="importFile($event)"
+                      />
+                      <!-- <a-input style="width: 100%" v-model="dataAdd.image" /> -->
                     </a-form-model-item>
                   </div>
                 </div>
@@ -402,6 +441,8 @@ export default {
   },
   data() {
     return {
+      url: "",
+      showImage: false,
       dataPositions: [],
       dataPosition: {
         name: "",
@@ -413,7 +454,7 @@ export default {
         dob: "",
         email: "",
         fullName: "",
-        gender: "",
+        gender: true,
         idPosition: "",
         image: "",
         nation: "",
@@ -522,6 +563,13 @@ export default {
     this.getAllPosition();
   },
   methods: {
+    importFile(event1) {
+      if (event1.target.files[0]) {
+        this.dataAdd.image = event1.target.files[0];
+        this.url = window.URL.createObjectURL(event1.target.files[0]);
+        this.showImage = true;
+      }
+    },
     handleCancel() {
       this.visibleAdd = false;
       this.visibleEdit = false;
@@ -598,6 +646,7 @@ export default {
       this.visibleAdd = true;
     },
     submitAdd() {
+      console.log("data add", this.dataAdd);
       userService
         .addUser(this.dataAdd)
         .then((response) => {
@@ -618,21 +667,22 @@ export default {
               response.data.message;
             this.notifi(type, message, description);
           }
+
+          this.visibleAdd = false;
+          this.dataAdd.fullName = "";
+          this.dataAdd.gender = "";
+          this.dataAdd.dob = "";
+          this.dataAdd.idPosition = "";
+          this.dataAdd.phone = "";
+          this.dataAdd.email = "";
+          this.dataAdd.nation = "";
+          this.dataAdd.address = "";
+          this.dataAdd.salary = "";
+          this.dataAdd.image = "";
         })
         .catch((e) => {
           console.log(e);
         });
-      this.visibleAdd = false;
-      this.dataAdd.fullName = "";
-      this.dataAdd.gender = "";
-      this.dataAdd.dob = "";
-      this.dataAdd.idPosition = "";
-      this.dataAdd.phone = "";
-      this.dataAdd.email = "";
-      this.dataAdd.nation = "";
-      this.dataAdd.address = "";
-      this.dataAdd.salary = "";
-      this.dataAdd.image = "";
     },
     showModalEdit(record) {
       this.dataEdit.id = record.id;
