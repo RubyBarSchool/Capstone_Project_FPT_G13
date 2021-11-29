@@ -492,7 +492,7 @@ export default {
       this.getAllEmployee();
     },
     submitUpdate() {
-      this.dataEdit.effectiveDate.
+      // this.dataEdit.effectiveDate.
       punishAdminService
         .updatePunishAdmin(this.dataEdit)
         .then((response) => {

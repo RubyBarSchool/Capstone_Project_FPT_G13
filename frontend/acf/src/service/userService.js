@@ -8,11 +8,7 @@ class userService {
         return http.post("/admin/employee/search", name);
     }
     addUser(form) {
-        return http.post(`/admin/employee/add`, form, {
-            headers: {
-                "Content-Type": "multipart/form-data"
-            }
-        });
+        return http.post(`/admin/employee/add`, form);
     }
     updateUser(data) {
         return http.put(`/admin/employee/update`, data);
