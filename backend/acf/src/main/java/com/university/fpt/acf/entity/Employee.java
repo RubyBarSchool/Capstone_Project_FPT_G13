@@ -23,7 +23,10 @@ public class Employee extends EntityCommon {
     private String nation;
     private String phone;
     private Long salary;
-    private String image;
+
+    @OneToOne
+    @JoinColumn(name = "file_id")
+    private File image;
 
 
 

@@ -87,7 +87,7 @@
               @change="handleTableChange"
             >
               <template slot="image" slot-scope="text, record">
-                {{ record.image }}
+                <img v-if="record.image !== null" alt="example" style="width: 20%" :src="record.image" />
               </template>
               <template slot="employee" slot-scope="text, record">
                 {{ record.fullName }}
@@ -432,6 +432,7 @@
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 import userService from "../service/userService";
+import fileService from "../service/fileService";
 
 export default {
   name: "User",
@@ -633,6 +634,21 @@ export default {
         .searchUser(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
+          for (let i = 0; i < this.dataSourceTable.length; i++) {
+            if (this.dataSourceTable[i].image !== null) {
+              userService
+                .preview(this.dataSourceTable[i].image)
+                .then((response) => {
+                  this.dataSourceTable[i].image = window.URL.createObjectURL(
+                    response.data
+                  );
+                })
+                .catch((e) => {
+                  console.log(e);
+                });
+              console.log("data", this.dataSourceTable[i].image);
+            }
+          }
           this.dataSearch.total = response.data.total;
           this.pagination.total = response.data.total;
         })
@@ -646,39 +662,49 @@ export default {
       this.visibleAdd = true;
     },
     submitAdd() {
-      console.log("data add", this.dataAdd);
-      userService
-        .addUser(this.dataAdd)
+      fileService
+        .uploadImage(this.dataAdd.image)
         .then((response) => {
-          this.submitSearch();
-          if (response.data.data) {
-            let type = "success";
-            let message = "Thêm mới";
-            let description =
-              "Thêm mới nhân viên " + this.dataAdd.username + " thành công !!";
-            this.notifi(type, message, description);
-          } else {
-            let type = "error";
-            let message = "Thêm mới";
-            let description =
-              "Thêm mới tài khoản " +
-              this.dataAdd.fullName +
-              " không thành công vì " +
-              response.data.message;
-            this.notifi(type, message, description);
-          }
+          this.dataAdd.image = response.data.data;
+          userService
+            .addUser(this.dataAdd)
+            .then((response) => {
+              this.submitSearch();
+              if (response.data.data) {
+                let type = "success";
+                let message = "Thêm mới";
+                let description =
+                  "Thêm mới nhân viên " +
+                  this.dataAdd.username +
+                  " thành công !!";
+                this.notifi(type, message, description);
+              } else {
+                let type = "error";
+                let message = "Thêm mới";
+                let description =
+                  "Thêm mới tài khoản " +
+                  this.dataAdd.fullName +
+                  " không thành công vì " +
+                  response.data.message;
+                this.notifi(type, message, description);
+              }
 
-          this.visibleAdd = false;
-          this.dataAdd.fullName = "";
-          this.dataAdd.gender = "";
-          this.dataAdd.dob = "";
-          this.dataAdd.idPosition = "";
-          this.dataAdd.phone = "";
-          this.dataAdd.email = "";
-          this.dataAdd.nation = "";
-          this.dataAdd.address = "";
-          this.dataAdd.salary = "";
-          this.dataAdd.image = "";
+              this.visibleAdd = false;
+              this.dataAdd.fullName = "";
+              this.dataAdd.gender = "";
+              this.dataAdd.dob = "";
+              this.dataAdd.idPosition = "";
+              this.dataAdd.phone = "";
+              this.dataAdd.email = "";
+              this.dataAdd.nation = "";
+              this.dataAdd.address = "";
+              this.dataAdd.salary = "";
+              this.dataAdd.image = "";
+            })
+            .catch(() => {
+              userService
+            .deleteImage(this.dataAdd.image);
+            });
         })
         .catch((e) => {
           console.log(e);

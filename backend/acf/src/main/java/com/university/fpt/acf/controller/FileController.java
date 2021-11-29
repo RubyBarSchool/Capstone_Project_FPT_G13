@@ -1,6 +1,7 @@
 package com.university.fpt.acf.controller;
 
 import com.university.fpt.acf.common.entity.ResponseCommon;
+import com.university.fpt.acf.entity.File;
 import com.university.fpt.acf.service.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -31,6 +32,26 @@ public class FileController {
             fileStorageService.save(file);
             message = "Uploaded the file successfully: " + file.getOriginalFilename();
             responseCommon.setData(true);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+            responseCommon.setData(false);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+
+    @PostMapping("/image")
+    public ResponseEntity<ResponseCommon> uploadImage(@RequestParam("file") MultipartFile file) {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        try {
+            File file1 = fileStorageService.saveImage(file);
+            message = "Uploaded the file successfully: " + file.getOriginalFilename();
+            responseCommon.setData(file1.getId());
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
@@ -82,5 +103,26 @@ public class FileController {
         Resource file = fileStorageService.load(filename);
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    }
+
+    @DeleteMapping("/{filename:.+}")
+    public ResponseEntity<ResponseCommon> deleteFile(@PathVariable String filename) throws IOException {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        Boolean check = false;
+        try {
+            check = fileStorageService.deleteFile(filename);
+            message = "Delete the file successfully";
+            responseCommon.setData(check);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = "Could not upload the file!";
+            responseCommon.setData(check);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
     }
 }

@@ -80,7 +80,7 @@ public class AccountController {
         String message = "";
         Boolean checkAdd = false;
         try {
-            checkAdd = checkAdd = accountService.insertAccount(addAccountForm);
+            checkAdd  = accountService.insertAccount(addAccountForm);
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
             responseCommon.setStatus(HttpStatus.OK.value());

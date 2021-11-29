@@ -23,8 +23,8 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
             "where e.deleted= false and a.username is null and LOWER(e.fullName) LIKE :fullname order by e.fullName asc  ")
     List<GetAllEmployeeVO> getTop10EmployeeNotAccount(@Param("fullname") String fullName,Pageable pageable);
 
-    @Query("SELECT new com.university.fpt.acf.vo.EmployeeDetailVO(e.image,e.fullName,e.gender,e.dob,e.email,e.phone,e.address,e.nation,e.salary,p.id,p.name)  " +
-            "FROM Employee e left join e.position p where e.id =:id")
+    @Query("SELECT new com.university.fpt.acf.vo.EmployeeDetailVO(img.name,e.fullName,e.gender,e.dob,e.email,e.phone,e.address,e.nation,e.salary,p.id,p.name)  " +
+            "FROM Employee e left join  e.image img left join e.position p where e.id =:id")
     EmployeeDetailVO getEmployeeById(@Param("id") Long id);
 
     @Query("SELECT e.phone FROM Employee e where e.phone=:phone and e.deleted=false")
@@ -44,4 +44,9 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
 
     @Query("SELECT e FROM Employee e where e.deleted = false ")
     List<Employee> getAllEmployee();
+
+
+    @Query("SELECT e FROM Employee e inner join e.image img where img.id = :idFile")
+    Employee getEmployeeByFile(@Param("idFile") String image);
+
 }

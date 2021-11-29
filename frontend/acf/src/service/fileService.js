@@ -13,6 +13,18 @@ class fileService {
             onUploadProgress
         });
     }
+
+    uploadImage(file) {
+        let formData = new FormData();
+
+        formData.append("file", file);
+
+        return http.post("/files/image", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        });
+    }
 }
 
 export default new fileService();

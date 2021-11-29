@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -88,7 +89,7 @@ public class EmployeeController {
         String message="";
         Boolean checkAdd = false;
         try {
-//            checkAdd =employeeService.AddEmployee(addEmployeeForm);
+            checkAdd = employeeService.AddEmployee(addEmployeeForm);
             if(checkAdd==false){
                 message="Thêm nhân viên không thành công";
             }else{

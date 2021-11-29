@@ -2,6 +2,7 @@ package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.config.security.AccountSercurity;
 import com.university.fpt.acf.entity.Employee;
+import com.university.fpt.acf.entity.File;
 import com.university.fpt.acf.entity.Position;
 import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.repository.EmployeeCustomRepository;
@@ -100,14 +101,16 @@ public class EmployeeServiceImpl implements EmployeeService {
                 throw new Exception("Data position is null");
             }else{
                 EmployeeValidate validate = new EmployeeValidate();
-                if(validate.checkFormEmail(addEmployeeForm.getEmail())&&validate.checkFormPhone(addEmployeeForm.getPhone())){
+//                if(validate.checkFormEmail(addEmployeeForm.getEmail())&&validate.checkFormPhone(addEmployeeForm.getPhone())){
                     if(employeeRepository.checkExitPhone(addEmployeeForm.getPhone())==null &&
                             employeeRepository.checkExitEmail(addEmployeeForm.getEmail())== null){
                         String checkPosition =positionRespository.CheckExitPositionById(addEmployeeForm.getIdPosition());
                         if(checkPosition !=null && !checkPosition.isEmpty()){
                             Employee e = new Employee();
                             e.setFullName(addEmployeeForm.getFullName());
-//                            e.setImage(addEmployeeForm.getImage());
+                            File file = new File();
+                            file.setId(addEmployeeForm.getImage());
+                            e.setImage(file);
                             e.setDob(addEmployeeForm.getDob());
                             e.setGender(addEmployeeForm.getGender());
                             e.setAddress(addEmployeeForm.getAddress());
@@ -130,9 +133,10 @@ public class EmployeeServiceImpl implements EmployeeService {
                     }else{
                         throw new Exception("SĐT/ Email không tồn tại!");
                     }
-                }else {
-                    throw new Exception("SĐT/Email sai quy chuẩn");
-                }
+//                }
+//                else {
+//                    throw new Exception("SĐT/Email sai quy chuẩn");
+//                }
             }
         }catch (Exception e){
             e.getMessage();
@@ -156,7 +160,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             if(e!=null){
                 if(validate.checkFormEmail(updateEmployeeForm.getEmail())&&validate.checkFormPhone(updateEmployeeForm.getPhone())){
                     e.setFullName(updateEmployeeForm.getFullName());
-                    e.setImage(updateEmployeeForm.getImage());
+                    File file = new File();
+                    file.setId(updateEmployeeForm.getImage());
+                    e.setImage(file);
                     e.setDob(updateEmployeeForm.getDob());
                     e.setGender(updateEmployeeForm.getGender());
                     e.setAddress(updateEmployeeForm.getAddress());

@@ -19,7 +19,20 @@ class userService {
     deleteUser(id) {
         return http.delete(`/admin/employee/delete?id=${id}`);
     }
+    uploadImage(file) {
+        let formData = new FormData();
 
+        formData.append("file", file);
+
+        return http.post("/admin/employee/image", formData, {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            }
+        });
+    }
+    preview(name) {
+        return http.get(`/files/${name}`, { responseType: 'blob' });
+    }
 }
 
 export default new userService();

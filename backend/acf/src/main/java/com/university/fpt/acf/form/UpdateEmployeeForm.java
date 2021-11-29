@@ -1,11 +1,15 @@
 package com.university.fpt.acf.form;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UpdateEmployeeForm {
     private Long id;
     @NotNull(message = "image đang null")

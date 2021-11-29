@@ -98,8 +98,8 @@ public class EmployeeCustomRepositoryImpl extends CommonRepository implements Em
     public List<SearchEmployeeVO> searchEmployee(SearchAllEmployeeForm searchAllEmployeeForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append(" SELECT new com.university.fpt.acf.vo.SearchEmployeeVO(e.id,e.image,e.fullName,e.gender,e.dob,e.email,p.id,p.name,e.deleted) " +
-                "FROM Employee e left join e.position p where 1=1 ");
+        sql.append(" SELECT new com.university.fpt.acf.vo.SearchEmployeeVO(e.id,img.name,e.fullName,e.gender,e.dob,e.email,p.id,p.name,e.deleted) " +
+                "FROM Employee e left join e.image img left join e.position p where 1=1 ");
         if (searchAllEmployeeForm.getName() != null && !searchAllEmployeeForm.getName().isEmpty()) {
             sql.append(" and LOWER(e.fullName) like :name");
             params.put("name", "%" + searchAllEmployeeForm.getName().toLowerCase() + "%");

@@ -1,5 +1,6 @@
 package com.university.fpt.acf.service;
 
+import com.university.fpt.acf.entity.File;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -7,15 +8,19 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 public interface FileStorageService {
-    public void init();
+     void init();
 
-    public void save(MultipartFile file);
+     void save(MultipartFile file);
 
-    public Resource load(String filename);
+     Resource load(String filename);
 
-    public String loadUri(String filename);
+     String loadUri(String filename);
 
-    public void deleteAll();
+     void deleteAll();
 
-    public Stream<Path> loadAll();
+     Stream<Path> loadAll();
+
+     File saveImage(MultipartFile file);
+
+     Boolean deleteFile(String fileId);
 }
