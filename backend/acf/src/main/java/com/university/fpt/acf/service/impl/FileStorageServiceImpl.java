@@ -35,10 +35,13 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
     @Override
     public void init() {
         try {
-            Files.createDirectory(root);
+            if(!Files.exists(root)) {
+                Files.createDirectory(root);
+            }
         } catch (IOException e) {
             throw new RuntimeException("Could not initialize folder for upload!");
         }
@@ -56,7 +59,7 @@ public class FileStorageServiceImpl implements FileStorageService {
             file1.setType(file.getContentType());
             file1.setUrl(root.toUri().getPath());
             fileRepository.save(file1);
-            Files.copy(file.getInputStream(),this.root.resolve(fileName));
+            Files.copy(file.getInputStream(), this.root.resolve(fileName));
         } catch (Exception e) {
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
         }
@@ -82,7 +85,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     public String loadUri(String filename) {
         try {
             Path file = root.resolve(filename);
-            return  file.toUri().getPath();
+            return file.toUri().getPath();
         } catch (Exception e) {
             throw new RuntimeException("Error: " + e.getMessage());
         }
@@ -90,7 +93,7 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     @Override
     public void deleteAll() {
-
+        FileSystemUtils.deleteRecursively(root.toFile());
     }
 
     @Override
@@ -105,7 +108,7 @@ public class FileStorageServiceImpl implements FileStorageService {
             LocalDateTime dateTime = LocalDateTime.now();
             DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy_hh-mm-ss");
             String dateTimeAfterFormat = dateTime.format(dateTimeFormat);
-            String fileName = "file_"+dateTimeAfterFormat+"_"+StringUtils.cleanPath(file.getOriginalFilename());
+            String fileName = "file_" + dateTimeAfterFormat + "_" + StringUtils.cleanPath(file.getOriginalFilename());
             AccountSercurity accountSercurity = new AccountSercurity();
             file1.setModified_by(accountSercurity.getUserName());
             file1.setCreated_by(accountSercurity.getUserName());
@@ -113,7 +116,7 @@ public class FileStorageServiceImpl implements FileStorageService {
             file1.setType(file.getContentType());
             file1.setUrl(root.toUri().getPath());
             file1 = fileRepository.save(file1);
-            Files.copy(file.getInputStream(),this.root.resolve(fileName));
+            Files.copy(file.getInputStream(), this.root.resolve(fileName));
         } catch (Exception e) {
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
         }
@@ -138,6 +141,6 @@ public class FileStorageServiceImpl implements FileStorageService {
         } catch (Exception e) {
             throw new RuntimeException("Error: " + e.getMessage());
         }
-        return  check;
+        return check;
     }
 }

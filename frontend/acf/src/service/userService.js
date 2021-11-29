@@ -33,6 +33,10 @@ class userService {
     preview(name) {
         return http.get(`/files/${name}`, { responseType: 'blob' });
     }
+
+    deleteImage(name) {
+        return http.delete(`/files/${name}`);
+    }
 }
 
 export default new userService();

@@ -33,7 +33,7 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
     @Query("SELECT e.email FROM Employee e where e.email=:email and e.deleted=false")
     String checkExitEmail(@Param("email") String email);
 
-    @Query("SELECT e FROM Employee e where e.deleted = false and e.id=:id")
+    @Query("SELECT e FROM Employee e left join e.image img where e.deleted = false and e.id=:id")
     Employee getEmployeeToUpdateById(@Param("id") Long id);
 
 

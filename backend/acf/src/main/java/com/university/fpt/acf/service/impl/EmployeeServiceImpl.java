@@ -7,8 +7,10 @@ import com.university.fpt.acf.entity.Position;
 import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.repository.EmployeeCustomRepository;
 import com.university.fpt.acf.repository.EmployeeRepository;
+import com.university.fpt.acf.repository.FileRepository;
 import com.university.fpt.acf.repository.PositionRespository;
 import com.university.fpt.acf.service.EmployeeService;
+import com.university.fpt.acf.service.FileStorageService;
 import com.university.fpt.acf.util.EmployeeValidate.EmployeeValidate;
 import com.university.fpt.acf.vo.EmployeeDetailVO;
 import com.university.fpt.acf.vo.GetAllEmployeeVO;
@@ -30,6 +32,10 @@ public class EmployeeServiceImpl implements EmployeeService {
     private PositionRespository positionRespository;
     @Autowired
     private EmployeeCustomRepository employeeCustomRepository;
+
+    @Autowired
+    private FileRepository fileRepository;
+
     @Override
     public List<SearchEmployeeVO> searchEmployee(SearchAllEmployeeForm searchAllEmployeeForm) {
         List<SearchEmployeeVO> getAlEmployeeVOS = new ArrayList<>();
@@ -156,13 +162,16 @@ public class EmployeeServiceImpl implements EmployeeService {
                 throw new Exception("Chức vụ không tồn tại!");
             }
             Employee e = employeeRepository.getEmployeeToUpdateById(updateEmployeeForm.getId());
+            String fileName = e.getImage().getId();
             EmployeeValidate validate = new EmployeeValidate();
             if(e!=null){
                 if(validate.checkFormEmail(updateEmployeeForm.getEmail())&&validate.checkFormPhone(updateEmployeeForm.getPhone())){
                     e.setFullName(updateEmployeeForm.getFullName());
-                    File file = new File();
-                    file.setId(updateEmployeeForm.getImage());
-                    e.setImage(file);
+                    if(updateEmployeeForm.getImage() != null && !updateEmployeeForm.getImage().equals("")){
+                        File file = new File();
+                        file.setId(updateEmployeeForm.getImage());
+                        e.setImage(file);
+                    }
                     e.setDob(updateEmployeeForm.getDob());
                     e.setGender(updateEmployeeForm.getGender());
                     e.setAddress(updateEmployeeForm.getAddress());
@@ -177,6 +186,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                     e.setModified_by(accountSercurity.getUserName());
                     e.setModified_date(LocalDate.now());
                     employeeRepository.save(e);
+                    if(updateEmployeeForm.getImage() != null && !updateEmployeeForm.getImage().equals("")){
+                        fileRepository.deleteByID(fileName);
+                    }
                     check =true;
                 }else {
                     throw new Exception("Employee is not format Phone/ Email!");

@@ -87,7 +87,12 @@
               @change="handleTableChange"
             >
               <template slot="image" slot-scope="text, record">
-                <img v-if="record.image !== null" alt="example" style="width: 20%" :src="record.image" />
+                <img
+                  v-if="record.image !== null"
+                  alt="example"
+                  style="width: 20%"
+                  :src="record.image"
+                />
               </template>
               <template slot="employee" slot-scope="text, record">
                 {{ record.fullName }}
@@ -147,7 +152,7 @@
           <a-modal v-model="visibleAdd" title="Thêm nhân viên">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitAdd">
+              <a-button key="submit" type="primary" :loading="loadingAdd" @click="submitAdd">
                 Lưu
               </a-button>
             </template>
@@ -254,18 +259,28 @@
           <a-modal v-model="visibleEdit" title="Chỉnh sửa nhân viên">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitUpdate">
+              <a-button key="submit" type="primary" :loading="loadingEdit" @click="submitUpdate">
                 Lưu
               </a-button>
             </template>
             <div class="container">
               <a-form-model>
+                <div class="row" v-if="showImage">
+                  <img
+                    alt="example"
+                    style="width: 50%; margin-left: auto; margin-right: auto"
+                    :src="url"
+                  />
+                </div>
                 <div class="row">
                   <div class="col">
-                    <a-form-model-item label="Họ Và Tên">
+                    <span style="color: red">*</span> Họ Và Tên :
+                    <a-form-model-item>
                       <a-input v-model="dataEdit.fullName" />
                     </a-form-model-item>
-                    <a-form-model-item label="Ngày Sinh">
+
+                    <span style="color: red">*</span> Ngày Sinh :
+                    <a-form-model-item>
                       <a-date-picker
                         v-model="dataEdit.dob"
                         format="YYYY-MM-DD"
@@ -274,20 +289,21 @@
                         <a-icon slot="suffixIcon" type="smile" />
                       </a-date-picker>
                     </a-form-model-item>
-                    <a-form-model-item label="Giới Tính">
+
+                    <span style="color: red">*</span> Giới tính :
+                    <a-form-model-item>
                       <a-radio-group v-model="dataEdit.gender">
                         <a-radio :value="true"> Nam </a-radio>
                         <a-radio :value="false"> Nữ </a-radio>
                       </a-radio-group>
                     </a-form-model-item>
-                    <a-form-model-item label="Chức Vụ">
+
+                    <span style="color: red">*</span> Chức Vụ :
+                    <a-form-model-item>
                       <a-select
                         placeholder="Chức vụ"
-                        :filter-option="false"
-                        @search="fetchPosition"
                         style="width: 120px"
                         v-model="dataEdit.idPosition"
-                        show-search
                       >
                         <a-select-option
                           v-for="(position, index) in dataPositions"
@@ -298,25 +314,40 @@
                         </a-select-option>
                       </a-select>
                     </a-form-model-item>
-                    <a-form-model-item label="Số Điện Thoại">
+
+                    <span style="color: red">*</span> Số điện thoại :
+                    <a-form-model-item>
                       <a-input v-model="dataEdit.phone" />
                     </a-form-model-item>
                   </div>
                   <div class="col">
-                    <a-form-model-item label="Email">
+                    <span style="color: red">*</span> Email :
+                    <a-form-model-item>
                       <a-input v-model="dataEdit.email" />
                     </a-form-model-item>
-                    <a-form-model-item label="Địa chỉ">
+
+                    <span style="color: red">*</span> Địa chỉ :
+                    <a-form-model-item>
                       <a-input v-model="dataEdit.address" />
                     </a-form-model-item>
-                    <a-form-model-item label="Dân Tộc">
+
+                    <span style="color: red">*</span> Dân tộc :
+                    <a-form-model-item>
                       <a-input v-model="dataEdit.nation" />
                     </a-form-model-item>
-                    <a-form-model-item label="Lương">
+
+                    <span style="color: red">*</span> Lương :
+                    <a-form-model-item>
                       <a-input v-model="dataEdit.salary" />
                     </a-form-model-item>
-                    <a-form-model-item label="Ảnh">
-                      <a-input v-model="dataEdit.image" />
+
+                    Ảnh :
+                    <a-form-model-item>
+                      <input
+                        type="file"
+                        accept=".jpg, .png"
+                        @change="importFileEdit($event)"
+                      />
                     </a-form-model-item>
                   </div>
                 </div>
@@ -557,6 +588,8 @@ export default {
       visibleAdd: false,
       visibleEdit: false,
       visibleProfile: false,
+      loadingAdd: false,
+      loadingEdit: false
     };
   },
   created() {
@@ -564,6 +597,13 @@ export default {
     this.getAllPosition();
   },
   methods: {
+    importFileEdit(event1) {
+      if (event1.target.files[0]) {
+        this.dataEdit.image = event1.target.files[0];
+        this.url = window.URL.createObjectURL(event1.target.files[0]);
+        this.showImage = true;
+      }
+    },
     importFile(event1) {
       if (event1.target.files[0]) {
         this.dataAdd.image = event1.target.files[0];
@@ -575,6 +615,7 @@ export default {
       this.visibleAdd = false;
       this.visibleEdit = false;
       this.visibleProfile = false;
+      this.showImage = false;
     },
     getAllPosition() {
       userService
@@ -660,8 +701,20 @@ export default {
       this.dataPosition.name = "";
       this.getAllPosition();
       this.visibleAdd = true;
+      this.url = "";
+      this.dataAdd.fullName = "";
+      this.dataAdd.gender = true;
+      this.dataAdd.dob = "";
+      this.dataAdd.idPosition = "";
+      this.dataAdd.phone = "";
+      this.dataAdd.email = "";
+      this.dataAdd.nation = "";
+      this.dataAdd.address = "";
+      this.dataAdd.salary = "";
+      this.dataAdd.image = "";
     },
     submitAdd() {
+      this.loadingAdd = true;
       fileService
         .uploadImage(this.dataAdd.image)
         .then((response) => {
@@ -670,6 +723,7 @@ export default {
             .addUser(this.dataAdd)
             .then((response) => {
               this.submitSearch();
+              this.loadingAdd = false;
               if (response.data.data) {
                 let type = "success";
                 let message = "Thêm mới";
@@ -688,71 +742,113 @@ export default {
                   response.data.message;
                 this.notifi(type, message, description);
               }
-
               this.visibleAdd = false;
-              this.dataAdd.fullName = "";
-              this.dataAdd.gender = "";
-              this.dataAdd.dob = "";
-              this.dataAdd.idPosition = "";
-              this.dataAdd.phone = "";
-              this.dataAdd.email = "";
-              this.dataAdd.nation = "";
-              this.dataAdd.address = "";
-              this.dataAdd.salary = "";
-              this.dataAdd.image = "";
             })
             .catch(() => {
-              userService
-            .deleteImage(this.dataAdd.image);
+              userService.deleteImage(this.dataAdd.image);
+              this.loadingAdd = false;
             });
         })
         .catch((e) => {
           console.log(e);
+          this.loadingAdd = false;
         });
     },
     showModalEdit(record) {
-      this.dataEdit.id = record.id;
-      this.dataEdit.fullName = record.fullName;
-      this.dataEdit.dob = record.dob;
-      this.dataEdit.idPosition = record.idPosition;
-      this.dataEdit.gender = record.gender;
-      this.dataEdit.email = record.email;
-      this.dataEdit.image = record.image;
-      this.getUserByID(record.id);
-      this.dataEdit.phone = this.dataUserDetail.phone;
-      this.dataEdit.nation = this.dataUserDetail.nation;
-      this.dataEdit.address = this.dataUserDetail.address;
-      this.dataEdit.salary = this.dataUserDetail.salary;
-      this.visibleEdit = true;
-    },
-    submitUpdate() {
       userService
-        .updateUser(this.dataEdit)
+        .getUserByID(record.id)
         .then((response) => {
-          this.submitSearch();
-          if (response.data.data) {
-            let type = "success";
-            let message = "Cập nhật";
-            let description =
-              "Sửa thông tin nhân viên " +
-              this.dataEdit.fullName +
-              " thành công !!";
-            this.notifi(type, message, description);
-          } else {
-            let type = "error";
-            let message = "Cập nhật";
-            let description =
-              "Sửa thông tin nhân viên " +
-              this.dataEdit.fullName +
-              " không thành công vì " +
-              response.data.message;
-            this.notifi(type, message, description);
-          }
+          this.dataEdit.id = record.id;
+          this.dataEdit.fullName = record.fullName;
+          this.dataEdit.dob = record.dob;
+          this.dataEdit.idPosition = record.idPosition;
+          this.dataEdit.gender = record.gender;
+          this.dataEdit.email = record.email;
+          this.url = record.image;
+          this.dataEdit.image = "";
+          this.dataEdit.phone = response.data.data.phone;
+          this.dataEdit.nation = response.data.data.nation;
+          this.dataEdit.address = response.data.data.address;
+          this.dataEdit.salary = response.data.data.salary;
+          this.visibleEdit = true;
+          this.showImage = true;
         })
         .catch((e) => {
           console.log(e);
         });
-      this.visibleEdit = false;
+        this.loadingEdit = false;
+    },
+    submitUpdate() {
+      this.loadingEdit = true;
+      if (this.dataEdit.image != "") {
+        fileService
+          .uploadImage(this.dataEdit.image)
+          .then((response) => {
+            this.dataEdit.image = response.data.data;
+            userService
+              .updateUser(this.dataEdit)
+              .then((response) => {
+                this.submitSearch();
+                this.visibleEdit = false;
+                this.loadingEdit = false;
+                if (response.data.data) {
+                  let type = "success";
+                  let message = "Cập nhật";
+                  let description =
+                    "Sửa thông tin nhân viên " +
+                    this.dataEdit.fullName +
+                    " thành công !!";
+                  this.notifi(type, message, description);
+                } else {
+                  let type = "error";
+                  let message = "Cập nhật";
+                  let description =
+                    "Sửa thông tin nhân viên " +
+                    this.dataEdit.fullName +
+                    " không thành công vì " +
+                    response.data.message;
+                  this.notifi(type, message, description);
+                }
+              })
+              .catch(() => {
+                userService.deleteImage(this.dataAdd.image);
+                this.loadingEdit = false;
+              });
+          })
+          .catch((e) => {
+            console.log(e);
+            this.loadingEdit = false;
+          });
+      } else {
+        userService
+          .updateUser(this.dataEdit)
+          .then((response) => {
+            this.submitSearch();
+            this.visibleEdit = false;
+            if (response.data.data) {
+              let type = "success";
+              let message = "Cập nhật";
+              let description =
+                "Sửa thông tin nhân viên " +
+                this.dataEdit.fullName +
+                " thành công !!";
+              this.notifi(type, message, description);
+            } else {
+              let type = "error";
+              let message = "Cập nhật";
+              let description =
+                "Sửa thông tin nhân viên " +
+                this.dataEdit.fullName +
+                " không thành công vì " +
+                response.data.message;
+              this.notifi(type, message, description);
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+            this.loadingEdit = false;
+          });
+      }
     },
     showDetail(id) {
       this.visibleProfile = true;
