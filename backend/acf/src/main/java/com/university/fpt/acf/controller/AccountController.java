@@ -169,4 +169,31 @@ public class AccountController {
     }
 
 
+    @PostMapping("/resetpassword/{id}")
+    public ResponseEntity<ResponseCommon> resetPassword(@PathVariable Long id) {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        Boolean checkUpdate = false;
+        try {
+            checkUpdate = accountService.resetPassword(id);
+            if (checkUpdate == false) {
+                message = "Cài lại mật khẩu không thành công!";
+            } else {
+                message = "Cài lại mật khẩu thành công!";
+            }
+            responseCommon.setMessage(message);
+            responseCommon.setData(checkUpdate);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return new ResponseEntity<>(responseCommon, HttpStatus.OK);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(checkUpdate);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
+
+
+
 }

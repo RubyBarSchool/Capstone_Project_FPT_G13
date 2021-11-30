@@ -47,10 +47,10 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     @Autowired
     private JavaMailSender emailSender;
 
-    private String generatePassword(){
+    private String generatePassword() {
         String result = "";
-        result = RandomStringUtils.random(8,true,true);
-        return  result;
+        result = RandomStringUtils.random(8, true, true);
+        return result;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                     MimeMessage mimeMessage = emailSender.createMimeMessage();
                     MimeMessageHelper helper =
                             new MimeMessageHelper(mimeMessage, "utf-8");
-                    helper.setText(this.buildEmail(addAccountForm.getUsername(),password,em.getFullName(), "http://acf-client.s3-website.us-east-2.amazonaws.com/#/login"), true);
+                    helper.setText(this.buildEmail(addAccountForm.getUsername(), password, em.getFullName(), "http://acf-client.s3-website.us-east-2.amazonaws.com/#/login"), true);
                     helper.setTo(em.getEmail());
                     helper.setSubject("Kích hoạt tài khoản thành công trên hệ thống công ty ANH CHUNG FURNITURE");
                     emailSender.send(mimeMessage);
@@ -99,19 +99,72 @@ public class AccountManagerServiceImpl implements AccountManagerService {
             } else {
                 throw new Exception("Employee has account exit!");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
         }
         return insert;
     }
 
-    private String buildEmail(String username,String password,String name, String link) {
+    @Override
+    public Boolean resetPassword(Long id) {
+        Boolean check = false;
+        try {
+            Account ac = accountManagerRepository.findAccountById(id);
+            String password = generatePassword();
+            ac.setPassword(passwordEncoder.encode(password));
+            AccountSercurity accountSercurity = new AccountSercurity();
+            ac.setModified_date(LocalDate.now());
+            ac.setModified_by(accountSercurity.getUserName());
+            accountManagerRepository.save(ac);
+            MimeMessage mimeMessage = emailSender.createMimeMessage();
+            MimeMessageHelper helper =
+                    new MimeMessageHelper(mimeMessage, "utf-8");
+            helper.setText(this.buildEmailReset(ac.getUsername(), password, ac.getEmployee().getFullName(), "http://acf-client.s3-website.us-east-2.amazonaws.com/#/login"), true);
+            helper.setTo(ac.getEmployee().getEmail());
+            helper.setSubject("Cài lại mật khẩu tài khoản thành công trên hệ thống công ty ANH CHUNG FURNITURE");
+            emailSender.send(mimeMessage);
+            check = true;
+        } catch (Exception ex) {
+            throw new RuntimeException("Không thể cài lại mật khẩu");
+        }
+        return check;
+    }
+
+    private String buildEmailReset(String username, String password, String name, String link) {
         StringBuilder sql = new StringBuilder("");
         sql.append("<div style=\" width:80%; margin: 0 auto;\">\n" +
                 "        <img src=\"\">\n" +
                 "        <table style=\"width:100%;\">\n" +
                 "            <tr>\n" +
-                "                <td colspan=\" 2 \">Xin chào "+name+", </td>\n" +
+                "                <td colspan=\" 2 \">Xin chào " + name + ", </td>\n" +
+                "            </tr>\n" +
+                "            <tr>\n" +
+                "                <td>Chúc mừng bạn đã cài lại mật khẩu thành công</td>\n" +
+                "            </tr>\n" +
+                "            <tr>\n" +
+                "                <td style=\"padding-left: 30px;\">- Tài khoản: " + username + "</td>\n" +
+                "            </tr>\n" +
+                "            <tr>\n" +
+                "                <td style=\"padding-left: 30px;\">- Mật Khẩu mới: " + password + "</td>\n" +
+                "            </tr>\n" +
+                "        </table>\n" +
+                "        <br>\n" +
+                "        <p>vui lòng mời bạn nhấn vào đường dẫn bên dưới để đến với trang mạng của công ty. </p>\n" +
+                "        <button style=\"display: block; margin-left: auto; margin-right: auto; background-color: #40A9FF; color: white;\">" +
+                "      <a href=\"" + link + "\">Đăng nhập!</a></button>\n" +
+                "        <p>Trân trọng,</p>\n" +
+                "        <h3 style=\"font-family: 'Courier New', Courier, monospace \">Anh Chung Furniture</h3>\n" +
+                "    </div>");
+        return sql.toString();
+    }
+
+    private String buildEmail(String username, String password, String name, String link) {
+        StringBuilder sql = new StringBuilder("");
+        sql.append("<div style=\" width:80%; margin: 0 auto;\">\n" +
+                "        <img src=\"\">\n" +
+                "        <table style=\"width:100%;\">\n" +
+                "            <tr>\n" +
+                "                <td colspan=\" 2 \">Xin chào " + name + ", </td>\n" +
                 "            </tr>\n" +
                 "            <tr>\n" +
                 "                <td>Chúc mừng bạn đã trở thành một nhân tố quan trọng của công ty ANH CHUNG FURNITURE</td>\n" +
@@ -134,20 +187,20 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     }
 
     @Override
-    public Boolean updateAccount(UpdateAccountForm updateAccountForm)  {
-        try{
+    public Boolean updateAccount(UpdateAccountForm updateAccountForm) {
+        try {
             AccountSercurity accountSercurity = new AccountSercurity();
             Account ac = accountManagerRepository.findAccountById(updateAccountForm.getId());
-            if(ac.getUsername().equals(accountSercurity.getUserName())){
+            if (ac.getUsername().equals(accountSercurity.getUserName())) {
                 throw new Exception("Account is available");
             }
-            if(ac!=null){
+            if (ac != null) {
                 ac.setStatus(updateAccountForm.getStatus());
                 ac.setModified_by(accountSercurity.getUserName());
                 ac.setModified_date(LocalDate.now());
                 ac.setModified_by(accountSercurity.getUserName());
                 List<Role> listRole = new ArrayList<>();
-                for(Long i : updateAccountForm.getListRole()){
+                for (Long i : updateAccountForm.getListRole()) {
                     Role role = new Role();
                     role.setId(i);
                     listRole.add(role);
@@ -156,7 +209,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                 accountManagerRepository.save(ac);
                 return true;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
         }
         return false;
@@ -164,10 +217,10 @@ public class AccountManagerServiceImpl implements AccountManagerService {
 
     @Override
     public Boolean deleteAccount(Long idAccount) {
-        try{
+        try {
             AccountSercurity accountSercurity = new AccountSercurity();
             Account account = accountManagerRepository.findAccountById(idAccount);
-            if(account.getUsername().equals(accountSercurity.getUserName())){
+            if (account.getUsername().equals(accountSercurity.getUserName())) {
                 throw new Exception("Account is available");
             }
             account.setModified_by(accountSercurity.getUserName());
@@ -175,20 +228,20 @@ public class AccountManagerServiceImpl implements AccountManagerService {
             account.setDeleted(true);
             accountManagerRepository.save(account);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
         }
         return false;
     }
 
-    @Override 
+    @Override
     public List<GetAllAccountResponseVO> searchAccount(SearchAccountForm searchAccountForm) {
         List<GetAllAccountVO> listAcc = accountCustomRepository.getAllAccount(searchAccountForm);
         List<GetAllAccountResponseVO> result = new ArrayList<>();
         GetAllAccountResponseVO accountResponseVO = new GetAllAccountResponseVO();
-        for(int i = 0 ; i< listAcc.size() ; i++){
-            if(!listAcc.get(i).getId().equals(accountResponseVO.getId())){
-                if(i!=0){
+        for (int i = 0; i < listAcc.size(); i++) {
+            if (!listAcc.get(i).getId().equals(accountResponseVO.getId())) {
+                if (i != 0) {
                     result.add(accountResponseVO);
                 }
                 accountResponseVO = new GetAllAccountResponseVO();
@@ -196,16 +249,16 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                 accountResponseVO.setStatus(listAcc.get(i).getStatus());
                 accountResponseVO.setTime(listAcc.get(i).getTime());
                 accountResponseVO.setUsername(listAcc.get(i).getUsername());
-                if(listAcc.get(i).getIdRole()!=null){
-                    accountResponseVO.getRoles().add(new RoleAccountVO(listAcc.get(i).getIdRole(),listAcc.get(i).getNameRole()));
+                if (listAcc.get(i).getIdRole() != null) {
+                    accountResponseVO.getRoles().add(new RoleAccountVO(listAcc.get(i).getIdRole(), listAcc.get(i).getNameRole()));
                 }
-            }else{
-                if(listAcc.get(i).getIdRole()!=null){
-                    accountResponseVO.getRoles().add(new RoleAccountVO(listAcc.get(i).getIdRole(),listAcc.get(i).getNameRole()));
+            } else {
+                if (listAcc.get(i).getIdRole() != null) {
+                    accountResponseVO.getRoles().add(new RoleAccountVO(listAcc.get(i).getIdRole(), listAcc.get(i).getNameRole()));
                 }
             }
         }
-        if(!accountResponseVO.getRoles().isEmpty()){
+        if (!accountResponseVO.getRoles().isEmpty()) {
             result.add(accountResponseVO);
         }
         return result;
@@ -213,23 +266,23 @@ public class AccountManagerServiceImpl implements AccountManagerService {
 
     @Override
     public int getTotalSearchAccount(SearchAccountForm searchAccountForm) {
-        if(searchAccountForm.getTotal() != null && searchAccountForm.getTotal().intValue() != 0){
+        if (searchAccountForm.getTotal() != null && searchAccountForm.getTotal().intValue() != 0) {
             return searchAccountForm.getTotal();
         }
-        return  accountCustomRepository.getTotalAllAccount(searchAccountForm);
+        return accountCustomRepository.getTotalAllAccount(searchAccountForm);
     }
 
     @Override
     public GetAccountDetailResponeVO getAccountById(Long id) {
-        try{
+        try {
             List<GetAccountDetailVO> ac = accountManagerRepository.getAccountById(id);
             GetAccountDetailResponeVO result = new GetAccountDetailResponeVO();
             List<RoleAccountVO> listRole = new ArrayList<>();
-            for(GetAccountDetailVO acd : ac){
-               RoleAccountVO role = new RoleAccountVO();
-               role.setId(acd.getIdRole());
-               role.setName(acd.getNameRole());
-               listRole.add(role);
+            for (GetAccountDetailVO acd : ac) {
+                RoleAccountVO role = new RoleAccountVO();
+                role.setId(acd.getIdRole());
+                role.setName(acd.getNameRole());
+                listRole.add(role);
             }
             result.setId(ac.get(0).getId());
             result.setUsername(ac.get(0).getUsername());
@@ -240,7 +293,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
             result.setPhone(ac.get(0).getPhone());
             result.setRoles(listRole);
             return result;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
         }
         return null;
@@ -249,16 +302,16 @@ public class AccountManagerServiceImpl implements AccountManagerService {
 
     @Override
     public String GenerateUsername(Long id) {
-        try{
-                String fullname = employeeRepository.getFullNameById(id);
-                if(fullname !=null && !fullname.isEmpty()) {
-                    AddAccountValidate addAccountValidate = new AddAccountValidate();
-                    String usernameGen = addAccountValidate.generateFormatUsernameByFullname(fullname);
-                    List<String> list = accountManagerRepository.getAllUsernameIsLike(usernameGen);
-                    Integer number = addAccountValidate.genNumberUsername(usernameGen, list);
-                    return usernameGen + ((number == 0) ? "" : number);
-                }
-        }catch (Exception e){
+        try {
+            String fullname = employeeRepository.getFullNameById(id);
+            if (fullname != null && !fullname.isEmpty()) {
+                AddAccountValidate addAccountValidate = new AddAccountValidate();
+                String usernameGen = addAccountValidate.generateFormatUsernameByFullname(fullname);
+                List<String> list = accountManagerRepository.getAllUsernameIsLike(usernameGen);
+                Integer number = addAccountValidate.genNumberUsername(usernameGen, list);
+                return usernameGen + ((number == 0) ? "" : number);
+            }
+        } catch (Exception e) {
             throw new RuntimeException("Username not correct!");
         }
         return null;

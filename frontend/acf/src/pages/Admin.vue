@@ -115,7 +115,7 @@
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-row>
-                  <a-col :span="8">
+                  <a-col :span="6">
                     <a-button
                       id="user"
                       @click="getAccountByID(record.id)"
@@ -124,7 +124,16 @@
                       <font-awesome-icon :icon="['fas', 'user']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="8">
+                  <a-col :span="6">
+                    <a-button
+                      id="reset"
+                      @click="resetPassword(record.id)"
+                      :style="{ 'margin-right': '100px' }"
+                    >
+                      <font-awesome-icon :icon="['fas', 'retweet']" />
+                    </a-button>
+                  </a-col>
+                  <a-col :span="6">
                     <a-button
                       id="edit"
                       @click="
@@ -140,7 +149,7 @@
                       <font-awesome-icon :icon="['fas', 'edit']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="8">
+                  <a-col :span="6">
                     <a-popconfirm
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
@@ -452,7 +461,7 @@ export default {
           dataIndex: "action",
           key: "action",
           fixed: "right",
-          width: 150,
+          width: 250,
           scopedSlots: { customRender: "action" },
         },
       ],
@@ -471,6 +480,27 @@ export default {
     this.getAllRole();
   },
   methods: {
+    resetPassword(id){
+      accountService
+        .resetpassword(id)
+        .then((response) => {
+          this.submitSearch();
+          if (response.data.data) {
+            let type = "success";
+            let message = "Cập nhật mật khẩu";
+            let description = "Tài khoản đặt lại mật khẩu thành công";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Cập nhật mật khẩu";
+            let description = "Tài khoản đặt lại mật khẩu không thành công";
+            this.notifi(type, message, description);
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;

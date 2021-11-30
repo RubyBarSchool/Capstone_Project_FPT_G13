@@ -22,6 +22,9 @@ class AccounService {
     addAccount(form) {
         return http.post(`/spadmin/account/add`, form);
     }
+    resetpassword(id) {
+        return http.post(`/spadmin/account/resetpassword/${id}`);
+    }
 
 }
 
