@@ -107,7 +107,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                 throw new Exception("Data position is null");
             }else{
                 EmployeeValidate validate = new EmployeeValidate();
-//                if(validate.checkFormEmail(addEmployeeForm.getEmail())&&validate.checkFormPhone(addEmployeeForm.getPhone())){
+                if(validate.checkFormEmail(addEmployeeForm.getEmail())&&validate.checkFormPhone(addEmployeeForm.getPhone())){
                     if(employeeRepository.checkExitPhone(addEmployeeForm.getPhone())==null &&
                             employeeRepository.checkExitEmail(addEmployeeForm.getEmail())== null){
                         String checkPosition =positionRespository.CheckExitPositionById(addEmployeeForm.getIdPosition());
@@ -139,10 +139,10 @@ public class EmployeeServiceImpl implements EmployeeService {
                     }else{
                         throw new Exception("SĐT/ Email không tồn tại!");
                     }
-//                }
-//                else {
-//                    throw new Exception("SĐT/Email sai quy chuẩn");
-//                }
+                }
+                else {
+                    throw new Exception("SĐT/Email sai quy chuẩn");
+                }
             }
         }catch (Exception e){
             e.getMessage();
@@ -162,7 +162,10 @@ public class EmployeeServiceImpl implements EmployeeService {
                 throw new Exception("Chức vụ không tồn tại!");
             }
             Employee e = employeeRepository.getEmployeeToUpdateById(updateEmployeeForm.getId());
-            String fileName = e.getImage().getId();
+            String fileName = "";
+            if(e.getImage() != null && !e.getImage().equals("")){
+                fileName = e.getImage().getId();
+            }
             EmployeeValidate validate = new EmployeeValidate();
             if(e!=null){
                 if(validate.checkFormEmail(updateEmployeeForm.getEmail())&&validate.checkFormPhone(updateEmployeeForm.getPhone())){
@@ -187,7 +190,9 @@ public class EmployeeServiceImpl implements EmployeeService {
                     e.setModified_date(LocalDate.now());
                     employeeRepository.save(e);
                     if(updateEmployeeForm.getImage() != null && !updateEmployeeForm.getImage().equals("")){
-                        fileRepository.deleteByID(fileName);
+                        if(fileName!= null && !fileName.equals("")) {
+                            fileRepository.deleteByID(fileName);
+                        }
                     }
                     check =true;
                 }else {

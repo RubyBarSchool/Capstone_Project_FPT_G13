@@ -128,9 +128,10 @@ public class FileStorageServiceImpl implements FileStorageService {
         Boolean check = false;
         try {
             Employee employee = employeeRepository.getEmployeeByFile(fileId);
-            employee.setImage(null);
-            employeeRepository.save(employee);
-
+            if(employee != null){
+                employee.setImage(null);
+                employeeRepository.save(employee);
+            }
             File fileOrg = fileRepository.getFileByID(fileId);
             fileRepository.deleteByID(fileId);
 

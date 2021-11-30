@@ -209,7 +209,7 @@
 
                     <span style="color: red">*</span> Số điện thoại :
                     <a-form-model-item>
-                      <a-input-number
+                      <a-input
                         style="width: 100%"
                         v-model="dataAdd.phone"
                       />
@@ -244,6 +244,7 @@
                       <input
                         type="file"
                         accept=".jpg, .png"
+                        ref="fileupload"
                         @change="importFile($event)"
                       />
                       <!-- <a-input style="width: 100%" v-model="dataAdd.image" /> -->
@@ -338,7 +339,7 @@
 
                     <span style="color: red">*</span> Lương :
                     <a-form-model-item>
-                      <a-input v-model="dataEdit.salary" />
+                      <a-input-number v-model="dataEdit.salary" />
                     </a-form-model-item>
 
                     Ảnh :
@@ -346,6 +347,7 @@
                       <input
                         type="file"
                         accept=".jpg, .png"
+                        ref="fileupload"
                         @change="importFileEdit($event)"
                       />
                     </a-form-model-item>
@@ -712,6 +714,7 @@ export default {
       this.dataAdd.address = "";
       this.dataAdd.salary = "";
       this.dataAdd.image = "";
+       this.$refs.fileupload.value=null;
     },
     submitAdd() {
       this.loadingAdd = true;
@@ -741,6 +744,7 @@ export default {
                   " không thành công vì " +
                   response.data.message;
                 this.notifi(type, message, description);
+                userService.deleteImage(this.dataAdd.image);
               }
               this.visibleAdd = false;
             })
@@ -771,7 +775,12 @@ export default {
           this.dataEdit.address = response.data.data.address;
           this.dataEdit.salary = response.data.data.salary;
           this.visibleEdit = true;
-          this.showImage = true;
+          if(this.url != null){
+            this.showImage = true;
+          }else{
+            this.showImage = false;
+          }
+           this.$refs.fileupload.value=null;
         })
         .catch((e) => {
           console.log(e);
@@ -808,10 +817,11 @@ export default {
                     " không thành công vì " +
                     response.data.message;
                   this.notifi(type, message, description);
+                  userService.deleteImage(this.dataEdit.image);
                 }
               })
               .catch(() => {
-                userService.deleteImage(this.dataAdd.image);
+                userService.deleteImage(this.dataEdit.image);
                 this.loadingEdit = false;
               });
           })

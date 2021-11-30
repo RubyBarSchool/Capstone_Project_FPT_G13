@@ -14,7 +14,8 @@ public class EmployeeValidate {
     }
     // check form email
     public  boolean checkFormEmail(String email){
-        String regexEmail ="^[A-Za-z0-9]+[A-Za-z0-9]*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)$";
+//        String regexEmail ="^[A-Za-z0-9]+[A-Za-z0-9]*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)$";
+        String regexEmail ="^[a-zA-Z][\\w-]+@([\\w]+\\.[\\w]+|[\\w]+\\.[\\w]{2,}\\.[\\w]{2,})$";
         if(email.matches(regexEmail)){
             return true;
         }
