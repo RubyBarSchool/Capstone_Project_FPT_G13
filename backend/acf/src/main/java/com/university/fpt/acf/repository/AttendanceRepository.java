@@ -13,4 +13,7 @@ import java.util.List;
 public interface AttendanceRepository extends JpaRepository<TimeKeep,Long> {
     @Query("select t.employee.id from TimeKeep t where t.date = :date")
     List<Long> getAllListID(@Param("date") LocalDate date);
+
+    @Query("select t from TimeKeep t where t.id = :id")
+    TimeKeep getTimeKeepByID(@Param("id") Long id);
 }

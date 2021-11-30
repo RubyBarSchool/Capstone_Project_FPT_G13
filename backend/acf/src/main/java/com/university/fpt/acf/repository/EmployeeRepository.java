@@ -49,4 +49,7 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
     @Query("SELECT e FROM Employee e inner join e.image img where img.id = :idFile")
     Employee getEmployeeByFile(@Param("idFile") String image);
 
+    @Query("SELECT e FROM Employee e inner join  e.position p where e.deleted = false and p.code = 'GD' ")
+    List<Employee> getEmployeeGD();
+
 }

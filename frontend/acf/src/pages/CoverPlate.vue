@@ -128,6 +128,14 @@
               "
               @change="handleTableChange"
             >
+              <template slot="image" slot-scope="text, record">
+                <img
+                  v-if="record.image !== null"
+                  alt="example"
+                  style="width: 20%"
+                  :src="record.image"
+                />
+              </template>
               <template slot="coverplatecode" slot-scope="text, record">
                 {{ record.name }}
               </template>
@@ -157,7 +165,8 @@
                           record.nameGroup,
                           record.unit,
                           record.company,
-                          record.price
+                          record.price,
+                          record.image
                         )
                       "
                       :style="{ width: '44.25px' }"
@@ -186,7 +195,12 @@
           <a-modal v-model="visibleAdd" title="Thêm tấm phủ">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitAdd">
+              <a-button
+                key="submit"
+                :loading="loadingAdd"
+                type="primary"
+                @click="submitAdd"
+              >
                 Lưu
               </a-button>
             </template>
@@ -325,19 +339,43 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">Giá thành</a-col>
+              <a-col flex="auto"> <a-input v-model="dataAdd.price" /></a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">Ảnh</a-col>
               <a-col flex="auto">
-                <a-input v-model="dataAdd.price"
-              /></a-col>
+                <input
+                  type="file"
+                  accept=".jpg, .png"
+                  ref="fileupload"
+                  @change="importFile($event)"
+                />
+              </a-col>
+            </a-row>
+            <a-row type="flex" v-if="showImage">
+              <a-col flex="100px">
+                <img
+                  alt="example"
+                  style="width: 50%; margin-left: auto; margin-right: auto"
+                  :src="url"
+                />
+              </a-col>
             </a-row>
           </a-modal>
-          
+
           <!-- popup add -->
 
           <!-- popup edit-->
           <a-modal v-model="visibleEdit" title="Chỉnh sửa tấm phủ">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitUpdate">
+              <a-button
+                key="submit"
+                :loading="loadingEdit"
+                type="primary"
+                @click="submitUpdate"
+              >
                 Lưu
               </a-button>
             </template>
@@ -390,6 +428,22 @@
                 />
               </a-form-model-item>
             </a-form-model>
+            Ảnh :
+            <a-form-model-item>
+              <input
+                type="file"
+                accept=".jpg, .png"
+                ref="fileupload"
+                @change="importFileEdit($event)"
+              />
+            </a-form-model-item>
+            <div class="row" v-if="showImage">
+              <img
+                alt="example"
+                style="width: 50%; margin-left: auto; margin-right: auto"
+                :src="url"
+              />
+            </div>
           </a-modal>
           <!-- popup edit-->
 
@@ -520,7 +574,7 @@
 import coverSheetService from "../service/coverPlateService";
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
-
+import fileService from "../service/fileService";
 export default {
   name: "Admin",
   components: {
@@ -529,6 +583,8 @@ export default {
   },
   data() {
     return {
+      url: "",
+      showImage: false,
       pagination: {
         current: 1,
         pageSize: 10,
@@ -556,6 +612,7 @@ export default {
         listIdHeight: [],
         listName: [],
         price: "",
+        image: "",
       },
       dataAddUnitCoverSheet: {
         idFrame: "",
@@ -576,6 +633,7 @@ export default {
       dataEdit: {
         idParameter: "",
         price: "",
+        image: "",
       },
       dataEditI: {
         code: "",
@@ -584,6 +642,7 @@ export default {
         id: "",
         unit: "",
         parameter: "",
+        image: "",
       },
       listCompanys: [],
       listCompany: {
@@ -623,6 +682,13 @@ export default {
           dataIndex: "id",
           key: "id",
           fixed: "left",
+        },
+        {
+          title: "Ảnh",
+          dataIndex: "image",
+          key: "image",
+          width: 150,
+          scopedSlots: { customRender: "image" },
         },
         {
           title: "Mã tấm phủ",
@@ -681,6 +747,8 @@ export default {
       tags: [],
       inputVisible: false,
       inputValue: "",
+      loadingAdd: false,
+      loadingEdit: false,
     };
   },
   computed: {},
@@ -691,14 +759,44 @@ export default {
     this.getAllCompany();
   },
   methods: {
+    importFileEdit(event1) {
+      if (event1.target.files[0]) {
+        this.dataEdit.image = event1.target.files[0];
+        this.url = window.URL.createObjectURL(event1.target.files[0]);
+        this.showImage = true;
+      }
+    },
+    importFile(event1) {
+      if (event1.target.files[0]) {
+        this.dataAdd.image = event1.target.files[0];
+        this.url = window.URL.createObjectURL(event1.target.files[0]);
+        this.showImage = true;
+      }
+    },
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;
       coverSheetService
         .searchCoverSheet(this.dataSearch)
         .then((response) => {
-          // this.listCodeMaterial = response.data.data;
           this.dataSourceTable = response.data.data;
+
+          for (let i = 0; i < this.dataSourceTable.length; i++) {
+            if (this.dataSourceTable[i].image !== null) {
+              coverSheetService
+                .preview(this.dataSourceTable[i].image)
+                .then((response) => {
+                  this.dataSourceTable[i].image = window.URL.createObjectURL(
+                    response.data
+                  );
+                })
+                .catch((e) => {
+                  console.log(e);
+                });
+              console.log("data", this.dataSourceTable[i].image);
+            }
+          }
+
           this.dataSearch.total = response.data.total;
           this.pagination.total = response.data.total;
         })
@@ -712,6 +810,21 @@ export default {
         .searchCoverSheet(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
+          for (let i = 0; i < this.dataSourceTable.length; i++) {
+            if (this.dataSourceTable[i].image !== null) {
+              coverSheetService
+                .preview(this.dataSourceTable[i].image)
+                .then((response) => {
+                  this.dataSourceTable[i].image = window.URL.createObjectURL(
+                    response.data
+                  );
+                })
+                .catch((e) => {
+                  console.log(e);
+                });
+              console.log("data", this.dataSourceTable[i].image);
+            }
+          }
           this.dataSearch.total = response.data.total;
           this.pagination.total = response.data.total;
         })
@@ -994,7 +1107,6 @@ export default {
       this.getCoverSheetByUnit(value);
     },
     showModalAdd() {
-      this.visibleAdd = true;
       // this.checkDataInput.show = false;
       // this.dataAddUnitCoverSheet.idUnit = "";
       this.getAllFrame();
@@ -1007,6 +1119,13 @@ export default {
       this.dataAdd.listName = [];
       this.dataAdd.price = "";
       this.tags = [];
+      if (this.$refs.fileupload != null) {
+        console.log("data show file");
+        this.$refs.fileupload.value = null;
+      }
+      this.url = "";
+      this.visibleAdd = true;
+      this.showImage = false;
     },
     showModalAddUnit() {
       this.getAllCodeCoverSheet();
@@ -1038,35 +1157,46 @@ export default {
     //   }
     // },
     submitAdd() {
-      this.dataAdd.listName = this.tags;
-      coverSheetService
-        .addCoverSheet(this.dataAdd)
+      this.loadingAdd = true;
+      fileService
+        .uploadImage(this.dataAddMaterial.image)
         .then((response) => {
-          // this.dataEmployees = response.data.data;
-          this.submitSearch();
-          if (response.data.data) {
-            let type = "success";
-            let message = "Thêm mới";
-            let description = response.data.message;
-            this.notifi(type, message, description);
-          } else {
-            let type = "error";
-            let message = "Thêm mới";
-            let description = response.data.message;
-            this.notifi(type, message, description);
-          }
+          this.dataAdd.listName = this.tags;
+          this.dataAdd.image = response.data.data;
+          coverSheetService
+            .addCoverSheet(this.dataAdd)
+            .then((response) => {
+              this.submitSearch();
+              this.loadingAdd = false;
+              if (response.data.data) {
+                let type = "success";
+                let message = "Thêm mới";
+                let description = response.data.message;
+                this.notifi(type, message, description);
+              } else {
+                let type = "error";
+                let message = "Thêm mới";
+                let description = response.data.message;
+                this.notifi(type, message, description);
+                coverSheetService.deleteImage(this.dataAdd.image);
+              }
+              this.visibleAdd = false;
+            })
+            .catch(() => {
+              coverSheetService.deleteImage(this.dataAdd.image);
+              this.loadingAdd = false;
+            });
         })
         .catch((e) => {
           console.log(e);
+          this.loadingAdd = false;
         });
-      this.visibleAdd = false;
-      
     },
     resetFrame() {
       this.disable = false;
-      this.dataAddFrameHeight.idMaterial="";
-      this.dataAddFrameHeight.idFrame="";
-      this.dataAddFrameHeight.idHeight="";
+      this.dataAddFrameHeight.idMaterial = "";
+      this.dataAddFrameHeight.idFrame = "";
+      this.dataAddFrameHeight.idHeight = "";
       this.getAllCodeCoverSheet();
       this.getAllFrame();
       this.getAllFrameHeight();
@@ -1144,7 +1274,8 @@ export default {
       group,
       unit,
       company,
-      price
+      price,
+      image
     ) {
       this.dataEditI.id = id;
       this.dataEdit.idParameter = idParameter;
@@ -1155,32 +1286,78 @@ export default {
       this.dataEditI.company = company;
       this.dataEditI.code = code;
       this.dataEditI.parameter = parameter;
-      this.visibleEdit = true;
       this.getAllFrame();
       this.getAllFrameHeight();
       code = "";
+      this.url = image;
+      this.dataEdit.image = "";
+      if (this.url != null) {
+        this.showImage = true;
+      } else {
+        this.showImage = false;
+      }
+      if (this.$refs.fileupload != null) {
+        this.$refs.fileupload.value = null;
+      }
+      this.visibleEdit = true;
     },
     submitUpdate() {
-      coverSheetService
-        .updateCoverSheet(this.dataEdit)
-        .then((response) => {
-          this.submitSearch();
-          if (response.data.data) {
-            let type = "success";
-            let message = "Cập nhật";
-            let description = "Account đang đăng nhập không được xóa";
-            this.notifi(type, message, description);
-          } else {
-            let type = "error";
-            let message = "Cập nhật";
-            let description = "Account đang đăng nhập không được xóa";
-            this.notifi(type, message, description);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-      this.visibleEdit = false;
+      this.loadingEdit = true;
+      if (this.dataEdit.image != "") {
+        fileService
+          .uploadImage(this.dataEdit.image)
+          .then((response) => {
+            this.dataEdit.image = response.data.data;
+            coverSheetService
+              .updateCoverSheet(this.dataEdit)
+              .then((response) => {
+                this.submitSearch();
+                if (response.data.data) {
+                  let type = "success";
+                  let message = "Cập nhật";
+                  let description = "Account đang đăng nhập không được xóa";
+                  this.notifi(type, message, description);
+                } else {
+                  let type = "error";
+                  let message = "Cập nhật";
+                  let description = "Account đang đăng nhập không được xóa";
+                  this.notifi(type, message, description);
+                  coverSheetService.deleteImage(this.dataEdit.image);
+                }
+              })
+              .catch(() => {
+                coverSheetService.deleteImage(this.dataEdit.image);
+                this.loadingEdit = false;
+              });
+            this.visibleEdit = false;
+          })
+          .catch((e) => {
+            console.log(e);
+            this.loadingEdit = false;
+          });
+      } else {
+        coverSheetService
+          .updateCoverSheet(this.dataEdit)
+          .then((response) => {
+            this.submitSearch();
+            if (response.data.data) {
+              let type = "success";
+              let message = "Cập nhật";
+              let description = "Account đang đăng nhập không được xóa";
+              this.notifi(type, message, description);
+            } else {
+              let type = "error";
+              let message = "Cập nhật";
+              let description = "Account đang đăng nhập không được xóa";
+              this.notifi(type, message, description);
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+        this.visibleEdit = false;
+        this.loadingEdit = false;
+      }
     },
 
     deleteCoverSheet(id) {

@@ -114,9 +114,11 @@ public class EmployeeServiceImpl implements EmployeeService {
                         if(checkPosition !=null && !checkPosition.isEmpty()){
                             Employee e = new Employee();
                             e.setFullName(addEmployeeForm.getFullName());
-                            File file = new File();
-                            file.setId(addEmployeeForm.getImage());
-                            e.setImage(file);
+                            if(addEmployeeForm.getImage() != null && !addEmployeeForm.getImage().equals("")){
+                                File file = new File();
+                                file.setId(addEmployeeForm.getImage());
+                                e.setImage(file);
+                            }
                             e.setDob(addEmployeeForm.getDob());
                             e.setGender(addEmployeeForm.getGender());
                             e.setAddress(addEmployeeForm.getAddress());

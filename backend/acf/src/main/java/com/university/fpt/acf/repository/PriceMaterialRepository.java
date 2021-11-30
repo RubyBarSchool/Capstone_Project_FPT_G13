@@ -20,7 +20,7 @@ public interface PriceMaterialRepository extends JpaRepository<PriceMaterial, Lo
     List<PriceMaterial> getListPriceMaterialById(@Param("id")Long id);
     @Query("select pm from PriceMaterial pm inner join  pm.material m where m.checkMaterial =false and m.deleted = false and m.id=:id")
     List<PriceMaterial> getListPriceCoverSheetById(@Param("id")Long id);
-    @Query("SELECT p from PriceMaterial p inner join p.material m where m.checkMaterial = true and m.deleted = false and p.id=:id")
+    @Query("SELECT p from PriceMaterial p inner join p.material m left join m.image img where m.checkMaterial = true and m.deleted = false and p.id=:id")
     PriceMaterial getPriceMaterialById(@Param("id")Long id);
     @Query("SELECT p from PriceMaterial p inner join p.material m where m.checkMaterial = false and m.deleted = false and p.id=:id")
     PriceMaterial getPriceCoverSheetById(@Param("id")Long id);

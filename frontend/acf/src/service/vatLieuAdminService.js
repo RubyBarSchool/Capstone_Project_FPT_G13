@@ -40,6 +40,12 @@ class vatLieuAdminService {
     getMaterials() {
         return http.get(`/admin/material/getmaterials`);
     }
+    preview(name) {
+        return http.get(`/files/${name}`, { responseType: 'blob' });
+    }
+    deleteImage(name) {
+        return http.delete(`/files/${name}`);
+    }
 }
 
 export default new vatLieuAdminService();

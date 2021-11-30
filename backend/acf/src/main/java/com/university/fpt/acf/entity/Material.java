@@ -22,6 +22,10 @@ public class Material extends EntityCommon {
 
     private Double percentChooseInYear = 0.0;
 
+    @OneToOne
+    @JoinColumn(name = "file_id")
+    private File image;
+
 
     @ManyToOne
     @JoinColumn(name = "company_id")

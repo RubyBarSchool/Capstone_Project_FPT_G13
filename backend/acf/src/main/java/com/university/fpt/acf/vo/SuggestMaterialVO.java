@@ -13,4 +13,5 @@ public class SuggestMaterialVO {
     private String nameMaterial;
     private String company;
     private Double percentChoose;
+    private String image;
 }

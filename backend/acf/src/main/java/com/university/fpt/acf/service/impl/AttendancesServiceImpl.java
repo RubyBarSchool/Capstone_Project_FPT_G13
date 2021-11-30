@@ -6,9 +6,7 @@ import com.university.fpt.acf.entity.Employee;
 import com.university.fpt.acf.entity.HistorySalary;
 import com.university.fpt.acf.entity.TimeKeep;
 import com.university.fpt.acf.form.*;
-import com.university.fpt.acf.repository.AttendanceRepository;
-import com.university.fpt.acf.repository.AttendancesCustomRepository;
-import com.university.fpt.acf.repository.HistorySalaryRepository;
+import com.university.fpt.acf.repository.*;
 import com.university.fpt.acf.service.AttendancesService;
 import com.university.fpt.acf.vo.AttendanceVO;
 import com.university.fpt.acf.vo.GetAllEmployeeVO;
@@ -20,12 +18,16 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
+import javax.mail.internet.MimeMessage;
 import javax.persistence.SequenceGenerator;
 import javax.transaction.Transactional;
 import java.io.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +47,14 @@ public class AttendancesServiceImpl implements AttendancesService {
     @Autowired
     private HistorySalaryRepository historySalaryRepository;
 
+    @Autowired
+    private JavaMailSender emailSender;
+
+    @Autowired
+    private AccountManagerRepository accountManagerRepository;
+
+    @Autowired
+    private EmployeeRepository employeeRepository;
 
     @Override
     public List<AttendanceVO> getAllAttendance(AttendanceFrom attendanceFrom) {
@@ -107,8 +117,8 @@ public class AttendancesServiceImpl implements AttendancesService {
                 String total = historySalary.getTotalMoney();
                 Integer salary = Integer.parseInt(historySalary.getSalary());
                 String totalResult = Double.parseDouble(total) + Double.parseDouble(addAttendanceForm.getType()) * salary + "";
-                if(totalResult.length()>2 && (totalResult.indexOf(".") == (totalResult.length() - 2)) && (totalResult.lastIndexOf("0") == (totalResult.length() - 1))){
-                    totalResult = totalResult.substring(0,totalResult.length()-2);
+                if (totalResult.length() > 2 && (totalResult.indexOf(".") == (totalResult.length() - 2)) && (totalResult.lastIndexOf("0") == (totalResult.length() - 1))) {
+                    totalResult = totalResult.substring(0, totalResult.length() - 2);
                 }
                 historySalary.setCountWork(aDouble + Double.parseDouble(addAttendanceForm.getType()));
                 historySalary.setTotalMoney(totalResult + "");
@@ -137,15 +147,49 @@ public class AttendancesServiceImpl implements AttendancesService {
         TimeKeep timeKeep = new TimeKeep();
         AccountSercurity accountSercurity = new AccountSercurity();
         try {
-            timeKeep = attendanceRepository.getById(updateAttendanceForm.getId());
-            LocalDate dateCheck = LocalDate.now();
-            if(dateCheck.getDayOfMonth() <= 10){
-                dateCheck = dateCheck.minusMonths(1);
-                dateCheck = LocalDate.of(dateCheck.getYear(),dateCheck.getMonthValue(),10);
-            }else{
-                dateCheck = LocalDate.of(dateCheck.getYear(),dateCheck.getMonthValue(),10);
+            timeKeep = attendanceRepository.getTimeKeepByID(updateAttendanceForm.getId());
+
+
+            LocalDate localDate = LocalDate.now();
+            LocalDateTime dateTime = LocalDateTime.now();
+            DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy hh:mm");
+            String dateTimeAfterFormat = dateTime.format(dateTimeFormat);
+
+            Boolean checkUpdate = false;
+
+            if (!timeKeep.getType().equals(updateAttendanceForm.getType())) {
+                checkUpdate = true;
             }
-            if(timeKeep.getDate().isBefore(dateCheck)){
+            if (!timeKeep.getNote().equals(updateAttendanceForm.getNote())) {
+                checkUpdate = true;
+            }
+
+            if (checkUpdate) {
+                if (localDate.isAfter(timeKeep.getDate())) {
+                    String fullname = accountManagerRepository.getFullnameByUsername(accountSercurity.getUserName());
+
+                    List<Employee> employeeGD = employeeRepository.getEmployeeGD();
+                    for (Employee employee : employeeGD) {
+                        MimeMessage mimeMessage = emailSender.createMimeMessage();
+                        MimeMessageHelper helper =
+                                new MimeMessageHelper(mimeMessage, "utf-8");
+                        helper.setText(this.buildEmail(timeKeep.getEmployee().getFullName(),timeKeep.getDate(),timeKeep.getType(),updateAttendanceForm.getType(),timeKeep.getNote(),updateAttendanceForm.getNote(),employee.getFullName(), "http://acf-client.s3-website.us-east-2.amazonaws.com/#/viewattendance"), true);
+                        helper.setTo(employee.getEmail());
+                        helper.setSubject("Phát hiện chỉnh sửa điểm danh đã quá hạn bởi quản lý " + fullname + " vào " + dateTimeAfterFormat);
+                        emailSender.send(mimeMessage);
+                    }
+                }
+            }
+
+
+            LocalDate dateCheck = LocalDate.now();
+            if (dateCheck.getDayOfMonth() <= 10) {
+                dateCheck = dateCheck.minusMonths(1);
+                dateCheck = LocalDate.of(dateCheck.getYear(), dateCheck.getMonthValue(), 10);
+            } else {
+                dateCheck = LocalDate.of(dateCheck.getYear(), dateCheck.getMonthValue(), 10);
+            }
+            if (timeKeep.getDate().isBefore(dateCheck)) {
                 throw new RuntimeException("Không thể sửa điểm danh của tháng trước");
             }
 
@@ -168,12 +212,12 @@ public class AttendancesServiceImpl implements AttendancesService {
 
             Double typeOld = Double.parseDouble(timeKeep.getType());
 
-            Double totalOld = Double.parseDouble(total) - typeOld*salary;
+            Double totalOld = Double.parseDouble(total) - typeOld * salary;
 
             String totalResult = totalOld + Double.parseDouble(updateAttendanceForm.getType()) * salary + "";
 
-            if(totalResult.length()>2 && (totalResult.indexOf(".") == (totalResult.length() - 2)) && (totalResult.lastIndexOf("0") == (totalResult.length() - 1))){
-                totalResult = totalResult.substring(0,totalResult.length()-2);
+            if (totalResult.length() > 2 && (totalResult.indexOf(".") == (totalResult.length() - 2)) && (totalResult.lastIndexOf("0") == (totalResult.length() - 1))) {
+                totalResult = totalResult.substring(0, totalResult.length() - 2);
             }
             historySalary.setCountWork(countOld + Double.parseDouble(updateAttendanceForm.getType()));
             historySalary.setTotalMoney(totalResult + "");
@@ -188,6 +232,37 @@ public class AttendancesServiceImpl implements AttendancesService {
             throw new RuntimeException(e.getMessage());
         }
         return timeKeep;
+    }
+
+    private String buildEmail(String fullNameChange,LocalDate dateChange,String typeOld,String typeNew,String noteOld,String noteNew, String fullName, String link) {
+        StringBuilder sql = new StringBuilder("");
+        sql.append("<div style=\" width:80%; margin: 0 auto;\">\n" +
+                "        <img src=\"\">\n" +
+                "        <table style=\"width:100%;\">\n" +
+                "            <tr>\n" +
+                "                <td colspan=\" 2 \">Xin chào " + fullName + ", </td>\n" +
+                "            </tr>\n" +
+                "            <tr>\n" +
+                "                <td> Nhân viên được thay đổi số liệu: "+fullNameChange+"</td>" +
+                "            </tr>\n" +
+                "            <tr>\n" +
+                "                <td> Ngày sửa đổi: "+dateChange+"</td>" +
+                "            </tr>\n" +
+                "            <tr>\n" +
+                "                <td> Số công: "+typeOld+"    =>   "+typeNew+"</td>" +
+                "            </tr>\n" +
+                "            <tr>\n" +
+                "                <td> Ghi chú: "+noteOld+"    =>   "+noteNew+"</td>" +
+                "            </tr>\n" +
+                "        </table>\n" +
+                "        <br>\n" +
+                "        <p>vui lòng mời bạn nhấn vào đường dẫn bên dưới để đến với điểm danh của công ty. </p>\n" +
+                "        <button style=\"display: block; margin-left: auto; margin-right: auto; background-color: #40A9FF; color: white;\">" +
+                "      <a href=\"" + link + "\">Đăng nhập!</a></button>\n" +
+                "        <p>Trân trọng,</p>\n" +
+                "        <h3 style=\"font-family: 'Courier New', Courier, monospace \">Anh Chung Furniture</h3>\n" +
+                "    </div>");
+        return sql.toString();
     }
 
     @Override

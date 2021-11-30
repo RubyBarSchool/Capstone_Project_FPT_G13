@@ -129,6 +129,14 @@
               "
               @change="handleTableChange"
             >
+              <template slot="image" slot-scope="text, record">
+                <img
+                  v-if="record.image !== null"
+                  alt="example"
+                  style="width: 20%"
+                  :src="record.image"
+                />
+              </template>
               <template slot="name" slot-scope="text, record">
                 {{ record.name }}
               </template>
@@ -157,7 +165,8 @@
                           record.nameGroup,
                           record.unit,
                           record.company,
-                          record.price
+                          record.price,
+                          record.image
                         )
                       "
                       :style="{ width: '44.25px' }"
@@ -186,7 +195,12 @@
           <a-modal v-model="visibleAdd" title="Thêm vật liệu">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitAdd">
+              <a-button
+                key="submit"
+                type="primary"
+                :loading="loadingAdd"
+                @click="submitAdd"
+              >
                 Lưu
               </a-button>
             </template>
@@ -324,11 +338,33 @@
               </a-col>
             </a-row>
             <br />
+
             <a-row type="flex">
               <a-col flex="100px">Giá thành</a-col>
               <a-col flex="auto">
                 <a-input v-model="dataAddMaterial.price"
               /></a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">Ảnh</a-col>
+              <a-col flex="auto">
+                <input
+                  type="file"
+                  accept=".jpg, .png"
+                  ref="fileupload"
+                  @change="importFile($event)"
+                />
+              </a-col>
+            </a-row>
+            <a-row type="flex" v-if="showImage">
+              <a-col flex="100px">
+                <img
+                  alt="example"
+                  style="width: 50%; margin-left: auto; margin-right: auto"
+                  :src="url"
+                />
+              </a-col>
             </a-row>
           </a-modal>
           <!-- popup add -->
@@ -337,7 +373,12 @@
           <a-modal v-model="visibleEdit" title="Chỉnh sửa vật liệu">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitUpdate">
+              <a-button
+                key="submit"
+                type="primary"
+                :loading="loadingEdit"
+                @click="submitUpdate"
+              >
                 Lưu
               </a-button>
             </template>
@@ -401,6 +442,27 @@
               <a-col flex="auto">
                 <a-input v-model="dataEdit.price" style="width: 100%"
               /></a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">Ảnh</a-col>
+              <a-col flex="auto">
+                <input
+                  type="file"
+                  accept=".jpg, .png"
+                  ref="fileupload"
+                  @change="importFileEdit($event)"
+                />
+              </a-col>
+            </a-row>
+            <a-row type="flex" v-if="showImage">
+              <a-col flex="100px">
+                <img
+                  alt="example"
+                  style="width: 50%; margin-left: auto; margin-right: auto"
+                  :src="url"
+                />
+              </a-col>
             </a-row>
           </a-modal>
           <!-- popup edit-->
@@ -544,6 +606,7 @@ import chieuCaoService from "@/service/chieuCaoService.js";
 import vatLieuAdminService from "@/service/vatLieuAdminService.js";
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
+import fileService from "../service/fileService";
 
 export default {
   name: "VatLieuAdmin",
@@ -553,6 +616,8 @@ export default {
   },
   data() {
     return {
+      url: "",
+      showImage: false,
       pagination: {
         current: 1,
         pageSize: 10,
@@ -618,6 +683,7 @@ export default {
         listIdHeight: [],
         listName: [],
         price: "",
+        image: "",
       },
       dataAddFrameHeightMaterial: {
         idFrame: "",
@@ -635,6 +701,7 @@ export default {
       dataEdit: {
         idParameter: "",
         price: "",
+        image: "",
       },
       dataEditMaterial: {
         parameter: "",
@@ -660,6 +727,13 @@ export default {
           dataIndex: "id",
           key: "id",
           fixed: "left",
+        },
+        {
+          title: "Ảnh",
+          dataIndex: "image",
+          key: "image",
+          width: 150,
+          scopedSlots: { customRender: "image" },
         },
         {
           title: "Mã vật liệu",
@@ -720,6 +794,8 @@ export default {
       inputVisible: false,
       inputValue: "",
       disable: false,
+      loadingAdd: false,
+      loadingEdit: false,
     };
   },
   computed: {},
@@ -733,6 +809,20 @@ export default {
     this.getMaterials();
   },
   methods: {
+    importFileEdit(event1) {
+      if (event1.target.files[0]) {
+        this.dataEdit.image = event1.target.files[0];
+        this.url = window.URL.createObjectURL(event1.target.files[0]);
+        this.showImage = true;
+      }
+    },
+    importFile(event1) {
+      if (event1.target.files[0]) {
+        this.dataAddMaterial.image = event1.target.files[0];
+        this.url = window.URL.createObjectURL(event1.target.files[0]);
+        this.showImage = true;
+      }
+    },
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;
@@ -740,6 +830,21 @@ export default {
         .searchMaterial(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
+          for (let i = 0; i < this.dataSourceTable.length; i++) {
+            if (this.dataSourceTable[i].image !== null) {
+              vatLieuAdminService
+                .preview(this.dataSourceTable[i].image)
+                .then((response) => {
+                  this.dataSourceTable[i].image = window.URL.createObjectURL(
+                    response.data
+                  );
+                })
+                .catch((e) => {
+                  console.log(e);
+                });
+              console.log("data", this.dataSourceTable[i].image);
+            }
+          }
           this.dataSearch.total = response.data.total;
           this.pagination.total = response.data.total;
         })
@@ -753,6 +858,21 @@ export default {
         .searchMaterial(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
+          for (let i = 0; i < this.dataSourceTable.length; i++) {
+            if (this.dataSourceTable[i].image !== null) {
+              vatLieuAdminService
+                .preview(this.dataSourceTable[i].image)
+                .then((response) => {
+                  this.dataSourceTable[i].image = window.URL.createObjectURL(
+                    response.data
+                  );
+                })
+                .catch((e) => {
+                  console.log(e);
+                });
+              console.log("data", this.dataSourceTable[i].image);
+            }
+          }
           this.dataSearch.total = response.data.total;
           this.pagination.total = response.data.total;
         })
@@ -787,7 +907,6 @@ export default {
     // add vật liệu
     showModalAdd() {
       this.tags = [];
-      this.visibleAdd = true;
       this.dataAddMaterial.idCompany = "";
       this.dataAddMaterial.idGroup = "";
       this.dataAddMaterial.idUnit = "";
@@ -795,31 +914,51 @@ export default {
       this.dataAddMaterial.listIdHeight = [];
       this.dataAddMaterial.listName = [];
       this.dataAddMaterial.price = "";
+      this.dataAddMaterial.image = "";
+      if (this.$refs.fileupload != null) {
+        this.$refs.fileupload.value = null;
+      }
+      this.url = "";
+      this.showImage = false;
+      this.visibleAdd = true;
     },
 
     //submit add
     submitAdd() {
-      this.dataAddMaterial.listName = this.tags;
-      vatLieuAdminService
-        .addMaterial(this.dataAddMaterial)
+      this.loadingAdd = true;
+      fileService
+        .uploadImage(this.dataAddMaterial.image)
         .then((response) => {
-          this.submitSearch();
-          if (response.data.data) {
-            let type = "success";
-            let message = "Thêm vật liệu mới";
-            let description = response.data.message;
-            this.notifi(type, message, description);
-          } else {
-            let type = "error";
-            let message = "Thêm vật liệu mới";
-            let description = response.data.message;
-            this.notifi(type, message, description);
-          }
+          this.dataAddMaterial.listName = this.tags;
+          this.dataAddMaterial.image = response.data.data;
+          vatLieuAdminService
+            .addMaterial(this.dataAddMaterial)
+            .then((response) => {
+              this.submitSearch();
+              this.loadingAdd = false;
+              if (response.data.data) {
+                let type = "success";
+                let message = "Thêm vật liệu mới";
+                let description = response.data.message;
+                this.notifi(type, message, description);
+              } else {
+                let type = "error";
+                let message = "Thêm vật liệu mới";
+                let description = response.data.message;
+                this.notifi(type, message, description);
+                vatLieuAdminService.deleteImage(this.dataAdd.image);
+              }
+              this.visibleAdd = false;
+            })
+            .catch(() => {
+              vatLieuAdminService.deleteImage(this.dataAdd.image);
+              this.loadingAdd = false;
+            });
         })
         .catch((e) => {
           console.log(e);
+          this.loadingAdd = false;
         });
-      this.visibleAdd = false;
     },
 
     //delete Material
@@ -854,7 +993,8 @@ export default {
       nameGroup,
       unit,
       company,
-      price
+      price,
+      image
     ) {
       this.dataEditMaterial.name = name;
       this.dataEdit.idParameter = idParameter;
@@ -863,31 +1003,78 @@ export default {
       this.dataEditMaterial.unit = unit;
       this.dataEditMaterial.company = company;
       this.dataEdit.price = price;
+      this.url = image;
+      this.dataEdit.image = "";
+      if (this.url != null) {
+        this.showImage = true;
+      } else {
+        this.showImage = false;
+      }
+      if (this.$refs.fileupload != null) {
+        this.$refs.fileupload.value = null;
+      }
       this.visibleEdit = true;
     },
 
     //submit update
     submitUpdate() {
-      vatLieuAdminService
-        .updateMaterial(this.dataEdit)
-        .then((response) => {
-          this.submitSearch();
-          if (response.data.data) {
-            let type = "success";
-            let message = "Cập nhật";
-            let description = "Cập nhật đơn thành công";
-            this.notifi(type, message, description);
-          } else {
-            let type = "error";
-            let message = "Cập nhật";
-            let description = "Cập nhật đơn không thành công";
-            this.notifi(type, message, description);
-          }
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-      this.visibleEdit = false;
+      this.loadingEdit = true;
+      if (this.dataEdit.image != "") {
+        fileService
+          .uploadImage(this.dataEdit.image)
+          .then((response) => {
+            this.dataEdit.image = response.data.data;
+            vatLieuAdminService
+              .updateMaterial(this.dataEdit)
+              .then((response) => {
+                this.submitSearch();
+                if (response.data.data) {
+                  let type = "success";
+                  let message = "Cập nhật";
+                  let description = "Cập nhật đơn thành công";
+                  this.notifi(type, message, description);
+                } else {
+                  let type = "error";
+                  let message = "Cập nhật";
+                  let description = "Cập nhật đơn không thành công";
+                  this.notifi(type, message, description);
+                  vatLieuAdminService.deleteImage(this.dataEdit.image);
+                }
+                this.loadingEdit = false;
+              })
+              .catch(() => {
+                vatLieuAdminService.deleteImage(this.dataEdit.image);
+                this.loadingAdd = false;
+              });
+            this.visibleEdit = false;
+          })
+          .catch((e) => {
+            console.log(e);
+            this.loadingEdit = false;
+          });
+      } else {
+        vatLieuAdminService
+          .updateMaterial(this.dataEdit)
+          .then((response) => {
+            this.submitSearch();
+            if (response.data.data) {
+              let type = "success";
+              let message = "Cập nhật";
+              let description = "Cập nhật đơn thành công";
+              this.notifi(type, message, description);
+            } else {
+              let type = "error";
+              let message = "Cập nhật";
+              let description = "Cập nhật đơn không thành công";
+              this.notifi(type, message, description);
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+        this.visibleEdit = false;
+        this.loadingEdit = false;
+      }
     },
 
     //add đơn vị

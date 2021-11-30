@@ -28,6 +28,8 @@ public class MaterialServiceImpl implements MaterialService {
     private PriceMaterialCustomRepository priceCustomRepository;
     @Autowired
     private PriceMaterialRepository priceMaterialRepository;
+    @Autowired
+    private FileRepository fileRepository;
     @Override
     public List<SuggestMaterialVO> searchSuggestMaterial(MaterialSuggestFrom materialSuggestFrom) {
         List<SuggestMaterialVO> suggestMaterialVOS = new ArrayList<>();
@@ -127,6 +129,11 @@ public class MaterialServiceImpl implements MaterialService {
                 String material =materialCustomRepository.getNameMaterial(a);
                 if(material==null || material.isEmpty()){
                     Material m = new Material();
+                    if(addForm.getImage() != null && !addForm.getImage().equals("")){
+                        File file = new File();
+                        file.setId(addForm.getImage());
+                        m.setImage(file);
+                    }
                     m.setName(list.get(i));
                     m.setGroupMaterial(groupMaterial);
                     m.setCompany(company);
@@ -190,14 +197,32 @@ public class MaterialServiceImpl implements MaterialService {
     public Boolean updateMaterial(UpdateMaterialForm updateForm) {
         Boolean check = false;
         try{
-            PriceMaterial p = priceMaterialRepository.getPriceMaterialById(updateForm.getIdParameter());
-            p.setPrice(updateForm.getPrice());
             AccountSercurity accountSercurity = new AccountSercurity();
+            PriceMaterial p = priceMaterialRepository.getPriceMaterialById(updateForm.getIdParameter());
+            Material material = materialRepository.getMaterialById(p.getMaterial().getId());
+            String fileName = "";
+            if(material.getImage() != null && !material.getImage().equals("")){
+                fileName = material.getImage().getId();
+            }
+            if(updateForm.getImage() != null && !updateForm.getImage().equals("")){
+                File file = new File();
+                file.setId(updateForm.getImage());
+                material.setImage(file);
+                material.setModified_by(accountSercurity.getUserName());
+                material.setModified_date(LocalDate.now());
+                materialRepository.save(material);
+            }
+            p.setPrice(updateForm.getPrice());
             p.setModified_by(accountSercurity.getUserName());
             p.setModified_date(LocalDate.now());
             priceMaterialRepository.save(p);
-            check =true;
 
+            if(updateForm.getImage() != null && !updateForm.getImage().equals("")){
+                if(fileName!= null && !fileName.equals("")) {
+                    fileRepository.deleteByID(fileName);
+                }
+            }
+            check =true;
         }catch (Exception e){
             throw new RuntimeException("Không chỉnh sửa được ! ");
         }
@@ -225,6 +250,11 @@ public class MaterialServiceImpl implements MaterialService {
                 String material =materialCustomRepository.getNameCoverSheet(a);
                 if(material==null|| material.isEmpty()){
                     Material m = new Material();
+                    if(addForm.getImage() != null && !addForm.getImage().equals("")){
+                        File file = new File();
+                        file.setId(addForm.getImage());
+                        m.setImage(file);
+                    }
                     m.setCheckMaterial(false);
                     m.setName(list.get(i));
                     m.setGroupMaterial(groupCoverSheet);
@@ -288,15 +318,33 @@ public class MaterialServiceImpl implements MaterialService {
     public Boolean updateCoverSheet(UpdateMaterialForm updateForm) {
         Boolean check = false;
         try{
+            AccountSercurity accountSercurity = new AccountSercurity();
             PriceMaterial p = priceMaterialRepository.getPriceCoverSheetById(updateForm.getIdParameter());
+            Material material = materialRepository.getCoverSheetById(p.getMaterial().getId());
+            String fileName = "";
+            if(material.getImage() != null && !material.getImage().equals("")){
+                fileName = material.getImage().getId();
+            }
+            if(updateForm.getImage() != null && !updateForm.getImage().equals("")){
+                File file = new File();
+                file.setId(updateForm.getImage());
+                material.setImage(file);
+                material.setModified_by(accountSercurity.getUserName());
+                material.setModified_date(LocalDate.now());
+                materialRepository.save(material);
+            }
             if(p==null){
                 throw new RuntimeException("không tìm thấy để chỉnh sửa ");
             }
             p.setPrice(updateForm.getPrice());
-            AccountSercurity accountSercurity = new AccountSercurity();
             p.setModified_by(accountSercurity.getUserName());
             p.setModified_date(LocalDate.now());
             priceMaterialRepository.save(p);
+            if(updateForm.getImage() != null && !updateForm.getImage().equals("")){
+                if(fileName!= null && !fileName.equals("")) {
+                    fileRepository.deleteByID(fileName);
+                }
+            }
             check =true;
         }catch (Exception e){
             throw new RuntimeException("Không chỉnh sửa được ! ");

@@ -13,4 +13,5 @@ public class AddMaterialForm {
     private Long idGroup;
     private Long idCompany;
     private String price;
+    private String image;
 }

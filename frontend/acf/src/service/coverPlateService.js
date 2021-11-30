@@ -55,15 +55,20 @@ class coverPlateService {
     }
 
     getFrameByCoverSheetAndHeight(form) {
-        return http.post(`/admin/coversheet/getframebycoversheetandheight`,form);
+        return http.post(`/admin/coversheet/getframebycoversheetandheight`, form);
     }
     getCoverSheetByFrameAndHeight(form) {
-        return http.post(`/admin/coversheet/getcoversheetbyframeandheight`,form);
+        return http.post(`/admin/coversheet/getcoversheetbyframeandheight`, form);
     }
     getHeightsByCoverSheetAndFrame(form) {
-        return http.post(`/admin/coversheet/getheightbycoversheetandframe`,form);
+        return http.post(`/admin/coversheet/getheightbycoversheetandframe`, form);
     }
-
+    preview(name) {
+        return http.get(`/files/${name}`, { responseType: 'blob' });
+    }
+    deleteImage(name) {
+        return http.delete(`/files/${name}`);
+    }
 }
 
 export default new coverPlateService();

@@ -152,7 +152,12 @@
           <a-modal v-model="visibleAdd" title="Thêm nhân viên">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" :loading="loadingAdd" @click="submitAdd">
+              <a-button
+                key="submit"
+                type="primary"
+                :loading="loadingAdd"
+                @click="submitAdd"
+              >
                 Lưu
               </a-button>
             </template>
@@ -209,10 +214,7 @@
 
                     <span style="color: red">*</span> Số điện thoại :
                     <a-form-model-item>
-                      <a-input
-                        style="width: 100%"
-                        v-model="dataAdd.phone"
-                      />
+                      <a-input style="width: 100%" v-model="dataAdd.phone" />
                     </a-form-model-item>
                   </div>
                   <div class="col">
@@ -260,7 +262,12 @@
           <a-modal v-model="visibleEdit" title="Chỉnh sửa nhân viên">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" :loading="loadingEdit" @click="submitUpdate">
+              <a-button
+                key="submit"
+                type="primary"
+                :loading="loadingEdit"
+                @click="submitUpdate"
+              >
                 Lưu
               </a-button>
             </template>
@@ -591,7 +598,7 @@ export default {
       visibleEdit: false,
       visibleProfile: false,
       loadingAdd: false,
-      loadingEdit: false
+      loadingEdit: false,
     };
   },
   created() {
@@ -702,7 +709,6 @@ export default {
     showModalAdd() {
       this.dataPosition.name = "";
       this.getAllPosition();
-      this.visibleAdd = true;
       this.url = "";
       this.dataAdd.fullName = "";
       this.dataAdd.gender = true;
@@ -714,7 +720,11 @@ export default {
       this.dataAdd.address = "";
       this.dataAdd.salary = "";
       this.dataAdd.image = "";
-       this.$refs.fileupload.value=null;
+      if (this.$refs.fileupload != null) {
+        this.$refs.fileupload.value = null;
+      }
+      this.showImage = false;
+      this.visibleAdd = true;
     },
     submitAdd() {
       this.loadingAdd = true;
@@ -774,18 +784,20 @@ export default {
           this.dataEdit.nation = response.data.data.nation;
           this.dataEdit.address = response.data.data.address;
           this.dataEdit.salary = response.data.data.salary;
-          this.visibleEdit = true;
-          if(this.url != null){
+          if (this.url != null) {
             this.showImage = true;
-          }else{
+          } else {
             this.showImage = false;
           }
-           this.$refs.fileupload.value=null;
+          if (this.$refs.fileupload != null) {
+            this.$refs.fileupload.value = null;
+          }
+          this.visibleEdit = true;
         })
         .catch((e) => {
           console.log(e);
         });
-        this.loadingEdit = false;
+      this.loadingEdit = false;
     },
     submitUpdate() {
       this.loadingEdit = true;

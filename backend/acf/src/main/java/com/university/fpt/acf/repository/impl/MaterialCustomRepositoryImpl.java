@@ -23,15 +23,15 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
         Map<String, Object> paramsAcc = new HashMap<>();
         if(materialSuggestFrom.getType().equals("thang")){
             sqlAcc.append(" select new com.university.fpt.acf.vo.SuggestMaterialVO(m.groupMaterial.name,m.id, m.name , " +
-                    " m.company.name,m.percentChooseInMonth ) from Material m where m.deleted = false  ");
+                    " m.company.name,m.percentChooseInMonth,img.name ) from Material m left join m.image img where m.deleted = false  ");
             sqlAcc.append(" ORDER by m.percentChooseInMonth desc ");
         }else if(materialSuggestFrom.getType().equals("quy")){
             sqlAcc.append(" select new com.university.fpt.acf.vo.SuggestMaterialVO(m.groupMaterial.name,m.id, m.name , " +
-                    " m.company.name,m.percentChooseInMonth ) from Material m where m.deleted = false  ");
+                    " m.company.name,m.percentChooseInMonth,img.name  ) from Material m left join m.image img where m.deleted = false  ");
             sqlAcc.append(" ORDER by m.percentChooseInQuarterOfYear desc ");
         }else if(materialSuggestFrom.getType().equals("name")){
             sqlAcc.append(" select new com.university.fpt.acf.vo.SuggestMaterialVO(m.groupMaterial.name,m.id, m.name , " +
-                    " m.company.name,m.percentChooseInMonth ) from Material m where m.deleted = false  ");
+                    " m.company.name,m.percentChooseInMonth,img.name  ) from Material m left join m.image img where m.deleted = false  ");
             sqlAcc.append(" ORDER by m.percentChooseInYear desc ");
         }
         TypedQuery<SuggestMaterialVO> queryAcc = super.createQuery(sqlAcc.toString(), paramsAcc, SuggestMaterialVO.class);
@@ -45,7 +45,7 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
     public List<MaterialVO> searchMaterial(SearchMaterialForm searchForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select new com.university.fpt.acf.vo.MaterialVO( m.id,m.name,p.id,concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight),g.id,g.name,c.id,c.name,u.id,u.name,p.price ) from Material m left join m.priceMaterials p inner join m.groupMaterial g inner join " +
+        sql.append("select new com.university.fpt.acf.vo.MaterialVO( m.id,m.name,p.id,concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight),g.id,g.name,c.id,c.name,u.id,u.name,p.price,img.name ) from Material m left join m.image img left join m.priceMaterials p inner join m.groupMaterial g inner join " +
                 "m.company c inner join p.heightMaterial h inner join p.unitMeasure u inner join p.frameMaterial f where m.checkMaterial=true and m.deleted =false ");
         if(searchForm.getCodeMaterial()!=null && !searchForm.getCodeMaterial().isEmpty()){
             sql.append(" and LOWER(m.name) like :code ");
@@ -175,7 +175,7 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
     public List<MaterialVO> searchCoverSheet(SearchMaterialForm searchForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select new com.university.fpt.acf.vo.MaterialVO( m.id,m.name,p.id,concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight),g.id,g.name,c.id,c.name,u.id,u.name,p.price ) from Material m left join m.priceMaterials p inner join m.groupMaterial g inner join " +
+        sql.append("select new com.university.fpt.acf.vo.MaterialVO( m.id,m.name,p.id,concat(f.frameLength,'x',f.frameWidth,'x',h.frameHeight),g.id,g.name,c.id,c.name,u.id,u.name,p.price,img.name ) from Material m left join m.image img left join m.priceMaterials p inner join m.groupMaterial g inner join " +
                 "m.company c inner join p.heightMaterial h inner join p.unitMeasure u inner join p.frameMaterial f where m.checkMaterial=false and m.deleted =false ");
         if(searchForm.getCodeMaterial()!=null && !searchForm.getCodeMaterial().isEmpty()){
             sql.append(" and LOWER(m.name) like :code ");

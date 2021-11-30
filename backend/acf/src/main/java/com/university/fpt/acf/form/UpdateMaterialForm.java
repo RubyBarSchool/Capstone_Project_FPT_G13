@@ -6,4 +6,5 @@ import lombok.Data;
 public class UpdateMaterialForm {
     private Long idParameter;
     private String price;
+    private String image;
 }

@@ -19,4 +19,5 @@ public class MaterialVO {
     private Long idUnit;
     private String unit;
     private String price;
+    private String image;
 }
