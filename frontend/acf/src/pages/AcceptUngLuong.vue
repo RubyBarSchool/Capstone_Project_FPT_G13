@@ -121,37 +121,48 @@
               <a-button
                 v-if="dataDetail.status == -1"
                 type="danger"
-                @click="submitReject(dataDetail.id, dataDetail.comment)"
+                :loading="loadingReject" :disabled="disableReject"
+                @click="checkFormReject(dataDetail.id, dataDetail.comment)"
                 >Loại bỏ</a-button
               >
               <a-button
                 v-if="dataDetail.status == -1"
                 type="primary"
-                @click="submitAccept(dataDetail.id, dataDetail.comment)"
+                :loading="loadingAccept" :disabled="disableAccept"
+                @click="checkFormAccept(dataDetail.id, dataDetail.comment)"
               >
                 Chấp nhận
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Nhân viên">
+              <span style="color: red">*</span> Nhân viên:
+              <a-form-model-item>
                 <a-input v-model="dataDetail.nameEmployee" disabled />
               </a-form-model-item>
-              <a-form-model-item label="Tiêu đề">
+              <span style="color: red">*</span> Tiêu đề:
+              <a-form-model-item>
                 <a-input v-model="dataDetail.title" disabled />
               </a-form-model-item>
+              <span style="color: red">*</span> Số tiền:
               <a-form-model-item label="Số tiền">
                 <a-input v-model="dataDetail.advanceSalary" disabled />
               </a-form-model-item>
-              <a-form-model-item label="Nội dung">
+              <span style="color: red">*</span> Nội dung:
+              <a-form-model-item>
                 <a-textarea v-model="dataDetail.content" :rows="4" disabled />
               </a-form-model-item>
-              <a-form-model-item label="Ghi chú">
+              <span style="color: red">*</span> Ghi chú:
+              <a-form-model-item>
                 <a-textarea
                   v-model="dataDetail.comment"
                   :disabled="dataDetail.status != -1"
-                  placeholder="Nhận xét như nào thì viết vào đây"
+                  placeholder="Nhận xét viết vào đây"
                   :rows="4"
+                  @change="inputComment"
                 />
+                <div style="color: red" v-if="checkDataInputComment.show">
+                  {{ checkDataInputComment.message }}
+                </div>
               </a-form-model-item>
             </a-form-model>
           </a-modal>
@@ -260,6 +271,14 @@ export default {
         },
       ],
       visibleView: false,
+      checkDataInputComment: {
+        show: false,
+        message: "",
+      },
+      loadingReject: false,
+      loadingAccept: false,
+      disableAccept : false,
+      disableReject: false,
     };
   },
   created() {
@@ -304,9 +323,13 @@ export default {
       this.dataDetail.date = record.date;
       this.dataDetail.idEmployee = record.idEmployee;
       this.dataDetail.status = record.status;
+      this.checkDataInputComment.show = false;
+      this.checkDataInputComment.message = "";
       this.visibleView = true;
     },
     handAccept() {
+      this.loadingAccept = true;
+      this.disableReject = true;
       acceptUngLuongService
         .acceptAdvanceSalaryAdmin(this.dataAccept)
         .then((response) => {
@@ -322,18 +345,62 @@ export default {
             let description = "Cập nhật trạng thái đơn thành công";
             this.notifi(type, message, description);
           }
+          this.loadingAccept = false;
+          this.disableReject = false;
+          this.visibleView = false;
         })
-        .catch((e) => {
-          console.log(e);
+        .catch(() => {
+          this.loadingAccept = false;
+          this.disableReject = false;
+          this.visibleView = false;
         });
     },
     submitAccept(id, comment) {
       this.dataAccept.id = id;
       this.dataAccept.comment = comment;
       this.handAccept();
-      this.visibleView = false;
+    },
+    checkFormReject(id, comment) {
+      if (
+        this.dataDetail.comment != null &&
+        this.dataDetail.comment.trim() != ""
+      ) {
+        this.checkDataInputComment.show = false;
+        this.checkDataInputComment.message = "";
+        this.submitReject(id, comment);
+      } else {
+        this.checkDataInputComment.show = true;
+        this.checkDataInputComment.message = "Bạn phải điền vào ô ghi chú";
+      }
+    },
+    checkFormAccept(id, comment) {
+      if (
+        this.dataDetail.comment != null &&
+        this.dataDetail.comment.trim() != ""
+      ) {
+        this.checkDataInputComment.show = false;
+        this.checkDataInputComment.message = "";
+        this.submitAccept(id, comment);
+      } else {
+        this.checkDataInputComment.show = true;
+        this.checkDataInputComment.message = "Bạn phải điền vào ô ghi chú";
+      }
+    },
+    inputComment() {
+      if (
+        this.dataDetail.comment != null &&
+        this.dataDetail.comment.trim() != ""
+      ) {
+        this.checkDataInputComment.show = false;
+        this.checkDataInputComment.message = "";
+      } else {
+        this.checkDataInputComment.show = true;
+        this.checkDataInputComment.message = "Bạn phải điền vào ô ghi chú";
+      }
     },
     handReject() {
+      this.loadingReject = true;
+      this.disableAccept = true;
       acceptUngLuongService
         .rejectAdvanceSalaryAdmin(this.dataAccept)
         .then((response) => {
@@ -349,21 +416,25 @@ export default {
             let description = "Cập nhật trạng thái đơn thành công";
             this.notifi(type, message, description);
           }
+          this.loadingReject = false;
+          this.disableAccept = false;
+          this.visibleView = false;
         })
-        .catch((e) => {
-          console.log(e);
+        .catch(() => {
+          this.loadingReject = false;
+          this.disableAccept = false;
+          this.visibleView = false;
         });
     },
     submitReject(id, comment) {
       this.dataAccept.id = id;
       this.dataAccept.comment = comment;
       this.handReject();
-      this.visibleView = false;
     },
     handleCancel() {
       this.visibleView = false;
     },
-        notifi(type, message, description) {
+    notifi(type, message, description) {
       this.$notification[type]({
         message: message,
         description: description,

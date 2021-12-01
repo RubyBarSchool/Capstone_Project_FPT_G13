@@ -164,13 +164,15 @@
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Tiêu đề">
+              <span style="color: red">*</span> Tiêu đề:
+              <a-form-model-item>
                 <a-input v-model="dataAdd.title" @change="inputTitleAdd" />
                 <div style="color: red" v-if="checkInputTitle.show">
                   {{ checkInputTitle.message }}
                 </div>
               </a-form-model-item>
-              <a-form-model-item label="Số tiền">
+              <span style="color: red">*</span> Số tiềntiền:
+              <a-form-model-item>
                 <a-input-number
                   style="width: 100%"
                   v-model="dataAdd.advanceSalary"
@@ -181,11 +183,11 @@
                   {{ checkInputSalary.message }}
                 </div>
               </a-form-model-item>
-
-              <a-form-model-item label="Nội dung">
+              <span style="color: red">*</span> Nội dung:
+              <a-form-model-item>
                 <a-textarea
                   v-model="dataAdd.content"
-                  placeholder="Lý do như nào thì viết vào đây"
+                  placeholder="Lý do viết vào đây"
                   :row="4"
                   @change="inputContentAdd"
                 />
@@ -211,13 +213,15 @@
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Tiêu đề">
+              <span style="color: red">*</span> Tiêu đề:
+              <a-form-model-item>
                 <a-input v-model="dataEdit.title" @change="inputTitleEdit" />
                 <div style="color: red" v-if="checkInputTitle.show">
                   {{ checkInputTitle.message }}
                 </div>
               </a-form-model-item>
-              <a-form-model-item label="Số tiền">
+              <span style="color: red">*</span> Số tiền:
+              <a-form-model-item>
                 <a-input-number
                   style="width: 100%"
                   v-model="dataEdit.advanceSalary"
@@ -228,10 +232,11 @@
                   {{ checkInputSalary.message }}
                 </div>
               </a-form-model-item>
-              <a-form-model-item label="Nội dung">
+              <span style="color: red">*</span> Nội dung:
+              <a-form-model-item>
                 <a-textarea
                   v-model="dataEdit.content"
-                  placeholder="Lý do như nào thì viết vào đây"
+                  placeholder="Lý do viết vào đây"
                   :row="4"
                   @change="inputContentEdit"
                 />
