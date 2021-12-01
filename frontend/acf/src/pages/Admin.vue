@@ -696,6 +696,10 @@ export default {
       this.visibleProfile = false;
     },
     showModalEdit(id, username, roles, status) {
+      this.checkDataInputUsername.show = false;
+      this.checkDataInputUsername.message = "";
+      this.checkDataInputRole.show = false;
+      this.checkDataInputRole.message = "";
       this.dataEdit.id = id;
       this.dataEdit.username = username;
       this.dataEdit.listRole = [];

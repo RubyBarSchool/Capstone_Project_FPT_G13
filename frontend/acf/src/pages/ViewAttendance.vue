@@ -20,7 +20,7 @@
           <!-- menu trên -->
           <a-input
             v-model="dataSearch.name"
-            placeholder="Tên  nhân viên"
+            placeholder="Tên nhân viên"
             style="width: 15%"
           />
           <a-range-picker
@@ -106,7 +106,11 @@
               <template slot="action" slot-scope="text, record">
                 <a-row>
                   <a-col :span="8">
-                    <a-button id="edit" v-if="showEdit(record)" @click="showModalEdit(record)">
+                    <a-button
+                      id="edit"
+                      v-if="showEdit(record)"
+                      @click="showModalEdit(record)"
+                    >
                       <font-awesome-icon :icon="['fas', 'edit']" />
                     </a-button>
                   </a-col>
@@ -116,25 +120,39 @@
           </div>
         </div>
 
+        <!-- popup edit -->
         <a-modal v-model="visibleEdit" title="Chỉnh sửa điểm danh">
           <template slot="footer">
             <a-button key="back" @click="handleCancel"> Hủy </a-button>
-            <a-button key="submit" type="primary" @click="submitUpdate">
+            <a-button
+              key="submit"
+              type="primary"
+              :loading="loading"
+              @click="checkFormUpdate"
+            >
               Lưu
             </a-button>
           </template>
           <a-form-model>
-            <a-form-model-item label="Họ Và Tên">
-              <a-input v-model="nameEdit" disabled />
-            </a-form-model-item>
-            <a-form-model-item label="Số công">
-              <a-select v-model="dataEdit.type" style="width: 100%">
-                <a-select-option key="1"> Cả ngày </a-select-option>
-                <a-select-option key="0.5"> Nửa ngày </a-select-option>
-                <a-select-option key="0"> Nghỉ </a-select-option>
-              </a-select>
-            </a-form-model-item>
-            <a-form-model-item label="Note">
+            <span style="color: red">*</span> Họ và tên :
+            <a-input @change="inputName" v-model="nameEdit" disabled />
+            <div style="color: red" v-if="checkDataInputName.show">
+              {{ checkDataInputName.message }}
+            </div>
+            <span style="color: red">*</span> Số công :
+            <a-select
+              @change="inputNumber"
+              v-model="dataEdit.type"
+              style="width: 100%"
+            >
+              <a-select-option key="1"> Cả ngày </a-select-option>
+              <a-select-option key="0.5"> Nửa ngày </a-select-option>
+              <a-select-option key="0"> Nghỉ </a-select-option>
+            </a-select>
+            <div style="color: red" v-if="checkDataInputNumber.show">
+              {{ checkDataInputNumber.message }}
+            </div>
+            <a-form-model-item label="Ghi chú">
               <a-textarea
                 v-model="dataEdit.note"
                 placeholder="Nhập ghi chú"
@@ -143,6 +161,7 @@
             </a-form-model-item>
           </a-form-model>
         </a-modal>
+        <!-- popup edit -->
 
         <!-- preview excel -->
         <a-modal
@@ -195,6 +214,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       dataPriviewExcel: [],
       visiblePriviewExport: false,
       visibleEdit: false,
@@ -268,6 +288,14 @@ export default {
           scopedSlots: { customRender: "action" },
         },
       ],
+      checkDataInputName: {
+        show: false,
+        message: "",
+      },
+      checkDataInputNumber: {
+        show: false,
+        message: "",
+      },
     };
   },
   computed: {},
@@ -279,24 +307,22 @@ export default {
       let date = record.date.split("-")[2];
       if (parseInt(date) >= 10) {
         let dateNow = moment();
-        let dateLast = moment(record.date)
-          .add(1, "months")
-          .set("date", 10);
+        let dateLast = moment(record.date).add(1, "months").set("date", 10);
         if (dateNow < dateLast) {
-          console.log("true")
+          // console.log("true");
           return true;
         } else {
-          console.log("false")
+          // console.log("false");
           return false;
         }
       } else {
         let dateNow1 = moment();
         let dateLast1 = moment(record.date).set("date", 10);
         if (dateNow1 < dateLast1) {
-          console.log("true")
+          // console.log("true");
           return true;
         } else {
-          console.log("false")
+          // console.log("false");
           return false;
         }
       }
@@ -347,19 +373,47 @@ export default {
       this.dataEdit.note = record.note;
       this.nameEdit = record.nameEmpl;
     },
+    checkFormUpdate() {
+      let check = true;
+      if (this.nameEdit != null && this.nameEdit.trim() != "") {
+        this.checkDataInputName.show = false;
+        this.checkDataInputName.message = "";
+      } else {
+        check = false;
+        this.checkDataInputName.show = true;
+        this.checkDataInputName.message = "Bạn phải điền họ và tên";
+      }
+
+      if (this.dataEdit.type != null && this.dataEdit.type.length != 0) {
+        this.checkDataInputNumber.show = false;
+        this.checkDataInputNumber.message = "";
+      } else {
+        check = false;
+        this.checkDataInputNumber.show = true;
+        this.checkDataInputNumber.message = "Bạn phải điền chức vụ";
+      }
+
+      if (check) {
+        this.submitUpdate();
+      }
+    },
     submitUpdate() {
+      this.loading = true;
       attendanceService
         .updateAttendance(this.dataEdit)
         .then((response) => {
           this.searchAttendance();
           if (response.data.data) {
-            this.notifi("success", "Cập nhật thành công");
+            this.notifi("success", "Viết ghi chú");
           }
+          this.loading = false;
+          this.handleCancel();
         })
         .catch((e) => {
           console.log(e);
+          this.loading = false;
+          this.handleCancel();
         });
-      this.handleCancel();
     },
     notifi(task, text) {
       this.$notification[task]({
@@ -396,6 +450,24 @@ export default {
       this.dataSearch.pageIndex = 1;
       this.dataSearch.total = 0;
       this.searchAttendance();
+    },
+    inputName() {
+      if (this.nameEdit != null && this.nameEdit.trim() != "") {
+        this.checkDataInputName.show = false;
+        this.checkDataInputName.message = "";
+      } else {
+        this.checkDataInputName.show = true;
+        this.checkDataInputName.message = "Bạn phải điền họ và tên";
+      }
+    },
+    inputNumber() {
+      if (this.dataEdit.type != null && this.dataEdit.type.length != 0) {
+        this.checkDataInputNumber.show = false;
+        this.checkDataInputNumber.message = "";
+      } else {
+        this.checkDataInputNumber.show = true;
+        this.checkDataInputNumber.message = "Bạn phải điền họ và tên";
+      }
     },
   },
 };
