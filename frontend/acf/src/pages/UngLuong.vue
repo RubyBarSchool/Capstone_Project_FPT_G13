@@ -171,7 +171,7 @@
                   {{ checkInputTitle.message }}
                 </div>
               </a-form-model-item>
-              <span style="color: red">*</span> Số tiềntiền:
+              <span style="color: red">*</span> Số tiền:
               <a-form-model-item>
                 <a-input-number
                   style="width: 100%"
