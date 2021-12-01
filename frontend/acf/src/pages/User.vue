@@ -870,70 +870,70 @@ export default {
     checkFormAdd() {
       let check = true;
       if (this.dataAdd.fullName != null && this.dataAdd.fullName.trim() != "") {
-        check = false;
         this.checkDataInputFullName.show = false;
         this.checkDataInputFullName.message = "";
       } else {
+        check = false;
         this.checkDataInputFullName.show = true;
         this.checkDataInputFullName.message = "Bạn phải điền vào ô họ và tên";
       }
       if (this.dataAdd.dob != null && this.dataAdd.dob != "") {
-        check = false;
         this.checkDataInputDoB.show = false;
         this.checkDataInputDoB.message = "";
       } else {
+        check = false;
         this.checkDataInputDoB.show = true;
         this.checkDataInputDoB.message = "Bạn phải điền vào ô ngày sinh";
       }
       if (this.dataAdd.idPosition != null && this.dataAdd.idPosition != "") {
-        check = false;
         this.checkDataInputPosition.show = false;
         this.checkDataInputPosition.message = "";
       } else {
+        check = false;
         this.checkDataInputPosition.show = true;
         this.checkDataInputPosition.message = "Bạn phải chọn chức vụ";
       }
       if (this.dataAdd.phone != null && this.dataAdd.phone.trim() != "") {
-        check = false;
         this.checkDataInputPhone.show = false;
         this.checkDataInputPhone.message = "";
       } else {
+        check = false;
         this.checkDataInputPhone.show = true;
         this.checkDataInputPhone.message = "Bạn phải điền vào ô số điện thoại";
       }
       if (this.dataAdd.email != null && this.dataAdd.email.trim() != "") {
-        check = false;
         this.checkDataInputEmail.show = false;
         this.checkDataInputEmail.message = "";
       } else {
+        check = false;
         this.checkDataInputEmail.show = true;
         this.checkDataInputEmail.message = "Bạn phải điền vào ô email";
       }
       if (this.dataAdd.address != null && this.dataAdd.address.trim() != "") {
-        check = false;
         this.checkDataInputAddress.show = false;
         this.checkDataInputAddress.message = "";
       } else {
+        check = false;
         this.checkDataInputAddress.show = true;
         this.checkDataInputAddress.message = "Bạn phải điền vào ô địa chỉ";
       }
       if (this.dataAdd.nation != null && this.dataAdd.nation.trim() != "") {
-        check = false;
         this.checkDataInputNation.show = false;
         this.checkDataInputNation.message = "";
       } else {
+        check = false;
         this.checkDataInputNation.show = true;
         this.checkDataInputNation.message = "Bạn phải điền vào ô dân tộc";
       }
       if (this.dataAdd.salary != null && this.dataAdd.salary != "") {
-        check = false;
         this.checkDataInputSalary.show = false;
         this.checkDataInputSalary.message = "";
       } else {
+        check = false;
         this.checkDataInputSalary.show = true;
         this.checkDataInputSalary.message = "Bạn phải điền vào ô lương";
       }
-      if (check == false) {
+      if (check == true) {
         this.submitAdd();
       }
     },
