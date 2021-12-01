@@ -123,22 +123,22 @@
                       <font-awesome-icon :icon="['fas', 'eye']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="8" v-if="record.statusAccept==-1">
+                  <a-col :span="8" v-if="record.statusAccept == -1">
                     <a-button
                       id="edit"
-                      @click="
-                        showModalEdit(record)
-                      "
+                      @click="showModalEdit(record)"
                       :style="{ width: '44.25px' }"
                     >
                       <font-awesome-icon :icon="['fas', 'edit']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="8" v-if="record.statusAccept==-1">
+                  <a-col :span="8" v-if="record.statusAccept == -1">
                     <a-popconfirm
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
                       @confirm="deletePersonalApplication(record.idApplication)"
+                      ok-text="Đồng ý"
+                      cancel-text="Hủy"
                     >
                       <a-button id="delete">
                         <font-awesome-icon :icon="['fas', 'trash']" />
@@ -154,36 +154,42 @@
           <a-modal v-model="visibleAdd" title="Viết đơn">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="checkFormAdd">
+              <a-button
+                key="submit"
+                type="primary"
+                :loading="loading"
+                @click="checkFormAdd"
+              >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Tiêu đề">
-                <a-input v-model="dataAdd.title" />
-                <div style="color: red" v-if="checkDataInput.show">
-                  {{ checkDataInput.message }}
-                </div>
-              </a-form-model-item>
-              <a-form-model-item label="Ngày">
-                <a-range-picker
-                  v-model="dataAdd.date"
-                  :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-                  format="DD/MM/YYYY"
-                  :style="{ width: '472px' }"
-                />
-              </a-form-model-item>
-
-              <a-form-model-item label="Nội dung">
-                <a-textarea
-                  v-model="dataAdd.content"
-                  placeholder="Lý do như nào thì viết vào đây"
-                  :row="4"
-                />
-                <div style="color: red" v-if="checkDataInput.show">
-                  {{ checkDataInput.message }}
-                </div>
-              </a-form-model-item>
+              <span style="color: red">*</span> Tiêu đề :
+              <a-input @change="inputTitle" v-model="dataAdd.title" />
+              <div style="color: red" v-if="checkDataInputTitle.show">
+                {{ checkDataInputTitle.message }}
+              </div>
+              <span style="color: red">*</span> Ngày :
+              <a-range-picker
+                @change="inputDate"
+                v-model="dataAdd.date"
+                :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+                format="DD/MM/YYYY"
+                :style="{ width: '472px' }"
+              />
+              <div style="color: red" v-if="checkDataInputDate.show">
+                {{ checkDataInputDate.message }}
+              </div>
+              <span style="color: red">*</span> Nội dung :
+              <a-textarea
+                @change="inputContent"
+                v-model="dataAdd.content"
+                placeholder="Bạn hãy điền nội dung vào đây"
+                :row="4"
+              />
+              <div style="color: red" v-if="checkDataInputContent.show">
+                {{ checkDataInputContent.message }}
+              </div>
             </a-form-model>
           </a-modal>
           <!-- popup add -->
@@ -192,34 +198,48 @@
           <a-modal v-model="visibleEdit" title="Chỉnh sửa đơn">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitUpdate">
+              <a-button
+                key="submit"
+                type="primary"
+                :loading="loading"
+                @click="checkFormEdit"
+              >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Tiêu đề">
-                <a-input v-model="dataEdit.title" />
-              </a-form-model-item>
-              <a-form-model-item label="Ngày">
-                <a-range-picker
-                  v-model="dataEdit.date"
-                  :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-                  :style="{ width: '472px' }"
-                />
-              </a-form-model-item>
-              <a-form-model-item label="Nội dung">
-                <a-textarea
-                  v-model="dataEdit.content"
-                  placeholder="Lý do như nào thì viết vào đây"
-                  :row="4"
-                />
-              </a-form-model-item>
+              <span style="color: red">*</span> Tiêu đề :
+              <a-input @change="inputEditTitle" v-model="dataEdit.title" />
+              <div style="color: red" v-if="checkDataInputTitle.show">
+                {{ checkDataInputTitle.message }}
+              </div>
+              <span style="color: red">*</span> Ngày :
+              <a-range-picker
+                @change="inputEditDate"
+                v-model="dataEdit.date"
+                :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+                format="DD/MM/YYYY"
+                :style="{ width: '472px' }"
+              />
+               <div style="color: red" v-if="checkDataInputDate.show">
+                {{ checkDataInputDate.message }}
+              </div>
+              <span style="color: red">*</span> Nội dung :
+              <a-textarea
+                @change="inputEditContent"
+                v-model="dataEdit.content"
+                placeholder="Bạn hãy điền nội dung vào đây"
+                :row="4"
+              />
+              <div style="color: red" v-if="checkDataInputContent.show">
+                {{ checkDataInputContent.message }}
+              </div>
             </a-form-model>
           </a-modal>
           <!-- popup edit-->
 
           <!-- popup view-->
-          <a-modal v-model="visibleView" class="view">
+          <a-modal v-model="visibleView" class="view" title="Xem đơn chi tiết">
             <template slot="footer">
               <a-button key="submit" @click="handleCancel">Đóng</a-button>
             </template>
@@ -281,7 +301,10 @@
                 </a-date-picker>
               </a-form-model-item>
               <a-form-model-item label="Quản lý xác nhận">
-                <a-input v-model="dataPersonalLeaveEmployeeDetail.nameEmployeeAccess" disabled />
+                <a-input
+                  v-model="dataPersonalLeaveEmployeeDetail.nameEmployeeAccess"
+                  disabled
+                />
               </a-form-model-item>
               <a-form-model-item label="Ngày xác nhận">
                 <a-date-picker
@@ -292,7 +315,11 @@
                 </a-date-picker>
               </a-form-model-item>
               <a-form-model-item label="Ghi chú của quản lý">
-                <a-textarea v-model="dataPersonalLeaveEmployeeDetail.comment" :row="4" disabled />
+                <a-textarea
+                  v-model="dataPersonalLeaveEmployeeDetail.comment"
+                  :row="4"
+                  disabled
+                />
               </a-form-model-item>
             </a-form-model>
           </a-modal>
@@ -316,6 +343,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       pagination: {
         current: 1,
         pageSize: 10,
@@ -419,7 +447,15 @@ export default {
       visibleAdd: false,
       visibleEdit: false,
       visibleView: false,
-      checkDataInput: {
+      checkDataInputTitle: {
+        show: false,
+        message: "",
+      },
+      checkDataInputDate: {
+        show: false,
+        message: "",
+      },
+      checkDataInputContent: {
         show: false,
         message: "",
       },
@@ -457,11 +493,21 @@ export default {
         });
     },
     showModalAdd() {
+      this.dataAdd.title = "";
+      this.dataAdd.date = [];
+      this.dataAdd.content = "";
+      this.checkDataInputTitle.show = false;
+      this.checkDataInputTitle.message = "";
+      this.checkDataInputDate.show = false;
+      this.checkDataInputDate.message = "";
+      this.checkDataInputContent.show = false;
+      this.checkDataInputContent.message = "";
       this.visibleAdd = true;
-      this.checkDataInput.show = false;
-      this.checkDataInput.message = "";
     },
     submitAdd() {
+      this.dataAdd.title = this.dataAdd.title.trim();
+      this.dataAdd.content = this.dataAdd.content.trim();
+      this.loading = true;
       xinNghiService
         .addPersonalApplication(this.dataAdd)
         .then((response) => {
@@ -482,28 +528,45 @@ export default {
               response.data.message;
             this.notifi(type, message, description);
           }
+          this.loading = false;
+          this.visibleAdd = false;
         })
         .catch((e) => {
           console.log(e);
+          this.loading = false;
+          this.visibleAdd = false;
         });
-      this.visibleAdd = false;
-      this.dataAdd.title = "";
-      this.dataAdd.date = [];
-      this.dataAdd.content = "";
     },
     checkFormAdd() {
-      if (
-        this.dataAdd.title != null &&
-        this.dataAdd.title != "" &&
-        this.dataAdd.content != null &&
-        this.dataAdd.content != ""
-      ) {
-        this.checkDataInput.show = false;
-        this.checkDataInput.message = "";
-        this.submitAdd();
+      let check = true;
+      if (this.dataAdd.title != null && this.dataAdd.title.trim() != "") {
+        this.checkDataInputTitle.show = false;
+        this.checkDataInputTitle.message = "";
       } else {
-        this.checkDataInput.show = true;
-        this.checkDataInput.message = "Bạn phải điền vào chỗ trống";
+        check = false;
+        this.checkDataInputTitle.show = true;
+        this.checkDataInputTitle.message = "Bạn phải điền tiêu đề";
+      }
+
+      if (this.dataAdd.date != null && this.dataAdd.date.length != 0) {
+        this.checkDataInputDate.show = false;
+        this.checkDataInputDate.message = "";
+      } else {
+        check = false;
+        this.checkDataInputDate.show = true;
+        this.checkDataInputDate.message = "Bạn phải chọn ngày";
+      }
+
+      if (this.dataAdd.content != null && this.dataAdd.content != "") {
+        this.checkDataInputContent.show = false;
+        this.checkDataInputContent.message = "";
+      } else {
+        check = false;
+        this.checkDataInputContent.show = true;
+        this.checkDataInputContent.message = "Bạn phải điền nội dung";
+      }
+      if (check) {
+        this.submitAdd();
       }
     },
     handleCancel() {
@@ -512,6 +575,12 @@ export default {
       this.visibleView = false;
     },
     showModalEdit(record) {
+      this.checkDataInputTitle.show = false;
+      this.checkDataInputTitle.message = "";
+      this.checkDataInputDate.show = false;
+      this.checkDataInputDate.message = "";
+      this.checkDataInputContent.show = false;
+      this.checkDataInputContent.message = "";
       this.dataEdit.idApplication = record.idApplication;
       this.dataEdit.title = record.title;
       this.dataEdit.content = record.content;
@@ -522,9 +591,12 @@ export default {
       this.visibleEdit = true;
     },
     submitUpdate() {
+      this.dataEdit.title = this.dataEdit.title.trim();
+      this.dataEdit.content = this.dataEdit.content.trim();
+      this.loading = true;
       let date = [];
-      date.push(moment(this.dataEdit.date[0]).add('1','days'));
-      date.push(moment(this.dataEdit.date[1]).add('1','days'));
+      date.push(moment(this.dataEdit.date[0]).add("1", "days"));
+      date.push(moment(this.dataEdit.date[1]).add("1", "days"));
       this.dataEdit.date = date;
       xinNghiService
         .updatePersonalApplication(this.dataEdit)
@@ -541,13 +613,47 @@ export default {
             let description = "Cập nhật đơn không thành công";
             this.notifi(type, message, description);
           }
+          this.loading = false;
+          this.visibleEdit = false;
         })
         .catch((e) => {
           console.log(e);
+          this.loading = false;
+          this.visibleEdit = false;
         });
-      this.visibleEdit = false;
     },
+    checkFormEdit() {
+      let check = true;
+      if (this.dataEdit.title != null && this.dataEdit.title.trim() != "") {
+        this.checkDataInputTitle.show = false;
+        this.checkDataInputTitle.message = "";
+      } else {
+        check = false;
+        this.checkDataInputTitle.show = true;
+        this.checkDataInputTitle.message = "Bạn phải điền tiêu đề";
+      }
+      
+      if (this.dataEdit.date != null && this.dataEdit.date.length != 0) {
+        this.checkDataInputDate.show = false;
+        this.checkDataInputDate.message = "";
+      } else {
+        check = false;
+        this.checkDataInputDate.show = true;
+        this.checkDataInputDate.message = "Bạn phải chọn ngày";
+      }
 
+      if (this.dataEdit.content != null && this.dataEdit.content != "") {
+        this.checkDataInputContent.show = false;
+        this.checkDataInputContent.message = "";
+      } else {
+        check = false;
+        this.checkDataInputContent.show = true;
+        this.checkDataInputContent.message = "Bạn phải điền nội dung";
+      }
+      if (check) {
+        this.submitUpdate();
+      }
+    },
     deletePersonalApplication(id) {
       xinNghiService
         .deletePersonalApplication(id)
@@ -570,7 +676,62 @@ export default {
           console.log(e);
         });
     },
-
+    inputTitle() {
+      if (this.dataAdd.title != null && this.dataAdd.title.trim() != "") {
+        this.checkDataInputTitle.show = false;
+        this.checkDataInputTitle.message = "";
+      } else {
+        this.checkDataInputTitle.show = true;
+        this.checkDataInputTitle.message = "Bạn phải điền tiêu đề";
+      }
+    },
+    inputDate() {
+      console.log("add", this.dataAdd.date)
+      if (this.dataAdd.date != null && this.dataAdd.date.length != 0) {
+        this.checkDataInputDate.show = false;
+        this.checkDataInputDate.message = "";
+      } else {
+        this.checkDataInputDate.show = true;
+        this.checkDataInputDate.message = "Bạn phải chọn ngày";
+      }
+    },
+    inputContent() {
+      if (this.dataAdd.content != null && this.dataAdd.content.trim() != "") {
+        this.checkDataInputContent.show = false;
+        this.checkDataInputContent.message = "";
+      } else {
+        this.checkDataInputContent.show = true;
+        this.checkDataInputContent.message = "Bạn phải điền nội dung";
+      }
+    },
+    inputEditTitle() {
+      if (this.dataEdit.title != null && this.dataEdit.title.trim() != "") {
+        this.checkDataInputTitle.show = false;
+        this.checkDataInputTitle.message = "";
+      } else {
+        this.checkDataInputTitle.show = true;
+        this.checkDataInputTitle.message = "Bạn phải điền tiêu đề";
+      }
+    },
+    inputEditDate() {
+      console.log("date", this.dataAdd.date != null && this.dataAdd.date.length != 0);
+      if (this.dataEdit.date != null && this.dataEdit.date.length != 0) {
+        this.checkDataInputDate.show = false;
+        this.checkDataInputDate.message = "";
+      } else {
+        this.checkDataInputDate.show = true;
+        this.checkDataInputDate.message = "Bạn phải chọn ngày";
+      }
+    },
+    inputEditContent() {
+      if (this.dataEdit.content != null && this.dataEdit.content.trim() != "") {
+        this.checkDataInputContent.show = false;
+        this.checkDataInputContent.message = "";
+      } else {
+        this.checkDataInputContent.show = true;
+        this.checkDataInputContent.message = "Bạn phải điền nội dung";
+      }
+    },
     showModelView(record) {
       console.log("datarow", record);
       this.dataPersonalLeaveEmployeeDetail.title = record.title;
