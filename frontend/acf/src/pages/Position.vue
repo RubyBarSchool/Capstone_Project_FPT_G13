@@ -88,8 +88,11 @@
                           v-if="dataSourceTable.length"
                           title="Bạn có chắc chắn muốn xóa không?"
                           @confirm="deletePosition(record.id)"
+                          ok-text="Đồng ý"
+                          cancel-text="Hủy"
                         >
                           <a-button id="delete">
+                            <!-- :loading = "loadingDelete" -->
                             <font-awesome-icon :icon="['fas', 'trash']" />
                           </a-button>
                         </a-popconfirm>
@@ -114,7 +117,7 @@
                   </a-button>
                 </template>
                 <a-form-model>
-                  <span style="color: red">*</span>Tên chức vụ:
+                  <span style="color: red">*</span> Tên chức vụ:
                   <a-form-model-item>
                     <a-input @change="inputNameAdd" v-model="dataAdd.name" />
                     <div style="color: red" v-if="checkDataInputName.show">
@@ -131,13 +134,13 @@
                     :loading="loading"
                     key="submit"
                     type="primary"
-                    @click="submitUpdate"
+                    @click="checkFormEdit"
                   >
                     Lưu
                   </a-button>
                 </template>
                 <a-form-model>
-                  <span style="color: red">*</span> Tên chức vụ :
+                  <span style="color: red">*</span> Tên chức vụ:
                   <a-form-model-item>
                     <a-input @change="inputNameEdit" v-model="dataEdit.name" />
                     <div style="color: red" v-if="checkDataInputName.show">
@@ -222,6 +225,7 @@ export default {
         show: false,
         message: "",
       },
+      loadingDelete: false,
     };
   },
   created() {
@@ -272,7 +276,7 @@ export default {
       }
     },
     checkFormEdit() {
-      if (this.dataAdd.name != null && this.dataAdd.name.trim() != "") {
+      if (this.dataEdit.name != null && this.dataEdit.name.trim() != "") {
         this.checkDataInputName.show = false;
         this.checkDataInputName.message = "";
         this.submitUpdate();
@@ -300,6 +304,7 @@ export default {
       }
     },
     submitAdd() {
+      this.dataAdd.name = this.dataAdd.name.trim();
       this.loading = true;
       positionService
         .addPosition(this.dataAdd)
@@ -340,6 +345,7 @@ export default {
       });
     },
     deletePosition(id) {
+      this.loadingDelete = true;
       positionService
         .deletePosition(id)
         .then((response) => {
@@ -355,12 +361,14 @@ export default {
             this.notifi(type, message, description);
           }
           this.submitSearch();
+          this.loadingDelete = false;
         })
         .catch(() => {
           let type = "error";
           let message = "Xóa chức vụ";
           let description = "Xóa chức vụ không thành công";
           this.notifi(type, message, description);
+          this.loadingDelete = false;
         });
     },
     showModalEdit(id, name) {
@@ -371,6 +379,8 @@ export default {
       this.checkDataInputName.message = "";
     },
     submitUpdate() {
+      this.dataEdit.name = this.dataEdit.name.trim();
+      this.loading = true;
       positionService
         .updatePosition(this.dataEdit)
         .then((response) => {
@@ -388,6 +398,7 @@ export default {
             this.notifi(type, message, description);
           }
           this.submitSearch();
+          this.loading = false;
         })
         .catch(() => {
           let type = "error";
@@ -395,6 +406,7 @@ export default {
           let description =
             "Sửa chức vụ : " + this.dataEdit.name + " không thành công";
           this.notifi(type, message, description);
+          this.loading = false;
         });
       this.visibleEdit = false;
     },
