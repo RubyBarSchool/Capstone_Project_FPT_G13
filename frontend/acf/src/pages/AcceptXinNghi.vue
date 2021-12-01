@@ -135,56 +135,63 @@
           <a-modal v-model="visibleView" title="Xét đơn xin nghỉ">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Đóng </a-button>
-              <a-button v-if="dataDetail.statusAccept == -1" type="danger" @click="submitReject()">
+              <a-button
+                v-if="dataDetail.statusAccept == -1"
+                type="danger"
+                :loading="loadingReject"
+                @click="checkFormReject()"
+              >
                 Loại bỏ
               </a-button>
-              <a-button v-if="dataDetail.statusAccept == -1"  type="primary" @click="submitAccept()">
+              <a-button
+                v-if="dataDetail.statusAccept == -1"
+                type="primary"
+                :loading="loadingAccept"
+                @click="checkFormAccept()"
+              >
                 Chấp nhận
               </a-button>
             </template>
             <div class="container">
               <a-form-model>
-                <a-form-model-item label="Nhân viên">
-                  <a-input v-model="dataDetail.nameEmployee" disabled />
-                </a-form-model-item>
-                <a-form-model-item label="Tiêu đề">
-                  <a-input v-model="dataDetail.title" disabled />
-                </a-form-model-item>
+                <span style="color: red">*</span> Nhân viên :
+                <a-input v-model="dataDetail.nameEmployee" disabled />
+                <span style="color: red">*</span> Tiêu đề :
+                <a-input v-model="dataDetail.title" disabled />
                 <a-row :gutter="[16, 8]">
                   <a-col :span="8">
-                    <a-form-model-item label="Ngày tạo">
-                      <a-input v-model="dataDetail.date" disabled />
-                    </a-form-model-item>
+                    <span style="color: red">*</span> Ngày tạo :
+                    <a-input v-model="dataDetail.date" disabled />
                   </a-col>
                   <a-col :span="8">
-                    <a-form-model-item label="Ngày bắt đầu">
-                      <a-input v-model="dataDetail.dateStart" disabled />
-                    </a-form-model-item>
+                    <span style="color: red">*</span> Ngày bắt đầu :
+                    <a-input v-model="dataDetail.dateStart" disabled />
                   </a-col>
                   <a-col :span="8">
-                    <a-form-model-item label="Ngày kết thúc">
-                      <a-input v-model="dataDetail.dateEnd" disabled />
-                    </a-form-model-item>
+                    <span style="color: red">*</span> Ngày kết thúc :
+                    <a-input v-model="dataDetail.dateEnd" disabled />
                   </a-col>
                 </a-row>
-                <a-form-model-item label="Nội dung">
-                  <a-textarea
-                    v-model="dataDetail.content"
-                    :auto-size="{
-                      minRows: 1,
-                      maxRows: 6,
-                    }"
-                    disabled
-                  />
-                </a-form-model-item>
-                <a-form-model-item label="Ghi chú">
-                  <a-textarea
-                    placeholder="Viết ghi chú....."
-                    :disabled="dataDetail.statusAccept != -1"
-                    v-model="dataDetail.comment"
-                    :rows="4"
-                  />
-                </a-form-model-item>
+                <span style="color: red">*</span> Nội dung :
+                <a-textarea
+                  v-model="dataDetail.content"
+                  :auto-size="{
+                    minRows: 1,
+                    maxRows: 6,
+                  }"
+                  disabled
+                />
+                <span style="color: red">*</span> Ghi chú ;
+                <a-textarea
+                  @change="inputNote"
+                  placeholder="Viết ghi chú....."
+                  :disabled="dataDetail.statusAccept != -1"
+                  v-model="dataDetail.comment"
+                  :rows="4"
+                />
+                <div style="color: red" v-if="checkDataInputNote.show">
+                  {{ checkDataInputNote.message }}
+                </div>
               </a-form-model>
             </div>
           </a-modal>
@@ -208,6 +215,12 @@ export default {
   },
   data() {
     return {
+      loadingReject: false,
+      loadingAccept: false,
+      checkDataInputNote: {
+        show: false,
+        message: "",
+      },
       pagination: {
         current: 1,
         pageSize: 10,
@@ -366,6 +379,7 @@ export default {
     },
 
     handAccept() {
+      this.loadingAccept = true;
       acceptXinNghiService
         .acceptPersonalApplication(this.dataAccept)
         .then((response) => {
@@ -382,13 +396,18 @@ export default {
             this.notifi(type, message, description);
             this.submitSearch();
           }
+          this.loadingAccept = false;
+          this.visibleView = false;
         })
         .catch((e) => {
           console.log(e);
+          this.loadingAccept = false;
+          this.visibleView = false;
         });
     },
 
     handReject() {
+      this.loadingReject = true;
       acceptXinNghiService
         .rejectPersonalApplication(this.dataAccept)
         .then((response) => {
@@ -405,9 +424,13 @@ export default {
             this.notifi(type, message, description);
             this.submitSearch();
           }
+          this.loadingReject = false;
+          this.visibleView = false;
         })
         .catch((e) => {
           console.log(e);
+          this.loadingReject = false;
+          this.visibleView = false;
         });
     },
 
@@ -415,14 +438,59 @@ export default {
       this.dataAccept.idApplication = this.dataDetail.idApplication;
       this.dataAccept.comment = this.dataDetail.comment;
       this.handAccept();
-      this.visibleView = false;
+    },
+    checkFormAccept() {
+      let check = true;
+      if (
+        this.dataDetail.comment != null &&
+        this.dataDetail.comment.trim() != ""
+      ) {
+        this.checkDataInputNote.show = false;
+        this.checkDataInputNote.message = "";
+      } else {
+        check = false;
+        this.checkDataInputNote.show = true;
+        this.checkDataInputNote.message = "Bạn phải điền nội dung vào đây";
+      }
+      if (check) {
+        this.submitAccept();
+      }
     },
 
     submitReject() {
       this.dataAccept.idApplication = this.dataDetail.idApplication;
       this.dataAccept.comment = this.dataDetail.comment;
       this.handReject();
-      this.visibleView = false;
+    },
+    checkFormReject() {
+      let check = true;
+      if (
+        this.dataDetail.comment != null &&
+        this.dataDetail.comment.trim() != ""
+      ) {
+        this.checkDataInputNote.show = false;
+        this.checkDataInputNote.message = "";
+      } else {
+        check = false;
+        this.checkDataInputNote.show = true;
+        this.checkDataInputNote.message = "Bạn phải điền nội dung vào đây";
+      }
+      if (check) {
+        this.submitReject();
+      }
+    },
+
+    inputNote() {
+      if (
+        this.dataDetail.comment != null &&
+        this.dataDetail.comment.trim() != ""
+      ) {
+        this.checkDataInputNote.show = false;
+        this.checkDataInputNote.message = "";
+      } else {
+        this.checkDataInputNote.show = true;
+        this.checkDataInputNote.message = "Bạn phải điền nội dung vào đây";
+      }
     },
 
     notifi(type, message, description) {
