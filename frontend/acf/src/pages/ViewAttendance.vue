@@ -57,7 +57,7 @@
           </a-button>
           <a-button
             type="primary"
-            @click="showExport"
+            @click="submitExport"
             :style="{ 'margin-left': '5px' }"
           >
             Xuất File
@@ -144,46 +144,6 @@
           </a-form-model>
         </a-modal>
 
-        <!-- popup tùy chỉnh xuất -->
-        <a-modal v-model="visibleExport" title="Tùy Chỉnh Xuất">
-          <template slot="footer">
-            <a-button key="back" @click="handleCancel"> Hủy </a-button>
-            <a-button type="danger" @click="previewExcel">
-              Xem Trước
-              <font-awesome-icon
-                :icon="['fas', 'eye']"
-                :style="{ 'margin-left': '5px' }"
-              />
-            </a-button>
-            <a-button key="submit" type="primary" @click="submitExport">
-              Xuất File
-              <font-awesome-icon
-                :icon="['fas', 'download']"
-                :style="{ 'margin-left': '5px' }"
-              />
-            </a-button>
-          </template>
-          <a-form-model>
-            <a-form-model-item label="Loại xuất">
-              <a-select
-                v-model="dataExport.type"
-                @change="changeTypeExport"
-                style="width: 100%"
-              >
-                <a-select-option key="1"> Chi tiết </a-select-option>
-                <a-select-option key="0"> Gộp ngày </a-select-option>
-              </a-select>
-            </a-form-model-item>
-
-            <a-form-model-item label="Xuất ghi chú" @change="changeExportNote">
-              <a-radio-group v-model="dataExport.note">
-                <a-radio-button value="true"> Có </a-radio-button>
-                <a-radio-button value="false"> Không </a-radio-button>
-              </a-radio-group>
-            </a-form-model-item>
-          </a-form-model>
-        </a-modal>
-
         <!-- preview excel -->
         <a-modal
           v-model="visiblePriviewExport"
@@ -227,12 +187,6 @@ import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 import attendanceService from "@/service/attendanceService.js";
 
-const dataSortCommon = [
-  { key: "name", value: "Họ và tên" },
-  { key: "1", value: "Đi làm" },
-  { key: "0.5", value: "Nghỉ" },
-  { key: "0", value: "Nửa công" },
-];
 export default {
   name: "Attendance",
   components: {
@@ -243,7 +197,6 @@ export default {
     return {
       dataPriviewExcel: [],
       visiblePriviewExport: false,
-      visibleExport: false,
       visibleEdit: false,
       nameEdit: "",
       dataSourceTable: [],
@@ -341,34 +294,10 @@ export default {
     handleCancelPriview() {
       this.visiblePriviewExport = false;
     },
-    previewExcel() {
-      this.dataPriviewExcel = [];
-      this.dataExport.dataSearch = this.dataSearch;
-      attendanceService
-        .previewExcel(this.dataExport)
-        .then((response) => {
-          this.dataPriviewExcel = response.data.data;
-          this.visiblePriviewExport = true;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    changeTypeExport(value) {
-      if (value == "1") {
-        this.dataSort.push(dataSortCommon[0]);
-      } else {
-        this.dataSort = dataSortCommon;
-      }
-    },
     changeExportNote() {},
-    showExport() {
-      this.visibleExport = true;
-      this.dataExport.dataSearch = {};
+    submitExport() {
       this.dataExport.type = "1";
       this.dataExport.note = "true";
-    },
-    submitExport() {
       this.dataExport.dataSearch = this.dataSearch;
       this.visibleExport = false;
       attendanceService

@@ -12,8 +12,7 @@ import com.university.fpt.acf.vo.AttendanceVO;
 import com.university.fpt.acf.vo.GetAllEmployeeVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.batik.gvt.CanvasGraphicsNode;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -426,22 +425,68 @@ public class AttendancesServiceImpl implements AttendancesService {
             }
             XSSFWorkbook workbook = new XSSFWorkbook();
             XSSFSheet sheet = workbook.createSheet("Attendance");
+            // Create font
+            Font font = sheet.getWorkbook().createFont();
+            font.setFontName("Times New Roman");
+            font.setBold(true);
+            font.setFontHeightInPoints((short) 14);
+            font.setColor(IndexedColors.WHITE.getIndex());
+
+            // Create CellStyle
+            CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+            cellStyle.setFont(font);
+            cellStyle.setFillForegroundColor(IndexedColors.BLUE.getIndex());
+            cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            cellStyle.setBorderBottom(BorderStyle.THIN);
+            cellStyle.setAlignment(HorizontalAlignment.CENTER);
+            cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+
+            CellStyle cellStyleData = sheet.getWorkbook().createCellStyle();
+            cellStyleData.setWrapText(true);
+            cellStyleData.setAlignment(HorizontalAlignment.LEFT);
+            cellStyleData.setVerticalAlignment(VerticalAlignment.CENTER);
+
+
             int rowIndex = 0;
             for (int i = 0; i < row.size(); i++) {
                 int cellIndex = 0;
                 if (i == 0) {
                     Row rowx = sheet.createRow(rowIndex++);
+                    int k = 0;
                     for (String nameCollumn : row.get(i).keySet()) {
+                        sheet.setColumnWidth(k,6000);
+                        if(nameCollumn.equals("NOTE")){
+                            sheet.setColumnWidth(k,10000);
+                        }
+                        sheet.autoSizeColumn(k);
                         Cell cell1 = rowx.createCell(cellIndex);
+                        cell1.setCellStyle(cellStyle);
                         cell1.setCellValue(nameCollumn);
+
                         cellIndex++;
+                        k++;
                     }
                     cellIndex = 0;
                 }
                 Row rowx = sheet.createRow(rowIndex++);
                 for (String nameCollumn : row.get(i).keySet()) {
                     Cell cell1 = rowx.createCell(cellIndex);
-                    cell1.setCellValue(row.get(i).get(nameCollumn));
+                    cell1.setCellStyle(cellStyleData);
+                    if( nameCollumn.equals("HỌ VÀ TÊN")||nameCollumn.equals("NOTE")){
+                        cell1.setCellValue(row.get(i).get(nameCollumn));
+                    }else if(nameCollumn.equals("SỐ THỨ TỰ")){
+                        cell1.setCellValue(Integer.parseInt(row.get(i).get(nameCollumn)));
+                    }else{
+                        String value = row.get(i).get(nameCollumn);
+                        if(value.length()==3){
+                            cell1.setCellValue(Double.parseDouble(value));
+                        }else if(value.length()==1){
+                            cell1.setCellValue(Integer.parseInt(value));
+                        }else{
+                            cell1.setCellValue(value);
+                        }
+                    }
                     cellIndex++;
                 }
             }
