@@ -156,7 +156,7 @@
                 key="submit"
                 type="primary"
                 :loading="loadingAdd"
-                @click="submitAdd"
+                @click="checkFormAdd"
               >
                 Lưu
               </a-button>
@@ -174,14 +174,31 @@
                   <div class="col">
                     <span style="color: red">*</span> Họ Và Tên :
                     <a-form-model-item>
-                      <a-input style="width: 100%" v-model="dataAdd.fullName" />
+                      <a-input
+                        style="width: 100%"
+                        @change="inputFullNameAdd"
+                        v-model="dataAdd.fullName"
+                      />
+                      <div
+                        style="color: red"
+                        v-if="checkDataInputFullName.show"
+                      >
+                        {{ checkDataInputFullName.message }}
+                      </div>
                     </a-form-model-item>
 
                     <span style="color: red">*</span> Ngày Sinh :
                     <a-form-model-item>
-                      <a-date-picker style="width: 100%" v-model="dataAdd.dob">
+                      <a-date-picker
+                        style="width: 100%"
+                        @change="inputDoBAdd"
+                        v-model="dataAdd.dob"
+                      >
                         <a-icon slot="suffixIcon" type="smile" />
                       </a-date-picker>
+                      <div style="color: red" v-if="checkDataInputDoB.show">
+                        {{ checkDataInputDoB.message }}
+                      </div>
                     </a-form-model-item>
 
                     <span style="color: red">*</span> Giới tính :
@@ -200,7 +217,9 @@
                       <a-select
                         placeholder="Chức vụ"
                         style="width: 100%"
+                        @change="inputPositionAdd"
                         v-model="dataAdd.idPosition"
+                        id="selectPosition"
                       >
                         <a-select-option
                           v-for="(position, index) in dataPositions"
@@ -210,35 +229,73 @@
                           {{ position.name }}
                         </a-select-option>
                       </a-select>
+                      <div
+                        style="color: red"
+                        v-if="checkDataInputPosition.show"
+                      >
+                        {{ checkDataInputPosition.message }}
+                      </div>
                     </a-form-model-item>
 
                     <span style="color: red">*</span> Số điện thoại :
                     <a-form-model-item>
-                      <a-input style="width: 100%" v-model="dataAdd.phone" />
+                      <a-input
+                        style="width: 100%"
+                        @change="inputPhoneAdd"
+                        v-model="dataAdd.phone"
+                      />
+                      <div style="color: red" v-if="checkDataInputPhone.show">
+                        {{ checkDataInputPhone.message }}
+                      </div>
                     </a-form-model-item>
                   </div>
                   <div class="col">
                     <span style="color: red">*</span> Email :
                     <a-form-model-item>
-                      <a-input style="width: 100%" v-model="dataAdd.email" />
+                      <a-input
+                        style="width: 100%"
+                        @change="inputEmailAdd"
+                        v-model="dataAdd.email"
+                      />
+                      <div style="color: red" v-if="checkDataInputEmail.show">
+                        {{ checkDataInputEmail.message }}
+                      </div>
                     </a-form-model-item>
 
                     <span style="color: red">*</span> Địa chỉ :
                     <a-form-model-item>
-                      <a-input style="width: 100%" v-model="dataAdd.address" />
+                      <a-input
+                        style="width: 100%"
+                        @change="inputAddressAdd"
+                        v-model="dataAdd.address"
+                      />
+                      <div style="color: red" v-if="checkDataInputAddress.show">
+                        {{ checkDataInputAddress.message }}
+                      </div>
                     </a-form-model-item>
 
                     <span style="color: red">*</span> Dân tộc :
                     <a-form-model-item>
-                      <a-input style="width: 100%" v-model="dataAdd.nation" />
+                      <a-input
+                        style="width: 100%"
+                        @change="inputNationAdd"
+                        v-model="dataAdd.nation"
+                      />
+                      <div style="color: red" v-if="checkDataInputNation.show">
+                        {{ checkDataInputNation.message }}
+                      </div>
                     </a-form-model-item>
 
                     <span style="color: red">*</span> Lương :
                     <a-form-model-item>
                       <a-input-number
                         style="width: 100%"
+                        @change="inputSalaryAdd"
                         v-model="dataAdd.salary"
                       />
+                      <div style="color: red" v-if="checkDataInputSalary.show">
+                        {{ checkDataInputSalary.message }}
+                      </div>
                     </a-form-model-item>
 
                     Ảnh :
@@ -266,7 +323,7 @@
                 key="submit"
                 type="primary"
                 :loading="loadingEdit"
-                @click="submitUpdate"
+                @click="checkFormEdit"
               >
                 Lưu
               </a-button>
@@ -284,7 +341,13 @@
                   <div class="col">
                     <span style="color: red">*</span> Họ Và Tên :
                     <a-form-model-item>
-                      <a-input v-model="dataEdit.fullName" />
+                      <a-input @change="inputFullNameEdit" v-model="dataEdit.fullName" />
+                      <div
+                        style="color: red"
+                        v-if="checkDataInputFullName.show"
+                      >
+                        {{ checkDataInputFullName.message }}
+                      </div>
                     </a-form-model-item>
 
                     <span style="color: red">*</span> Ngày Sinh :
@@ -293,9 +356,13 @@
                         v-model="dataEdit.dob"
                         format="YYYY-MM-DD"
                         valueFormat="YYYY-MM-DD"
+                        @change="inputDoBEdit"
                       >
                         <a-icon slot="suffixIcon" type="smile" />
                       </a-date-picker>
+                      <div style="color: red" v-if="checkDataInputDoB.show">
+                        {{ checkDataInputDoB.message }}
+                      </div>
                     </a-form-model-item>
 
                     <span style="color: red">*</span> Giới tính :
@@ -312,6 +379,7 @@
                         placeholder="Chức vụ"
                         style="width: 120px"
                         v-model="dataEdit.idPosition"
+                        @change="inputPositionEdit"
                       >
                         <a-select-option
                           v-for="(position, index) in dataPositions"
@@ -321,32 +389,53 @@
                           {{ position.name }}
                         </a-select-option>
                       </a-select>
+                      <div
+                        style="color: red"
+                        v-if="checkDataInputPosition.show"
+                      >
+                        {{ checkDataInputPosition.message }}
+                      </div>
                     </a-form-model-item>
 
                     <span style="color: red">*</span> Số điện thoại :
                     <a-form-model-item>
-                      <a-input v-model="dataEdit.phone" />
+                      <a-input v-model="dataEdit.phone" @change="inputPhoneEdit"/>
+                      <div style="color: red" v-if="checkDataInputPhone.show">
+                        {{ checkDataInputPhone.message }}
+                      </div>
                     </a-form-model-item>
                   </div>
                   <div class="col">
                     <span style="color: red">*</span> Email :
                     <a-form-model-item>
-                      <a-input v-model="dataEdit.email" />
+                      <a-input v-model="dataEdit.email" @change="inputEmailEdit"/>
+                      <div style="color: red" v-if="checkDataInputEmail.show">
+                        {{ checkDataInputEmail.message }}
+                      </div>
                     </a-form-model-item>
 
                     <span style="color: red">*</span> Địa chỉ :
                     <a-form-model-item>
-                      <a-input v-model="dataEdit.address" />
+                      <a-input v-model="dataEdit.address" @change="inputAddressEdit"/>
+                      <div style="color: red" v-if="checkDataInputAddress.show">
+                        {{ checkDataInputAddress.message }}
+                      </div>
                     </a-form-model-item>
 
                     <span style="color: red">*</span> Dân tộc :
                     <a-form-model-item>
-                      <a-input v-model="dataEdit.nation" />
+                      <a-input v-model="dataEdit.nation" @change="inputNationEdit"/>
+                      <div style="color: red" v-if="checkDataInputNation.show">
+                        {{ checkDataInputNation.message }}
+                      </div>
                     </a-form-model-item>
 
                     <span style="color: red">*</span> Lương :
                     <a-form-model-item>
-                      <a-input-number v-model="dataEdit.salary" />
+                      <a-input-number v-model="dataEdit.salary" @change="inputSalaryEdit"/>
+                      <div style="color: red" v-if="checkDataInputSalary.show">
+                        {{ checkDataInputSalary.message }}
+                      </div>
                     </a-form-model-item>
 
                     Ảnh :
@@ -599,6 +688,42 @@ export default {
       visibleProfile: false,
       loadingAdd: false,
       loadingEdit: false,
+      checkDataInputFullName: {
+        show: false,
+        message: "",
+      },
+      checkDataInputDoB: {
+        show: false,
+        message: "",
+      },
+      checkDataInputGender: {
+        show: false,
+        message: "",
+      },
+      checkDataInputPosition: {
+        show: false,
+        message: "",
+      },
+      checkDataInputPhone: {
+        show: false,
+        message: "",
+      },
+      checkDataInputEmail: {
+        show: false,
+        message: "",
+      },
+      checkDataInputAddress: {
+        show: false,
+        message: "",
+      },
+      checkDataInputNation: {
+        show: false,
+        message: "",
+      },
+      checkDataInputSalary: {
+        show: false,
+        message: "",
+      },
     };
   },
   created() {
@@ -725,6 +850,164 @@ export default {
       }
       this.showImage = false;
       this.visibleAdd = true;
+      this.checkDataInputFullName.show = false;
+      this.checkDataInputFullName.message = "";
+      this.checkDataInputDoB.show = false;
+      this.checkDataInputDoB.message = "";
+      this.checkDataInputPosition.show = false;
+      this.checkDataInputPosition.message = "";
+      this.checkDataInputPhone.show = false;
+      this.checkDataInputPhone.message = "";
+      this.checkDataInputEmail.show = false;
+      this.checkDataInputEmail.message = "";
+      this.checkDataInputAddress.show = false;
+      this.checkDataInputAddress.message = "";
+      this.checkDataInputNation.show = false;
+      this.checkDataInputNation.message = "";
+      this.checkDataInputSalary.show = false;
+      this.checkDataInputSalary.message = "";
+    },
+    checkFormAdd() {
+      let check = true;
+      if (this.dataAdd.fullName != null && this.dataAdd.fullName.trim() != "") {
+        check = false;
+        this.checkDataInputFullName.show = false;
+        this.checkDataInputFullName.message = "";
+      } else {
+        this.checkDataInputFullName.show = true;
+        this.checkDataInputFullName.message = "Bạn phải điền vào ô họ và tên";
+      }
+      if (this.dataAdd.dob != null && this.dataAdd.dob != "") {
+        check = false;
+        this.checkDataInputDoB.show = false;
+        this.checkDataInputDoB.message = "";
+      } else {
+        this.checkDataInputDoB.show = true;
+        this.checkDataInputDoB.message = "Bạn phải điền vào ô ngày sinh";
+      }
+      if (this.dataAdd.idPosition != null && this.dataAdd.idPosition != "") {
+        check = false;
+        this.checkDataInputPosition.show = false;
+        this.checkDataInputPosition.message = "";
+      } else {
+        this.checkDataInputPosition.show = true;
+        this.checkDataInputPosition.message = "Bạn phải chọn chức vụ";
+      }
+      if (this.dataAdd.phone != null && this.dataAdd.phone.trim() != "") {
+        check = false;
+        this.checkDataInputPhone.show = false;
+        this.checkDataInputPhone.message = "";
+      } else {
+        this.checkDataInputPhone.show = true;
+        this.checkDataInputPhone.message = "Bạn phải điền vào ô số điện thoại";
+      }
+      if (this.dataAdd.email != null && this.dataAdd.email.trim() != "") {
+        check = false;
+        this.checkDataInputEmail.show = false;
+        this.checkDataInputEmail.message = "";
+      } else {
+        this.checkDataInputEmail.show = true;
+        this.checkDataInputEmail.message = "Bạn phải điền vào ô email";
+      }
+      if (this.dataAdd.address != null && this.dataAdd.address.trim() != "") {
+        check = false;
+        this.checkDataInputAddress.show = false;
+        this.checkDataInputAddress.message = "";
+      } else {
+        this.checkDataInputAddress.show = true;
+        this.checkDataInputAddress.message = "Bạn phải điền vào ô địa chỉ";
+      }
+      if (this.dataAdd.nation != null && this.dataAdd.nation.trim() != "") {
+        check = false;
+        this.checkDataInputNation.show = false;
+        this.checkDataInputNation.message = "";
+      } else {
+        this.checkDataInputNation.show = true;
+        this.checkDataInputNation.message = "Bạn phải điền vào ô dân tộc";
+      }
+      if (this.dataAdd.salary != null && this.dataAdd.salary != "") {
+        check = false;
+        this.checkDataInputSalary.show = false;
+        this.checkDataInputSalary.message = "";
+      } else {
+        this.checkDataInputSalary.show = true;
+        this.checkDataInputSalary.message = "Bạn phải điền vào ô lương";
+      }
+      if (check == false) {
+        this.submitAdd();
+      }
+    },
+    inputFullNameAdd() {
+      if (this.dataAdd.fullName != null && this.dataAdd.fullName.trim() != "") {
+        this.checkDataInputFullName.show = false;
+        this.checkDataInputFullName.message = "";
+      } else {
+        this.checkDataInputFullName.show = true;
+        this.checkDataInputFullName.message = "Bạn phải điền vào ô họ và tên";
+      }
+    },
+    inputDoBAdd() {
+      if (this.dataAdd.dob != null && this.dataAdd.dob != "") {
+        this.checkDataInputDoB.show = false;
+        this.checkDataInputDoB.message = "";
+      } else {
+        this.checkDataInputDoB.show = true;
+        this.checkDataInputDoB.message = "Bạn phải điền vào ô ngày sinh";
+      }
+    },
+    inputPositionAdd() {
+      if (this.dataAdd.idPosition != null && this.dataAdd.idPosition != "") {
+        this.checkDataInputPosition.show = false;
+        this.checkDataInputPosition.message = "";
+      } else {
+        this.checkDataInputPosition.show = true;
+        this.checkDataInputPosition.message = "Bạn phải chọn chức vụ";
+      }
+    },
+    inputPhoneAdd() {
+      if (this.dataAdd.phone != null && this.dataAdd.phone.trim() != "") {
+        this.checkDataInputPhone.show = false;
+        this.checkDataInputPhone.message = "";
+      } else {
+        this.checkDataInputPhone.show = true;
+        this.checkDataInputPhone.message = "Bạn phải điền vào ô số điện thoại";
+      }
+    },
+    inputEmailAdd() {
+      if (this.dataAdd.email != null && this.dataAdd.email.trim() != "") {
+        this.checkDataInputEmail.show = false;
+        this.checkDataInputEmail.message = "";
+      } else {
+        this.checkDataInputEmail.show = true;
+        this.checkDataInputEmail.message = "Bạn phải điền vào ô email";
+      }
+    },
+    inputAddressAdd() {
+      if (this.dataAdd.address != null && this.dataAdd.address.trim() != "") {
+        this.checkDataInputAddress.show = false;
+        this.checkDataInputAddress.message = "";
+      } else {
+        this.checkDataInputAddress.show = true;
+        this.checkDataInputAddress.message = "Bạn phải điền vào ô địa chỉ";
+      }
+    },
+    inputNationAdd() {
+      if (this.dataAdd.nation != null && this.dataAdd.nation.trim() != "") {
+        this.checkDataInputNation.show = false;
+        this.checkDataInputNation.message = "";
+      } else {
+        this.checkDataInputNation.show = true;
+        this.checkDataInputNation.message = "Bạn phải điền vào ô dân tộc";
+      }
+    },
+    inputSalaryAdd() {
+      if (this.dataAdd.salary != null && this.dataAdd.salary != "") {
+        this.checkDataInputSalary.show = false;
+        this.checkDataInputSalary.message = "";
+      } else {
+        this.checkDataInputSalary.show = true;
+        this.checkDataInputSalary.message = "Bạn phải điền vào ô lương";
+      }
     },
     submitAdd() {
       this.loadingAdd = true;
@@ -769,6 +1052,22 @@ export default {
         });
     },
     showModalEdit(record) {
+      this.checkDataInputFullName.show = false;
+      this.checkDataInputFullName.message = "";
+      this.checkDataInputDoB.show = false;
+      this.checkDataInputDoB.message = "";
+      this.checkDataInputPosition.show = false;
+      this.checkDataInputPosition.message = "";
+      this.checkDataInputPhone.show = false;
+      this.checkDataInputPhone.message = "";
+      this.checkDataInputEmail.show = false;
+      this.checkDataInputEmail.message = "";
+      this.checkDataInputAddress.show = false;
+      this.checkDataInputAddress.message = "";
+      this.checkDataInputNation.show = false;
+      this.checkDataInputNation.message = "";
+      this.checkDataInputSalary.show = false;
+      this.checkDataInputSalary.message = "";
       userService
         .getUserByID(record.id)
         .then((response) => {
@@ -798,6 +1097,148 @@ export default {
           console.log(e);
         });
       this.loadingEdit = false;
+    },
+    checkFormEdit() {
+      let check = true;
+      if (this.dataEdit.fullName != null && this.dataEdit.fullName.trim() != "") {
+        this.checkDataInputFullName.show = false;
+        this.checkDataInputFullName.message = "";
+      } else {
+        check = false;
+        this.checkDataInputFullName.show = true;
+        this.checkDataInputFullName.message = "Bạn phải điền vào ô họ và tên";
+      }
+      if (this.dataEdit.dob != null && this.dataEdit.dob != "") {
+        this.checkDataInputDoB.show = false;
+        this.checkDataInputDoB.message = "";
+      } else {
+        check = false;
+        this.checkDataInputDoB.show = true;
+        this.checkDataInputDoB.message = "Bạn phải điền vào ô ngày sinh";
+      }
+      if (this.dataEdit.idPosition != null && this.dataEdit.idPosition != "") {
+        this.checkDataInputPosition.show = false;
+        this.checkDataInputPosition.message = "";
+      } else {
+        check = false;
+        this.checkDataInputPosition.show = true;
+        this.checkDataInputPosition.message = "Bạn phải chọn chức vụ";
+      }
+      if (this.dataEdit.phone != null && this.dataEdit.phone.trim() != "") {
+        this.checkDataInputPhone.show = false;
+        this.checkDataInputPhone.message = "";
+      } else {
+        check = false;
+        this.checkDataInputPhone.show = true;
+        this.checkDataInputPhone.message = "Bạn phải điền vào ô số điện thoại";
+      }
+      if (this.dataEdit.email != null && this.dataEdit.email.trim() != "") {
+        this.checkDataInputEmail.show = false;
+        this.checkDataInputEmail.message = "";
+      } else {
+        check = false;
+        this.checkDataInputEmail.show = true;
+        this.checkDataInputEmail.message = "Bạn phải điền vào ô email";
+      }
+      if (this.dataEdit.address != null && this.dataEdit.address.trim() != "") {
+        this.checkDataInputAddress.show = false;
+        this.checkDataInputAddress.message = "";
+      } else {
+        check = false;
+        this.checkDataInputAddress.show = true;
+        this.checkDataInputAddress.message = "Bạn phải điền vào ô địa chỉ";
+      }
+      if (this.dataEdit.nation != null && this.dataEdit.nation.trim() != "") {
+        this.checkDataInputNation.show = false;
+        this.checkDataInputNation.message = "";
+      } else {
+        check = false;
+        this.checkDataInputNation.show = true;
+        this.checkDataInputNation.message = "Bạn phải điền vào ô dân tộc";
+      }
+      if (this.dataEdit.salary != null && this.dataEdit.salary != "") {
+        this.checkDataInputSalary.show = false;
+        this.checkDataInputSalary.message = "";
+      } else {
+        check = false;
+        this.checkDataInputSalary.show = true;
+        this.checkDataInputSalary.message = "Bạn phải điền vào ô lương";
+      }
+      if (check == true) {
+        this.submitUpdate();
+      }
+    },
+    inputFullNameEdit() {
+      if (this.dataEdit.fullName != null && this.dataEdit.fullName.trim() != "") {
+        this.checkDataInputFullName.show = false;
+        this.checkDataInputFullName.message = "";
+      } else {
+        this.checkDataInputFullName.show = true;
+        this.checkDataInputFullName.message = "Bạn phải điền vào ô họ và tên";
+      }
+    },
+    inputDoBEdit() {
+      if (this.dataEdit.dob != null && this.dataEdit.dob != "") {
+        this.checkDataInputDoB.show = false;
+        this.checkDataInputDoB.message = "";
+      } else {
+        this.checkDataInputDoB.show = true;
+        this.checkDataInputDoB.message = "Bạn phải điền vào ô ngày sinh";
+      }
+    },
+    inputPositionEdit() {
+      if (this.dataEdit.idPosition != null && this.dataEdit.idPosition != "") {
+        this.checkDataInputPosition.show = false;
+        this.checkDataInputPosition.message = "";
+      } else {
+        this.checkDataInputPosition.show = true;
+        this.checkDataInputPosition.message = "Bạn phải chọn chức vụ";
+      }
+    },
+    inputPhoneEdit() {
+      if (this.dataEdit.phone != null && this.dataEdit.phone.trim() != "") {
+        this.checkDataInputPhone.show = false;
+        this.checkDataInputPhone.message = "";
+      } else {
+        this.checkDataInputPhone.show = true;
+        this.checkDataInputPhone.message = "Bạn phải điền vào ô số điện thoại";
+      }
+    },
+    inputEmailEdit() {
+      if (this.dataEdit.email != null && this.dataEdit.email.trim() != "") {
+        this.checkDataInputEmail.show = false;
+        this.checkDataInputEmail.message = "";
+      } else {
+        this.checkDataInputEmail.show = true;
+        this.checkDataInputEmail.message = "Bạn phải điền vào ô email";
+      }
+    },
+    inputAddressEdit() {
+      if (this.dataEdit.address != null && this.dataEdit.address.trim() != "") {
+        this.checkDataInputAddress.show = false;
+        this.checkDataInputAddress.message = "";
+      } else {
+        this.checkDataInputAddress.show = true;
+        this.checkDataInputAddress.message = "Bạn phải điền vào ô địa chỉ";
+      }
+    },
+    inputNationEdit() {
+      if (this.dataEdit.nation != null && this.dataEdit.nation.trim() != "") {
+        this.checkDataInputNation.show = false;
+        this.checkDataInputNation.message = "";
+      } else {
+        this.checkDataInputNation.show = true;
+        this.checkDataInputNation.message = "Bạn phải điền vào ô dân tộc";
+      }
+    },
+    inputSalaryEdit() {
+      if (this.dataEdit.salary != null && this.dataEdit.salary != "") {
+        this.checkDataInputSalary.show = false;
+        this.checkDataInputSalary.message = "";
+      } else {
+        this.checkDataInputSalary.show = true;
+        this.checkDataInputSalary.message = "Bạn phải điền vào ô lương";
+      }
     },
     submitUpdate() {
       this.loadingEdit = true;
