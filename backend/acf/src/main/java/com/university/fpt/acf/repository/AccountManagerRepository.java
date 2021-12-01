@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface AccountManagerRepository extends JpaRepository<Account,Long> {
-    @Query("select new com.university.fpt.acf.vo.GetAccountDetailVO(a.id,a.username,r.id,r.name,img.name,e.fullName,e.dob,e.phone,e.gender) from Account a " +
+    @Query("select new com.university.fpt.acf.vo.GetAccountDetailVO(a.id,a.username,r.id,r.name,img.name,e.fullName,e.dob,e.phone,e.gender,e.email,e.address) from Account a " +
             " inner join a.employee e left join e.image img " +
             "inner join a.roles r where a.id=:id and a.deleted = false ")
     List<GetAccountDetailVO> getAccountById(@Param("id") Long id);

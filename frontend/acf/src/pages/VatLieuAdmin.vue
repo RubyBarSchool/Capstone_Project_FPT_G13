@@ -178,6 +178,7 @@
                     <a-popconfirm
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
+                      ok-text="Đồng ý" cancel-text="Không đồng ý"
                       @confirm="deleteMaterial(record.id)"
                     >
                       <a-button id="delete">

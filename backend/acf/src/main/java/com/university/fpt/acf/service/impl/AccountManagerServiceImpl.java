@@ -292,6 +292,8 @@ public class AccountManagerServiceImpl implements AccountManagerService {
             result.setDob(ac.get(0).getDob());
             result.setPhone(ac.get(0).getPhone());
             result.setRoles(listRole);
+            result.setEmail(ac.get(0).getEmail());
+            result.setAddress(ac.get(0).getAddress());
             return result;
         } catch (Exception e) {
             e.getMessage();
