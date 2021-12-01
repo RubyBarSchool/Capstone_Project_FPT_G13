@@ -139,6 +139,7 @@
                 v-if="dataDetail.statusAccept == -1"
                 type="danger"
                 :loading="loadingReject"
+                :disabled="disabledReject"
                 @click="checkFormReject()"
               >
                 Loại bỏ
@@ -147,6 +148,7 @@
                 v-if="dataDetail.statusAccept == -1"
                 type="primary"
                 :loading="loadingAccept"
+                :disabled="disabledAccept"
                 @click="checkFormAccept()"
               >
                 Chấp nhận
@@ -217,6 +219,8 @@ export default {
     return {
       loadingReject: false,
       loadingAccept: false,
+      disabledReject: false,
+      disabledAccept: false,
       checkDataInputNote: {
         show: false,
         message: "",
@@ -380,6 +384,7 @@ export default {
 
     handAccept() {
       this.loadingAccept = true;
+      this.disabledReject = true;
       acceptXinNghiService
         .acceptPersonalApplication(this.dataAccept)
         .then((response) => {
@@ -397,17 +402,20 @@ export default {
             this.submitSearch();
           }
           this.loadingAccept = false;
+          this.disabledReject = false;
           this.visibleView = false;
         })
         .catch((e) => {
           console.log(e);
           this.loadingAccept = false;
+          this.disabledReject = false;
           this.visibleView = false;
         });
     },
 
     handReject() {
       this.loadingReject = true;
+      this.disabledAccept = true;
       acceptXinNghiService
         .rejectPersonalApplication(this.dataAccept)
         .then((response) => {
@@ -425,11 +433,13 @@ export default {
             this.submitSearch();
           }
           this.loadingReject = false;
+          this.disabledAccept = false;
           this.visibleView = false;
         })
         .catch((e) => {
           console.log(e);
           this.loadingReject = false;
+          this.disabledAccept = false;
           this.visibleView = false;
         });
     },
