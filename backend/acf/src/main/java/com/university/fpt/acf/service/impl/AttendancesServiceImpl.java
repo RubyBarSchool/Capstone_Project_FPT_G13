@@ -399,6 +399,7 @@ public class AttendancesServiceImpl implements AttendancesService {
                                         + "\n");
                             }
                         }
+                        o.put("TỔNG SỐ CÔNG", Double.parseDouble(o.get("TỔNG SỐ CÔNG")) + Double.parseDouble(attendanceVO.getType()) +"" );
                         o.put(attendanceVO.getDate().format(dateFormatter), attendanceVO.getType());
                         checkExitData = false;
                         break;
@@ -408,6 +409,7 @@ public class AttendancesServiceImpl implements AttendancesService {
                     LinkedHashMap<String, String> dataAttendance = new LinkedHashMap<>();
                     dataAttendance.put("SỐ THỨ TỰ", attendanceVO.getIdEmpl().toString());
                     dataAttendance.put("HỌ VÀ TÊN", attendanceVO.getNameEmpl());
+                    dataAttendance.put("TỔNG SỐ CÔNG", attendanceVO.getType());
                     if (exportExcelForm.getNote().equals("true")) {
                         if (!attendanceVO.getNote().isBlank()) {
                             dataAttendance.put("NOTE", attendanceVO.getDate().format(dateFormatter)

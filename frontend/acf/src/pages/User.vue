@@ -341,7 +341,10 @@
                   <div class="col">
                     <span style="color: red">*</span> Họ Và Tên :
                     <a-form-model-item>
-                      <a-input @change="inputFullNameEdit" v-model="dataEdit.fullName" />
+                      <a-input
+                        @change="inputFullNameEdit"
+                        v-model="dataEdit.fullName"
+                      />
                       <div
                         style="color: red"
                         v-if="checkDataInputFullName.show"
@@ -399,7 +402,10 @@
 
                     <span style="color: red">*</span> Số điện thoại :
                     <a-form-model-item>
-                      <a-input v-model="dataEdit.phone" @change="inputPhoneEdit"/>
+                      <a-input
+                        v-model="dataEdit.phone"
+                        @change="inputPhoneEdit"
+                      />
                       <div style="color: red" v-if="checkDataInputPhone.show">
                         {{ checkDataInputPhone.message }}
                       </div>
@@ -408,7 +414,10 @@
                   <div class="col">
                     <span style="color: red">*</span> Email :
                     <a-form-model-item>
-                      <a-input v-model="dataEdit.email" @change="inputEmailEdit"/>
+                      <a-input
+                        v-model="dataEdit.email"
+                        @change="inputEmailEdit"
+                      />
                       <div style="color: red" v-if="checkDataInputEmail.show">
                         {{ checkDataInputEmail.message }}
                       </div>
@@ -416,7 +425,10 @@
 
                     <span style="color: red">*</span> Địa chỉ :
                     <a-form-model-item>
-                      <a-input v-model="dataEdit.address" @change="inputAddressEdit"/>
+                      <a-input
+                        v-model="dataEdit.address"
+                        @change="inputAddressEdit"
+                      />
                       <div style="color: red" v-if="checkDataInputAddress.show">
                         {{ checkDataInputAddress.message }}
                       </div>
@@ -424,7 +436,10 @@
 
                     <span style="color: red">*</span> Dân tộc :
                     <a-form-model-item>
-                      <a-input v-model="dataEdit.nation" @change="inputNationEdit"/>
+                      <a-input
+                        v-model="dataEdit.nation"
+                        @change="inputNationEdit"
+                      />
                       <div style="color: red" v-if="checkDataInputNation.show">
                         {{ checkDataInputNation.message }}
                       </div>
@@ -432,7 +447,10 @@
 
                     <span style="color: red">*</span> Lương :
                     <a-form-model-item>
-                      <a-input-number v-model="dataEdit.salary" @change="inputSalaryEdit"/>
+                      <a-input-number
+                        v-model="dataEdit.salary"
+                        @change="inputSalaryEdit"
+                      />
                       <div style="color: red" v-if="checkDataInputSalary.show">
                         {{ checkDataInputSalary.message }}
                       </div>
@@ -1011,45 +1029,79 @@ export default {
     },
     submitAdd() {
       this.loadingAdd = true;
-      fileService
-        .uploadImage(this.dataAdd.image)
-        .then((response) => {
-          this.dataAdd.image = response.data.data;
-          userService
-            .addUser(this.dataAdd)
-            .then((response) => {
-              this.submitSearch();
-              this.loadingAdd = false;
-              if (response.data.data) {
-                let type = "success";
-                let message = "Thêm mới";
-                let description =
-                  "Thêm mới nhân viên " +
-                  this.dataAdd.username +
-                  " thành công !!";
-                this.notifi(type, message, description);
-              } else {
-                let type = "error";
-                let message = "Thêm mới";
-                let description =
-                  "Thêm mới tài khoản " +
-                  this.dataAdd.fullName +
-                  " không thành công vì " +
-                  response.data.message;
-                this.notifi(type, message, description);
+      console.log("data image", this.dataAdd.image)
+      if (this.dataAdd.image != "") {
+        fileService
+          .uploadImage(this.dataAdd.image)
+          .then((response) => {
+            this.dataAdd.image = response.data.data;
+            userService
+              .addUser(this.dataAdd)
+              .then((response) => {
+                this.submitSearch();
+                this.loadingAdd = false;
+                if (response.data.data) {
+                  let type = "success";
+                  let message = "Thêm mới";
+                  let description =
+                    "Thêm mới nhân viên " +
+                    this.dataAdd.username +
+                    " thành công !!";
+                  this.notifi(type, message, description);
+                } else {
+                  let type = "error";
+                  let message = "Thêm mới";
+                  let description =
+                    "Thêm mới tài khoản " +
+                    this.dataAdd.fullName +
+                    " không thành công vì " +
+                    response.data.message;
+                  this.notifi(type, message, description);
+                  userService.deleteImage(this.dataAdd.image);
+                }
+                this.visibleAdd = false;
+              })
+              .catch(() => {
                 userService.deleteImage(this.dataAdd.image);
-              }
-              this.visibleAdd = false;
-            })
-            .catch(() => {
+                this.loadingAdd = false;
+              });
+          })
+          .catch((e) => {
+            console.log(e);
+            this.loadingAdd = false;
+          });
+      } else {
+        userService
+          .addUser(this.dataAdd)
+          .then((response) => {
+            this.submitSearch();
+            this.loadingAdd = false;
+            if (response.data.data) {
+              let type = "success";
+              let message = "Thêm mới";
+              let description =
+                "Thêm mới nhân viên " +
+                this.dataAdd.username +
+                " thành công !!";
+              this.notifi(type, message, description);
+            } else {
+              let type = "error";
+              let message = "Thêm mới";
+              let description =
+                "Thêm mới tài khoản " +
+                this.dataAdd.fullName +
+                " không thành công vì " +
+                response.data.message;
+              this.notifi(type, message, description);
               userService.deleteImage(this.dataAdd.image);
-              this.loadingAdd = false;
-            });
-        })
-        .catch((e) => {
-          console.log(e);
-          this.loadingAdd = false;
-        });
+            }
+            this.visibleAdd = false;
+          })
+          .catch(() => {
+            userService.deleteImage(this.dataAdd.image);
+            this.loadingAdd = false;
+          });
+      }
     },
     showModalEdit(record) {
       this.checkDataInputFullName.show = false;
@@ -1100,7 +1152,10 @@ export default {
     },
     checkFormEdit() {
       let check = true;
-      if (this.dataEdit.fullName != null && this.dataEdit.fullName.trim() != "") {
+      if (
+        this.dataEdit.fullName != null &&
+        this.dataEdit.fullName.trim() != ""
+      ) {
         this.checkDataInputFullName.show = false;
         this.checkDataInputFullName.message = "";
       } else {
@@ -1169,7 +1224,10 @@ export default {
       }
     },
     inputFullNameEdit() {
-      if (this.dataEdit.fullName != null && this.dataEdit.fullName.trim() != "") {
+      if (
+        this.dataEdit.fullName != null &&
+        this.dataEdit.fullName.trim() != ""
+      ) {
         this.checkDataInputFullName.show = false;
         this.checkDataInputFullName.message = "";
       } else {
