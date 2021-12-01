@@ -18,6 +18,7 @@
             <a-table
               :columns="columnsSalaryNow"
               :data-source="datasalaryNow"
+              :scroll="{ x: 1500 }"
               :pagination="false"
               :rowKey="
                 (record, index) => {
@@ -40,6 +41,7 @@
                     :columns="columnsBonusPunish"
                     :data-source="dataBonusNow"
                     :pagination="paginationBonusNow"
+                    :scroll="{ x: 800 }"
                     :rowKey="
                       (record, index) => {
                         return index;
@@ -50,7 +52,7 @@
                     <template slot="status" slot-scope="text, record">
                       <a-tag :color="record.status ? 'green' : 'blue'">
                         {{
-                         record.status ? "Đã có hiệu lực" : "Chưa có hiệu lực"
+                          record.status ? "Đã có hiệu lực" : "Chưa có hiệu lực"
                         }}
                       </a-tag>
                     </template>
@@ -62,6 +64,7 @@
                     :columns="columnsBonusPunish"
                     :data-source="dataPunishNow"
                     :pagination="paginationPunishNow"
+                    :scroll="{ x: 800 }"
                     :rowKey="
                       (record, index) => {
                         return index;
@@ -94,6 +97,7 @@
               :columns="columnsSalaryNotNow"
               :data-source="dataSalaryNotNow"
               :pagination="paginationSalaryNotNow"
+              :scroll="{ x: 1500 }"
               :rowKey="
                 (record, index) => {
                   return index;
@@ -115,6 +119,7 @@
                     :columns="columnsBonusPunish"
                     :data-source="dataBonusNotNow"
                     :pagination="paginationBonusNotNow"
+                    :scroll="{ x: 800 }"
                     :rowKey="
                       (record, index) => {
                         return index;
@@ -137,6 +142,7 @@
                     :columns="columnsBonusPunish"
                     :data-source="dataPunishNotNow"
                     :pagination="paginationPunishNotNow"
+                    :scroll="{ x: 800 }"
                     :rowKey="
                       (record, index) => {
                         return index;
@@ -453,7 +459,14 @@ export default {
   },
   methods: {
     disabledDate(current) {
-      return current && current > moment().subtract(1, "months");
+      console.log("date",current);
+      let date = moment();
+      if (date.date() > 10) {
+        return current.date() != 10 || current > moment().set("date",10);
+      } else {
+        let date2 = moment().subtract(1,"months");
+        return current.date() != 10 || current > date2.set("date",10);
+      }
     },
     changeDate() {
       this.dataSearchSalaryNotNow.date = this.dateSelect;

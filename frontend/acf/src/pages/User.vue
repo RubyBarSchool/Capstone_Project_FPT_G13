@@ -79,6 +79,7 @@
               :columns="columns"
               :data-source="dataSourceTable"
               :pagination="pagination"
+              :scroll="{ x: 1500 }"
               :rowKey="
                 (record, index) => {
                   return index;
@@ -1029,7 +1030,7 @@ export default {
     },
     submitAdd() {
       this.loadingAdd = true;
-      console.log("data image", this.dataAdd.image)
+      console.log("data image", this.dataAdd.image);
       if (this.dataAdd.image != "") {
         fileService
           .uploadImage(this.dataAdd.image)
