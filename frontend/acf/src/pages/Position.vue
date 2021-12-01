@@ -127,6 +127,7 @@
                 </a-form-model>
               </a-modal>
               <!-- popup add -->
+              <!-- popup update -->
               <a-modal v-model="visibleEdit" title="Chỉnh sửa chức vụ">
                 <template slot="footer">
                   <a-button key="back" @click="handleCancel"> Hủy </a-button>
@@ -149,6 +150,7 @@
                   </a-form-model-item>
                 </a-form-model>
               </a-modal>
+              <!-- popup update -->
             </a-col>
           </a-row>
         </div>

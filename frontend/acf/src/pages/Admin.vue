@@ -29,6 +29,7 @@
             v-model="dataSearch.listRole"
             :filter-option="false"
             @search="fetchRoles"
+            @change="search"
             style="width: 150px"
           >
             <a-select-option
@@ -44,14 +45,15 @@
             mode="multiple"
             v-model="dataSearch.listStatus"
             style="width: 150px"
+            @change="search"
           >
             <a-select-option value="false"> Nháp </a-select-option>
             <a-select-option value="true"> Công khai </a-select-option>
           </a-select>
           <a-range-picker
+            @change="search"
             v-model="dataSearch.date"
             :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-            :show-time="{ format: 'DD/MM/YYYY' }"
             format="DD/MM/YYYY"
           />
           <a-button
@@ -125,13 +127,17 @@
                     </a-button>
                   </a-col>
                   <a-col :span="6">
-                    <a-button
-                      id="reset"
-                      @click="resetPassword(record.id)"
-                      :style="{ 'margin-right': '100px' }"
+                    <a-popconfirm
+                      v-if="dataSourceTable.length"
+                      title="Bạn có chắc chắn muốn cập nhật mật khẩu?"
+                      @confirm="resetPassword(record.id)"
+                      ok-text="Đồng ý"
+                      cancel-text="Hủy"
                     >
-                      <font-awesome-icon :icon="['fas', 'retweet']" />
-                    </a-button>
+                      <a-button id="reset" :style="{ 'margin-right': '100px' }">
+                        <font-awesome-icon :icon="['fas', 'retweet']" />
+                      </a-button>
+                    </a-popconfirm>
                   </a-col>
                   <a-col :span="6">
                     <a-button
@@ -154,8 +160,11 @@
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
                       @confirm="deleteAccount(record.id)"
+                      ok-text="Đồng ý"
+                      cancel-text="Hủy"
                     >
                       <a-button id="delete">
+                        <!-- :loading = "loadingDelete" -->
                         <font-awesome-icon :icon="['fas', 'trash']" />
                       </a-button>
                     </a-popconfirm>
@@ -181,7 +190,6 @@
                       src="https://img.icons8.com/bubbles/100/000000/user.png"
                       class="img-radius"
                     />
-                    <a href="#"><a-icon type="camera" /></a>
                   </div>
                   <h6 class="text-white f-w-400">
                     {{ dataAccountDetail.fullname }}
@@ -255,57 +263,73 @@
           <a-modal v-model="visibleAdd" title="Thêm tài khoản">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="checkFormAdd">
+              <a-button
+                key="submit"
+                type="primary"
+                :loading="loading"
+                @click="checkFormAdd"
+              >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Nhân viên">
-                <a-select
-                  show-search
-                  placeholder="Tên nhân viên"
-                  :filter-option="false"
-                  v-model="dataAdd.employee"
-                  @change="generateUsername"
-                  @search="fetchEmployees"
-                  style="width: 100%"
+              <span style="color: red">*</span> Nhân viên :
+              <a-select
+                show-search
+                placeholder="Tên nhân viên"
+                :filter-option="false"
+                v-model="dataAdd.employee"
+                @change="generateUsername"
+                @search="fetchEmployees"
+                style="width: 100%"
+              >
+                <a-select-option
+                  v-for="(employee, index) in dataEmployees"
+                  :value="employee.id"
+                  :key="index"
                 >
-                  <a-select-option
-                    v-for="(employee, index) in dataEmployees"
-                    :value="employee.id"
-                    :key="index"
-                  >
-                    {{ employee.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-              <a-form-model-item label="Tài khoản">
-                <a-input v-model="dataAdd.username" disabled />
-              </a-form-model-item>
+                  {{ employee.name }}
+                </a-select-option>
+              </a-select>
+              <div style="color: red" v-if="checkDataInputEmployee.show">
+                {{ checkDataInputEmployee.message }}
+              </div>
+              <span style="color: red">*</span> Tài khoản :
+              <a-input
+                @change="inputUsername"
+                v-model="dataAdd.username"
+                disabled
+              />
+              <div style="color: red" v-if="checkDataInputUsername.show">
+                {{ checkDataInputUsername.message }}
+              </div>
               <!-- <a-form-model-item label="Mật khẩu">
                 <a-input-password v-model="dataAdd.password" />
                 <div style="color: red" v-if="checkDataInput.show">
                   {{ checkDataInput.message }}
                 </div>
               </a-form-model-item> -->
-              <a-form-model-item label="Chức vụ">
-                <a-select
-                  placeholder="Chức vụ"
-                  mode="multiple"
-                  v-model="dataAdd.listRole"
-                  :filter-option="false"
-                  @search="fetchRoles"
-                  style="width: 100%"
+              <span style="color: red">*</span> Chức vụ :
+              <a-select
+                placeholder="Chức vụ"
+                mode="multiple"
+                v-model="dataAdd.listRole"
+                :filter-option="false"
+                @search="fetchRoles"
+                style="width: 100%"
+                @change="inputNamePosition"
+              >
+                <a-select-option
+                  v-for="(role, index) in dataRoles"
+                  :value="role.id"
+                  :key="index"
                 >
-                  <a-select-option
-                    v-for="(role, index) in dataRoles"
-                    :value="role.id"
-                    :key="index"
-                  >
-                    {{ role.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
+                  {{ role.name }}
+                </a-select-option>
+              </a-select>
+              <div style="color: red" v-if="checkDataInputRole.show">
+                {{ checkDataInputRole.message }}
+              </div>
             </a-form-model>
           </a-modal>
           <!-- popup add -->
@@ -314,38 +338,47 @@
           <a-modal v-model="visibleEdit" title="Chỉnh sửa tài khoản">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitUpdate">
+              <a-button
+                key="submit"
+                type="primary"
+                :loading="loading"
+                @click="checkFormEdit"
+              >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Tài khoản">
-                <a-input v-model="dataEdit.username" disabled />
-              </a-form-model-item>
-              <a-form-model-item label="Chức vụ">
-                <a-select
-                  placeholder="Chức vụ"
-                  mode="multiple"
-                  v-model="dataEdit.listRole"
-                  :filter-option="false"
-                  @search="fetchRoles"
-                  style="width: 100%"
+              <span style="color: red">*</span> Tài khoản :
+              <a-input v-model="dataEdit.username" disabled />
+              <div style="color: red" v-if="checkDataInputUsername.show">
+                {{ checkDataInputUsername.message }}
+              </div>
+              <span style="color: red">*</span> Chức vụ :
+              <a-select
+                placeholder="Chức vụ"
+                mode="multiple"
+                v-model="dataEdit.listRole"
+                :filter-option="false"
+                @search="fetchRoles"
+                style="width: 100%"
+                @change="inputEditPosition"
+              >
+                <a-select-option
+                  v-for="(role, index) in dataRoles"
+                  :value="role.id"
+                  :key="index"
                 >
-                  <a-select-option
-                    v-for="(role, index) in dataRoles"
-                    :value="role.id"
-                    :key="index"
-                  >
-                    {{ role.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-              <a-form-model-item label="Trạng thái">
-                <a-radio-group name="radioGroup" v-model="dataEdit.status">
-                  <a-radio :value="false"> Nháp </a-radio>
-                  <a-radio :value="true"> Công khai </a-radio>
-                </a-radio-group>
-              </a-form-model-item>
+                  {{ role.name }}
+                </a-select-option>
+              </a-select>
+              <div style="color: red" v-if="checkDataInputRole.show">
+                {{ checkDataInputRole.message }}
+              </div>
+              <span style="color: red">*</span> Trạng thái :
+              <a-radio-group name="radioGroup" v-model="dataEdit.status">
+                <a-radio :value="false"> Nháp </a-radio>
+                <a-radio :value="true"> Công khai </a-radio>
+              </a-radio-group>
             </a-form-model>
           </a-modal>
           <!-- popup edit-->
@@ -371,6 +404,8 @@ export default {
   },
   data() {
     return {
+      loading: false,
+      loadingDelete: false,
       pagination: {
         current: 1,
         pageSize: 10,
@@ -472,6 +507,18 @@ export default {
         show: false,
         message: "",
       },
+      checkDataInputUsername: {
+        show: false,
+        message: "",
+      },
+      checkDataInputEmployee: {
+        show: false,
+        message: "",
+      },
+      checkDataInputRole: {
+        show: false,
+        message: "",
+      },
     };
   },
   computed: {},
@@ -480,7 +527,7 @@ export default {
     this.getAllRole();
   },
   methods: {
-    resetPassword(id){
+    resetPassword(id) {
       accountService
         .resetpassword(id)
         .then((response) => {
@@ -516,11 +563,19 @@ export default {
         });
     },
     generateUsername() {
-      accountService
-        .generateUsername(this.dataAdd.employee)
-        .then((response) => {
-          this.dataAdd.username = response.data.data;
-        });
+      if (this.dataAdd.employee != null && this.dataAdd.employee.length != 0) {
+        accountService
+          .generateUsername(this.dataAdd.employee)
+          .then((response) => {
+            this.dataAdd.username = response.data.data;
+            this.inputUsername();
+          });
+        this.checkDataInputEmployee.show = false;
+        this.checkDataInputEmployee.message = "";
+      } else {
+        this.checkDataInputEmployee.show = true;
+        this.checkDataInputEmployee.message = "Bạn phải điền tên nhân viên";
+      }
     },
     fetchRoles(value) {
       this.dataRole.name = value;
@@ -551,25 +606,57 @@ export default {
         });
     },
     showModalAdd() {
+      this.dataAdd.username = "";
+      this.dataAdd.employee = "";
+      this.dataAdd.password = "";
+      this.dataAdd.listRole = [];
       this.dataRole.name = "";
       this.getAllRole();
       this.dataEmployee.name = "";
       this.getAllEmployeeNotAccount();
       this.visibleAdd = true;
-      this.checkDataInput.show = false;
-      this.checkDataInput.message = "";
+      this.checkDataInputUsername.show = false;
+      this.checkDataInputUsername.message = "";
+      this.checkDataInputEmployee.show = false;
+      this.checkDataInputEmployee.message = "";
+      this.checkDataInputRole.show = false;
+      this.checkDataInputRole.message = "";
     },
     checkFormAdd() {
-      if (this.dataAdd.password != null && this.dataAdd.password != "") {
-        this.checkDataInput.show = false;
-        this.checkDataInput.message = "";
-        this.submitAdd();
+      let check = true;
+      if (this.dataAdd.employee != null && this.dataAdd.employee.length != 0) {
+        this.checkDataInputEmployee.show = false;
+        this.checkDataInputEmployee.message = "";
       } else {
-        this.checkDataInput.show = true;
-        this.checkDataInput.message = "Bạn phải điền vào chỗ trống";
+        check = false;
+        this.checkDataInputEmployee.show = true;
+        this.checkDataInputEmployee.message = "Bạn phải điền tên nhân viên";
+      }
+
+      if (this.dataAdd.username != null && this.dataAdd.username.trim() != "") {
+        this.checkDataInputUsername.show = false;
+        this.checkDataInputUsername.message = "";
+      } else {
+        check = false;
+        this.checkDataInputUsername.show = true;
+        this.checkDataInputUsername.message = "Bạn phải điền tài khoản";
+      }
+
+      if (this.dataAdd.listRole != null && this.dataAdd.listRole.length != 0) {
+        this.checkDataInputRole.show = false;
+        this.checkDataInputRole.message = "";
+      } else {
+        check = false;
+        this.checkDataInputRole.show = true;
+        this.checkDataInputRole.message = "Bạn phải điền chức vụ";
+      }
+      if (check) {
+        this.submitAdd();
       }
     },
+
     submitAdd() {
+      this.loading = true;
       accountService
         .addAccount(this.dataAdd)
         .then((response) => {
@@ -591,9 +678,11 @@ export default {
               response.data.message;
             this.notifi(type, message, description);
           }
+          this.loading = false;
         })
         .catch((e) => {
           console.log(e);
+          this.loading = false;
         });
       this.visibleAdd = false;
       this.dataAdd.username = "";
@@ -620,7 +709,25 @@ export default {
       this.dataEmployee.name = "";
       this.getAllEmployeeNotAccount();
     },
+    checkFormEdit() {
+      let check = true;
+      if (
+        this.dataEdit.listRole != null &&
+        this.dataEdit.listRole.length != 0
+      ) {
+        this.checkDataInputRole.show = false;
+        this.checkDataInputRole.message = "";
+      } else {
+        check = false;
+        this.checkDataInputRole.show = true;
+        this.checkDataInputRole.message = "Bạn phải điền chức vụ";
+      }
+      if (check) {
+        this.submitUpdate();
+      }
+    },
     submitUpdate() {
+      this.loading = true;
       adminService
         .updateAccount(this.dataEdit)
         .then((response) => {
@@ -628,19 +735,59 @@ export default {
           if (response.data.data) {
             let type = "success";
             let message = "Cập nhật";
-            let description = "Account đang đăng nhập không được xóa";
+            let description =
+              "Cập nhật tài khoản " + this.dataEdit.username + " thành công !!";
             this.notifi(type, message, description);
           } else {
             let type = "error";
             let message = "Cập nhật";
-            let description = "Account đang đăng nhập không được xóa";
+            let description =
+              "Cập nhật tài khoản " +
+              this.dataEdit.username +
+              " không thành công vì " +
+              response.data.message;
             this.notifi(type, message, description);
           }
+          this.loading = false;
         })
         .catch((e) => {
           console.log(e);
+          this.loading = false;
         });
       this.visibleEdit = false;
+    },
+
+    inputEditPosition() {
+      if (
+        this.dataEdit.listRole != null &&
+        this.dataEdit.listRole.length != 0
+      ) {
+        this.checkDataInputRole.show = false;
+        this.checkDataInputRole.message = "";
+      } else {
+        this.checkDataInputRole.show = true;
+        this.checkDataInputRole.message = "Bạn phải điền chức vụ";
+      }
+    },
+
+    inputUsername() {
+      if (this.dataAdd.username != null && this.dataAdd.username.trim() != "") {
+        this.checkDataInputUsername.show = false;
+        this.checkDataInputUsername.message = "";
+      } else {
+        this.checkDataInputUsername.show = true;
+        this.checkDataInputUsername.message = "Bạn phải điền tài khoản";
+      }
+    },
+
+    inputNamePosition() {
+      if (this.dataAdd.listRole != null && this.dataAdd.listRole.length != 0) {
+        this.checkDataInputRole.show = false;
+        this.checkDataInputRole.message = "";
+      } else {
+        this.checkDataInputRole.show = true;
+        this.checkDataInputRole.message = "Bạn phải điền chức vụ";
+      }
     },
     submitSearch() {
       this.dataSearch.total = 0;
@@ -667,6 +814,7 @@ export default {
         });
     },
     deleteAccount(id) {
+      this.loadingDelete = true;
       accountService
         .deleteAccount(id)
         .then((response) => {
@@ -679,12 +827,14 @@ export default {
           } else {
             let type = "error";
             let message = "Xóa";
-            let description = "Account đang đăng nhập không được xóa";
+            let description = "Tài khoản đang đăng nhập không được xóa";
             this.notifi(type, message, description);
           }
+          this.loadingDelete = false;
         })
         .catch((e) => {
           console.log(e);
+          this.loadingDelete = false;
         });
     },
     notifi(type, message, description) {
@@ -692,6 +842,11 @@ export default {
         message: message,
         description: description,
       });
+    },
+    search() {
+      this.dataSearch.pageIndex = 1;
+      this.dataSearch.total = 0;
+      this.handleTableChange(this.pagination);
     },
   },
 };
