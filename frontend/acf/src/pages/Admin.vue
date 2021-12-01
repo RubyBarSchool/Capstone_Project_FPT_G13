@@ -282,12 +282,12 @@
               <a-form-model-item label="Tài khoản">
                 <a-input v-model="dataAdd.username" disabled />
               </a-form-model-item>
-              <a-form-model-item label="Mật khẩu">
+              <!-- <a-form-model-item label="Mật khẩu">
                 <a-input-password v-model="dataAdd.password" />
                 <div style="color: red" v-if="checkDataInput.show">
                   {{ checkDataInput.message }}
                 </div>
-              </a-form-model-item>
+              </a-form-model-item> -->
               <a-form-model-item label="Chức vụ">
                 <a-select
                   placeholder="Chức vụ"
