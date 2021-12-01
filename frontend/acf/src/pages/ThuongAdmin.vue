@@ -116,6 +116,8 @@
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
                       @confirm="deleteThuongAdmin(record.id)"
+                      ok-text="Đồng ý"
+                      cancel-text="Hủy"
                     >
                       <a-button id="delete">
                         <font-awesome-icon :icon="['fas', 'trash']" />
@@ -132,55 +134,86 @@
           <a-modal v-model="visibleAdd" title="Thêm khen thưởng">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitAdd">
+              <a-button
+                key="submit"
+                type="primary"
+                :loading="loading"
+                @click="checkFormAdd"
+              >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Tiêu đề">
-                <a-input v-model="dataAdd.title" />
-              </a-form-model-item>
-              <a-form-model-item label="Họ và tên">
-                <a-select
-                  placeholder="Họ và tên"
-                  mode="multiple"
-                  v-model="dataAdd.listIdEmployee"
-                  :filter-option="false"
-                  @search="fetchEmployees"
+              <span style="color: red">*</span> Tiêu đề :
+              <a-input @change="inputTitle" v-model="dataAdd.title" />
+              <div style="color: red" v-if="checkDataInputTitle.show">
+                {{ checkDataInputTitle.message }}
+              </div>
+              <span style="color: red">*</span> Họ và tên :
+              <a-select
+                placeholder="Họ và tên"
+                mode="multiple"
+                v-model="dataAdd.listIdEmployee"
+                :filter-option="false"
+                @search="fetchEmployees"
+                @change="inputName"
+              >
+                <a-select-option
+                  v-for="(employee, index) in dataEmployees"
+                  :value="employee.id"
+                  :key="index"
                 >
-                  <a-select-option
-                    v-for="(employee, index) in dataEmployees"
-                    :value="employee.id"
-                    :key="index"
-                  >
-                    {{ employee.fullName }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-              <a-form-model-item label="Lý do">
-                <a-textarea
-                  placeholder="Lý do"
-                  :rows="4"
-                  v-model="dataAdd.reason"
-                />
-              </a-form-model-item>
-              <a-form-model-item label="Số tiền">
-                <a-input-number v-model="dataAdd.money" :min="100000" />
-              </a-form-model-item>
-              <a-form-model-item label="Trạng thái">
-                <a-radio-group name="radioGroup" v-model="dataAdd.status">
-                  <a-radio value="false"> Nháp </a-radio>
-                  <a-radio value="true"> Hiệu lực </a-radio>
-                </a-radio-group>
-              </a-form-model-item>
-              <a-form-model-item label="Ngày hiệu lực">
-                <a-date-picker
-                  v-model="dataAdd.effectiveDate"
-                  :disabled-date="disableDateStart"
-                  format="DD/MM/YYYY"
-                >
-                </a-date-picker>
-              </a-form-model-item>
+                  {{ employee.fullName }}
+                </a-select-option>
+              </a-select>
+              <div style="color: red" v-if="checkDataInputName.show">
+                {{ checkDataInputName.message }}
+              </div>
+              <span style="color: red">*</span> Lý do :
+              <a-textarea
+                placeholder="Lý do"
+                :rows="4"
+                v-model="dataAdd.reason"
+                @change="inputReason"
+              />
+              <div style="color: red" v-if="checkDataInputReason.show">
+                {{ checkDataInputReason.message }}
+              </div>
+              <span style="color: red">*</span> Số tiền :
+              <a-input-number
+                v-model="dataAdd.money"
+                @change="inputMoney"
+                :min="100000"
+              />
+              <div style="color: red" v-if="checkDataInputMoney.show">
+                {{ checkDataInputMoney.message }}
+              </div>
+              <br />
+              <span style="color: red">*</span> Trạng thái :
+              <a-radio-group
+                name="radioGroup"
+                @change="inputStatus"
+                v-model="dataAdd.status"
+              >
+                <a-radio :value="false"> Nháp </a-radio>
+                <a-radio :value="true"> Hiệu lực </a-radio>
+              </a-radio-group>
+              <div style="color: red" v-if="checkDataInputStatus.show">
+                {{ checkDataInputStatus.message }}
+              </div>
+              <br />
+              <span style="color: red">*</span> Ngày hiệu lực
+              <a-date-picker
+                @change="inputEffectiveDate"
+                v-model="dataAdd.effectiveDate"
+                :disabled-date="disableDateStart"
+                format="DD/MM/YYYY"
+                placeholder="Ngày hiệu lực"
+              >
+              </a-date-picker>
+              <div style="color: red" v-if="checkDataInputEffectiveDate.show">
+                {{ checkDataInputEffectiveDate.message }}
+              </div>
             </a-form-model>
           </a-modal>
           <!-- popup add -->
@@ -189,57 +222,84 @@
           <a-modal v-model="visibleEdit" title="Chỉnh sửa khen thưởng">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitUpdate">
+              <a-button
+                key="submit"
+                type="primary"
+                :loading="loadingEdit"
+                @click="checkFormUpdate"
+              >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Tiêu đề">
-                <a-input v-model="dataEdit.title" />
-              </a-form-model-item>
-              <a-form-model-item label="Họ và tên">
-                <a-select
-                  :disabled="true"
-                  placeholder="Họ và tên"
-                  mode="multiple"
-                  v-model="dataEdit.listIdEmployee"
-                  :filter-option="false"
-                  @search="fetchEmployees"
+              <span style="color: red">*</span> Tiêu đề :
+              <a-input @change="inputEditTitle" v-model="dataEdit.title" />
+              <div style="color: red" v-if="checkDataInputTitle.show">
+                {{ checkDataInputTitle.message }}
+              </div>
+              <span style="color: red">*</span> Họ và tên :
+              <a-select
+                :disabled="true"
+                placeholder="Họ và tên"
+                mode="multiple"
+                v-model="dataEdit.listIdEmployee"
+                :filter-option="false"
+                @search="fetchEmployees"
+                @change="inputEditName"
+              >
+                <a-select-option
+                  v-for="(employee, index) in dataEmployees"
+                  :value="employee.id"
+                  :key="index"
                 >
-                  <a-select-option
-                    v-for="(employee, index) in dataEmployees"
-                    :value="employee.id"
-                    :key="index"
-                  >
-                    {{ employee.fullName }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-              <a-form-model-item label="Lý do">
-                <a-textarea
-                  placeholder="Lý do"
-                  :rows="4"
-                  v-model="dataEdit.reason"
-                />
-              </a-form-model-item>
-              <a-form-model-item label="Số tiền">
-                <a-input-number v-model="dataEdit.money" :min="100000" />
-              </a-form-model-item>
-              <a-form-model-item label="Trạng thái">
-                <a-radio-group name="radioGroup" v-model="dataEdit.status">
-                  <a-radio :value="false"> Nháp </a-radio>
-                  <a-radio :value="true"> Hiệu lực </a-radio>
-                </a-radio-group>
-              </a-form-model-item>
-              <a-form-model-item label="Ngày hiệu lực">
-                <a-date-picker
-                  v-model="dataEdit.effectiveDate"
-                  :disabled-date="disableDateStart"
-                  format="DD/MM/YYYY"
-                  valueFormat="YYYY-MM-DD"
-                >
-                </a-date-picker>
-              </a-form-model-item>
+                  {{ employee.fullName }}
+                </a-select-option>
+              </a-select>
+              <div style="color: red" v-if="checkDataInputName.show">
+                {{ checkDataInputName.message }}
+              </div>
+              <span style="color: red">*</span> Lý do :
+              <a-textarea
+                placeholder="Lý do"
+                :rows="4"
+                v-model="dataEdit.reason"
+                @change="inputEditReason"
+              />
+              <div style="color: red" v-if="checkDataInputReason.show">
+                {{ checkDataInputReason.message }}
+              </div>
+              <span style="color: red">*</span> Số tiền :
+              <a-input-number
+                v-model="dataEdit.money"
+                @change="inputEditMoney"
+                :min="100000"
+              />
+              <div style="color: red" v-if="checkDataInputMoney.show">
+                {{ checkDataInputMoney.message }}
+              </div>
+              <br />
+              <span style="color: red">*</span> Trạng thái :
+              <a-radio-group name="radioGroup" @change="inputEditStatus" v-model="dataEdit.status">
+                <a-radio :value="false"> Nháp </a-radio>
+                <a-radio :value="true"> Hiệu lực </a-radio>
+              </a-radio-group>
+              <div style="color: red" v-if="checkDataInputStatus.show">
+                {{ checkDataInputStatus.message }}
+              </div>
+              <br />
+              <span style="color: red">*</span> Ngày hiệu lực
+              <a-date-picker
+                @change="inputEditEffectiveDate"
+                v-model="dataEdit.effectiveDate"
+                :disabled-date="disableDateStart"
+                format="DD/MM/YYYY"
+                valueFormat="YYYY-MM-DD"
+                placeholder="Ngày hiệu lực"
+              >
+              </a-date-picker>
+              <div style="color: red" v-if="checkDataInputEffectiveDate.show">
+                {{ checkDataInputEffectiveDate.message }}
+              </div>
             </a-form-model>
           </a-modal>
           <!-- popup edit-->
@@ -262,6 +322,32 @@ export default {
   },
   data() {
     return {
+      loadingEdit: false,
+      loading: false,
+      checkDataInputTitle: {
+        show: false,
+        message: "",
+      },
+      checkDataInputName: {
+        show: false,
+        message: "",
+      },
+      checkDataInputReason: {
+        show: false,
+        message: "",
+      },
+      checkDataInputMoney: {
+        show: false,
+        message: "",
+      },
+      checkDataInputStatus: {
+        show: false,
+        message: "",
+      },
+      checkDataInputEffectiveDate: {
+        show: false,
+        message: "",
+      },
       pagination: {
         current: 1,
         pageSize: 10,
@@ -282,7 +368,7 @@ export default {
         listIdEmployee: [],
         money: "",
         reason: "",
-        status: "",
+        status: true,
         title: "",
       },
       dataEmployee: {
@@ -298,7 +384,7 @@ export default {
         listIdEmployee: [],
         money: "",
         reason: "",
-        status: "",
+        status: true,
         title: "",
       },
       columns: [
@@ -436,10 +522,31 @@ export default {
         });
     },
     showModalAdd() {
+      this.checkDataInputTitle.show = false;
+      this.checkDataInputTitle.message = "";
+      this.checkDataInputName.show = false;
+      this.checkDataInputName.message = "";
+      this.checkDataInputReason.show = false;
+      this.checkDataInputReason.message = "";
+      this.checkDataInputMoney.show = false;
+      this.checkDataInputMoney.message = "";
+      this.checkDataInputStatus.show = false;
+      this.checkDataInputStatus.message = "";
+      this.checkDataInputEffectiveDate.show = false;
+      this.checkDataInputEffectiveDate.message = "";
+      this.dataAdd.effectiveDate = "";
+      this.dataAdd.listIdEmployee = [];
+      this.dataAdd.money = "";
+      this.dataAdd.reason = "";
+      this.dataAdd.status = true;
+      this.dataAdd.title = "";
       this.visibleAdd = true;
       this.getAllEmployee();
     },
     submitAdd() {
+      this.dataAdd.title = this.dataAdd.title.trim();
+      this.dataAdd.reason = this.dataAdd.reason.trim();
+      this.loading = true;
       thuongAdminService
         .addThuongAdmin(this.dataAdd)
         .then((response) => {
@@ -457,17 +564,14 @@ export default {
               response.data.message;
             this.notifi(type, message, description);
           }
+          this.loading = false;
+          this.visibleAdd = false;
         })
         .catch((e) => {
           console.log(e);
+          this.loading = false;
+          this.visibleAdd = false;
         });
-      this.visibleAdd = false;
-      this.dataAdd.effectiveDate = "";
-      this.dataAdd.listIdEmployee = [];
-      this.dataAdd.money = "";
-      this.dataAdd.reason = "";
-      this.dataAdd.status = "";
-      this.dataAdd.title = "";
     },
     handleCancel() {
       this.visibleAdd = false;
@@ -483,6 +587,18 @@ export default {
       status,
       title
     ) {
+      this.checkDataInputTitle.show = false;
+      this.checkDataInputTitle.message = "";
+      this.checkDataInputName.show = false;
+      this.checkDataInputName.message = "";
+      this.checkDataInputReason.show = false;
+      this.checkDataInputReason.message = "";
+      this.checkDataInputMoney.show = false;
+      this.checkDataInputMoney.message = "";
+      this.checkDataInputStatus.show = false;
+      this.checkDataInputStatus.message = "";
+      this.checkDataInputEffectiveDate.show = false;
+      this.checkDataInputEffectiveDate.message = "";
       this.dataEdit.id = id;
       this.dataEdit.effectiveDate = effectiveDate;
       this.dataEdit.listIdEmployee = [];
@@ -497,6 +613,9 @@ export default {
       this.getAllEmployee();
     },
     submitUpdate() {
+      this.dataAdd.title = this.dataAdd.title.trim();
+      this.dataAdd.reason = this.dataAdd.reason.trim();
+      this.loadingEdit = true;
       thuongAdminService
         .updateThuongAdmin(this.dataEdit)
         .then((response) => {
@@ -512,11 +631,81 @@ export default {
             let description = "Cập nhật thưởng không thành công";
             this.notifi(type, message, description);
           }
+          this.loadingEdit = false;
+          this.visibleEdit = false;
         })
         .catch((e) => {
           console.log(e);
+          this.loadingEdit = false;
+          this.visibleEdit = false;
         });
-      this.visibleEdit = false;
+    },
+    checkFormUpdate() {
+      let check = true;
+      if (this.dataEdit.title != null && this.dataEdit.title.trim() != "") {
+        this.checkDataInputTitle.show = false;
+        this.checkDataInputTitle.message = "";
+      } else {
+        check = false;
+        this.checkDataInputTitle.show = true;
+        this.checkDataInputTitle.message = "Bạn phải điền tiêu đề";
+      }
+
+      if (
+        this.dataEdit.listIdEmployee != null &&
+        this.dataEdit.listIdEmployee.length != 0
+      ) {
+        this.checkDataInputName.show = false;
+        this.checkDataInputName.message = "";
+      } else {
+        check = false;
+        this.checkDataInputName.show = true;
+        this.checkDataInputName.message = "Bạn phải điền họ và tên";
+      }
+
+      if (this.dataEdit.reason != null && this.dataEdit.reason.trim() != "") {
+        this.checkDataInputReason.show = false;
+        this.checkDataInputReason.message = "";
+      } else {
+        check = false;
+        this.checkDataInputReason.show = true;
+        this.checkDataInputReason.message = "Bạn phải điền lý do";
+      }
+
+      if (this.dataEdit.money != null && this.dataEdit.money != "") {
+        this.checkDataInputMoney.show = false;
+        this.checkDataInputMoney.message = "";
+      } else {
+        check = false;
+        this.checkDataInputMoney.show = true;
+        this.checkDataInputMoney.message = "Bạn phải điền số tiền";
+      }
+
+      if (this.dataEdit.status != null) {
+        this.checkDataInputStatus.show = false;
+        this.checkDataInputStatus.message = "";
+      } else {
+        check = false;
+        this.checkDataInputStatus.show = true;
+        this.checkDataInputStatus.message = "Bạn phải chọn trạng thái";
+      }
+
+      if (
+        this.dataEdit.effectiveDate != null &&
+        this.dataEdit.effectiveDate.length != 0
+      ) {
+        this.checkDataInputEffectiveDate.show = false;
+        this.checkDataInputEffectiveDate.message = "";
+      } else {
+        check = false;
+        this.checkDataInputEffectiveDate.show = true;
+        this.checkDataInputEffectiveDate.message =
+          "Bạn phải chọn ngày hiệu lực";
+      }
+
+      if (check) {
+        this.submitUpdate();
+      }
     },
     deleteThuongAdmin(id) {
       thuongAdminService
@@ -542,6 +731,197 @@ export default {
           console.log(e);
         });
     },
+    checkFormAdd() {
+      let check = true;
+      if (this.dataAdd.title != null && this.dataAdd.title.trim() != "") {
+        this.checkDataInputTitle.show = false;
+        this.checkDataInputTitle.message = "";
+      } else {
+        check = false;
+        this.checkDataInputTitle.show = true;
+        this.checkDataInputTitle.message = "Bạn phải điền tiêu đề";
+      }
+
+      if (
+        this.dataAdd.listIdEmployee != null &&
+        this.dataAdd.listIdEmployee.length != 0
+      ) {
+        this.checkDataInputName.show = false;
+        this.checkDataInputName.message = "";
+      } else {
+        check = false;
+        this.checkDataInputName.show = true;
+        this.checkDataInputName.message = "Bạn phải điền họ và tên";
+      }
+
+      if (this.dataAdd.reason != null && this.dataAdd.reason.trim() != "") {
+        this.checkDataInputReason.show = false;
+        this.checkDataInputReason.message = "";
+      } else {
+        check = false;
+        this.checkDataInputReason.show = true;
+        this.checkDataInputReason.message = "Bạn phải điền lý do";
+      }
+
+      if (this.dataAdd.money != null && this.dataAdd.money != "") {
+        this.checkDataInputMoney.show = false;
+        this.checkDataInputMoney.message = "";
+      } else {
+        check = false;
+        this.checkDataInputMoney.show = true;
+        this.checkDataInputMoney.message = "Bạn phải điền số tiền";
+      }
+
+      if (this.dataAdd.status != null) {
+        this.checkDataInputStatus.show = false;
+        this.checkDataInputStatus.message = "";
+      } else {
+        check = false;
+        this.checkDataInputStatus.show = true;
+        this.checkDataInputStatus.message = "Bạn phải chọn trạng thái";
+      }
+
+      if (
+        this.dataAdd.effectiveDate != null &&
+        this.dataAdd.effectiveDate.length != 0
+      ) {
+        this.checkDataInputEffectiveDate.show = false;
+        this.checkDataInputEffectiveDate.message = "";
+      } else {
+        check = false;
+        this.checkDataInputEffectiveDate.show = true;
+        this.checkDataInputEffectiveDate.message =
+          "Bạn phải chọn ngày hiệu lực";
+      }
+
+      if (check) {
+        this.submitAdd();
+      }
+    },
+    inputTitle() {
+      if (this.dataAdd.title != null && this.dataAdd.title.trim() != "") {
+        this.checkDataInputTitle.show = false;
+        this.checkDataInputTitle.message = "";
+      } else {
+        this.checkDataInputTitle.show = true;
+        this.checkDataInputTitle.message = "Bạn phải điền tiêu đề";
+      }
+    },
+    inputName() {
+      if (
+        this.dataAdd.listIdEmployee != null &&
+        this.dataAdd.listIdEmployee.length != 0
+      ) {
+        this.checkDataInputName.show = false;
+        this.checkDataInputName.message = "";
+      } else {
+        this.checkDataInputName.show = true;
+        this.checkDataInputName.message = "Bạn phải điền họ và tên";
+      }
+    },
+    inputReason() {
+      if (this.dataAdd.reason != null && this.dataAdd.reason.trim() != "") {
+        this.checkDataInputReason.show = false;
+        this.checkDataInputReason.message = "";
+      } else {
+        this.checkDataInputReason.show = true;
+        this.checkDataInputReason.message = "Bạn phải điền lý do";
+      }
+    },
+    inputMoney() {
+      if (this.dataAdd.money != null && this.dataAdd.money != "") {
+        this.checkDataInputMoney.show = false;
+        this.checkDataInputMoney.message = "";
+      } else {
+        this.checkDataInputMoney.show = true;
+        this.checkDataInputMoney.message = "Bạn phải điền số tiền";
+      }
+    },
+    inputStatus() {
+      if (this.dataAdd.status != null) {
+        this.checkDataInputStatus.show = false;
+        this.checkDataInputStatus.message = "";
+      } else {
+        this.checkDataInputStatus.show = true;
+        this.checkDataInputStatus.message = "Bạn phải chọn trạng thái";
+      }
+    },
+    inputEffectiveDate() {
+      if (
+        this.dataAdd.effectiveDate != null &&
+        this.dataAdd.effectiveDate.length != 0
+      ) {
+        this.checkDataInputEffectiveDate.show = false;
+        this.checkDataInputEffectiveDate.message = "";
+      } else {
+        this.checkDataInputEffectiveDate.show = true;
+        this.checkDataInputEffectiveDate.message =
+          "Bạn phải chọn ngày hiệu lực";
+      }
+    },
+    //edit
+    inputEditTitle() {
+      if (this.dataEdit.title != null && this.dataEdit.title.trim() != "") {
+        this.checkDataInputTitle.show = false;
+        this.checkDataInputTitle.message = "";
+      } else {
+        this.checkDataInputTitle.show = true;
+        this.checkDataInputTitle.message = "Bạn phải điền tiêu đề";
+      }
+    },
+    inputEditName() {
+      if (
+        this.dataEdit.listIdEmployee != null &&
+        this.dataEdit.listIdEmployee.length != 0
+      ) {
+        this.checkDataInputName.show = false;
+        this.checkDataInputName.message = "";
+      } else {
+        this.checkDataInputName.show = true;
+        this.checkDataInputName.message = "Bạn phải điền họ và tên";
+      }
+    },
+    inputEditReason() {
+      if (this.dataEdit.reason != null && this.dataEdit.reason.trim() != "") {
+        this.checkDataInputReason.show = false;
+        this.checkDataInputReason.message = "";
+      } else {
+        this.checkDataInputReason.show = true;
+        this.checkDataInputReason.message = "Bạn phải điền lý do";
+      }
+    },
+    inputEditMoney() {
+      if (this.dataEdit.money != null && this.dataEdit.money != "") {
+        this.checkDataInputMoney.show = false;
+        this.checkDataInputMoney.message = "";
+      } else {
+        this.checkDataInputMoney.show = true;
+        this.checkDataInputMoney.message = "Bạn phải điền số tiền";
+      }
+    },
+    inputEditStatus() {
+      if (this.dataEdit.status != null) {
+        this.checkDataInputStatus.show = false;
+        this.checkDataInputStatus.message = "";
+      } else {
+        this.checkDataInputStatus.show = true;
+        this.checkDataInputStatus.message = "Bạn phải chọn trạng thái";
+      }
+    },
+    inputEditEffectiveDate() {
+      if (
+        this.dataEdit.effectiveDate != null &&
+        this.dataEdit.effectiveDate.length != 0
+      ) {
+        this.checkDataInputEffectiveDate.show = false;
+        this.checkDataInputEffectiveDate.message = "";
+      } else {
+        this.checkDataInputEffectiveDate.show = true;
+        this.checkDataInputEffectiveDate.message =
+          "Bạn phải chọn ngày hiệu lực";
+      }
+    },
+
     notifi(type, message, description) {
       this.$notification[type]({
         message: message,
