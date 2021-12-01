@@ -1093,12 +1093,10 @@ export default {
                 " không thành công vì " +
                 response.data.message;
               this.notifi(type, message, description);
-              userService.deleteImage(this.dataAdd.image);
             }
             this.visibleAdd = false;
           })
           .catch(() => {
-            userService.deleteImage(this.dataAdd.image);
             this.loadingAdd = false;
           });
       }
