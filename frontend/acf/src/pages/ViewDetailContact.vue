@@ -120,7 +120,10 @@
                       title="Bạn có chắc chắn muốn xóa không?"
                       @confirm="deleteProduct(record.idProduct)"
                     >
-                      <a-button v-if="record.status == '-2' || record.status == '-1'" id="delete">
+                      <a-button
+                        v-if="record.status == '-2' || record.status == '-1'"
+                        id="delete"
+                      >
                         <font-awesome-icon :icon="['fas', 'trash']" />
                       </a-button>
                     </a-popconfirm>
@@ -581,8 +584,6 @@ export default {
   },
   methods: {
     onCellChangeCount(key, value) {
-      console.log("key", key);
-      console.log("value", value);
       if (!parseInt(value)) {
         let task = "error";
         let message = "Nhập đúng giá trị số";
@@ -618,8 +619,6 @@ export default {
       }
     },
     onCellChangeNote(key, value) {
-      console.log("key", key);
-      console.log("value", value);
       for (let i = 0; i < this.addProductForm.materials.length; i++) {
         if (this.addProductForm.materials[i].id == key) {
           this.addProductForm.materials[i].note = value;
@@ -644,8 +643,6 @@ export default {
     },
 
     onSelectChange(selectedRowKeys, selectedRows) {
-      console.log("selectedRowKeys", selectedRowKeys);
-      console.log("selectedRows", selectedRows);
       this.selectedRowKeys = selectedRowKeys;
       this.selectedRows = selectedRows;
       this.addProductForm.materials = [];
@@ -702,7 +699,6 @@ export default {
       }
     },
     submitAddProductDetail() {
-      console.log("data product", this.addProductForm);
       viewDetailContactService
         .addProduct(this.addProductForm)
         .then((response) => {
@@ -867,7 +863,6 @@ export default {
                 dataMaterial[j].count = dataMaterial[j].count + "";
                 this.dataAddMaterialDetail.unshift(dataMaterial[j]);
               }
-              console.log("data material", this.addProductForm.materials);
             })
             .catch((e) => {
               console.log(e);

@@ -113,18 +113,24 @@
               <template slot="action" slot-scope="text, record">
                 <a-button
                   id="edit"
-                  @click="showModalEdit(
-                    record.name,
-                    record.id,
-                    record.dateFinish,
-                    record.idCompany
-                  )"
+                  @click="
+                    showModalEdit(
+                      record.name,
+                      record.id,
+                      record.dateFinish,
+                      record.idCompany
+                    )
+                  "
                   :style="{ width: '44.25px' }"
                 >
                   <font-awesome-icon :icon="['fas', 'edit']" />
                 </a-button>
 
-                <a-button id="delete" v-if="record.statusDone == -2" @click="deleteContact(record.id)">
+                <a-button
+                  id="delete"
+                  v-if="record.statusDone == -2"
+                  @click="deleteContact(record.id)"
+                >
                   <font-awesome-icon :icon="['fas', 'trash']" />
                 </a-button>
               </template>
@@ -208,7 +214,11 @@
                 <a-input v-model="dataEdit.name" />
               </a-form-model-item>
               <a-form-model-item label="Khách hàng">
-                <a-select v-model="dataEditCompany.id" style="width: 100%" disabled>
+                <a-select
+                  v-model="dataEditCompany.id"
+                  style="width: 100%"
+                  disabled
+                >
                   <a-select-option
                     v-for="(company, index) in companys"
                     :value="company.id"
@@ -219,7 +229,7 @@
                 </a-select>
               </a-form-model-item>
               <a-form-model-item label="Hạn hoàn thành">
-                <a-date-picker v-model="dataEdit.dateFinish"/>
+                <a-date-picker v-model="dataEdit.dateFinish" />
               </a-form-model-item>
             </a-form-model>
           </a-modal>
@@ -287,8 +297,8 @@ export default {
         id: "",
         name: "",
       },
-      dataEditCompany:{
-        id:"",
+      dataEditCompany: {
+        id: "",
       },
       message: "",
       progress: 0,

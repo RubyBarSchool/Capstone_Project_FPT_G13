@@ -178,7 +178,8 @@
                     <a-popconfirm
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
-                      ok-text="Đồng ý" cancel-text="Không đồng ý"
+                      ok-text="Đồng ý"
+                      cancel-text="Không đồng ý"
                       @confirm="deleteMaterial(record.id)"
                     >
                       <a-button id="delete">
@@ -843,7 +844,6 @@ export default {
                 .catch((e) => {
                   console.log(e);
                 });
-              console.log("data", this.dataSourceTable[i].image);
             }
           }
           this.dataSearch.total = response.data.total;
@@ -871,7 +871,6 @@ export default {
                 .catch((e) => {
                   console.log(e);
                 });
-              console.log("data", this.dataSourceTable[i].image);
             }
           }
           this.dataSearch.total = response.data.total;

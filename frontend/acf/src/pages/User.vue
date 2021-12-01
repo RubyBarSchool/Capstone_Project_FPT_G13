@@ -840,7 +840,6 @@ export default {
                 .catch((e) => {
                   console.log(e);
                 });
-              console.log("data", this.dataSourceTable[i].image);
             }
           }
           this.dataSearch.total = response.data.total;
@@ -1030,7 +1029,6 @@ export default {
     },
     submitAdd() {
       this.loadingAdd = true;
-      console.log("data image", this.dataAdd.image);
       if (this.dataAdd.image != "") {
         fileService
           .uploadImage(this.dataAdd.image)

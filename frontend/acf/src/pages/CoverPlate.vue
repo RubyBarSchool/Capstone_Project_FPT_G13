@@ -793,7 +793,6 @@ export default {
                 .catch((e) => {
                   console.log(e);
                 });
-              console.log("data", this.dataSourceTable[i].image);
             }
           }
 
@@ -822,7 +821,6 @@ export default {
                 .catch((e) => {
                   console.log(e);
                 });
-              console.log("data", this.dataSourceTable[i].image);
             }
           }
           this.dataSearch.total = response.data.total;
@@ -1023,7 +1021,6 @@ export default {
         }
       }
       this.dataSelect.push(data);
-      console.log(this.dataSelect);
       if (this.dataSelect.length == 2) {
         this.dataForm.id1 = data.id;
         this.dataForm.name1 = data.name;
@@ -1051,7 +1048,6 @@ export default {
         }
       }
       this.dataSelect.push(data);
-      console.log(this.dataSelect);
       if (this.dataSelect.length == 2) {
         if (this.dataSelect[0].type == "material") {
           this.dataForm.id1 = this.dataSelect[0].id;
@@ -1083,7 +1079,6 @@ export default {
         }
       }
       this.dataSelect.push(data);
-      console.log(this.dataSelect);
       if (this.dataSelect.length == 2) {
         this.dataForm.id1 = this.dataSelect[0].id;
         this.dataForm.name1 = this.dataSelect[0].name;
@@ -1120,7 +1115,6 @@ export default {
       this.dataAdd.price = "";
       this.tags = [];
       if (this.$refs.fileupload != null) {
-        console.log("data show file");
         this.$refs.fileupload.value = null;
       }
       this.url = "";

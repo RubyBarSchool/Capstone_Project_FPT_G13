@@ -324,7 +324,6 @@ export default {
       this.nameProductEdit = record.nameProduct;
       let number = record.numberFinish.split("/");
       this.dataEdit.number = number[0];
-      console.log("dataEdit", this.dataEdit);
       this.showModalEdit = true;
     },
     editNumberProduct() {

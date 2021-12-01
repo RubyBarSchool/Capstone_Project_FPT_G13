@@ -221,7 +221,7 @@
                 format="DD/MM/YYYY"
                 :style="{ width: '472px' }"
               />
-               <div style="color: red" v-if="checkDataInputDate.show">
+              <div style="color: red" v-if="checkDataInputDate.show">
                 {{ checkDataInputDate.message }}
               </div>
               <span style="color: red">*</span> Nội dung :
@@ -632,7 +632,7 @@ export default {
         this.checkDataInputTitle.show = true;
         this.checkDataInputTitle.message = "Bạn phải điền tiêu đề";
       }
-      
+
       if (this.dataEdit.date != null && this.dataEdit.date.length != 0) {
         this.checkDataInputDate.show = false;
         this.checkDataInputDate.message = "";
@@ -686,7 +686,6 @@ export default {
       }
     },
     inputDate() {
-      console.log("add", this.dataAdd.date)
       if (this.dataAdd.date != null && this.dataAdd.date.length != 0) {
         this.checkDataInputDate.show = false;
         this.checkDataInputDate.message = "";
@@ -714,7 +713,6 @@ export default {
       }
     },
     inputEditDate() {
-      console.log("date", this.dataAdd.date != null && this.dataAdd.date.length != 0);
       if (this.dataEdit.date != null && this.dataEdit.date.length != 0) {
         this.checkDataInputDate.show = false;
         this.checkDataInputDate.message = "";
@@ -733,7 +731,6 @@ export default {
       }
     },
     showModelView(record) {
-      console.log("datarow", record);
       this.dataPersonalLeaveEmployeeDetail.title = record.title;
       this.dataPersonalLeaveEmployeeDetail.dateCreate = record.dateCreate;
       this.dataPersonalLeaveEmployeeDetail.content = record.content;

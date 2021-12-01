@@ -622,8 +622,6 @@ export default {
       this.showModalView = false;
     },
     onSelectChange(selectedRowKeys, selectedRows) {
-      console.log("selectedRowKeys", selectedRowKeys);
-      console.log("selectedRows", selectedRows);
       this.selectedRowKeys = selectedRowKeys;
       this.selectedRows = selectedRows;
       this.idEmployeeChoose = [];
@@ -708,7 +706,6 @@ export default {
         });
     },
     submitAddProductionOrder() {
-      console.log("data submit", this.dataSubmit);
       ProductionOrderService.addOrUpdateProductOrder(this.dataSubmit)
         .then((response) => {
           this.showModalAdd = false;
@@ -724,7 +721,6 @@ export default {
         });
     },
     submitUpdateProductionOrder() {
-      console.log("data submit", this.dataSubmit);
       ProductionOrderService.addOrUpdateProductOrder(this.dataSubmit)
         .then((response) => {
           this.showModalAdd = false;
@@ -745,7 +741,6 @@ export default {
       } else {
         this.disableSaveAdd = true;
       }
-      console.log("data employee", this.idEmployeeChoose);
       this.showModalViewWork = false;
     },
     cleanData() {
@@ -875,8 +870,6 @@ export default {
           break;
         }
       }
-      console.log("data date start", this.dateStart);
-      console.log("data date end", this.dateEnd);
       this.disableDateStart();
       this.disableDateEnd();
     },
