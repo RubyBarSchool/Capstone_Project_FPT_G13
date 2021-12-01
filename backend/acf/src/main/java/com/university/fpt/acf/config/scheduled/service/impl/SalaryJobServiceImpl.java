@@ -9,11 +9,12 @@ import com.university.fpt.acf.repository.EmployeeRepository;
 import com.university.fpt.acf.repository.HistorySalaryRepository;
 import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
+@Service
 public class SalaryJobServiceImpl implements SalaryJobService {
 
     @Autowired

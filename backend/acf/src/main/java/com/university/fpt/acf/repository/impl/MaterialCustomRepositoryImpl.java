@@ -29,7 +29,7 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
             sqlAcc.append(" select new com.university.fpt.acf.vo.SuggestMaterialVO(m.groupMaterial.name,m.id, m.name , " +
                     " m.company.name,m.percentChooseInMonth,img.name  ) from Material m left join m.image img where m.deleted = false  ");
             sqlAcc.append(" ORDER by m.percentChooseInQuarterOfYear desc ");
-        }else if(materialSuggestFrom.getType().equals("name")){
+        }else if(materialSuggestFrom.getType().equals("nam")){
             sqlAcc.append(" select new com.university.fpt.acf.vo.SuggestMaterialVO(m.groupMaterial.name,m.id, m.name , " +
                     " m.company.name,m.percentChooseInMonth,img.name  ) from Material m left join m.image img where m.deleted = false  ");
             sqlAcc.append(" ORDER by m.percentChooseInYear desc ");

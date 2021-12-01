@@ -91,6 +91,7 @@
             <a-date-picker
               v-model="dateSelect"
               :disabled-date="disabledDate"
+              showToday="true"
               @change="changeDate"
             />
             <a-table
@@ -459,7 +460,6 @@ export default {
   },
   methods: {
     disabledDate(current) {
-      console.log("date",current);
       let date = moment();
       if (date.date() > 10) {
         return current.date() != 10 || current > moment().set("date",10);

@@ -1,14 +1,9 @@
 package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.config.security.AccountSercurity;
-import com.university.fpt.acf.entity.Employee;
-import com.university.fpt.acf.entity.File;
-import com.university.fpt.acf.entity.Position;
+import com.university.fpt.acf.entity.*;
 import com.university.fpt.acf.form.*;
-import com.university.fpt.acf.repository.EmployeeCustomRepository;
-import com.university.fpt.acf.repository.EmployeeRepository;
-import com.university.fpt.acf.repository.FileRepository;
-import com.university.fpt.acf.repository.PositionRespository;
+import com.university.fpt.acf.repository.*;
 import com.university.fpt.acf.service.EmployeeService;
 import com.university.fpt.acf.service.FileStorageService;
 import com.university.fpt.acf.util.EmployeeValidate.EmployeeValidate;
@@ -35,6 +30,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private FileRepository fileRepository;
+
+    @Autowired
+    private HistorySalaryRepository historySalaryRepository;
 
     @Override
     public List<SearchEmployeeVO> searchEmployee(SearchAllEmployeeForm searchAllEmployeeForm) {
@@ -133,6 +131,26 @@ public class EmployeeServiceImpl implements EmployeeService {
                             e.setCreated_date(LocalDate.now());;
                             e.setCreated_by(accountSercurity.getUserName());
                             Employee ex = employeeRepository.save(e);
+                            LocalDate dateNow = LocalDate.now();
+                            LocalDate dateCreat = LocalDate.now();
+                            if(dateNow.getDayOfMonth() >= 10){
+                                dateCreat = LocalDate.of(dateNow.getYear(),dateNow.getMonthValue(),10);
+                            }else{
+                                LocalDate dateMinus = dateNow.minusMonths(1);
+                                dateCreat = LocalDate.of(dateMinus.getYear(),dateMinus.getMonthValue(),10);
+                            }
+                            HistorySalary historySalary = new HistorySalary();
+                            historySalary.setCreated_by("JOB_AUTO");
+                            historySalary.setCreated_date(dateCreat);
+                            historySalary.setModified_by("JOB_AUTO");
+                            historySalary.setCountWork(0.0);
+                            historySalary.setSalary(ex.getSalary()+"");
+                            historySalary.setEmployee(ex);
+                            historySalary.setBonus("0");
+                            historySalary.setPenalty("0");
+                            historySalary.setAdvanceSalary("0");
+                            historySalary.setTotalMoney("0");
+                            historySalaryRepository.save(historySalary);
                             check =true;
                         }else{
                             throw new Exception("Chức vụ không tồn tại!");
