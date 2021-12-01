@@ -106,7 +106,7 @@
               <template slot="action" slot-scope="text, record">
                 <a-row>
                   <a-col :span="8">
-                    <a-button id="edit" @click="showModalEdit(record)">
+                    <a-button id="edit" v-if="showEdit(record)" @click="showModalEdit(record)">
                       <font-awesome-icon :icon="['fas', 'edit']" />
                     </a-button>
                   </a-col>
@@ -186,7 +186,7 @@
 import Header from "@/layouts/Header.vue";
 import Footer from "@/layouts/Footer.vue";
 import attendanceService from "@/service/attendanceService.js";
-
+import moment from "moment";
 export default {
   name: "Attendance",
   components: {
@@ -275,6 +275,32 @@ export default {
     this.getDate();
   },
   methods: {
+    showEdit(record) {
+      let date = record.date.split("-")[2];
+      if (parseInt(date) >= 10) {
+        let dateNow = moment();
+        let dateLast = moment(record.date)
+          .add(1, "months")
+          .set("date", 10);
+        if (dateNow < dateLast) {
+          console.log("true")
+          return true;
+        } else {
+          console.log("false")
+          return false;
+        }
+      } else {
+        let dateNow1 = moment();
+        let dateLast1 = moment(record.date).set("date", 10);
+        if (dateNow1 < dateLast1) {
+          console.log("true")
+          return true;
+        } else {
+          console.log("false")
+          return false;
+        }
+      }
+    },
     getDate() {
       let datex = new Date();
       let month =

@@ -106,15 +106,15 @@
                   <a-button key="back" @click="handleCancel"> Hủy </a-button>
                   <a-button
                     key="submit"
-                    :disabled="diableButtom"
                     type="primary"
+                    :loading="loading"
                     @click="checkFormAdd"
                   >
                     Lưu
                   </a-button>
                 </template>
                 <a-form-model>
-                  <span style="color: red">*</span> Tên chức vụ :
+                  <span style="color: red">*</span>Tên chức vụ:
                   <a-form-model-item>
                     <a-input @change="inputNameAdd" v-model="dataAdd.name" />
                     <div style="color: red" v-if="checkDataInputName.show">
@@ -128,8 +128,8 @@
                 <template slot="footer">
                   <a-button key="back" @click="handleCancel"> Hủy </a-button>
                   <a-button
+                    :loading="loading"
                     key="submit"
-                    :disabled="diableButtom"
                     type="primary"
                     @click="submitUpdate"
                   >
@@ -168,6 +168,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       pagination: {
         current: 1,
         pageSize: 10,
@@ -221,7 +222,6 @@ export default {
         show: false,
         message: "",
       },
-      diableButtom: true,
     };
   },
   created() {
@@ -260,10 +260,9 @@ export default {
       this.visibleAdd = true;
       this.checkDataInputName.show = false;
       this.checkDataInputName.message = "";
-      this.diableButtom = true;
     },
     checkFormAdd() {
-      if (this.dataAdd.name != null && this.dataAdd.name != "") {
+      if (this.dataAdd.name != null && this.dataAdd.name.trim() != "") {
         this.checkDataInputName.show = false;
         this.checkDataInputName.message = "";
         this.submitAdd();
@@ -273,7 +272,7 @@ export default {
       }
     },
     checkFormEdit() {
-      if (this.dataAdd.name != null && this.dataAdd.name != "") {
+      if (this.dataAdd.name != null && this.dataAdd.name.trim() != "") {
         this.checkDataInputName.show = false;
         this.checkDataInputName.message = "";
         this.submitUpdate();
@@ -283,28 +282,25 @@ export default {
       }
     },
     inputNameAdd() {
-      if (this.dataAdd.name != null && this.dataAdd.name != "") {
+      if (this.dataAdd.name != null && this.dataAdd.name.trim() != "") {
         this.checkDataInputName.show = false;
         this.checkDataInputName.message = "";
-        this.diableButtom = false;
       } else {
         this.checkDataInputName.show = true;
         this.checkDataInputName.message = "Bạn phải điền vào ô tên chức vụ";
-        this.diableButtom = true;
       }
     },
     inputNameEdit() {
-      if (this.dataEdit.name != null && this.dataEdit.name != "") {
+      if (this.dataEdit.name != null && this.dataEdit.name.trim() != "") {
         this.checkDataInputName.show = false;
         this.checkDataInputName.message = "";
-        this.diableButtom = false;
       } else {
         this.checkDataInputName.show = true;
         this.checkDataInputName.message = "Bạn phải điền vào ô tên chức vụ";
-      this.diableButtom = true;
       }
     },
     submitAdd() {
+      this.loading = true;
       positionService
         .addPosition(this.dataAdd)
         .then((response) => {
@@ -324,6 +320,7 @@ export default {
           this.submitSearch();
           this.visibleAdd = false;
           this.dataAdd.name = "";
+          this.loading = false;
         })
         .catch(() => {
           let type = "error";
@@ -333,6 +330,7 @@ export default {
           this.notifi(type, message, description);
           this.visibleAdd = false;
           this.dataAdd.name = "";
+          this.loading = false;
         });
     },
     notifi(type, message, description) {
@@ -371,7 +369,6 @@ export default {
       this.visibleEdit = true;
       this.checkDataInputName.show = false;
       this.checkDataInputName.message = "";
-      this.diableButtom = true;
     },
     submitUpdate() {
       positionService
