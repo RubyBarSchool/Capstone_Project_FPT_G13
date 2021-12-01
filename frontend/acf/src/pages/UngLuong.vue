@@ -118,7 +118,7 @@
                       <font-awesome-icon :icon="['fas', 'eye']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="8" v-if="record.accept==-1">
+                  <a-col :span="8" v-if="record.accept == -1">
                     <a-button
                       id="edit"
                       @click="
@@ -134,7 +134,7 @@
                       <font-awesome-icon :icon="['fas', 'edit']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="8" v-if="record.accept==-1">
+                  <a-col :span="8" v-if="record.accept == -1">
                     <a-popconfirm
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
@@ -154,19 +154,29 @@
           <a-modal v-model="visibleAdd" title="Viết đơn">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="checkInput">
+              <a-button
+                key="submit"
+                type="primary"
+                :loading="loadingAdd"
+                @click="checkFormAdd"
+              >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
               <a-form-model-item label="Tiêu đề">
-                <a-input v-model="dataAdd.title" />
+                <a-input v-model="dataAdd.title" @change="inputTitleAdd" />
                 <div style="color: red" v-if="checkInputTitle.show">
                   {{ checkInputTitle.message }}
                 </div>
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
-                <a-input-number v-model="dataAdd.advanceSalary" :min="0" />
+                <a-input-number
+                  style="width: 100%"
+                  v-model="dataAdd.advanceSalary"
+                  :min="0"
+                  @change="inputAdvanceSalaryAdd"
+                />
                 <div style="color: red" v-if="checkInputSalary.show">
                   {{ checkInputSalary.message }}
                 </div>
@@ -177,6 +187,7 @@
                   v-model="dataAdd.content"
                   placeholder="Lý do như nào thì viết vào đây"
                   :row="4"
+                  @change="inputContentAdd"
                 />
                 <div style="color: red" v-if="checkInputContent.show">
                   {{ checkInputContent.message }}
@@ -190,23 +201,43 @@
           <a-modal v-model="visibleEdit" title="Chỉnh sửa đơn">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitUpdate">
+              <a-button
+                key="submit"
+                type="primary"
+                @click="checkFormEdit"
+                :loading="loadingEdit"
+              >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
               <a-form-model-item label="Tiêu đề">
-                <a-input v-model="dataEdit.title" />
+                <a-input v-model="dataEdit.title" @change="inputTitleEdit" />
+                <div style="color: red" v-if="checkInputTitle.show">
+                  {{ checkInputTitle.message }}
+                </div>
               </a-form-model-item>
               <a-form-model-item label="Số tiền">
-                <a-input-number v-model="dataEdit.advanceSalary" :min="0" />
+                <a-input-number
+                  style="width: 100%"
+                  v-model="dataEdit.advanceSalary"
+                  :min="0"
+                  @change="inputAdvanceSalaryEdit"
+                />
+                <div style="color: red" v-if="checkInputSalary.show">
+                  {{ checkInputSalary.message }}
+                </div>
               </a-form-model-item>
               <a-form-model-item label="Nội dung">
                 <a-textarea
                   v-model="dataEdit.content"
                   placeholder="Lý do như nào thì viết vào đây"
                   :row="4"
+                  @change="inputContentEdit"
                 />
+                <div style="color: red" v-if="checkInputContent.show">
+                  {{ checkInputContent.message }}
+                </div>
               </a-form-model-item>
             </a-form-model>
           </a-modal>
@@ -394,6 +425,8 @@ export default {
       visibleAdd: false,
       visibleEdit: false,
       visibleView: false,
+      loadingAdd: false,
+      loadingEdit: false,
     };
   },
   created() {
@@ -428,9 +461,56 @@ export default {
         });
     },
     showModalAdd() {
+      this.dataAdd.title = "";
+      this.dataAdd.advanceSalary = "";
+      this.dataAdd.content = "";
+      this.checkInputTitle.show = false;
+      this.checkInputTitle.message = "";
+      this.checkInputSalary.show = false;
+      this.checkInputSalary.message = "";
+      this.checkInputContent.show = false;
+      this.checkInputContent.message = "";
+
+      this.dataAdd.title = "";
+      this.dataAdd.advanceSalary = "";
+      this.dataAdd.content = "";
       this.visibleAdd = true;
     },
+    checkFormAdd() {
+      let check = true;
+      if (this.dataAdd.title != null && this.dataAdd.title.trim() != "") {
+        this.checkInputTitle.show = false;
+        this.checkInputTitle.message = "";
+      } else {
+        check = false;
+        this.checkInputTitle.show = true;
+        this.checkInputTitle.message = "Bạn phải điền vào ô tiêu đề";
+      }
+      if (
+        this.dataAdd.advanceSalary != null &&
+        this.dataAdd.advanceSalary != ""
+      ) {
+        this.checkInputSalary.show = false;
+        this.checkInputSalary.message = "";
+      } else {
+        check = false;
+        this.checkInputSalary.show = true;
+        this.checkInputSalary.message = "Bạn phải điền vào ô số tiền";
+      }
+      if (this.dataAdd.content != null && this.dataAdd.content != "") {
+        this.checkInputContent.show = false;
+        this.checkInputContent.message = "";
+      } else {
+        check = false;
+        this.checkInputContent.show = true;
+        this.checkInputContent.message = "Bạn phải điền vào ô nội dung";
+      }
+      if (check == true) {
+        this.submitAdd();
+      }
+    },
     submitAdd() {
+      this.loadingAdd = true;
       ungLuongService
         .addAdvanceSalaryEmployee(this.dataAdd)
         .then((response) => {
@@ -451,14 +531,44 @@ export default {
               response.data.message;
             this.notifi(type, message, description);
           }
+          this.loadingAdd = false;
+          this.visibleAdd = false;
         })
         .catch((e) => {
           console.log(e);
+          this.loadingAdd = false;
+          this.visibleAdd = false;
         });
-      this.visibleAdd = false;
-      this.dataAdd.title = "";
-      this.dataAdd.advanceSalary = "";
-      this.dataAdd.content = "";
+    },
+    inputTitleAdd() {
+      if (this.dataAdd.title != null && this.dataAdd.title.trim() != "") {
+        this.checkInputTitle.show = false;
+        this.checkInputTitle.message = "";
+      } else {
+        this.checkInputTitle.show = true;
+        this.checkInputTitle.message = "Bạn phải điền vào ô tiêu đề";
+      }
+    },
+    inputAdvanceSalaryAdd() {
+      if (
+        this.dataAdd.advanceSalary != null &&
+        this.dataAdd.advanceSalary != ""
+      ) {
+        this.checkInputSalary.show = false;
+        this.checkInputSalary.message = "";
+      } else {
+        this.checkInputSalary.show = true;
+        this.checkInputSalary.message = "Bạn phải điền vào ô số tiền";
+      }
+    },
+    inputContentAdd() {
+      if (this.dataAdd.content != null && this.dataAdd.content != "") {
+        this.checkInputContent.show = false;
+        this.checkInputContent.message = "";
+      } else {
+        this.checkInputContent.show = true;
+        this.checkInputContent.message = "Bạn phải điền vào ô nội dung";
+      }
     },
 
     handleCancel() {
@@ -471,9 +581,79 @@ export default {
       this.dataEdit.title = title;
       this.dataEdit.content = content;
       this.dataEdit.advanceSalary = advanceSalary;
+      this.checkInputTitle.show = false;
+      this.checkInputTitle.message = "";
+      this.checkInputSalary.show = false;
+      this.checkInputSalary.message = "";
+      this.checkInputContent.show = false;
+      this.checkInputContent.message = "";
       this.visibleEdit = true;
     },
+    checkFormEdit() {
+      let check = true;
+      if (this.dataEdit.title != null && this.dataEdit.title.trim() != "") {
+        this.checkInputTitle.show = false;
+        this.checkInputTitle.message = "";
+      } else {
+        check = false;
+        this.checkInputTitle.show = true;
+        this.checkInputTitle.message = "Bạn phải điền vào ô tiêu đề";
+      }
+      if (
+        this.dataEdit.advanceSalary != null &&
+        this.dataEdit.advanceSalary != ""
+      ) {
+        this.checkInputSalary.show = false;
+        this.checkInputSalary.message = "";
+      } else {
+        check = false;
+        this.checkInputSalary.show = true;
+        this.checkInputSalary.message = "Bạn phải điền vào ô số tiền";
+      }
+      if (this.dataEdit.content != null && this.dataEdit.content != "") {
+        this.checkInputContent.show = false;
+        this.checkInputContent.message = "";
+      } else {
+        check = false;
+        this.checkInputContent.show = true;
+        this.checkInputContent.message = "Bạn phải điền vào ô nội dung";
+      }
+      if (check == true) {
+        this.submitUpdate();
+      }
+    },
+    inputTitleEdit() {
+      if (this.dataEdit.title != null && this.dataEdit.title.trim() != "") {
+        this.checkInputTitle.show = false;
+        this.checkInputTitle.message = "";
+      } else {
+        this.checkInputTitle.show = true;
+        this.checkInputTitle.message = "Bạn phải điền vào ô tiêu đề";
+      }
+    },
+    inputAdvanceSalaryEdit() {
+      if (
+        this.dataEdit.advanceSalary != null &&
+        this.dataEdit.advanceSalary != ""
+      ) {
+        this.checkInputSalary.show = false;
+        this.checkInputSalary.message = "";
+      } else {
+        this.checkInputSalary.show = true;
+        this.checkInputSalary.message = "Bạn phải điền vào ô số tiền";
+      }
+    },
+    inputContentEdit() {
+      if (this.dataEdit.content != null && this.dataEdit.content != "") {
+        this.checkInputContent.show = false;
+        this.checkInputContent.message = "";
+      } else {
+        this.checkInputContent.show = true;
+        this.checkInputContent.message = "Bạn phải điền vào ô nội dung";
+      }
+    },
     submitUpdate() {
+      this.loadingEdit = true;
       ungLuongService
         .updateAdvanceSalaryEmployee(this.dataEdit)
         .then((response) => {
@@ -489,11 +669,13 @@ export default {
             let description = "Cập nhật đơn không thành công";
             this.notifi(type, message, description);
           }
+          this.loadingEdit = false;
+          this.visibleEdit = false;
         })
-        .catch((e) => {
-          console.log(e);
+        .catch(() => {
+          this.loadingEdit = false;
+          this.visibleEdit = false;
         });
-      this.visibleEdit = false;
     },
 
     deleteAdvanceSalary(id) {
@@ -535,46 +717,6 @@ export default {
         message: message,
         description: description,
       });
-    },
-    checkInput() {
-      if (this.dataAdd.title == null || this.dataAdd.title == "") {
-        this.checkInputTitle.show = true;
-        this.checkInputTitle.message = "Bạn phải điền vào chỗ trống";
-      } else {
-        this.checkInputTitle.show = false;
-        this.checkInputTitle.message = "";
-      }
-      if (
-        this.dataAdd.advanceSalary == null ||
-        this.dataAdd.advanceSalary == ""
-      ) {
-        this.checkInputSalary.show = true;
-        this.checkInputSalary.message = "Bạn phải điền vào chỗ trống";
-      } else {
-        this.checkInputSalary.show = false;
-        this.checkInputSalary.message = "";
-      }
-      if (this.dataAdd.content == null || this.dataAdd.content == "") {
-        this.checkInputContent.show = true;
-        this.checkInputContent.message = "Bạn phải điền vào chỗ trống";
-      } else {
-        this.checkInputContent.show = false;
-        this.checkInputContent.message = "";
-        this.submitAdd();
-      }
-      if (
-        this.dataAdd.content != null &&
-        this.dataAdd.content != "" &&
-        this.dataAdd.advanceSalary != null &&
-        this.dataAdd.advanceSalary != "" &&
-        this.dataAdd.content != null &&
-        this.dataAdd.content != ""
-      ) {
-        this.checkInputContent.show = false;
-        this.checkInputSalary.show = false;
-        this.checkInputTitle.show = false;
-        this.submitAdd();
-      }
     },
   },
 };
