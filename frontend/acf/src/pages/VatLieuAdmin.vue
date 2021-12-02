@@ -258,6 +258,9 @@
                     {{ frameI.frame }}
                   </a-select-option>
                 </a-select>
+                <!-- <div style="color: red" v-if="checkInputFrame.show">
+                  {{ checkInputFrame.message }}
+                </div> -->
               </a-col>
             </a-row>
             <br />
@@ -280,6 +283,9 @@
                     {{ height.frameHeight }}
                   </a-select-option>
                 </a-select>
+                <!-- <div style="color: red" v-if="checkInputHeight.show">
+                  {{ checkInputHeight.message }}
+                </div> -->
               </a-col>
             </a-row>
             <br />
@@ -299,6 +305,9 @@
                     {{ group.name }}
                   </a-select-option>
                 </a-select>
+                <!-- <div style="color: red" v-if="checkInputGroupMaterial.show">
+                  {{ checkInputGroupMaterial.message }}
+                </div> -->
               </a-col>
             </a-row>
             <br />
@@ -318,6 +327,9 @@
                     {{ unit.name }}
                   </a-select-option>
                 </a-select>
+                <!-- <div style="color: red" v-if="checkInputUnit.show">
+                  {{ checkInputUnit.message }}
+                </div> -->
               </a-col>
             </a-row>
             <br />
@@ -473,12 +485,12 @@
           <a-modal v-model="visibleAddUnit" title="Thêm đơn vị">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitAddUnit">
+              <a-button key="submit" type="primary" @click="checkFormAddUnit">
                 Lưu
               </a-button>
             </template>
             <a-row type="flex">
-              <a-col flex="100px">Mã vật liệu</a-col>
+              <span style="color: red">*</span>Mã vật liệu :
               <a-col flex="auto">
                 <a-select
                   placeholder="Mã vật liệu"
@@ -494,11 +506,14 @@
                     {{ frame.name }}
                   </a-select-option>
                 </a-select>
+                <div style="color: red" v-if="checkInputCodeMaterial.show">
+                  {{ checkInputCodeMaterial.message }}
+                </div>
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Đơn vị đo</a-col>
+              <span style="color: red">*</span>Đơn vị đo :
               <a-col flex="auto">
                 <a-select
                   placeholder="Đơn vị đo"
@@ -514,6 +529,9 @@
                     {{ unit.name }}
                   </a-select-option>
                 </a-select>
+                <div style="color: red" v-if="checkInputUnit.show">
+                  {{ checkInputUnit.message }}
+                </div>
               </a-col>
             </a-row>
           </a-modal>
@@ -798,6 +816,27 @@ export default {
       disable: false,
       loadingAdd: false,
       loadingEdit: false,
+      // checkInputFrame: {
+      //   show: false,
+      //   message: "",
+      // },
+      // checkInputHeight: {
+      //   show: false,
+      //   message: "",
+      // },
+      // checkInputGroupMaterial: {
+      //   show: false,
+      //   message: "",
+      // },
+      checkInputUnit: {
+        show: false,
+        message: "",
+      },
+      checkInputCodeMaterial: {
+        show: false,
+        message: "",
+      },
+      loadingAddUnit: false,
     };
   },
   computed: {},
@@ -1110,8 +1149,39 @@ export default {
       this.dataAddUnitMaterial.idUnit = "";
       this.getAllUnit();
       this.getMaterials();
+      this.checkInputCodeMaterial.show = false;
+      this.checkInputCodeMaterial.message = "";
+      this.checkInputUnit.show = false;
+      this.checkInputUnit.message = "";
     },
-
+    checkFormAddUnit() {
+      let check = true;
+      if (
+        this.dataAddUnitMaterial.idMaterial != null &&
+        this.dataAddUnitMaterial.idMaterial != ""
+      ) {
+        this.checkInputCodeMaterial.show = false;
+        this.checkInputCodeMaterial.message = "";
+      } else {
+        check = false;
+        this.checkInputCodeMaterial.show = true;
+        this.checkInputCodeMaterial.message = "Bạn phải điền mã vật liệu";
+      }
+      if (
+        this.dataAddUnitMaterial.idUnit != null &&
+        this.dataAddUnitMaterial.idUnit != ""
+      ) {
+        this.checkInputUnit.show = false;
+        this.checkInputUnit.message = "";
+      } else {
+        check = false;
+        this.checkInputUnit.show = true;
+        this.checkInputUnit.message = "Bạn phải điền đơn vị đo";
+      }
+      if (check) {
+        this.submitAddUnit();
+      }
+    },
     //thay đổi đơn vị theo MVL
     getUnitByMaterial(id) {
       vatLieuAdminService
@@ -1137,9 +1207,33 @@ export default {
 
     //thay đổi đơn vị theo MVL
     handleDonViByMVL(value) {
+      if (
+        this.dataAddUnitMaterial.idMaterial != null &&
+        this.dataAddUnitMaterial.idMaterial != ""
+      ) {
+        this.checkInputCodeMaterial.show = false;
+        this.checkInputCodeMaterial.message = "";
+      } else {
+        this.checkInputCodeMaterial.show = true;
+        this.checkInputCodeMaterial.message = "Bạn phải điền đơn vị đo";
+      }
       this.getUnitByMaterial(value);
     },
 
+    //thay đổi MVL theo đơn vị
+    handleMVLByDonVi(value) {
+      if (
+        this.dataAddUnitMaterial.idUnit != null &&
+        this.dataAddUnitMaterial.idUnit != ""
+      ) {
+        this.checkInputUnit.show = false;
+        this.checkInputUnit.message = "";
+      } else {
+        this.checkInputUnit.show = true;
+        this.checkInputUnit.message = "Bạn phải điền mã vật liệu";
+      }
+      this.searchMaterialByUnit(value);
+    },
     //thay đổi MVL theo đơn vị
     searchMaterialByUnit(unit) {
       vatLieuAdminService
@@ -1163,13 +1257,9 @@ export default {
         });
     },
 
-    //thay đổi MVL theo đơn vị
-    handleMVLByDonVi(value) {
-      this.searchMaterialByUnit(value);
-    },
-
     //submit add unit
     submitAddUnit() {
+      this.loadingAddUnit = true;
       vatLieuAdminService
         .addUnitMaterial(this.dataAddUnitMaterial)
         .then((response) => {
@@ -1185,11 +1275,13 @@ export default {
             let description = response.data.message;
             this.notifi(type, message, description);
           }
+          this.loadingAddUnit = false;
+          this.visibleAddUnit = false;
         })
-        .catch((e) => {
-          console.log(e);
+        .catch(() => {
+          this.loadingAddUnit = false;
+          this.visibleAddUnit = false;
         });
-      this.visibleAddUnit = false;
     },
 
     //thay đổi chiều cao theo MVL và khung
