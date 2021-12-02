@@ -1159,6 +1159,7 @@ export default {
     // },
     submitAdd() {
       this.loadingAdd = true;
+
       if (this.dataAdd.image != "") {
         fileService
           .uploadImage(this.dataAdd.image)
