@@ -18,41 +18,43 @@
             </div>
           </a-back-top>
           <!-- menu trên -->
-          <a-row type="flex">
-            <a-col flex="auto">
-              <a-input
-                placeholder="Tên công ty"
-                style="width: 150px"
-                v-model="dataSearch.name"
-              />
-              <a-input
-                placeholder="Địa chỉ"
-                style="width: 150px"
-                v-model="dataSearch.address"
-              />
-              <a-input
-                placeholder="Số điện thoại"
-                style="width: 150px"
-                v-model="dataSearch.phone"
-              />
-              <a-button type="primary" @click="submitSearch">
-                <font-awesome-icon
-                  :icon="['fas', 'search']"
-                  :style="{ 'margin-right': '5px' }"
-                />
-                Tìm kiếm
-              </a-button>
-            </a-col>
-            <a-col flex="100px">
-              <a-button type="primary" @click="showModalAdd">
-                <font-awesome-icon
-                  :icon="['fas', 'user-plus']"
-                  :style="{ 'margin-right': '5px' }"
-                />
-                Thêm
-              </a-button>
-            </a-col>
-          </a-row>
+          <a-input
+            placeholder="Tên công ty"
+            style="width: 150px"
+            v-model="dataSearch.name"
+          />
+          <a-input
+            placeholder="Địa chỉ"
+            style="width: 150px"
+            v-model="dataSearch.address"
+          />
+          <a-input
+            placeholder="Số điện thoại"
+            style="width: 150px"
+            v-model="dataSearch.phone"
+          />
+          <a-button
+            type="primary"
+            @click="submitSearch"
+            :style="{ 'margin-left': '5px' }"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'search']"
+              :style="{ 'margin-right': '5px' }"
+            />
+            Tìm kiếm
+          </a-button>
+          <a-button
+            type="primary"
+            @click="showModalAdd"
+            :style="{ 'margin-left': '5px' }"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'user-plus']"
+              :style="{ 'margin-right': '5px' }"
+            />
+            Thêm
+          </a-button>
 
           <!-- table content -->
           <div :style="{ 'padding-top': '10px' }">
@@ -95,6 +97,8 @@
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
                       @confirm="deleteUser(record.id)"
+                      ok-text="Đồng ý"
+                      cancel-text="Hủy"
                     >
                       <a-button id="delete">
                         <font-awesome-icon :icon="['fas', 'trash']" />
@@ -110,53 +114,84 @@
           <a-modal v-model="visibleAdd" title="Thêm công ty">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitAdd">
+              <a-button
+                key="submit"
+                type="primary"
+                :loading="loading"
+                @click="checkFormAdd"
+              >
                 Lưu
               </a-button>
             </template>
             <div class="container">
               <a-form-model>
-                <a-form-model-item label="Tên công ty">
-                  <a-input v-model="dataAdd.name" />
-                </a-form-model-item>
-                <a-form-model-item label="Địa chỉ">
-                  <a-input v-model="dataAdd.address" />
-                </a-form-model-item>
-                <a-form-model-item label="Số Điện Thoại">
-                  <a-input v-model="dataAdd.phone" />
-                </a-form-model-item>
-                <a-form-model-item label="Email">
-                  <a-input v-model="dataAdd.email" />
-                </a-form-model-item>
+                <span style="color: red">*</span> Tên công ty
+                <a-input @change="inputCompany" v-model="dataAdd.name" />
+                <div style="color: red" v-if="checkDataInputCompany.show">
+                  {{ checkDataInputCompany.message }}
+                </div>
+                <span style="color: red">*</span> Địa chỉ
+                <a-input @change="inputAddress" v-model="dataAdd.address" />
+                <div style="color: red" v-if="checkDataInputAddress.show">
+                  {{ checkDataInputAddress.message }}
+                </div>
+                <span style="color: red">*</span> Số điện thoại
+                <a-input @change="inputPhone" v-model="dataAdd.phone" />
+                <div style="color: red" v-if="checkDataInputPhone.show">
+                  {{ checkDataInputPhone.message }}
+                </div>
+                <span style="color: red">*</span> Email
+                <a-input @change="inputEmail" v-model="dataAdd.email" />
+                <div style="color: red" v-if="checkDataInputEmail.show">
+                  {{ checkDataInputEmail.message }}
+                </div>
               </a-form-model>
             </div>
           </a-modal>
           <!-- popup add -->
 
+          <!-- popup update -->
           <a-modal v-model="visibleEdit" title="Chỉnh sửa công ty">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitUpdate">
+              <a-button
+                key="submit"
+                type="primary"
+                :loading="loadingUpdate"
+                @click="checkFormUpdate"
+              >
                 Lưu
               </a-button>
             </template>
             <div class="container">
               <a-form-model>
-                <a-form-model-item label="Tên công ty">
-                  <a-input v-model="dataEdit.name" />
-                </a-form-model-item>
-                <a-form-model-item label="Địa chỉ">
-                  <a-input v-model="dataEdit.address" />
-                </a-form-model-item>
-                <a-form-model-item label="Số điện thoại">
-                  <a-input v-model="dataEdit.phone" />
-                </a-form-model-item>
-                <a-form-model-item label="Email">
-                  <a-input v-model="dataEdit.email" />
-                </a-form-model-item>
+                <span style="color: red">*</span> Tên công ty
+                <a-input @change="inputEditCompany" v-model="dataEdit.name" />
+                <div style="color: red" v-if="checkDataInputCompany.show">
+                  {{ checkDataInputCompany.message }}
+                </div>
+                <span style="color: red">*</span> Địa chỉ
+                <a-input
+                  @change="inputEditAddress"
+                  v-model="dataEdit.address"
+                />
+                <div style="color: red" v-if="checkDataInputAddress.show">
+                  {{ checkDataInputAddress.message }}
+                </div>
+                <span style="color: red">*</span> Số điện thoại
+                <a-input @change="inputEditPhone" v-model="dataEdit.phone" />
+                <div style="color: red" v-if="checkDataInputPhone.show">
+                  {{ checkDataInputPhone.message }}
+                </div>
+                <span style="color: red">*</span> Email
+                <a-input @change="inputEditEmail" v-model="dataEdit.email" />
+                <div style="color: red" v-if="checkDataInputEmail.show">
+                  {{ checkDataInputEmail.message }}
+                </div>
               </a-form-model>
             </div>
           </a-modal>
+          <!-- popup update -->
         </div>
       </a-layout-content>
       <Footer />
@@ -177,6 +212,8 @@ export default {
   },
   data() {
     return {
+      loading: false,
+      loadingUpdate: false,
       dataPositions: [],
       dataPosition: {
         name: "",
@@ -270,6 +307,22 @@ export default {
       ],
       visibleAdd: false,
       visibleEdit: false,
+      checkDataInputCompany: {
+        show: false,
+        message: "",
+      },
+      checkDataInputAddress: {
+        show: false,
+        message: "",
+      },
+      checkDataInputPhone: {
+        show: false,
+        message: "",
+      },
+      checkDataInputEmail: {
+        show: false,
+        message: "",
+      },
     };
   },
   created() {
@@ -308,9 +361,26 @@ export default {
         });
     },
     showModalAdd() {
+      this.checkDataInputCompany.show = false;
+      this.checkDataInputCompany.message = "";
+      this.checkDataInputAddress.show = false;
+      this.checkDataInputAddress.message = "";
+      this.checkDataInputPhone.show = false;
+      this.checkDataInputPhone.message = "";
+      this.checkDataInputEmail.show = false;
+      this.checkDataInputEmail.message = "";
+      this.dataAdd.name = "";
+      this.dataAdd.phone = "";
+      this.dataAdd.email = "";
+      this.dataAdd.address = "";
       this.visibleAdd = true;
     },
     submitAdd() {
+      this.dataAdd.name = this.dataAdd.name.trim();
+      this.dataAdd.phone = this.dataAdd.phone.trim();
+      this.dataAdd.email = this.dataAdd.email.trim();
+      this.dataAdd.address = this.dataAdd.address.trim();
+      this.loading = true;
       companyService
         .addCompany(this.dataAdd)
         .then((response) => {
@@ -331,15 +401,14 @@ export default {
               response.data.message;
             this.notifi(type, message, description);
           }
+          this.loading = false;
+          this.visibleAdd = false;
         })
         .catch((e) => {
           console.log(e);
+          this.loading = false;
+          this.visibleAdd = false;
         });
-      this.visibleAdd = false;
-      this.dataAdd.name = "";
-      this.dataAdd.phone = "";
-      this.dataAdd.email = "";
-      this.dataAdd.address = "";
     },
     showModalEdit(record) {
       this.dataEdit.id = record.id;
@@ -350,6 +419,11 @@ export default {
       this.visibleEdit = true;
     },
     submitUpdate() {
+      this.dataEdit.name = this.dataEdit.name.trim();
+      this.dataEdit.phone = this.dataEdit.phone.trim();
+      this.dataEdit.email = this.dataEdit.email.trim();
+      this.dataEdit.address = this.dataEdit.address.trim();
+      this.loadingUpdate = true;
       companyService
         .updateCompany(this.dataEdit)
         .then((response) => {
@@ -358,9 +432,7 @@ export default {
             let type = "success";
             let message = "Cập nhật";
             let description =
-              "Sửa thông tin công ty " +
-              this.dataEdit.name +
-              " thành công !!";
+              "Sửa thông tin công ty " + this.dataEdit.name + " thành công !!";
             this.notifi(type, message, description);
           } else {
             let type = "error";
@@ -372,11 +444,14 @@ export default {
               response.data.message;
             this.notifi(type, message, description);
           }
+          this.loadingUpdate = false;
+          this.visibleEdit = false;
         })
         .catch((e) => {
           console.log(e);
+          this.loadingUpdate = false;
+          this.visibleEdit = false;
         });
-      this.visibleEdit = false;
     },
     deleteUser(id) {
       companyService
@@ -386,12 +461,10 @@ export default {
             let type = "success";
             let message = "Xóa";
             let description =
-              "Xóa thông tin công ty " +
-              this.dataEdit.name +
-              " thành công !!";
+              "Xóa thông tin công ty " + this.dataEdit.name + " thành công !!";
             this.notifi(type, message, description);
             this.submitSearch();
-          }else {
+          } else {
             let type = "error";
             let message = "Xóa";
             let description =
@@ -405,6 +478,164 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+    },
+    inputCompany() {
+      if (this.dataAdd.name != null && this.dataAdd.name.trim() != "") {
+        this.checkDataInputCompany.show = false;
+        this.checkDataInputCompany.message = "";
+      } else {
+        this.checkDataInputCompany.show = true;
+        this.checkDataInputCompany.message = "Bạn phải điền công ty";
+      }
+    },
+    inputAddress() {
+      if (this.dataAdd.address != null && this.dataAdd.address.trim() != "") {
+        this.checkDataInputAddress.show = false;
+        this.checkDataInputAddress.message = "";
+      } else {
+        this.checkDataInputAddress.show = true;
+        this.checkDataInputAddress.message = "Bạn phải điền địa chỉ";
+      }
+    },
+    inputPhone() {
+      if (this.dataAdd.phone != null && this.dataAdd.phone.trim() != "") {
+        this.checkDataInputPhone.show = false;
+        this.checkDataInputPhone.message = "";
+      } else {
+        this.checkDataInputPhone.show = true;
+        this.checkDataInputPhone.message = "Bạn phải điền số điện thoại";
+      }
+    },
+    inputEmail() {
+      if (this.dataAdd.email != null && this.dataAdd.email.trim() != "") {
+        this.checkDataInputEmail.show = false;
+        this.checkDataInputEmail.message = "";
+      } else {
+        this.checkDataInputEmail.show = true;
+        this.checkDataInputEmail.message = "Bạn phải điền email";
+      }
+    },
+
+    inputEditCompany() {
+      if (this.dataEdit.name != null && this.dataEdit.name.trim() != "") {
+        this.checkDataInputCompany.show = false;
+        this.checkDataInputCompany.message = "";
+      } else {
+        this.checkDataInputCompany.show = true;
+        this.checkDataInputCompany.message = "Bạn phải điền công ty";
+      }
+    },
+    inputEditAddress() {
+      if (this.dataEdit.address != null && this.dataEdit.address.trim() != "") {
+        this.checkDataInputAddress.show = false;
+        this.checkDataInputAddress.message = "";
+      } else {
+        this.checkDataInputAddress.show = true;
+        this.checkDataInputAddress.message = "Bạn phải điền địa chỉ";
+      }
+    },
+    inputEditPhone() {
+      if (this.dataEdit.phone != null && this.dataEdit.phone.trim() != "") {
+        this.checkDataInputPhone.show = false;
+        this.checkDataInputPhone.message = "";
+      } else {
+        this.checkDataInputPhone.show = true;
+        this.checkDataInputPhone.message = "Bạn phải điền số điện thoại";
+      }
+    },
+    inputEditEmail() {
+      if (this.dataEdit.email != null && this.dataEdit.email.trim() != "") {
+        this.checkDataInputEmail.show = false;
+        this.checkDataInputEmail.message = "";
+      } else {
+        this.checkDataInputEmail.show = true;
+        this.checkDataInputEmail.message = "Bạn phải điền email";
+      }
+    },
+    checkFormAdd() {
+      let check = true;
+      if (this.dataAdd.name != null && this.dataAdd.name.trim() != "") {
+        this.checkDataInputCompany.show = false;
+        this.checkDataInputCompany.message = "";
+      } else {
+        check = false;
+        this.checkDataInputCompany.show = true;
+        this.checkDataInputCompany.message = "Bạn phải điền công ty";
+      }
+
+      if (this.dataAdd.address != null && this.dataAdd.address.trim() != "") {
+        this.checkDataInputAddress.show = false;
+        this.checkDataInputAddress.message = "";
+      } else {
+        check = false;
+        this.checkDataInputAddress.show = true;
+        this.checkDataInputAddress.message = "Bạn phải điền địa chỉ";
+      }
+
+      if (this.dataAdd.phone != null && this.dataAdd.phone.trim() != "") {
+        this.checkDataInputPhone.show = false;
+        this.checkDataInputPhone.message = "";
+      } else {
+        check = false;
+        this.checkDataInputPhone.show = true;
+        this.checkDataInputPhone.message = "Bạn phải điền số điện thoại";
+      }
+
+      if (this.dataAdd.email != null && this.dataAdd.email.trim() != "") {
+        this.checkDataInputEmail.show = false;
+        this.checkDataInputEmail.message = "";
+      } else {
+        check = false;
+        this.checkDataInputEmail.show = true;
+        this.checkDataInputEmail.message = "Bạn phải điền email";
+      }
+      if (check) {
+        this.submitAdd();
+      }
+    },
+
+    checkFormUpdate() {
+      let check = true;
+
+      if (this.dataEdit.name != null && this.dataEdit.name.trim() != "") {
+        this.checkDataInputCompany.show = false;
+        this.checkDataInputCompany.message = "";
+      } else {
+        check = false;
+        this.checkDataInputCompany.show = true;
+        this.checkDataInputCompany.message = "Bạn phải điền công ty";
+      }
+
+      if (this.dataEdit.address != null && this.dataEdit.address.trim() != "") {
+        this.checkDataInputAddress.show = false;
+        this.checkDataInputAddress.message = "";
+      } else {
+        check = false;
+        this.checkDataInputAddress.show = true;
+        this.checkDataInputAddress.message = "Bạn phải điền địa chỉ";
+      }
+
+      if (this.dataEdit.phone != null && this.dataEdit.phone.trim() != "") {
+        this.checkDataInputPhone.show = false;
+        this.checkDataInputPhone.message = "";
+      } else {
+        check = false;
+        this.checkDataInputPhone.show = true;
+        this.checkDataInputPhone.message = "Bạn phải điền số điện thoại";
+      }
+
+      if (this.dataEdit.email != null && this.dataEdit.email.trim() != "") {
+        this.checkDataInputEmail.show = false;
+        this.checkDataInputEmail.message = "";
+      } else {
+        check = false;
+        this.checkDataInputEmail.show = true;
+        this.checkDataInputEmail.message = "Bạn phải điền email";
+      }
+
+      if (check) {
+        this.submitUpdate();
+      }
     },
     notifi(type, message, description) {
       this.$notification[type]({
