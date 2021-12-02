@@ -46,6 +46,8 @@
                   v-if="dataSourceTable.length"
                   title="Bạn có chắc chắn muốn xóa không?"
                   @confirm="deleteGroup(record.id)"
+                  ok-text="Đồng ý"
+                  cancel-text="Đóng"
                 >
                   <a-button id="delete">
                     <font-awesome-icon :icon="['fas', 'trash']" />
@@ -60,17 +62,21 @@
           <a-modal v-model="visibleAdd" title="Thêm nhóm tấm phủ">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="checkFormAdd">
+              <a-button
+                key="submit"
+                type="primary"
+                :loading="loading"
+                @click="checkFormAdd"
+              >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Tên nhóm tấm phủ">
-                <a-input v-model="name" />
-                <div style="color: red" v-if="checkDataInputGroup.show">
-                  {{ checkDataInputGroup.message }}
-                </div>
-              </a-form-model-item>
+              <span style="color: red">*</span> Tên nhóm tấm phủ
+              <a-input @change="inputGroup" v-model="name" />
+              <div style="color: red" v-if="checkDataInputGroup.show">
+                {{ checkDataInputGroup.message }}
+              </div>
             </a-form-model>
           </a-modal>
           <!-- popup add -->
@@ -93,6 +99,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       pagination: {
         current: 1,
         pageSize: 10,
@@ -150,6 +157,8 @@ export default {
       this.name = "";
     },
     submitAdd() {
+      this.name = this.name.trim();
+      this.loading = true;
       groupCoverPlateService
         .addGroup(this.name)
         .then((response) => {
@@ -165,11 +174,14 @@ export default {
             let description = response.data.message;
             this.notifi(type, message, description);
           }
+          this.loading = false;
+          this.visibleAdd = false;
         })
         .catch((e) => {
           console.log(e);
+          this.loading = false;
+          this.visibleAdd = false;
         });
-      this.visibleAdd = false;
     },
     handleCancel() {
       this.visibleAdd = false;
@@ -202,13 +214,26 @@ export default {
       });
     },
     checkFormAdd() {
-      if (this.name != null && this.name != "") {
+      let check = true;
+      if (this.name != null && this.name.trim() != "") {
         this.checkDataInputGroup.show = false;
         this.checkDataInputGroup.message = "";
+      } else {
+        check = false;
+        this.checkDataInputGroup.show = true;
+        this.checkDataInputGroup.message = "Bạn phải điền tên nhóm tấm phủ";
+      }
+      if (check) {
         this.submitAdd();
+      }
+    },
+    inputGroup() {
+      if (this.name != null && this.name.trim() != "") {
+        this.checkDataInputGroup.show = false;
+        this.checkDataInputGroup.message = "";
       } else {
         this.checkDataInputGroup.show = true;
-        this.checkDataInputGroup.message = "Bạn phải điền vào chỗ trống";
+        this.checkDataInputGroup.message = "Bạn phải điền tên nhóm tấm phủ";
       }
     },
   },

@@ -238,7 +238,7 @@ export default {
         this.submitAdd();
       } else {
         this.checkDataInputName.show = true;
-        this.checkDataInputName.message = "Bạn phải điền vào chỗ trống";
+        this.checkDataInputName.message = "Bạn phải điền tên đơn vị";
       }
     },
   },

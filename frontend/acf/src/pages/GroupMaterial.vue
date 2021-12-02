@@ -22,10 +22,6 @@
             @click="showModalAdd"
             :style="{ 'margin-left': '5px' }"
           >
-            <font-awesome-icon
-              :icon="['fas', 'plus-square']"
-              :style="{ 'margin-right': '5px' }"
-            />
             Thêm
           </a-button>
 
@@ -49,6 +45,8 @@
                     v-if="dataSourceTable.length"
                     title="Bạn có chắc chắn muốn xóa không?"
                     @confirm="deleteGroupMaterial(record.id)"
+                    ok-text="Đồng ý"
+                    cancel-text="Đóng"
                   >
                     <a-button id="delete">
                       <font-awesome-icon :icon="['fas', 'trash']" />
@@ -67,18 +65,18 @@
               <a-button
                 key="submit"
                 type="primary"
-                @click="checkGroupMaterialName"
+                :loading="loading"
+                @click="checkFormAdd"
               >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Tên nhóm vật liệu">
-                <a-input v-model="name" />
-                <div style="color: red" v-if="checkDataInputName.show">
-                  {{ checkDataInputName.message }}
-                </div>
-              </a-form-model-item>
+              <span style="color: red">*</span> Tên nhóm vật liệu
+              <a-input @change="inputGroup" v-model="name" />
+              <div style="color: red" v-if="checkDataInputGroup.show">
+                {{ checkDataInputGroup.message }}
+              </div>
             </a-form-model>
           </a-modal>
           <!-- popup add -->
@@ -101,9 +99,10 @@ export default {
   },
   data() {
     return {
+      loading: false,
       dataSourceTable: [],
       name: "",
-      checkDataInputName: {
+      checkDataInputGroup: {
         show: false,
         message: "",
       },
@@ -154,6 +153,8 @@ export default {
       this.name = "";
     },
     submitAdd() {
+      this.name = this.name.trim();
+      this.loading = true;
       groupMaterialService
         .addGroupMaterial(this.name)
         .then((response) => {
@@ -169,11 +170,14 @@ export default {
             let description = response.data.message;
             this.notifi(type, message, description);
           }
+          this.loading = false;
+          this.visibleAdd = false;
         })
         .catch((e) => {
           console.log(e);
+          this.loading = false;
+          this.visibleAdd = false;
         });
-      this.visibleAdd = false;
     },
     handleCancel() {
       this.visibleAdd = false;
@@ -205,14 +209,27 @@ export default {
         description: description,
       });
     },
-    checkGroupMaterialName() {
-      if (this.name != null && this.name != "") {
-        this.checkDataInputName.show = false;
-        this.checkDataInputName.message = "";
-        this.submitAdd();
+    checkFormAdd() {
+      let check = true;
+      if (this.name != null && this.name.trim() != "") {
+        this.checkDataInputGroup.show = false;
+        this.checkDataInputGroup.message = "";
       } else {
-        this.checkDataInputName.show = true;
-        this.checkDataInputName.message = "Bạn phải điền vào chỗ trống";
+        check = false;
+        this.checkDataInputGroup.show = true;
+        this.checkDataInputGroup.message = "Bạn phải điền tên nhóm vật liệu";
+      }
+      if (check) {
+        this.submitAdd();
+      }
+    },
+    inputGroup() {
+      if (this.name != null && this.name.trim() != "") {
+        this.checkDataInputGroup.show = false;
+        this.checkDataInputGroup.message = "";
+      } else {
+        this.checkDataInputGroup.show = true;
+        this.checkDataInputGroup.message = "Bạn phải điền tên nhóm vật liệu";
       }
     },
   },
