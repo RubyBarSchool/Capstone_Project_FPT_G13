@@ -93,19 +93,36 @@
           <a-modal v-model="visibleAdd" title="Thêm khung">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="checkFormAdd">
+              <a-button
+                key="submit"
+                type="primary"
+                @click="checkFormAdd"
+                :loading="loadingAdd"
+              >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Chiều dài">
-                <a-input v-model="dataAdd.length" />
+              <span style="color: red">*</span>Chiều dài :
+              <a-form-model-item>
+                <a-input-number
+                  style="width: 100%"
+                  v-model="dataAdd.length"
+                  min="0"
+                  @change="inputLengthAdd"
+                />
                 <div style="color: red" v-if="checkInputLength.show">
                   {{ checkInputLength.message }}
                 </div>
               </a-form-model-item>
-              <a-form-model-item label="Chiều rộng">
-                <a-input v-model="dataAdd.width" />
+              <span style="color: red">*</span>Chiều rộng :
+              <a-form-model-item>
+                <a-input-number
+                  style="width: 100%"
+                  v-model="dataAdd.width"
+                  min="0"
+                  @change="inputWidthAdd"
+                />
                 <div style="color: red" v-if="checkInputWidth.show">
                   {{ checkInputWidth.message }}
                 </div>
@@ -191,6 +208,7 @@ export default {
         show: false,
         message: "",
       },
+      loadingAdd: false,
     };
   },
   computed: {},
@@ -213,35 +231,56 @@ export default {
         });
     },
     showModalAdd() {
-      this.visibleAdd = true;
+      this.dataAdd.length = "";
+      this.dataAdd.width = "";
       this.checkInputLength.show = false;
       this.checkInputLength.message = "";
       this.checkInputWidth.show = false;
       this.checkInputWidth.message = "";
+      this.visibleAdd = true;
     },
     checkFormAdd() {
-        if (this.dataAdd.length == null || this.dataAdd.length == "") {
-        this.checkInputLength.show = true;
-        this.checkInputLength.message = "Bạn phải điền chiều dài";
-      } else {
+      let check = true;
+      if (this.dataAdd.length != null && this.dataAdd.length != "") {
         this.checkInputLength.show = false;
         this.checkInputLength.message = "";
+      } else {
+        check = false;
+        this.checkInputLength.show = true;
+        this.checkInputLength.message = "Bạn phải điền chiều dài";
       }
-      if(this.dataAdd.width == null || this.dataAdd.width == "") {
-        this.checkInputWidth.show = true;
-        this.checkInputWidth.message = "Bạn phải điền chiều rộng";
-      }else {
+      if (this.dataAdd.width != null && this.dataAdd.width != "") {
         this.checkInputWidth.show = false;
         this.checkInputWidth.message = "";
+      } else {
+        check = false;
+        this.checkInputWidth.show = true;
+        this.checkInputWidth.message = "Bạn phải điền chiều rộng";
       }
-      if(this.dataAdd.width != null && this.dataAdd.width != ""
-      && this.dataAdd.length != null && this.dataAdd.length != ""){
-        this.checkInputWidth.show = false;
-        this.checkInputLength.show = false;
+      if (check == true) {
         this.submitAdd();
       }
     },
+    inputLengthAdd() {
+      if (this.dataAdd.length != null && this.dataAdd.length != "") {
+        this.checkInputLength.show = false;
+        this.checkInputLength.message = "";
+      } else {
+        this.checkInputLength.show = true;
+        this.checkInputLength.message = "Bạn phải điền chiều dài";
+      }
+    },
+    inputWidthAdd() {
+      if (this.dataAdd.width != null && this.dataAdd.width != "") {
+        this.checkInputWidth.show = false;
+        this.checkInputWidth.message = "";
+      } else {
+        this.checkInputWidth.show = true;
+        this.checkInputWidth.message = "Bạn phải điền chiều rộng";
+      }
+    },
     submitAdd() {
+      this.loadingAdd = true;
       frameAdminService
         .addFrame(this.dataAdd)
         .then((response) => {
@@ -258,13 +297,13 @@ export default {
             let description = response.data.message;
             this.notifi(type, message, description);
           }
+          this.loadingAdd = false;
+          this.visibleAdd = false;
         })
-        .catch((e) => {
-          console.log(e);
+        .catch(() => {
+          this.loadingAdd = false;
+          this.visibleAdd = false;
         });
-      this.visibleAdd = false;
-      this.dataAdd.length = "";
-      this.dataAdd.width = "";
     },
     handleCancel() {
       this.visibleAdd = false;
