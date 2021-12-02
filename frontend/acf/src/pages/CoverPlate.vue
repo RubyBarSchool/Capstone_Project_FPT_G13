@@ -507,71 +507,80 @@
           <!-- popup khung-->
           <a-modal v-model="visibleAddHW" title="Thêm Khung và chiều cao">
             <template slot="footer">
-              <a-button key="reset" type="danger" @click="resetFrame">
-                Reset
-              </a-button>
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
+              <a-button key="reset" type="danger" @click="resetFrame">
+                Cài lại
+              </a-button>
               <a-button
                 key="submit"
                 type="primary"
-                @click="submitAddFrameHeight"
+                @click="checkFormAddFrameHeight"
+                :loading="loadingFrame"
               >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Mã tấm phủ">
-                <a-select
-                  placeholder="Mã tấm phủ"
-                  v-model="dataAddFrameHeight.idMaterial"
-                  :filter-option="false"
-                  style="width: 100%"
-                  @change="handleChangeCodeCoverSheet"
-                  :disabled="disable"
+              <span style="color: red">*</span> Mã tấm phủ
+              <a-select
+                placeholder="Mã tấm phủ"
+                v-model="dataAddFrameHeight.idMaterial"
+                :filter-option="false"
+                style="width: 100%"
+                @change="handleChangeCodeCoverSheet"
+                :disabled="disable"
+              >
+                <a-select-option
+                  v-for="(code, index) in listCodeCoverSheets"
+                  :value="code.id"
+                  :key="index"
                 >
-                  <a-select-option
-                    v-for="(code, index) in listCodeCoverSheets"
-                    :value="code.id"
-                    :key="index"
-                  >
-                    {{ code.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-              <a-form-model-item label="Khung">
-                <a-select
-                  placeholder="Khung"
-                  v-model="dataAddFrameHeight.idFrame"
-                  style="width: 100%"
-                  @change="handleChangeFrame"
-                  :disabled="disable"
+                  {{ code.name }}
+                </a-select-option>
+              </a-select>
+              <div style="color: red" v-if="checkDataInputAddCoverPlate.show">
+                {{ checkDataInputAddCoverPlate.message }}
+              </div>
+
+              <span style="color: red">*</span> Khung
+              <a-select
+                placeholder="Khung"
+                v-model="dataAddFrameHeight.idFrame"
+                style="width: 100%"
+                @change="handleChangeFrame"
+                :disabled="disable"
+              >
+                <a-select-option
+                  v-for="(frame, index) in listFrames"
+                  :value="frame.id"
+                  :key="index"
                 >
-                  <a-select-option
-                    v-for="(frame, index) in listFrames"
-                    :value="frame.id"
-                    :key="index"
-                  >
-                    {{ frame.frame }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-              <a-form-model-item label="Chiều cao">
-                <a-select
-                  placeholder="Chiều cao"
-                  v-model="dataAddFrameHeight.idHeight"
-                  style="width: 100%"
-                  @change="handleChangeHeight"
-                  :disabled="disable"
+                  {{ frame.frame }}
+                </a-select-option>
+              </a-select>
+              <div style="color: red" v-if="checkDataInputAddFrame.show">
+                {{ checkDataInputAddFrame.message }}
+              </div>
+
+              <span style="color: red">*</span> Chiều cao
+              <a-select
+                placeholder="Chiều cao"
+                v-model="dataAddFrameHeight.idHeight"
+                style="width: 100%"
+                @change="handleChangeHeight"
+                :disabled="disable"
+              >
+                <a-select-option
+                  v-for="(height, index) in listFrameHeights"
+                  :value="height.id"
+                  :key="index"
                 >
-                  <a-select-option
-                    v-for="(height, index) in listFrameHeights"
-                    :value="height.id"
-                    :key="index"
-                  >
-                    {{ height.frameHeight }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
+                  {{ height.frameHeight }}
+                </a-select-option>
+              </a-select>
+              <div style="color: red" v-if="checkDataInputAddHeight.show">
+                {{ checkDataInputAddHeight.message }}
+              </div>
             </a-form-model>
           </a-modal>
         </div>
@@ -593,7 +602,6 @@ export default {
   },
   data() {
     return {
-      loadingUnit: false,
       url: "",
       showImage: false,
       pagination: {
@@ -769,6 +777,19 @@ export default {
         message: "",
       },
       loadingAddUnit: false,
+      loadingFrame: false,
+      checkDataInputAddCoverPlate: {
+        show: false,
+        message: "",
+      },
+      checkDataInputAddFrame: {
+        show: false,
+        message: "",
+      },
+      checkDataInputAddHeight: {
+        show: false,
+        message: "",
+      },
     };
   },
   computed: {},
@@ -1026,94 +1047,6 @@ export default {
           console.log(e);
         });
     },
-    handleChangeCodeCoverSheet() {
-      let data = {
-        type: "material",
-        id: this.dataAddFrameHeight.idMaterial,
-        name: "",
-      };
-      for (var i = 0; i < this.listCodeCoverSheets.length; i++) {
-        if (
-          this.listCodeCoverSheets[i].id == this.dataAddFrameHeight.idMaterial
-        ) {
-          data.name = this.listCodeCoverSheets[i].name;
-        }
-      }
-      this.dataSelect.push(data);
-      if (this.dataSelect.length == 2) {
-        this.dataForm.id1 = data.id;
-        this.dataForm.name1 = data.name;
-        this.dataForm.id2 = this.dataSelect[0].id;
-        this.dataForm.name2 = this.dataSelect[0].name;
-        if (this.dataSelect[0].type == "frame") {
-          this.getHeightsByCoverSheetAndFrame();
-        } else {
-          this.getCoverSheetByFrameAndHeight();
-        }
-      }
-      if (this.dataSelect.length == 3) {
-        this.disable = true;
-      }
-    },
-    handleChangeFrame() {
-      let data = {
-        type: "frame",
-        id: this.dataAddFrameHeight.idFrame,
-        name: "",
-      };
-      for (var i = 0; i < this.listFrames.length; i++) {
-        if (this.listFrames[i].id == this.dataAddFrameHeight.idFrame) {
-          data.name = this.listFrames[i].name;
-        }
-      }
-      this.dataSelect.push(data);
-      if (this.dataSelect.length == 2) {
-        if (this.dataSelect[0].type == "material") {
-          this.dataForm.id1 = this.dataSelect[0].id;
-          this.dataForm.name1 = this.dataSelect[0].name;
-          this.dataForm.id2 = data.id;
-          this.dataForm.name2 = data.name;
-          this.getHeightsByCoverSheetAndFrame();
-        } else {
-          this.dataForm.id1 = data.id;
-          this.dataForm.name1 = data.name;
-          this.dataForm.id2 = this.dataSelect[0].id;
-          this.dataForm.name2 = this.dataSelect[0].name;
-          this.getCoverSheetByFrameAndHeight();
-        }
-      }
-      if (this.dataSelect.length == 3) {
-        this.disable = true;
-      }
-    },
-    handleChangeHeight() {
-      let data = {
-        type: "height",
-        id: this.dataAddFrameHeight.idHeight,
-        name: "",
-      };
-      for (var i = 0; i < this.listFrameHeights.length; i++) {
-        if (this.listFrameHeights[i].id == this.dataAddFrameHeight.idHeight) {
-          data.name = this.listFrameHeights[i].name;
-        }
-      }
-      this.dataSelect.push(data);
-      if (this.dataSelect.length == 2) {
-        this.dataForm.id1 = this.dataSelect[0].id;
-        this.dataForm.name1 = this.dataSelect[0].name;
-        this.dataForm.id2 = data.id;
-        this.dataForm.name2 = data.name;
-
-        if (this.dataSelect[0].type == "material") {
-          this.getFrameByCoverSheetAndHeight();
-        } else {
-          this.getCoverSheetByFrameAndHeight();
-        }
-      }
-      if (this.dataSelect.length == 3) {
-        this.disable = true;
-      }
-    },
 
     showModalAdd() {
       // this.checkDataInput.show = false;
@@ -1136,17 +1069,6 @@ export default {
       this.showImage = false;
     },
 
-    showModalAddHW() {
-      this.visibleAddHW = true;
-      // this.getFrameCoverSheet();
-      // this.getFrameHeightCoverSheet();
-      this.getAllCodeCoverSheet();
-      this.getAllFrame();
-      this.getAllFrameHeight();
-      this.dataAddFrameHeight.idMaterial = "";
-      this.dataAddFrameHeight.idFrame = "";
-      this.dataAddFrameHeight.idHeight = "";
-    },
     // checkFormAdd() {
     //   if (this.dataAdd.password != null && this.dataAdd.password != "") {
     //     this.checkDataInput.show = false;
@@ -1219,20 +1141,10 @@ export default {
           });
       }
     },
-    resetFrame() {
-      this.disable = false;
-      this.dataAddFrameHeight.idMaterial = "";
-      this.dataAddFrameHeight.idFrame = "";
-      this.dataAddFrameHeight.idHeight = "";
-      this.getAllCodeCoverSheet();
-      this.getAllFrame();
-      this.getAllFrameHeight();
-    },
 
     //add unit
     handleChangeCodeSheet(value) {
       this.getUnitByCoverSheet(value);
-      console.log("material: ", this.dataAddUnitCoverSheet.idMaterial);
       if (
         this.dataAddUnitCoverSheet.idMaterial != null &&
         this.dataAddUnitCoverSheet.idMaterial != ""
@@ -1332,7 +1244,156 @@ export default {
     },
     //add unit
 
+    //add frame
+    handleChangeCodeCoverSheet() {
+      let data = {
+        type: "material",
+        id: this.dataAddFrameHeight.idMaterial,
+        name: "",
+      };
+      for (var i = 0; i < this.listCodeCoverSheets.length; i++) {
+        if (
+          this.listCodeCoverSheets[i].id == this.dataAddFrameHeight.idMaterial
+        ) {
+          data.name = this.listCodeCoverSheets[i].name;
+        }
+      }
+      this.dataSelect.push(data);
+      if (this.dataSelect.length == 2) {
+        this.dataForm.id1 = data.id;
+        this.dataForm.name1 = data.name;
+        this.dataForm.id2 = this.dataSelect[0].id;
+        this.dataForm.name2 = this.dataSelect[0].name;
+        if (this.dataSelect[0].type == "frame") {
+          this.getHeightsByCoverSheetAndFrame();
+        } else {
+          this.getCoverSheetByFrameAndHeight();
+        }
+      }
+      if (this.dataSelect.length == 3) {
+        this.disable = true;
+      }
+      if (
+        this.dataAddFrameHeight.idMaterial != null &&
+        this.dataAddFrameHeight.idMaterial != ""
+      ) {
+        this.checkDataInputAddCoverPlate.show = false;
+        this.checkDataInputAddCoverPlate.message = "";
+      } else {
+        this.checkDataInputAddCoverPlate.show = true;
+        this.checkDataInputAddCoverPlate.message = "Bạn phải chọn mã tấm phủ";
+      }
+    },
+    handleChangeFrame() {
+      let data = {
+        type: "frame",
+        id: this.dataAddFrameHeight.idFrame,
+        name: "",
+      };
+      for (var i = 0; i < this.listFrames.length; i++) {
+        if (this.listFrames[i].id == this.dataAddFrameHeight.idFrame) {
+          data.name = this.listFrames[i].name;
+        }
+      }
+      this.dataSelect.push(data);
+      if (this.dataSelect.length == 2) {
+        if (this.dataSelect[0].type == "material") {
+          this.dataForm.id1 = this.dataSelect[0].id;
+          this.dataForm.name1 = this.dataSelect[0].name;
+          this.dataForm.id2 = data.id;
+          this.dataForm.name2 = data.name;
+          this.getHeightsByCoverSheetAndFrame();
+        } else {
+          this.dataForm.id1 = data.id;
+          this.dataForm.name1 = data.name;
+          this.dataForm.id2 = this.dataSelect[0].id;
+          this.dataForm.name2 = this.dataSelect[0].name;
+          this.getCoverSheetByFrameAndHeight();
+        }
+      }
+      if (this.dataSelect.length == 3) {
+        this.disable = true;
+      }
+      if (
+        this.dataAddFrameHeight.idFrame != null &&
+        this.dataAddFrameHeight.idFrame != ""
+      ) {
+        this.checkDataInputAddFrame.show = false;
+        this.checkDataInputAddFrame.message = "";
+      } else {
+        this.checkDataInputAddFrame.show = true;
+        this.checkDataInputAddFrame.message = "Bạn phải chọn khung";
+      }
+    },
+    handleChangeHeight() {
+      let data = {
+        type: "height",
+        id: this.dataAddFrameHeight.idHeight,
+        name: "",
+      };
+      for (var i = 0; i < this.listFrameHeights.length; i++) {
+        if (this.listFrameHeights[i].id == this.dataAddFrameHeight.idHeight) {
+          data.name = this.listFrameHeights[i].name;
+        }
+      }
+      this.dataSelect.push(data);
+      if (this.dataSelect.length == 2) {
+        this.dataForm.id1 = this.dataSelect[0].id;
+        this.dataForm.name1 = this.dataSelect[0].name;
+        this.dataForm.id2 = data.id;
+        this.dataForm.name2 = data.name;
+
+        if (this.dataSelect[0].type == "material") {
+          this.getFrameByCoverSheetAndHeight();
+        } else {
+          this.getCoverSheetByFrameAndHeight();
+        }
+      }
+      if (this.dataSelect.length == 3) {
+        this.disable = true;
+      }
+      if (
+        this.dataAddFrameHeight.idHeight != null &&
+        this.dataAddFrameHeight.idHeight != ""
+      ) {
+        this.checkDataInputAddHeight.show = false;
+        this.checkDataInputAddHeight.message = "";
+      } else {
+        this.checkDataInputAddHeight.show = true;
+        this.checkDataInputAddHeight.message = "Bạn phải chọn chiều cao";
+      }
+    },
+
+    resetFrame() {
+      this.disable = false;
+      this.dataAddFrameHeight.idMaterial = "";
+      this.dataAddFrameHeight.idFrame = "";
+      this.dataAddFrameHeight.idHeight = "";
+      this.getAllCodeCoverSheet();
+      this.getAllFrame();
+      this.getAllFrameHeight();
+    },
+
+    showModalAddHW() {
+      this.dataAdd.idCompany = "";
+      this.dataAdd.idGroup = "";
+      this.dataAdd.idUnit = "";
+      this.dataAdd.listIdFrame = [];
+      this.dataAdd.listIdHeight = [];
+      this.dataAdd.listName = [];
+      this.dataAdd.price = [];
+      this.visibleAddHW = true;
+      // this.getFrameCoverSheet();
+      // this.getFrameHeightCoverSheet();
+      this.getAllCodeCoverSheet();
+      this.getAllFrame();
+      this.getAllFrameHeight();
+      this.dataAddFrameHeight.idMaterial = "";
+      this.dataAddFrameHeight.idFrame = "";
+      this.dataAddFrameHeight.idHeight = "";
+    },
     submitAddFrameHeight() {
+      this.loadingFrame = true;
       coverSheetService
         .addFrameHeightCoverSheet(this.dataAddFrameHeight)
         .then((response) => {
@@ -1348,19 +1409,58 @@ export default {
             let description = response.data.message;
             this.notifi(type, message, description);
           }
+          this.loadingFrame = false;
+          this.visibleAddHW = false;
         })
         .catch((e) => {
           console.log(e);
+          this.loadingFrame = false;
+          this.visibleAddHW = false;
         });
-      this.visibleAddHW = false;
-      this.dataAdd.idCompany = "";
-      this.dataAdd.idGroup = "";
-      this.dataAdd.idUnit = "";
-      this.dataAdd.listIdFrame = [];
-      this.dataAdd.listIdHeight = [];
-      this.dataAdd.listName = [];
-      this.dataAdd.price = [];
     },
+    checkFormAddFrameHeight() {
+      let check = true;
+      if (
+        this.dataAddFrameHeight.idMaterial != null &&
+        this.dataAddFrameHeight.idMaterial != ""
+      ) {
+        this.checkDataInputAddCoverPlate.show = false;
+        this.checkDataInputAddCoverPlate.message = "";
+      } else {
+        check = false;
+        this.checkDataInputAddCoverPlate.show = true;
+        this.checkDataInputAddCoverPlate.message = "Bạn phải chọn mã tấm phủ";
+      }
+
+      if (
+        this.dataAddFrameHeight.idFrame != null &&
+        this.dataAddFrameHeight.idFrame != ""
+      ) {
+        this.checkDataInputAddFrame.show = false;
+        this.checkDataInputAddFrame.message = "";
+      } else {
+        check = false;
+        this.checkDataInputAddFrame.show = true;
+        this.checkDataInputAddFrame.message = "Bạn phải chọn khung";
+      }
+
+      if (
+        this.dataAddFrameHeight.idHeight != null &&
+        this.dataAddFrameHeight.idHeight != ""
+      ) {
+        this.checkDataInputAddHeight.show = false;
+        this.checkDataInputAddHeight.message = "";
+      } else {
+        check = false;
+        this.checkDataInputAddHeight.show = true;
+        this.checkDataInputAddHeight.message = "Bạn phải chọn chiều cao";
+      }
+      if (check) {
+        this.submitAddFrameHeight();
+      }
+    },
+    //add frame
+
     handleCancel() {
       this.visibleAdd = false;
       this.visibleAddHW = false;
