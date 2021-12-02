@@ -23,6 +23,10 @@
             @click="showModalAdd"
             :style="{ 'margin-left': '5px' }"
           >
+            <font-awesome-icon
+              :icon="['fas', 'plus-square']"
+              :style="{ 'margin-right': '5px' }"
+            />
             Thêm
           </a-button>
           <!-- menu trên -->
@@ -59,13 +63,24 @@
           <a-modal v-model="visibleAdd" title="Thêm chiều cao">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="checkForm">
+              <a-button
+                key="submit"
+                type="primary"
+                @click="checkFormAdd"
+                :loading="loadingAdd"
+              >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Chiều cao">
-                <a-input v-model="frameHeight" />
+              <span style="color: red">*</span>Chiều cao :
+              <a-form-model-item>
+                <a-input-number
+                  style="width: 100%"
+                  v-model="frameHeight"
+                  min="0"
+                  @change="inputNameAdd"
+                />
                 <div style="color: red" v-if="checkDataInputName.show">
                   {{ checkDataInputName.message }}
                 </div>
@@ -123,6 +138,7 @@ export default {
         },
       ],
       visibleAdd: false,
+      loadingAdd: false,
     };
   },
   created() {
@@ -140,10 +156,32 @@ export default {
         });
     },
     showModalAdd() {
-      this.visibleAdd = true;
       this.frameHeight = "";
+      this.checkDataInputName.show = false;
+      this.checkDataInputName.message = "";
+      this.visibleAdd = true;
+    },
+    checkFormAdd() {
+      if (this.frameHeight != null && this.frameHeight != "") {
+        this.checkDataInputName.show = false;
+        this.checkDataInputName.message = "";
+        this.submitAdd();
+      } else {
+        this.checkDataInputName.show = true;
+        this.checkDataInputName.message = "Bạn phải điền vào ô chiều cao";
+      }
+    },
+    inputNameAdd() {
+      if (this.frameHeight != null && this.frameHeight != "") {
+        this.checkDataInputName.show = false;
+        this.checkDataInputName.message = "";
+      } else {
+        this.checkDataInputName.show = true;
+        this.checkDataInputName.message = "Bạn phải điền vào ô chiều cao";
+      }
     },
     submitAdd() {
+      this.loadingAdd = true;
       chieuCaoService
         .addFrameHeight(this.frameHeight)
         .then((response) => {
@@ -159,11 +197,13 @@ export default {
             let description = response.data.message;
             this.notifi(type, message, description);
           }
+          this.loadingAdd = false;
+          this.visibleAdd = false;
         })
-        .catch((e) => {
-          console.log(e);
+        .catch(() => {
+          this.loadingAdd = false;
+          this.visibleAdd = false;
         });
-      this.visibleAdd = false;
     },
     handleCancel() {
       this.visibleAdd = false;
@@ -194,16 +234,6 @@ export default {
         message: message,
         description: description,
       });
-    },
-    checkForm() {
-      if (this.frameHeight != null && this.frameHeight != "") {
-        this.checkDataInputName.show = false;
-        this.checkDataInputName.message = "";
-        this.submitAdd();
-      } else {
-        this.checkDataInputName.show = true;
-        this.checkDataInputName.message = "Bạn phải điền vào chỗ trống";
-      }
     },
   },
 };
