@@ -485,7 +485,7 @@
           <a-modal v-model="visibleAddUnit" title="Thêm đơn vị">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="checkFormAddUnit">
+              <a-button key="submit" type="primary" @click="checkFormAddUnit" :loading="loadingAddUnit">
                 Lưu
               </a-button>
             </template>
