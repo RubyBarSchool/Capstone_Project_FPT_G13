@@ -1240,7 +1240,7 @@ export default {
         .searchMaterialByUnit(unit)
         .then((response) => {
           if (response.data.data) {
-            this.dataSourceTable = response.data.data;
+            this.dataMaterials = response.data.data;
             let type = "success";
             let message = "Bạn đã chọn đơn vị";
             let description = response.data.message;
