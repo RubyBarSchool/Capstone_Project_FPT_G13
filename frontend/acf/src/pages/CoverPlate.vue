@@ -451,45 +451,55 @@
           <a-modal v-model="visibleAddUnit" title="Thêm đơn vị">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitAddUnit">
+              <a-button
+                key="submit"
+                type="primary"
+                :loading="loadingAddUnit"
+                @click="checkFormAddUnit"
+              >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Mã tấm phủ">
-                <a-select
-                  placeholder="Mã tấm phủ"
-                  v-model="dataAddUnitCoverSheet.idMaterial"
-                  :filter-option="false"
-                  style="width: 100%"
-                  @change="handleChangeCodeSheet"
+              <span style="color: red">*</span> Mã tấm phủ
+              <a-select
+                placeholder="Mã tấm phủ"
+                v-model="dataAddUnitCoverSheet.idMaterial"
+                :filter-option="false"
+                style="width: 100%"
+                @change="handleChangeCodeSheet"
+              >
+                <a-select-option
+                  v-for="(code, index) in listCodeCoverSheets"
+                  :value="code.id"
+                  :key="index"
                 >
-                  <a-select-option
-                    v-for="(code, index) in listCodeCoverSheets"
-                    :value="code.id"
-                    :key="index"
-                  >
-                    {{ code.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
-              <a-form-model-item label="Đơn vị đo">
-                <a-select
-                  placeholder="Đơn vị đo"
-                  v-model="dataAddUnitCoverSheet.idUnit"
-                  :filter-option="false"
-                  style="width: 100%"
-                  @change="handleChangeUnit"
+                  {{ code.name }}
+                </a-select-option>
+              </a-select>
+              <div style="color: red" v-if="checkDataInputAddMaterial.show">
+                {{ checkDataInputAddMaterial.message }}
+              </div>
+
+              <span style="color: red">*</span> Đơn vị đo
+              <a-select
+                placeholder="Đơn vị đo"
+                v-model="dataAddUnitCoverSheet.idUnit"
+                :filter-option="false"
+                style="width: 100%"
+                @change="handleChangeUnit"
+              >
+                <a-select-option
+                  v-for="(unit, index) in listUnits"
+                  :value="unit.id"
+                  :key="index"
                 >
-                  <a-select-option
-                    v-for="(unit, index) in listUnits"
-                    :value="unit.id"
-                    :key="index"
-                  >
-                    {{ unit.name }}
-                  </a-select-option>
-                </a-select>
-              </a-form-model-item>
+                  {{ unit.name }}
+                </a-select-option>
+              </a-select>
+              <div style="color: red" v-if="checkDataInputAddUnit.show">
+                {{ checkDataInputAddUnit.message }}
+              </div>
             </a-form-model>
           </a-modal>
           <!-- popup unit-->
@@ -583,6 +593,7 @@ export default {
   },
   data() {
     return {
+      loadingUnit: false,
       url: "",
       showImage: false,
       pagination: {
@@ -749,6 +760,15 @@ export default {
       inputValue: "",
       loadingAdd: false,
       loadingEdit: false,
+      checkDataInputAddMaterial: {
+        show: false,
+        message: "",
+      },
+      checkDataInputAddUnit: {
+        show: false,
+        message: "",
+      },
+      loadingAddUnit: false,
     };
   },
   computed: {},
@@ -780,7 +800,6 @@ export default {
         .searchCoverSheet(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
-
           for (let i = 0; i < this.dataSourceTable.length; i++) {
             if (this.dataSourceTable[i].image !== null) {
               coverSheetService
@@ -1095,12 +1114,7 @@ export default {
         this.disable = true;
       }
     },
-    handleChangeCodeSheet(value) {
-      this.getUnitByCoverSheet(value);
-    },
-    handleChangeUnit(value) {
-      this.getCoverSheetByUnit(value);
-    },
+
     showModalAdd() {
       // this.checkDataInput.show = false;
       // this.dataAddUnitCoverSheet.idUnit = "";
@@ -1121,14 +1135,7 @@ export default {
       this.visibleAdd = true;
       this.showImage = false;
     },
-    showModalAddUnit() {
-      this.getAllCodeCoverSheet();
-      this.getAllUnit();
-      this.dataAddUnitCoverSheet.idMaterial = "";
-      this.dataAddUnitCoverSheet.idUnit = "";
-      this.visibleAddUnit = true;
-      // this.getUnitCoverSheet();
-    },
+
     showModalAddHW() {
       this.visibleAddHW = true;
       // this.getFrameCoverSheet();
@@ -1152,10 +1159,9 @@ export default {
     // },
     submitAdd() {
       this.loadingAdd = true;
-
-      if (this.dataAddMaterial.image != "") {
+      if (this.dataAdd.image != "") {
         fileService
-          .uploadImage(this.dataAddMaterial.image)
+          .uploadImage(this.dataAdd.image)
           .then((response) => {
             this.dataAdd.listName = this.tags;
             this.dataAdd.image = response.data.data;
@@ -1188,6 +1194,7 @@ export default {
             this.loadingAdd = false;
           });
       } else {
+        this.dataAdd.listName = this.tags;
         coverSheetService
           .addCoverSheet(this.dataAdd)
           .then((response) => {
@@ -1203,12 +1210,10 @@ export default {
               let message = "Thêm mới";
               let description = response.data.message;
               this.notifi(type, message, description);
-              coverSheetService.deleteImage(this.dataAdd.image);
             }
             this.visibleAdd = false;
           })
           .catch(() => {
-            coverSheetService.deleteImage(this.dataAdd.image);
             this.loadingAdd = false;
           });
       }
@@ -1222,11 +1227,87 @@ export default {
       this.getAllFrame();
       this.getAllFrameHeight();
     },
+
+    //add unit
+    handleChangeCodeSheet(value) {
+      this.getUnitByCoverSheet(value);
+      console.log("material: ", this.dataAddUnitCoverSheet.idMaterial);
+      if (
+        this.dataAddUnitCoverSheet.idMaterial != null &&
+        this.dataAddUnitCoverSheet.idMaterial != ""
+      ) {
+        this.checkDataInputAddMaterial.show = false;
+        this.checkDataInputAddMaterial.message = "";
+      } else {
+        this.checkDataInputAddMaterial.show = true;
+        this.checkDataInputAddMaterial.message = "Bạn phải chọn mã tấm phủ";
+      }
+    },
+
+    handleChangeUnit(value) {
+      this.getCoverSheetByUnit(value);
+      if (
+        this.dataAddUnitCoverSheet.idUnit != null &&
+        this.dataAddUnitCoverSheet.idUnit != ""
+      ) {
+        this.checkDataInputAddUnit.show = false;
+        this.checkDataInputAddUnit.message = "";
+      } else {
+        this.checkDataInputAddUnit.show = true;
+        this.checkDataInputAddUnit.message = "Bạn phải chọn đơn vị đo";
+      }
+    },
+    showModalAddUnit() {
+      this.checkDataInputAddMaterial.show = false;
+      this.checkDataInputAddMaterial.message = "";
+      this.checkDataInputAddUnit.show = false;
+      this.checkDataInputAddUnit.message = "";
+      this.dataAdd.idCompany = "";
+      this.dataAdd.idGroup = "";
+      this.dataAdd.idUnit = "";
+      this.dataAdd.listIdFrame = [];
+      this.dataAdd.listIdHeight = [];
+      this.dataAdd.listName = [];
+      this.dataAdd.price = [];
+      this.getAllCodeCoverSheet();
+      this.getAllUnit();
+      this.dataAddUnitCoverSheet.idMaterial = "";
+      this.dataAddUnitCoverSheet.idUnit = "";
+      this.visibleAddUnit = true;
+    },
+    checkFormAddUnit() {
+      let check = true;
+      if (
+        this.dataAddUnitCoverSheet.idMaterial != null &&
+        this.dataAddUnitCoverSheet.idMaterial != ""
+      ) {
+        this.checkDataInputAddMaterial.show = false;
+        this.checkDataInputAddMaterial.message = "";
+      } else {
+        check = false;
+        this.checkDataInputAddMaterial.show = true;
+        this.checkDataInputAddMaterial.message = "Bạn phải chọn mã tấm phủ";
+      }
+      if (
+        this.dataAddUnitCoverSheet.idUnit != null &&
+        this.dataAddUnitCoverSheet.idUnit != ""
+      ) {
+        this.checkDataInputAddUnit.show = false;
+        this.checkDataInputAddUnit.message = "";
+      } else {
+        check = false;
+        this.checkDataInputAddUnit.show = true;
+        this.checkDataInputAddUnit.message = "Bạn phải chọn đơn vị đo";
+      }
+      if (check) {
+        this.submitAddUnit();
+      }
+    },
     submitAddUnit() {
+      this.loadingAddUnit = true;
       coverSheetService
         .addUnitCoverSheet(this.dataAddUnitCoverSheet)
         .then((response) => {
-          // this.dataEmployees = response.data.data;
           this.submitSearch();
           if (response.data.data) {
             let type = "success";
@@ -1239,19 +1320,17 @@ export default {
             let description = response.data.message;
             this.notifi(type, message, description);
           }
+          this.loadingAddUnit = false;
+          this.visibleAddUnit = false;
         })
         .catch((e) => {
           console.log(e);
+          this.loadingAddUnit = false;
+          this.visibleAddUnit = false;
         });
-      this.visibleAddUnit = false;
-      this.dataAdd.idCompany = "";
-      this.dataAdd.idGroup = "";
-      this.dataAdd.idUnit = "";
-      this.dataAdd.listIdFrame = [];
-      this.dataAdd.listIdHeight = [];
-      this.dataAdd.listName = [];
-      this.dataAdd.price = [];
     },
+    //add unit
+
     submitAddFrameHeight() {
       coverSheetService
         .addFrameHeightCoverSheet(this.dataAddFrameHeight)
