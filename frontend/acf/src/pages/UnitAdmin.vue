@@ -64,13 +64,19 @@
           <a-modal v-model="visibleAdd" title="Thêm đơn vị">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="checkUnitAdmin">
+              <a-button
+                key="submit"
+                type="primary"
+                :loading="loadingAdd"
+                @click="checkFormAdd"
+              >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Loại đơn vị đo">
-                <a-input v-model="name" />
+              <span style="color: red">*</span> Loại đơn vị đo:
+              <a-form-model-item>
+                <a-input v-model="name" @change="inputNameAdd" />
                 <div style="color: red" v-if="checkDataInputName.show">
                   {{ checkDataInputName.message }}
                 </div>
@@ -128,6 +134,7 @@ export default {
         },
       ],
       visibleAdd: false,
+      loadingAdd: false,
     };
   },
   created() {
@@ -145,10 +152,32 @@ export default {
         });
     },
     showModalAdd() {
-      this.visibleAdd = true;
       this.name = "";
+      this.checkDataInputName.show = false;
+      this.checkDataInputName.message = "";
+      this.visibleAdd = true;
+    },
+    checkFormAdd() {
+      if (this.name != null && this.name.trim() != "") {
+        this.checkDataInputName.show = false;
+        this.checkDataInputName.message = "";
+        this.submitAdd();
+      } else {
+        this.checkDataInputName.show = true;
+        this.checkDataInputName.message = "Bạn phải điền vào ô loại đơn vị đo";
+      }
+    },
+    inputNameAdd() {
+      if (this.name != null && this.name.trim() != "") {
+        this.checkDataInputName.show = false;
+        this.checkDataInputName.message = "";
+      } else {
+        this.checkDataInputName.show = true;
+        this.checkDataInputName.message = "Bạn phải điền vào ô loại đơn vị đo";
+      }
     },
     submitAdd() {
+      this.loadingAdd = true;
       unitService
         .addUnitAdmin(this.name)
         .then((response) => {
@@ -164,11 +193,13 @@ export default {
             let description = response.data.message;
             this.notifi(type, message, description);
           }
+          this.loadingAdd = false;
+          this.visibleAdd = false;
         })
-        .catch((e) => {
-          console.log(e);
+        .catch(() => {
+          this.loadingAdd = false;
+          this.visibleAdd = false;
         });
-      this.visibleAdd = false;
     },
     handleCancel() {
       this.visibleAdd = false;
