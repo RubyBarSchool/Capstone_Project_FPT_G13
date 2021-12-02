@@ -926,39 +926,65 @@ export default {
     //submit add
     submitAdd() {
       this.loadingAdd = true;
-      fileService
-        .uploadImage(this.dataAddMaterial.image)
-        .then((response) => {
-          this.dataAddMaterial.listName = this.tags;
-          this.dataAddMaterial.image = response.data.data;
-          vatLieuAdminService
-            .addMaterial(this.dataAddMaterial)
-            .then((response) => {
-              this.submitSearch();
-              this.loadingAdd = false;
-              if (response.data.data) {
-                let type = "success";
-                let message = "Thêm vật liệu mới";
-                let description = response.data.message;
-                this.notifi(type, message, description);
-              } else {
-                let type = "error";
-                let message = "Thêm vật liệu mới";
-                let description = response.data.message;
-                this.notifi(type, message, description);
+      if (this.dataAddMaterial.image != "") {
+        fileService
+          .uploadImage(this.dataAddMaterial.image)
+          .then((response) => {
+            this.dataAddMaterial.listName = this.tags;
+            this.dataAddMaterial.image = response.data.data;
+            vatLieuAdminService
+              .addMaterial(this.dataAddMaterial)
+              .then((response) => {
+                this.submitSearch();
+                this.loadingAdd = false;
+                if (response.data.data) {
+                  let type = "success";
+                  let message = "Thêm vật liệu mới";
+                  let description = response.data.message;
+                  this.notifi(type, message, description);
+                } else {
+                  let type = "error";
+                  let message = "Thêm vật liệu mới";
+                  let description = response.data.message;
+                  this.notifi(type, message, description);
+                  vatLieuAdminService.deleteImage(this.dataAdd.image);
+                }
+                this.visibleAdd = false;
+              })
+              .catch(() => {
                 vatLieuAdminService.deleteImage(this.dataAdd.image);
-              }
-              this.visibleAdd = false;
-            })
-            .catch(() => {
+                this.loadingAdd = false;
+              });
+          })
+          .catch((e) => {
+            console.log(e);
+            this.loadingAdd = false;
+          });
+      } else {
+        vatLieuAdminService
+          .addMaterial(this.dataAddMaterial)
+          .then((response) => {
+            this.submitSearch();
+            this.loadingAdd = false;
+            if (response.data.data) {
+              let type = "success";
+              let message = "Thêm vật liệu mới";
+              let description = response.data.message;
+              this.notifi(type, message, description);
+            } else {
+              let type = "error";
+              let message = "Thêm vật liệu mới";
+              let description = response.data.message;
+              this.notifi(type, message, description);
               vatLieuAdminService.deleteImage(this.dataAdd.image);
-              this.loadingAdd = false;
-            });
-        })
-        .catch((e) => {
-          console.log(e);
-          this.loadingAdd = false;
-        });
+            }
+            this.visibleAdd = false;
+          })
+          .catch(() => {
+            vatLieuAdminService.deleteImage(this.dataAdd.image);
+            this.loadingAdd = false;
+          });
+      }
     },
 
     //delete Material

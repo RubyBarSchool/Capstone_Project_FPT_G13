@@ -1152,39 +1152,66 @@ export default {
     // },
     submitAdd() {
       this.loadingAdd = true;
-      fileService
-        .uploadImage(this.dataAddMaterial.image)
-        .then((response) => {
-          this.dataAdd.listName = this.tags;
-          this.dataAdd.image = response.data.data;
-          coverSheetService
-            .addCoverSheet(this.dataAdd)
-            .then((response) => {
-              this.submitSearch();
-              this.loadingAdd = false;
-              if (response.data.data) {
-                let type = "success";
-                let message = "Thêm mới";
-                let description = response.data.message;
-                this.notifi(type, message, description);
-              } else {
-                let type = "error";
-                let message = "Thêm mới";
-                let description = response.data.message;
-                this.notifi(type, message, description);
+
+      if (this.dataAddMaterial.image != "") {
+        fileService
+          .uploadImage(this.dataAddMaterial.image)
+          .then((response) => {
+            this.dataAdd.listName = this.tags;
+            this.dataAdd.image = response.data.data;
+            coverSheetService
+              .addCoverSheet(this.dataAdd)
+              .then((response) => {
+                this.submitSearch();
+                this.loadingAdd = false;
+                if (response.data.data) {
+                  let type = "success";
+                  let message = "Thêm mới";
+                  let description = response.data.message;
+                  this.notifi(type, message, description);
+                } else {
+                  let type = "error";
+                  let message = "Thêm mới";
+                  let description = response.data.message;
+                  this.notifi(type, message, description);
+                  coverSheetService.deleteImage(this.dataAdd.image);
+                }
+                this.visibleAdd = false;
+              })
+              .catch(() => {
                 coverSheetService.deleteImage(this.dataAdd.image);
-              }
-              this.visibleAdd = false;
-            })
-            .catch(() => {
+                this.loadingAdd = false;
+              });
+          })
+          .catch((e) => {
+            console.log(e);
+            this.loadingAdd = false;
+          });
+      } else {
+        coverSheetService
+          .addCoverSheet(this.dataAdd)
+          .then((response) => {
+            this.submitSearch();
+            this.loadingAdd = false;
+            if (response.data.data) {
+              let type = "success";
+              let message = "Thêm mới";
+              let description = response.data.message;
+              this.notifi(type, message, description);
+            } else {
+              let type = "error";
+              let message = "Thêm mới";
+              let description = response.data.message;
+              this.notifi(type, message, description);
               coverSheetService.deleteImage(this.dataAdd.image);
-              this.loadingAdd = false;
-            });
-        })
-        .catch((e) => {
-          console.log(e);
-          this.loadingAdd = false;
-        });
+            }
+            this.visibleAdd = false;
+          })
+          .catch(() => {
+            coverSheetService.deleteImage(this.dataAdd.image);
+            this.loadingAdd = false;
+          });
+      }
     },
     resetFrame() {
       this.disable = false;
