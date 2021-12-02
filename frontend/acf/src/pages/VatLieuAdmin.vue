@@ -994,6 +994,7 @@ export default {
                   vatLieuAdminService.deleteImage(this.dataAdd.image);
                 }
                 this.visibleAdd = false;
+                this.loadingAdd = false;
               })
               .catch(() => {
                 vatLieuAdminService.deleteImage(this.dataAdd.image);
@@ -1023,6 +1024,7 @@ export default {
               this.notifi(type, message, description);
             }
             this.visibleAdd = false;
+            this.loadingAdd = false;
           })
           .catch(() => {
             this.loadingAdd = false;
