@@ -485,7 +485,12 @@
           <a-modal v-model="visibleAddUnit" title="Thêm đơn vị">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="checkFormAddUnit" :loading="loadingAddUnit">
+              <a-button
+                key="submit"
+                type="primary"
+                @click="checkFormAddUnit"
+                :loading="loadingAddUnit"
+              >
                 Lưu
               </a-button>
             </template>
@@ -1000,6 +1005,7 @@ export default {
             this.loadingAdd = false;
           });
       } else {
+        this.dataAddMaterial.listName = this.tags;
         vatLieuAdminService
           .addMaterial(this.dataAddMaterial)
           .then((response) => {
@@ -1015,12 +1021,10 @@ export default {
               let message = "Thêm vật liệu mới";
               let description = response.data.message;
               this.notifi(type, message, description);
-              vatLieuAdminService.deleteImage(this.dataAdd.image);
             }
             this.visibleAdd = false;
           })
           .catch(() => {
-            vatLieuAdminService.deleteImage(this.dataAdd.image);
             this.loadingAdd = false;
           });
       }
