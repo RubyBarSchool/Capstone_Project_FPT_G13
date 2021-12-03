@@ -549,7 +549,12 @@
               <a-button key="reset" type="danger" @click="resetFrame">
                 Reset
               </a-button>
-              <a-button key="submit" type="primary" @click="submitAddFrame">
+              <a-button
+                key="submit"
+                type="primary"
+                @click="checkFormAddFrame"
+                :loading="loadingAddFrameHeight"
+              >
                 Lưu
               </a-button>
             </template>
@@ -571,6 +576,9 @@
                     {{ frame.name }}
                   </a-select-option>
                 </a-select>
+                <div style="color: red" v-if="checkInputCodeMaterial.show">
+                  {{ checkInputCodeMaterial.message }}
+                </div>
               </a-col>
             </a-row>
             <br />
@@ -592,6 +600,9 @@
                     {{ frameI.frame }}
                   </a-select-option>
                 </a-select>
+                <div style="color: red" v-if="checkInputFrame.show">
+                  {{ checkInputFrame.message }}
+                </div>
               </a-col>
             </a-row>
             <br />
@@ -613,6 +624,9 @@
                     {{ height.frameHeight }}
                   </a-select-option>
                 </a-select>
+                <div style="color: red" v-if="checkInputHeight.show">
+                  {{ checkInputHeight.message }}
+                </div>
               </a-col>
             </a-row>
           </a-modal>
@@ -821,14 +835,14 @@ export default {
       disable: false,
       loadingAdd: false,
       loadingEdit: false,
-      // checkInputFrame: {
-      //   show: false,
-      //   message: "",
-      // },
-      // checkInputHeight: {
-      //   show: false,
-      //   message: "",
-      // },
+      checkInputFrame: {
+        show: false,
+        message: "",
+      },
+      checkInputHeight: {
+        show: false,
+        message: "",
+      },
       // checkInputGroupMaterial: {
       //   show: false,
       //   message: "",
@@ -842,6 +856,7 @@ export default {
         message: "",
       },
       loadingAddUnit: false,
+      loadingAddFrameHeight: false,
     };
   },
   computed: {},
@@ -934,6 +949,12 @@ export default {
       this.dataAddFrameHeightMaterial.idMaterial = "";
       this.dataAddFrameHeightMaterial.idFrame = "";
       this.dataAddFrameHeightMaterial.idHeight = "";
+      this.checkInputCodeMaterial.show = false;
+      this.checkInputCodeMaterial.message = "";
+      this.checkInputFrame.show = false;
+      this.checkInputFrame.message = "";
+      this.checkInputHeight.show = false;
+      this.checkInputHeight.message = "";
     },
 
     //get vật liệu
@@ -1361,6 +1382,17 @@ export default {
 
     //thay đổi chiều cao theo MVL và khung
     handleChieuCaoByMVLvaKhung() {
+      if (
+        this.dataAddFrameHeightMaterial.idHeight != null &&
+        this.dataAddFrameHeightMaterial.idHeight != ""
+      ) {
+        this.checkInputHeight.show = false;
+        this.checkInputHeight.message = "";
+      } else {
+        this.checkInputHeight.show = true;
+        this.checkInputHeight.message = "Bạn phải điền chiều cao";
+      }
+
       let data = {
         type: "height",
         id: this.dataAddFrameHeightMaterial.idHeight,
@@ -1392,6 +1424,17 @@ export default {
 
     //thay đổi khung theo MVL và chiều cao
     handleKhungByMVLvaChieuCao() {
+      if (
+        this.dataAddFrameHeightMaterial.idFrame != null &&
+        this.dataAddFrameHeightMaterial.idFrame != ""
+      ) {
+        this.checkInputFrame.show = false;
+        this.checkInputFrame.message = "";
+      } else {
+        this.checkInputFrame.show = true;
+        this.checkInputFrame.message = "Bạn phải điền khung vật liệu";
+      }
+
       let data = {
         type: "frame",
         id: this.dataAddFrameHeightMaterial.idFrame,
@@ -1428,6 +1471,17 @@ export default {
 
     //thay đổi MVL theo khung và chiều cao
     handleMVLByKhungvaChieuCao() {
+      if (
+        this.dataAddFrameHeightMaterial.idMaterial != null &&
+        this.dataAddFrameHeightMaterial.idMaterial != ""
+      ) {
+        this.checkInputCodeMaterial.show = false;
+        this.checkInputCodeMaterial.message = "";
+      } else {
+        this.checkInputCodeMaterial.show = true;
+        this.checkInputCodeMaterial.message = "Bạn phải điền mã vật liệu";
+      }
+
       let data = {
         type: "material",
         id: this.dataAddFrameHeightMaterial.idMaterial,
@@ -1459,6 +1513,7 @@ export default {
 
     //submit add frame
     submitAddFrame() {
+      this.loadingAddFrameHeight = true;
       vatLieuAdminService
         .addFrameHeightMaterial(this.dataAddFrameHeightMaterial)
         .then((response) => {
@@ -1474,22 +1529,69 @@ export default {
             let description = response.data.message;
             this.notifi(type, message, description);
           }
+          this.loadingAddFrameHeight = false;
+          this.visibleAddFrame = false;
         })
-        .catch((e) => {
-          console.log(e);
+        .catch(() => {
+          this.loadingAddFrameHeight = false;
+          this.visibleAddFrame = false;
         });
-      this.visibleAddFrame = false;
     },
 
     //add khung
     showModalAddFrame() {
-      this.visibleAddFrame = true;
       this.getMaterials();
       this.getAllFrame();
       this.getAllHeight();
       this.dataAddFrameHeightMaterial.idMaterial = "";
       this.dataAddFrameHeightMaterial.idFrame = "";
       this.dataAddFrameHeightMaterial.idHeight = "";
+      this.checkInputCodeMaterial.show = false;
+      this.checkInputCodeMaterial.message = "";
+      this.checkInputFrame.show = false;
+      this.checkInputFrame.message = "";
+      this.checkInputHeight.show = false;
+      this.checkInputHeight.message = "";
+      this.visibleAddFrame = true;
+    },
+    checkFormAddFrame() {
+      let check = true;
+      if (
+        this.dataAddFrameHeightMaterial.idMaterial != null &&
+        this.dataAddFrameHeightMaterial.idMaterial != ""
+      ) {
+        this.checkInputCodeMaterial.show = false;
+        this.checkInputCodeMaterial.message = "";
+      } else {
+        check = false;
+        this.checkInputCodeMaterial.show = true;
+        this.checkInputCodeMaterial.message = "Bạn phải điền mã vật liệu";
+      }
+      if (
+        this.dataAddFrameHeightMaterial.idFrame != null &&
+        this.dataAddFrameHeightMaterial.idFrame != ""
+      ) {
+        this.checkInputFrame.show = false;
+        this.checkInputFrame.message = "";
+      } else {
+        check = false;
+        this.checkInputFrame.show = true;
+        this.checkInputFrame.message = "Bạn phải điền khung vật liệu";
+      }
+      if (
+        this.dataAddFrameHeightMaterial.idHeight != null &&
+        this.dataAddFrameHeightMaterial.idHeight != ""
+      ) {
+        this.checkInputHeight.show = false;
+        this.checkInputHeight.message = "";
+      } else {
+        check = false;
+        this.checkInputHeight.show = true;
+        this.checkInputHeight.message = "Bạn phải điền chiều cao";
+      }
+      if (check) {
+        this.submitAddFrame();
+      }
     },
     handleCancel() {
       this.visibleAdd = false;
