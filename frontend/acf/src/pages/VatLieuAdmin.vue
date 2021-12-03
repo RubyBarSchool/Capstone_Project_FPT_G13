@@ -419,71 +419,106 @@
                 key="submit"
                 type="primary"
                 :loading="loadingEdit"
-                @click="submitUpdate"
+                @click="checkFormEdit"
               >
                 Lưu
               </a-button>
             </template>
             <a-row type="flex">
-              <a-col flex="100px">Mã vật liệu</a-col>
+              <a-col flex="100px"
+                ><span style="color: red">*</span>Mã vật liệu</a-col
+              >
               <a-col flex="auto">
                 <a-input
                   v-model="dataEditMaterial.name"
                   style="width: 100%"
                   disabled
                 />
+                <div style="color: red" v-if="checkInputCodeMaterial.show">
+                  {{ checkInputCodeMaterial.message }}
+                </div>
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Thông số</a-col>
+              <a-col flex="100px"
+                ><span style="color: red">*</span>Thông số</a-col
+              >
               <a-col flex="auto">
                 <a-input
                   v-model="dataEditMaterial.parameter"
                   style="width: 100%"
                   disabled
                 />
+                <div style="color: red" v-if="checkInputFrame.show">
+                  {{ checkInputFrame.message }}
+                </div>
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Nhóm vật liệu</a-col>
+              <a-col flex="100px"
+                ><span style="color: red">*</span>Nhóm vật liệu</a-col
+              >
               <a-col flex="auto">
                 <a-input
                   v-model="dataEditMaterial.nameGroup"
                   style="width: 100%"
                   disabled
                 />
+                <div style="color: red" v-if="checkInputGroupMaterial.show">
+                  {{ checkInputGroupMaterial.message }}
+                </div>
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Đơn vị đo</a-col>
+              <a-col flex="100px"
+                ><span style="color: red">*</span>Đơn vị đo</a-col
+              >
               <a-col flex="auto">
                 <a-input
                   v-model="dataEditMaterial.unit"
                   style="width: 100%"
                   disabled
                 />
+                <div style="color: red" v-if="checkInputUnit.show">
+                  {{ checkInputUnit.message }}
+                </div>
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Công ty</a-col>
+              <a-col flex="100px"
+                ><span style="color: red">*</span>Công ty</a-col
+              >
               <a-col flex="auto">
                 <a-input
                   v-model="dataEditMaterial.company"
                   style="width: 100%"
                   disabled
                 />
+                <div style="color: red" v-if="checkInputCompany.show">
+                  {{ checkInputCompany.message }}
+                </div>
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Giá thành</a-col>
+              <a-col flex="100px"
+                ><span style="color: red">*</span>Giá thành</a-col
+              >
               <a-col flex="auto">
-                <a-input v-model="dataEdit.price" style="width: 100%"
-              /></a-col>
+                <a-input-number
+                  style="width: 100%"
+                  :min="0"
+                  v-model="dataEdit.price"
+                  @change="inputPriceEdit"
+                />
+                <div style="color: red" v-if="checkInputPrice.show">
+                  {{ checkInputPrice.message }}
+                </div>
+              </a-col>
             </a-row>
             <br />
             <a-row type="flex">
@@ -1292,6 +1327,8 @@ export default {
       this.dataEdit.price = price;
       this.url = image;
       this.dataEdit.image = "";
+      this.checkInputPrice.show = false;
+      this.checkInputPrice.message = "";
       if (this.url != null) {
         this.showImage = true;
       } else {
@@ -1302,7 +1339,84 @@ export default {
       }
       this.visibleEdit = true;
     },
-
+    checkFormEdit() {
+      let check = true;
+      if (
+        this.dataEditMaterial.name != null &&
+        this.dataEditMaterial.name != ""
+      ) {
+        this.checkInputCodeMaterial.show = false;
+        this.checkInputCodeMaterial.message = "";
+      } else {
+        check = false;
+        this.checkInputCodeMaterial.show = true;
+        this.checkInputCodeMaterial.message = "Bạn phải điền khung vật liệu";
+      }
+      if (
+        this.dataEditMaterial.parameter != null &&
+        this.dataEditMaterial.parameter != ""
+      ) {
+        this.checkInputFrame.show = false;
+        this.checkInputFrame.message = "";
+      } else {
+        check = false;
+        this.checkInputFrame.show = true;
+        this.checkInputFrame.message = "Bạn phải điền khung vật liệu";
+      }
+      if (
+        this.dataEditMaterial.nameGroup != null &&
+        this.dataEditMaterial.nameGroup != ""
+      ) {
+        this.checkInputGroupMaterial.show = false;
+        this.checkInputGroupMaterial.message = "";
+      } else {
+        check = false;
+        this.checkInputGroupMaterial.show = true;
+        this.checkInputGroupMaterial.message = "Bạn phải điền nhóm vật liệu";
+      }
+      if (
+        this.dataEditMaterial.unit != null &&
+        this.dataEditMaterial.unit != ""
+      ) {
+        this.checkInputUnit.show = false;
+        this.checkInputUnit.message = "";
+      } else {
+        check = false;
+        this.checkInputUnit.show = true;
+        this.checkInputUnit.message = "Bạn phải điền đơn vị";
+      }
+      if (
+        this.dataEditMaterial.company != null &&
+        this.dataEditMaterial.company != ""
+      ) {
+        this.checkInputCompany.show = false;
+        this.checkInputCompany.message = "";
+      } else {
+        check = false;
+        this.checkInputCompany.show = true;
+        this.checkInputCompany.message = "Bạn phải điền công ty";
+      }
+      if (this.dataEdit.price != null && this.dataEdit.price != "") {
+        this.checkInputPrice.show = false;
+        this.checkInputPrice.message = "";
+      } else {
+        check = false;
+        this.checkInputPrice.show = true;
+        this.checkInputPrice.message = "Bạn phải điền giá thành";
+      }
+      if (check) {
+        this.submitUpdate();
+      }
+    },
+    inputPriceEdit() {
+      if (this.dataEdit.price != null && this.dataEdit.price != "") {
+        this.checkInputPrice.show = false;
+        this.checkInputPrice.message = "";
+      } else {
+        this.checkInputPrice.show = true;
+        this.checkInputPrice.message = "Bạn phải điền giá thành";
+      }
+    },
     //submit update
     submitUpdate() {
       this.loadingEdit = true;
@@ -1328,16 +1442,18 @@ export default {
                   vatLieuAdminService.deleteImage(this.dataEdit.image);
                 }
                 this.loadingEdit = false;
+                this.visibleEdit = false;
               })
               .catch(() => {
                 vatLieuAdminService.deleteImage(this.dataEdit.image);
                 this.loadingAdd = false;
+                this.visibleEdit = false;
               });
-            this.visibleEdit = false;
           })
           .catch((e) => {
             console.log(e);
             this.loadingEdit = false;
+            this.visibleEdit = false;
           });
       } else {
         vatLieuAdminService
@@ -1355,12 +1471,13 @@ export default {
               let description = "Cập nhật đơn không thành công";
               this.notifi(type, message, description);
             }
+            this.loadingEdit = false;
+            this.visibleEdit = false;
           })
-          .catch((e) => {
-            console.log(e);
+          .catch(() => {
+            this.loadingEdit = false;
+            this.visibleEdit = false;
           });
-        this.visibleEdit = false;
-        this.loadingEdit = false;
       }
     },
 
