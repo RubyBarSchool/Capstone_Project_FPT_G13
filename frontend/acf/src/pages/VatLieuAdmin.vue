@@ -201,13 +201,15 @@
                 key="submit"
                 type="primary"
                 :loading="loadingAdd"
-                @click="submitAdd"
+                @click="checkFormAdd"
               >
                 Lưu
               </a-button>
             </template>
             <a-row type="flex">
-              <a-col flex="100px">Mã vật liệu</a-col>
+              <a-col flex="100px"
+                ><span style="color: red">*</span>Mã vật liệu</a-col
+              >
               <a-col flex="auto">
                 <template v-for="tag in tags">
                   <a-tag
@@ -240,7 +242,7 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Khung</a-col>
+              <a-col flex="100px"><span style="color: red">*</span>Khung</a-col>
               <a-col flex="auto">
                 <a-select
                   placeholder="Thông số"
@@ -249,6 +251,7 @@
                   :filter-option="false"
                   @search="fetchFrame"
                   style="width: 100%"
+                  @change="inputFrame"
                 >
                   <a-select-option
                     v-for="(frameI, index) in dataFrameMaterials"
@@ -258,14 +261,16 @@
                     {{ frameI.frame }}
                   </a-select-option>
                 </a-select>
-                <!-- <div style="color: red" v-if="checkInputFrame.show">
+                <div style="color: red" v-if="checkInputFrame.show">
                   {{ checkInputFrame.message }}
-                </div> -->
+                </div>
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Chiều cao</a-col>
+              <a-col flex="100px"
+                ><span style="color: red">*</span>Chiều cao</a-col
+              >
               <a-col flex="auto">
                 <a-select
                   placeholder="Chiều cao"
@@ -274,6 +279,7 @@
                   :filter-option="false"
                   @search="fetchHeight"
                   style="width: 100%"
+                  @change="inputHeight"
                 >
                   <a-select-option
                     v-for="(height, index) in dataHeights"
@@ -283,19 +289,22 @@
                     {{ height.frameHeight }}
                   </a-select-option>
                 </a-select>
-                <!-- <div style="color: red" v-if="checkInputHeight.show">
+                <div style="color: red" v-if="checkInputHeight.show">
                   {{ checkInputHeight.message }}
-                </div> -->
+                </div>
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Nhóm vật liệu</a-col>
+              <a-col flex="100px"
+                ><span style="color: red">*</span>Nhóm vật liệu</a-col
+              >
               <a-col flex="auto">
                 <a-select
                   placeholder="Nhóm vật liệu"
                   v-model="dataAddMaterial.idGroup"
                   style="width: 100%"
+                  @change="inputGroupMaterial"
                 >
                   <a-select-option
                     v-for="(group, index) in dataGroupMaterials"
@@ -305,19 +314,22 @@
                     {{ group.name }}
                   </a-select-option>
                 </a-select>
-                <!-- <div style="color: red" v-if="checkInputGroupMaterial.show">
+                <div style="color: red" v-if="checkInputGroupMaterial.show">
                   {{ checkInputGroupMaterial.message }}
-                </div> -->
+                </div>
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Đơn vị đo</a-col>
+              <a-col flex="100px"
+                ><span style="color: red">*</span>Đơn vị đo</a-col
+              >
               <a-col flex="auto">
                 <a-select
                   placeholder="Đơn vị đo"
                   v-model="dataAddMaterial.idUnit"
                   style="width: 100%"
+                  @change="inputUnit"
                 >
                   <a-select-option
                     v-for="(unit, index) in dataUnits"
@@ -327,19 +339,22 @@
                     {{ unit.name }}
                   </a-select-option>
                 </a-select>
-                <!-- <div style="color: red" v-if="checkInputUnit.show">
+                <div style="color: red" v-if="checkInputUnit.show">
                   {{ checkInputUnit.message }}
-                </div> -->
+                </div>
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Công ty</a-col>
+              <a-col flex="100px"
+                ><span style="color: red">*</span>Công ty</a-col
+              >
               <a-col flex="auto">
                 <a-select
                   placeholder="Công ty"
                   v-model="dataAddMaterial.idCompany"
                   style="width: 100%"
+                  @change="inputCompany"
                 >
                   <a-select-option
                     v-for="(company, index) in dataCompanys"
@@ -349,15 +364,28 @@
                     {{ company.name }}
                   </a-select-option>
                 </a-select>
+                <div style="color: red" v-if="checkInputCompany.show">
+                  {{ checkInputCompany.message }}
+                </div>
               </a-col>
             </a-row>
             <br />
 
             <a-row type="flex">
-              <a-col flex="100px">Giá thành</a-col>
+              <a-col flex="100px"
+                ><span style="color: red">*</span>Giá thành</a-col
+              >
               <a-col flex="auto">
-                <a-input v-model="dataAddMaterial.price"
-              /></a-col>
+                <a-input-number
+                  style="width: 100%"
+                  :min="0"
+                  v-model="dataAddMaterial.price"
+                  @change="inputPrice"
+                />
+                <div style="color: red" v-if="checkInputPrice.show">
+                  {{ checkInputPrice.message }}
+                </div></a-col
+              >
             </a-row>
             <br />
             <a-row type="flex">
@@ -843,15 +871,23 @@ export default {
         show: false,
         message: "",
       },
-      // checkInputGroupMaterial: {
-      //   show: false,
-      //   message: "",
-      // },
+      checkInputGroupMaterial: {
+        show: false,
+        message: "",
+      },
       checkInputUnit: {
         show: false,
         message: "",
       },
       checkInputCodeMaterial: {
+        show: false,
+        message: "",
+      },
+      checkInputCompany: {
+        show: false,
+        message: "",
+      },
+      checkInputPrice: {
         show: false,
         message: "",
       },
@@ -984,10 +1020,166 @@ export default {
         this.$refs.fileupload.value = null;
       }
       this.url = "";
+
+      this.checkInputFrame.show = false;
+      this.checkInputFrame.message = "";
+      this.checkInputHeight.show = false;
+      this.checkInputHeight.message = "";
+      this.checkInputGroupMaterial.show = false;
+      this.checkInputGroupMaterial.message = "";
+      this.checkInputUnit.show = false;
+      this.checkInputUnit.message = "";
+      this.checkInputCompany.show = false;
+      this.checkInputCompany.message = "";
+      this.checkInputPrice.show = false;
+      this.checkInputPrice.message = "";
       this.showImage = false;
       this.visibleAdd = true;
     },
-
+    checkFormAdd() {
+      let check = true;
+      if (
+        this.dataAddMaterial.listIdFrame != null &&
+        this.dataAddMaterial.listIdFrame.length != 0
+      ) {
+        this.checkInputFrame.show = false;
+        this.checkInputFrame.message = "";
+      } else {
+        check = false;
+        this.checkInputFrame.show = true;
+        this.checkInputFrame.message = "Bạn phải điền khung vật liệu";
+      }
+      if (
+        this.dataAddMaterial.listIdHeight != null &&
+        this.dataAddMaterial.listIdHeight.length != 0
+      ) {
+        this.checkInputHeight.show = false;
+        this.checkInputHeight.message = "";
+      } else {
+        check = false;
+        this.checkInputHeight.show = true;
+        this.checkInputHeight.message = "Bạn phải điền chiều cao";
+      }
+      if (
+        this.dataAddMaterial.idGroup != null &&
+        this.dataAddMaterial.idGroup != ""
+      ) {
+        this.checkInputGroupMaterial.show = false;
+        this.checkInputGroupMaterial.message = "";
+      } else {
+        check = false;
+        this.checkInputGroupMaterial.show = true;
+        this.checkInputGroupMaterial.message = "Bạn phải điền nhóm vật liệu";
+      }
+      if (
+        this.dataAddMaterial.idUnit != null &&
+        this.dataAddMaterial.idUnit != ""
+      ) {
+        this.checkInputUnit.show = false;
+        this.checkInputUnit.message = "";
+      } else {
+        check = false;
+        this.checkInputUnit.show = true;
+        this.checkInputUnit.message = "Bạn phải điền đơn vị";
+      }
+      if (
+        this.dataAddMaterial.idCompany != null &&
+        this.dataAddMaterial.idCompany != ""
+      ) {
+        this.checkInputCompany.show = false;
+        this.checkInputCompany.message = "";
+      } else {
+        check = false;
+        this.checkInputCompany.show = true;
+        this.checkInputCompany.message = "Bạn phải điền công ty";
+      }
+      if (
+        this.dataAddMaterial.price != null &&
+        this.dataAddMaterial.price != ""
+      ) {
+        this.checkInputPrice.show = false;
+        this.checkInputPrice.message = "";
+      } else {
+        check = false;
+        this.checkInputPrice.show = true;
+        this.checkInputPrice.message = "Bạn phải điền giá thành";
+      }
+      if (check) {
+        this.submitAdd();
+      }
+    },
+    inputFrame() {
+      if (
+        this.dataAddMaterial.listIdFrame != null &&
+        this.dataAddMaterial.listIdFrame.length != 0
+      ) {
+        this.checkInputFrame.show = false;
+        this.checkInputFrame.message = "";
+      } else {
+        this.checkInputFrame.show = true;
+        this.checkInputFrame.message = "Bạn phải điền khung vật liệu";
+      }
+    },
+    inputHeight() {
+      if (
+        this.dataAddMaterial.listIdHeight != null &&
+        this.dataAddMaterial.listIdHeight.length != 0
+      ) {
+        this.checkInputHeight.show = false;
+        this.checkInputHeight.message = "";
+      } else {
+        this.checkInputHeight.show = true;
+        this.checkInputHeight.message = "Bạn phải điền chiều cao";
+      }
+    },
+    inputGroupMaterial() {
+      if (
+        this.dataAddMaterial.idGroup != null &&
+        this.dataAddMaterial.idGroup != ""
+      ) {
+        this.checkInputGroupMaterial.show = false;
+        this.checkInputGroupMaterial.message = "";
+      } else {
+        this.checkInputGroupMaterial.show = true;
+        this.checkInputGroupMaterial.message = "Bạn phải điền nhóm vật liệu";
+      }
+    },
+    inputUnit() {
+      if (
+        this.dataAddMaterial.idUnit != null &&
+        this.dataAddMaterial.idUnit != ""
+      ) {
+        this.checkInputUnit.show = false;
+        this.checkInputUnit.message = "";
+      } else {
+        this.checkInputUnit.show = true;
+        this.checkInputUnit.message = "Bạn phải điền đơn vị";
+      }
+    },
+    inputCompany() {
+      if (
+        this.dataAddMaterial.idCompany != null &&
+        this.dataAddMaterial.idCompany != ""
+      ) {
+        this.checkInputCompany.show = false;
+        this.checkInputCompany.message = "";
+      } else {
+        this.checkInputCompany.show = true;
+        this.checkInputCompany.message = "Bạn phải điền công ty";
+      }
+    },
+    inputPrice() {
+      if (
+        this.dataAddMaterial.price != null &&
+        this.dataAddMaterial.price != ""
+      ) {
+        this.checkInputPrice.show = false;
+        this.checkInputPrice.message = "";
+      } else {
+        this.checkInputPrice.show = true;
+        this.checkInputPrice.message = "Bạn phải điền giá thành";
+      }
+    },
     //submit add
     submitAdd() {
       this.loadingAdd = true;
@@ -1020,11 +1212,13 @@ export default {
               .catch(() => {
                 vatLieuAdminService.deleteImage(this.dataAdd.image);
                 this.loadingAdd = false;
+                this.visibleAdd = false;
               });
           })
           .catch((e) => {
             console.log(e);
             this.loadingAdd = false;
+            this.visibleAdd = false;
           });
       } else {
         this.dataAddMaterial.listName = this.tags;
@@ -1049,6 +1243,7 @@ export default {
           })
           .catch(() => {
             this.loadingAdd = false;
+            this.visibleAdd = false;
           });
       }
     },
