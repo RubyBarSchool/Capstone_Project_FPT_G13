@@ -419,76 +419,115 @@
                 key="submit"
                 :loading="loadingEdit"
                 type="primary"
-                @click="submitUpdate"
+                @click="checkFormUpdate"
               >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Mã tấm phủ">
-                <a-input
-                  placeholder="Mã tấm phủ"
-                  style="width: 100%"
-                  v-model="dataEditI.code"
-                  disabled
-                />
-              </a-form-model-item>
-              <a-form-model-item label="Thông số">
-                <a-input
-                  placeholder="Thông số"
-                  style="width: 100%"
-                  v-model="dataEditI.parameter"
-                  disabled
-                />
-              </a-form-model-item>
-              <a-form-model-item label="Nhóm tấm phủ">
-                <a-input
-                  placeholder="Nhóm tấm phủ"
-                  style="width: 100%"
-                  v-model="dataEditI.group"
-                  disabled
-                />
-              </a-form-model-item>
-              <a-form-model-item label="Đơn vị">
-                <a-input
-                  placeholder="Đơn vị"
-                  style="width: 100%"
-                  v-model="dataEditI.unit"
-                  disabled
-                />
-              </a-form-model-item>
-              <a-form-model-item label="Công ty">
-                <a-input
-                  placeholder="Công ty"
-                  style="width: 100%"
-                  v-model="dataEditI.company"
-                  disabled
-                />
-              </a-form-model-item>
-              <a-form-model-item label="Giá thành">
-                <a-input
-                  placeholder="Giá thành"
-                  style="width: 100%"
-                  v-model="dataEdit.price"
-                />
-              </a-form-model-item>
+              <a-row type="flex">
+                <a-col flex="120px">
+                  <span style="color: red">*</span> Mã tấm phủ
+                </a-col>
+                <a-col flex="auto">
+                  <a-input
+                    placeholder="Mã tấm phủ"
+                    style="width: 100%"
+                    v-model="dataEditI.code"
+                    disabled
+                /></a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="120px">
+                  <span style="color: red">*</span> Thông số
+                </a-col>
+                <a-col flex="auto">
+                  <a-input
+                    placeholder="Thông số"
+                    style="width: 100%"
+                    v-model="dataEditI.parameter"
+                    disabled
+                /></a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="120px">
+                  <span style="color: red">*</span> Nhóm tấm phủ
+                </a-col>
+                <a-col flex="auto">
+                  <a-input
+                    placeholder="Nhóm tấm phủ"
+                    style="width: 100%"
+                    v-model="dataEditI.group"
+                    disabled
+                /></a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="120px">
+                  <span style="color: red">*</span> Đơn vị
+                </a-col>
+                <a-col flex="auto">
+                  <a-input
+                    placeholder="Đơn vị"
+                    style="width: 100%"
+                    v-model="dataEditI.unit"
+                    disabled
+                /></a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="120px">
+                  <span style="color: red">*</span> Công ty
+                </a-col>
+                <a-col flex="auto">
+                  <a-input
+                    placeholder="Công ty"
+                    style="width: 100%"
+                    v-model="dataEditI.company"
+                    disabled
+                  />
+                </a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="120px">
+                  <span style="color: red">*</span> Giá thành
+                </a-col>
+                <a-col flex="auto">
+                  <a-input
+                    placeholder="Giá thành"
+                    style="width: 100%"
+                    v-model="dataEdit.price"
+                    @change="inputEditPrice"
+                /></a-col>
+                <div style="color: red" v-if="checkDataInputPrice.show">
+                  {{ checkDataInputPrice.message }}
+                </div>
+              </a-row>
+              <br />
             </a-form-model>
-            Ảnh :
-            <a-form-model-item>
-              <input
-                type="file"
-                accept=".jpg, .png"
-                ref="fileupload"
-                @change="importFileEdit($event)"
-              />
-            </a-form-model-item>
-            <div class="row" v-if="showImage">
-              <img
-                alt="example"
-                style="width: 50%; margin-left: auto; margin-right: auto"
-                :src="url"
-              />
-            </div>
+            <a-row type="flex">
+              <a-col flex="120px"> Ảnh : </a-col>
+              <a-col flex="auto">
+                <a-form-model-item>
+                  <input
+                    type="file"
+                    accept=".jpg, .png"
+                    ref="fileupload"
+                    @change="importFileEdit($event)"
+                  />
+                </a-form-model-item>
+                <div class="row" v-if="showImage">
+                  <img
+                    alt="example"
+                    style="width: 50%; margin-left: auto; margin-right: auto"
+                    :src="url"
+                  />
+                </div>
+              </a-col>
+            </a-row>
           </a-modal>
           <!-- popup edit-->
 
@@ -953,10 +992,6 @@ export default {
           console.log(e);
         });
     },
-    // fetchEmployees(value) {
-    //   this.dataEmployee.name = value;
-    //   this.getAllEmployeeNotAccount();
-    // },
     getAllUnit() {
       coverSheetService
         .listUnit()
@@ -997,16 +1032,7 @@ export default {
           console.log(e);
         });
     },
-    // getUnitCoverSheet() {
-    //   coverSheetService
-    //     .listUnitCoverSheet()
-    //     .then((response) => {
-    //       this.listUnitCoverSheets = response.data.data;
-    //     })
-    //     .catch((e) => {
-    //       console.log(e);
-    //     });
-    // },
+
     getFrameCoverSheet() {
       coverSheetService
         .listFrameCoverSheet()
@@ -1117,6 +1143,135 @@ export default {
         });
     },
 
+    //edit cover plate
+    inputEditPrice() {
+      if (this.dataEdit.price != null && this.dataEdit.price.trim() != "") {
+        this.checkDataInputPrice.show = false;
+        this.checkDataInputPrice.message = "";
+      } else {
+        this.checkDataInputPrice.show = true;
+        this.checkDataInputPrice.message = "Bạn phải điền giá thành";
+      }
+    },
+    showModalEdit(
+      id,
+      code,
+      idParameter,
+      parameter,
+      group,
+      unit,
+      company,
+      price,
+      image
+    ) {
+      this.checkDataInputPrice.show = false;
+      this.checkDataInputPrice.message = "";
+      this.dataEditI.id = id;
+      this.dataEdit.idParameter = idParameter;
+      this.dataEditI.unit = unit;
+      this.dataEdit.price = price;
+
+      this.dataEditI.group = group;
+      this.dataEditI.company = company;
+      this.dataEditI.code = code;
+      this.dataEditI.parameter = parameter;
+      this.getAllFrame();
+      this.getAllFrameHeight();
+      code = "";
+      this.url = image;
+      this.dataEdit.image = "";
+      if (this.url != null) {
+        this.showImage = true;
+      } else {
+        this.showImage = false;
+      }
+      if (this.$refs.fileupload != null) {
+        this.$refs.fileupload.value = null;
+      }
+      this.visibleEdit = true;
+    },
+    submitUpdate() {
+      this.loadingEdit = true;
+      this.dataEdit.price = this.dataEdit.price.trim();
+      if (this.dataEdit.image != "") {
+        fileService
+          .uploadImage(this.dataEdit.image)
+          .then((response) => {
+            this.dataEdit.image = response.data.data;
+            coverSheetService
+              .updateCoverSheet(this.dataEdit)
+              .then((response) => {
+                this.submitSearch();
+                if (response.data.data) {
+                  let type = "success";
+                  let message = "Cập nhật";
+                  let description = "Cập nhật tấm phủ thành công";
+                  this.notifi(type, message, description);
+                } else {
+                  let type = "error";
+                  let message = "Cập nhật";
+                  let description = "Cập nhật tấm phủ không thành công";
+                  this.notifi(type, message, description);
+                  coverSheetService.deleteImage(this.dataEdit.image);
+                }
+                this.loadingEdit = false;
+                this.visibleEdit = false;
+              })
+              .catch(() => {
+                coverSheetService.deleteImage(this.dataEdit.image);
+                this.loadingEdit = false;
+                this.visibleEdit = false;
+              });
+          })
+          .catch((e) => {
+            console.log(e);
+            this.loadingEdit = false;
+            this.visibleEdit = false;
+          });
+      } else {
+        this.loadingEdit = true;
+        coverSheetService
+          .updateCoverSheet(this.dataEdit)
+          .then((response) => {
+            this.submitSearch();
+            if (response.data.data) {
+              let type = "success";
+              let message = "Cập nhật";
+              let description = "Account đang đăng nhập không được xóa";
+              this.notifi(type, message, description);
+            } else {
+              let type = "error";
+              let message = "Cập nhật";
+              let description = "Account đang đăng nhập không được xóa";
+              this.notifi(type, message, description);
+            }
+            this.loadingEdit = false;
+            this.visibleEdit = false;
+          })
+          .catch((e) => {
+            console.log(e);
+            this.loadingEdit = false;
+            this.visibleEdit = false;
+          });
+      }
+    },
+    checkFormUpdate() {
+      let check = true;
+      if (this.dataEdit.price != null && this.dataEdit.price.trim() != "") {
+        this.checkDataInputPrice.show = false;
+        this.checkDataInputPrice.message = "";
+      } else {
+        check = false;
+        this.checkDataInputPrice.show = true;
+        this.checkDataInputPrice.message = "Bạn phải điền giá thành";
+      }
+      if (check) {
+        this.submitUpdate();
+      }
+    },
+
+    //edit cover plate
+
     //add cover plate
     showModalAdd() {
       this.checkDataInputNumber.show = false;
@@ -1150,7 +1305,6 @@ export default {
     },
     checkFormAdd() {
       let check = true;
-      
       if (
         this.dataAdd.listIdFrame != null &&
         this.dataAdd.listIdFrame.length != 0
@@ -1672,99 +1826,6 @@ export default {
       this.visibleAddHW = false;
       this.visibleAddUnit = false;
       this.visibleEdit = false;
-    },
-    showModalEdit(
-      id,
-      code,
-      idParameter,
-      parameter,
-      group,
-      unit,
-      company,
-      price,
-      image
-    ) {
-      this.dataEditI.id = id;
-      this.dataEdit.idParameter = idParameter;
-      this.dataEditI.unit = unit;
-      this.dataEdit.price = price;
-
-      this.dataEditI.group = group;
-      this.dataEditI.company = company;
-      this.dataEditI.code = code;
-      this.dataEditI.parameter = parameter;
-      this.getAllFrame();
-      this.getAllFrameHeight();
-      code = "";
-      this.url = image;
-      this.dataEdit.image = "";
-      if (this.url != null) {
-        this.showImage = true;
-      } else {
-        this.showImage = false;
-      }
-      if (this.$refs.fileupload != null) {
-        this.$refs.fileupload.value = null;
-      }
-      this.visibleEdit = true;
-    },
-    submitUpdate() {
-      this.loadingEdit = true;
-      if (this.dataEdit.image != "") {
-        fileService
-          .uploadImage(this.dataEdit.image)
-          .then((response) => {
-            this.dataEdit.image = response.data.data;
-            coverSheetService
-              .updateCoverSheet(this.dataEdit)
-              .then((response) => {
-                this.submitSearch();
-                if (response.data.data) {
-                  let type = "success";
-                  let message = "Cập nhật";
-                  let description = "Account đang đăng nhập không được xóa";
-                  this.notifi(type, message, description);
-                } else {
-                  let type = "error";
-                  let message = "Cập nhật";
-                  let description = "Account đang đăng nhập không được xóa";
-                  this.notifi(type, message, description);
-                  coverSheetService.deleteImage(this.dataEdit.image);
-                }
-              })
-              .catch(() => {
-                coverSheetService.deleteImage(this.dataEdit.image);
-                this.loadingEdit = false;
-              });
-            this.visibleEdit = false;
-          })
-          .catch((e) => {
-            console.log(e);
-            this.loadingEdit = false;
-          });
-      } else {
-        coverSheetService
-          .updateCoverSheet(this.dataEdit)
-          .then((response) => {
-            this.submitSearch();
-            if (response.data.data) {
-              let type = "success";
-              let message = "Cập nhật";
-              let description = "Account đang đăng nhập không được xóa";
-              this.notifi(type, message, description);
-            } else {
-              let type = "error";
-              let message = "Cập nhật";
-              let description = "Account đang đăng nhập không được xóa";
-              this.notifi(type, message, description);
-            }
-          })
-          .catch((e) => {
-            console.log(e);
-          });
-        this.visibleEdit = false;
-        this.loadingEdit = false;
-      }
     },
 
     deleteCoverSheet(id) {
