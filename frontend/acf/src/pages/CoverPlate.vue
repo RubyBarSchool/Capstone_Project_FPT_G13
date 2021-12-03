@@ -179,6 +179,8 @@
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
                       @confirm="deleteCoverSheet(record.id)"
+                      ok-text="Đồng ý"
+                      cancel-text="Đóng"
                     >
                       <a-button id="delete">
                         <font-awesome-icon :icon="['fas', 'trash']" />

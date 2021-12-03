@@ -126,14 +126,15 @@
 
             <a-modal
               v-model="showModalEdit"
-              title="Xập nhật số lượng sản phẩm đã làm xong"
+              title="Cập nhật số lượng sản phẩm đã làm xong"
             >
               <template slot="footer">
                 <a-button key="back" @click="handleCancelEdit"> Đóng </a-button>
                 <a-button
                   key="submit"
                   type="primary"
-                  @click="editNumberProduct"
+                  @click="checkFormEdit"
+                  :loading="loadingEdit"
                 >
                   Lưu
                 </a-button>
@@ -143,7 +144,11 @@
                 v-model="dataEdit.number"
                 :min="0"
                 :max="maxNumber"
+                @change="inputEdit"
               />
+              <div style="color: red" v-if="checkDataInputEdit.show">
+                {{ checkDataInputEdit.message }}
+              </div>
             </a-modal>
           </div>
         </div>
@@ -164,6 +169,7 @@ export default {
   },
   data() {
     return {
+      loadingEdit: false,
       pagination: {
         current: 1,
         pageSize: 10,
@@ -311,6 +317,10 @@ export default {
       },
       maxNumber: "0",
       nameProductEdit: "",
+      checkDataInputEdit: {
+        show: false,
+        message: "",
+      },
     };
   },
   computed: {},
@@ -318,7 +328,10 @@ export default {
     this.beforeSearch();
   },
   methods: {
+    //edit
     showEditForm(record) {
+      this.checkDataInputEdit.show = false;
+      this.checkDataInputEdit.message = "";
       this.dataEdit.id = record.id;
       this.maxNumber = record.countProduct;
       this.nameProductEdit = record.nameProduct;
@@ -327,6 +340,7 @@ export default {
       this.showModalEdit = true;
     },
     editNumberProduct() {
+      this.loadingEdit = true;
       ViewWorkEmployee.updateWorkEmployee(this.dataEdit)
         .then((response) => {
           let task = response.data.data ? "success" : "error";
@@ -340,12 +354,39 @@ export default {
               this.nameProductEdit;
           this.notifi(task, text, description);
           this.showModalEdit = false;
+          this.loadingEdit = false;
           this.beforeSearch();
         })
         .catch((e) => {
           console.log(e);
+          this.showModalEdit = false;
+          this.loadingEdit = false;
         });
     },
+    checkFormEdit() {
+      let check = true;
+      if (this.dataEdit.number != null && this.dataEdit.number != "") {
+        this.checkDataInputEdit.show = false;
+        this.checkDataInputEdit.message = "";
+      } else {
+        check = false;
+        this.checkDataInputEdit.show = true;
+        this.checkDataInputEdit.message = "Bạn phải điền số tiền tạm ứng";
+      }
+      if (check) {
+        this.editNumberProduct();
+      }
+    },
+    inputEdit() {
+      if (this.dataEdit.number != null && this.dataEdit.number != "") {
+        this.checkDataInputEdit.show = false;
+        this.checkDataInputEdit.message = "";
+      } else {
+        this.checkDataInputEdit.show = true;
+        this.checkDataInputEdit.message = "Bạn phải điền số tiền tạm ứng";
+      }
+    },
+    //edit
     showModelView(record) {
       ViewWorkEmployee.searchMaterialInWork(record.id)
         .then((response) => {

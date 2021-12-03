@@ -1,5 +1,5 @@
 <template>
-  <div class="taohopdong">
+  <div class="ContatcMoney">
     <a-layout :style="{ background: 'white' }">
       <Header />
       <a-layout-content :style="{ margin: '24px 16px 0' }">
@@ -105,6 +105,8 @@
                     <a-popconfirm
                       title="Bạn có chắc chắn xác nhận bàn giao hợp đồng?"
                       @confirm="confirm(record)"
+                      ok-text="Đồng ý"
+                      cancel-text="Đóng"
                     >
                       <a-button id="confirm">
                         <font-awesome-icon :icon="['fas', 'check-circle']" />
@@ -121,34 +123,46 @@
         <a-modal v-model="showModalAdd" title="Thêm lịch sử tạm ứng">
           <template slot="footer">
             <a-button key="back" @click="handleCancelAdd"> Đóng </a-button>
-            <a-button key="submit" type="primary" @click="submitCotactMoney">
+            <a-button
+              key="submit"
+              type="primary"
+              :loading="loadingAdd"
+              @click="checkFormAddCotactMoney"
+            >
               Lưu
             </a-button>
           </template>
           <a-form-model>
-            <a-form-model-item label="Tên hợp đồng">
-              <a-select
-                v-model="dataSubmit.contact"
-                placeholder="Hợp đồng"
-                style="width: 80%"
+            <span style="color: red">*</span> Tên hợp đồng
+            <a-select
+              v-model="dataSubmit.contact"
+              placeholder="Hợp đồng"
+              style="width: 80%"
+              @change="inputContract"
+            >
+              <a-select-option
+                v-for="(contact, index) in dataContact"
+                :value="contact.id"
+                :key="index"
               >
-                <a-select-option
-                  v-for="(contact, index) in dataContact"
-                  :value="contact.id"
-                  :key="index"
-                >
-                  {{ contact.name }}
-                </a-select-option>
-              </a-select>
-            </a-form-model-item>
-            <a-form-model-item label="Số tiền tạm ứng">
-              <a-input-number
-                v-model="dataSubmit.money"
-                placeholder="Nhập số tiền tạm ứng"
-                style="width: 80%"
-                :min="100000"
-              />
-            </a-form-model-item>
+                {{ contact.name }}
+              </a-select-option>
+            </a-select>
+            <div style="color: red" v-if="checkDataInputContract.show">
+              {{ checkDataInputContract.message }}
+            </div>
+            <br />
+            <span style="color: red">*</span> Số tiền tạm ứng
+            <a-input-number
+              @change="inputMoney"
+              v-model="dataSubmit.money"
+              placeholder="Nhập số tiền tạm ứng"
+              style="width: 80%"
+              :min="100000"
+            />
+            <div style="color: red" v-if="checkDataInputMoney.show">
+              {{ checkDataInputMoney.message }}
+            </div>
           </a-form-model>
         </a-modal>
 
@@ -186,6 +200,8 @@
                 <a-popconfirm
                   title="Bạn có chắc chắn muốn xóa không?"
                   @confirm="deleteProductionOrder(record)"
+                  ok-text="Đồng ý"
+                  cancel-text="Đóng"
                 >
                   <a-button id="delete">
                     <font-awesome-icon :icon="['fas', 'trash']" />
@@ -203,20 +219,24 @@
             <a-button
               key="submit"
               type="primary"
-              @click="submitEditCotactMoney"
+              @click="checkFormEditMoney"
+              :loading="loadingEdit"
             >
               Lưu
             </a-button>
           </template>
           <a-form-model>
-            <a-form-model-item label="Số tiền tạm ứng">
-              <a-input-number
-                v-model="dataSubmit.money"
-                placeholder="Nhập số tiền tạm ứng"
-                style="width: 80%"
-                :min="100000"
-              />
-            </a-form-model-item>
+            <span style="color: red">*</span> Số tiền tạm ứng
+            <a-input-number
+              v-model="dataSubmit.money"
+              placeholder="Nhập số tiền tạm ứng"
+              style="width: 80%"
+              :min="100000"
+              @change="inputEditMoney"
+            />
+            <div style="color: red" v-if="checkDataInputEditMoney.show">
+              {{ checkDataInputEditMoney.message }}
+            </div>
           </a-form-model>
         </a-modal>
       </a-layout-content>
@@ -239,6 +259,8 @@ export default {
   },
   data() {
     return {
+      loadingEdit: false,
+      loadingAdd: false,
       dataSubmit: {
         contact: "",
         money: "",
@@ -341,6 +363,18 @@ export default {
       showModalView: false,
       showModalEdit: false,
       disableEditAndDelete: true,
+      checkDataInputContract: {
+        show: false,
+        message: "",
+      },
+      checkDataInputMoney: {
+        show: false,
+        message: "",
+      },
+      checkDataInputEditMoney: {
+        show: false,
+        message: "",
+      },
     };
   },
   created() {
@@ -364,26 +398,61 @@ export default {
           console.log(e);
         });
     },
+
+    //edit
     submitEditCotactMoney() {
+      this.loadingEdit = true;
       contactMoneyService
         .updateContactMoney(this.dataSubmit)
         .then(() => {
           this.showModalView = false;
           this.showModalEdit = false;
           this.beforeSearch();
+          this.loadingEdit = false;
         })
         .catch((e) => {
           console.log(e);
+          this.showModalEdit = false;
+          this.loadingEdit = false;
         });
     },
+    inputEditMoney() {
+      if (this.dataSubmit.money != null && this.dataSubmit.money != "") {
+        this.checkDataInputEditMoney.show = false;
+        this.checkDataInputEditMoney.message = "";
+      } else {
+        this.checkDataInputEditMoney.show = true;
+        this.checkDataInputEditMoney.message = "Bạn phải điền số tiền tạm ứng";
+      }
+    },
+    checkFormEditMoney() {
+      let check = true;
+      if (this.dataSubmit.money != null && this.dataSubmit.money != "") {
+        this.checkDataInputEditMoney.show = false;
+        this.checkDataInputEditMoney.message = "";
+      } else {
+        check = false;
+        this.checkDataInputEditMoney.show = true;
+        this.checkDataInputEditMoney.message = "Bạn phải điền số tiền tạm ứng";
+      }
+      if (check) {
+        this.submitEditCotactMoney();
+      }
+    },
+
     handleCancelEdit() {
       this.showModalEdit = false;
     },
     showEditForm(record) {
+      this.checkDataInputEditMoney.show = false;
+      this.checkDataInputEditMoney.message = "";
+      this.dataSubmit.money = "";
       this.dataSubmit.contact = record.id;
       this.dataSubmit.money = record.money;
       this.showModalEdit = true;
     },
+    //edit
+
     deleteProductionOrder(record) {
       contactMoneyService
         .deleteContactMoney(record.id)
@@ -405,10 +474,7 @@ export default {
         this.disableEditAndDelete = false;
       }
     },
-    showModalAddF() {
-      this.getDataContact();
-      this.showModalAdd = true;
-    },
+
     getDataContact() {
       viewDetailContactService
         .searchContactInAdd()
@@ -419,17 +485,79 @@ export default {
           console.log(e);
         });
     },
+    //add contract
+    showModalAddF() {
+      this.checkDataInputContract.show = false;
+      this.checkDataInputContract.message = "";
+      this.checkDataInputMoney.show = false;
+      this.checkDataInputMoney.message = "";
+      this.dataSubmit.contact = [];
+      this.dataSubmit.money = "";
+      this.getDataContact();
+      this.showModalAdd = true;
+    },
     submitCotactMoney() {
+      this.loadingAdd = true;
       contactMoneyService
         .addContactMoney(this.dataSubmit)
         .then(() => {
           this.beforeSearch();
           this.showModalAdd = false;
+          this.loadingAdd = false;
         })
         .catch((e) => {
           console.log(e);
+          this.showModalAdd = false;
+          this.loadingAdd = false;
         });
     },
+    inputContract() {
+      if (
+        this.dataSubmit.contact != null &&
+        this.dataSubmit.contact.length != 0
+      ) {
+        this.checkDataInputContract.show = false;
+        this.checkDataInputContract.message = "";
+      } else {
+        this.checkDataInputContract.show = true;
+        this.checkDataInputContract.message = "Bạn phải chọn tên hợp đồng";
+      }
+    },
+    inputMoney() {
+      if (this.dataSubmit.money != null && this.dataSubmit.money != "") {
+        this.checkDataInputMoney.show = false;
+        this.checkDataInputMoney.message = "";
+      } else {
+        this.checkDataInputMoney.show = true;
+        this.checkDataInputMoney.message = "Bạn phải điền số tiền tạm ứng";
+      }
+    },
+    checkFormAddCotactMoney() {
+      let check = true;
+      if (
+        this.dataSubmit.contact != null &&
+        this.dataSubmit.contact.length != 0
+      ) {
+        this.checkDataInputContract.show = false;
+        this.checkDataInputContract.message = "";
+      } else {
+        check = false;
+        this.checkDataInputContract.show = true;
+        this.checkDataInputContract.message = "Bạn phải chọn tên hợp đồng";
+      }
+      if (this.dataSubmit.money != null && this.dataSubmit.money != "") {
+        this.checkDataInputMoney.show = false;
+        this.checkDataInputMoney.message = "";
+      } else {
+        check = false;
+        this.checkDataInputMoney.show = true;
+        this.checkDataInputMoney.message = "Bạn phải điền số tiền tạm ứng";
+      }
+      if (check) {
+        this.submitCotactMoney();
+      }
+    },
+    //add contract
     handleCancelAdd() {
       this.showModalAdd = false;
     },
