@@ -199,13 +199,15 @@
                 key="submit"
                 :loading="loadingAdd"
                 type="primary"
-                @click="submitAdd"
+                @click="checkFormAdd"
               >
                 Lưu
               </a-button>
             </template>
             <a-row type="flex">
-              <a-col flex="100px">Mã tấm phủ</a-col>
+              <a-col flex="120px">
+                <span style="color: red">*</span> Mã tấm phủ</a-col
+              >
               <a-col flex="auto">
                 <template v-for="tag in tags">
                   <a-tag
@@ -232,13 +234,22 @@
                   style="background: #fff; borderstyle: dashed"
                   @click="showInput"
                 >
-                  <font-awesome-icon :icon="['fas', 'plus']" /> Thêm vật liệu
+                  <font-awesome-icon :icon="['fas', 'plus']" />
+                  Thêm vật liệu
                 </a-tag>
+                <div
+                  style="color: red"
+                  v-if="checkDataInputCodeCoverPlate.show"
+                >
+                  {{ checkDataInputCodeCoverPlate.message }}
+                </div>
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Thông số</a-col>
+              <a-col flex="120px">
+                <span style="color: red">*</span> Thông số</a-col
+              >
               <a-col flex="auto">
                 <a-select
                   placeholder="Thông số"
@@ -247,6 +258,7 @@
                   :filter-option="false"
                   @search="fetchFrame"
                   style="width: 100%"
+                  @change="inputFrame"
                 >
                   <a-select-option
                     v-for="(frame, index) in listFrames"
@@ -256,11 +268,16 @@
                     {{ frame.frame }}
                   </a-select-option>
                 </a-select>
+                <div style="color: red" v-if="checkDataInputNumber.show">
+                  {{ checkDataInputNumber.message }}
+                </div>
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Chiều cao</a-col>
+              <a-col flex="120px">
+                <span style="color: red">*</span> Chiều cao</a-col
+              >
               <a-col flex="auto">
                 <a-select
                   placeholder="Chiều cao"
@@ -268,6 +285,7 @@
                   v-model="dataAdd.listIdHeight"
                   :filter-option="false"
                   style="width: 100%"
+                  @change="inputHeight"
                 >
                   <a-select-option
                     v-for="(height, index) in listFrameHeights"
@@ -277,16 +295,22 @@
                     {{ height.frameHeight }}
                   </a-select-option>
                 </a-select>
+                <div style="color: red" v-if="checkDataInputAddHeight.show">
+                  {{ checkDataInputAddHeight.message }}
+                </div>
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Nhóm tấm phủ</a-col>
+              <a-col flex="120px">
+                <span style="color: red">*</span> Nhóm tấm phủ</a-col
+              >
               <a-col flex="auto">
                 <a-select
                   placeholder="Nhóm tấm phủ"
                   v-model="dataAdd.idGroup"
                   style="width: 100%"
+                  @change="inputGroup"
                 >
                   <a-select-option
                     v-for="(cover, index) in listGroupCoverPlate"
@@ -296,16 +320,22 @@
                     {{ cover.name }}
                   </a-select-option>
                 </a-select>
+                <div style="color: red" v-if="checkDataInputGroup.show">
+                  {{ checkDataInputGroup.message }}
+                </div>
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Đơn vị đo</a-col>
+              <a-col flex="120px">
+                <span style="color: red">*</span> Đơn vị đo</a-col
+              >
               <a-col flex="auto">
                 <a-select
                   placeholder="Đơn vị đo"
                   v-model="dataAdd.idUnit"
                   style="width: 100%"
+                  @change="inputUnit"
                 >
                   <a-select-option
                     v-for="(unit, index) in listUnits"
@@ -315,16 +345,22 @@
                     {{ unit.name }}
                   </a-select-option>
                 </a-select>
+                <div style="color: red" v-if="checkDataInputUnit.show">
+                  {{ checkDataInputUnit.message }}
+                </div>
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Công ty</a-col>
+              <a-col flex="120px">
+                <span style="color: red">*</span> Công ty</a-col
+              >
               <a-col flex="auto">
                 <a-select
                   placeholder="Công ty"
                   v-model="dataAdd.idCompany"
                   style="width: 100%"
+                  @change="inputCompany"
                 >
                   <a-select-option
                     v-for="(company, index) in listCompanys"
@@ -334,16 +370,26 @@
                     {{ company.name }}
                   </a-select-option>
                 </a-select>
+                <div style="color: red" v-if="checkDataInputCompany.show">
+                  {{ checkDataInputCompany.message }}
+                </div>
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Giá thành</a-col>
-              <a-col flex="auto"> <a-input v-model="dataAdd.price" /></a-col>
+              <a-col flex="120px">
+                <span style="color: red">*</span> Giá thành</a-col
+              >
+              <a-col flex="auto">
+                <a-input @change="inputPrice" v-model="dataAdd.price" />
+                <div style="color: red" v-if="checkDataInputPrice.show">
+                  {{ checkDataInputPrice.message }}
+                </div></a-col
+              >
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Ảnh</a-col>
+              <a-col flex="120px">Ảnh</a-col>
               <a-col flex="auto">
                 <input
                   type="file"
@@ -363,7 +409,6 @@
               </a-col>
             </a-row>
           </a-modal>
-
           <!-- popup add -->
 
           <!-- popup edit-->
@@ -790,6 +835,30 @@ export default {
         show: false,
         message: "",
       },
+      checkDataInputCodeCoverPlate: {
+        show: false,
+        message: "",
+      },
+      checkDataInputNumber: {
+        show: false,
+        message: "",
+      },
+      checkDataInputGroup: {
+        show: false,
+        message: "",
+      },
+      checkDataInputUnit: {
+        show: false,
+        message: "",
+      },
+      checkDataInputCompany: {
+        show: false,
+        message: "",
+      },
+      checkDataInputPrice: {
+        show: false,
+        message: "",
+      },
     };
   },
   computed: {},
@@ -1048,9 +1117,20 @@ export default {
         });
     },
 
+    //add cover plate
     showModalAdd() {
-      // this.checkDataInput.show = false;
-      // this.dataAddUnitCoverSheet.idUnit = "";
+      this.checkDataInputNumber.show = false;
+      this.checkDataInputNumber.message = "";
+      this.checkDataInputAddHeight.show = false;
+      this.checkDataInputAddHeight.message = "";
+      this.checkDataInputGroup.show = false;
+      this.checkDataInputGroup.message = "";
+      this.checkDataInputUnit.show = false;
+      this.checkDataInputUnit.message = "";
+      this.checkDataInputCompany.show = false;
+      this.checkDataInputCompany.message = "";
+      this.checkDataInputPrice.show = false;
+      this.checkDataInputPrice.message = "";
       this.getAllFrame();
       this.getAllFrameHeight();
       this.dataAdd.idCompany = "";
@@ -1068,20 +1148,136 @@ export default {
       this.visibleAdd = true;
       this.showImage = false;
     },
+    checkFormAdd() {
+      let check = true;
+      
+      if (
+        this.dataAdd.listIdFrame != null &&
+        this.dataAdd.listIdFrame.length != 0
+      ) {
+        this.checkDataInputNumber.show = false;
+        this.checkDataInputNumber.message = "";
+      } else {
+        check = false;
+        this.checkDataInputNumber.show = true;
+        this.checkDataInputNumber.message = "Bạn phải chọn thông số";
+      }
+      if (
+        this.dataAdd.listIdHeight != null &&
+        this.dataAdd.listIdHeight.length != 0
+      ) {
+        this.checkDataInputAddHeight.show = false;
+        this.checkDataInputAddHeight.message = "";
+      } else {
+        check = false;
+        this.checkDataInputAddHeight.show = true;
+        this.checkDataInputAddHeight.message = "Bạn phải chọn chiều cao";
+      }
+      if (this.dataAdd.idGroup != null && this.dataAdd.idGroup.length != 0) {
+        this.checkDataInputGroup.show = false;
+        this.checkDataInputGroup.message = "";
+      } else {
+        check = false;
+        this.checkDataInputGroup.show = true;
+        this.checkDataInputGroup.message = "Bạn phải chọn nhóm tấm phủ";
+      }
+      if (this.dataAdd.idUnit != null && this.dataAdd.idUnit.length != 0) {
+        this.checkDataInputUnit.show = false;
+        this.checkDataInputUnit.message = "";
+      } else {
+        check = false;
+        this.checkDataInputUnit.show = true;
+        this.checkDataInputUnit.message = "Bạn phải chọn đơn vị đo";
+      }
+      if (
+        this.dataAdd.idCompany != null &&
+        this.dataAdd.idCompany.length != 0
+      ) {
+        this.checkDataInputCompany.show = false;
+        this.checkDataInputCompany.message = "";
+      } else {
+        check = false;
+        this.checkDataInputCompany.show = true;
+        this.checkDataInputCompany.message = "Bạn phải chọn công ty";
+      }
+      if (this.dataAdd.price != null && this.dataAdd.price.trim() != "") {
+        this.checkDataInputPrice.show = false;
+        this.checkDataInputPrice.message = "";
+      } else {
+        check = false;
+        this.checkDataInputPrice.show = true;
+        this.checkDataInputPrice.message = "Bạn phải điền giá thành";
+      }
+      if (check) {
+        this.submitAdd();
+      }
+    },
 
-    // checkFormAdd() {
-    //   if (this.dataAdd.password != null && this.dataAdd.password != "") {
-    //     this.checkDataInput.show = false;
-    //     this.checkDataInput.message = "";
-    //     this.submitAdd();
-    //   } else {
-    //     this.checkDataInput.show = true;
-    //     this.checkDataInput.message = "Bạn phải điền vào chỗ trống";
-    //   }
-    // },
+    inputFrame() {
+      if (
+        this.dataAdd.listIdFrame != null &&
+        this.dataAdd.listIdFrame.length != 0
+      ) {
+        this.checkDataInputNumber.show = false;
+        this.checkDataInputNumber.message = "";
+      } else {
+        this.checkDataInputNumber.show = true;
+        this.checkDataInputNumber.message = "Bạn phải chọn thông số";
+      }
+    },
+    inputHeight() {
+      if (
+        this.dataAdd.listIdHeight != null &&
+        this.dataAdd.listIdHeight.length != 0
+      ) {
+        this.checkDataInputAddHeight.show = false;
+        this.checkDataInputAddHeight.message = "";
+      } else {
+        this.checkDataInputAddHeight.show = true;
+        this.checkDataInputAddHeight.message = "Bạn phải chọn chiều cao";
+      }
+    },
+    inputGroup() {
+      if (this.dataAdd.idGroup != null && this.dataAdd.idGroup.length != 0) {
+        this.checkDataInputGroup.show = false;
+        this.checkDataInputGroup.message = "";
+      } else {
+        this.checkDataInputGroup.show = true;
+        this.checkDataInputGroup.message = "Bạn phải chọn nhóm tấm phủ";
+      }
+    },
+    inputUnit() {
+      if (this.dataAdd.idUnit != null && this.dataAdd.idUnit.length != 0) {
+        this.checkDataInputUnit.show = false;
+        this.checkDataInputUnit.message = "";
+      } else {
+        this.checkDataInputUnit.show = true;
+        this.checkDataInputUnit.message = "Bạn phải chọn đơn vị đo";
+      }
+    },
+    inputCompany() {
+      if (
+        this.dataAdd.idCompany != null &&
+        this.dataAdd.idCompany.length != 0
+      ) {
+        this.checkDataInputCompany.show = false;
+        this.checkDataInputCompany.message = "";
+      } else {
+        this.checkDataInputCompany.show = true;
+        this.checkDataInputCompany.message = "Bạn phải chọn công ty";
+      }
+    },
+    inputPrice() {
+      if (this.dataAdd.price != null && this.dataAdd.price.trim() != "") {
+        this.checkDataInputPrice.show = false;
+        this.checkDataInputPrice.message = "";
+      } else {
+        this.checkDataInputPrice.show = true;
+        this.checkDataInputPrice.message = "Bạn phải điền giá thành";
+      }
+    },
     submitAdd() {
       this.loadingAdd = true;
-
       if (this.dataAdd.image != "") {
         fileService
           .uploadImage(this.dataAdd.image)
@@ -1092,7 +1288,6 @@ export default {
               .addCoverSheet(this.dataAdd)
               .then((response) => {
                 this.submitSearch();
-                this.loadingAdd = false;
                 if (response.data.data) {
                   let type = "success";
                   let message = "Thêm mới";
@@ -1105,24 +1300,27 @@ export default {
                   this.notifi(type, message, description);
                   coverSheetService.deleteImage(this.dataAdd.image);
                 }
+                this.loadingAdd = false;
                 this.visibleAdd = false;
               })
               .catch(() => {
                 coverSheetService.deleteImage(this.dataAdd.image);
                 this.loadingAdd = false;
+                this.visibleAdd = false;
               });
           })
           .catch((e) => {
             console.log(e);
             this.loadingAdd = false;
+            this.visibleAdd = false;
           });
       } else {
         this.dataAdd.listName = this.tags;
+        this.loadingAdd = true;
         coverSheetService
           .addCoverSheet(this.dataAdd)
           .then((response) => {
             this.submitSearch();
-            this.loadingAdd = false;
             if (response.data.data) {
               let type = "success";
               let message = "Thêm mới";
@@ -1134,13 +1332,17 @@ export default {
               let description = response.data.message;
               this.notifi(type, message, description);
             }
+            this.loadingAdd = false;
             this.visibleAdd = false;
           })
-          .catch(() => {
+          .catch((e) => {
+            console.log(e);
             this.loadingAdd = false;
+            this.visibleAdd = false;
           });
       }
     },
+    //add cover plate
 
     //add unit
     handleChangeCodeSheet(value) {
@@ -1366,6 +1568,12 @@ export default {
 
     resetFrame() {
       this.disable = false;
+      this.checkDataInputAddCoverPlate.show = false;
+      this.checkDataInputAddCoverPlate.message = "";
+      this.checkDataInputAddFrame.show = false;
+      this.checkDataInputAddFrame.message = "";
+      this.checkDataInputAddHeight.show = false;
+      this.checkDataInputAddHeight.message = "";
       this.dataAddFrameHeight.idMaterial = "";
       this.dataAddFrameHeight.idFrame = "";
       this.dataAddFrameHeight.idHeight = "";
@@ -1383,8 +1591,6 @@ export default {
       this.dataAdd.listName = [];
       this.dataAdd.price = [];
       this.visibleAddHW = true;
-      // this.getFrameCoverSheet();
-      // this.getFrameHeightCoverSheet();
       this.getAllCodeCoverSheet();
       this.getAllFrame();
       this.getAllFrameHeight();
@@ -1645,14 +1851,6 @@ export default {
 }
 #edit:hover {
   background-color: rgb(0, 181, 253);
-  color: white;
-}
-#user {
-  background-color: rgb(76, 238, 12);
-  color: white;
-}
-#user:hover {
-  background-color: rgb(42, 253, 0);
   color: white;
 }
 </style>
