@@ -238,6 +238,9 @@
                 >
                   <font-awesome-icon :icon="['fas', 'plus']" /> Thêm vật liệu
                 </a-tag>
+                <div style="color: red" v-if="checkInputCodeMaterial.show">
+                  {{ checkInputCodeMaterial.message }}
+                </div>
               </a-col>
             </a-row>
             <br />
@@ -1020,12 +1023,27 @@ export default {
       this.dataAddFrameHeightMaterial.idMaterial = "";
       this.dataAddFrameHeightMaterial.idFrame = "";
       this.dataAddFrameHeightMaterial.idHeight = "";
+
       this.checkInputCodeMaterial.show = false;
       this.checkInputCodeMaterial.message = "";
+
       this.checkInputFrame.show = false;
       this.checkInputFrame.message = "";
+
       this.checkInputHeight.show = false;
       this.checkInputHeight.message = "";
+
+      this.checkInputGroupMaterial.show = false;
+      this.checkInputGroupMaterial.message = "";
+
+      this.checkInputUnit.show = false;
+      this.checkInputUnit.message = "";
+
+      this.checkInputCompany.show = false;
+      this.checkInputCompany.message = "";
+
+      this.checkInputPrice.show = false;
+      this.checkInputPrice.message = "";
     },
 
     //get vật liệu
@@ -1056,18 +1074,27 @@ export default {
       }
       this.url = "";
 
+      this.checkInputCodeMaterial.show = false;
+      this.checkInputCodeMaterial.message = "";
+
       this.checkInputFrame.show = false;
       this.checkInputFrame.message = "";
+
       this.checkInputHeight.show = false;
       this.checkInputHeight.message = "";
+
       this.checkInputGroupMaterial.show = false;
       this.checkInputGroupMaterial.message = "";
+
       this.checkInputUnit.show = false;
       this.checkInputUnit.message = "";
+
       this.checkInputCompany.show = false;
       this.checkInputCompany.message = "";
+
       this.checkInputPrice.show = false;
       this.checkInputPrice.message = "";
+
       this.showImage = false;
       this.visibleAdd = true;
     },
