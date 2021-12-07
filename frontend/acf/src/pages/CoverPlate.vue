@@ -21,11 +21,13 @@
           <a-input
             placeholder="Mã tấm phủ"
             style="width: 150px"
+            @pressEnter="submitSearch"
             v-model="dataSearch.codeMaterial"
           />
           <a-input
             placeholder="Thông số"
             style="width: 150px"
+            @pressEnter="submitSearch"
             v-model="dataSearch.frame"
           />
           <a-select

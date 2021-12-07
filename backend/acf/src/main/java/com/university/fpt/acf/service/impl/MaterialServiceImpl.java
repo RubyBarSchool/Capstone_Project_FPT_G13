@@ -586,10 +586,10 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public List<FrameMaterialVO> getFrameByMaterialAndHeight(Long idHeight, Long idMaterial) {
+    public List<FrameMaterialVO> getFrameByMaterialAndHeight(Long idMaterial,Long idHeight) {
         List<FrameMaterialVO> list= new ArrayList<>();
         try{
-            list = materialRepository.getFrameByMaterialAndHeight(idHeight,idMaterial);
+            list = materialRepository.getFrameByMaterialAndHeight(idMaterial,idHeight);
         }catch (Exception e){
             throw new RuntimeException("Không tìm thấy! ");
         }
@@ -597,10 +597,10 @@ public class MaterialServiceImpl implements MaterialService {
     }
 
     @Override
-    public List<FrameMaterialVO> getFrameByCoverSheetAndHeight(Long idHeight, Long idCoverSheet) {
+    public List<FrameMaterialVO> getFrameByCoverSheetAndHeight(Long idCoverSheet,Long idHeight) {
         List<FrameMaterialVO> list= new ArrayList<>();
         try{
-            list = materialRepository.getFrameByCoverSheetAndHeight(idHeight,idCoverSheet);
+            list = materialRepository.getFrameByCoverSheetAndHeight(idCoverSheet,idHeight);
         }catch (Exception e){
             throw new RuntimeException("Không tìm thấy! ");
         }

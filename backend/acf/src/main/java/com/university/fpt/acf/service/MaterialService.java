@@ -40,7 +40,7 @@ public interface MaterialService {
     List<HeightMaterialVO>getHeightByCoverSheetAndFrame(Long idMaterial,Long idFrame);
     List<GetAllMaterialVO> getMaterialByHeightFrame(Long idHeight,Long idFrame);
     List<GetAllMaterialVO> getCoverSheetByHeightFrame(Long idHeight, Long idFrame);
-    List<FrameMaterialVO> getFrameByMaterialAndHeight(Long idHeight,Long idMaterial);
-    List<FrameMaterialVO> getFrameByCoverSheetAndHeight(Long idHeight,Long idCoverSheet);
+    List<FrameMaterialVO> getFrameByMaterialAndHeight(Long idMaterial,Long idHeight);
+    List<FrameMaterialVO> getFrameByCoverSheetAndHeight(Long idCoverSheet,Long idHeight);
 
 }

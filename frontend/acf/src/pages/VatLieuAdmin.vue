@@ -22,10 +22,12 @@
             placeholder="Mã vật liệu"
             style="width: 150px"
             v-model="dataSearch.codeMaterial"
+            @pressEnter="submitSearch"
           />
           <a-input
             placeholder="Thông số"
             style="width: 150px"
+            @pressEnter="submitSearch"
             v-model="dataSearch.listIdFrame"
           />
           <a-select
