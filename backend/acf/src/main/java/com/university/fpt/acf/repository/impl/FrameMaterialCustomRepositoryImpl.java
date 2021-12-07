@@ -30,7 +30,7 @@ public class FrameMaterialCustomRepositoryImpl extends CommonRepository implemen
         }
         if (searchForm.getWidth()!=null && !searchForm.getWidth().isEmpty()){
             sql.append(" and LOWER(f.frameWidth) like :width ");
-            params.put("width", searchForm.getWidth().toLowerCase());
+            params.put("width", "%"+searchForm.getWidth().toLowerCase()+"%");
         }
         sql.append(" ORDER by f.id desc ");
         TypedQuery<SearchFrameMaterialVO> query = super.createQuery(sql.toString(), params, SearchFrameMaterialVO.class);

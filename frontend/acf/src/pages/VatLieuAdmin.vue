@@ -563,7 +563,9 @@
               </a-button>
             </template>
             <a-row type="flex">
-              <span style="color: red">*</span>Mã vật liệu :
+              <a-col flex="100px"
+                ><span style="color: red">*</span>Mã vật liệu :</a-col
+              >
               <a-col flex="auto">
                 <a-select
                   v-model="dataAddUnitMaterial.idMaterial"
@@ -585,7 +587,9 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <span style="color: red">*</span>Đơn vị đo :
+              <a-col flex="100px"
+                ><span style="color: red">*</span>Đơn vị đo :</a-col
+              >
               <a-col flex="auto">
                 <a-select
                   v-model="dataAddUnitMaterial.idUnit"
@@ -625,7 +629,9 @@
               </a-button>
             </template>
             <a-row type="flex">
-              <a-col flex="100px">Mã vật liệu</a-col>
+              <a-col flex="100px"
+                ><span style="color: red">*</span>Mã vật liệu :</a-col
+              >
               <a-col flex="auto">
                 <a-select
                   placeholder="Mã vật liệu"
@@ -649,7 +655,9 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Khung</a-col>
+              <a-col flex="100px">
+                <span style="color: red">*</span>Khung :</a-col
+              >
               <a-col flex="auto">
                 <a-select
                   placeholder="Thông số"
@@ -673,7 +681,9 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Chiều cao</a-col>
+              <a-col flex="100px">
+                <span style="color: red">*</span>Chiều cao :</a-col
+              >
               <a-col flex="auto">
                 <a-select
                   placeholder="Chiều cao"
