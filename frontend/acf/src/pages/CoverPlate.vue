@@ -383,7 +383,12 @@
                 <span style="color: red">*</span> Giá thành</a-col
               >
               <a-col flex="auto">
-                <a-input @change="inputPrice" v-model="dataAdd.price" />
+                <a-input-number
+                  style="width: 100%"
+                  :min="0"
+                  @change="inputPrice"
+                  v-model="dataAdd.price"
+                />
                 <div style="color: red" v-if="checkDataInputPrice.show">
                   {{ checkDataInputPrice.message }}
                 </div></a-col
@@ -498,16 +503,16 @@
                   <span style="color: red">*</span> Giá thành
                 </a-col>
                 <a-col flex="auto">
-                  <a-input
-                    placeholder="Giá thành"
+                  <a-input-number
                     style="width: 100%"
+                    :min="0"
                     v-model="dataEdit.price"
                     @change="inputEditPrice"
                 /></a-col>
-                <div style="color: red" v-if="checkDataInputPrice.show">
-                  {{ checkDataInputPrice.message }}
-                </div>
               </a-row>
+              <div style="color: red" v-if="checkDataInputPrice.show">
+                {{ checkDataInputPrice.message }}
+              </div>
               <br />
             </a-form-model>
             <a-row type="flex">
@@ -549,9 +554,7 @@
             <a-form-model>
               <span style="color: red">*</span> Mã tấm phủ
               <a-select
-                placeholder="Mã tấm phủ"
                 v-model="dataAddUnitCoverSheet.idMaterial"
-                :filter-option="false"
                 style="width: 100%"
                 @change="handleChangeCodeSheet"
               >
@@ -569,9 +572,7 @@
 
               <span style="color: red">*</span> Đơn vị đo
               <a-select
-                placeholder="Đơn vị đo"
                 v-model="dataAddUnitCoverSheet.idUnit"
-                :filter-option="false"
                 style="width: 100%"
                 @change="handleChangeUnit"
               >
@@ -1087,20 +1088,21 @@ export default {
         });
     },
     getUnitByCoverSheet(id) {
+      this.dataAddUnitCoverSheet.idUnit = "";
       coverSheetService
         .getUnitByCoverSheet(id)
         .then((response) => {
           // this.submitSearch();
-          if (response.data.data) {
+          if (response.data.data.length != 0) {
             this.listUnits = response.data.data;
             let type = "success";
-            let message = "Ok";
-            let description = response.data.data.message;
+            let message = "Thành công";
+            let description = "Lấy đơn vị theo mã vật liệu thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Error";
-            let description = response.data.data.message;
+            let message = "Không thành công";
+            let description = "Lấy đơn vị theo mã vật liệu không thành công";
             this.notifi(type, message, description);
           }
         })
@@ -1112,8 +1114,27 @@ export default {
       coverSheetService
         .getFrameByCoverSheetAndHeight(this.dataForm)
         .then((response) => {
-          // this.listFrameByCoverSheetAndHeights = response.data.data;
-          // this.listFrames = this.listFrameByCoverSheetAndHeights;
+          if (response.data.data.length != 0) {
+            let type = "success";
+            let message = "Thành công";
+            let description =
+              "Lấy khung theo " +
+              this.dataForm.name1 +
+              " và " +
+              this.dataForm.name2 +
+              " thành công";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Không tồn tại";
+            let description =
+              "Tất cả khung theo " +
+              this.dataForm.name1 +
+              " và " +
+              this.dataForm.name2 +
+              " đều đã tồn tại";
+            this.notifi(type, message, description);
+          }
           this.listFrames = response.data.data;
         })
         .catch((e) => {
@@ -1124,9 +1145,28 @@ export default {
       coverSheetService
         .getCoverSheetByFrameAndHeight(this.dataForm)
         .then((response) => {
-          // this.listCoverSheetByFrameAndHeights = response.data.data;
-          // this.listFrameHeights = this.listCoverSheetByFrameAndHeights;
-          this.listFrameHeights = response.data.data;
+          if (response.data.data.length != 0) {
+            let type = "success";
+            let message = "Thành công";
+            let description =
+              "Lấy mã tấm phủ theo " +
+              this.dataForm.name1 +
+              " và " +
+              this.dataForm.name2 +
+              " thành công";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Không tồn tại";
+            let description =
+              "Tất cả mã tấm phủ theo " +
+              this.dataForm.name1 +
+              " và " +
+              this.dataForm.name2 +
+              " đều đã tồn tại";
+            this.notifi(type, message, description);
+          }
+          this.listCodeCoverSheets = response.data.data;
         })
         .catch((e) => {
           console.log(e);
@@ -1136,9 +1176,28 @@ export default {
       coverSheetService
         .getHeightsByCoverSheetAndFrame(this.dataForm)
         .then((response) => {
-          // this.listHeightsByCoverSheetAndFrames = response.data.data;
-          // this.listCodeCoverSheets = this.listHeightsByCoverSheetAndFrames;
-          this.listCodeCoverSheets = response.data.data;
+          if (response.data.data.length != 0) {
+            let type = "success";
+            let message = "Thành công";
+            let description =
+              "Lấy chiều cao theo " +
+              this.dataForm.name1 +
+              " và " +
+              this.dataForm.name2 +
+              " thành công";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Không tồn tại";
+            let description =
+              "Tất cả chiều cao theo " +
+              this.dataForm.name1 +
+              " và " +
+              this.dataForm.name2 +
+              " đều đã tồn tại";
+            this.notifi(type, message, description);
+          }
+          this.listFrameHeights = response.data.data;
         })
         .catch((e) => {
           console.log(e);
@@ -1147,7 +1206,7 @@ export default {
 
     //edit cover plate
     inputEditPrice() {
-      if (this.dataEdit.price != null && this.dataEdit.price.trim() != "") {
+      if (this.dataEdit.price != null && this.dataEdit.price != "") {
         this.checkDataInputPrice.show = false;
         this.checkDataInputPrice.message = "";
       } else {
@@ -1276,6 +1335,8 @@ export default {
 
     //add cover plate
     showModalAdd() {
+      this.checkDataInputCodeCoverPlate.show = false;
+      this.checkDataInputCodeCoverPlate.message = "";
       this.checkDataInputNumber.show = false;
       this.checkDataInputNumber.message = "";
       this.checkDataInputAddHeight.show = false;
@@ -1307,6 +1368,14 @@ export default {
     },
     checkFormAdd() {
       let check = true;
+      if (this.tags != null && this.tags.length != 0) {
+        this.checkDataInputCodeCoverPlate.show = false;
+        this.checkDataInputCodeCoverPlate.message = "";
+      } else {
+        check = false;
+        this.checkDataInputCodeCoverPlate.show = true;
+        this.checkDataInputCodeCoverPlate.message = "Bạn phải điền mã vật liệu";
+      }
       if (
         this.dataAdd.listIdFrame != null &&
         this.dataAdd.listIdFrame.length != 0
@@ -1424,7 +1493,7 @@ export default {
       }
     },
     inputPrice() {
-      if (this.dataAdd.price != null && this.dataAdd.price.trim() != "") {
+      if (this.dataAdd.price != null && this.dataAdd.price != "") {
         this.checkDataInputPrice.show = false;
         this.checkDataInputPrice.message = "";
       } else {
@@ -1502,7 +1571,6 @@ export default {
 
     //add unit
     handleChangeCodeSheet(value) {
-      this.getUnitByCoverSheet(value);
       if (
         this.dataAddUnitCoverSheet.idMaterial != null &&
         this.dataAddUnitCoverSheet.idMaterial != ""
@@ -1513,10 +1581,10 @@ export default {
         this.checkDataInputAddMaterial.show = true;
         this.checkDataInputAddMaterial.message = "Bạn phải chọn mã tấm phủ";
       }
+      this.getUnitByCoverSheet(value);
     },
 
-    handleChangeUnit(value) {
-      this.getCoverSheetByUnit(value);
+    handleChangeUnit() {
       if (
         this.dataAddUnitCoverSheet.idUnit != null &&
         this.dataAddUnitCoverSheet.idUnit != ""
@@ -1604,16 +1672,33 @@ export default {
 
     //add frame
     handleChangeCodeCoverSheet() {
+      if (
+        this.dataAddFrameHeight.idMaterial != null &&
+        this.dataAddFrameHeight.idMaterial != ""
+      ) {
+        this.checkDataInputAddCoverPlate.show = false;
+        this.checkDataInputAddCoverPlate.message = "";
+      } else {
+        this.checkDataInputAddCoverPlate.show = true;
+        this.checkDataInputAddCoverPlate.message = "Bạn phải chọn mã tấm phủ";
+      }
       let data = {
         type: "material",
         id: this.dataAddFrameHeight.idMaterial,
         name: "",
       };
-      for (var i = 0; i < this.listCodeCoverSheets.length; i++) {
+      for (let i = 0; i < this.listCodeCoverSheets.length; i++) {
         if (
           this.listCodeCoverSheets[i].id == this.dataAddFrameHeight.idMaterial
         ) {
           data.name = this.listCodeCoverSheets[i].name;
+        }
+      }
+
+      for (let i = this.dataSelect.length - 1; i >= 0; i--) {
+        if (this.dataSelect[i].type == "material") {
+          this.dataSelect.splice(i, 1);
+          break;
         }
       }
       this.dataSelect.push(data);
@@ -1631,26 +1716,32 @@ export default {
       if (this.dataSelect.length == 3) {
         this.disable = true;
       }
-      if (
-        this.dataAddFrameHeight.idMaterial != null &&
-        this.dataAddFrameHeight.idMaterial != ""
-      ) {
-        this.checkDataInputAddCoverPlate.show = false;
-        this.checkDataInputAddCoverPlate.message = "";
-      } else {
-        this.checkDataInputAddCoverPlate.show = true;
-        this.checkDataInputAddCoverPlate.message = "Bạn phải chọn mã tấm phủ";
-      }
     },
     handleChangeFrame() {
+      if (
+        this.dataAddFrameHeight.idFrame != null &&
+        this.dataAddFrameHeight.idFrame != ""
+      ) {
+        this.checkDataInputAddFrame.show = false;
+        this.checkDataInputAddFrame.message = "";
+      } else {
+        this.checkDataInputAddFrame.show = true;
+        this.checkDataInputAddFrame.message = "Bạn phải chọn khung";
+      }
       let data = {
         type: "frame",
         id: this.dataAddFrameHeight.idFrame,
         name: "",
       };
-      for (var i = 0; i < this.listFrames.length; i++) {
+      for (let i = 0; i < this.listFrames.length; i++) {
         if (this.listFrames[i].id == this.dataAddFrameHeight.idFrame) {
-          data.name = this.listFrames[i].name;
+          data.name = this.listFrames[i].frame;
+        }
+      }
+      for (let i = this.dataSelect.length - 1; i >= 0; i--) {
+        if (this.dataSelect[i].type == "frame") {
+          this.dataSelect.splice(i, 1);
+          break;
         }
       }
       this.dataSelect.push(data);
@@ -1672,44 +1763,8 @@ export default {
       if (this.dataSelect.length == 3) {
         this.disable = true;
       }
-      if (
-        this.dataAddFrameHeight.idFrame != null &&
-        this.dataAddFrameHeight.idFrame != ""
-      ) {
-        this.checkDataInputAddFrame.show = false;
-        this.checkDataInputAddFrame.message = "";
-      } else {
-        this.checkDataInputAddFrame.show = true;
-        this.checkDataInputAddFrame.message = "Bạn phải chọn khung";
-      }
     },
     handleChangeHeight() {
-      let data = {
-        type: "height",
-        id: this.dataAddFrameHeight.idHeight,
-        name: "",
-      };
-      for (var i = 0; i < this.listFrameHeights.length; i++) {
-        if (this.listFrameHeights[i].id == this.dataAddFrameHeight.idHeight) {
-          data.name = this.listFrameHeights[i].name;
-        }
-      }
-      this.dataSelect.push(data);
-      if (this.dataSelect.length == 2) {
-        this.dataForm.id1 = this.dataSelect[0].id;
-        this.dataForm.name1 = this.dataSelect[0].name;
-        this.dataForm.id2 = data.id;
-        this.dataForm.name2 = data.name;
-
-        if (this.dataSelect[0].type == "material") {
-          this.getFrameByCoverSheetAndHeight();
-        } else {
-          this.getCoverSheetByFrameAndHeight();
-        }
-      }
-      if (this.dataSelect.length == 3) {
-        this.disable = true;
-      }
       if (
         this.dataAddFrameHeight.idHeight != null &&
         this.dataAddFrameHeight.idHeight != ""
@@ -1720,39 +1775,63 @@ export default {
         this.checkDataInputAddHeight.show = true;
         this.checkDataInputAddHeight.message = "Bạn phải chọn chiều cao";
       }
+      let data = {
+        type: "height",
+        id: this.dataAddFrameHeight.idHeight,
+        name: "",
+      };
+      for (let i = 0; i < this.listFrameHeights.length; i++) {
+        if (this.listFrameHeights[i].id == this.dataAddFrameHeight.idHeight) {
+          data.name = this.listFrameHeights[i].frameHeight;
+        }
+      }
+      for (let i = this.dataSelect.length - 1; i >= 0; i--) {
+        if (this.dataSelect[i].type == "height") {
+          this.dataSelect.splice(i, 1);
+          break;
+        }
+      }
+      this.dataSelect.push(data);
+      if (this.dataSelect.length == 2) {
+        this.dataForm.id1 = this.dataSelect[0].id;
+        this.dataForm.name1 = this.dataSelect[0].name;
+        this.dataForm.id2 = data.id;
+        this.dataForm.name2 = data.name;
+        if (this.dataSelect[0].type == "material") {
+          this.getFrameByCoverSheetAndHeight();
+        } else {
+          this.getCoverSheetByFrameAndHeight();
+        }
+      }
+      if (this.dataSelect.length == 3) {
+        this.disable = true;
+      }
     },
 
     resetFrame() {
+      this.dataSelect = [];
       this.disable = false;
-      this.checkDataInputAddCoverPlate.show = false;
-      this.checkDataInputAddCoverPlate.message = "";
-      this.checkDataInputAddFrame.show = false;
-      this.checkDataInputAddFrame.message = "";
-      this.checkDataInputAddHeight.show = false;
-      this.checkDataInputAddHeight.message = "";
-      this.dataAddFrameHeight.idMaterial = "";
-      this.dataAddFrameHeight.idFrame = "";
-      this.dataAddFrameHeight.idHeight = "";
       this.getAllCodeCoverSheet();
       this.getAllFrame();
       this.getAllFrameHeight();
+
+      this.dataAddFrameHeight.idMaterial = "";
+      this.dataAddFrameHeight.idFrame = "";
+      this.dataAddFrameHeight.idHeight = "";
+
+      this.checkDataInputAddCoverPlate.show = false;
+      this.checkDataInputAddCoverPlate.message = "";
+
+      this.checkDataInputAddFrame.show = false;
+      this.checkDataInputAddFrame.message = "";
+
+      this.checkDataInputAddHeight.show = false;
+      this.checkDataInputAddHeight.message = "";
     },
 
     showModalAddHW() {
-      this.dataAdd.idCompany = "";
-      this.dataAdd.idGroup = "";
-      this.dataAdd.idUnit = "";
-      this.dataAdd.listIdFrame = [];
-      this.dataAdd.listIdHeight = [];
-      this.dataAdd.listName = [];
-      this.dataAdd.price = [];
+      this.resetFrame();
       this.visibleAddHW = true;
-      this.getAllCodeCoverSheet();
-      this.getAllFrame();
-      this.getAllFrameHeight();
-      this.dataAddFrameHeight.idMaterial = "";
-      this.dataAddFrameHeight.idFrame = "";
-      this.dataAddFrameHeight.idHeight = "";
     },
     submitAddFrameHeight() {
       this.loadingFrame = true;
@@ -1862,6 +1941,13 @@ export default {
       const tags = this.tags.filter((tag) => tag !== removedTag);
       console.log(tags);
       this.tags = tags;
+      if (this.tags != null && this.tags.length != 0) {
+        this.checkDataInputCodeCoverPlate.show = false;
+        this.checkDataInputCodeCoverPlate.message = "";
+      } else {
+        this.checkDataInputCodeCoverPlate.show = true;
+        this.checkDataInputCodeCoverPlate.message = "Bạn phải điền mã vật liệu";
+      }
     },
 
     showInput() {
@@ -1878,8 +1964,8 @@ export default {
     handleInputConfirm() {
       const inputValue = this.inputValue;
       let tags = this.tags;
-      if (inputValue && tags.indexOf(inputValue) === -1) {
-        tags = [...tags, inputValue];
+      if (inputValue.trim() != "" && tags.indexOf(inputValue) === -1) {
+        tags = [...tags, inputValue.trim()];
       }
       console.log(tags);
       Object.assign(this, {
@@ -1887,6 +1973,13 @@ export default {
         inputVisible: false,
         inputValue: "",
       });
+      if (this.tags != null && this.tags.length != 0) {
+        this.checkDataInputCodeCoverPlate.show = false;
+        this.checkDataInputCodeCoverPlate.message = "";
+      } else {
+        this.checkDataInputCodeCoverPlate.show = true;
+        this.checkDataInputCodeCoverPlate.message = "Bạn phải điền mã vật liệu";
+      }
     },
   },
 };

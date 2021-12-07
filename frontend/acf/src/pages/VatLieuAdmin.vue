@@ -1561,7 +1561,7 @@ export default {
       vatLieuAdminService
         .getUnitByMaterial(id)
         .then((response) => {
-          if (response.data.data) {
+          if (response.data.data.length != 0) {
             this.dataUnits = response.data.data;
             let type = "success";
             let message = "Thành công";
@@ -1606,7 +1606,6 @@ export default {
         this.checkInputUnit.show = true;
         this.checkInputUnit.message = "Bạn phải điền mã vật liệu";
       }
-      // this.searchMaterialByUnit(value);
     },
     //thay đổi MVL theo đơn vị
     searchMaterialByUnit(unit) {
@@ -1743,7 +1742,7 @@ export default {
             let type = "error";
             let message = "Không tồn tại";
             let description =
-              "Tất cả khung theo " +
+              "Tất cả mã vật liệu theo " +
               this.dataForm.name1 +
               " và " +
               this.dataForm.name2 +
@@ -1775,7 +1774,7 @@ export default {
         id: this.dataAddFrameHeightMaterial.idHeight,
         name: "",
       };
-      for (var i = 0; i < this.dataHeights.length; i++) {
+      for (let i = 0; i < this.dataHeights.length; i++) {
         if (
           this.dataHeights[i].id == this.dataAddFrameHeightMaterial.idHeight
         ) {
@@ -1826,7 +1825,7 @@ export default {
         id: this.dataAddFrameHeightMaterial.idFrame,
         name: "",
       };
-      for (var i = 0; i < this.dataFrameMaterials.length; i++) {
+      for (let i = 0; i < this.dataFrameMaterials.length; i++) {
         if (
           this.dataFrameMaterials[i].id ==
           this.dataAddFrameHeightMaterial.idFrame
