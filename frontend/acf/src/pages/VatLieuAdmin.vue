@@ -564,7 +564,6 @@
               <span style="color: red">*</span>Mã vật liệu :
               <a-col flex="auto">
                 <a-select
-                  placeholder="Mã vật liệu"
                   v-model="dataAddUnitMaterial.idMaterial"
                   style="width: 100%"
                   @change="handleDonViByMVL"
@@ -587,7 +586,6 @@
               <span style="color: red">*</span>Đơn vị đo :
               <a-col flex="auto">
                 <a-select
-                  placeholder="Đơn vị đo"
                   v-model="dataAddUnitMaterial.idUnit"
                   style="width: 100%"
                   @change="handleMVLByDonVi"
@@ -1100,6 +1098,14 @@ export default {
     },
     checkFormAdd() {
       let check = true;
+      if (this.tags != null && this.tags.length != 0) {
+        this.checkInputCodeMaterial.show = false;
+        this.checkInputCodeMaterial.message = "";
+      } else {
+        check = false;
+        this.checkInputCodeMaterial.show = true;
+        this.checkInputCodeMaterial.message = "Bạn phải điền mã vật liệu";
+      }
       if (
         this.dataAddMaterial.listIdFrame != null &&
         this.dataAddMaterial.listIdFrame.length != 0
@@ -1550,19 +1556,20 @@ export default {
     },
     //thay đổi đơn vị theo MVL
     getUnitByMaterial(id) {
+      this.dataAddUnitMaterial.idUnit = "";
       vatLieuAdminService
         .getUnitByMaterial(id)
         .then((response) => {
           if (response.data.data) {
             this.dataUnits = response.data.data;
             let type = "success";
-            let message = "Bạn đã chọn mã vật liệu";
-            let description = response.data.message;
+            let message = "Thành công";
+            let description = "Lấy đơn vị theo mã vật liệu thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Bạn đã chọn mã vật liệu";
-            let description = response.data.message;
+            let message = "Không thành công";
+            let description = "Lấy đơn vị theo mã vật liệu không thành công";
             this.notifi(type, message, description);
           }
         })
@@ -1587,7 +1594,7 @@ export default {
     },
 
     //thay đổi MVL theo đơn vị
-    handleMVLByDonVi(value) {
+    handleMVLByDonVi() {
       if (
         this.dataAddUnitMaterial.idUnit != null &&
         this.dataAddUnitMaterial.idUnit != ""
@@ -1598,7 +1605,7 @@ export default {
         this.checkInputUnit.show = true;
         this.checkInputUnit.message = "Bạn phải điền mã vật liệu";
       }
-      this.searchMaterialByUnit(value);
+      // this.searchMaterialByUnit(value);
     },
     //thay đổi MVL theo đơn vị
     searchMaterialByUnit(unit) {
@@ -2025,8 +2032,14 @@ export default {
     //xử lý thẻ tag
     handleClose(removedTag) {
       const tags = this.tags.filter((tag) => tag !== removedTag);
-      console.log(tags);
       this.tags = tags;
+      if (this.tags != null && this.tags.length != 0) {
+        this.checkInputCodeMaterial.show = false;
+        this.checkInputCodeMaterial.message = "";
+      } else {
+        this.checkInputCodeMaterial.show = true;
+        this.checkInputCodeMaterial.message = "Bạn phải điền mã vật liệu";
+      }
     },
     showInput() {
       this.inputVisible = true;
@@ -2040,15 +2053,21 @@ export default {
     handleInputConfirm() {
       const inputValue = this.inputValue;
       let tags = this.tags;
-      if (inputValue && tags.indexOf(inputValue) === -1) {
-        tags = [...tags, inputValue];
+      if (inputValue.trim()!="" && tags.indexOf(inputValue) === -1) {
+        tags = [...tags, inputValue.trim()];
       }
-      console.log(tags);
       Object.assign(this, {
         tags,
         inputVisible: false,
         inputValue: "",
       });
+      if (this.tags != null && this.tags.length != 0) {
+        this.checkInputCodeMaterial.show = false;
+        this.checkInputCodeMaterial.message = "";
+      } else {
+        this.checkInputCodeMaterial.show = true;
+        this.checkInputCodeMaterial.message = "Bạn phải điền mã vật liệu";
+      }
     },
     //xử lý thẻ tag
   },
