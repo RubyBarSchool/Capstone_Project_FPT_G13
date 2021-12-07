@@ -1,7 +1,6 @@
 <template>
   <div class="ungluong">
     <a-layout :style="{ background: 'white' }">
-      <Header />
       <a-layout-content :style="{ margin: '30px 16px 0' }">
         <div
           :style="{
@@ -309,20 +308,15 @@
           <!-- popup view-->
         </div>
       </a-layout-content>
-      <Footer />
     </a-layout>
   </div>
 </template>
  <script>
-import Header from "@/layouts/Header.vue";
-import Footer from "@/layouts/Footer.vue";
 import ungLuongService from "../service/ungLuongService";
 
 export default {
   name: "UngLuong",
   components: {
-    Header,
-    Footer,
   },
   data() {
     return {

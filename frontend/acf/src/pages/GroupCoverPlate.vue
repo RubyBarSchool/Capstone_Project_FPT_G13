@@ -1,7 +1,6 @@
 <template>
   <div class="groupcoverplate">
     <a-layout :style="{ background: 'white' }">
-      <Header />
       <a-layout-content :style="{ margin: '24px 16px 0' }">
         <div
           :style="{
@@ -82,20 +81,15 @@
           <!-- popup add -->
         </div>
       </a-layout-content>
-      <Footer />
     </a-layout>
   </div>
 </template>
 
 <script>
-import Header from "@/layouts/Header.vue";
-import Footer from "@/layouts/Footer.vue";
 import groupCoverPlateService from "@/service/groupCoverPlateService";
 export default {
   name: "GroupCoverPlate",
   components: {
-    Header,
-    Footer,
   },
   data() {
     return {

@@ -1,7 +1,6 @@
 <template>
   <div class="viewattendance">
     <a-layout :style="{ background: 'white' }">
-      <Header />
       <a-layout-content :style="{ margin: '30px 16px 0' }">
         <div
           :style="{
@@ -197,20 +196,15 @@
           </template>
         </a-modal>
       </a-layout-content>
-      <Footer />
     </a-layout>
   </div>
 </template>
  <script>
-import Header from "@/layouts/Header.vue";
-import Footer from "@/layouts/Footer.vue";
 import attendanceService from "@/service/attendanceService.js";
 import moment from "moment";
 export default {
   name: "Attendance",
   components: {
-    Header,
-    Footer,
   },
   data() {
     return {

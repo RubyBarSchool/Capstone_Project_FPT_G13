@@ -1,7 +1,6 @@
 <template>
   <div class="admin">
     <a-layout :style="{ background: 'white' }">
-      <Header />
       <a-layout-content :style="{ margin: '30px 16px 0' }">
         <div
           :style="{
@@ -311,14 +310,10 @@
 </template>
  <script>
 import thuongAdminService from "../service/thuongAdminService";
-import Header from "@/layouts/Header.vue";
-import Footer from "@/layouts/Footer.vue";
 import moment from "moment";
 export default {
   name: "ThuongAdmin",
   components: {
-    Header,
-    Footer,
   },
   data() {
     return {

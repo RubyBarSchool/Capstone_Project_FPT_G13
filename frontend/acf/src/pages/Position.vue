@@ -1,7 +1,6 @@
 <template>
   <div class="Position">
     <a-layout :style="{ background: 'white' }">
-      <Header />
       <a-layout-content :style="{ margin: '30px 16px 0' }">
         <div
           :style="{
@@ -155,21 +154,16 @@
           </a-row>
         </div>
       </a-layout-content>
-      <Footer />
     </a-layout>
   </div>
 </template>
 
 <script>
-import Header from "@/layouts/Header.vue";
-import Footer from "@/layouts/Footer.vue";
 import positionService from "../service/positionService";
 
 export default {
   name: "Position",
   components: {
-    Header,
-    Footer,
   },
   data() {
     return {

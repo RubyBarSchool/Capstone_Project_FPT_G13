@@ -1,7 +1,6 @@
 <template>
   <div class="materialsuggest">
     <a-layout :style="{ background: 'white' }">
-      <Header />
       <a-layout-content :style="{ margin: '24px 16px 0' }">
         <div
           :style="{
@@ -56,20 +55,15 @@
           <!-- table content -->
         </div>
       </a-layout-content>
-      <Footer />
     </a-layout>
   </div>
 </template>
 
 <script>
-import Header from "@/layouts/Header.vue";
-import Footer from "@/layouts/Footer.vue";
 import materialSuggestService from "@/service/materialSuggestService";
 export default {
   name: "MaterialSuggest",
   components: {
-    Header,
-    Footer,
   },
   data() {
     return {

@@ -1,7 +1,6 @@
 <template>
   <div class="admin">
     <a-layout :style="{ background: 'white' }">
-      <Header />
       <a-layout-content :style="{ margin: '30px 16px 0' }">
         <div
           :style="{
@@ -384,7 +383,6 @@
           <!-- popup edit-->
         </div>
       </a-layout-content>
-      <Footer />
     </a-layout>
   </div>
 </template>
@@ -393,14 +391,10 @@ import accountService from "@/service/accountService.js";
 import roleService from "@/service/roleService.js";
 import employeeService from "@/service/employeeService.js";
 import adminService from "@/service/adminService";
-import Header from "@/layouts/Header.vue";
-import Footer from "@/layouts/Footer.vue";
 
 export default {
   name: "Admin",
   components: {
-    Header,
-    Footer,
   },
   data() {
     return {

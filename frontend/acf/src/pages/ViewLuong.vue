@@ -1,7 +1,6 @@
 <template>
   <div class="viewluong">
     <a-layout :style="{ background: 'white' }">
-      <Header />
       <a-layout-content :style="{ margin: '24px 16px 0' }">
         <a-back-top>
           <div class="ant-back-top-inner">
@@ -165,21 +164,16 @@
           </a-tab-pane>
         </a-tabs>
       </a-layout-content>
-      <Footer />
     </a-layout>
   </div>
 </template>
 
 <script>
 import moment from "moment";
-import Header from "@/layouts/Header.vue";
-import Footer from "@/layouts/Footer.vue";
 import ViewSalaryService from "@/service/viewSalaryService.js";
 export default {
   name: "ViewLuong",
   components: {
-    Header,
-    Footer,
   },
   data() {
     return {

@@ -1,7 +1,6 @@
 <template>
   <div class="historyluongadmin">
     <a-layout :style="{ background: 'white' }">
-      <Header />
       <a-layout-content :style="{ margin: '24px 16px 0' }">
         <a-back-top>
           <div class="ant-back-top-inner">
@@ -99,7 +98,6 @@
         </div>
         <!-- table content -->
       </a-layout-content>
-      <Footer />
     </a-layout>
   </div>
 </template>
@@ -107,13 +105,9 @@
 <script>
 import userService from "../service/userService";
 import historyLuongAdminService from "@/service/historyLuongAdmin.js";
-import Header from "@/layouts/Header.vue";
-import Footer from "@/layouts/Footer.vue";
 export default {
   name: "historyluongadmin",
   components: {
-    Header,
-    Footer,
   },
   data() {
     return {

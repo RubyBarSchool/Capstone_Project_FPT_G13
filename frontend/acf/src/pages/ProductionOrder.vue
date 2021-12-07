@@ -1,7 +1,6 @@
 <template>
   <div class="attendance">
     <a-layout :style="{ background: 'white' }">
-      <Header />
       <a-layout-content :style="{ margin: '30px 16px 0' }">
         <div
           :style="{
@@ -404,8 +403,6 @@
   </div>
 </template>
  <script>
-import Header from "@/layouts/Header.vue";
-import Footer from "@/layouts/Footer.vue";
 import viewDetailContactService from "@/service/viewDetailContactService.js";
 import ContactService from "@/service/contactService.js";
 import ProductionOrderService from "@/service/ProductionOrderService.js";
@@ -415,8 +412,6 @@ import moment from "moment";
 export default {
   name: "productionorder",
   components: {
-    Header,
-    Footer,
     // EditableCell,
   },
   data() {

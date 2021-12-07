@@ -1,7 +1,6 @@
 <template>
   <div class="ContatcMoney">
     <a-layout :style="{ background: 'white' }">
-      <Header />
       <a-layout-content :style="{ margin: '24px 16px 0' }">
         <div
           :style="{
@@ -240,22 +239,17 @@
           </a-form-model>
         </a-modal>
       </a-layout-content>
-      <Footer />
     </a-layout>
   </div>
 </template>
 
 <script>
-import Header from "@/layouts/Header.vue";
-import Footer from "@/layouts/Footer.vue";
 import contactMoneyService from "@/service/contactMoneyService";
 import viewDetailContactService from "@/service/viewDetailContactService";
 
 export default {
   name: "ContatcMoney",
   components: {
-    Header,
-    Footer,
   },
   data() {
     return {

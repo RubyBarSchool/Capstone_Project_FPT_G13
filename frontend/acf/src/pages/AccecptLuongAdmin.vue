@@ -1,7 +1,6 @@
 <template>
   <div class="acceptluongadmin">
     <a-layout :style="{ background: 'white' }">
-      <Header />
       <a-layout-content :style="{ margin: '24px 16px 0' }">
         <a-back-top>
           <div class="ant-back-top-inner">
@@ -113,7 +112,6 @@
         </div>
         <!-- table content -->
       </a-layout-content>
-      <Footer />
     </a-layout>
   </div>
 </template>
@@ -121,14 +119,10 @@
 <script>
 import userService from "../service/userService";
 import accecptLuongAdminService from "@/service/accecptLuongAdminService.js";
-import Header from "@/layouts/Header.vue";
-import Footer from "@/layouts/Footer.vue";
 import moment from "moment";
 export default {
   name: "acceptluongadmin",
   components: {
-    Header,
-    Footer,
   },
   data() {
     return {

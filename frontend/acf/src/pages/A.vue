@@ -1,7 +1,6 @@
 <template>
   <div class="attendance">
     <a-layout :style="{ background: 'white' }">
-      <Header />
       <a-layout-content :style="{ margin: '30px 16px 0' }">
           <img alt="example" style="width: 100%" :src="url" /> </a-layout-content>
       <a-button
@@ -59,19 +58,17 @@
           </a-select>
         </template>
       </a-modal>
-      <Footer />
     </a-layout>
+
+
+    
   </div>
 </template>
  <script>
-import Header from "@/layouts/Header.vue";
-import Footer from "@/layouts/Footer.vue";
 import attendanceService from "@/service/attendanceService.js";
 export default {
   name: "A",
   components: {
-    Header,
-    Footer,
   },
   data() {
     return {

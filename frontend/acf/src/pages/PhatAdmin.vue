@@ -1,7 +1,6 @@
 <template>
   <div class="punish">
     <a-layout :style="{ background: 'white' }">
-      <Header />
       <a-layout-content :style="{ margin: '30px 16px 0' }">
         <div
           :style="{
@@ -320,20 +319,15 @@
           <!-- popup edit-->
         </div>
       </a-layout-content>
-      <Footer />
     </a-layout>
   </div>
 </template>
 <script>
 import punishAdminService from "@/service/punishAdminService";
-import Header from "@/layouts/Header.vue";
-import Footer from "@/layouts/Footer.vue";
 import moment from "moment";
 export default {
   name: "PhatAdmin",
   components: {
-    Header,
-    Footer,
   },
   data() {
     return {

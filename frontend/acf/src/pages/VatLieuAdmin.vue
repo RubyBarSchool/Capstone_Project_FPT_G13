@@ -1,7 +1,6 @@
 <template>
   <div class="vatlieuadmin">
     <a-layout :style="{ background: 'white' }">
-      <Header />
       <a-layout-content :style="{ margin: '30px 16px 0' }">
         <div
           :style="{
@@ -709,7 +708,6 @@
           <!-- popup add frame-->
         </div>
       </a-layout-content>
-      <Footer />
     </a-layout>
   </div>
 </template>
@@ -719,15 +717,11 @@ import unitService from "@/service/unitService.js";
 import groupMaterialService from "@/service/groupMaterialService.js";
 import chieuCaoService from "@/service/chieuCaoService.js";
 import vatLieuAdminService from "@/service/vatLieuAdminService.js";
-import Header from "@/layouts/Header.vue";
-import Footer from "@/layouts/Footer.vue";
 import fileService from "../service/fileService";
 
 export default {
   name: "VatLieuAdmin",
   components: {
-    Header,
-    Footer,
   },
   data() {
     return {

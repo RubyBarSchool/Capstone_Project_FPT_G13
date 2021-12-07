@@ -1,7 +1,6 @@
 <template>
   <div class="lichsutamung">
     <a-layout :style="{ background: 'white' }">
-      <Header />
       <a-layout-content :style="{ margin: '24px 16px 0' }">
         <div
           :style="{
@@ -64,14 +63,11 @@
           <!-- popup add-->
         </div>
       </a-layout-content>
-      <Footer />
     </a-layout>
   </div>
 </template>
 
 <script>
-import Header from "@/layouts/Header.vue";
-import Footer from "@/layouts/Footer.vue";
 const columns = [
   {
     title: "STT",
@@ -113,8 +109,6 @@ const data = [
 export default {
   name: "LichSuTamUng",
   components: {
-    Header,
-    Footer,
   },
   data() {
     return {

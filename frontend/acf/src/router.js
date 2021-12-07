@@ -1,6 +1,5 @@
 import Vue from "vue";
 import Router from "vue-router";
-import Home from "./pages/Home.vue";
 import Login from "./pages/Login.vue";
 import layout from "./layouts/Slider.vue";
 
@@ -8,52 +7,231 @@ Vue.use(Router);
 
 export const router = new Router({
     routes: [{
-            path: "/",
-            name: "home",
-            component: Home,
-        },
-        {
-            path: "/home",
-            component: Home,
-        },
-        {
             path: "/login",
             component: Login,
         },
         {
-            path: "/admin",
-            name: "admin",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/Admin.vue"),
-        },
-        {
-            path: "/user",
-            name: "User",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/User.vue"),
-        },
-        {
-            path: "/attendance",
-            name: "Attendance",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/Attendance.vue"),
-        },
-        {
-            path: "/viewattendance",
-            name: "ViewAttendance",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/ViewAttendance.vue"),
-        },
-        {
-            path: "/position",
-            name: "Position",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/Position.vue"),
+            path: "/",
+            name: "rootLayOut",
+            component: layout,
+            children: [{
+                    path: "admin",
+                    name: "admin",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/Admin.vue"),
+                }, {
+                    path: "user",
+                    name: "User",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/User.vue"),
+                },
+                {
+                    path: "attendance",
+                    name: "Attendance",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/Attendance.vue"),
+                },
+                {
+                    path: "viewattendance",
+                    name: "ViewAttendance",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/ViewAttendance.vue"),
+                },
+                {
+                    path: "position",
+                    name: "Position",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/Position.vue"),
+                }, {
+                    path: "company",
+                    name: "Company",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/Company.vue"),
+                },
+                {
+                    path: "ungluong",
+                    name: "UngLuong",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/UngLuong.vue"),
+                },
+                {
+                    path: "acceptungluong",
+                    name: "AcceptUngLuong",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/AcceptUngLuong.vue"),
+                },
+                {
+                    path: "xinnghi",
+                    name: "XinNghi",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/XinNghi.vue"),
+                },
+                {
+                    path: "acceptxinnghi",
+                    name: "AcceptXinNghi",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/AcceptXinNghi.vue"),
+                },
+                {
+                    path: "viewluong",
+                    name: "ViewLuong",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/ViewLuong.vue"),
+                },
+                {
+                    path: "acceptluongadmin",
+                    name: "AccecptLuongAdmin",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/AccecptLuongAdmin.vue"),
+                },
+                {
+                    path: "historyluongadmin",
+                    name: "HistoryLuongAdmin",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/HistoryLuongAdmin.vue"),
+                },
+                {
+                    path: "phatadmin",
+                    name: "PhatAdmin",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/PhatAdmin.vue"),
+                },
+                {
+                    path: "thuongadmin",
+                    name: "ThuongAdmin",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/ThuongAdmin.vue"),
+                },
+                {
+                    path: "viewthuongphat",
+                    name: "ViewThuongPhat",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/ViewThuongPhat.vue"),
+                },
+                {
+                    path: "unitadmin",
+                    name: "UnitAdmin",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/UnitAdmin.vue"),
+                },
+                {
+                    path: "groupcoverplate",
+                    name: "GroupCoverPlate",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/GroupCoverPlate.vue"),
+                },
+                {
+                    path: "groupmaterial",
+                    name: "GroupMaterial",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/GroupMaterial.vue"),
+                },
+                {
+                    path: "frameadmin",
+                    name: "FrameAdmin",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/FrameAdmin.vue"),
+                }, {
+                    path: "a",
+                    name: "a",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/A.vue"),
+                },
+                {
+                    path: "coverplate",
+                    name: "CoverPlate",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/CoverPlate.vue"),
+                }, {
+                    path: "materialsuggest",
+                    name: "MaterialSuggest",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/MaterialSuggest.vue"),
+                },
+                {
+                    path: "vatlieuadmin",
+                    name: "VatLieuAdmin",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/VatLieuAdmin.vue"),
+                },
+                {
+                    path: "taohopdong",
+                    name: "TaoHopDong",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/TaoHopDong.vue"),
+                },
+                {
+                    path: "lichsutamung",
+                    name: "LichSuTamUng",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/LichSuTamUng.vue"),
+                },
+                {
+                    path: "viewdetailcontact",
+                    name: "ViewDetailContact",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/ViewDetailContact.vue"),
+                },
+                {
+                    path: "productionorder",
+                    name: "ProductionOrder",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/ProductionOrder.vue"),
+                },
+                {
+                    path: "viewwork",
+                    name: "ViewWorkEmployee",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/ViewWorkEmployee.vue"),
+                }, {
+                    path: "contactmoney",
+                    name: "ContactMoney",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/ContactMoney.vue"),
+                },
+                {
+                    path: "slider",
+                    name: "Slider",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./layouts/Slider.vue"),
+                }, {
+                    path: 'chieucao',
+                    name: 'chieuCao',
+                    component: () =>
+                        import ("./pages/ChieuCao.vue")
+                }
+            ]
         },
         {
             path: "/pageforbiden",
@@ -69,199 +247,7 @@ export const router = new Router({
             component: () =>
                 import ("./pages/PageNotFound.vue"),
         },
-        {
-            path: "/company",
-            name: "Company",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/Company.vue"),
-        },
-        {
-            path: "/ungluong",
-            name: "UngLuong",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/UngLuong.vue"),
-        },
-        {
-            path: "/acceptungluong",
-            name: "AcceptUngLuong",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/AcceptUngLuong.vue"),
-        },
-        {
-            path: "/xinnghi",
-            name: "XinNghi",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/XinNghi.vue"),
-        },
-        {
-            path: "/acceptxinnghi",
-            name: "AcceptXinNghi",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/AcceptXinNghi.vue"),
-        },
-        {
-            path: "/viewluong",
-            name: "ViewLuong",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/ViewLuong.vue"),
-        },
-        {
-            path: "/acceptluongadmin",
-            name: "AccecptLuongAdmin",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/AccecptLuongAdmin.vue"),
-        },
-        {
-            path: "/historyluongadmin",
-            name: "HistoryLuongAdmin",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/HistoryLuongAdmin.vue"),
-        },
-        {
-            path: "/phatadmin",
-            name: "PhatAdmin",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/PhatAdmin.vue"),
-        },
-        {
-            path: "/thuongadmin",
-            name: "ThuongAdmin",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/ThuongAdmin.vue"),
-        },
-        {
-            path: "/viewthuongphat",
-            name: "ViewThuongPhat",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/ViewThuongPhat.vue"),
-        },
-        {
-            path: "/unitadmin",
-            name: "UnitAdmin",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/UnitAdmin.vue"),
-        },
-        {
-            path: "/",
-            name: "ChieuCao",
-            component: layout,
-            children: [{
-                    path: 'chieucao',
-                    name: 'chieu_cao',
-                    component: () =>
-                        import ("./pages/ChieuCao.vue")
-                }]
-                // lazy-loaded
-                // component: () =>
-                //     import ("./pages/ChieuCao.vue"),
-        },
-        {
-            path: "/groupcoverplate",
-            name: "GroupCoverPlate",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/GroupCoverPlate.vue"),
-        },
-        {
-            path: "/groupmaterial",
-            name: "GroupMaterial",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/GroupMaterial.vue"),
-        },
-        {
-            path: "/frameadmin",
-            name: "FrameAdmin",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/FrameAdmin.vue"),
-        }, {
-            path: "/a",
-            name: "a",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/A.vue"),
-        },
-        {
-            path: "/coverplate",
-            name: "CoverPlate",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/CoverPlate.vue"),
-        }, {
-            path: "/materialsuggest",
-            name: "MaterialSuggest",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/MaterialSuggest.vue"),
-        },
-        {
-            path: "/vatlieuadmin",
-            name: "VatLieuAdmin",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/VatLieuAdmin.vue"),
-        },
-        {
-            path: "/taohopdong",
-            name: "TaoHopDong",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/TaoHopDong.vue"),
-        },
-        {
-            path: "/lichsutamung",
-            name: "LichSuTamUng",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/LichSuTamUng.vue"),
-        },
-        {
-            path: "/viewdetailcontact",
-            name: "ViewDetailContact",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/ViewDetailContact.vue"),
-        },
-        {
-            path: "/productionorder",
-            name: "ProductionOrder",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/ProductionOrder.vue"),
-        },
-        {
-            path: "/viewwork",
-            name: "ViewWorkEmployee",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/ViewWorkEmployee.vue"),
-        }, {
-            path: "/contactmoney",
-            name: "ContactMoney",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/ContactMoney.vue"),
-        },
-        {
-            path: "/slider",
-            name: "Slider",
-            // lazy-loaded
-            component: () =>
-                import ("./layouts/Slider.vue"),
-        },
+
     ],
 });
 

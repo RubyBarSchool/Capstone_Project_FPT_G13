@@ -1,7 +1,6 @@
 <template>
   <div class="attendance">
     <a-layout :style="{ background: 'white' }">
-      <Header />
       <a-layout-content :style="{ margin: '30px 16px 0' }">
         <div
           :style="{
@@ -384,20 +383,15 @@
           </a-modal>
         </div>
       </a-layout-content>
-      <Footer />
     </a-layout>
   </div>
 </template>
  <script>
-import Header from "@/layouts/Header.vue";
-import Footer from "@/layouts/Footer.vue";
 import viewDetailContactService from "@/service/viewDetailContactService.js";
 import EditableCell from "@/components/EditableCell.vue";
 export default {
   name: "viewdetailcontact",
   components: {
-    Header,
-    Footer,
     EditableCell,
   },
   data() {
