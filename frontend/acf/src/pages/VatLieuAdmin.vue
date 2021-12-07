@@ -1014,6 +1014,7 @@ export default {
 
     //reset
     resetFrame() {
+      this.dataSelect = [];
       this.disable = false;
       this.getMaterials();
       this.getAllFrame();
@@ -1662,18 +1663,28 @@ export default {
       vatLieuAdminService
         .getHeightsByMaterialAndFrame(this.dataForm)
         .then((response) => {
-          if (response.data.data) {
-            this.dataHeights = response.data.data;
+          if (response.data.data.length != 0) {
             let type = "success";
-            let message = "Bạn đã chọn mã vật liệu và khung";
-            let description = response.data.message;
+            let message = "Thành công";
+            let description =
+              "Lấy chiều cao theo " +
+              this.dataForm.name1 +
+              " và " +
+              this.dataForm.name2 +
+              " thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Bạn đã chọn mã vật liệu và khung";
-            let description = response.data.message;
+            let message = "Không tồn tại";
+            let description =
+              "Tất cả chiều cao theo " +
+              this.dataForm.name1 +
+              " và " +
+              this.dataForm.name2 +
+              " đều đã tồn tại";
             this.notifi(type, message, description);
           }
+          this.dataHeights = response.data.data;
         })
         .catch((e) => {
           console.log(e);
@@ -1685,18 +1696,28 @@ export default {
       vatLieuAdminService
         .getFrameByMaterialAndHeight(this.dataForm)
         .then((response) => {
-          if (response.data.data) {
-            this.dataFrameMaterials = response.data.data;
+          if (response.data.data.length != 0) {
             let type = "success";
-            let message = "Bạn đã chọn mã vật liệu và chiều cao";
-            let description = response.data.message;
+            let message = "Thành công";
+            let description =
+              "Lấy khung theo " +
+              this.dataForm.name1 +
+              " và " +
+              this.dataForm.name2 +
+              " thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Bạn đã chọn mã vật liệu và chiều cao";
-            let description = response.data.message;
+            let message = "Không tồn tại";
+            let description =
+              "Tất cả khung theo " +
+              this.dataForm.name1 +
+              " và " +
+              this.dataForm.name2 +
+              " đều đã tồn tại";
             this.notifi(type, message, description);
           }
+          this.dataFrameMaterials = response.data.data;
         })
         .catch((e) => {
           console.log(e);
@@ -1708,18 +1729,28 @@ export default {
       vatLieuAdminService
         .getMaterialByFrameAndHeight(this.dataForm)
         .then((response) => {
-          if (response.data.data) {
-            this.dataMaterials = response.data.data;
+          if (response.data.data.length != 0) {
             let type = "success";
-            let message = "Bạn đã chọn khung và chiều cao";
-            let description = response.data.message;
+            let message = "Thành công";
+            let description =
+              "Lấy mã vật liệu theo " +
+              this.dataForm.name1 +
+              " và " +
+              this.dataForm.name2 +
+              " thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Bạn đã chọn khung và chiều cao";
-            let description = response.data.message;
+            let message = "Không tồn tại";
+            let description =
+              "Tất cả khung theo " +
+              this.dataForm.name1 +
+              " và " +
+              this.dataForm.name2 +
+              " đều đã tồn tại";
             this.notifi(type, message, description);
           }
+          this.dataMaterials = response.data.data;
         })
         .catch((e) => {
           console.log(e);
@@ -1748,10 +1779,19 @@ export default {
         if (
           this.dataHeights[i].id == this.dataAddFrameHeightMaterial.idHeight
         ) {
-          data.name = this.dataHeights[i].name;
+          data.name = this.dataHeights[i].frameHeight;
         }
       }
+
+      for (let i = this.dataSelect.length - 1; i >= 0; i--) {
+        if (this.dataSelect[i].type == "height") {
+          this.dataSelect.splice(i, 1);
+          break;
+        }
+      }
+
       this.dataSelect.push(data);
+      console.log("data select", this.dataSelect);
       if (this.dataSelect.length == 2) {
         this.dataForm.id1 = this.dataSelect[0].id;
         this.dataForm.name1 = this.dataSelect[0].name;
@@ -1791,10 +1831,17 @@ export default {
           this.dataFrameMaterials[i].id ==
           this.dataAddFrameHeightMaterial.idFrame
         ) {
-          data.name = this.dataFrameMaterials[i].name;
+          data.name = this.dataFrameMaterials[i].frame;
+        }
+      }
+      for (let i = this.dataSelect.length - 1; i >= 0; i--) {
+        if (this.dataSelect[i].type == "frame") {
+          this.dataSelect.splice(i, 1);
+          break;
         }
       }
       this.dataSelect.push(data);
+      console.log("data select", this.dataSelect);
       if (this.dataSelect.length == 2) {
         if (this.dataSelect[0].type == "material") {
           this.dataForm.id1 = this.dataSelect[0].id;
@@ -1833,14 +1880,23 @@ export default {
         id: this.dataAddFrameHeightMaterial.idMaterial,
         name: "",
       };
-      for (var i = 0; i < this.dataMaterials.length; i++) {
+      for (let i = 0; i < this.dataMaterials.length; i++) {
         if (
           this.dataMaterials[i].id == this.dataAddFrameHeightMaterial.idMaterial
         ) {
           data.name = this.dataMaterials[i].name;
         }
       }
+
+      for (let i = this.dataSelect.length - 1; i >= 0; i--) {
+        if (this.dataSelect[i].type == "material") {
+          this.dataSelect.splice(i, 1);
+          break;
+        }
+      }
+
       this.dataSelect.push(data);
+      console.log("data select", this.dataSelect);
       if (this.dataSelect.length == 2) {
         this.dataForm.id1 = data.id;
         this.dataForm.name1 = data.name;
@@ -1886,18 +1942,7 @@ export default {
 
     //add khung
     showModalAddFrame() {
-      this.getMaterials();
-      this.getAllFrame();
-      this.getAllHeight();
-      this.dataAddFrameHeightMaterial.idMaterial = "";
-      this.dataAddFrameHeightMaterial.idFrame = "";
-      this.dataAddFrameHeightMaterial.idHeight = "";
-      this.checkInputCodeMaterial.show = false;
-      this.checkInputCodeMaterial.message = "";
-      this.checkInputFrame.show = false;
-      this.checkInputFrame.message = "";
-      this.checkInputHeight.show = false;
-      this.checkInputHeight.message = "";
+      this.resetFrame();
       this.visibleAddFrame = true;
     },
     checkFormAddFrame() {
@@ -2053,7 +2098,7 @@ export default {
     handleInputConfirm() {
       const inputValue = this.inputValue;
       let tags = this.tags;
-      if (inputValue.trim()!="" && tags.indexOf(inputValue) === -1) {
+      if (inputValue.trim() != "" && tags.indexOf(inputValue) === -1) {
         tags = [...tags, inputValue.trim()];
       }
       Object.assign(this, {
