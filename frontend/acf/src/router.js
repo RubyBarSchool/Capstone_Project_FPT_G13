@@ -2,6 +2,8 @@ import Vue from "vue";
 import Router from "vue-router";
 import Home from "./pages/Home.vue";
 import Login from "./pages/Login.vue";
+import layout from "./layouts/Slider.vue";
+
 Vue.use(Router);
 
 export const router = new Router({
@@ -152,11 +154,18 @@ export const router = new Router({
                 import ("./pages/UnitAdmin.vue"),
         },
         {
-            path: "/chieucao",
+            path: "/",
             name: "ChieuCao",
-            // lazy-loaded
-            component: () =>
-                import ("./pages/ChieuCao.vue"),
+            component: layout,
+            children: [{
+                    path: 'chieucao',
+                    name: 'chieu_cao',
+                    component: () =>
+                        import ("./pages/ChieuCao.vue")
+                }]
+                // lazy-loaded
+                // component: () =>
+                //     import ("./pages/ChieuCao.vue"),
         },
         {
             path: "/groupcoverplate",
@@ -245,6 +254,13 @@ export const router = new Router({
             // lazy-loaded
             component: () =>
                 import ("./pages/ContactMoney.vue"),
+        },
+        {
+            path: "/slider",
+            name: "Slider",
+            // lazy-loaded
+            component: () =>
+                import ("./layouts/Slider.vue"),
         },
     ],
 });
