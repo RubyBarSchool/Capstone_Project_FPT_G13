@@ -111,6 +111,7 @@
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-button
+                  v-if="record.statusDone == -2"
                   id="edit"
                   @click="
                     showModalEdit(
@@ -125,13 +126,18 @@
                   <font-awesome-icon :icon="['fas', 'edit']" />
                 </a-button>
 
-                <a-button
-                  id="delete"
+                <a-popconfirm
                   v-if="record.statusDone == -2"
-                  @click="deleteContact(record.id)"
+                  title="Bạn có chắc chắn muốn xóa không?"
+                  ok-text="Đồng ý"
+                  cancel-text="Không đồng ý"
+                  @confirm="deleteContact(record.id)"
                 >
-                  <font-awesome-icon :icon="['fas', 'trash']" />
-                </a-button>
+                  <a-button id="delete">
+                    <font-awesome-icon :icon="['fas', 'trash']" />
+                  </a-button>
+                </a-popconfirm>
+                
               </template>
             </a-table>
           </div>
@@ -141,16 +147,31 @@
           <a-modal v-model="visibleAdd" title="Thêm hợp đồng">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="handleSubmit">
+              <a-button
+                :loading="loadingAdd"
+                key="submit"
+                type="primary"
+                @click="checkBeforeAdd"
+              >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Tên hợp đồng">
-                <a-input v-model="dataAdd.name" />
+              <span style="color: red">*</span>Tên hợp đồng:
+              <a-form-model-item>
+                <a-input @change="inputNameContact" v-model="dataAdd.name" />
+                <div style="color: red" v-if="checkNameContact.show">
+                  {{ checkNameContact.message }}
+                </div>
               </a-form-model-item>
-              <a-form-model-item label="Khách hàng">
-                <a-select v-model="dataAdd.idCompany" style="width: 100%">
+
+              <span style="color: red">*</span>Khách hàng:
+              <a-form-model-item>
+                <a-select
+                  @change="selectCompany"
+                  v-model="dataAdd.idCompany"
+                  style="width: 100%"
+                >
                   <a-select-option
                     v-for="(company, index) in companys"
                     :value="company.id"
@@ -159,14 +180,37 @@
                     {{ company.name }}
                   </a-select-option>
                 </a-select>
+                <div style="color: red" v-if="checkCompany.show">
+                  {{ checkCompany.message }}
+                </div>
               </a-form-model-item>
-              <a-form-model-item label="Hạn hoàn thành">
-                <a-date-picker v-model="dataAdd.time" />
+
+              <span style="color: red">*</span>Hạn hoàn thành:
+              <a-form-model-item>
+                <a-date-picker
+                  :disabled-date="disableDateStart"
+                  @change="selectDateEnd"
+                  v-model="dataAdd.time"
+                />
+                <div style="color: red" v-if="checkDateEnd.show">
+                  {{ checkDateEnd.message }}
+                </div>
               </a-form-model-item>
-              <a-form-model-item label="Tổng giá trị">
-                <a-input v-model="fileExcel.priceContact" disabled />
+
+              <span style="color: red">*</span>Tổng giá trị:
+              <a-form-model-item>
+                <a-input
+                  @change="changeTotalMoney"
+                  v-model="fileExcel.priceContact"
+                  disabled
+                />
+                <div style="color: red" v-if="checkTotalMoney.show">
+                  {{ checkTotalMoney.message }}
+                </div>
               </a-form-model-item>
-              <a-form-model-item label="Ghi chú">
+
+              Ghi chú:
+              <a-form-model-item>
                 <a-textarea
                   :auto-size="{
                     minRows: 1,
@@ -187,16 +231,22 @@
                 {{ progress }}%
               </div>
               <a-row :gutter="[16, 16]">
-                <a-col :span="8"> Bảng chi tiết: </a-col>
+                <a-col :span="8">
+                  <span style="color: red">*</span>Bảng chi tiết:</a-col
+                >
                 <a-col :span="8">
                   <input
                     type="file"
+                    ref="fileupload"
                     accept=".xls, .xlsx"
                     @change="importFile($event)"
                   />
                 </a-col>
               </a-row>
             </a-form-model>
+            <div style="color: red" v-if="checkTableDetail.show">
+              {{ checkTableDetail.message }}
+            </div>
           </a-modal>
           <!-- popup add-->
 
@@ -204,15 +254,29 @@
           <a-modal v-model="visibleEdit" title="Sửa hợp đồng">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
-              <a-button key="submit" type="primary" @click="submitUpdate">
+              <a-button
+                :loading="loadingAdd"
+                key="submit"
+                type="primary"
+                @click="submitUpdate"
+              >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Tên hợp đồng">
-                <a-input v-model="dataEdit.name" />
+              <span style="color: red">*</span>Tên hợp đồng:
+              <a-form-model-item>
+                <a-input
+                  @change="inputEditNameContact"
+                  v-model="dataEdit.name"
+                />
+                <div style="color: red" v-if="checkNameContact.show">
+                  {{ checkNameContact.message }}
+                </div>
               </a-form-model-item>
-              <a-form-model-item label="Khách hàng">
+
+              <span style="color: red">*</span>Khách hàng:
+              <a-form-model-item>
                 <a-select
                   v-model="dataEditCompany.id"
                   style="width: 100%"
@@ -226,9 +290,20 @@
                     {{ company.name }}
                   </a-select-option>
                 </a-select>
+                <div style="color: red" v-if="checkCompany.show">
+                  {{ checkCompany.message }}
+                </div>
               </a-form-model-item>
-              <a-form-model-item label="Hạn hoàn thành">
-                <a-date-picker v-model="dataEdit.dateFinish" />
+              <span style="color: red">*</span>Hạn hoàn thành:
+              <a-form-model-item>
+                <a-date-picker
+                  @change="selectEditDateEnd"
+                  :disabled-date="disableDateStart"
+                  v-model="dataEdit.dateFinish"
+                />
+                <div style="color: red" v-if="checkDateEnd.show">
+                  {{ checkDateEnd.message }}
+                </div>
               </a-form-model-item>
             </a-form-model>
           </a-modal>
@@ -244,13 +319,14 @@ import fileService from "@/service/fileService.js";
 import company from "@/service/companyService.js";
 import contact from "@/service/contactService.js";
 import contactService from "@/service/contactService";
+import moment from "moment";
 
 export default {
   name: "TaoHopDong",
-  components: {
-  },
+  components: {},
   data() {
     return {
+      loadingAdd: false,
       // data,
       pagination: {
         current: 1,
@@ -358,6 +434,30 @@ export default {
           scopedSlots: { customRender: "action" },
         },
       ],
+      checkNameContact: {
+        show: false,
+        message: "",
+      },
+      checkCompany: {
+        show: false,
+        message: "",
+      },
+      checkDateEnd: {
+        show: false,
+        message: "",
+      },
+      checkTotalMoney: {
+        show: false,
+        message: "",
+      },
+      checkNote: {
+        show: false,
+        message: "",
+      },
+      checkTableDetail: {
+        show: false,
+        message: "",
+      },
     };
   },
   created() {
@@ -365,6 +465,80 @@ export default {
     this.submitSearch();
   },
   methods: {
+    disableDateStart(current) {
+      return current < moment().subtract(1, "days");
+    },
+    changeNoteContact() {
+      if (
+        this.fileExcel.noteContact != null &&
+        this.fileExcel.noteContact.trim() != ""
+      ) {
+        this.checkTotalMoney.show = false;
+        this.checkTotalMoney.message = "";
+      } else {
+        this.checkTotalMoney.show = true;
+        this.checkTotalMoney.message =
+          "Bạn phải xem lại tổng tiền trong tệp hợp đồng";
+      }
+    },
+    changeTotalMoney() {
+      if (
+        this.fileExcel.priceContact != null &&
+        this.fileExcel.priceContact.trim() != ""
+      ) {
+        this.checkTotalMoney.show = false;
+        this.checkTotalMoney.message = "";
+      } else {
+        this.checkTotalMoney.show = true;
+        this.checkTotalMoney.message =
+          "Bạn phải xem lại tổng tiền trong tệp hợp đồng";
+      }
+    },
+    selectEditDateEnd() {
+      if (this.dataEdit.dateFinish != null && this.dataEdit.dateFinish != "") {
+        this.checkDateEnd.show = false;
+        this.checkDateEnd.message = "";
+      } else {
+        this.checkDateEnd.show = true;
+        this.checkDateEnd.message = "Bạn phải chọn ngày hết hạn";
+      }
+    },
+    selectDateEnd() {
+      if (this.dataAdd.time != null && this.dataAdd.time != "") {
+        this.checkDateEnd.show = false;
+        this.checkDateEnd.message = "";
+      } else {
+        this.checkDateEnd.show = true;
+        this.checkDateEnd.message = "Bạn phải chọn ngày hết hạn";
+      }
+    },
+    selectCompany() {
+      if (this.dataAdd.idCompany != null && this.dataAdd.idCompany != "") {
+        this.checkCompany.show = false;
+        this.checkCompany.message = "";
+      } else {
+        this.checkCompany.show = true;
+        this.checkCompany.message = "Bạn phải chọn khách hàng";
+      }
+    },
+    inputEditNameContact() {
+      if (this.dataEdit.name != null && this.dataEdit.name.trim() != "") {
+        this.checkNameContact.show = false;
+        this.checkNameContact.message = "";
+      } else {
+        this.checkNameContact.show = true;
+        this.checkNameContact.message = "Bạn phải điền tên hợp đồng";
+      }
+    },
+    inputNameContact() {
+      if (this.dataAdd.name != null && this.dataAdd.name.trim() != "") {
+        this.checkNameContact.show = false;
+        this.checkNameContact.message = "";
+      } else {
+        this.checkNameContact.show = true;
+        this.checkNameContact.message = "Bạn phải điền tên hợp đồng";
+      }
+    },
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;
@@ -416,23 +590,101 @@ export default {
           .then((response) => {
             this.message = response.data.message;
             this.fileExcel = response.data.data;
+            this.checkTableDetail.show = false;
+            this.checkTableDetail.message = "";
+            this.changeTotalMoney();
           })
           .catch((e) => {
             this.progress = 0;
             this.message = "Không thể upload file";
+            this.checkTableDetail.show = true;
+            this.checkTableDetail.message = "Bạn phải thêm tệp hợp đồng";
             console.log(e);
           });
       }
     },
+    checkBeforeAdd() {
+      let check = true;
+      if (this.dataAdd.name != null && this.dataAdd.name.trim() != "") {
+        this.checkNameContact.show = false;
+        this.checkNameContact.message = "";
+      } else {
+        check = false;
+        this.checkNameContact.show = true;
+        this.checkNameContact.message = "Bạn phải điền tên hợp đồng";
+      }
+
+      if (this.dataAdd.idCompany != null && this.dataAdd.idCompany != "") {
+        this.checkCompany.show = false;
+        this.checkCompany.message = "";
+      } else {
+        check = false;
+        this.checkCompany.show = true;
+        this.checkCompany.message = "Bạn phải chọn khách hàng";
+      }
+
+      if (this.dataAdd.time != null && this.dataAdd.time != "") {
+        this.checkDateEnd.show = false;
+        this.checkDateEnd.message = "";
+      } else {
+        check = false;
+        this.checkDateEnd.show = true;
+        this.checkDateEnd.message = "Bạn phải chọn ngày hết hạn";
+      }
+
+      if (
+        this.fileExcel.priceContact != null &&
+        this.fileExcel.priceContact.trim() != ""
+      ) {
+        this.checkTotalMoney.show = false;
+        this.checkTotalMoney.message = "";
+      } else {
+        check = false;
+        this.checkTotalMoney.show = true;
+        this.checkTotalMoney.message =
+          "Bạn phải xem lại tổng tiền trong tệp hợp đồng";
+      }
+
+      if (
+        this.fileExcel.priceContact != null &&
+        this.fileExcel.priceContact.trim() != "" &&
+        this.fileExcel.fileProductVOList != null &&
+        this.fileExcel.fileProductVOList.length != 0
+      ) {
+        this.checkTableDetail.show = false;
+        this.checkTableDetail.message = "";
+      } else {
+        check = false;
+        this.checkTableDetail.show = true;
+        this.checkTableDetail.message = "Bạn phải thêm tệp hợp đồng";
+      }
+      if (check) {
+        this.handleSubmit();
+      }
+    },
     handleSubmit() {
+      this.loadingAdd = true;
       this.dataAdd.fileExcel = this.fileExcel;
       contact
         .submitContact(this.dataAdd)
-        .then(() => {
+        .then((response) => {
+          if (response.data.data) {
+            let type = "success";
+            let message = "Thêm mới";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Thêm mới";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          }
+          this.loadingAdd = false;
           this.visibleAdd = false;
           this.submitSearch();
         })
         .catch((e) => {
+          this.loadingAdd = false;
           console.log(e);
         });
     },
@@ -442,11 +694,23 @@ export default {
     showModalAdd() {
       this.visibleAdd = true;
       this.progress = 0;
-      (this.dataAdd.name = ""),
-        (this.dataAdd.idCompany = ""),
-        (this.dataAdd.time = ""),
-        (this.fileExcel = []);
-      // this.$refs.file.files = undefined
+      this.dataAdd.name = "";
+      this.dataAdd.idCompany = "";
+      this.dataAdd.time = "";
+      this.fileExcel = [];
+      if (this.$refs.fileupload != null) {
+        this.$refs.fileupload.value = null;
+      }
+      this.checkDateEnd.show = false;
+      this.checkDateEnd.message = "";
+      this.checkCompany.show = false;
+      this.checkCompany.message = "";
+      this.checkNameContact.show = false;
+      this.checkNameContact.message = "";
+      this.checkTotalMoney.show = false;
+      this.checkTotalMoney.message = "";
+      this.checkTableDetail.show = false;
+      this.checkTableDetail.message = "";
     },
     handleCancel() {
       this.visibleAdd = false;
@@ -456,29 +720,72 @@ export default {
       this.dataEdit.name = name;
       this.dataEdit.id = id;
       this.dataEditCompany.id = idCompany;
+      this.checkNameContact.show = false;
+      this.checkNameContact.message = "";
+      this.checkCompany.show = false;
+      this.checkCompany.message = "";
+      this.checkDateEnd.show = false;
+      this.checkDateEnd.message = "";
       this.visibleEdit = true;
     },
+    checkBeforeEdit() {
+      let check = true;
+      if (this.dataEdit.name != null && this.dataEdit.name.trim() != "") {
+        this.checkNameContact.show = false;
+        this.checkNameContact.message = "";
+      } else {
+        check = false;
+        this.checkNameContact.show = true;
+        this.checkNameContact.message = "Bạn phải điền tên hợp đồng";
+      }
+
+      if (this.dataAdd.idCompany != null && this.dataAdd.idCompany != "") {
+        this.checkCompany.show = false;
+        this.checkCompany.message = "";
+      } else {
+        check = false;
+        this.checkCompany.show = true;
+        this.checkCompany.message = "Bạn phải chọn khách hàng";
+      }
+
+      if (this.dataEdit.dateFinish != null && this.dataEdit.dateFinish != "") {
+        this.checkDateEnd.show = false;
+        this.checkDateEnd.message = "";
+      } else {
+        check = false;
+        this.checkDateEnd.show = true;
+        this.checkDateEnd.message = "Bạn phải chọn ngày hết hạn";
+      }
+
+      if (check) {
+        this.submitUpdate();
+      }
+    },
     submitUpdate() {
+      this.loadingAdd = true;
       contactService
         .updateContact(this.dataEdit)
         .then((response) => {
-          this.submitSearch();
           if (response.data.data) {
             let type = "success";
             let message = "Cập nhật";
-            let description = response.data.data.message;
+            let description = response.data.message;
             this.notifi(type, message, description);
           } else {
             let type = "error";
             let message = "Cập nhật";
-            let description = response.data.data.message;
+            let description = response.data.message;
             this.notifi(type, message, description);
           }
+          this.submitSearch();
+          this.visibleEdit = false;
+          this.loadingAdd = false;
         })
         .catch((e) => {
+          this.loadingAdd = false;
+          this.visibleEdit = false;
           console.log(e);
         });
-      this.visibleEdit = false;
     },
     deleteContact(id) {
       contactService
@@ -488,18 +795,24 @@ export default {
           if (response.data.data) {
             let type = "success";
             let message = "Xóa";
-            let description = response.data.data.message;
+            let description = response.data.message;
             this.notifi(type, message, description);
           } else {
             let type = "error";
             let message = "Xóa";
-            let description = response.data.data.message;
+            let description = response.data.message;
             this.notifi(type, message, description);
           }
         })
         .catch((e) => {
           console.log(e);
         });
+    },
+    notifi(type, message, description) {
+      this.$notification[type]({
+        message: message,
+        description: description,
+      });
     },
   },
 };
