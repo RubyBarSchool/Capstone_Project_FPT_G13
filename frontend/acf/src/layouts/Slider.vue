@@ -4,23 +4,10 @@
       <a-layout-sider v-model="collapsed" :trigger="null" collapsible>
         <div class="logo" />
         <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
-          <a-menu-item key="1">
-            <a-icon>
-              <font-awesome-icon :icon="['fas', 'user']" />
-            </a-icon>
-            <span> Quản lý tài khoản </span>
-          </a-menu-item>
-          <a-menu-item key="2">
-            <a-icon>
-              <font-awesome-icon :icon="['fas', 'users']" />
-            </a-icon>
-            <span> Quản lý nhân viên</span>
-          </a-menu-item>
-          <a-menu-item key="3">
-            <a-icon>
-              <font-awesome-icon :icon="['fas', 'file-contract']" />
-            </a-icon>
-            <span> Quản lý hợp đồng </span>
+          <a-menu-item :key="index" v-for="(data, index) in router">
+            <router-link :to="data.path">
+              {{ data.name }}
+            </router-link>
           </a-menu-item>
         </a-menu>
       </a-layout-sider>
@@ -46,11 +33,6 @@
                   <span style="color: black"> {{ loadUser }} </span>
                 </a>
                 <a-menu slot="overlay" class="menu">
-                  <a-menu-item :key="index" v-for="(data, index) in router">
-                    <router-link :to="data.path">
-                      {{ data.name }}
-                    </router-link>
-                  </a-menu-item>
                   <a-menu-divider />
                   <a-menu-item :key="router.length" @click="logout">
                     <h6>
@@ -92,6 +74,122 @@ export default {
           name: "Quản lý tài khoản",
         },
       ],
+      routerAdmin: [
+        {
+          path: "/attendance",
+          name: "Chấm công",
+        },
+        {
+          path: "/viewattendance",
+          name: "Xem chấm công",
+        },
+        {
+          path: "/user",
+          name: "Quản lý nhân viên",
+        },
+        {
+          path: "/position",
+          name: "Quản lý chức vụ",
+        },
+        {
+          path: "/company",
+          name: "Quản lý công ty liên kết",
+        },
+        {
+          path: "/acceptungluong",
+          name: "Quản lý đơn ứng lương",
+        },
+        {
+          path: "/acceptxinnghi",
+          name: "Quản lí đơn xin nghỉ",
+        },
+        {
+          path: "/acceptluongadmin",
+          name: "Quản lý thanh toán lương",
+        },
+        {
+          path: "/historyluongadmin",
+          name: "Quản lý lương",
+        },
+        {
+          path: "/phatadmin",
+          name: "Quản lý đơn phạt",
+        },
+        {
+          path: "/thuongadmin",
+          name: "Quản lý đơn thưởng",
+        },
+        {
+          path: "/unitadmin",
+          name: "Quản lý đơn vị đo",
+        },
+        {
+          path: "/chieucao",
+          name: "Quản lý chiều cao",
+        },
+        {
+          path: "/groupcoverplate",
+          name: "Quản lý nhóm tấm phủ",
+        },
+        {
+          path: "/groupmaterial",
+          name: "Quản lý nhóm vật liệu",
+        },
+        {
+          path: "/frameadmin",
+          name: "Quản lý khung đo",
+        },
+        {
+          path: "/coverplate",
+          name: "Quản lý tấm phủ",
+        },
+        {
+          path: "/vatlieuadmin",
+          name: "Quản lý vật liệu",
+        },
+        {
+          path: "/materialsuggest",
+          name: "Gợi ý sản phẩm",
+        },
+        {
+          path: "/taohopdong",
+          name: "Tạo hợp đồng",
+        },
+        {
+          path: "/viewdetailcontact",
+          name: "Quản lý chi tiết hợp đồng",
+        },
+        {
+          path: "/productionorder",
+          name: "Tạo Lệnh sản xuất",
+        },
+        {
+          path: "/contactmoney",
+          name: "Tạm ứng tiền hợp đồng",
+        },
+      ],
+      routerEmployee: [
+        {
+          path: "/viewluong",
+          name: "Xem lương",
+        },
+        {
+          path: "/ungluong",
+          name: "Ứng lương",
+        },
+        {
+          path: "/xinnghi",
+          name: "Đơn xin nghỉ",
+        },
+        {
+          path: "/viewthuongphat",
+          name: "Xem Thưởng phạt",
+        },
+        {
+          path: "/viewwork",
+          name: "Xem công việc",
+        },
+      ],
     };
   },
   watch: {
@@ -117,6 +215,12 @@ export default {
       let users = JSON.parse(localStorage.getItem("user"));
       if (users.roles.includes("SP_ADMIN")) {
         this.router.push.apply(this.router, this.routerSPAdmin);
+      }
+      if (users.roles.includes("ADMIN")) {
+        this.router.push.apply(this.router, this.routerAdmin);
+      }
+      if (users.roles.includes("EMPLOYEE")) {
+        this.router.push.apply(this.router, this.routerEmployee);
       }
     },
   },
