@@ -164,29 +164,31 @@
             <a-modal v-model="showModalAdd" title="Thêm lệnh sản xuất">
               <template slot="footer">
                 <a-button key="back" @click="handleCancelAdd"> Đóng </a-button>
-                <a-button
-                  key="submit"
-                  type="primary"
-                  :disabled="disableSaveAdd"
-                  @click="submitAddProductionOrder"
-                >
+                <a-button key="submit" type="primary" @click="checkBeforeSave">
                   Lưu
                 </a-button>
               </template>
               <a-form-model>
-                <a-form-model-item label="Lệnh sản xuất">
+                <span style="color: red">*</span>Lệnh sản xuất:
+                <a-form-model-item>
                   <a-input
+                    @change="changeNameProductionOrder"
                     v-model="dataSubmit.name"
+                    style="width: 100%"
                     placeholder="Nhập tên lệnh sản xuất"
                   />
+                  <div style="color: red" v-if="checkNameProductionOrder.show">
+                    {{ checkNameProductionOrder.message }}
+                  </div>
                 </a-form-model-item>
 
-                <a-form-model-item label="Tên hợp đồng">
+                <span style="color: red">*</span>Tên hợp đồng:
+                <a-form-model-item>
                   <a-select
                     v-model="dataSubmit.idContact"
                     @change="changeContact"
                     placeholder="Hợp đồng"
-                    style="width: 80%"
+                    style="width: 100%"
                   >
                     <a-select-option
                       v-for="(contact, index) in dataContactInForm"
@@ -196,14 +198,19 @@
                       {{ contact.name }}
                     </a-select-option>
                   </a-select>
+                  <div style="color: red" v-if="checkNameContact.show">
+                    {{ checkNameContact.message }}
+                  </div>
                 </a-form-model-item>
 
-                <a-form-model-item label="Tên sản phẩm">
+                <span style="color: red">*</span>Tên sản phẩm:
+                <a-form-model-item>
                   <a-select
+                    @change="changeNameProduct"
                     v-model="dataSubmit.idProduct"
                     :disabled="disableProduct"
                     placeholder="Hợp đồng"
-                    style="width: 80%"
+                    style="width: 100%"
                   >
                     <a-select-option
                       v-for="(contact, index) in dataProductIncontact"
@@ -213,34 +220,165 @@
                       {{ contact.name }}
                     </a-select-option>
                   </a-select>
+                  <div style="color: red" v-if="checkNameProduct.show">
+                    {{ checkNameProduct.message }}
+                  </div>
                 </a-form-model-item>
-                <a-form-model-item label="Ngày bắt đầu">
+
+                <span style="color: red">*</span>Ngày bắt đầu:
+                <a-form-model-item>
                   <a-date-picker
+                    @change="changeDateStart"
+                    style="width: 100%"
                     :disabled="disabledDate"
                     :disabled-date="disableDateStart"
                     v-model="dataSubmit.dateStart"
                   />
+                  <div style="color: red" v-if="checkDateStart.show">
+                    {{ checkDateStart.message }}
+                  </div>
                 </a-form-model-item>
-                <a-form-model-item label="Ngày hoàn thành">
+
+                <span style="color: red">*</span>Ngày hoàn thành:
+                <a-form-model-item>
                   <a-date-picker
+                    @change="changeDateEnd"
+                    style="width: 100%"
                     :disabled="disabledDate"
                     :disabled-date="disableDateEnd"
                     v-model="dataSubmit.dateEnd"
                   />
+                  <div style="color: red" v-if="checkDateEnd.show">
+                    {{ checkDateEnd.message }}
+                  </div>
                 </a-form-model-item>
 
-                <a-form-model-item label="Xem công việc">
+                <span style="color: red">*</span>Xem công việc:
+                <a-form-model-item>
                   <a-button
+                    style="width: 100%"
                     :disabled="disabledDate"
                     type="primary"
                     @click="showWorkEmployee"
                   >
                     Chi tiết công việc
                   </a-button>
+                  <div style="color: red" v-if="checkEmployees.show">
+                    {{ checkEmployees.message }}
+                  </div>
                 </a-form-model-item>
               </a-form-model>
             </a-modal>
 
+            <!-- chỉnh sửa lệnh sản xuất -->
+            <a-modal v-model="showModalEdit" title="Chỉnh sửa lệnh sản xuất">
+              <template slot="footer">
+                <a-button key="back" @click="handleCancelEdit"> Đóng </a-button>
+                <a-button key="submit" type="primary" @click="checkBeforeSave">
+                  Lưu
+                </a-button>
+              </template>
+              <a-form-model>
+                <span style="color: red">*</span>Lệnh sản xuất:
+                <a-form-model-item>
+                  <a-input
+                    v-model="dataSubmit.name"
+                    @change="changeNameProductionOrder"
+                    style="width: 100%"
+                    placeholder="Nhập tên lệnh sản xuất"
+                  />
+                  <div style="color: red" v-if="checkNameProductionOrder.show">
+                    {{ checkNameProductionOrder.message }}
+                  </div>
+                </a-form-model-item>
+
+                <span style="color: red">*</span>Tên hợp đồng:
+                <a-form-model-item>
+                  <a-select
+                    v-model="nameConatctEdit"
+                    disabled
+                    @change="changeContact"
+                    placeholder="Hợp đồng"
+                    style="width: 100%"
+                  >
+                    <a-select-option
+                      v-for="(contact, index) in dataContactInForm"
+                      :value="contact.idContact"
+                      :key="index"
+                    >
+                      {{ contact.name }}
+                    </a-select-option>
+                  </a-select>
+                  <div style="color: red" v-if="checkNameContact.show">
+                    {{ checkNameContact.message }}
+                  </div>
+                </a-form-model-item>
+
+                <span style="color: red">*</span>Tên sản phẩm:
+                <a-form-model-item>
+                  <a-select
+                    @change="changeNameProduct"
+                    v-model="nameProductEdit"
+                    disabled
+                    placeholder="Hợp đồng"
+                    style="width: 100%"
+                  >
+                    <a-select-option
+                      v-for="(contact, index) in dataProductIncontact"
+                      :value="contact.id"
+                      :key="index"
+                    >
+                      {{ contact.name }}
+                    </a-select-option>
+                  </a-select>
+                  <div style="color: red" v-if="checkNameProduct.show">
+                    {{ checkNameProduct.message }}
+                  </div>
+                </a-form-model-item>
+
+                <span style="color: red">*</span>Ngày bắt đầu:
+                <a-form-model-item>
+                  <a-date-picker
+                    :disabled="disabledDate"
+                    style="width: 100%"
+                    @change="changeDateStart"
+                    :disabled-date="disableDateStart"
+                    v-model="dataSubmit.dateStart"
+                  />
+                  <div style="color: red" v-if="checkDateStart.show">
+                    {{ checkDateStart.message }}
+                  </div>
+                </a-form-model-item>
+
+                <span style="color: red">*</span>Ngày hoàn thành:
+                <a-form-model-item>
+                  <a-date-picker
+                    :disabled="disabledDate"
+                    @change="changeDateEnd"
+                    style="width: 100%"
+                    :disabled-date="disableDateEnd"
+                    v-model="dataSubmit.dateEnd"
+                  />
+                  <div style="color: red" v-if="checkDateEnd.show">
+                    {{ checkDateEnd.message }}
+                  </div>
+                </a-form-model-item>
+
+                <span style="color: red">*</span>Xem công việc:
+                <a-form-model-item>
+                  <a-button
+                    :disabled="disabledDate"
+                    type="primary"
+                    @click="showWorkEmployeeEdit"
+                  >
+                    Chi tiết công việc
+                  </a-button>
+                  <div style="color: red" v-if="checkEmployees.show">
+                    {{ checkEmployees.message }}
+                  </div>
+                </a-form-model-item>
+              </a-form-model>
+            </a-modal>
             <!-- show work of employee -->
             <a-modal
               v-model="showModalViewWork"
@@ -309,91 +447,6 @@
                 "
               >
               </a-table>
-            </a-modal>
-
-            <!-- chỉnh sửa lệnh sản xuất -->
-            <a-modal v-model="showModalEdit" title="Chỉnh sửa lệnh sản xuất">
-              <template slot="footer">
-                <a-button key="back" @click="handleCancelEdit"> Đóng </a-button>
-                <a-button
-                  key="submit"
-                  type="primary"
-                  :disabled="disableSaveEdit"
-                  @click="submitAddProductionOrder"
-                >
-                  Lưu
-                </a-button>
-              </template>
-              <a-form-model>
-                <a-form-model-item label="Lệnh sản xuất">
-                  <a-input
-                    v-model="dataSubmit.name"
-                    @change="change"
-                    placeholder="Nhập tên lệnh sản xuất"
-                  />
-                </a-form-model-item>
-
-                <a-form-model-item label="Tên hợp đồng">
-                  <a-select
-                    v-model="dataSubmit.idContact"
-                    disabled
-                    @change="changeContact"
-                    placeholder="Hợp đồng"
-                    style="width: 80%"
-                  >
-                    <a-select-option
-                      v-for="(contact, index) in dataContactInForm"
-                      :value="contact.idContact"
-                      :key="index"
-                    >
-                      {{ contact.name }}
-                    </a-select-option>
-                  </a-select>
-                </a-form-model-item>
-
-                <a-form-model-item label="Tên sản phẩm">
-                  <a-select
-                    v-model="dataSubmit.idProduct"
-                    disabled
-                    placeholder="Hợp đồng"
-                    style="width: 80%"
-                  >
-                    <a-select-option
-                      v-for="(contact, index) in dataProductIncontact"
-                      :value="contact.id"
-                      :key="index"
-                    >
-                      {{ contact.name }}
-                    </a-select-option>
-                  </a-select>
-                </a-form-model-item>
-                <a-form-model-item label="Ngày bắt đầu">
-                  <a-date-picker
-                    :disabled="disabledDate"
-                    @change="change"
-                    :disabled-date="disableDateStart"
-                    v-model="dataSubmit.dateStart"
-                  />
-                </a-form-model-item>
-                <a-form-model-item label="Ngày hoàn thành">
-                  <a-date-picker
-                    :disabled="disabledDate"
-                    @change="change"
-                    :disabled-date="disableDateEnd"
-                    v-model="dataSubmit.dateEnd"
-                  />
-                </a-form-model-item>
-
-                <a-form-model-item label="Xem công việc">
-                  <a-button
-                    :disabled="disabledDate"
-                    type="primary"
-                    @click="showWorkEmployeeEdit"
-                  >
-                    Chi tiết công việc
-                  </a-button>
-                </a-form-model-item>
-              </a-form-model>
             </a-modal>
           </div>
         </div>
@@ -558,6 +611,32 @@ export default {
         pageSize: 10,
         total: 0,
       },
+      checkNameProductionOrder: {
+        show: false,
+        message: "",
+      },
+      checkNameContact: {
+        show: false,
+        message: "",
+      },
+      checkNameProduct: {
+        show: false,
+        message: "",
+      },
+      checkDateStart: {
+        show: false,
+        message: "",
+      },
+      checkDateEnd: {
+        show: false,
+        message: "",
+      },
+      checkEmployees: {
+        show: false,
+        message: "",
+      },
+      nameConatctEdit: "",
+      nameProductEdit: "",
     };
   },
   computed: {},
@@ -566,6 +645,49 @@ export default {
     this.beforeSearch();
   },
   methods: {
+    changeNameProductionOrder() {
+      if (this.dataSubmit.name != null && this.dataSubmit.name.trim() != "") {
+        this.checkNameProductionOrder.show = false;
+        this.checkNameProductionOrder.message = "";
+      } else {
+        this.checkNameProductionOrder.show = true;
+        this.checkNameProductionOrder.message =
+          "Bạn phải điền tên lệnh sản xuất";
+      }
+    },
+    changeNameProduct() {
+      if (
+        this.dataSubmit.idProduct != null &&
+        this.dataSubmit.idProduct != ""
+      ) {
+        this.checkNameProduct.show = false;
+        this.checkNameProduct.message = "";
+      } else {
+        this.checkNameProduct.show = true;
+        this.checkNameProduct.message = "Bạn phải chọn sản phẩm";
+      }
+    },
+    changeDateStart() {
+      if (
+        this.dataSubmit.dateStart != null &&
+        this.dataSubmit.dateStart != ""
+      ) {
+        this.checkDateStart.show = false;
+        this.checkDateStart.message = "";
+      } else {
+        this.checkDateStart.show = true;
+        this.checkDateStart.message = "Bạn phải chọn ngày bắt đầu";
+      }
+    },
+    changeDateEnd() {
+      if (this.dataSubmit.dateEnd != null && this.dataSubmit.dateEnd != "") {
+        this.checkDateEnd.show = false;
+        this.checkDateEnd.message = "";
+      } else {
+        this.checkDateEnd.show = true;
+        this.checkDateEnd.message = "Bạn phải chọn ngày hoàn thành";
+      }
+    },
     confirm(record) {
       ProductionOrderService.confirmProductionOrder(record.id)
         .then((response) => {
@@ -583,9 +705,6 @@ export default {
           console.log(e);
         });
     },
-    change() {
-      this.disableSaveEdit = false;
-    },
     showEditForm(record) {
       this.cleanData();
       this.dataSubmit.id = record.id;
@@ -594,8 +713,9 @@ export default {
       this.dataSubmit.idProduct = record.idProduct;
       this.dataSubmit.dateStart = record.dateStart;
       this.dataSubmit.dateEnd = record.dateEnd;
-      this.dataSubmit.name = record.name;
-      this.dataSubmit.name = record.name;
+
+      this.nameConatctEdit = record.nameContact;
+      this.nameProductEdit = record.nameProduct;
       this.getEmployeeInProductionOrder(record.id);
       this.getContactEdit();
       this.disabledDate = false;
@@ -688,7 +808,7 @@ export default {
       }
       let data = {
         dateStart: this.dataSubmit.dateStart,
-        dateEnd: this.dataSubmit.dateEnd,
+        dateEnd: moment(this.dataSubmit.dateEnd).add(1,"days"),
       };
       ProductionOrderService.viewWorkEmployee(data)
         .then((response) => {
@@ -700,7 +820,81 @@ export default {
           console.log(e);
         });
     },
+    checkBeforeSave() {
+      let check = true;
+      if (this.dataSubmit.name != null && this.dataSubmit.name.trim() != "") {
+        this.checkNameProductionOrder.show = false;
+        this.checkNameProductionOrder.message = "";
+      } else {
+        check = false;
+        this.checkNameProductionOrder.show = true;
+        this.checkNameProductionOrder.message =
+          "Bạn phải điền tên lệnh sản xuất";
+      }
+
+      if (
+        this.dataSubmit.idContact != null &&
+        this.dataSubmit.idContact != ""
+      ) {
+        this.checkNameContact.show = false;
+        this.checkNameContact.message = "";
+      } else {
+        check = false;
+        this.checkNameContact.show = true;
+        this.checkNameContact.message = "Bạn phải điền tên hợp đồng";
+      }
+
+      if (
+        this.dataSubmit.idProduct != null &&
+        this.dataSubmit.idProduct != ""
+      ) {
+        this.checkNameProduct.show = false;
+        this.checkNameProduct.message = "";
+      } else {
+        check = false;
+        this.checkNameProduct.show = true;
+        this.checkNameProduct.message = "Bạn phải chọn sản phẩm";
+      }
+
+      if (
+        this.dataSubmit.dateStart != null &&
+        this.dataSubmit.dateStart != ""
+      ) {
+        this.checkDateStart.show = false;
+        this.checkDateStart.message = "";
+      } else {
+        check = false;
+        this.checkDateStart.show = true;
+        this.checkDateStart.message = "Bạn phải chọn ngày bắt đầu";
+      }
+
+      if (this.dataSubmit.dateEnd != null && this.dataSubmit.dateEnd != "") {
+        this.checkDateEnd.show = false;
+        this.checkDateEnd.message = "";
+      } else {
+        check = false;
+        this.checkDateEnd.show = true;
+        this.checkDateEnd.message = "Bạn phải chọn ngày hoàn thành";
+      }
+
+      if (
+        this.dataSubmit.idEmployees != null &&
+        this.dataSubmit.idEmployees.length != 0
+      ) {
+        this.checkEmployees.show = false;
+        this.checkEmployees.message = "";
+      } else {
+        check = false;
+        this.checkEmployees.show = true;
+        this.checkEmployees.message =
+          "Bạn phải chọn nhân viên thực hiện công việc";
+      }
+      if (check) {
+        this.submitAddProductionOrder();
+      }
+    },
     submitAddProductionOrder() {
+      this.dataSubmit.name = this.dataSubmit.name.trim();
       ProductionOrderService.addOrUpdateProductOrder(this.dataSubmit)
         .then((response) => {
           this.showModalAdd = false;
@@ -748,8 +942,21 @@ export default {
       this.dataSubmit.idEmployees = [];
       this.dataContactInForm = [];
       this.dataProductIncontact = [];
+      this.disableProduct = true;
       this.disabledDate = true;
       this.disableSaveEdit = true;
+      this.checkNameProductionOrder.show = false;
+      this.checkNameProductionOrder.message = "";
+      this.checkNameContact.show = false;
+      this.checkNameContact.message = "";
+      this.checkNameProduct.show = false;
+      this.checkNameProduct.message = "";
+      this.checkDateStart.show = false;
+      this.checkDateStart.message = "";
+      this.checkDateEnd.show = false;
+      this.checkDateEnd.message = "";
+      this.checkEmployees.show = false;
+      this.checkEmployees.message = "";
     },
     deleteProductionOrder(record) {
       ProductionOrderService.deleteProductOrder(record.id)
@@ -867,6 +1074,16 @@ export default {
       }
       this.disableDateStart();
       this.disableDateEnd();
+      if (
+        this.dataSubmit.idContact != null &&
+        this.dataSubmit.idContact != ""
+      ) {
+        this.checkNameContact.show = false;
+        this.checkNameContact.message = "";
+      } else {
+        this.checkNameContact.show = true;
+        this.checkNameContact.message = "Bạn phải điền tên hợp đồng";
+      }
     },
     getProductInContact(id) {
       ProductService.getProductInContact(id)
