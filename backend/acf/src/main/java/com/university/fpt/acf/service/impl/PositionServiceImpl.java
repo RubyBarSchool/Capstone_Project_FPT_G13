@@ -1,7 +1,6 @@
 package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.config.security.AccountSercurity;
-import com.university.fpt.acf.config.security.entity.Account;
 import com.university.fpt.acf.entity.Position;
 import com.university.fpt.acf.form.AddPositionForm;
 import com.university.fpt.acf.form.PositionForm;
@@ -83,8 +82,7 @@ public class PositionServiceImpl implements PositionService {
             } else {
                 if (positionRespository.checkDeletePositionById(updatePositionForm.getId()) == null) {
                     if (positionRespository.CheckExitPositionById(updatePositionForm.getId()) != null) {
-                        if (positionRespository.checkExitPosition(updatePositionForm.getName()) == null ||
-                                positionRespository.checkExitPosition(updatePositionForm.getName()) == updatePositionForm.getName()) {
+                        if (positionRespository.checkExitPosition(updatePositionForm.getName()) != null ) {
                             Position p = positionRespository.getPositionById(updatePositionForm.getId());
                             p.setName(updatePositionForm.getName());
                             p.setCode(updatePositionForm.getCode());
@@ -93,11 +91,11 @@ public class PositionServiceImpl implements PositionService {
                             positionRespository.save(p);
                             check = true;
                         } else {
-                            throw new Exception("đã tồn tại tên chức vụ");
+                            throw new Exception("Tên chức vụ không được để chống");
                         }
 
                     } else {
-                        throw new Exception("chức vụ không tồn tại trong hệ thống");
+                        throw new Exception("Chức vụ không tồn tại trong hệ thống");
                     }
                 } else {
                     throw new Exception("chức vụ đã bị xóa");

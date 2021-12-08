@@ -13,6 +13,5 @@ public interface AccountManagerService {
     int getTotalSearchAccount(SearchAccountForm searchAccountForm);
     GetAccountDetailResponeVO getAccountById(Long id);
     String GenerateUsername(Long id);
-
     Boolean resetPassword(Long id);
 }
