@@ -164,20 +164,22 @@
                 Đóng
               </a-button>
               <a-button
+                :loading="loadingAdd"
                 key="submit"
                 type="primary"
-                :disabled="disableSave"
-                @click="submitAddProductDetail"
+                @click="checkBeforeAdd"
               >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Tên hợp đồng">
+              <span style="color: red">*</span>Tên hợp đồng:
+              <a-form-model-item>
                 <a-select
+                  @change="changeNameCOntact"
                   v-model="addProductForm.idContact"
                   placeholder="Hợp đồng"
-                  style="width: 80%"
+                  style="width: 100%"
                 >
                   <a-select-option
                     v-for="(contact, index) in dataContactInAdd"
@@ -187,33 +189,66 @@
                     {{ contact.name }}
                   </a-select-option>
                 </a-select>
+                <div style="color: red" v-if="checkNameContact.show">
+                  {{ checkNameContact.message }}
+                </div>
               </a-form-model-item>
-              <a-form-model-item label="Tên sản phẩm">
+
+              <span style="color: red">*</span>Tên sản phẩm:
+              <a-form-model-item>
                 <a-input
+                  @change="changeNameProduct"
+                  style="width: 100%"
                   v-model="addProductForm.nameProduct"
                   placeholder="Nhập tên sản phẩm"
                 />
+                <div style="color: red" v-if="checkNameProduct.show">
+                  {{ checkNameProduct.message }}
+                </div>
               </a-form-model-item>
-              <a-form-model-item label="Số lượng">
-                <a-input
+
+              <span style="color: red">*</span>Số lượng:
+              <a-form-model-item>
+                <a-input-number
+                  style="width: 100%"
                   v-model="addProductForm.countProduct"
+                  @change="changeCountProduct"
+                  :min="0"
                   placeholder="Nhập số lượng sản phẩm"
                 />
+                <div style="color: red" v-if="checkCountProduct.show">
+                  {{ checkCountProduct.message }}
+                </div>
               </a-form-model-item>
-              <a-form-model-item label="Thông số">
-                <a-input
+
+              <span style="color: red">*</span>Thông số:
+              <a-form-model-item>
+                <a-input-number
+                  @change="changeFrameProduct"
+                  style="width: 100%"
+                  :min="0"
                   v-model="addProductForm.lengthFrame"
                   placeholder="Chiều rộng"
                 />
-                <a-input
+                <a-input-number
+                  @change="changeFrameProduct"
+                  style="width: 100%"
+                  :min="0"
                   v-model="addProductForm.widthFrame"
                   placeholder="Chiều dài"
                 />
-                <a-input
+                <a-input-number
+                  @change="changeFrameProduct"
+                  style="width: 100%"
+                  :min="0"
                   v-model="addProductForm.heightFrame"
                   placeholder="Chiều cao"
                 />
+                <div style="color: red" v-if="checkFrameProduct.show">
+                  {{ checkFrameProduct.message }}
+                </div>
               </a-form-model-item>
+
               <a-form-model-item label="Ghi chú">
                 <a-textarea
                   v-model="addProductForm.noteProduct"
@@ -221,13 +256,23 @@
                   :auto-size="{ minRows: 4, maxRows: 10 }"
                 />
               </a-form-model-item>
-              <a-form-model-item label="Giá tiền">
+
+              <span style="color: red">*</span>Giá tiền:
+              <a-form-model-item>
                 <a-input v-model="addProductForm.priceProduct" disabled />
+                <div style="color: red" v-if="checkMoneyProduct.show">
+                  {{ checkMoneyProduct.message }}
+                </div>
               </a-form-model-item>
-              <a-form-model-item label="Bảng giá chi tiết">
+
+              <span style="color: red">*</span>Bảng giá chi tiết:
+              <a-form-model-item>
                 <a-button type="primary" @click="handleAddMaterialDetail">
                   Thêm vật liệu
                 </a-button>
+                <div style="color: red" v-if="checkMaterialInProduct.show">
+                  {{ checkMaterialInProduct.message }}
+                </div>
               </a-form-model-item>
             </a-form-model>
           </a-modal>
@@ -313,21 +358,23 @@
                 Đóng
               </a-button>
               <a-button
+                :loading="loadingAdd"
                 key="submit"
                 type="primary"
-                :disabled="disableSave"
-                @click="submitAddProductDetail"
+                @click="checkBeforeAdd"
               >
                 Lưu
               </a-button>
             </template>
             <a-form-model>
-              <a-form-model-item label="Tên hợp đồng">
+              <span style="color: red">*</span>Tên hợp đồng:
+              <a-form-model-item>
                 <a-select
+                  @change="changeNameCOntact"
                   v-model="addProductForm.idContact"
                   disabled
                   placeholder="Hợp đồng"
-                  style="width: 80%"
+                  style="width: 100%"
                 >
                   <a-select-option
                     v-for="(contact, index) in dataContactInAdd"
@@ -337,47 +384,95 @@
                     {{ contact.name }}
                   </a-select-option>
                 </a-select>
+                <div style="color: red" v-if="checkNameContact.show">
+                  {{ checkNameContact.message }}
+                </div>
               </a-form-model-item>
-              <a-form-model-item label="Tên sản phẩm">
+
+              <span style="color: red">*</span>Tên sản phẩm:
+              <a-form-model-item>
                 <a-input
+                  @change="changeNameProduct"
+                  style="width: 100%"
                   v-model="addProductForm.nameProduct"
                   placeholder="Nhập tên sản phẩm"
                 />
+                <div style="color: red" v-if="checkNameProduct.show">
+                  {{ checkNameProduct.message }}
+                </div>
               </a-form-model-item>
-              <a-form-model-item label="Số lượng">
-                <a-input
+
+              <span style="color: red">*</span>Số lượng:
+              <a-form-model-item>
+                <a-input-number
+                  @change="changeCountProduct"
+                  style="width: 100%"
+                  :min="0"
                   v-model="addProductForm.countProduct"
                   placeholder="Nhập số lượng sản phẩm"
                 />
+                <div style="color: red" v-if="checkCountProduct.show">
+                  {{ checkCountProduct.message }}
+                </div>
               </a-form-model-item>
-              <a-form-model-item label="Thông số">
-                <a-input
+
+              <span style="color: red">*</span>Thông số:
+              <a-form-model-item>
+                <a-input-number
+                  @change="changeFrameProduct"
+                  style="width: 100%"
+                  :min="0"
                   v-model="addProductForm.lengthFrame"
                   placeholder="Chiều rộng"
                 />
-                <a-input
+                <a-input-number
+                  @change="changeFrameProduct"
+                  style="width: 100%"
+                  :min="0"
                   v-model="addProductForm.widthFrame"
                   placeholder="Chiều dài"
                 />
-                <a-input
+                <a-input-number
+                  @change="changeFrameProduct"
+                  style="width: 100%"
+                  :min="0"
                   v-model="addProductForm.heightFrame"
                   placeholder="Chiều cao"
                 />
+                <div style="color: red" v-if="checkFrameProduct.show">
+                  {{ checkFrameProduct.message }}
+                </div>
               </a-form-model-item>
+
               <a-form-model-item label="Ghi chú">
                 <a-textarea
+                  style="width: 100%"
                   v-model="addProductForm.noteProduct"
                   placeholder="Nhập ghi chú"
                   :auto-size="{ minRows: 4, maxRows: 10 }"
                 />
               </a-form-model-item>
-              <a-form-model-item label="Giá tiền">
-                <a-input v-model="addProductForm.priceProduct" disabled />
+
+              <span style="color: red">*</span>Giá tiền:
+              <a-form-model-item>
+                <a-input
+                  style="width: 100%"
+                  v-model="addProductForm.priceProduct"
+                  disabled
+                />
+                <div style="color: red" v-if="checkMoneyProduct.show">
+                  {{ checkMoneyProduct.message }}
+                </div>
               </a-form-model-item>
-              <a-form-model-item label="Bảng giá chi tiết">
+
+              <span style="color: red">*</span>Bảng giá chi tiết:
+              <a-form-model-item>
                 <a-button type="primary" @click="handleEditMaterialDetail">
                   Thêm vật liệu
                 </a-button>
+                <div style="color: red" v-if="checkMaterialInProduct.show">
+                  {{ checkMaterialInProduct.message }}
+                </div>
               </a-form-model-item>
             </a-form-model>
           </a-modal>
@@ -396,6 +491,7 @@ export default {
   },
   data() {
     return {
+      loadingAdd: false,
       dataSearch: {
         idContact: [],
         nameProduct: "",
@@ -568,6 +664,30 @@ export default {
       dataNote: [],
       dataCount: [],
       disableSave: true,
+      checkNameContact: {
+        show: false,
+        message: "",
+      },
+      checkNameProduct: {
+        show: false,
+        message: "",
+      },
+      checkCountProduct: {
+        show: false,
+        message: "",
+      },
+      checkFrameProduct: {
+        show: false,
+        message: "",
+      },
+      checkMoneyProduct: {
+        show: false,
+        message: "",
+      },
+      checkMaterialInProduct: {
+        show: false,
+        message: "",
+      },
     };
   },
   computed: {},
@@ -577,6 +697,60 @@ export default {
     this.getContactInForm();
   },
   methods: {
+    changeNameCOntact() {
+      if (
+        this.addProductForm.idContact != null &&
+        this.addProductForm.idContact != ""
+      ) {
+        this.checkNameContact.show = false;
+        this.checkNameContact.message = "";
+      } else {
+        this.checkNameContact.show = true;
+        this.checkNameContact.message =
+          "Bạn phải chọn hợp đồng muốn thêm sản phẩm";
+      }
+    },
+    changeNameProduct() {
+      if (
+        this.addProductForm.nameProduct != null &&
+        this.addProductForm.nameProduct.trim() != ""
+      ) {
+        this.checkNameProduct.show = false;
+        this.checkNameProduct.message = "";
+      } else {
+        this.checkNameProduct.show = true;
+        this.checkNameProduct.message = "Bạn phải điền tên sản phẩm";
+      }
+    },
+    changeCountProduct() {
+      if (
+        this.addProductForm.countProduct != null &&
+        this.addProductForm.countProduct != ""
+      ) {
+        this.checkCountProduct.show = false;
+        this.checkCountProduct.message = "";
+      } else {
+        this.checkCountProduct.show = true;
+        this.checkCountProduct.message = "Bạn phải điền số lượng sản phẩm";
+      }
+    },
+    changeFrameProduct() {
+      if (
+        this.addProductForm.lengthFrame != null &&
+        this.addProductForm.lengthFrame != "" &&
+        this.addProductForm.widthFrame != null &&
+        this.addProductForm.widthFrame != "" &&
+        this.addProductForm.heightFrame != null &&
+        this.addProductForm.heightFrame != ""
+      ) {
+        this.checkFrameProduct.show = false;
+        this.checkFrameProduct.message = "";
+      } else {
+        this.checkFrameProduct.show = true;
+        this.checkFrameProduct.message =
+          "Bạn phải điền đầy đủ 3 thông số (chiều rộng, chiều dài, chiều cao) của sản phẩm";
+      }
+    },
     onCellChangeCount(key, value) {
       if (!parseInt(value)) {
         let task = "error";
@@ -689,14 +863,107 @@ export default {
       }
       if (checkSuccess) {
         this.addProductForm.priceProduct = price;
+        this.checkMoneyProduct.show = false;
+        this.checkMoneyProduct.message = "";
+        this.checkMaterialInProduct.show = false;
+        this.checkMaterialInProduct.message = "";
         this.showAddMaterialDetail = false;
       }
     },
+    checkBeforeAdd() {
+      let check = true;
+      if (
+        this.addProductForm.idContact != null &&
+        this.addProductForm.idContact != ""
+      ) {
+        this.checkNameContact.show = false;
+        this.checkNameContact.message = "";
+      } else {
+        check = false;
+        this.checkNameContact.show = true;
+        this.checkNameContact.message =
+          "Bạn phải chọn hợp đồng muốn thêm sản phẩm";
+      }
+
+      if (
+        this.addProductForm.nameProduct != null &&
+        this.addProductForm.nameProduct.trim() != ""
+      ) {
+        this.checkNameProduct.show = false;
+        this.checkNameProduct.message = "";
+      } else {
+        check = false;
+        this.checkNameProduct.show = true;
+        this.checkNameProduct.message = "Bạn phải điền tên sản phẩm";
+      }
+
+      if (
+        this.addProductForm.countProduct != null &&
+        this.addProductForm.countProduct != ""
+      ) {
+        this.checkCountProduct.show = false;
+        this.checkCountProduct.message = "";
+      } else {
+        check = false;
+        this.checkCountProduct.show = true;
+        this.checkCountProduct.message = "Bạn phải điền số lượng sản phẩm";
+      }
+
+      if (
+        this.addProductForm.lengthFrame != null &&
+        this.addProductForm.lengthFrame != "" &&
+        this.addProductForm.widthFrame != null &&
+        this.addProductForm.widthFrame != "" &&
+        this.addProductForm.heightFrame != null &&
+        this.addProductForm.heightFrame != ""
+      ) {
+        this.checkFrameProduct.show = false;
+        this.checkFrameProduct.message = "";
+      } else {
+        check = false;
+        this.checkFrameProduct.show = true;
+        this.checkFrameProduct.message =
+          "Bạn phải điền 3 thông số (chiều rộng, chiều dài, chiều cao) của sản phẩm";
+      }
+
+      if (
+        this.addProductForm.priceProduct != null &&
+        this.addProductForm.priceProduct.trim() != ""
+      ) {
+        this.checkMoneyProduct.show = false;
+        this.checkMoneyProduct.message = "";
+      } else {
+        check = false;
+        this.checkMoneyProduct.show = true;
+        this.checkMoneyProduct.message =
+          "Bạn phải chọn vật liệu để lấy giá tiền tương ứng";
+      }
+
+      if (
+        this.addProductForm.materials != null &&
+        this.addProductForm.materials.length != 0
+      ) {
+        this.checkMaterialInProduct.show = false;
+        this.checkMaterialInProduct.message = "";
+      } else {
+        check = false;
+        this.checkMaterialInProduct.show = true;
+        this.checkMaterialInProduct.message =
+          "Bạn phải chọn vật liệu cấu thành sản phẩm";
+      }
+
+      if (check) {
+        this.submitAddProductDetail();
+      }
+    },
     submitAddProductDetail() {
+      this.loadingAdd = true;
+      this.addProductForm.nameProduct = this.addProductForm.nameProduct.trim();
       viewDetailContactService
         .addProduct(this.addProductForm)
         .then((response) => {
           this.search();
+          this.loadingAdd = false;
           this.handleCancelAddProductDetail();
           let task = response.data.data ? "success" : "error";
           let text = response.data.data
@@ -709,6 +976,7 @@ export default {
           this.notifi(task, text, description);
         })
         .catch((e) => {
+          this.loadingAdd = false;
           console.log(e);
         });
     },
@@ -789,6 +1057,18 @@ export default {
       this.dataAddMaterialDetail = [];
       this.dataNote = [];
       this.dataCount = [];
+      this.checkNameContact.show = false;
+      this.checkNameContact.message = "";
+      this.checkNameProduct.show = false;
+      this.checkNameProduct.message = "";
+      this.checkCountProduct.show = false;
+      this.checkCountProduct.message = "";
+      this.checkFrameProduct.show = false;
+      this.checkFrameProduct.message = "";
+      this.checkMoneyProduct.show = false;
+      this.checkMoneyProduct.message = "";
+      this.checkMaterialInProduct.show = false;
+      this.checkMaterialInProduct.message = "";
     },
     handleCancelViewMaterialDetail() {
       this.showViewMaterialDetail = false;
