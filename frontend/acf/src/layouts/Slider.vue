@@ -377,6 +377,10 @@ export default {
   color: #1890ff;
 }
 
+.ant-layout-sider {
+  min-height: 100vh;
+}
+
 #layout .logo {
   height: 45px;
   /* background: rgba(206, 13, 13); */
@@ -387,7 +391,7 @@ export default {
   height: 45px;
   width: 45px;
   /* background: rgba(206, 13, 13); */
-  background-image: url("../assets/logo2.jpg");
+  background-image: url("../assets/logo3.png");
   margin: 10px;
 }
 .dropdown {
