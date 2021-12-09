@@ -2,13 +2,38 @@
   <div class="Slider">
     <a-layout id="layout">
       <a-layout-sider v-model="collapsed" :trigger="null" collapsible>
-        <div class="logo" />
-        <a-menu theme="dark" mode="inline" :default-selected-keys="['1']">
-          <a-menu-item :key="index" v-for="(data, index) in router">
-            <router-link :to="data.path">
-              {{ data.name }}
-            </router-link>
-          </a-menu-item>
+        <div :class="logo" />
+        <a-menu
+          :open-keys="openKeys"
+          @openChange="onOpenChange"
+          theme="dark"
+          mode="inline"
+          :default-selected-keys="[0]"
+        >
+          <template v-for="(data, index) in router">
+            <a-menu-item v-if="data.menu.length == 0" :key="index">
+              <font-awesome-icon :icon="['fas', data.icon]" />
+              <span v-if="disableTitle"> {{ data.name }}</span>
+              <router-link :to="data.path">
+                {{ data.name }}
+              </router-link>
+            </a-menu-item>
+
+            <a-sub-menu v-if="data.menu.length != 0" :key="index">
+              <span slot="title">
+                <font-awesome-icon :icon="['fas', data.icon]" />
+                <span v-if="disableTitle"> {{ data.name }}</span></span
+              >
+              <template v-for="datax in data.menu">
+                <a-menu-item :key="datax.path">
+                  <span> {{ datax.name }}</span>
+                  <router-link :to="datax.path">
+                    {{ datax.name }}
+                  </router-link>
+                </a-menu-item>
+              </template>
+            </a-sub-menu>
+          </template>
         </a-menu>
       </a-layout-sider>
       <a-layout>
@@ -18,7 +43,7 @@
               <a-icon
                 class="trigger"
                 :type="collapsed ? 'menu-unfold' : 'menu-fold'"
-                @click="() => (collapsed = !collapsed)"
+                @click="toggleCollapsed"
               />
             </a-col>
             <a-col flex="200px">
@@ -33,8 +58,11 @@
                   <span style="color: black"> {{ loadUser }} </span>
                 </a>
                 <a-menu slot="overlay" class="menu">
+                  <a-menu-item :key="1">
+                    <router-link to="/detail"> Chi tiết tài khoản </router-link>
+                  </a-menu-item>
                   <a-menu-divider />
-                  <a-menu-item :key="router.length" @click="logout">
+                  <a-menu-item :key="2" @click="logout">
                     <h6>
                       Thoát ra
                       <font-awesome-icon :icon="['fas', 'sign-out-alt']" />
@@ -65,137 +93,179 @@ export default {
   name: "Slider",
   data() {
     return {
+      logo: "logo",
       collapsed: false,
+      disableTitle: true,
+      openKeys: [],
       user: "",
-      router: [],
-      routerSPAdmin: [
+      router: [
+        {
+          path: "/dashboard",
+          icon: "chart-pie",
+          name: "Thống kê",
+          menu: [],
+        },
         {
           path: "/admin",
+          icon: "users-cog",
           name: "Quản lý tài khoản",
-        },
-      ],
-      routerAdmin: [
-        {
-          path: "/attendance",
-          name: "Chấm công",
+          menu: [],
         },
         {
-          path: "/viewattendance",
-          name: "Xem chấm công",
-        },
-        {
-          path: "/user",
-          name: "Quản lý nhân viên",
-        },
-        {
-          path: "/position",
-          name: "Quản lý chức vụ",
-        },
-        {
-          path: "/company",
-          name: "Quản lý công ty liên kết",
-        },
-        {
-          path: "/acceptungluong",
-          name: "Quản lý đơn ứng lương",
-        },
-        {
-          path: "/acceptxinnghi",
-          name: "Quản lí đơn xin nghỉ",
-        },
-        {
-          path: "/acceptluongadmin",
-          name: "Quản lý thanh toán lương",
-        },
-        {
-          path: "/historyluongadmin",
-          name: "Quản lý lương",
-        },
-        {
-          path: "/phatadmin",
-          name: "Quản lý đơn phạt",
-        },
-        {
-          path: "/thuongadmin",
-          name: "Quản lý đơn thưởng",
-        },
-        {
-          path: "/unitadmin",
-          name: "Quản lý đơn vị đo",
-        },
-        {
-          path: "/chieucao",
-          name: "Quản lý chiều cao",
-        },
-        {
-          path: "/groupcoverplate",
-          name: "Quản lý nhóm tấm phủ",
-        },
-        {
-          path: "/groupmaterial",
-          name: "Quản lý nhóm vật liệu",
-        },
-        {
-          path: "/frameadmin",
-          name: "Quản lý khung đo",
-        },
-        {
-          path: "/coverplate",
-          name: "Quản lý tấm phủ",
-        },
-        {
-          path: "/vatlieuadmin",
-          name: "Quản lý vật liệu",
-        },
-        {
-          path: "/materialsuggest",
-          name: "Gợi ý sản phẩm",
-        },
-        {
-          path: "/taohopdong",
-          name: "Tạo hợp đồng",
-        },
-        {
-          path: "/viewdetailcontact",
-          name: "Quản lý chi tiết hợp đồng",
-        },
-        {
-          path: "/productionorder",
-          name: "Tạo Lệnh sản xuất",
-        },
-        {
-          path: "/contactmoney",
-          name: "Tạm ứng tiền hợp đồng",
-        },
-      ],
-      routerEmployee: [
-        {
-          path: "/viewluong",
-          name: "Xem lương",
-        },
-        {
-          path: "/ungluong",
-          name: "Ứng lương",
-        },
-        {
-          path: "/xinnghi",
-          name: "Đơn xin nghỉ",
-        },
-        {
-          path: "/viewthuongphat",
-          name: "Xem Thưởng phạt",
+          path: "/",
+          icon: "file-contract",
+          name: "Quản lý Hợp đồng",
+          menu: [
+            {
+              path: "/taohopdong",
+              name: "Tạo hợp đồng",
+            },
+            {
+              path: "/viewdetailcontact",
+              name: "Chi tiết hợp đồng",
+            },
+            {
+              path: "/productionorder",
+              name: "Lệnh sản xuất",
+            },
+            {
+              path: "/contactmoney",
+              name: "Tạm ứng tiền hợp đồng",
+            },
+          ],
         },
         {
           path: "/viewwork",
+          icon: "tasks",
           name: "Xem công việc",
+          menu: [],
+        },
+        {
+          path: "/",
+          icon: "calendar-check",
+          name: "Quản lý chấm công",
+          menu: [
+            {
+              path: "/attendance",
+              name: "Chấm công",
+            },
+            {
+              path: "/viewattendance",
+              name: "Xem chấm công",
+            },
+          ],
+        },
+        {
+          path: "/",
+          icon: "user",
+          name: "Quản lý nhân sự",
+          menu: [
+            {
+              path: "/position",
+              name: "Chức vụ",
+            },
+            {
+              path: "/user",
+              name: "Nhân viên",
+            },
+            {
+              path: "/acceptungluong",
+              name: "Đơn ứng lương",
+            },
+            {
+              path: "/acceptxinnghi",
+              name: "Đơn xin nghỉ",
+            },
+            {
+              path: "/phatadmin",
+              name: "Đơn phạt",
+            },
+            {
+              path: "/thuongadmin",
+              name: "Đơn thưởng",
+            },
+            {
+              path: "/acceptluongadmin",
+              name: "Thanh toán lương",
+            },
+            {
+              path: "/historyluongadmin",
+              name: "Lịch sử thanh toán lương",
+            },
+          ],
+        },
+        {
+          path: "/",
+          icon: "boxes",
+          name: "Quản lý vật tư",
+          menu: [
+            {
+              path: "/unitadmin",
+              name: "Đơn vị đo",
+            },
+            {
+              path: "/chieucao",
+              name: "Chiều cao",
+            },
+            {
+              path: "/frameadmin",
+              name: "Khung đo",
+            },
+            {
+              path: "/groupcoverplate",
+              name: "Nhóm tấm phủ",
+            },
+            {
+              path: "/groupmaterial",
+              name: "Nhóm vật liệu",
+            },
+            {
+              path: "/coverplate",
+              name: "Tấm phủ",
+            },
+            {
+              path: "/vatlieuadmin",
+              name: "Vật liệu",
+            },
+          ],
+        },
+        {
+          path: "/materialsuggest",
+          icon: "file-medical-alt",
+          name: "Gợi ý vật liệu",
+          menu: [],
+        },
+        {
+          path: "/company",
+          icon: "building",
+          name: "Quản lý công ty liên kết",
+          menu: [],
+        },
+        {
+          path: "/",
+          icon: "award",
+          name: "Lương thưởng",
+          menu: [
+            {
+              path: "/viewluong",
+              name: "Xem lương",
+            },
+            {
+              path: "/ungluong",
+              name: "Ứng lương",
+            },
+            {
+              path: "/xinnghi",
+              name: "Đơn xin nghỉ",
+            },
+            {
+              path: "/viewthuongphat",
+              name: "Xem Thưởng phạt",
+            },
+          ],
         },
       ],
     };
-  },
-  watch: {
-    openKeys(val) {
-      console.log("openKeys", val);
-    },
   },
   created() {
     this.reloadPath();
@@ -206,6 +276,32 @@ export default {
     },
   },
   methods: {
+    onOpenChange(openKeys) {
+      if (openKeys.length == 0) {
+        this.openKeys = openKeys;
+      } else {
+        if (this.openKeys.length == 0) {
+          this.openKeys = openKeys;
+        } else {
+          if (this.openKeys[0] == parseInt(openKeys[1])) {
+            this.openKeys = [];
+          } else {
+            this.openKeys = [parseInt(openKeys[1])];
+          }
+        }
+      }
+      console.log("openKeys", openKeys);
+      console.log("this.openKeys", this.openKeys);
+    },
+    toggleCollapsed() {
+      this.collapsed = !this.collapsed;
+      this.disableTitle = !this.disableTitle;
+      if (!this.collapsed) {
+        this.logo = "logo";
+      } else {
+        this.logo = "logo1";
+      }
+    },
     logout() {
       localStorage.removeItem("user");
       this.$store.dispatch("remove");
@@ -213,15 +309,57 @@ export default {
     },
     reloadPath() {
       let users = JSON.parse(localStorage.getItem("user"));
-      if (users.roles.includes("SP_ADMIN")) {
-        this.router.push.apply(this.router, this.routerSPAdmin);
+
+      for (let i = this.router.length - 1; i >= 0; i--) {
+        if (this.router[i].path == "Quản lý tài khoản") {
+          if (!users.roles.includes("SP_ADMIN")) {
+            this.router.splice(i, 1);
+          }
+        }
+        if (this.router[i].path == "Hợp đồng") {
+          if (!users.roles.includes("ADMIN")) {
+            this.router.splice(i, 1);
+          }
+        }
+        if (this.router[i].path == "Chấm công") {
+          if (!users.roles.includes("ADMIN")) {
+            this.router.splice(i, 1);
+          }
+        }
+        if (this.router[i].path == "Nhân Viên") {
+          if (!users.roles.includes("ADMIN")) {
+            this.router.splice(i, 1);
+          }
+        }
+        if (this.router[i].path == "Vật liệu") {
+          if (!users.roles.includes("ADMIN")) {
+            this.router.splice(i, 1);
+          }
+        }
+        if (this.router[i].path == "Gợi ý vật liệu") {
+          if (!users.roles.includes("ADMIN")) {
+            this.router.splice(i, 1);
+          }
+        }
+
+        if (this.router[i].path == "Quản lý công ty liên kết") {
+          if (!users.roles.includes("ADMIN")) {
+            this.router.splice(i, 1);
+          }
+        }
+
+        if (this.router[i].path == "Xem công việc") {
+          if (!users.roles.includes("EMPLOYEE")) {
+            this.router.splice(i, 1);
+          }
+        }
+        if (this.router[i].path == "Lương thưởng") {
+          if (!users.roles.includes("EMPLOYEE")) {
+            this.router.splice(i, 1);
+          }
+        }
       }
-      if (users.roles.includes("ADMIN")) {
-        this.router.push.apply(this.router, this.routerAdmin);
-      }
-      if (users.roles.includes("EMPLOYEE")) {
-        this.router.push.apply(this.router, this.routerEmployee);
-      }
+      console.log("data menu", this.router);
     },
   },
 };
@@ -245,7 +383,13 @@ export default {
   background-image: url("../assets/logo1.png");
   margin: 10px;
 }
-
+#layout .logo1 {
+  height: 45px;
+  width: 45px;
+  /* background: rgba(206, 13, 13); */
+  background-image: url("../assets/logo2.jpg");
+  margin: 10px;
+}
 .dropdown {
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
