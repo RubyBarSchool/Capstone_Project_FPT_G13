@@ -713,7 +713,7 @@ export default {
       this.checkTableDetail.message = "";
     },
     handleCancel() {
-      this.visibleAdd = false;
+      this.visibleEdit = false;
     },
     showModalEdit(name, id, time, idCompany) {
       this.dataEdit.dateFinish = time;

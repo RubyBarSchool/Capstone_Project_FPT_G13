@@ -42,4 +42,5 @@ public class Contact extends EntityCommon {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<ContactMoney> contactMonies;
+
 }

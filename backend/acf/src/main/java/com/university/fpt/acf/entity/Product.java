@@ -40,4 +40,7 @@ public class Product extends EntityCommon {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     private Collection<ProductMaterial> productMaterials;
+
+    @OneToOne(mappedBy = "products",cascade = CascadeType.ALL)
+    private ProductionOrder productionOrder;
 }
