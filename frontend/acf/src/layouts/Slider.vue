@@ -312,55 +312,65 @@ export default {
     },
     reloadPath() {
       let users = JSON.parse(localStorage.getItem("user"));
-      for (let i = this.router.length - 1; i >= 0; i--) {
-        if (this.router[i].name == "Quản lý tài khoản") {
+      let b = this.router.length - 1;
+      for (let i = b; i >= 0; i--) {
+        console.log("data: ",this.router[i].name);
+        console.log(i);
+        console.log("data size: ",this.router);
+
+        if (this.router[i] &&this.router[i].name == "Quản lý tài khoản") {
           if (!users.roles.includes("SP_ADMIN")) {
             this.router.splice(i, 1);
           }
         }
-        if (this.router[i].name == "Quản lý Hợp đồng") {
 
-          if (!users.roles.includes("ADMIN")) {
-            this.router.splice(i, 1);
-          }
-        }
-        if (this.router[i].name == "Quản lý chấm công") {
-          if (!users.roles.includes("ADMIN")) {
-            this.router.splice(i, 1);
-          }
-        }
-        if (this.router[i].name == "Quản lý nhân sự") {
-          if (!users.roles.includes("ADMIN")) {
-            this.router.splice(i, 1);
-          }
-        }
-        if (this.router[i].name == "Quản lý vật tư") {
-          if (!users.roles.includes("ADMIN")) {
-            this.router.splice(i, 1);
-          }
-        }
-        if (this.router[i].name == "Gợi ý vật liệu") {
+        if (this.router[i] &&this.router[i].name == "Quản lý Hợp đồng") {
           if (!users.roles.includes("ADMIN")) {
             this.router.splice(i, 1);
           }
         }
 
-        if (this.router[i].name == "Quản lý công ty liên kết") {
+        if (this.router[i] &&this.router[i].name == "Quản lý chấm công") {
           if (!users.roles.includes("ADMIN")) {
             this.router.splice(i, 1);
           }
         }
 
-        if (this.router[i].name == "Xem công việc") {
+        if (this.router[i] &&this.router[i].name == "Quản lý nhân sự") {
+          if (!users.roles.includes("ADMIN")) {
+            this.router.splice(i, 1);
+          }
+        }
+
+        if (this.router[i] &&this.router[i].name == "Quản lý vật tư") {
+          if (!users.roles.includes("ADMIN")) {
+            this.router.splice(i, 1);
+          }
+        }
+
+        if (this.router[i] &&this.router[i].name == "Gợi ý vật liệu") {
+          if (!users.roles.includes("ADMIN")) {
+            this.router.splice(i, 1);
+          }
+        }
+
+        if (this.router[i] &&this.router[i].name == "Quản lý công ty liên kết") {
+          if (!users.roles.includes("ADMIN")) {
+            this.router.splice(i, 1);
+          }
+        }
+
+        if (this.router[i] &&this.router[i].name == "Xem công việc") {
           if (!users.roles.includes("EMPLOYEE")) {
             this.router.splice(i, 1);
           }
         }
-        if (this.router[i].name == "Lương thưởng") {
+        if (this.router[i] && this.router[i].name == "Lương thưởng") {
           if (!users.roles.includes("EMPLOYEE")) {
             this.router.splice(i, 1);
           }
         }
+        
       }
 
       this.selectKeys = this.$route.path;
