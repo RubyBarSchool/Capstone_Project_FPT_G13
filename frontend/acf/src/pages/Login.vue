@@ -62,6 +62,8 @@
 </template>
 <script>
 import User from "../model/user";
+import SockJS from "sockjs-client";
+import Stomp from "webstomp-client";
 export default {
   name: "Login",
   data() {
@@ -69,6 +71,10 @@ export default {
       user: new User("", ""),
       loading: false,
       message: "",
+
+      received_messages: [],
+      send_message: null,
+      connected: false,
     };
   },
   computed: {
@@ -103,6 +109,7 @@ export default {
           this.$store.dispatch("auth/login", this.user).then(
             () => {
               let users = JSON.parse(localStorage.getItem("user"));
+              this.connectWebsoket(users.username);
               if (users.roles.includes("SP_ADMIN")) {
                 this.$router.push("/admin");
               } else {
@@ -110,14 +117,38 @@ export default {
               }
             },
             () => {
-              this.$notification['error']({
-                message: 'Sai tài khoản hoặc mật khẩu',
-                description: 'Mời đăng nhập lại',
+              this.$notification["error"]({
+                message: "Sai tài khoản hoặc mật khẩu",
+                description: "Mời đăng nhập lại",
               });
             }
           );
         }
       });
+    },
+
+    connectWebsoket(username) {
+      this.socket = new SockJS("http://localhost:8080/api/wse/online");
+      this.stompClient = Stomp.over(this.socket);
+      this.stompClient.connect(
+        { username: username },
+        () => {
+          this.connected = true;
+          this.stompClient.subscribe("/users/queue/messages", (tick) => {
+            if (this != null) {
+              this.received_messages = JSON.parse(tick.body);
+              console.log("account login", this.received_messages);
+            }
+          });
+          if (this.stompClient && this.stompClient.connected) {
+            this.stompClient.send("/ws/login");
+          }
+        },
+        (error) => {
+          console.log(error);
+          this.connected = false;
+        }
+      );
     },
   },
 };

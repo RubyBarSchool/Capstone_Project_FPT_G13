@@ -20,9 +20,11 @@
         "bootstrap-vue": "^2.21.2",
         "core-js": "^3.6.5",
         "moment": "^2.29.1",
+        "sockjs-client": "^1.5.2",
         "vue": "^2.6.14",
         "vue-router": "^3.5.2",
-        "vuex": "^3.6.2"
+        "vuex": "^3.6.2",
+        "webstomp-client": "^1.2.6"
     },
     "devDependencies": {
         "@vue/cli-plugin-babel": "~4.5.0",

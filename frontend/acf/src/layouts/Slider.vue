@@ -90,6 +90,9 @@
 </template>
 
 <script>
+import SockJS from "sockjs-client";
+import Stomp from "webstomp-client";
+
 export default {
   name: "Slider",
   data() {
@@ -306,18 +309,34 @@ export default {
       }
     },
     logout() {
+      this.connectWebsoket();
       localStorage.removeItem("user");
       this.$store.dispatch("remove");
       this.$router.push("/login");
+    },
+      connectWebsoket() {
+      let username = JSON.parse(localStorage.getItem("user")).username;
+      this.socket = new SockJS("http://localhost:8080/api/wse/online");
+      this.stompClient = Stomp.over(this.socket);
+      this.stompClient.connect(
+        { username: username },
+        () => {
+          this.connected = true;
+          this.stompClient.subscribe("/users/queue/online");
+          if (this.stompClient && this.stompClient.connected) {
+             this.stompClient.send("/ws/logout");
+          }
+        },
+        (error) => {
+          console.log(error);
+          this.connected = false;
+        }
+      );
     },
     reloadPath() {
       let users = JSON.parse(localStorage.getItem("user"));
       let b = this.router.length - 1;
       for (let i = b; i >= 0; i--) {
-        console.log("data: ",this.router[i].name);
-        console.log(i);
-        console.log("data size: ",this.router);
-
         if (this.router[i] &&this.router[i].name == "Quản lý tài khoản") {
           if (!users.roles.includes("SP_ADMIN")) {
             this.router.splice(i, 1);
@@ -373,7 +392,7 @@ export default {
         
       }
 
-      this.selectKeys = this.$route.path;
+      // this.selectKeys = this.$route.path;
 
       for (let i = 0; i < this.router.length; i++) {
         if (this.router[i].menu.length != 0) {

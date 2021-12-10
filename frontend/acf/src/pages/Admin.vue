@@ -125,7 +125,7 @@
                       <font-awesome-icon :icon="['fas', 'user']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="6">
+                  <a-col :span="6" v-if="checkDisable(record.username)" >
                     <a-popconfirm
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn cập nhật mật khẩu?"
@@ -133,12 +133,15 @@
                       ok-text="Đồng ý"
                       cancel-text="Hủy"
                     >
-                      <a-button id="reset" :style="{ 'margin-right': '100px' }">
+                      <a-button
+                        id="reset"
+                        :style="{ 'margin-right': '100px' }"
+                      >
                         <font-awesome-icon :icon="['fas', 'retweet']" />
                       </a-button>
                     </a-popconfirm>
                   </a-col>
-                  <a-col :span="6">
+                  <a-col :span="6" v-if="checkDisable(record.username)" >
                     <a-button
                       id="edit"
                       @click="
@@ -154,7 +157,7 @@
                       <font-awesome-icon :icon="['fas', 'edit']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="6">
+                  <a-col :span="6" v-if="checkDisable(record.username)">
                     <a-popconfirm
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
@@ -162,7 +165,9 @@
                       ok-text="Đồng ý"
                       cancel-text="Hủy"
                     >
-                      <a-button id="delete">
+                      <a-button
+                        id="delete"
+                      >
                         <!-- :loading = "loadingDelete" -->
                         <font-awesome-icon :icon="['fas', 'trash']" />
                       </a-button>
@@ -391,11 +396,12 @@ import accountService from "@/service/accountService.js";
 import roleService from "@/service/roleService.js";
 import employeeService from "@/service/employeeService.js";
 import adminService from "@/service/adminService";
+import SockJS from "sockjs-client";
+import Stomp from "webstomp-client";
 
 export default {
   name: "Admin",
-  components: {
-  },
+  components: {},
   data() {
     return {
       loading: false,
@@ -513,14 +519,50 @@ export default {
         show: false,
         message: "",
       },
+      connected: false,
+      listUserOnline: [],
     };
   },
   computed: {},
+  watch: {},
   created() {
     this.submitSearch();
     this.getAllRole();
+    this.connectWebsoket();
   },
   methods: {
+    checkDisable(username) {
+      console.log("username", username);
+      console.log(
+        "this.listUserOnline.indexOf(username)",
+        this.listUserOnline.indexOf(username)
+      );
+      return this.listUserOnline.indexOf(username) != -1 ? false : true;
+    },
+    connectWebsoket() {
+      let username = JSON.parse(localStorage.getItem("user")).username;
+      this.socket = new SockJS("http://localhost:8080/api/wse/online");
+      this.stompClient = Stomp.over(this.socket);
+      this.stompClient.connect(
+        { username: username },
+        () => {
+          this.connected = true;
+          this.stompClient.subscribe("/users/queue/online", (tick) => {
+            if (this != null) {
+              this.listUserOnline = JSON.parse(tick.body);
+              console.log("data all", this.listUserOnline);
+            }
+          });
+          if (this.stompClient && this.stompClient.connected) {
+            this.stompClient.send("/ws/online");
+          }
+        },
+        (error) => {
+          console.log(error);
+          this.connected = false;
+        }
+      );
+    },
     resetPassword(id) {
       accountService
         .resetpassword(id)

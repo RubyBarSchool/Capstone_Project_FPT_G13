@@ -14,20 +14,24 @@ export default new Vuex.Store({
             type: "",
             message: "",
             description: "",
-        }
+        },
+        listUser: []
     },
     getters: {
 
     },
     mutations: {
         changeMessage(state, message) {
-            state.message = message
+            state.message = message;
         },
         removeMessage(state) {
             state.message.type = "";
             state.message.message = "";
             state.message.description = "";
-        }
+        },
+        changeListUser(state, listUser) {
+            state.listUser = listUser;
+        },
     },
     actions: {
         handleChangeMessage(context, message) {
@@ -35,6 +39,9 @@ export default new Vuex.Store({
         },
         remove(context) {
             context.commit('removeMessage')
-        }
+        },
+        handleChangeUserLogin(context, listUser) {
+            context.commit('changeListUser', listUser)
+        },
     }
 });
