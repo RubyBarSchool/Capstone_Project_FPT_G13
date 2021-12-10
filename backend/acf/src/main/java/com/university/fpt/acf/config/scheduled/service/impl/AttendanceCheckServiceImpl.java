@@ -8,6 +8,7 @@ import com.university.fpt.acf.repository.AttendanceRepository;
 import com.university.fpt.acf.repository.EmployeeCustomRepository;
 import com.university.fpt.acf.vo.GetAllEmployeeVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -35,6 +36,9 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
     @Autowired
     private AttendanceRepository attendanceRepository;
 
+    @Value( "${acf.scross.path}" )
+    private String path;
+
     @Override
     public void checkAttendance() {
         try {
@@ -60,7 +64,7 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
                     MimeMessage mimeMessage = emailSender.createMimeMessage();
                     MimeMessageHelper helper =
                             new MimeMessageHelper(mimeMessage, "utf-8");
-                    helper.setText(this.buildEmail(getAllEmployeeVOList, "http://acf-client.s3-website.us-east-2.amazonaws.com/#/attendance"), true);
+                    helper.setText(this.buildEmail(getAllEmployeeVOList,path+ "/#/attendance"), true);
                     helper.setTo(s);
                     helper.setSubject((count==0?"":"[Nhắc lại lần " + count + "]")+ "Thư nhắc nhở chấm công ngày " + dateTimeAfterFormat);
                     emailSender.send(mimeMessage);

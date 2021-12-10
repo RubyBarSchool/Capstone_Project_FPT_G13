@@ -13,6 +13,7 @@ import com.university.fpt.acf.util.AccountValidate.AddAccountValidate;
 import com.university.fpt.acf.vo.*;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -53,6 +54,9 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         return result;
     }
 
+    @Value( "${acf.scross.path}" )
+    private String path;
+
     @Override
     public Boolean insertAccount(AddAccountForm addAccountForm) {
         Boolean insert = false;
@@ -86,7 +90,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                     MimeMessage mimeMessage = emailSender.createMimeMessage();
                     MimeMessageHelper helper =
                             new MimeMessageHelper(mimeMessage, "utf-8");
-                    helper.setText(this.buildEmail(addAccountForm.getUsername(), password, em.getFullName(), "http://acf-client.s3-website.us-east-2.amazonaws.com/#/login"), true);
+                    helper.setText(this.buildEmail(addAccountForm.getUsername(), password, em.getFullName(),path+ "/#/login"), true);
                     helper.setTo(em.getEmail());
                     helper.setSubject("Kích hoạt tài khoản thành công trên hệ thống công ty ANH CHUNG FURNITURE");
                     emailSender.send(mimeMessage);
@@ -119,7 +123,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
             MimeMessage mimeMessage = emailSender.createMimeMessage();
             MimeMessageHelper helper =
                     new MimeMessageHelper(mimeMessage, "utf-8");
-            helper.setText(this.buildEmailReset(ac.getUsername(), password, ac.getEmployee().getFullName(), "http://acf-client.s3-website.us-east-2.amazonaws.com/#/login"), true);
+            helper.setText(this.buildEmailReset(ac.getUsername(), password, ac.getEmployee().getFullName(),path+ "/#/login"), true);
             helper.setTo(ac.getEmployee().getEmail());
             helper.setSubject("Cài lại mật khẩu tài khoản thành công trên hệ thống công ty ANH CHUNG FURNITURE");
             emailSender.send(mimeMessage);

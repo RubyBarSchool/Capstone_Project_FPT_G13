@@ -16,6 +16,7 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -54,6 +55,9 @@ public class AttendancesServiceImpl implements AttendancesService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Value( "${acf.scross.path}" )
+    private String path;
 
     @Override
     public List<AttendanceVO> getAllAttendance(AttendanceFrom attendanceFrom) {
@@ -172,7 +176,7 @@ public class AttendancesServiceImpl implements AttendancesService {
                         MimeMessage mimeMessage = emailSender.createMimeMessage();
                         MimeMessageHelper helper =
                                 new MimeMessageHelper(mimeMessage, "utf-8");
-                        helper.setText(this.buildEmail(timeKeep.getEmployee().getFullName(),timeKeep.getDate(),timeKeep.getType(),updateAttendanceForm.getType(),timeKeep.getNote(),updateAttendanceForm.getNote(),employee.getFullName(), "http://acf-client.s3-website.us-east-2.amazonaws.com/#/viewattendance"), true);
+                        helper.setText(this.buildEmail(timeKeep.getEmployee().getFullName(),timeKeep.getDate(),timeKeep.getType(),updateAttendanceForm.getType(),timeKeep.getNote(),updateAttendanceForm.getNote(),employee.getFullName(),path+ "/#/viewattendance"), true);
                         helper.setTo(employee.getEmail());
                         helper.setSubject("Phát hiện chỉnh sửa điểm danh đã quá hạn bởi quản lý " + fullname + " vào " + dateTimeAfterFormat);
                         emailSender.send(mimeMessage);
