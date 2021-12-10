@@ -27,8 +27,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void insertUserLogout(String username) {
-        if(!userOnline.contains(username)){
-            userOnline.add(username);
-        }
+        userOnline.add(username);
     }
 }
