@@ -125,7 +125,7 @@
                       <font-awesome-icon :icon="['fas', 'user']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="6" v-if="checkDisable(record.username)" >
+                  <a-col :span="6" v-if="checkDisable(record.username)">
                     <a-popconfirm
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn cập nhật mật khẩu?"
@@ -133,15 +133,12 @@
                       ok-text="Đồng ý"
                       cancel-text="Hủy"
                     >
-                      <a-button
-                        id="reset"
-                        :style="{ 'margin-right': '100px' }"
-                      >
+                      <a-button id="reset" :style="{ 'margin-right': '100px' }">
                         <font-awesome-icon :icon="['fas', 'retweet']" />
                       </a-button>
                     </a-popconfirm>
                   </a-col>
-                  <a-col :span="6" v-if="checkDisable(record.username)" >
+                  <a-col :span="6" v-if="checkDisable(record.username)">
                     <a-button
                       id="edit"
                       @click="
@@ -165,9 +162,7 @@
                       ok-text="Đồng ý"
                       cancel-text="Hủy"
                     >
-                      <a-button
-                        id="delete"
-                      >
+                      <a-button id="delete">
                         <!-- :loading = "loadingDelete" -->
                         <font-awesome-icon :icon="['fas', 'trash']" />
                       </a-button>
@@ -525,12 +520,21 @@ export default {
   },
   computed: {},
   watch: {},
+  beforeDestroy() {
+    console.log("beforeDestroy");
+    this.disconnect();
+  },
   created() {
     this.submitSearch();
     this.getAllRole();
     this.connectWebsoket();
   },
   methods: {
+    disconnect() {
+      if (this.stompClient) {
+        this.stompClient.disconnect();
+      }
+    },
     checkDisable(username) {
       console.log("username", username);
       console.log(

@@ -33,7 +33,6 @@ public class MessageController {
 
     @MessageMapping("/login")
     public void addUserOnline(SimpMessageHeaderAccessor sha) {
-        String message = "Hello from " + sha.getUser().getName();
         this.userService.insertUserLogout(sha.getUser().getName());
         List<String> userLogin = this.userService.getListUserOnline();
         for (String s : userLogin) {
@@ -43,14 +42,12 @@ public class MessageController {
 
     @MessageMapping("/online")
     public void getUserOnline(SimpMessageHeaderAccessor sha) {
-        String message = "Hello from " + sha.getUser().getName();
         List<String> userLogin = this.userService.getListUserOnline();
         simpMessagingTemplate.convertAndSendToUser(sha.getUser().getName(), "/queue/online", userLogin);
     }
 
     @MessageMapping("/logout")
     public void deleteUserOnline(SimpMessageHeaderAccessor sha) {
-        String message = "Hello from " + sha.getUser().getName();
         this.userService.deleteUserLogout(sha.getUser().getName());
         List<String> userLogin = this.userService.getListUserOnline();
         for (String s : userLogin) {

@@ -275,12 +275,21 @@ export default {
   created() {
     this.reloadPath();
   },
+  beforeDestroy() {
+    console.log("beforeDestroy");
+    this.disconnect();
+  },
   computed: {
     loadUser() {
       return JSON.parse(localStorage.getItem("user")).username;
     },
   },
   methods: {
+    disconnect() {
+      if (this.stompClient) {
+        this.stompClient.disconnect();
+      }
+    },
     handleClick(e) {
       this.selectKeys = e.key;
     },
@@ -314,7 +323,7 @@ export default {
       this.$store.dispatch("remove");
       this.$router.push("/login");
     },
-      connectWebsoket() {
+    connectWebsoket() {
       let username = JSON.parse(localStorage.getItem("user")).username;
       this.socket = new SockJS("http://localhost:8080/api/wse/online");
       this.stompClient = Stomp.over(this.socket);
@@ -324,7 +333,7 @@ export default {
           this.connected = true;
           this.stompClient.subscribe("/users/queue/online");
           if (this.stompClient && this.stompClient.connected) {
-             this.stompClient.send("/ws/logout");
+            this.stompClient.send("/ws/logout");
           }
         },
         (error) => {
@@ -337,49 +346,52 @@ export default {
       let users = JSON.parse(localStorage.getItem("user"));
       let b = this.router.length - 1;
       for (let i = b; i >= 0; i--) {
-        if (this.router[i] &&this.router[i].name == "Quản lý tài khoản") {
+        if (this.router[i] && this.router[i].name == "Quản lý tài khoản") {
           if (!users.roles.includes("SP_ADMIN")) {
             this.router.splice(i, 1);
           }
         }
 
-        if (this.router[i] &&this.router[i].name == "Quản lý Hợp đồng") {
+        if (this.router[i] && this.router[i].name == "Quản lý Hợp đồng") {
           if (!users.roles.includes("ADMIN")) {
             this.router.splice(i, 1);
           }
         }
 
-        if (this.router[i] &&this.router[i].name == "Quản lý chấm công") {
+        if (this.router[i] && this.router[i].name == "Quản lý chấm công") {
           if (!users.roles.includes("ADMIN")) {
             this.router.splice(i, 1);
           }
         }
 
-        if (this.router[i] &&this.router[i].name == "Quản lý nhân sự") {
+        if (this.router[i] && this.router[i].name == "Quản lý nhân sự") {
           if (!users.roles.includes("ADMIN")) {
             this.router.splice(i, 1);
           }
         }
 
-        if (this.router[i] &&this.router[i].name == "Quản lý vật tư") {
+        if (this.router[i] && this.router[i].name == "Quản lý vật tư") {
           if (!users.roles.includes("ADMIN")) {
             this.router.splice(i, 1);
           }
         }
 
-        if (this.router[i] &&this.router[i].name == "Gợi ý vật liệu") {
+        if (this.router[i] && this.router[i].name == "Gợi ý vật liệu") {
           if (!users.roles.includes("ADMIN")) {
             this.router.splice(i, 1);
           }
         }
 
-        if (this.router[i] &&this.router[i].name == "Quản lý công ty liên kết") {
+        if (
+          this.router[i] &&
+          this.router[i].name == "Quản lý công ty liên kết"
+        ) {
           if (!users.roles.includes("ADMIN")) {
             this.router.splice(i, 1);
           }
         }
 
-        if (this.router[i] &&this.router[i].name == "Xem công việc") {
+        if (this.router[i] && this.router[i].name == "Xem công việc") {
           if (!users.roles.includes("EMPLOYEE")) {
             this.router.splice(i, 1);
           }
@@ -389,7 +401,6 @@ export default {
             this.router.splice(i, 1);
           }
         }
-        
       }
 
       // this.selectKeys = this.$route.path;

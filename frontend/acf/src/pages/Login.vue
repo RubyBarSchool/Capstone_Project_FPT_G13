@@ -89,7 +89,16 @@ export default {
   created() {
     this.showMessage();
   },
+  beforeDestroy() {
+    console.log("beforeDestroy");
+    this.disconnect();
+  },
   methods: {
+    disconnect() {
+      if (this.stompClient) {
+        this.stompClient.disconnect();
+      }
+    },
     showMessage() {
       let message = this.$store.state.message;
       if (message.type != "") {

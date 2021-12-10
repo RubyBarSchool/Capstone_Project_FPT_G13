@@ -117,7 +117,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(item,index) in received_messages" :key="index">
+                <tr v-for="(item, index) in received_messages" :key="index">
                   <td>{{ item }}</td>
                 </tr>
               </tbody>
@@ -161,6 +161,10 @@ export default {
   created() {
     // this.loadImage();
   },
+  beforeDestroy() {
+    console.log("beforeDestroy");
+    this.disconnect();
+  },
   methods: {
     send() {
       console.log("Send message:" + this.send_message);
@@ -168,7 +172,7 @@ export default {
         // const msg = { name: this.send_message };
         this.stompClient.send(
           "/ws/hello",
-         this.send_message,
+          this.send_message,
           this.send_message
         );
       }
@@ -181,14 +185,11 @@ export default {
         { username: username },
         () => {
           this.connected = true;
-          this.stompClient.subscribe(
-            "/users/queue/messages",
-            tick => {
-              if(this != null){
-                this.received_messages.push(tick);
-              }
+          this.stompClient.subscribe("/users/queue/messages", (tick) => {
+            if (this != null) {
+              this.received_messages.push(tick);
             }
-          );
+          });
         },
         (error) => {
           console.log(error);

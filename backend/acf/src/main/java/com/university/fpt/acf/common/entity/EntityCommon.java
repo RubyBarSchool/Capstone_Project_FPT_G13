@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @MappedSuperclass
 public class EntityCommon {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private LocalDate created_date = LocalDate.now() ;
