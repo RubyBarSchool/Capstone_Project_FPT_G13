@@ -295,8 +295,6 @@ export default {
           }
         }
       }
-      console.log("openKeys", openKeys);
-      console.log("this.openKeys", this.openKeys);
     },
     toggleCollapsed() {
       this.collapsed = !this.collapsed;
@@ -315,49 +313,50 @@ export default {
     reloadPath() {
       let users = JSON.parse(localStorage.getItem("user"));
       for (let i = this.router.length - 1; i >= 0; i--) {
-        if (this.router[i].path == "Quản lý tài khoản") {
+        if (this.router[i].name == "Quản lý tài khoản") {
           if (!users.roles.includes("SP_ADMIN")) {
             this.router.splice(i, 1);
           }
         }
-        if (this.router[i].path == "Hợp đồng") {
+        if (this.router[i].name == "Quản lý Hợp đồng") {
+
           if (!users.roles.includes("ADMIN")) {
             this.router.splice(i, 1);
           }
         }
-        if (this.router[i].path == "Chấm công") {
+        if (this.router[i].name == "Quản lý chấm công") {
           if (!users.roles.includes("ADMIN")) {
             this.router.splice(i, 1);
           }
         }
-        if (this.router[i].path == "Nhân Viên") {
+        if (this.router[i].name == "Quản lý nhân sự") {
           if (!users.roles.includes("ADMIN")) {
             this.router.splice(i, 1);
           }
         }
-        if (this.router[i].path == "Vật liệu") {
+        if (this.router[i].name == "Quản lý vật tư") {
           if (!users.roles.includes("ADMIN")) {
             this.router.splice(i, 1);
           }
         }
-        if (this.router[i].path == "Gợi ý vật liệu") {
+        if (this.router[i].name == "Gợi ý vật liệu") {
           if (!users.roles.includes("ADMIN")) {
             this.router.splice(i, 1);
           }
         }
 
-        if (this.router[i].path == "Quản lý công ty liên kết") {
+        if (this.router[i].name == "Quản lý công ty liên kết") {
           if (!users.roles.includes("ADMIN")) {
             this.router.splice(i, 1);
           }
         }
 
-        if (this.router[i].path == "Xem công việc") {
+        if (this.router[i].name == "Xem công việc") {
           if (!users.roles.includes("EMPLOYEE")) {
             this.router.splice(i, 1);
           }
         }
-        if (this.router[i].path == "Lương thưởng") {
+        if (this.router[i].name == "Lương thưởng") {
           if (!users.roles.includes("EMPLOYEE")) {
             this.router.splice(i, 1);
           }
@@ -366,10 +365,10 @@ export default {
 
       this.selectKeys = this.$route.path;
 
-      for(let i = 0 ; i < this.router.length ; i++){
-        if(this.router[i].menu.length != 0){
-          for(let j = 0 ; j < this.router[i].menu.length ; j++){
-            if(this.router[i].menu[j].path == this.selectKeys){
+      for (let i = 0; i < this.router.length; i++) {
+        if (this.router[i].menu.length != 0) {
+          for (let j = 0; j < this.router[i].menu.length; j++) {
+            if (this.router[i].menu[j].path == this.selectKeys) {
               this.openKeys = [i];
               return;
             }

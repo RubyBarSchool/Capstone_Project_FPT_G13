@@ -303,20 +303,16 @@ export default {
         let dateNow = moment();
         let dateLast = moment(record.date).add(1, "months").set("date", 10);
         if (dateNow < dateLast) {
-          // console.log("true");
           return true;
         } else {
-          // console.log("false");
           return false;
         }
       } else {
         let dateNow1 = moment();
         let dateLast1 = moment(record.date).set("date", 10);
         if (dateNow1 < dateLast1) {
-          // console.log("true");
           return true;
         } else {
-          // console.log("false");
           return false;
         }
       }

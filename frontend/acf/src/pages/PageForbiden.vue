@@ -1599,7 +1599,7 @@
           Không đời nào Immma
           <tspan x="35" y="290">cho phép bạn đi qua!</tspan>
           <tspan x="100" y="355" fill="#BF3E73" font-size="65">403</tspan>
-          <router-link class="link_404" to="/home">
+          <router-link class="link_404" to="/">
             <tspan x="108" y="381" fill="#6BA184" font-size="15">
               Về trang chủ
             </tspan>
@@ -1622,8 +1622,6 @@ export default {
   },
   methods: {
     show() {
-      // const style = "font-weight: bold; font-size: 150px;color: red;";
-      // console.log("%c Em Xin Cac Anh !!!!", style);
     },
   },
 };

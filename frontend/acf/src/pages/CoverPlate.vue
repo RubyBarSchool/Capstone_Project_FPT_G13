@@ -1935,7 +1935,6 @@ export default {
     //thêm tags
     handleClose(removedTag) {
       const tags = this.tags.filter((tag) => tag !== removedTag);
-      console.log(tags);
       this.tags = tags;
       if (this.tags != null && this.tags.length != 0) {
         this.checkDataInputCodeCoverPlate.show = false;
@@ -1963,7 +1962,6 @@ export default {
       if (inputValue.trim() != "" && tags.indexOf(inputValue) === -1) {
         tags = [...tags, inputValue.trim()];
       }
-      console.log(tags);
       Object.assign(this, {
         tags,
         inputVisible: false,

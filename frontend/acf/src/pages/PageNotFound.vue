@@ -458,8 +458,6 @@ export default {
   },
   methods: {
     show() {
-      // const style = "font-weight: bold; font-size: 150px;color: red;";
-      // console.log("%c Em Xin Cac Anh !!!!", style);
     },
   },
 };
