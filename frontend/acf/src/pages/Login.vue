@@ -106,7 +106,7 @@ export default {
               if (users.roles.includes("SP_ADMIN")) {
                 this.$router.push("/admin");
               } else {
-                this.$router.push("/home");
+                this.$router.push("/");
               }
             },
             () => {

@@ -8,10 +8,11 @@
           @openChange="onOpenChange"
           theme="dark"
           mode="inline"
-          :default-selected-keys="[0]"
+          :selected-keys="[selectKeys]"
+          @click="handleClick"
         >
           <template v-for="(data, index) in router">
-            <a-menu-item v-if="data.menu.length == 0" :key="index">
+            <a-menu-item v-if="data.menu.length == 0" :key="data.path">
               <font-awesome-icon :icon="['fas', data.icon]" />
               <span v-if="disableTitle"> {{ data.name }}</span>
               <router-link :to="data.path">
@@ -98,6 +99,7 @@ export default {
       disableTitle: true,
       openKeys: [],
       user: "",
+      selectKeys: "/dashboard",
       router: [
         {
           path: "/dashboard",
@@ -276,6 +278,9 @@ export default {
     },
   },
   methods: {
+    handleClick(e) {
+      this.selectKeys = e.key;
+    },
     onOpenChange(openKeys) {
       if (openKeys.length == 0) {
         this.openKeys = openKeys;
@@ -309,7 +314,6 @@ export default {
     },
     reloadPath() {
       let users = JSON.parse(localStorage.getItem("user"));
-
       for (let i = this.router.length - 1; i >= 0; i--) {
         if (this.router[i].path == "Quản lý tài khoản") {
           if (!users.roles.includes("SP_ADMIN")) {
@@ -359,7 +363,19 @@ export default {
           }
         }
       }
-      console.log("data menu", this.router);
+
+      this.selectKeys = this.$route.path;
+
+      for(let i = 0 ; i < this.router.length ; i++){
+        if(this.router[i].menu.length != 0){
+          for(let j = 0 ; j < this.router[i].menu.length ; j++){
+            if(this.router[i].menu[j].path == this.selectKeys){
+              this.openKeys = [i];
+              return;
+            }
+          }
+        }
+      }
     },
   },
 };
