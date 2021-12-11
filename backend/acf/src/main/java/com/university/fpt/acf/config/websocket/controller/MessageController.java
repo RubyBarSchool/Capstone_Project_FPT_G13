@@ -1,6 +1,8 @@
 package com.university.fpt.acf.config.websocket.controller;
 
 import com.university.fpt.acf.config.websocket.model.DataReponseWebSocket;
+import com.university.fpt.acf.config.websocket.model.Notification;
+import com.university.fpt.acf.config.websocket.service.NotificationService;
 import com.university.fpt.acf.config.websocket.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -21,6 +23,9 @@ public class MessageController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @MessageMapping("/hello")
     public void send(SimpMessageHeaderAccessor sha, @Payload String username) {
@@ -53,5 +58,11 @@ public class MessageController {
         for (String s : userLogin) {
             simpMessagingTemplate.convertAndSendToUser(s, "/queue/online", userLogin);
         }
+    }
+
+    @MessageMapping("/notification")
+    public void getNotification(SimpMessageHeaderAccessor sha) {
+        HashMap<String, Object> notifications = this.notificationService.getListNotification(sha.getUser().getName());
+        simpMessagingTemplate.convertAndSendToUser(sha.getUser().getName(), "/queue/notification", notifications);
     }
 }

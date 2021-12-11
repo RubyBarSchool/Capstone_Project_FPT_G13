@@ -536,11 +536,6 @@ export default {
       }
     },
     checkDisable(username) {
-      console.log("username", username);
-      console.log(
-        "this.listUserOnline.indexOf(username)",
-        this.listUserOnline.indexOf(username)
-      );
       return this.listUserOnline.indexOf(username) != -1 ? false : true;
     },
     connectWebsoket() {
@@ -554,7 +549,6 @@ export default {
           this.stompClient.subscribe("/users/queue/online", (tick) => {
             if (this != null) {
               this.listUserOnline = JSON.parse(tick.body);
-              console.log("data all", this.listUserOnline);
             }
           });
           if (this.stompClient && this.stompClient.connected) {

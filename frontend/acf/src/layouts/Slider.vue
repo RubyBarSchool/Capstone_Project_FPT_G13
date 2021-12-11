@@ -47,6 +47,15 @@
                 @click="toggleCollapsed"
               />
             </a-col>
+            <a-col flex="auto">
+              <a-badge :count="countmessage" :overflow-count="30">
+                <font-awesome-icon
+                  :style="{ 'font-size': '30px', color: '#495057' }"
+                  if=""
+                  :icon="['fas', 'bell']"
+                />
+              </a-badge>
+            </a-col>
             <a-col flex="200px">
               <a-dropdown :trigger="['click']" class="dropdown">
                 <a class="ant-dropdown-link">
@@ -97,6 +106,7 @@ export default {
   name: "Slider",
   data() {
     return {
+      countmessage: 100,
       logo: "logo",
       collapsed: false,
       disableTitle: true,
@@ -270,13 +280,14 @@ export default {
           ],
         },
       ],
+      dataNotification: [],
     };
   },
   created() {
     this.reloadPath();
+    this.connectWebsoket();
   },
   beforeDestroy() {
-    console.log("beforeDestroy");
     this.disconnect();
   },
   computed: {
@@ -331,9 +342,22 @@ export default {
         { username: username },
         () => {
           this.connected = true;
-          this.stompClient.subscribe("/users/queue/online");
+          this.stompClient.subscribe("/users/queue/notification", (tick) => {
+            if (this != null) {
+              let dataMess = JSON.parse(tick.body).data;
+              if (dataMess.length > this.dataNotification) {
+                this.dataNotification = dataMess;
+                let type = "success";
+                let message = "Thông báo mới";
+                let description = dataMess[0].usernameCreate + "\n" + dataMess[0].content ;
+                this.notificationLocation(type, message, description, 'bottomLeft');
+              }
+              this.countmessage = JSON.parse(tick.body).count;
+            }
+          });
+
           if (this.stompClient && this.stompClient.connected) {
-            this.stompClient.send("/ws/logout");
+            this.stompClient.send("/ws/notification");
           }
         },
         (error) => {
@@ -403,7 +427,7 @@ export default {
         }
       }
 
-      // this.selectKeys = this.$route.path;
+      this.selectKeys = this.$route.path;
 
       for (let i = 0; i < this.router.length; i++) {
         if (this.router[i].menu.length != 0) {
@@ -415,6 +439,13 @@ export default {
           }
         }
       }
+    },
+    notificationLocation(type, message, description, placement) {
+      this.$notification[type]({
+        message: message,
+        description: description,
+        placement,
+      });
     },
   },
 };
