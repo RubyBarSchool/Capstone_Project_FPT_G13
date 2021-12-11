@@ -14,36 +14,22 @@ import java.util.Properties;
 public class MailConfig {
 
     @Value( "${spring.mail.username}" )
-    private String mail;
-    @Value( "${spring.mail.password}" )
-    private String password;
-    @Value( "${spring.mail.host}" )
-    private String hostName;
-    @Value( "${spring.mail.port}" )
-    private int portCode;
-
-    @Value( "${acf.email.host}" )
-    private String SMTP_HOST_NAME;
-
-    @Value( "${acf.email.username}" )
     private String SMTP_AUTH_USER;
-
-    @Value( "${acf.email.password}" )
+    @Value( "${spring.mail.password}" )
     private String SMTP_AUTH_PWD;
-
-    @Value( "${acf.email.port}" )
+    @Value( "${spring.mail.host}" )
+    private String SMTP_HOST_NAME;
+    @Value( "${spring.mail.port}" )
     private int SMTP_HOST_PORT;
-
-
 
     @Bean
     public JavaMailSender getJavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost(hostName);
-        mailSender.setPort(portCode);
+        mailSender.setHost(SMTP_HOST_NAME);
+        mailSender.setPort(SMTP_HOST_PORT);
 
-        mailSender.setUsername(mail);
-        mailSender.setPassword(password);
+        mailSender.setUsername(SMTP_AUTH_USER);
+        mailSender.setPassword(SMTP_AUTH_PWD);
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

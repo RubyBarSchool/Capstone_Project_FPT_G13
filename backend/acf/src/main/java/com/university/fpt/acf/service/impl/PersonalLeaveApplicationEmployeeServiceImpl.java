@@ -1,6 +1,7 @@
 package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.config.security.AccountSercurity;
+import com.university.fpt.acf.config.websocket.service.NotificationService;
 import com.university.fpt.acf.entity.Employee;
 import com.university.fpt.acf.entity.PersonaLeaveApplication;
 import com.university.fpt.acf.form.AddPerLeaveAppEmployeeForm;
@@ -10,6 +11,7 @@ import com.university.fpt.acf.repository.*;
 import com.university.fpt.acf.service.PersonalLeaveApplicationEmployeeService;
 import com.university.fpt.acf.vo.SearchPersonalApplicationEmployeeVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,6 +30,13 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
     private PersonalLeaveApplicationEmployeeCustomRepository personalCustomRepository;
     @Autowired
     private AccountManagerRepository accountManagerRepository;
+
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
+
+    @Autowired
+    private NotificationService notificationService;
+
     @Override
     public Boolean AddLeaveApplication(AddPerLeaveAppEmployeeForm addPerLeaveAppEmployeeForm) {
         boolean check = false;
