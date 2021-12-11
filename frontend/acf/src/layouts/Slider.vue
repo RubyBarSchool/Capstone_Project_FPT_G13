@@ -345,7 +345,7 @@ export default {
           this.stompClient.subscribe("/users/queue/notification", (tick) => {
             if (this != null) {
               let dataMess = JSON.parse(tick.body).data;
-              if (dataMess.length > this.dataNotification) {
+              if (dataMess.length > this.dataNotification.length) {
                 this.dataNotification = dataMess;
                 let type = "success";
                 let message = "Thông báo mới";

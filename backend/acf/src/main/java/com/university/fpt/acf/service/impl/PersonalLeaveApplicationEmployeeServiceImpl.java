@@ -1,6 +1,7 @@
 package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.config.security.AccountSercurity;
+import com.university.fpt.acf.config.websocket.model.Notification;
 import com.university.fpt.acf.config.websocket.service.NotificationService;
 import com.university.fpt.acf.entity.Employee;
 import com.university.fpt.acf.entity.PersonaLeaveApplication;
@@ -11,11 +12,13 @@ import com.university.fpt.acf.repository.*;
 import com.university.fpt.acf.service.PersonalLeaveApplicationEmployeeService;
 import com.university.fpt.acf.vo.SearchPersonalApplicationEmployeeVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -36,6 +39,9 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
 
     @Autowired
     private NotificationService notificationService;
+
+    @Value( "${acf.scross.path}" )
+    private String path;
 
     @Override
     public Boolean AddLeaveApplication(AddPerLeaveAppEmployeeForm addPerLeaveAppEmployeeForm) {
@@ -61,6 +67,16 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
             personalLeaveApplicationEmployeeRepository.save(p);
             check=true;
 
+            List<String> accountAdmin = accountManagerRepository.getUsernameAdmin();
+            for(String s : accountAdmin){
+                Notification notification = new Notification();
+                notification.setUsername(s);
+                notification.setUsernameCreate(accountSercurity.getUserName());
+                notification.setContent(" tạo một đơn xin nghỉ");
+                notification.setPath("/acceptxinnghi");
+                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+            }
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }
