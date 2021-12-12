@@ -193,11 +193,11 @@ export default {
             },
             {
               path: "/phatadmin",
-              name: "Đơn phạt",
+              name: "Đơn kỷ luật",
             },
             {
               path: "/thuongadmin",
-              name: "Đơn thưởng",
+              name: "Đơn Khen thưởng",
             },
             {
               path: "/acceptluongadmin",
@@ -275,7 +275,7 @@ export default {
             },
             {
               path: "/viewthuongphat",
-              name: "Xem Thưởng phạt",
+              name: "Xem Khen Thưởng(Kỉ luật)",
             },
           ],
         },

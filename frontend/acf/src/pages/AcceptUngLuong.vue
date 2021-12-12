@@ -145,7 +145,7 @@
                 <a-input v-model="dataDetail.title" disabled />
               </a-form-model-item>
               <span style="color: red">*</span> Số tiền:
-              <a-form-model-item label="Số tiền">
+              <a-form-model-item>
                 <a-input v-model="dataDetail.advanceSalary" disabled />
               </a-form-model-item>
               <span style="color: red">*</span> Nội dung:

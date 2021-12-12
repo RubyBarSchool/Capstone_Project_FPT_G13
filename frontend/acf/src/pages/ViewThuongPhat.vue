@@ -113,14 +113,19 @@
                 <a-input v-model="dataDetail.money" disabled />
               </a-form-model-item>
               <a-form-model-item label="Trạng thái">
-                <a-radio-group
-                  name="radioGroup"
-                  disabled
-                  v-model="dataDetail.status"
+                <a-tag
+                  :color="
+                    dataDetail.status
+                      ? 'green'
+                      : 'orange'
+                  "
                 >
-                  <a-radio :value="false"> Chờ duyệt </a-radio>
-                  <a-radio :value="true"> Đã duyệt </a-radio>
-                </a-radio-group>
+                  {{
+                    dataDetail.status
+                      ? 'Đã duyệt'
+                      : 'Chờ duyệt'
+                  }}
+                </a-tag>
               </a-form-model-item>
               <a-form-model-item label="Ngày hiệu lực">
                 <a-date-picker
@@ -258,9 +263,9 @@ export default {
 
     checkType(record) {
       if (record.bonus == true) {
-        this.titleView = "Đơn thưởng";
+        this.titleView = "Đơn Thưởng";
       } else {
-        this.titleView = "Đơn phạt";
+        this.titleView = "Đơn Phạt";
       }
       this.dataDetail.title = record.title;
       this.dataDetail.reason = record.reason;
