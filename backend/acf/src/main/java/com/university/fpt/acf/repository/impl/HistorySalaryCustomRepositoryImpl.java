@@ -39,16 +39,8 @@ public class HistorySalaryCustomRepositoryImpl extends CommonRepository implemen
         } else {
             if (bonusPunishForm.getDate() != null) {
                 LocalDate localDate = bonusPunishForm.getDate();
-                int day = localDate.getDayOfMonth();
-                LocalDate dateCreated = LocalDate.now();
-                if (day < 10) {
-                    LocalDate localDate1 = localDate.minusMonths(1);
-                    dateCreated = LocalDate.of(localDate1.getYear(), localDate1.getMonth(), 10);
-                } else {
-                    dateCreated = LocalDate.of(dateCreated.getYear(), dateCreated.getMonth(), 10);
-                }
                 sqlAcc.append(" and  hs.created_date =  :dateStart  ");
-                paramsAcc.put("dateStart", dateCreated);
+                paramsAcc.put("dateStart", localDate);
             } else {
                 LocalDate localDate = LocalDate.now();
                 int day = localDate.getDayOfMonth();

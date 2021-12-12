@@ -117,13 +117,15 @@
               <template slot="action" slot-scope="text, record">
                 <a-row v-if="record.status == -2">
                   <a-col :span="8">
-                    <a-button
-                      id="view"
-                      @click="confirm(record)"
-                      :style="{ width: '44.25px', 'margin-right': '100px' }"
+                    <a-popconfirm
+                      v-if="record.status == '-2'"
+                      title="Bạn có chắc chắn xác nhận hoàn thành không?"
+                      @confirm="confirm(record)"
                     >
-                      <font-awesome-icon :icon="['fas', 'check-circle']" />
-                    </a-button>
+                      <a-button>
+                        <font-awesome-icon :icon="['fas', 'check-circle']" />
+                      </a-button>
+                    </a-popconfirm>
                   </a-col>
                 </a-row>
                 <a-row v-if="record.status != -2">
@@ -231,7 +233,7 @@
                     @change="changeDateStart"
                     style="width: 100%"
                     :disabled="disabledDate"
-                    :disabled-date="disableDateStart"
+                    :disabled-date="disableDateStartAdd"
                     v-model="dataSubmit.dateStart"
                   />
                   <div style="color: red" v-if="checkDateStart.show">
@@ -245,7 +247,7 @@
                     @change="changeDateEnd"
                     style="width: 100%"
                     :disabled="disabledDate"
-                    :disabled-date="disableDateEnd"
+                    :disabled-date="disableDateEndAdd"
                     v-model="dataSubmit.dateEnd"
                   />
                   <div style="color: red" v-if="checkDateEnd.show">
@@ -268,6 +270,58 @@
                   </div>
                 </a-form-model-item>
               </a-form-model>
+            </a-modal>
+
+            <!-- show work of employee -->
+            <a-modal
+              v-model="showModalViewWork1"
+              height="100%"
+              width="80%"
+              title="Xem công việc của nhân viên"
+            >
+              <template slot="footer">
+                <a-button key="back" @click="handleCancelViewWork">
+                  Đóng
+                </a-button>
+                <a-button
+                  key="submit"
+                  type="primary"
+                  :disabled="disableSaveAdd1"
+                  @click="submitAddEmployee"
+                >
+                  Lưu
+                </a-button>
+              </template>
+              <a-table
+                :columns="columnsViewWork"
+                :data-source="dataTableViewWork"
+                :pagination="false"
+                :scroll="{ x: 1500, y: 800 }"
+                :rowKey="
+                  (record, index) => {
+                    return record.id;
+                  }
+                "
+                :row-selection="{
+                  selectedRowKeys: selectedRowKeys,
+                  selectedRows: selectedRows,
+                  onChange: onSelectChange,
+                }"
+              >
+                <template slot="average" slot-scope="text, record">
+                  <a-tag
+                    :color="
+                      record.average < 2
+                        ? '#108ee9'
+                        : record.average < 3
+                        ? '#e6c000'
+                        : '#f50'
+                    "
+                  >
+                    {{ record.average }}
+                  </a-tag>
+                </template>
+              </a-table>
             </a-modal>
 
             <!-- chỉnh sửa lệnh sản xuất -->
@@ -379,6 +433,25 @@
                 </a-form-model-item>
               </a-form-model>
             </a-modal>
+
+            <!-- view detail -->
+            <a-modal v-model="showModalView" title="Xem nhân viên thực hiện">
+              <template slot="footer">
+                <a-button key="back" @click="handleModalView"> Đóng </a-button>
+              </template>
+              <a-table
+                :columns="columnsEmployee"
+                :data-source="dataSourceEmployee"
+                :pagination="false"
+                :rowKey="
+                  (record, index) => {
+                    return record.idEmployee;
+                  }
+                "
+              >
+              </a-table>
+            </a-modal>
+
             <!-- show work of employee -->
             <a-modal
               v-model="showModalViewWork"
@@ -428,24 +501,6 @@
                     {{ record.average }}
                   </a-tag>
                 </template>
-              </a-table>
-            </a-modal>
-
-            <!-- view detail -->
-            <a-modal v-model="showModalView" title="Xem nhân viên thực hiện">
-              <template slot="footer">
-                <a-button key="back" @click="handleModalView"> Đóng </a-button>
-              </template>
-              <a-table
-                :columns="columnsEmployee"
-                :data-source="dataSourceEmployee"
-                :pagination="false"
-                :rowKey="
-                  (record, index) => {
-                    return record.idEmployee;
-                  }
-                "
-              >
               </a-table>
             </a-modal>
           </div>
@@ -589,6 +644,7 @@ export default {
       dataTableViewWork: [],
       showModalAdd: false,
       showModalViewWork: false,
+      showModalViewWork1: false,
       disableSaveAdd: true,
       disableProduct: true,
       disableContact: true,
@@ -639,10 +695,21 @@ export default {
       nameProductEdit: "",
     };
   },
-  computed: {},
   created() {
     this.getContact();
     this.beforeSearch();
+  },
+  watch: {
+    urlState(newValue) {
+      if (newValue.indexOf("/productionorder") != -1) {
+        this.search();
+      }
+    },
+  },
+  computed: {
+    urlState() {
+      return this.$store.state.url;
+    },
   },
   methods: {
     changeNameProductionOrder() {
@@ -751,6 +818,7 @@ export default {
     },
     handleCancelViewWork() {
       this.showModalViewWork = false;
+      this.showModalViewWork1 = false;
     },
     showWorkEmployee() {
       this.selectedRowKeys = this.dataSubmit.idEmployees;
@@ -780,7 +848,7 @@ export default {
         .then((response) => {
           this.dataTableViewWork = response.data.data.data;
           this.columnsViewWork = response.data.data.columns;
-          this.showModalViewWork = true;
+          this.showModalViewWork1 = true;
         })
         .catch((e) => {
           console.log(e);
@@ -808,7 +876,7 @@ export default {
       }
       let data = {
         dateStart: this.dataSubmit.dateStart,
-        dateEnd: moment(this.dataSubmit.dateEnd).add(1,"days"),
+        dateEnd: moment(this.dataSubmit.dateEnd).add(1, "days"),
       };
       ProductionOrderService.viewWorkEmployee(data)
         .then((response) => {
@@ -895,6 +963,10 @@ export default {
     },
     submitAddProductionOrder() {
       this.dataSubmit.name = this.dataSubmit.name.trim();
+      this.dataSubmit.dateEnd = moment(this.dataSubmit.dateEnd).add(
+        "1",
+        "days"
+      );
       ProductionOrderService.addOrUpdateProductOrder(this.dataSubmit)
         .then((response) => {
           this.showModalAdd = false;
@@ -910,6 +982,10 @@ export default {
         });
     },
     submitUpdateProductionOrder() {
+      this.dataSubmit.dateEnd = moment(this.dataSubmit.dateEnd).add(
+        "1",
+        "days"
+      );
       ProductionOrderService.addOrUpdateProductOrder(this.dataSubmit)
         .then((response) => {
           this.showModalAdd = false;
@@ -931,6 +1007,7 @@ export default {
         this.disableSaveAdd = true;
       }
       this.showModalViewWork = false;
+      this.showModalViewWork1 = false;
     },
     cleanData() {
       this.dataSubmit.id = "";
@@ -1047,16 +1124,26 @@ export default {
           console.log(e);
         });
     },
-    disableDateStart(current) {
+    disableDateStartAdd(current) {
       return (
         current < moment().subtract(1, "days") ||
         current > moment(this.dateEnd).add(1, "days")
       );
     },
-    disableDateEnd(current) {
+    disableDateEndAdd(current) {
       return (
         current < moment().subtract(1, "days") ||
         current > moment(this.dateEnd).add(1, "days")
+      );
+    },
+    disableDateStart(current) {
+      return (
+        current < moment().subtract(1, "days") || current > moment(this.dateEnd)
+      );
+    },
+    disableDateEnd(current) {
+      return (
+        current < moment().subtract(1, "days") || current > moment(this.dateEnd)
       );
     },
     changeContact() {

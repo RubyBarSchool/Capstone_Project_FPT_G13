@@ -90,7 +90,6 @@
             <a-date-picker
               v-model="dateSelect"
               :disabled-date="disabledDate"
-              :showToday="true"
               @change="changeDate"
             />
             <a-table
@@ -451,16 +450,26 @@ export default {
     this.searchBonusNow();
     this.searchPunishNow();
   },
+  watch: {
+    urlState(newValue) {
+      if (newValue.indexOf("/viewluong") != -1) {
+        this.searchSalaryNotNow();
+      }
+    },
+  },
+  computed: {
+    urlState() {
+      return this.$store.state.url;
+    },
+  },
   methods: {
     disabledDate(current) {
       let date = moment();
       if (date.date() >= 10) {
         let date1 = moment().subtract(1, "months");
-        this.dateSelect = date1.set("date", 10);
         return current.date() != 10 || current > date1.set("date", 10);
       } else {
         let date2 = moment().subtract(2, "months");
-        this.dateSelect = date2.set("date", 10);
         return current.date() != 10 || current > date2.set("date", 10);
       }
     },

@@ -1421,7 +1421,7 @@ export default {
         this.checkDataInputCompany.show = true;
         this.checkDataInputCompany.message = "Bạn phải chọn công ty";
       }
-      if (this.dataAdd.price != null && this.dataAdd.price.trim() != "") {
+      if (this.dataAdd.price != null && this.dataAdd.price != "") {
         this.checkDataInputPrice.show = false;
         this.checkDataInputPrice.message = "";
       } else {

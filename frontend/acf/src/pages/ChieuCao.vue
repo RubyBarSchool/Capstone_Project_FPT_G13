@@ -83,7 +83,7 @@
             <a-input-number
               style="width: 100%"
               v-model="frameHeight"
-              min="0"
+              :min="0"
               @change="inputNameAdd"
             />
             <div style="color: red" v-if="checkDataInputName.show">

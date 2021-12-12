@@ -67,13 +67,17 @@
               <template slot="action" slot-scope="text, record">
                 <a-row v-if="record.status == -1">
                   <a-col :span="8">
+                    <a-popconfirm
+                      v-if="record.status == '-1'"
+                      title="Bạn có chắc chắn xác nhận thực hiện không?"
+                      @confirm="confirmWork(record)"
+                    >
                     <a-button
-                      id="confirm"
-                      @click="confirmWork(record)"
-                      :style="{ width: '44.25px', 'margin-right': '100px' }"
                     >
                       <font-awesome-icon :icon="['fas', 'check-circle']" />
                     </a-button>
+                    </a-popconfirm>
+
                   </a-col>
                 </a-row>
 
@@ -159,8 +163,7 @@
 import ViewWorkEmployee from "@/service/viewWorkEmployeeService.js";
 export default {
   name: "ViewWorkEmployee",
-  components: {
-  },
+  components: {},
   data() {
     return {
       loadingEdit: false,
@@ -317,9 +320,21 @@ export default {
       },
     };
   },
-  computed: {},
   created() {
     this.beforeSearch();
+  },
+
+  watch: {
+    urlState(newValue) {
+      if (newValue.indexOf("/viewwork") != -1) {
+        this.search();
+      }
+    },
+  },
+  computed: {
+    urlState() {
+      return this.$store.state.url;
+    },
   },
   methods: {
     //edit

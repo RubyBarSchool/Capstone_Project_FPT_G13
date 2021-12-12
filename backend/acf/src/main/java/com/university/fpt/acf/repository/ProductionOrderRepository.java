@@ -18,8 +18,11 @@ public interface ProductionOrderRepository extends JpaRepository<ProductionOrder
     @Query("select new com.university.fpt.acf.vo.ProductionOrderDetailVO(e.id,e.fullName) from  ProductionOrder po inner join po.employees e where po.id = :idProductionOrder")
     List<ProductionOrderDetailVO> getProductionOrder(@Param("idProductionOrder") Long idProduction);
 
-    @Query("select po  from  ProductionOrder po  where po.id = :id")
+    @Query("select po  from  ProductionOrder po inner join  po.employees e where po.id = :id")
     ProductionOrder getProductionOrderByID(@Param("id") Long id);
+
+    @Query("select a.username  from Account a inner join  a.employee e inner join e.productionOrders po where po.id = :id")
+    List<String> getUsernameByID(@Param("id") Long id);
 
     @Modifying
     @Transactional

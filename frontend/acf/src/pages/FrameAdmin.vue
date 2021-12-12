@@ -107,7 +107,7 @@
                 <a-input-number
                   style="width: 100%"
                   v-model="dataAdd.length"
-                  min="0"
+                  :min="0"
                   @change="inputLengthAdd"
                 />
                 <div style="color: red" v-if="checkInputLength.show">
@@ -119,7 +119,7 @@
                 <a-input-number
                   style="width: 100%"
                   v-model="dataAdd.width"
-                  min="0"
+                  :min="0"
                   @change="inputWidthAdd"
                 />
                 <div style="color: red" v-if="checkInputWidth.show">
