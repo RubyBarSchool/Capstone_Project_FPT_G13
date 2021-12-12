@@ -1,6 +1,7 @@
 package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.config.security.AccountSercurity;
+import com.university.fpt.acf.config.websocket.service.NotificationService;
 import com.university.fpt.acf.entity.AdvaceSalary;
 
 import com.university.fpt.acf.entity.HistorySalary;
@@ -14,6 +15,7 @@ import com.university.fpt.acf.service.AdvanceSalaryAdminService;
 import com.university.fpt.acf.vo.DetailAdvanceSalaryAdminVO;
 import com.university.fpt.acf.vo.SearchAdvanceSalaryAdminVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -30,6 +32,13 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
     private AccountManagerRepository accountManagerRepository;
     @Autowired
     private HistorySalaryRepository historySalaryRepository;
+
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
+
+    @Autowired
+    private NotificationService notificationService;
+
 
     @Override
     public List<SearchAdvanceSalaryAdminVO> searchAdvanceSalaryAdmin(SearchAdvanceSalaryAdminForm searchForm) {

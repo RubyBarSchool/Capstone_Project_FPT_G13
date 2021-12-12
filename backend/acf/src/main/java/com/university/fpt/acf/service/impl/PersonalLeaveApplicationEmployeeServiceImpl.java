@@ -63,13 +63,14 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
             e.setId(idEmployee);
             p.setEmployee(e);
             p.setCreated_by(accountSercurity.getUserName());
-            p.setCreated_date(LocalDate.now());
+            p.setModified_by(accountSercurity.getUserName());
             personalLeaveApplicationEmployeeRepository.save(p);
             check=true;
 
             List<String> accountAdmin = accountManagerRepository.getUsernameAdmin();
             for(String s : accountAdmin){
                 Notification notification = new Notification();
+                notification.setType("success");
                 notification.setUsername(s);
                 notification.setUsernameCreate(accountSercurity.getUserName());
                 notification.setContent(" tạo một đơn xin nghỉ");

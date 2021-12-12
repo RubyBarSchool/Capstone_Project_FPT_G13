@@ -329,11 +329,14 @@ export default {
       }
     },
     logout() {
-      this.connectWebsoket();
+      if (this.stompClient && this.stompClient.connected) {
+        this.stompClient.send("/ws/logout");
+      }
       localStorage.removeItem("user");
       this.$store.dispatch("remove");
       this.$router.push("/login");
     },
+
     connectWebsoket() {
       let username = JSON.parse(localStorage.getItem("user")).username;
       this.socket = new SockJS("http://localhost:8080/api/wse/online");
@@ -347,15 +350,24 @@ export default {
               let dataMess = JSON.parse(tick.body).data;
               if (dataMess.length > this.dataNotification.length) {
                 this.dataNotification = dataMess;
-                let type = "success";
-                let message = "Thông báo mới";
-                let description = dataMess[0].usernameCreate + "\n" + dataMess[0].content ;
-                this.notificationLocation(type, message, description, 'bottomLeft');
+                if (!dataMess[0].read) {
+                  let type = dataMess[0].type;
+                  let message = "Thông báo mới";
+                  let description =
+                    dataMess[0].usernameCreate + "\n" + dataMess[0].content;
+                  this.notificationLocation(
+                    type,
+                    message,
+                    description,
+                    "bottomLeft"
+                  );
+                  console.log("come here")
+                  this.$store.dispatch("urlNotification",dataMess[0].localDateTime + dataMess[0].path);
+                }
               }
               this.countmessage = JSON.parse(tick.body).count;
             }
           });
-
           if (this.stompClient && this.stompClient.connected) {
             this.stompClient.send("/ws/notification");
           }

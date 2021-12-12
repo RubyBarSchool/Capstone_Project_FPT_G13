@@ -333,8 +333,7 @@ import xinNghiService from "@/service/xinNghiService";
 import moment from "moment";
 export default {
   name: "XinNghi",
-  components: {
-  },
+  components: {},
   data() {
     return {
       loading: false,
@@ -457,6 +456,18 @@ export default {
   },
   created() {
     this.submitSearch();
+  },
+  watch: {
+    urlState(newValue) {
+      if (newValue.indexOf("/xinnghi") != -1) {
+        this.submitSearch();
+      }
+    },
+  },
+  computed: {
+    urlState() {
+      return this.$store.state.url;
+    },
   },
   methods: {
     handleTableChange(pagination) {

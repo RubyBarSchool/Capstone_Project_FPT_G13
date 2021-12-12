@@ -207,8 +207,7 @@
 import acceptXinNghiService from "../service/acceptXinNghiService";
 export default {
   name: "AcceptXinNghi",
-  components: {
-  },
+  components: {},
   data() {
     return {
       loadingReject: false,
@@ -305,10 +304,23 @@ export default {
         },
       ],
       visibleView: false,
+      url: "",
     };
   },
   created() {
     this.submitSearch();
+  },
+  watch: {
+    urlState(newValue) {
+      if (newValue.indexOf("/acceptxinnghi") != -1) {
+        this.submitSearch();
+      }
+    },
+  },
+  computed: {
+    urlState() {
+      return this.$store.state.url;
+    },
   },
   methods: {
     handleTableChange(pagination) {

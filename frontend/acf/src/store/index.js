@@ -15,10 +15,11 @@ export default new Vuex.Store({
             message: "",
             description: "",
         },
-        listUser: []
+        listUser: [],
+        url: ""
     },
     getters: {
-
+        url: state => state.url,
     },
     mutations: {
         changeMessage(state, message) {
@@ -32,6 +33,9 @@ export default new Vuex.Store({
         changeListUser(state, listUser) {
             state.listUser = listUser;
         },
+        changeUrlNotification(state, url) {
+            state.url = url;
+        },
     },
     actions: {
         handleChangeMessage(context, message) {
@@ -42,6 +46,9 @@ export default new Vuex.Store({
         },
         handleChangeUserLogin(context, listUser) {
             context.commit('changeListUser', listUser)
+        },
+        urlNotification(context, url) {
+            context.commit('changeUrlNotification', url)
         },
     }
 });

@@ -1,6 +1,8 @@
 package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.config.security.AccountSercurity;
+import com.university.fpt.acf.config.websocket.model.Notification;
+import com.university.fpt.acf.config.websocket.service.NotificationService;
 import com.university.fpt.acf.entity.PersonaLeaveApplication;
 import com.university.fpt.acf.entity.Position;
 import com.university.fpt.acf.form.AcceptPersonalLeaveApplicationAdminForm;
@@ -12,10 +14,12 @@ import com.university.fpt.acf.repository.PersonalLeaveApplicationAdminRepository
 import com.university.fpt.acf.service.PersonalLeaveApplicationAdminService;
 import com.university.fpt.acf.vo.SearchPersonalLeaveApplicationAdminVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -26,6 +30,13 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
     PersonalLeaveApplicationAdminRepository personalLeaveApplicationAdminRepository;
     @Autowired
     AccountManagerRepository accountRepository;
+
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
+
+    @Autowired
+    private NotificationService notificationService;
+
     @Override
     public List<SearchPersonalLeaveApplicationAdminVO> searchPersonalApplication(SearchPersonalLeaveAdminApplicationForm personalApplicationForm) {
         List<SearchPersonalLeaveApplicationAdminVO> listPersonalApplication = new ArrayList<>();
@@ -69,6 +80,15 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
                 p.setModified_date(LocalDate.now());
                 personalLeaveApplicationAdminRepository.save(p);
                 check=true;
+
+                Notification notification = new Notification();
+                notification.setType("success");
+                notification.setUsername(p.getCreated_by());
+                notification.setUsernameCreate(accountSercurity.getUserName());
+                notification.setContent(" chấp nhận đơn xin nghỉ của bạn");
+                notification.setPath("/xinnghi");
+                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(p.getCreated_by(), "/queue/notification", dataOutPut);
             }
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
@@ -96,6 +116,15 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
                 p.setModified_by(accountSercurity.getUserName());
                 p.setModified_date(LocalDate.now());
                 personalLeaveApplicationAdminRepository.save(p);
+
+                Notification notification = new Notification();
+                notification.setType("error");
+                notification.setUsername(p.getCreated_by());
+                notification.setUsernameCreate(accountSercurity.getUserName());
+                notification.setContent(" từ chối đơn xin nghỉ của bạn");
+                notification.setPath("/xinnghi");
+                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(p.getCreated_by(), "/queue/notification", dataOutPut);
             }
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
