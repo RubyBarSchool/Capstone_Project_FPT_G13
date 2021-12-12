@@ -1,22 +1,23 @@
 package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.config.security.AccountSercurity;
+import com.university.fpt.acf.config.websocket.model.Notification;
+import com.university.fpt.acf.config.websocket.service.NotificationService;
 import com.university.fpt.acf.entity.BonusPenalty;
 import com.university.fpt.acf.entity.Employee;
 import com.university.fpt.acf.entity.HistorySalary;
 import com.university.fpt.acf.form.*;
-import com.university.fpt.acf.repository.BonusCustomRepository;
-import com.university.fpt.acf.repository.BonusRepository;
-import com.university.fpt.acf.repository.EmployeeRepository;
-import com.university.fpt.acf.repository.HistorySalaryRepository;
+import com.university.fpt.acf.repository.*;
 import com.university.fpt.acf.service.BonusService;
 import com.university.fpt.acf.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -32,6 +33,15 @@ public class BonusServiceImpl implements BonusService {
 
     @Autowired
     private HistorySalaryRepository historySalaryRepository;
+
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
+
+    @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
+    private AccountManagerRepository accountManagerRepository;
 
     @Override
     public List<ResultSearchBonusAdminVO> searchBonus(SearchBonusAdminForm searchBonus) {
@@ -232,6 +242,17 @@ public class BonusServiceImpl implements BonusService {
             check = true;
 
 
+            List<String> usernames = accountManagerRepository.getUsernameByIdEmployee(addBonus.getListIdEmployee());
+            for(String s : usernames){
+                Notification notification = new Notification();
+                notification.setUsername(s);
+                notification.setUsernameCreate(accountSercurity.getUserName());
+                notification.setContent(" tạo một đơn khen thưởng cho bạn");
+                notification.setPath("/viewthuongphat");
+                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+            }
+
             if (addBonus.getStatus()) {
                 LocalDate date = LocalDate.now();
                 int day = date.getDayOfMonth();
@@ -280,9 +301,26 @@ public class BonusServiceImpl implements BonusService {
         boolean check = false;
         try {
             BonusPenalty bonus = bonusRepository.getBonusById(id);
+
+            AccountSercurity accountSercurity = new AccountSercurity();
+            List<Long> isEmployees = new ArrayList<>();
+            for (Employee employee : bonus.getEmployees()) {
+                isEmployees.add(employee.getId());
+            }
+
+            List<String> usernames = accountManagerRepository.getUsernameByIdEmployee(isEmployees);
+            for (String s : usernames) {
+                Notification notification = new Notification();
+                notification.setUsername(s);
+                notification.setUsernameCreate(accountSercurity.getUserName());
+                notification.setContent(" đã xóa đơn khen thưởng cho bạn");
+                notification.setPath("/viewthuongphat");
+                HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+            }
+
             if (!bonus.getStatus()) {
                 bonus.setDeleted(true);
-                AccountSercurity accountSercurity = new AccountSercurity();
                 bonus.setModified_by(accountSercurity.getUserName());
                 bonus.setModified_date(LocalDate.now());
                 bonusRepository.save(bonus);
@@ -296,7 +334,6 @@ public class BonusServiceImpl implements BonusService {
                     LocalDate dateStart = LocalDate.of(date.getYear(), date.getMonthValue(), 9);
                     if (dateStart.isBefore(bonus.getEffectiveDate())) {
                         bonus.setDeleted(true);
-                        AccountSercurity accountSercurity = new AccountSercurity();
                         bonus.setModified_by(accountSercurity.getUserName());
                         bonus.setModified_date(LocalDate.now());
                         bonusRepository.save(bonus);
@@ -324,7 +361,6 @@ public class BonusServiceImpl implements BonusService {
                     LocalDate dateEnd = LocalDate.of(date.getYear(), date.getMonthValue(), 10);
                     if (dateStart.isBefore(bonus.getEffectiveDate())) {
                         bonus.setDeleted(true);
-                        AccountSercurity accountSercurity = new AccountSercurity();
                         bonus.setModified_by(accountSercurity.getUserName());
                         bonus.setModified_date(LocalDate.now());
                         bonusRepository.save(bonus);
@@ -359,6 +395,22 @@ public class BonusServiceImpl implements BonusService {
         try {
             BonusPenalty bonus = bonusRepository.getBonusById(updateBonus.getId());
             AccountSercurity accountSercurity = new AccountSercurity();
+
+            List<Long> isEmployees = new ArrayList<>();
+            for (Employee employee : bonus.getEmployees()) {
+                isEmployees.add(employee.getId());
+            }
+
+            List<String> usernames = accountManagerRepository.getUsernameByIdEmployee(isEmployees);
+            for (String s : usernames) {
+                Notification notification = new Notification();
+                notification.setUsername(s);
+                notification.setUsernameCreate(accountSercurity.getUserName());
+                notification.setContent(" cập nhật lại đơn khen thưởng cho bạn");
+                notification.setPath("/viewthuongphat");
+                HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+            }
 
             LocalDate date = LocalDate.now();
             int day = date.getDayOfMonth();

@@ -46,4 +46,7 @@ public interface AccountManagerRepository extends JpaRepository<Account,Long> {
 
     @Query("select a.username from  Account  a inner  join  a.roles r where a.deleted = false  and r.code = 'ADMIN'")
     List<String> getUsernameAdmin();
+
+    @Query("select a.username from  Account  a inner  join  a.employee e where a.deleted = false  and e.id in :idEmployees  ")
+    List<String> getUsernameByIdEmployee(@Param("idEmployees") List<Long> idEmployees);
 }
