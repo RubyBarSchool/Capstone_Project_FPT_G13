@@ -1,19 +1,24 @@
 package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.config.security.AccountSercurity;
+import com.university.fpt.acf.config.websocket.model.Notification;
+import com.university.fpt.acf.config.websocket.service.NotificationService;
 import com.university.fpt.acf.entity.HistorySalary;
 import com.university.fpt.acf.form.BonusPunishForm;
 import com.university.fpt.acf.form.SearchSalaryForm;
+import com.university.fpt.acf.repository.AccountManagerRepository;
 import com.university.fpt.acf.repository.HistorySalaryCustomRepository;
 import com.university.fpt.acf.repository.HistorySalaryRepository;
 import com.university.fpt.acf.service.SalaryService;
 import com.university.fpt.acf.vo.SearchSalaryVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -25,12 +30,21 @@ public class SalaryServiceImpl implements SalaryService {
     @Autowired
     private HistorySalaryRepository historySalaryRepository;
 
+    @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
+
+    @Autowired
+    private AccountManagerRepository accountManagerRepository;
+
     @Override
     public List<SearchSalaryVO> searchSalary(BonusPunishForm bonusPunishForm) {
         List<SearchSalaryVO> searchSalaryVOS = new ArrayList<>();
         try {
             AccountSercurity accountSercurity = new AccountSercurity();
-            searchSalaryVOS = historySalaryCustomRepository.searchSalary(accountSercurity.getUserName(),bonusPunishForm);
+            searchSalaryVOS = historySalaryCustomRepository.searchSalary(accountSercurity.getUserName(), bonusPunishForm);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -45,7 +59,7 @@ public class SalaryServiceImpl implements SalaryService {
         int total = 0;
         try {
             AccountSercurity accountSercurity = new AccountSercurity();
-            total = historySalaryCustomRepository.getTotalSearchSalary(accountSercurity.getUserName(),bonusPunishForm);
+            total = historySalaryCustomRepository.getTotalSearchSalary(accountSercurity.getUserName(), bonusPunishForm);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -105,21 +119,29 @@ public class SalaryServiceImpl implements SalaryService {
     @Override
     @Transactional
     public Boolean acceptSalary(Long id) {
-        try{
+        try {
             AccountSercurity accountSercurity = new AccountSercurity();
             HistorySalary historySalary = historySalaryRepository.getById(id);
-            if(historySalary != null){
+            if (historySalary != null) {
                 historySalary.setStatus(true);
                 historySalary.setModified_by(accountSercurity.getUserName());
                 historySalary.setAccountAccept(accountSercurity.getUserName());
                 historySalary.setDateAccept(LocalDate.now());
                 historySalary.setModified_date(LocalDate.now());
-            }else {
+                historySalaryRepository.save(historySalary);
+                String username = accountManagerRepository.getUsername(historySalary.getEmployee().getId());
+                Notification notification = new Notification();
+                notification.setUsername(username);
+                notification.setUsernameCreate(accountSercurity.getUserName());
+                notification.setContent(" đã thanh toán lương cho bạn");
+                notification.setPath("/viewluong");
+                HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(username, "/queue/notification", dataOutPut);
+            } else {
                 throw new RuntimeException("id not exit");
             }
-            historySalaryRepository.save(historySalary);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
     }

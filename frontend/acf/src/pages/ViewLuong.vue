@@ -90,7 +90,7 @@
             <a-date-picker
               v-model="dateSelect"
               :disabled-date="disabledDate"
-              showToday="true"
+              :showToday="true"
               @change="changeDate"
             />
             <a-table
@@ -173,8 +173,7 @@ import moment from "moment";
 import ViewSalaryService from "@/service/viewSalaryService.js";
 export default {
   name: "ViewLuong",
-  components: {
-  },
+  components: {},
   data() {
     return {
       columnsSalaryNow: [
@@ -455,11 +454,14 @@ export default {
   methods: {
     disabledDate(current) {
       let date = moment();
-      if (date.date() > 10) {
-        return current.date() != 10 || current > moment().set("date",10);
+      if (date.date() >= 10) {
+        let date1 = moment().subtract(1, "months");
+        this.dateSelect = date1.set("date", 10);
+        return current.date() != 10 || current > date1.set("date", 10);
       } else {
-        let date2 = moment().subtract(1,"months");
-        return current.date() != 10 || current > date2.set("date",10);
+        let date2 = moment().subtract(2, "months");
+        this.dateSelect = date2.set("date", 10);
+        return current.date() != 10 || current > date2.set("date", 10);
       }
     },
     changeDate() {
