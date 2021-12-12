@@ -47,7 +47,10 @@
                 @click="toggleCollapsed"
               />
             </a-col>
-            <a-col flex="auto">
+            <a-col flex="200px">
+
+
+              <a-dropdown :trigger="['click']" class="dropdown">
               <a-badge :count="countmessage" :overflow-count="30">
                 <font-awesome-icon
                   :style="{ 'font-size': '30px', color: '#495057' }"
@@ -55,6 +58,13 @@
                   :icon="['fas', 'bell']"
                 />
               </a-badge>
+                <a-menu slot="overlay" class="menu">
+                  <a-menu-item  v-for="(data, index) in dataNotification" :key="index">
+                    <router-link :to="data.path"><a-badge :color="!data.read?'blue':''" />{{data.usernameCreate}}{{data.content}} </router-link>
+                  </a-menu-item>
+                </a-menu>
+              </a-dropdown>
+
             </a-col>
             <a-col flex="200px">
               <a-dropdown :trigger="['click']" class="dropdown">
@@ -106,7 +116,7 @@ export default {
   name: "Slider",
   data() {
     return {
-      countmessage: 100,
+      countmessage: 0,
       logo: "logo",
       collapsed: false,
       disableTitle: true,
