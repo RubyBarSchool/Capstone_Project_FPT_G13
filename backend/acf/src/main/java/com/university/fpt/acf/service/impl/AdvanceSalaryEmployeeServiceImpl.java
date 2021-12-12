@@ -1,6 +1,8 @@
 package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.config.security.AccountSercurity;
+import com.university.fpt.acf.config.websocket.model.Notification;
+import com.university.fpt.acf.config.websocket.service.NotificationService;
 import com.university.fpt.acf.entity.AdvaceSalary;
 import com.university.fpt.acf.entity.Employee;
 import com.university.fpt.acf.form.AddAdvanceSalaryEmployeeForm;
@@ -14,22 +16,34 @@ import com.university.fpt.acf.service.AdvanceSalaryEmployeeService;
 import com.university.fpt.acf.vo.DetailAdvanceSalaryEmployeeVO;
 import com.university.fpt.acf.vo.GetAllAdvanceSalaryEmployeeVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
 public class AdvanceSalaryEmployeeServiceImpl implements AdvanceSalaryEmployeeService {
     @Autowired
     private AdvanceSalaryEmployeeRepository advanceSalaryEmployeeRepository;
+
     @Autowired
     private AdvanceSalaryEmployeeCustomRepository advanceSalaryEmployeeCustomRepository;
+
     @Autowired
     private EmployeeRepository employeeRepository;
+
     @Autowired
     private AccountManagerRepository accountManagerRepository;
+
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
+
+    @Autowired
+    private NotificationService notificationService;
+
     @Override
     public List<GetAllAdvanceSalaryEmployeeVO> searchAdvanceSalaryEmployee(SearchAdvanceEmployeeForm searchForm) {
         List<GetAllAdvanceSalaryEmployeeVO> list = new ArrayList<>();
@@ -77,6 +91,18 @@ public class AdvanceSalaryEmployeeServiceImpl implements AdvanceSalaryEmployeeSe
             p.setModified_by(accountSercurity.getUserName());
             advanceSalaryEmployeeRepository.save(p);
             check=true;
+
+            List<String> accountAdmin = accountManagerRepository.getUsernameAdmin();
+            for(String s : accountAdmin){
+                Notification notification = new Notification();
+                notification.setType("success");
+                notification.setUsername(s);
+                notification.setUsernameCreate(accountSercurity.getUserName());
+                notification.setContent(" tạo một đơn xin ứng lương");
+                notification.setPath("/acceptungluong");
+                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+            }
 
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());

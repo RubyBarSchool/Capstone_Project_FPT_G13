@@ -82,7 +82,6 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
                 check=true;
 
                 Notification notification = new Notification();
-                notification.setType("success");
                 notification.setUsername(p.getCreated_by());
                 notification.setUsernameCreate(accountSercurity.getUserName());
                 notification.setContent(" chấp nhận đơn xin nghỉ của bạn");

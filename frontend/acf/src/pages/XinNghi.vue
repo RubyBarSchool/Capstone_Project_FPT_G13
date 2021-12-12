@@ -486,6 +486,9 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
+      this.visibleAdd = false;
+      this.visibleEdit = false;
+      this.visibleView = false;
       xinNghiService
         .searchPersonalLeaveApplication(this.dataSearch)
         .then((response) => {

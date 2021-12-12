@@ -40,9 +40,6 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
     @Autowired
     private NotificationService notificationService;
 
-    @Value( "${acf.scross.path}" )
-    private String path;
-
     @Override
     public Boolean AddLeaveApplication(AddPerLeaveAppEmployeeForm addPerLeaveAppEmployeeForm) {
         boolean check = false;

@@ -339,6 +339,7 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
+      this.visibleView = false;
       acceptXinNghiService
         .searchPersonalLeaveApplication(this.dataSearch)
         .then((response) => {

@@ -316,8 +316,7 @@ import ungLuongService from "../service/ungLuongService";
 
 export default {
   name: "UngLuong",
-  components: {
-  },
+  components: {},
   data() {
     return {
       pagination: {
@@ -431,6 +430,18 @@ export default {
   created() {
     this.submitSearch();
   },
+  watch: {
+    urlState(newValue) {
+      if (newValue.indexOf("/ungluong") != -1) {
+        this.submitSearch();
+      }
+    },
+  },
+  computed: {
+    urlState() {
+      return this.$store.state.url;
+    },
+  },
   methods: {
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
@@ -448,6 +459,9 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
+      this.visibleAdd=false;
+      this.visibleEdit=false;
+      this.visibleView=false;
       ungLuongService
         .searchAdvanceSalaryEmployee(this.dataSearch)
         .then((response) => {

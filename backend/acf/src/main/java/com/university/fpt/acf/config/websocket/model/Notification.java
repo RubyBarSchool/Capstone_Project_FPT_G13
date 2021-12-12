@@ -15,7 +15,7 @@ public class Notification {
     private String username;
     private String usernameCreate;
     private String content;
-    private String type;
+    private String type = "success";
     private String path;
     private Boolean read = false;
     private LocalDateTime localDateTime = LocalDateTime.now();

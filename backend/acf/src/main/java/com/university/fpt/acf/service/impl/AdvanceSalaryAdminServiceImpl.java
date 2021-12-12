@@ -1,6 +1,7 @@
 package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.config.security.AccountSercurity;
+import com.university.fpt.acf.config.websocket.model.Notification;
 import com.university.fpt.acf.config.websocket.service.NotificationService;
 import com.university.fpt.acf.entity.AdvaceSalary;
 
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -90,6 +92,15 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
             data.setModified_date(LocalDate.now());
             adminRepository.save(data);
             check=true;
+
+            Notification notification = new Notification();
+            notification.setUsername(data.getCreated_by());
+            notification.setUsernameCreate(accountSercurity.getUserName());
+            notification.setContent(" chấp nhận đơn xin ứng lương của bạn");
+            notification.setPath("/ungluong");
+            HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+            simpMessagingTemplate.convertAndSendToUser(data.getCreated_by(), "/queue/notification", dataOutPut);
+
             LocalDate date = LocalDate.now();
             if(date.getDayOfMonth() < 10){
                 date = date.minusMonths(1);
@@ -98,12 +109,15 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
                 date = LocalDate.of(date.getYear(),date.getMonthValue(),10);
 
             }
-            HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(id, date);
+
+            Long idEmpl = accountManagerRepository.getIdEmployeeByUsername(data.getCreated_by());
+            HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(idEmpl, date);
             historySalary.setAdvanceSalary((Integer.parseInt(historySalary.getAdvanceSalary())+Integer.parseInt(data.getAdvaceSalary()))+"");
             historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) - Integer.parseInt(data.getAdvaceSalary()))+"");
             historySalary.setModified_by(accountSercurity.getUserName());
             historySalary.setModified_date(LocalDate.now());
             historySalaryRepository.save(historySalary);
+
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }
@@ -125,6 +139,15 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
             data.setModified_date(LocalDate.now());
             adminRepository.save(data);
             check=true;
+
+            Notification notification = new Notification();
+            notification.setType("error");
+            notification.setUsername(data.getCreated_by());
+            notification.setUsernameCreate(accountSercurity.getUserName());
+            notification.setContent(" không chấp nhận đơn xin ứng lương của bạn");
+            notification.setPath("/ungluong");
+            HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+            simpMessagingTemplate.convertAndSendToUser(data.getCreated_by(), "/queue/notification", dataOutPut);
 
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());

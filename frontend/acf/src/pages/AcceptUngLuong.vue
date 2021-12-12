@@ -120,14 +120,16 @@
               <a-button
                 v-if="dataDetail.status == -1"
                 type="danger"
-                :loading="loadingReject" :disabled="disableReject"
+                :loading="loadingReject"
+                :disabled="disableReject"
                 @click="checkFormReject(dataDetail.id, dataDetail.comment)"
                 >Loại bỏ</a-button
               >
               <a-button
                 v-if="dataDetail.status == -1"
                 type="primary"
-                :loading="loadingAccept" :disabled="disableAccept"
+                :loading="loadingAccept"
+                :disabled="disableAccept"
                 @click="checkFormAccept(dataDetail.id, dataDetail.comment)"
               >
                 Chấp nhận
@@ -176,8 +178,7 @@ import acceptUngLuongService from "@/service/acceptUngLuongService.js";
 
 export default {
   name: "acceptungluong",
-  components: {
-  },
+  components: {},
   data() {
     return {
       pagination: {
@@ -271,12 +272,24 @@ export default {
       },
       loadingReject: false,
       loadingAccept: false,
-      disableAccept : false,
+      disableAccept: false,
       disableReject: false,
     };
   },
   created() {
     this.submitSearch();
+  },
+  watch: {
+    urlState(newValue) {
+      if (newValue.indexOf("/acceptungluong") != -1) {
+        this.submitSearch();
+      }
+    },
+  },
+  computed: {
+    urlState() {
+      return this.$store.state.url;
+    },
   },
   methods: {
     handleTableChange(pagination) {
@@ -295,6 +308,7 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
+      this.visibleView = false;
       acceptUngLuongService
         .searchAdvanceSalaryAdmin(this.dataSearch)
         .then((response) => {
