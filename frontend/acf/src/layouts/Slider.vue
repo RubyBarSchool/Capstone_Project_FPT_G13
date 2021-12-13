@@ -49,27 +49,55 @@
             </a-col>
             <a-col flex="200px">
               <a-dropdown :trigger="['click']" class="dropdown">
-                <a-badge :count="countmessage" :overflow-count="30">
+                <a-badge
+                  @click="clickNotification"
+                  :count="countmessage"
+                  :overflow-count="30"
+                >
                   <font-awesome-icon
                     :style="{ 'font-size': '30px', color: '#495057' }"
                     if=""
                     :icon="['fas', 'bell']"
                   />
                 </a-badge>
-                <a-menu slot="overlay" class="menu">
+                <a-menu
+                  v-if="dataNotification.length != 0"
+                  slot="overlay"
+                  class="menu"
+                >
                   <a-menu-item
                     v-for="(data, index) in dataNotification"
                     :key="index"
+                    @click="readNotification(data)"
                   >
                     <router-link :to="data.path"
                       ><a-badge :color="!data.read ? 'blue' : ''" />{{
                         data.usernameCreate
-                      }}{{ data.content }}
+                      }}{{ data.content }}{{ getdate(data.localDateTime) }}
                     </router-link>
+
+                    <a-popconfirm
+                      title="Bạn có chắc chắn muốn xóa thông báo không?"
+                      @confirm="deleteNotification(data)"
+                      ok-text="Đồng ý"
+                      cancel-text="Hủy"
+                    >
+                      <a-button>
+                        <font-awesome-icon
+                          :style="{ 'font-size': '30px', color: '#495057' }"
+                          if=""
+                          :icon="['fas', 'ellipsis-h']"
+                        />
+                      </a-button>
+                    </a-popconfirm>
                   </a-menu-item>
                   <a-menu-divider />
-                  <a-menu-item key="x">Xem tất cả</a-menu-item>
-                  <a-menu-item key="y">Xóa tất cả</a-menu-item>
+                  <a-menu-item key="x" @click="readAllNotification"
+                    >Xem tất cả</a-menu-item
+                  >
+                  <a-menu-item key="y" @click="deleteAllNotification"
+                    >Xóa tất cả</a-menu-item
+                  >
                 </a-menu>
               </a-dropdown>
             </a-col>
@@ -313,6 +341,56 @@ export default {
     },
   },
   methods: {
+    deleteNotification(data) {
+      let notification = {
+        username: data.username,
+        usernameCreate: data.usernameCreate,
+        content: data.content,
+        type: data.type,
+        path: data.path,
+        read: data.read,
+        localDateTime: data.localDateTime,
+      };
+      if (this.stompClient && this.stompClient.connected) {
+        this.stompClient.send(
+          "/ws/deletenotification",
+          JSON.stringify(notification)
+        );
+      }
+    },
+    clickNotification() {
+      if (this.stompClient && this.stompClient.connected) {
+        this.stompClient.send("/ws/notification");
+      }
+    },
+    getdate(date) {
+      let dates = Date.now() - new Date(date);
+      let x = Math.floor(dates / 1000);
+      let seconds = x % 60;
+      x = Math.floor(x / 60);
+      let minutes = x % 60;
+      x = Math.floor(x / 60);
+      let hours = x % 24;
+      let days = Math.floor(x / 24);
+      return (
+        " " +
+        (days != 0 ? days + " ngày" : "") +
+        (hours != 0 ? hours + " giờ" : "") +
+        (minutes != 0 ? minutes + " phút" : "") +
+        (seconds != 0 ? seconds + " giây" : "0 giây") +
+        " trước"
+      );
+    },
+    readAllNotification() {
+      if (this.stompClient && this.stompClient.connected) {
+        this.stompClient.send("/ws/readallnotification");
+      }
+    },
+    deleteAllNotification() {
+      if (this.stompClient && this.stompClient.connected) {
+        this.stompClient.send("/ws/deleteallnotification");
+      }
+    },
     disconnect() {
       if (this.stompClient) {
         this.stompClient.disconnect();
@@ -353,9 +431,23 @@ export default {
       this.$store.dispatch("remove");
       this.$router.push("/login");
     },
-    read() {
+    readNotification(data) {
+      let notification = {
+        username: data.username,
+        usernameCreate: data.usernameCreate,
+        content: data.content,
+        type: data.type,
+        path: data.path,
+        read: data.read,
+        localDateTime: data.localDateTime,
+      };
+
+      console.log("data notification", notification);
       if (this.stompClient && this.stompClient.connected) {
-        this.stompClient.send("/ws/logout");
+        this.stompClient.send(
+          "/ws/readnotification",
+          JSON.stringify(notification)
+        );
       }
     },
     connectWebsoket() {
@@ -370,7 +462,6 @@ export default {
             if (this != null) {
               let dataMess = JSON.parse(tick.body).data;
               if (dataMess.length > this.dataNotification.length) {
-                this.dataNotification = dataMess;
                 if (!dataMess[0].read) {
                   let type = dataMess[0].type;
                   let message = "Thông báo mới";
@@ -389,6 +480,7 @@ export default {
                   );
                 }
               }
+              this.dataNotification = dataMess;
               this.countmessage = JSON.parse(tick.body).count;
             }
           });

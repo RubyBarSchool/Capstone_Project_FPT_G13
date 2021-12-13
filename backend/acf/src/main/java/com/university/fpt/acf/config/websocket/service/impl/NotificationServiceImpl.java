@@ -52,22 +52,78 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
-    public HashMap<String, Object> deleteNotification(String username, Notification notification) {
-        return null;
+    public HashMap<String, Object> deleteNotification(Notification notification) {
+        HashMap<String, Object> stringObjectHashMap = new HashMap<>();
+        int count = 0;
+        List<Notification> notificationsOutput = new ArrayList<>();
+
+        for (int i = notifications.size() - 1 ; i >= 0 ; i--) {
+            if(notifications.get(i).equals(notification)){
+                notifications.remove(i);
+                continue;
+            }
+            notificationsOutput.add(notifications.get(i));
+            if(!notifications.get(i).getRead()){
+                count++;
+            }
+        }
+
+        stringObjectHashMap.put("data", notificationsOutput);
+        stringObjectHashMap.put("count", count);
+        return stringObjectHashMap;
     }
 
     @Override
-    public void deleteAllNotification(String username) {
+    public HashMap<String, Object> deleteAllNotification(String username) {
+        HashMap<String, Object> stringObjectHashMap = new HashMap<>();
+        int count = 0;
+        List<Notification> notificationsOutput = new ArrayList<>();
 
+        for (int i = notifications.size() - 1 ; i >= 0 ; i--) {
+            if(notifications.get(i).getUsername().equals(username)){
+                notifications.remove(i);
+            }
+        }
+
+        stringObjectHashMap.put("data", notificationsOutput);
+        stringObjectHashMap.put("count", count);
+        return stringObjectHashMap;
     }
 
     @Override
-    public void readAllNotification(String username) {
-
+    public HashMap<String, Object> readAllNotification(String username) {
+        HashMap<String, Object> stringObjectHashMap = new HashMap<>();
+        int count = 0;
+        List<Notification> notificationsOutput = new ArrayList<>();
+        for (Notification notificationx : notifications) {
+           if(notificationx.getUsername().equals(username)){
+               notificationx.setRead(true);
+               notificationsOutput.add(notificationx);
+           }
+        }
+        stringObjectHashMap.put("data", notificationsOutput);
+        stringObjectHashMap.put("count", count);
+        return stringObjectHashMap;
     }
 
     @Override
-    public HashMap<String, Object> readNotification(String username, Notification notification) {
-        return null;
+    public HashMap<String, Object> readNotification(Notification notification) {
+        HashMap<String, Object> stringObjectHashMap = new HashMap<>();
+        int count = 0;
+        List<Notification> notificationsOutput = new ArrayList<>();
+        for (Notification notificationx : notifications) {
+            if(notificationx.getUsername().equals(notification.getUsername())){
+                if (notificationx.equals(notification)) {
+                    notificationx.setRead(true);
+                }
+                if(!notificationx.getRead()){
+                    count++;
+                }
+                notificationsOutput.add(notificationx);
+            }
+        }
+        stringObjectHashMap.put("data", notificationsOutput);
+        stringObjectHashMap.put("count", count);
+        return stringObjectHashMap;
     }
 }

@@ -65,4 +65,29 @@ public class MessageController {
         HashMap<String, Object> notifications = this.notificationService.getListNotification(sha.getUser().getName());
         simpMessagingTemplate.convertAndSendToUser(sha.getUser().getName(), "/queue/notification", notifications);
     }
+
+    @MessageMapping("/readnotification")
+    public void readNotification(SimpMessageHeaderAccessor sha, @Payload Notification notification) {
+        HashMap<String, Object> notifications = this.notificationService.readNotification(notification);
+        simpMessagingTemplate.convertAndSendToUser(sha.getUser().getName(), "/queue/notification", notifications);
+    }
+
+    @MessageMapping("/readallnotification")
+    public void readAllNotification(SimpMessageHeaderAccessor sha) {
+        HashMap<String, Object> notifications = this.notificationService.readAllNotification(sha.getUser().getName());
+        simpMessagingTemplate.convertAndSendToUser(sha.getUser().getName(), "/queue/notification", notifications);
+    }
+
+    @MessageMapping("/deleteallnotification")
+    public void deleteAllNotification(SimpMessageHeaderAccessor sha) {
+        HashMap<String, Object> notifications = this.notificationService.deleteAllNotification(sha.getUser().getName());
+        simpMessagingTemplate.convertAndSendToUser(sha.getUser().getName(), "/queue/notification", notifications);
+    }
+
+    @MessageMapping("/deletenotification")
+    public void deleteNotification(SimpMessageHeaderAccessor sha, @Payload Notification notification) {
+        HashMap<String, Object> notifications = this.notificationService.deleteNotification(notification);
+        simpMessagingTemplate.convertAndSendToUser(sha.getUser().getName(), "/queue/notification", notifications);
+    }
+
 }
