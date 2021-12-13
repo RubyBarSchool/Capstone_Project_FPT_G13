@@ -89,16 +89,17 @@ export default {
   created() {
     this.showMessage();
   },
-  beforeDestroy() {
-    console.log("beforeDestroy");
+  destroyed() {
     this.disconnect();
   },
   methods: {
     disconnect() {
-      if (this.stompClient) {
+      console.log("here");
+      if (this.stompClient && this.stompClient.connected) {
         this.stompClient.disconnect();
       }
     },
+    wsLogin() {},
     showMessage() {
       let message = this.$store.state.message;
       if (message.type != "") {

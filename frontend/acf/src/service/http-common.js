@@ -26,13 +26,13 @@ service.interceptors.response.use(
     },
     error => {
         if (error.response && error.response.status === 401) {
-            localStorage.removeItem('user')
             let message = {
                 type: "error",
                 message: "Hết hạn tài khoản",
                 description: "Xin hãy đăng nhập lại"
             }
             state.dispatch('handleChangeMessage', message)
+
             if (router.currentRoute.path !== '/login') {
                 router.push('/login');
             }
