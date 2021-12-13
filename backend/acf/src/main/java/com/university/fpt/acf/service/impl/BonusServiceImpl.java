@@ -244,6 +244,9 @@ public class BonusServiceImpl implements BonusService {
 
             List<String> usernames = accountManagerRepository.getUsernameByIdEmployee(addBonus.getListIdEmployee());
             for(String s : usernames){
+                if(s.equals(accountSercurity.getUserName())){
+                    continue;
+                }
                 Notification notification = new Notification();
                 notification.setUsername(s);
                 notification.setUsernameCreate(accountSercurity.getUserName());
@@ -310,6 +313,9 @@ public class BonusServiceImpl implements BonusService {
 
             List<String> usernames = accountManagerRepository.getUsernameByIdEmployee(isEmployees);
             for (String s : usernames) {
+                if(s.equals(accountSercurity.getUserName())){
+                    continue;
+                }
                 Notification notification = new Notification();
                 notification.setUsername(s);
                 notification.setUsernameCreate(accountSercurity.getUserName());
@@ -403,6 +409,9 @@ public class BonusServiceImpl implements BonusService {
 
             List<String> usernames = accountManagerRepository.getUsernameByIdEmployee(isEmployees);
             for (String s : usernames) {
+                if(s.equals(accountSercurity.getUserName())){
+                    continue;
+                }
                 Notification notification = new Notification();
                 notification.setUsername(s);
                 notification.setUsernameCreate(accountSercurity.getUserName());

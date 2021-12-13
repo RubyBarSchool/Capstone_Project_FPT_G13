@@ -66,6 +66,9 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
 
             List<String> accountAdmin = accountManagerRepository.getUsernameAdmin();
             for(String s : accountAdmin){
+                if(s.equals(accountSercurity.getUserName())){
+                    continue;
+                }
                 Notification notification = new Notification();
                 notification.setType("success");
                 notification.setUsername(s);

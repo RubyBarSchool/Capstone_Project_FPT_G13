@@ -690,7 +690,18 @@ export default {
       },
     };
   },
-  computed: {},
+  watch: {
+    urlState(newValue) {
+      if (newValue.indexOf("/viewdetailcontact") != -1) {
+        this.search();
+      }
+    },
+  },
+  computed: {
+    urlState() {
+      return this.$store.state.url;
+    },
+  },
   created() {
     this.searchContact();
     this.search();

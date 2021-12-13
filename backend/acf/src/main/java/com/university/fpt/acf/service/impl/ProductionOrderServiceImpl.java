@@ -78,11 +78,11 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
                 if (productionOrderViewWorkVO.getDateStart() == null || productionOrderViewWorkVO.getDateEnd() == null) {
                     continue;
                 }
-                if(!checkNewEmpl){
+                if (!checkNewEmpl) {
                     String idPro = dataEmployee.get("idProductionOrder").toString();
                     String namePro = dataEmployee.get("nameProductionOrder").toString();
-                    dataEmployee.put("idProductionOrder", idPro +","+ productionOrderViewWorkVO.getIdProductionOrder());
-                    dataEmployee.put("nameProductionOrder",namePro+","+ productionOrderViewWorkVO.getNameProductionOrder());
+                    dataEmployee.put("idProductionOrder", idPro + "," + productionOrderViewWorkVO.getIdProductionOrder());
+                    dataEmployee.put("nameProductionOrder", namePro + "," + productionOrderViewWorkVO.getNameProductionOrder());
                 }
                 if (productionOrderViewWorkVO.getDateStart().isBefore(dateWorkEmployeeFrom.getDateStart())) {
                     productionOrderViewWorkVO.setDateStart(dateWorkEmployeeFrom.getDateStart());
@@ -143,7 +143,7 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
         List<ViewWorkVO> list = new ArrayList<>();
         try {
             AccountSercurity accountSercurity = new AccountSercurity();
-            list = productionOrderCustomRepository.searchProductOrderEmployee(searchWorkEmployeeForm,accountSercurity.getUserName());
+            list = productionOrderCustomRepository.searchProductOrderEmployee(searchWorkEmployeeForm, accountSercurity.getUserName());
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -170,7 +170,7 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
         List<ViewWorkDetailVO> list = new ArrayList<>();
         try {
             AccountSercurity accountSercurity = new AccountSercurity();
-            list = productionOrderCustomRepository.searchProductOrderDetailEmployee(accountSercurity.getUserName(),id);
+            list = productionOrderCustomRepository.searchProductOrderDetailEmployee(accountSercurity.getUserName(), id);
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -183,7 +183,7 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
         try {
             AccountSercurity accountSercurity = new AccountSercurity();
             ProductionOrder productionOrder = new ProductionOrder();
-            if(addProductionOrderFrom.getId() != null){
+            if (addProductionOrderFrom.getId() != null) {
                 productionOrder.setId(addProductionOrderFrom.getId());
             }
             productionOrder.setCreated_by(accountSercurity.getUserName());
@@ -195,9 +195,9 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
             productionOrder.setProducts(product);
             productionOrder.setDateStart(addProductionOrderFrom.getDateStart());
             productionOrder.setDateEnd(addProductionOrderFrom.getDateEnd());
-            productionOrder.setNumberFinish("0/"+product.getCount());
+            productionOrder.setNumberFinish("0/" + product.getCount());
             List<Employee> employees = new ArrayList<>();
-            for(Long idEmpl : addProductionOrderFrom.getIdEmployees()){
+            for (Long idEmpl : addProductionOrderFrom.getIdEmployees()) {
                 Employee employee = new Employee();
                 employee.setId(idEmpl);
                 employees.add(employee);
@@ -207,19 +207,39 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
             check = true;
 
             List<String> usernames = accountManagerRepository.getUsernameByIdEmployee(addProductionOrderFrom.getIdEmployees());
-            for(String s : usernames){
+            for (String s : usernames) {
+                if (s.equals(accountSercurity.getUserName())) {
+                    continue;
+                }
                 Notification notification = new Notification();
                 notification.setUsername(s);
                 notification.setUsernameCreate(accountSercurity.getUserName());
-                if(addProductionOrderFrom.getId() != null){
+                if (addProductionOrderFrom.getId() != null) {
                     notification.setContent(" chỉnh sửa một lệnh sản xuất cho bạn");
-                }else{
+                } else {
                     notification.setContent(" tạo một lệnh sản xuất cho bạn");
                 }
                 notification.setPath("/viewwork");
-                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
                 simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
             }
+
+            if (addProductionOrderFrom.getId() == null) {
+                List<String> usernameAdmin = accountManagerRepository.getUsernameAdmin();
+                for (String s : usernameAdmin) {
+                    if (s.equals(accountSercurity.getUserName())) {
+                        continue;
+                    }
+                    Notification notification = new Notification();
+                    notification.setUsername(s);
+                    notification.setUsernameCreate(accountSercurity.getUserName());
+                    notification.setContent(" tạo một lệnh sản xuất cho sản phẩm " + product.getName());
+                    notification.setPath("/viewdetailcontact");
+                    HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
+                    simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+                }
+            }
+
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -238,7 +258,7 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
             productionOrder.setDateStart(addProductionOrderFrom.getDateStart());
             productionOrder.setDateEnd(addProductionOrderFrom.getDateEnd());
             List<Employee> employees = new ArrayList<>();
-            for(Long idEmpl : addProductionOrderFrom.getIdEmployees()){
+            for (Long idEmpl : addProductionOrderFrom.getIdEmployees()) {
                 Employee employee = new Employee();
                 employee.setId(idEmpl);
                 employees.add(employee);
@@ -249,13 +269,16 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
 
 
             List<String> usernames = accountManagerRepository.getUsernameByIdEmployee(addProductionOrderFrom.getIdEmployees());
-            for(String s : usernames){
+            for (String s : usernames) {
+                if (s.equals(accountSercurity.getUserName())) {
+                    continue;
+                }
                 Notification notification = new Notification();
                 notification.setUsername(s);
                 notification.setUsernameCreate(accountSercurity.getUserName());
                 notification.setContent(" chỉnh sửa một lệnh sản xuất cho bạn");
                 notification.setPath("/viewwork");
-                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
                 simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
             }
 
@@ -280,7 +303,6 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
             notification.setUsernameCreate(accountSercurity.getUserName());
             notification.setContent(" chấp nhận lệnh sản xuất " + productionOrder.getName());
             notification.setPath("/productionorder");
-            HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
 
             productionOrderRepository.save(productionOrder);
 
@@ -291,14 +313,17 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
             productRepository.save(product);
 
             Contact contact = product.getContact();
-            if(contact.getStatusDone() != -1){
+            if (contact.getStatusDone() != -1) {
                 contact.setModified_by(accountSercurity.getUserName());
                 contact.setModified_date(LocalDate.now());
                 contact.setStatusDone(-1);
                 contactRepository.save(contact);
             }
             check = true;
-            simpMessagingTemplate.convertAndSendToUser(productionOrder.getCreated_by(), "/queue/notification", dataOutPut);
+            if (!productionOrder.getCreated_by().equals(accountSercurity.getUserName())) {
+                HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(productionOrder.getCreated_by(), "/queue/notification", dataOutPut);
+            }
 
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
@@ -325,12 +350,12 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
 
             Contact contact = product.getContact();
             String[] number = contact.getNumberFinish().split("/");
-            Integer numberDone = Integer.parseInt(number[0])+1;
+            Integer numberDone = Integer.parseInt(number[0]) + 1;
             Integer numberAll = Integer.parseInt(number[1]);
-            if(numberDone==numberAll){
+            if (numberDone == numberAll) {
                 contact.setStatusDone(0);
             }
-            contact.setNumberFinish(numberDone+"/"+numberAll);
+            contact.setNumberFinish(numberDone + "/" + numberAll);
             contact.setModified_by(accountSercurity.getUserName());
             contact.setModified_date(LocalDate.now());
 
@@ -338,13 +363,16 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
             productRepository.saveAndFlush(product);
             contactRepository.saveAndFlush(contact);
 
-            for(String s : usernames){
+            for (String s : usernames) {
+                if(s.equals(accountSercurity.getUserName())){
+                    continue;
+                }
                 Notification notification = new Notification();
                 notification.setUsername(s);
                 notification.setUsernameCreate(accountSercurity.getUserName());
                 notification.setContent(" xác nhận hoàn thành lệnh sản xuất " + productionOrder.getName() + " của bạn ");
                 notification.setPath("/viewwork");
-                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
                 simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
             }
             check = true;
@@ -364,22 +392,23 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
             productionOrder.setModified_date(LocalDate.now());
             String[] numberfinish = productionOrder.getNumberFinish().split("/");
             Integer numberProduct = Integer.parseInt(numberfinish[1]);
-            if(numberProduct.intValue() == updateWorkEmployeeFrom.getNumber().intValue()){
+            if (numberProduct.intValue() == updateWorkEmployeeFrom.getNumber().intValue()) {
                 productionOrder.setStatus(-2);
             }
-            productionOrder.setNumberFinish(updateWorkEmployeeFrom.getNumber()+"/"+numberProduct);
+            productionOrder.setNumberFinish(updateWorkEmployeeFrom.getNumber() + "/" + numberProduct);
 
             Notification notification = new Notification();
             notification.setUsername(productionOrder.getCreated_by());
             notification.setUsernameCreate(accountSercurity.getUserName());
-            notification.setContent(" hoàn thành " + updateWorkEmployeeFrom.getNumber() +" sản phẩm trong lệnh sản xuất "+ productionOrder.getName());
+            notification.setContent(" hoàn thành " + updateWorkEmployeeFrom.getNumber() + " sản phẩm trong lệnh sản xuất " + productionOrder.getName());
             notification.setPath("/productionorder");
-            HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
 
             productionOrderRepository.save(productionOrder);
             check = true;
-
-            simpMessagingTemplate.convertAndSendToUser(productionOrder.getCreated_by(), "/queue/notification", dataOutPut);
+            if(!productionOrder.getCreated_by().equals(accountSercurity.getUserName())){
+                HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(productionOrder.getCreated_by(), "/queue/notification", dataOutPut);
+            }
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -400,15 +429,34 @@ public class ProductionOrderServiceImpl implements ProductionOrderService {
             product.setStatus(-2);
             productRepository.save(product);
             productionOrderRepository.deleteProductionOrderById(productionOrder.getId());
-            for(String s : usernames){
+            for (String s : usernames) {
+                if (s.equals(accountSercurity.getUserName())) {
+                    continue;
+                }
                 Notification notification = new Notification();
                 notification.setUsername(s);
                 notification.setUsernameCreate(accountSercurity.getUserName());
                 notification.setContent(" xóa một lệnh sản xuất của bạn");
                 notification.setPath("/viewwork");
-                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
                 simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
             }
+
+            List<String> usernameAdmin = accountManagerRepository.getUsernameAdmin();
+
+            for (String s : usernameAdmin) {
+                if (s.equals(accountSercurity.getUserName())) {
+                    continue;
+                }
+                Notification notification = new Notification();
+                notification.setUsername(s);
+                notification.setUsernameCreate(accountSercurity.getUserName());
+                notification.setContent(" xóa một lệnh sản xuất cho sản phẩm " + product.getName());
+                notification.setPath("/viewdetailcontact");
+                HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+            }
+
             check = true;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());

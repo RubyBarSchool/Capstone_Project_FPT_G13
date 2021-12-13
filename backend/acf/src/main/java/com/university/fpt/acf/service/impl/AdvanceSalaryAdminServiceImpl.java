@@ -93,13 +93,15 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
             adminRepository.save(data);
             check=true;
 
-            Notification notification = new Notification();
-            notification.setUsername(data.getCreated_by());
-            notification.setUsernameCreate(accountSercurity.getUserName());
-            notification.setContent(" chấp nhận đơn xin ứng lương của bạn");
-            notification.setPath("/ungluong");
-            HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
-            simpMessagingTemplate.convertAndSendToUser(data.getCreated_by(), "/queue/notification", dataOutPut);
+            if(!data.getCreated_by().equals(accountSercurity.getUserName())){
+                Notification notification = new Notification();
+                notification.setUsername(data.getCreated_by());
+                notification.setUsernameCreate(accountSercurity.getUserName());
+                notification.setContent(" chấp nhận đơn xin ứng lương của bạn");
+                notification.setPath("/ungluong");
+                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(data.getCreated_by(), "/queue/notification", dataOutPut);
+            }
 
             LocalDate date = LocalDate.now();
             if(date.getDayOfMonth() < 10){
@@ -140,15 +142,16 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
             adminRepository.save(data);
             check=true;
 
-            Notification notification = new Notification();
-            notification.setType("error");
-            notification.setUsername(data.getCreated_by());
-            notification.setUsernameCreate(accountSercurity.getUserName());
-            notification.setContent(" không chấp nhận đơn xin ứng lương của bạn");
-            notification.setPath("/ungluong");
-            HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
-            simpMessagingTemplate.convertAndSendToUser(data.getCreated_by(), "/queue/notification", dataOutPut);
-
+            if(!data.getCreated_by().equals(accountSercurity.getUserName())){
+                Notification notification = new Notification();
+                notification.setType("error");
+                notification.setUsername(data.getCreated_by());
+                notification.setUsernameCreate(accountSercurity.getUserName());
+                notification.setContent(" không chấp nhận đơn xin ứng lương của bạn");
+                notification.setPath("/ungluong");
+                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(data.getCreated_by(), "/queue/notification", dataOutPut);
+            }
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }

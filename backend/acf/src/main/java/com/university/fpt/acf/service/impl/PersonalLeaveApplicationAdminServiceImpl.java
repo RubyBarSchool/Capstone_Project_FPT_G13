@@ -81,13 +81,15 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
                 personalLeaveApplicationAdminRepository.save(p);
                 check=true;
 
-                Notification notification = new Notification();
-                notification.setUsername(p.getCreated_by());
-                notification.setUsernameCreate(accountSercurity.getUserName());
-                notification.setContent(" chấp nhận đơn xin nghỉ của bạn");
-                notification.setPath("/xinnghi");
-                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
-                simpMessagingTemplate.convertAndSendToUser(p.getCreated_by(), "/queue/notification", dataOutPut);
+                if(!p.getCreated_by().equals(accountSercurity.getUserName())){
+                    Notification notification = new Notification();
+                    notification.setUsername(p.getCreated_by());
+                    notification.setUsernameCreate(accountSercurity.getUserName());
+                    notification.setContent(" chấp nhận đơn xin nghỉ của bạn");
+                    notification.setPath("/xinnghi");
+                    HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                    simpMessagingTemplate.convertAndSendToUser(p.getCreated_by(), "/queue/notification", dataOutPut);
+                }
             }
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
@@ -116,14 +118,16 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
                 p.setModified_date(LocalDate.now());
                 personalLeaveApplicationAdminRepository.save(p);
 
-                Notification notification = new Notification();
-                notification.setType("error");
-                notification.setUsername(p.getCreated_by());
-                notification.setUsernameCreate(accountSercurity.getUserName());
-                notification.setContent(" từ chối đơn xin nghỉ của bạn");
-                notification.setPath("/xinnghi");
-                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
-                simpMessagingTemplate.convertAndSendToUser(p.getCreated_by(), "/queue/notification", dataOutPut);
+                if(!p.getCreated_by().equals(accountSercurity.getUserName())){
+                    Notification notification = new Notification();
+                    notification.setType("error");
+                    notification.setUsername(p.getCreated_by());
+                    notification.setUsernameCreate(accountSercurity.getUserName());
+                    notification.setContent(" từ chối đơn xin nghỉ của bạn");
+                    notification.setPath("/xinnghi");
+                    HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                    simpMessagingTemplate.convertAndSendToUser(p.getCreated_by(), "/queue/notification", dataOutPut);
+                }
             }
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());

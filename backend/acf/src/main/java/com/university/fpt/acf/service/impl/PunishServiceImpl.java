@@ -155,6 +155,9 @@ public class PunishServiceImpl implements PunishService {
 
             List<String> usernames = accountManagerRepository.getUsernameByIdEmployee(addPunish.getListIdEmployee());
             for (String s : usernames) {
+                if(s.equals(accountSercurity.getUserName())){
+                    continue;
+                }
                 Notification notification = new Notification();
                 notification.setUsername(s);
                 notification.setUsernameCreate(accountSercurity.getUserName());
@@ -225,6 +228,9 @@ public class PunishServiceImpl implements PunishService {
 
             List<String> usernames = accountManagerRepository.getUsernameByIdEmployee(isEmployees);
             for (String s : usernames) {
+                if(s.equals(accountSercurity.getUserName())){
+                    continue;
+                }
                 Notification notification = new Notification();
                 notification.setUsername(s);
                 notification.setUsernameCreate(accountSercurity.getUserName());
@@ -325,6 +331,9 @@ public class PunishServiceImpl implements PunishService {
 
             List<String> usernames = accountManagerRepository.getUsernameByIdEmployee(isEmployees);
             for (String s : usernames) {
+                if(s.equals(accountSercurity.getUserName())){
+                    continue;
+                }
                 Notification notification = new Notification();
                 notification.setUsername(s);
                 notification.setUsernameCreate(accountSercurity.getUserName());

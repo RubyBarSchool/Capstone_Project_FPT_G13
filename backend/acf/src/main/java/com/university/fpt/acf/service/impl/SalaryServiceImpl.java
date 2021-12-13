@@ -130,13 +130,15 @@ public class SalaryServiceImpl implements SalaryService {
                 historySalary.setModified_date(LocalDate.now());
                 historySalaryRepository.save(historySalary);
                 String username = accountManagerRepository.getUsername(historySalary.getEmployee().getId());
-                Notification notification = new Notification();
-                notification.setUsername(username);
-                notification.setUsernameCreate(accountSercurity.getUserName());
-                notification.setContent(" đã thanh toán lương cho bạn");
-                notification.setPath("/viewluong");
-                HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
-                simpMessagingTemplate.convertAndSendToUser(username, "/queue/notification", dataOutPut);
+                if(!username.equals(accountSercurity.getUserName())){
+                    Notification notification = new Notification();
+                    notification.setUsername(username);
+                    notification.setUsernameCreate(accountSercurity.getUserName());
+                    notification.setContent(" đã thanh toán lương cho bạn");
+                    notification.setPath("/viewluong");
+                    HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
+                    simpMessagingTemplate.convertAndSendToUser(username, "/queue/notification", dataOutPut);
+                }
             } else {
                 throw new RuntimeException("id not exit");
             }

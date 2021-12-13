@@ -238,11 +238,11 @@ export default {
             },
             {
               path: "/phatadmin",
-              name: "Đơn kỷ luật",
+              name: "Quyết định kỷ luật",
             },
             {
               path: "/thuongadmin",
-              name: "Đơn Khen thưởng",
+              name: "Quyết định khen thưởng",
             },
             {
               path: "/acceptluongadmin",
