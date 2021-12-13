@@ -453,7 +453,9 @@ export default {
   watch: {
     urlState(newValue) {
       if (newValue.indexOf("/viewluong") != -1) {
-        this.searchSalaryNotNow();
+        this.searchSalaryNow();
+        this.searchBonusNow();
+        this.searchPunishNow();
       }
     },
   },

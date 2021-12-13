@@ -2,6 +2,8 @@ package com.university.fpt.acf.service.impl;
 
 
 import com.university.fpt.acf.config.security.AccountSercurity;
+import com.university.fpt.acf.config.websocket.model.Notification;
+import com.university.fpt.acf.config.websocket.service.NotificationService;
 import com.university.fpt.acf.entity.Employee;
 import com.university.fpt.acf.entity.HistorySalary;
 import com.university.fpt.acf.entity.TimeKeep;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.mail.internet.MimeMessage;
@@ -59,6 +62,13 @@ public class AttendancesServiceImpl implements AttendancesService {
     @Value( "${acf.scross.path}" )
     private String path;
 
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
+
+    @Autowired
+    private NotificationService notificationService;
+
+
     @Override
     public List<AttendanceVO> getAllAttendance(AttendanceFrom attendanceFrom) {
         List<AttendanceVO> attendanceVOS = new ArrayList<>();
@@ -90,9 +100,12 @@ public class AttendancesServiceImpl implements AttendancesService {
         try {
             AccountSercurity accountSercurity = new AccountSercurity();
             List<Long> idEmployeeAttemdance = attendanceRepository.getAllListID(addAttendanceForm.getDate());
+            List<Long> list = new ArrayList<>();
             for (int i = addAttendanceForm.getAttendance().size() - 1; i >= 0; i--) {
                 if (idEmployeeAttemdance.contains(addAttendanceForm.getAttendance().get(i).getId())) {
                     addAttendanceForm.getAttendance().remove(i);
+                }else{
+                    list.add(addAttendanceForm.getAttendance().get(i).getId());
                 }
             }
             List<HistorySalary> historySalaryrs = new ArrayList<>();
@@ -137,6 +150,36 @@ public class AttendancesServiceImpl implements AttendancesService {
             if (timeKeeps.size() != 0) {
                 timeKeeps = attendanceRepository.saveAll(timeKeeps);
                 historySalaryRepository.saveAll(historySalaryrs);
+
+                List<String> usernames = accountManagerRepository.getUsernameByIdEmployee(list);
+                for(String s : usernames){
+                    if(s.equals(accountSercurity.getUserName())){
+                        continue;
+                    }
+                    Notification notification = new Notification();
+                    notification.setUsername(s);
+                    notification.setUsernameCreate(accountSercurity.getUserName());
+                    notification.setContent(" chấm công cho bạn");
+                    notification.setPath("/viewluong");
+                    HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                    simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+                }
+
+                List<String> accountAdmin = accountManagerRepository.getUsernameAdmin();
+                for(String s : accountAdmin){
+                    if(s.equals(accountSercurity.getUserName())){
+                        continue;
+                    }
+                    Notification notification = new Notification();
+                    notification.setType("success");
+                    notification.setUsername(s);
+                    notification.setUsernameCreate(accountSercurity.getUserName());
+                    notification.setContent(" chấm công ");
+                    notification.setPath("/viewattendance");
+                    HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                    simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+                }
+
             }
         } catch (Exception ex) {
             log.error("error save Attendance");

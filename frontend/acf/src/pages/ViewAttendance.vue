@@ -292,7 +292,18 @@ export default {
       },
     };
   },
-  computed: {},
+  watch: {
+    urlState(newValue) {
+      if (newValue.indexOf("/viewattendance") != -1) {
+        this.getDate();
+      }
+    },
+  },
+  computed: {
+    urlState() {
+      return this.$store.state.url;
+    },
+  },
   created() {
     this.getDate();
   },
