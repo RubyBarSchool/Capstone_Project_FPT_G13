@@ -22,6 +22,7 @@
             :style="{ width: '150px', 'margin-right': '5px' }"
             v-model="dataSearch.nameContact"
           />
+          Trạng thái:
           <a-select
             v-model="dataSearch.statusDone"
             @change="beforeSearch"
@@ -61,7 +62,7 @@
               :columns="columns"
               :data-source="dataSourceTable"
               :pagination="pagination"
-              :scroll="{ x: 1500 }"
+              :scroll="{ x: 1000 }"
               :rowKey="
                 (record, index) => {
                   return index;
@@ -178,7 +179,7 @@
             :columns="columnsTableView"
             :data-source="dataSourceTableView"
             :pagination="false"
-            :scroll="{ x: 1500 }"
+            :scroll="{ x: 1000 }"
             :rowKey="
               (record, index) => {
                 return index;

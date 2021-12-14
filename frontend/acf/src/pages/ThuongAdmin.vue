@@ -28,7 +28,7 @@
             @change="search"
             style="width: 150px"
           >
-            <a-select-option value=""> All </a-select-option>
+            <a-select-option value=""> Tất cả </a-select-option>
             <a-select-option :value="false"> Nháp </a-select-option>
             <a-select-option :value="true"> Công khai </a-select-option>
           </a-select>
@@ -67,7 +67,7 @@
               :columns="columns"
               :data-source="dataSourceTable"
               :pagination="pagination"
-              :scroll="{ x: 1500 }"
+              :scroll="{ x: 1000 }"
               :rowKey="
                 (record, index) => {
                   return index;

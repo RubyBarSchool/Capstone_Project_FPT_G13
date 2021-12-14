@@ -230,6 +230,12 @@ export const router = new Router({
                     name: 'chieuCao',
                     component: () =>
                         import ("./pages/ChieuCao.vue")
+                },
+                {
+                    path: 'profile',
+                    name: 'profile',
+                    component: () =>
+                        import ("./pages/Profile.vue")
                 }
             ]
         },

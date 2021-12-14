@@ -26,7 +26,7 @@
                 <div><img src="../assets/5.png" /></div>
               </a-carousel>
             </a-col>
-            <a-col flex="650px">
+            <a-col flex="400px">
               <!-- menu trên -->
               <a-input
                 placeholder="Tên chức vụ"
@@ -58,12 +58,13 @@
                   :columns="columns"
                   :data-source="dataSourceTable"
                   :pagination="pagination"
+                  :scroll="{ x: 600 }"
                   :rowKey="
                     (record, index) => {
                       return index;
                     }
                   "
-                  @change="handleTableChange"
+                  @change="handleTableChange  "
                 >
                   <template slot="id" slot-scope="text, record">
                     {{ record.id }}

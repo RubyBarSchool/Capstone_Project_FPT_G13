@@ -67,6 +67,7 @@
               :columns="columns"
               :data-source="dataSourceTable"
               :pagination="pagination"
+              :scroll="{ x: 1000 }"
               :rowKey="
                 (record, index) => {
                   return index;
@@ -113,18 +114,8 @@
                 <a-input v-model="dataDetail.money" disabled />
               </a-form-model-item>
               <a-form-model-item label="Trạng thái">
-                <a-tag
-                  :color="
-                    dataDetail.status
-                      ? 'green'
-                      : 'orange'
-                  "
-                >
-                  {{
-                    dataDetail.status
-                      ? 'Đã duyệt'
-                      : 'Chờ duyệt'
-                  }}
+                <a-tag :color="dataDetail.status ? 'green' : 'orange'">
+                  {{ dataDetail.status ? "Đã duyệt" : "Chờ duyệt" }}
                 </a-tag>
               </a-form-model-item>
               <a-form-model-item label="Ngày hiệu lực">
@@ -150,8 +141,7 @@ import viewThuongPhat from "@/service/viewThuongPhat";
 
 export default {
   name: "viewThuongPhat",
-  components: {
-  },
+  components: {},
   data() {
     return {
       pagination: {

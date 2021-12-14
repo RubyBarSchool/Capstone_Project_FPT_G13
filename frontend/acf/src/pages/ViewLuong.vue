@@ -17,7 +17,7 @@
             <a-table
               :columns="columnsSalaryNow"
               :data-source="datasalaryNow"
-              :scroll="{ x: 1500 }"
+              :scroll="{ x: 1000 }"
               :pagination="false"
               :rowKey="
                 (record, index) => {
@@ -40,7 +40,7 @@
                     :columns="columnsBonusPunish"
                     :data-source="dataBonusNow"
                     :pagination="paginationBonusNow"
-                    :scroll="{ x: 800 }"
+                    :scroll="{ x: 1000 }"
                     :rowKey="
                       (record, index) => {
                         return index;
@@ -63,7 +63,7 @@
                     :columns="columnsBonusPunish"
                     :data-source="dataPunishNow"
                     :pagination="paginationPunishNow"
-                    :scroll="{ x: 800 }"
+                    :scroll="{ x: 1000 }"
                     :rowKey="
                       (record, index) => {
                         return index;
@@ -96,7 +96,7 @@
               :columns="columnsSalaryNotNow"
               :data-source="dataSalaryNotNow"
               :pagination="paginationSalaryNotNow"
-              :scroll="{ x: 1500 }"
+              :scroll="{ x: 1000 }"
               :rowKey="
                 (record, index) => {
                   return index;
@@ -118,7 +118,7 @@
                     :columns="columnsBonusPunish"
                     :data-source="dataBonusNotNow"
                     :pagination="paginationBonusNotNow"
-                    :scroll="{ x: 800 }"
+                    :scroll="{ x: 1000 }"
                     :rowKey="
                       (record, index) => {
                         return index;
@@ -141,7 +141,7 @@
                     :columns="columnsBonusPunish"
                     :data-source="dataPunishNotNow"
                     :pagination="paginationPunishNotNow"
-                    :scroll="{ x: 800 }"
+                    :scroll="{ x: 1000 }"
                     :rowKey="
                       (record, index) => {
                         return index;

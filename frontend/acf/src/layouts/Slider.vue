@@ -47,7 +47,7 @@
                 @click="toggleCollapsed"
               />
             </a-col>
-            <a-col flex="200px">
+            <a-col flex="40px">
               <a-dropdown :trigger="['click']" class="dropdown">
                 <a-badge
                   @click="clickNotification"
@@ -57,7 +57,7 @@
                   <font-awesome-icon
                     :style="{ 'font-size': '30px', color: '#495057' }"
                     if=""
-                    :icon="['fas', 'bell']"
+                    :icon="['far', 'bell']"
                   />
                 </a-badge>
                 <a-menu
@@ -292,7 +292,7 @@ export default {
         {
           path: "/materialsuggest",
           icon: "file-medical-alt",
-          name: "Gợi ý vật liệu",
+          name: "Gợi ý vật tư",
           menu: [],
         },
         {
@@ -320,7 +320,7 @@ export default {
             },
             {
               path: "/viewthuongphat",
-              name: "Xem Khen Thưởng(Kỉ luật)",
+              name: "Xem Khen Thưởng (Kỷ luật)",
             },
           ],
         },
@@ -579,6 +579,14 @@ export default {
 };
 </script>
 <style scoped>
+::v-deep .ant-menu-inline .ant-menu-item{
+  font-size: 17px;
+}
+
+::v-deep .ant-menu-inline .ant-menu-submenu-title {
+  font-size: 17px;
+}
+
 #layout .trigger {
   font-size: 18px;
   line-height: 64px;
@@ -591,20 +599,26 @@ export default {
   color: #1890ff;
 }
 
-.ant-layout-sider {
+::v-deep .ant-layout-sider {
   min-height: 100vh;
+  min-width: 200px;
+  width: 300px !important;
+  flex: none !important;
+  max-width: 300px !important;
+}
+.ant-layout-sider-collapsed {
+  width: auto !important;
+  max-width: 80px !important;
 }
 
 #layout .logo {
-  height: 45px;
-  /* background: rgba(206, 13, 13); */
+  height: 70px;
   background-image: url("../assets/logo1.png");
   margin: 10px;
 }
 #layout .logo1 {
   height: 45px;
   width: 45px;
-  /* background: rgba(206, 13, 13); */
   background-image: url("../assets/logo3.png");
   margin: 10px;
 }

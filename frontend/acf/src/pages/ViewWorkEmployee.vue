@@ -16,6 +16,7 @@
               />
             </div>
           </a-back-top>
+          Trạng thái: 
           <a-select
             v-model="dataSearch.status"
             @change="changeSearch"
@@ -32,7 +33,7 @@
               :columns="columns"
               :data-source="dataSourceTable"
               :pagination="pagination"
-              :scroll="{ x: 1500 }"
+              :scroll="{ x: 1000 }"
               :rowKey="
                 (record, index) => {
                   return index;
@@ -117,7 +118,7 @@
                 :columns="columnsView"
                 :data-source="dataSourceTableView"
                 :pagination="false"
-                :scroll="{ x: 1500, y: 800 }"
+                :scroll="{ x: 1000 }"
                 :rowKey="
                   (record, index) => {
                     return index;

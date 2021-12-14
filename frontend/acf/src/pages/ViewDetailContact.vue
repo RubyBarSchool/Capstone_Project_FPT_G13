@@ -67,7 +67,7 @@
               :columns="columns"
               :data-source="dataSourceTable"
               :pagination="pagination"
-              :scroll="{ x: 1500 }"
+              :scroll="{ x: 1000 }"
               :rowKey="
                 (record, index) => {
                   return index;
@@ -326,7 +326,7 @@
                 }
               "
               :pagination="false"
-              :scroll="{ y: 800 }"
+              :scroll="{ x: 1000 }"
               :row-selection="{
                 selectedRowKeys: selectedRowKeys,
                 selectedRows: selectedRows,

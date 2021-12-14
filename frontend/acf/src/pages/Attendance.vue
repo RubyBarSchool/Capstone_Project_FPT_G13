@@ -20,7 +20,7 @@
           <div class="container">
             <div class="row">
               <div class="col">
-                <a-form-model-item label="Attendance type">
+                <a-form-model-item label="Loại chấm công">
                   <a-select v-model="typeAttendance" style="width: 100%">
                     <a-select-option key="1"> Cả ngày </a-select-option>
                     <a-select-option key="0.5"> Nửa ngày </a-select-option>
@@ -33,7 +33,7 @@
                   :columns="columns"
                   :data-source="dataTable"
                   :pagination="false"
-                  :scroll="{ x: 800, y: 800 }"
+                  :scroll="{ x: 1000 }"
                   :rowKey="
                     (record, index) => {
                       return record.id;
@@ -110,6 +110,7 @@ export default {
           width: 100,
           dataIndex: "id",
           key: "id",
+          fixed: "left",
         },
         {
           title: "Nhân viên",

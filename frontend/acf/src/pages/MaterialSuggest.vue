@@ -44,6 +44,7 @@
             <a-table
               :columns="columns"
               :data-source="dataSourceTable"
+              :scroll="{ x: 1000 }"
               :rowKey="
                 (record, index) => {
                   return index;
@@ -81,13 +82,13 @@ export default {
           fixed:"left"
         },
         {
-          title: "Mã tấm phủ",
+          title: "Mã vật tư",
           dataIndex: "nameMaterial",
           key: "nameMaterial",
           width: 150,
         },
         {
-          title: "Nhóm tấm phủ",
+          title: "Nhóm vật tư",
           dataIndex: "groupMaterial",
           key: "groupMaterial",
           width: 150,

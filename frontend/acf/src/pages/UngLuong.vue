@@ -22,6 +22,7 @@
             style="width: 150px"
             v-model="dataSearch.title"
           />
+          Trạng thái:
           <a-select
             placeholder="Trạng thái"
             @change="submitSearch"
@@ -68,6 +69,7 @@
               :columns="columns"
               :data-source="dataSourceTable"
               :pagination="pagination"
+              :scroll="{ x: 1000 }"
               :rowKey="
                 (record, index) => {
                   return index;

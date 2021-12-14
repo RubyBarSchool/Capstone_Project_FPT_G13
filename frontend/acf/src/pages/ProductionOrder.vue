@@ -43,6 +43,7 @@
             :placeholder="['Từ ngày', 'Đến ngày']"
             format="DD/MM/YYYY"
           />
+          Trạng thái:
           <a-select
             v-model="dataSearch.status"
             @change="changeSearch"
@@ -82,7 +83,7 @@
               :columns="columns"
               :data-source="dataSourceTable"
               :pagination="pagination"
-              :scroll="{ x: 1500 }"
+              :scroll="{ x: 1000 }"
               :rowKey="
                 (record, index) => {
                   return index;
@@ -296,7 +297,7 @@
                 :columns="columnsViewWork"
                 :data-source="dataTableViewWork"
                 :pagination="false"
-                :scroll="{ x: 1500, y: 800 }"
+                :scroll="{ x: 1000 }"
                 :rowKey="
                   (record, index) => {
                     return record.id;
@@ -476,7 +477,7 @@
                 :columns="columnsViewWork"
                 :data-source="dataTableViewWork"
                 :pagination="false"
-                :scroll="{ x: 1500, y: 800 }"
+                :scroll="{ x: 1000 }"
                 :rowKey="
                   (record, index) => {
                     return record.id;

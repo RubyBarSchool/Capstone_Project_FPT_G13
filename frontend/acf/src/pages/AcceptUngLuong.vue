@@ -58,10 +58,11 @@
 
           <!-- table content -->
           <div :style="{ 'padding-top': '10px' }">
-            <a-table
+            <a-tables
               :columns="columns"
               :data-source="dataSourceTable"
               :pagination="pagination"
+              :scroll="{ x: 1000 }"
               :rowKey="
                 (record, index) => {
                   return index;
@@ -105,7 +106,7 @@
                   <font-awesome-icon :icon="['fas', 'eye']" />
                 </a-button>
               </template>
-            </a-table>
+            </a-tables>
           </div>
           <!-- table content -->
 
