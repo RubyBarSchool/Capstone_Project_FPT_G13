@@ -8,6 +8,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.time.LocalDateTime;
 import java.util.TimeZone;
 
 
@@ -18,17 +19,14 @@ public class AcfApplication{
 	private FileStorageService fileStorageService;
 
 	public static void main(String[] args) {
-		SpringApplication.run(AcfApplication.class, args);
+		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
+		SpringApplication.run(AcfApplication.class, args
+		);
 	}
 
 
 	@Bean
 	public void createDirectory() {
 		fileStorageService.init();
-	}
-
-	@Bean
-	public void setTimeZone() {
-		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
 	}
 }
