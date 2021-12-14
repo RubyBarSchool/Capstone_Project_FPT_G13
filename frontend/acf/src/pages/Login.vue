@@ -83,14 +83,36 @@ export default {
     },
   },
   beforeCreate() {
-    localStorage.removeItem("user");
     this.form = this.$form.createForm(this, { name: "normal_login" });
   },
   created() {
     this.showMessage();
-  },
-  destroyed() {
-    this.disconnect();
+    if (JSON.parse(localStorage.getItem("user"))) {
+      let username = JSON.parse(localStorage.getItem("user")).username;
+      this.socket = new SockJS("http://localhost:8080/api/wse/online");
+      this.stompClient = Stomp.over(this.socket);
+      this.stompClient.connect(
+        { username: username },
+        () => {
+          this.connected = true;
+          this.stompClient.subscribe("/users/queue/messages", (tick) => {
+            if (this != null) {
+              this.received_messages = JSON.parse(tick.body);
+              console.log("account login", this.received_messages);
+            }
+          });
+          if (this.stompClient && this.stompClient.connected) {
+            this.stompClient.send("/ws/logout");
+            this.disconnect();
+          }
+        },
+        (error) => {
+          console.log(error);
+          this.connected = false;
+        }
+      );
+      localStorage.removeItem("user");
+    }
   },
   methods: {
     disconnect() {
@@ -136,7 +158,6 @@ export default {
         }
       });
     },
-
     connectWebsoket(username) {
       this.socket = new SockJS("http://localhost:8080/api/wse/online");
       this.stompClient = Stomp.over(this.socket);

@@ -330,13 +330,7 @@ export default {
   },
   created() {
     this.reloadPath();
-    window.addEventListener("beforeunload", this.leaving);
     this.connectWebsoket();
-  },
-  beforeDestroy() {
-    if (this.stompClient && this.stompClient.connected) {
-      this.stompClient.send("/ws/logout");
-    }
   },
   destroyed() {
     this.disconnect();
@@ -347,12 +341,6 @@ export default {
     },
   },
   methods: {
-    leaving() {
-      localStorage.removeItem("user");
-      if (this.stompClient && this.stompClient.connected) {
-        this.stompClient.send("/ws/logout");
-      }
-    },
     deleteNotification(data) {
       let notification = {
         username: data.username,

@@ -8,6 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
+import java.util.TimeZone;
+
 
 @SpringBootApplication(scanBasePackages = "com.university.fpt.acf")
 public class AcfApplication{
@@ -23,5 +25,10 @@ public class AcfApplication{
 	@Bean
 	public void createDirectory() {
 		fileStorageService.init();
+	}
+
+	@Bean
+	public void setTimeZone() {
+		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Ho_Chi_Minh"));
 	}
 }
