@@ -399,13 +399,13 @@ export default {
           if (response.data.data) {
             let type = "success";
             let message = "Cập nhật";
-            let description = "Cập nhật trạng thái đơn thành công";
+            let description = "Xác nhận đơn thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           } else {
             let type = "error";
             let message = "Cập nhật";
-            let description = "Cập nhật trạng thái đơn không thành công";
+            let description = "Xác nhận đơn không thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           }
@@ -430,13 +430,13 @@ export default {
           if (response.data.data) {
             let type = "success";
             let message = "Cập nhật";
-            let description = "Cập nhật trạng thái đơn thành công";
+            let description = "Hủy đơn thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           } else {
             let type = "error";
             let message = "Cập nhật";
-            let description = "Cập nhật trạng thái đơn không thành công";
+            let description = "Hủy đơn không thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           }
