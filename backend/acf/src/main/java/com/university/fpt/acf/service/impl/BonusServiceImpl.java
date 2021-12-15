@@ -305,6 +305,9 @@ public class BonusServiceImpl implements BonusService {
         try {
             BonusPenalty bonus = bonusRepository.getBonusById(id);
 
+            if(bonus.getStatus()){
+                throw new RuntimeException("Quyết định khen thưởng có hiệu lực không được xóa");
+            }
             AccountSercurity accountSercurity = new AccountSercurity();
 
 
@@ -403,7 +406,11 @@ public class BonusServiceImpl implements BonusService {
         boolean check = false;
         try {
             BonusPenalty bonus = bonusRepository.getBonusById(updateBonus.getId());
+            if(bonus.getStatus()){
+                throw new RuntimeException("Quyết định khen thưởng có hiệu lực không được sửa");
+            }
             AccountSercurity accountSercurity = new AccountSercurity();
+
             if(updateBonus.getStatus()){
 
                 List<Long> isEmployees = new ArrayList<>();

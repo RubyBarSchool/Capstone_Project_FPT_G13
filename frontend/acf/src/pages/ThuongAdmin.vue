@@ -91,7 +91,7 @@
                 </div>
               </template>
               <template slot="action" slot-scope="text, record">
-                <a-row>
+                <a-row v-if="!record.status" >
                   <a-col :span="9" v-if="checkEditOrDelete(record)">
                     <a-button
                       id="edit"
@@ -599,7 +599,7 @@ export default {
       this.checkDataInputEffectiveDate.show = false;
       this.checkDataInputEffectiveDate.message = "";
       this.dataEdit.id = id;
-      this.dataEdit.effectiveDate = effectiveDate;
+      this.dataEdit.effectiveDate = '';
       this.dataEdit.listIdEmployee = [];
       for (var i = 0; i < listIdEmployees.length; i++) {
         this.dataEdit.listIdEmployee.push(listIdEmployees[i].id);

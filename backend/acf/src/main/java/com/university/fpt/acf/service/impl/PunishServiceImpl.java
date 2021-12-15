@@ -220,7 +220,9 @@ public class PunishServiceImpl implements PunishService {
         boolean check = false;
         try {
             BonusPenalty bonus = punishRepository.getPunishById(id);
-
+            if(bonus.getStatus()){
+                throw new RuntimeException("Quyết định kỷ luật có hiệu lực không được xóa");
+            }
             AccountSercurity accountSercurity = new AccountSercurity();
             if (!bonus.getStatus()) {
                 bonus.setDeleted(true);
@@ -323,6 +325,9 @@ public class PunishServiceImpl implements PunishService {
         try {
             AccountSercurity accountSercurity = new AccountSercurity();
             BonusPenalty bonus = punishRepository.getPunishById(updateForm.getId());
+            if(bonus.getStatus()){
+                throw new RuntimeException("Quyết định kỷ luật có hiệu lực không được sửa");
+            }
             if(updateForm.getStatus()){
 
                 List<Long> isEmployees = new ArrayList<>();
