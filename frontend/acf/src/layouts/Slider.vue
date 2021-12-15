@@ -48,7 +48,7 @@
               />
             </a-col>
             <a-col flex="40px">
-              <a-dropdown :trigger="['click']" class="dropdown">
+              <a-dropdown :trigger="['click']">
                 <a-badge
                   @click="clickNotification"
                   :count="countmessage"
@@ -70,26 +70,38 @@
                     :key="index"
                     @click="readNotification(data)"
                   >
-                    <router-link :to="data.path"
-                      ><a-badge :color="!data.read ? 'blue' : ''" />{{
-                        data.usernameCreate
-                      }}{{ data.content }}{{ getdate(data.localDateTime) }}
-                    </router-link>
-
-                    <a-popconfirm
-                      title="Bạn có chắc chắn muốn xóa thông báo không?"
-                      @confirm="deleteNotification(data)"
-                      ok-text="Đồng ý"
-                      cancel-text="Hủy"
-                    >
-                      <a-button>
-                        <font-awesome-icon
-                          :style="{ 'font-size': '30px', color: '#495057' }"
-                          if=""
-                          :icon="['fas', 'ellipsis-h']"
-                        />
-                      </a-button>
-                    </a-popconfirm>
+                    <h5>Thông báo</h5>
+                    <a-row type="flex">
+                      <a-col flex="auto" :style="{ color: '#000000' }">
+                        <router-link :to="data.path"
+                          ><a-badge :color="!data.read ? 'blue' : ''" />
+                          <strong style="font-size: 17px"
+                            >{{ data.usernameCreate }}
+                          </strong>
+                          <span style="font-size: 16px">
+                            {{ data.content }}
+                          </span>
+                          <p style="color: #2e89ff">
+                            {{ getdate(data.localDateTime) }}
+                          </p>
+                        </router-link>
+                      </a-col>
+                      <a-col flex="20px">
+                        <a-popconfirm
+                          title="Bạn có chắc chắn muốn xóa thông báo không?"
+                          @confirm="deleteNotification(data)"
+                          ok-text="Đồng ý"
+                          cancel-text="Hủy"
+                        >
+                          <!-- <a-button> -->
+                          <font-awesome-icon
+                            :style="{ 'font-size': '30px', color: '#495057' }"
+                            :icon="['fas', 'ellipsis-h']"
+                          />
+                          <!-- </a-button> -->
+                        </a-popconfirm>
+                      </a-col>
+                    </a-row>
                   </a-menu-item>
                   <a-menu-divider />
                   <a-menu-item key="x" @click="readAllNotification"
@@ -102,7 +114,7 @@
               </a-dropdown>
             </a-col>
             <a-col flex="200px">
-              <a-dropdown :trigger="['click']" class="dropdown">
+              <a-dropdown :trigger="['click']" class="menuAva">
                 <a class="ant-dropdown-link">
                   <a-avatar
                     :size="50"
@@ -110,11 +122,16 @@
                     src="https://img.icons8.com/bubbles/100/000000/user.png"
                     class="avatar"
                   />
-                  <span style="color: black"> {{ loadUser }} </span>
+                  <font-awesome-icon
+                    :style="{ 'font-size': '16px', color: '#495057' }"
+                    :icon="['fas', 'caret-down']"
+                  />
                 </a>
                 <a-menu slot="overlay" class="menu">
                   <a-menu-item :key="1">
-                    <router-link to="/detail"> Chi tiết tài khoản </router-link>
+                    <router-link to="/profile">
+                      <h6 style="color: black">{{ loadUser }}</h6>
+                    </router-link>
                   </a-menu-item>
                   <a-menu-divider />
                   <a-menu-item :key="2" @click="logout">
@@ -579,7 +596,7 @@ export default {
 };
 </script>
 <style scoped>
-::v-deep .ant-menu-inline .ant-menu-item{
+::v-deep .ant-menu-inline .ant-menu-item {
   font-size: 17px;
 }
 
@@ -622,17 +639,20 @@ export default {
   background-image: url("../assets/logo3.png");
   margin: 10px;
 }
-.dropdown {
+.menuAva {
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
-  color: white;
   font-size: 16px;
 }
 
-.dropdown:hover {
+.menuAva:hover {
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
-  color: white;
   font-size: 18px;
+}
+
+.menu {
+  margin-bottom: 20vh;
+  margin-left: 1vh;
 }
 </style>

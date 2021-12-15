@@ -22,6 +22,7 @@
             style="width: 150px"
             v-model="dataSearch.title"
           />
+          Trạng thái:
           <a-select
             placeholder="Trạng thái"
             v-model="dataSearch.status"
@@ -55,7 +56,7 @@
             :style="{ 'margin-left': '5px' }"
           >
             <font-awesome-icon
-              :icon="['fas', 'plus-circle']"
+              :icon="['fas', 'file-signature']"
               :style="{ 'margin-right': '5px' }"
             />
             Thêm
@@ -278,7 +279,11 @@
               </div>
               <br />
               <span style="color: red">*</span> Trạng thái :
-              <a-radio-group name="radioGroup" @change="inputEditStatus" v-model="dataEdit.status">
+              <a-radio-group
+                name="radioGroup"
+                @change="inputEditStatus"
+                v-model="dataEdit.status"
+              >
                 <a-radio :value="false"> Nháp </a-radio>
                 <a-radio :value="true"> Hiệu lực </a-radio>
               </a-radio-group>
@@ -313,8 +318,7 @@ import thuongAdminService from "../service/thuongAdminService";
 import moment from "moment";
 export default {
   name: "ThuongAdmin",
-  components: {
-  },
+  components: {},
   data() {
     return {
       loadingEdit: false,

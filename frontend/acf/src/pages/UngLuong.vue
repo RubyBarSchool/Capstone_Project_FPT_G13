@@ -57,7 +57,7 @@
             :style="{ 'margin-left': '5px' }"
           >
             <font-awesome-icon
-              :icon="['fas', 'envelope-open-text']"
+              :icon="['fas', 'file-alt']"
               :style="{ 'margin-right': '5px' }"
             />
             Viết đơn

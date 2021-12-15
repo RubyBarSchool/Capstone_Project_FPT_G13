@@ -49,7 +49,7 @@
             :style="{ 'margin-left': '5px' }"
           >
             <font-awesome-icon
-              :icon="['fas', 'user-plus']"
+              :icon="['fas', 'building']"
               :style="{ 'margin-right': '5px' }"
             />
             Thêm

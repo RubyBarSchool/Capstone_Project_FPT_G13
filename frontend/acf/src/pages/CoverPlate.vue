@@ -88,7 +88,7 @@
             :style="{ 'margin-left': '5px' }"
           >
             <font-awesome-icon
-              :icon="['fas', 'plus']"
+              :icon="['fas', 'plus-square']"
               :style="{ 'margin-right': '5px' }"
             />
 
@@ -100,7 +100,7 @@
             :style="{ 'margin-left': '5px' }"
           >
             <font-awesome-icon
-              :icon="['fas', 'plus']"
+              :icon="['fas', 'plus-square']"
               :style="{ 'margin-right': '5px' }"
             />
             Thêm đơn vị
@@ -111,7 +111,7 @@
             :style="{ 'margin-left': '5px' }"
           >
             <font-awesome-icon
-              :icon="['fas', 'plus']"
+              :icon="['fas', 'plus-square']"
               :style="{ 'margin-right': '5px' }"
             />
             Thêm khung và chiều cao
@@ -682,8 +682,7 @@ import coverSheetService from "../service/coverPlateService";
 import fileService from "../service/fileService";
 export default {
   name: "Admin",
-  components: {
-  },
+  components: {},
   data() {
     return {
       url: "",

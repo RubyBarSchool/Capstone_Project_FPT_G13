@@ -72,7 +72,7 @@
             :style="{ 'margin-left': '5px' }"
           >
             <font-awesome-icon
-              :icon="['fas', 'plus-circle']"
+              :icon="['fas', 'file-signature']"
               :style="{ 'margin-right': '5px' }"
             />
             Thêm
@@ -236,6 +236,7 @@
                     :disabled="disabledDate"
                     :disabled-date="disableDateStartAdd"
                     v-model="dataSubmit.dateStart"
+                    placeholder="Ngày bắt đầu"
                   />
                   <div style="color: red" v-if="checkDateStart.show">
                     {{ checkDateStart.message }}
@@ -250,6 +251,7 @@
                     :disabled="disabledDate"
                     :disabled-date="disableDateEndAdd"
                     v-model="dataSubmit.dateEnd"
+                    placeholder="Ngày hoàn thành"
                   />
                   <div style="color: red" v-if="checkDateEnd.show">
                     {{ checkDateEnd.message }}
@@ -399,6 +401,7 @@
                     @change="changeDateStart"
                     :disabled-date="disableDateStart"
                     v-model="dataSubmit.dateStart"
+                    placeholder="Ngày bắt đầu"
                   />
                   <div style="color: red" v-if="checkDateStart.show">
                     {{ checkDateStart.message }}
@@ -413,6 +416,7 @@
                     style="width: 100%"
                     :disabled-date="disableDateEnd"
                     v-model="dataSubmit.dateEnd"
+                    placeholder="Ngày hoàn thành"
                   />
                   <div style="color: red" v-if="checkDateEnd.show">
                     {{ checkDateEnd.message }}

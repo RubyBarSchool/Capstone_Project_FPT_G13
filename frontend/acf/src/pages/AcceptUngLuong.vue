@@ -27,6 +27,7 @@
             style="width: 150px"
             v-model="dataSearch.title"
           />
+          Trạng thái
           <a-select
             placeholder="Trạng thái"
             @change="submitSearch"
@@ -38,6 +39,7 @@
             <a-select-option value="1"> Đã duyệt </a-select-option>
             <a-select-option value="0"> Từ chối </a-select-option>
           </a-select>
+          Ngày tạo
           <a-range-picker
             v-model="dataSearch.date"
             @change="submitSearch"
@@ -58,7 +60,7 @@
 
           <!-- table content -->
           <div :style="{ 'padding-top': '10px' }">
-            <a-tables
+            <a-table
               :columns="columns"
               :data-source="dataSourceTable"
               :pagination="pagination"
@@ -106,7 +108,7 @@
                   <font-awesome-icon :icon="['fas', 'eye']" />
                 </a-button>
               </template>
-            </a-tables>
+            </a-table>
           </div>
           <!-- table content -->
 
@@ -179,7 +181,6 @@ import acceptUngLuongService from "@/service/acceptUngLuongService.js";
 
 export default {
   name: "acceptungluong",
-  components: {},
   data() {
     return {
       pagination: {

@@ -87,8 +87,8 @@
             @click="showModalAdd"
             :style="{ 'margin-left': '5px' }"
           >
-            <font-awesome-icon
-              :icon="['fas', 'file-signature']"
+             <font-awesome-icon
+              :icon="['fas', 'plus-square']"
               :style="{ 'margin-right': '5px' }"
             />
             Thêm vật liệu
@@ -98,8 +98,8 @@
             @click="showModalAddUnit"
             :style="{ 'margin-left': '5px' }"
           >
-            <font-awesome-icon
-              :icon="['fas', 'file-signature']"
+             <font-awesome-icon
+              :icon="['fas', 'plus-square']"
               :style="{ 'margin-right': '5px' }"
             />
             Thêm đơn vị
@@ -109,8 +109,8 @@
             @click="showModalAddFrame"
             :style="{ 'margin-left': '5px' }"
           >
-            <font-awesome-icon
-              :icon="['fas', 'file-signature']"
+             <font-awesome-icon
+              :icon="['fas', 'plus-square']"
               :style="{ 'margin-right': '5px' }"
             />
             Thêm khung và chiều cao

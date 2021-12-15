@@ -22,6 +22,10 @@
             @click="showModalAdd"
             :style="{ 'margin-left': '5px' }"
           >
+           <font-awesome-icon
+              :icon="['fas', 'plus-square']"
+              :style="{ 'margin-right': '5px' }"
+            />
             Thêm
           </a-button>
           <!-- menu trên -->

@@ -22,13 +22,14 @@
             style="width: 150px"
             v-model="dataSearch.title"
           />
+          Trạng thái:
           <a-select
             placeholder="Trạng thái"
             @change="search"
             v-model="dataSearch.status"
             style="width: 150px"
           >
-            <a-select-option value=""> All </a-select-option>
+            <a-select-option value=""> Tất cả </a-select-option>
             <a-select-option :value="false"> Nháp </a-select-option>
             <a-select-option :value="true"> Công khai </a-select-option>
           </a-select>
@@ -55,7 +56,7 @@
             :style="{ 'margin-left': '5px' }"
           >
             <font-awesome-icon
-              :icon="['fas', 'plus-circle']"
+              :icon="['fas', 'file-signature']"
               :style="{ 'margin-right': '5px' }"
             />
             Thêm

@@ -56,7 +56,7 @@
             :style="{ 'margin-left': '5px' }"
           >
             <font-awesome-icon
-              :icon="['fas', 'plus-circle']"
+              :icon="['fas', 'file-signature']"
               :style="{ 'margin-right': '5px' }"
             />
             Thêm

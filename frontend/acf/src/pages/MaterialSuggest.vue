@@ -18,6 +18,7 @@
           </a-back-top>
 
           <!-- menu trên -->
+          Số lượng: 
           <a-input
             placeholder="Số lượng"
             v-model="dataSearch.count"

@@ -22,6 +22,7 @@
             placeholder="Tiêu đề"
             style="width: 150px"
           />
+          Loại đơn: 
           <a-select
             v-model="dataSearch.bonus"
             @change="submitSearch"
@@ -32,6 +33,7 @@
             <a-select-option value="false"> Phạt </a-select-option>
             <a-select-option value="true"> Thưởng </a-select-option>
           </a-select>
+          Trạng thái:
           <a-select
             v-model="dataSearch.status"
             @change="submitSearch"
