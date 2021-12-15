@@ -33,6 +33,7 @@
             placeholder="Nhóm tấm phủ"
             mode="multiple"
             v-model="dataSearch.listGroupID"
+            @change="submitSearch"
             style="width: 150px"
           >
             <a-select-option
@@ -47,6 +48,7 @@
             placeholder="Đơn vị đo"
             mode="multiple"
             v-model="dataSearch.listUnitId"
+            @change="submitSearch"
             style="width: 150px"
           >
             <a-select-option
@@ -61,6 +63,7 @@
             placeholder="Công ty"
             mode="multiple"
             v-model="dataSearch.listIdCompany"
+            @change="submitSearch"
             style="width: 150px"
           >
             <a-select-option
