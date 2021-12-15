@@ -714,12 +714,12 @@ export default {
             this.notifi(type, message, description);
           }
           this.loading = false;
+          this.visibleAdd = false;
         })
         .catch((e) => {
           console.log(e);
           this.loading = false;
         });
-      this.visibleAdd = false;
       this.dataAdd.username = "";
       this.dataAdd.password = "";
       this.dataAdd.employee = "";
@@ -788,12 +788,12 @@ export default {
             this.notifi(type, message, description);
           }
           this.loading = false;
+          this.visibleEdit = false;
         })
         .catch((e) => {
           console.log(e);
           this.loading = false;
         });
-      this.visibleEdit = false;
     },
 
     inputEditPosition() {
