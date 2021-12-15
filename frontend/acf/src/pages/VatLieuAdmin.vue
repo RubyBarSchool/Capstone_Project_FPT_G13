@@ -35,6 +35,7 @@
             v-model="dataSearch.listGroupID"
             :filter-option="false"
             @search="fetchGroupMaterial"
+            @change="submitSearch"
             style="width: 150px"
           >
             <a-select-option
@@ -47,7 +48,9 @@
           </a-select>
           <a-select
             placeholder="Đơn vị đo"
-            v-model="dataSearch.idUnit"
+            mode="multiple"
+            @change="submitSearch"
+            v-model="dataSearch.listUnitId"
             style="width: 150px"
           >
             <a-select-option
@@ -60,7 +63,9 @@
           </a-select>
           <a-select
             placeholder="Công ty"
-            v-model="dataSearch.idCompany"
+            mode="multiple"
+            @change="submitSearch"
+            v-model="dataSearch.listIdCompany"
             style="width: 250px"
           >
             <a-select-option
@@ -87,7 +92,7 @@
             @click="showModalAdd"
             :style="{ 'margin-left': '5px' }"
           >
-             <font-awesome-icon
+            <font-awesome-icon
               :icon="['fas', 'plus-square']"
               :style="{ 'margin-right': '5px' }"
             />
@@ -98,7 +103,7 @@
             @click="showModalAddUnit"
             :style="{ 'margin-left': '5px' }"
           >
-             <font-awesome-icon
+            <font-awesome-icon
               :icon="['fas', 'plus-square']"
               :style="{ 'margin-right': '5px' }"
             />
@@ -109,7 +114,7 @@
             @click="showModalAddFrame"
             :style="{ 'margin-left': '5px' }"
           >
-             <font-awesome-icon
+            <font-awesome-icon
               :icon="['fas', 'plus-square']"
               :style="{ 'margin-right': '5px' }"
             />
@@ -722,8 +727,7 @@ import fileService from "../service/fileService";
 
 export default {
   name: "VatLieuAdmin",
-  components: {
-  },
+  components: {},
   data() {
     return {
       url: "",
