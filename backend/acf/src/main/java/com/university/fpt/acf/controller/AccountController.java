@@ -202,7 +202,7 @@ public class AccountController {
         Boolean checkUpdate = false;
         try {
             checkUpdate = accountService.changePassword(changePasswordAccountForm);
-            if (checkUpdate == false) {
+            if (checkUpdate) {
                 message = "Thay đổi mật khẩu thành công!";
             } else {
                 message = "Thay dổi mật khẩu không thành công   !";
