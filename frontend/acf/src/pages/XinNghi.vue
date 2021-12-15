@@ -174,6 +174,7 @@
                 @change="inputDate"
                 v-model="dataAdd.date"
                 :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+                :disabled-date="disableDateStart"
                 format="DD/MM/YYYY"
                 :style="{ width: '472px' }"
               />
@@ -219,6 +220,7 @@
                 v-model="dataEdit.date"
                 :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
                 format="DD/MM/YYYY"
+                :disabled-date="disableDateStart"
                 :style="{ width: '472px' }"
               />
               <div style="color: red" v-if="checkDataInputDate.show">
@@ -471,6 +473,9 @@ export default {
     },
   },
   methods: {
+    disableDateStart(current) {
+      return current < moment().subtract(1, "days");
+    },
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;
