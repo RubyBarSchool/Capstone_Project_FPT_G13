@@ -27,7 +27,7 @@
             placeholder="Thông số"
             style="width: 150px"
             @pressEnter="submitSearch"
-            v-model="dataSearch.listIdFrame"
+            v-model="dataSearch.frame"
           />
           <a-select
             placeholder="Nhóm vật liệu"

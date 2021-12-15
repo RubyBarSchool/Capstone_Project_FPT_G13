@@ -1,8 +1,11 @@
 package com.university.fpt.acf.service.impl;
 
 import com.university.fpt.acf.config.security.AccountSercurity;
+import com.university.fpt.acf.config.websocket.model.Notification;
+import com.university.fpt.acf.config.websocket.service.NotificationService;
 import com.university.fpt.acf.entity.*;
 import com.university.fpt.acf.form.*;
+import com.university.fpt.acf.repository.AccountManagerRepository;
 import com.university.fpt.acf.repository.ContactCustomRepository;
 import com.university.fpt.acf.repository.ContactRepository;
 import com.university.fpt.acf.repository.PriceMaterialRepository;
@@ -12,6 +15,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,7 +23,9 @@ import javax.persistence.Convert;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -34,6 +40,15 @@ public class ContactServiceImpl implements ContactService {
 
     @Autowired
     private ContactCustomRepository contactCustomRepository;
+
+    @Autowired
+    private AccountManagerRepository accountManagerRepository;
+
+    @Autowired
+    private SimpMessagingTemplate simpMessagingTemplate;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @Override
     public Contact addContact(AddContactForm addContactForm) {
@@ -93,6 +108,22 @@ public class ContactServiceImpl implements ContactService {
             }
             contact.setNumberFinish("0/" + products.size());
             contactRepository.saveAndFlush(contact);
+
+            List<String> accountAdmin = accountManagerRepository.getUsernameAdmin();
+            for(String s : accountAdmin){
+                if(s.equals(accountSercurity.getUserName())){
+                    continue;
+                }
+                Notification notification = new Notification();
+                notification.setType("success");
+                notification.setUsername(s);
+                notification.setUsernameCreate(accountSercurity.getUserName());
+                notification.setContent(" tạo mới một hợp đồng");
+                notification.setPath("/taohopdong");
+                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+            }
+
         } catch (Exception ex) {
             throw new RuntimeException(ex.getMessage());
         }
@@ -345,11 +376,29 @@ public class ContactServiceImpl implements ContactService {
     public Boolean updateContact(UpdateContractForm updateForm) {
         Boolean check = false;
         try{
+            AccountSercurity accountSercurity = new AccountSercurity();
             Contact c = contactRepository.getContactByID(updateForm.getId());
+            c.setModified_by(accountSercurity.getUserName());
+            c.setModified_date(LocalDate.now());
             c.setName(updateForm.getName());
             c.setDateFinish(updateForm.getDateFinish());
             contactRepository.save(c);
             check=true;
+
+            List<String> accountAdmin = accountManagerRepository.getUsernameAdmin();
+            for(String s : accountAdmin){
+                if(s.equals(accountSercurity.getUserName())){
+                    continue;
+                }
+                Notification notification = new Notification();
+                notification.setType("success");
+                notification.setUsername(s);
+                notification.setUsernameCreate(accountSercurity.getUserName());
+                notification.setContent(" chỉnh sửa một hợp đồng");
+                notification.setPath("/taohopdong");
+                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+            }
 
         }catch (Exception e){
             throw new RuntimeException("Error contact repository " + e.getMessage());
@@ -367,6 +416,21 @@ public class ContactServiceImpl implements ContactService {
             if(c.getStatusDone()==-2 && numberFinish.startsWith("0")){
                 contactRepository.delete(c);
                 check = true;
+            }
+            AccountSercurity accountSercurity = new AccountSercurity();
+            List<String> accountAdmin = accountManagerRepository.getUsernameAdmin();
+            for(String s : accountAdmin){
+                if(s.equals(accountSercurity.getUserName())){
+                    continue;
+                }
+                Notification notification = new Notification();
+                notification.setType("success");
+                notification.setUsername(s);
+                notification.setUsernameCreate(accountSercurity.getUserName());
+                notification.setContent(" xóa một hợp đồng");
+                notification.setPath("/taohopdong");
+                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
             }
         }catch (Exception e){
             throw new RuntimeException("Error contact repository " + e.getMessage());

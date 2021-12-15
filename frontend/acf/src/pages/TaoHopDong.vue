@@ -137,7 +137,6 @@
                     <font-awesome-icon :icon="['fas', 'trash']" />
                   </a-button>
                 </a-popconfirm>
-                
               </template>
             </a-table>
           </div>
@@ -463,6 +462,18 @@ export default {
   created() {
     this.getAllCompany();
     this.submitSearch();
+  },
+  watch: {
+    urlState(newValue) {
+      if (newValue.indexOf("/taohopdong") != -1) {
+        this.submitSearch();
+      }
+    },
+  },
+    computed: {
+    urlState() {
+      return this.$store.state.url;
+    },
   },
   methods: {
     disableDateStart(current) {
