@@ -22,7 +22,7 @@
             placeholder="Tiêu đề"
             style="width: 150px"
           />
-          Loại đơn: 
+          Loại đơn:
           <a-select
             v-model="dataSearch.bonus"
             @change="submitSearch"
@@ -223,6 +223,18 @@ export default {
   },
   created() {
     this.submitSearch();
+  },
+  watch: {
+    urlState(newValue) {
+      if (newValue.indexOf("/viewthuongphat") != -1) {
+        this.submitSearch();
+      }
+    },
+  },
+  computed: {
+    urlState() {
+      return this.$store.state.url;
+    },
   },
   methods: {
     handleTableChange(pagination) {

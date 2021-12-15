@@ -241,22 +241,22 @@ public class BonusServiceImpl implements BonusService {
             bonusRepository.saveAndFlush(bonus);
             check = true;
 
-
-            List<String> usernames = accountManagerRepository.getUsernameByIdEmployee(addBonus.getListIdEmployee());
-            for(String s : usernames){
-                if(s.equals(accountSercurity.getUserName())){
-                    continue;
-                }
-                Notification notification = new Notification();
-                notification.setUsername(s);
-                notification.setUsernameCreate(accountSercurity.getUserName());
-                notification.setContent(" tạo một đơn khen thưởng cho bạn");
-                notification.setPath("/viewthuongphat");
-                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
-                simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
-            }
-
             if (addBonus.getStatus()) {
+
+                List<String> usernames = accountManagerRepository.getUsernameByIdEmployee(addBonus.getListIdEmployee());
+                for(String s : usernames){
+                    if(s.equals(accountSercurity.getUserName())){
+                        continue;
+                    }
+                    Notification notification = new Notification();
+                    notification.setUsername(s);
+                    notification.setUsernameCreate(accountSercurity.getUserName());
+                    notification.setContent(" tạo một đơn khen thưởng cho bạn");
+                    notification.setPath("/viewthuongphat");
+                    HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                    simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+                }
+
                 LocalDate date = LocalDate.now();
                 int day = date.getDayOfMonth();
                 if (day < 10) {
@@ -306,24 +306,7 @@ public class BonusServiceImpl implements BonusService {
             BonusPenalty bonus = bonusRepository.getBonusById(id);
 
             AccountSercurity accountSercurity = new AccountSercurity();
-            List<Long> isEmployees = new ArrayList<>();
-            for (Employee employee : bonus.getEmployees()) {
-                isEmployees.add(employee.getId());
-            }
 
-            List<String> usernames = accountManagerRepository.getUsernameByIdEmployee(isEmployees);
-            for (String s : usernames) {
-                if(s.equals(accountSercurity.getUserName())){
-                    continue;
-                }
-                Notification notification = new Notification();
-                notification.setUsername(s);
-                notification.setUsernameCreate(accountSercurity.getUserName());
-                notification.setContent(" đã xóa đơn khen thưởng cho bạn");
-                notification.setPath("/viewthuongphat");
-                HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
-                simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
-            }
 
             if (!bonus.getStatus()) {
                 bonus.setDeleted(true);
@@ -332,6 +315,26 @@ public class BonusServiceImpl implements BonusService {
                 bonusRepository.save(bonus);
                 check = true;
             } else {
+
+                List<Long> isEmployees = new ArrayList<>();
+                for (Employee employee : bonus.getEmployees()) {
+                    isEmployees.add(employee.getId());
+                }
+
+                List<String> usernames = accountManagerRepository.getUsernameByIdEmployee(isEmployees);
+                for (String s : usernames) {
+                    if(s.equals(accountSercurity.getUserName())){
+                        continue;
+                    }
+                    Notification notification = new Notification();
+                    notification.setUsername(s);
+                    notification.setUsernameCreate(accountSercurity.getUserName());
+                    notification.setContent(" đã xóa đơn khen thưởng cho bạn");
+                    notification.setPath("/viewthuongphat");
+                    HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
+                    simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+                }
+
                 LocalDate date = LocalDate.now();
                 int day = date.getDayOfMonth();
                 if (day < 10) {
@@ -401,24 +404,26 @@ public class BonusServiceImpl implements BonusService {
         try {
             BonusPenalty bonus = bonusRepository.getBonusById(updateBonus.getId());
             AccountSercurity accountSercurity = new AccountSercurity();
+            if(updateBonus.getStatus()){
 
-            List<Long> isEmployees = new ArrayList<>();
-            for (Employee employee : bonus.getEmployees()) {
-                isEmployees.add(employee.getId());
-            }
-
-            List<String> usernames = accountManagerRepository.getUsernameByIdEmployee(isEmployees);
-            for (String s : usernames) {
-                if(s.equals(accountSercurity.getUserName())){
-                    continue;
+                List<Long> isEmployees = new ArrayList<>();
+                for (Employee employee : bonus.getEmployees()) {
+                    isEmployees.add(employee.getId());
                 }
-                Notification notification = new Notification();
-                notification.setUsername(s);
-                notification.setUsernameCreate(accountSercurity.getUserName());
-                notification.setContent(" cập nhật lại đơn khen thưởng cho bạn");
-                notification.setPath("/viewthuongphat");
-                HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
-                simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+
+                List<String> usernames = accountManagerRepository.getUsernameByIdEmployee(isEmployees);
+                for (String s : usernames) {
+                    if(s.equals(accountSercurity.getUserName())){
+                        continue;
+                    }
+                    Notification notification = new Notification();
+                    notification.setUsername(s);
+                    notification.setUsernameCreate(accountSercurity.getUserName());
+                    notification.setContent(" cập nhật lại đơn khen thưởng cho bạn");
+                    notification.setPath("/viewthuongphat");
+                    HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
+                    simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+                }
             }
 
             LocalDate date = LocalDate.now();
