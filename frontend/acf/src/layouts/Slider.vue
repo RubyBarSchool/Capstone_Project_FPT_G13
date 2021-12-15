@@ -577,7 +577,7 @@ export default {
           }
         }
 
-        if (this.router[i] && this.router[i].name == "Gợi ý vật liệu") {
+        if (this.router[i] && this.router[i].name == "Gợi ý vật tư") {
           if (!users.roles.includes("ADMIN")) {
             this.router.splice(i, 1);
           }
