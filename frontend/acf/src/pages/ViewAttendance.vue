@@ -21,13 +21,16 @@
             v-model="dataSearch.name"
             placeholder="Tên nhân viên"
             style="width: 15%"
+            :style="{'margin-right': '5px'}"
           />
           <a-range-picker
             @change="search"
             v-model="dataSearch.date"
             :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
             format="DD/MM/YYYY"
+            :style="{'margin-right': '10px'}"
           />
+          Loại chấm công:
           <a-select
             v-model="dataSearch.type"
             @change="search"
@@ -42,6 +45,7 @@
             v-model="dataSearch.note"
             placeholder="Ghi Chú"
             style="width: 15%"
+            :style="{'margin-left': '5px'}"
           />
           <a-button
             type="primary"

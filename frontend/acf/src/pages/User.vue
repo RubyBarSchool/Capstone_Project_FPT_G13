@@ -19,15 +19,16 @@
           <!-- menu trên -->
           <a-input
             placeholder="Tên nhân viên"
-            style="width: 150px"
             v-model="dataSearch.name"
+            :style="{ 'margin-right': '10px', width: '12%' }"
           />
+          Chức vụ:
           <a-select
-            placeholder="Chức vụ"
-            style="width: 140px"
             default-value=""
             @change="submitSearch"
             v-model="dataSearch.idPosition"
+            :style="{ 'margin-right': '10px', width: '8%' }"
+
           >
             <a-select-option value=""> Tất cả </a-select-option>
             <a-select-option
@@ -38,12 +39,12 @@
               {{ position.name }}
             </a-select-option>
           </a-select>
+          Trạng thái: 
           <a-select
             @change="submitSearch"
-            placeholder="Trạng thái"
-            style="width: 150px"
             default-value=""
             v-model="dataSearch.statusDelete"
+            :style="{ width: '8%' }"
           >
             <a-select-option value=""> Tất cả </a-select-option>
             <a-select-option value="false"> Đang làm </a-select-option>
@@ -580,8 +581,7 @@ import fileService from "../service/fileService";
 
 export default {
   name: "User",
-  components: {
-  },
+  components: {},
   data() {
     return {
       url: "",

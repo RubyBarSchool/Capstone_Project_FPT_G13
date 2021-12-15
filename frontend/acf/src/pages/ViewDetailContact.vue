@@ -22,7 +22,7 @@
             @change="changeSelect"
             placeholder="Hợp đồng"
             mode="multiple"
-            style="width: 20%"
+            :style="{'margin-right': '5px', 'width': '20%'}"
           >
             <a-select-option
               v-for="(contact, index) in dataContact"

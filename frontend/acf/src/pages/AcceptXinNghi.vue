@@ -21,18 +21,19 @@
             placeholder="Nhân viên"
             style="width: 150px"
             v-model="dataSearch.nameEmployee"
+            :style="{'margin-right': '5px', 'width': '12%'}"
           />
           <a-input
             placeholder="Tiêu đề"
-            style="width: 150px"
             v-model="dataSearch.title"
+            :style="{'margin-right': '10px', 'width': '12%'}"
           />
           Trạng thái
           <a-select
             placeholder="Trạng thái"
             @change="submitSearch"
             v-model="dataSearch.status"
-            style="width: 150px"
+            :style="{'margin-right': '10px', 'width':'8%'}"
           >
             <a-select-option value=""> Tất cả </a-select-option>
             <a-select-option value="-1"> Chờ duyệt </a-select-option>

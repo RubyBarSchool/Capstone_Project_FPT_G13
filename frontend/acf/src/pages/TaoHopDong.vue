@@ -190,6 +190,7 @@
                   :disabled-date="disableDateStart"
                   @change="selectDateEnd"
                   v-model="dataAdd.time"
+                  placeholder= "Hạn hoàn thành"
                 />
                 <div style="color: red" v-if="checkDateEnd.show">
                   {{ checkDateEnd.message }}

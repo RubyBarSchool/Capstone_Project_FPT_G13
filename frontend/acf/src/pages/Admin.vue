@@ -21,15 +21,16 @@
             placeholder="Tên tài khoản"
             style="width: 150px"
             v-model="dataSearch.name"
+            :style="{'margin-right': '5px'}"
           />
           <a-select
-            placeholder="Chức vụ"
+            placeholder="Quyền"
             mode="multiple"
             v-model="dataSearch.listRole"
             :filter-option="false"
             @search="fetchRoles"
             @change="search"
-            style="width: 150px"
+            :style="{'margin-right': '5px', 'width': '150px'}"
           >
             <a-select-option
               v-for="(role, index) in dataRoles"
@@ -43,7 +44,7 @@
             placeholder="Trạng thái"
             mode="multiple"
             v-model="dataSearch.listStatus"
-            style="width: 150px"
+            :style="{'margin-right': '5px', 'width': '150px'}"
             @change="search"
           >
             <a-select-option value="false"> Nháp </a-select-option>
@@ -467,7 +468,7 @@ export default {
           scopedSlots: { customRender: "username" },
         },
         {
-          title: "Chức vụ",
+          title: "Quyền",
           dataIndex: "roles",
           key: "roles",
           width: 150,

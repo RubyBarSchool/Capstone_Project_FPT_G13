@@ -21,7 +21,7 @@
             @change="changeSearch"
             placeholder="Hợp đồng"
             mode="multiple"
-            style="width: 15%"
+            :style="{'margin-right': '5px', 'width': '15%'}"
           >
             <a-select-option
               v-for="(contact, index) in dataContact"
@@ -34,7 +34,7 @@
           <a-input
             v-model="dataSearch.nameProduction"
             placeholder="Tên lệnh sản xuất"
-            style="width: 15%"
+            :style="{'margin-right': '10px', 'width': '15%'}"
           />
           Ngày hoàn thành:
           <a-range-picker
@@ -42,6 +42,7 @@
             v-model="dataSearch.dateList"
             :placeholder="['Từ ngày', 'Đến ngày']"
             format="DD/MM/YYYY"
+             :style="{'margin-right': '10px'}"
           />
           Trạng thái:
           <a-select
