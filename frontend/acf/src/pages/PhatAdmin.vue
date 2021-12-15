@@ -116,7 +116,7 @@
                     <a-popconfirm
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
-                      @confirm="deleteThuongAdmin(record.id)"
+                      @confirm="deletePunishAdmin(record.id)"
                     >
                       <a-button id="delete">
                         <font-awesome-icon :icon="['fas', 'trash']" />
@@ -846,7 +846,7 @@ export default {
           this.visibleEdit = false;
         });
     },
-    deleteThuongAdmin(id) {
+    deletePunishAdmin(id) {
       punishAdminService
         .deletePunishAdmin(id)
         .then((response) => {
