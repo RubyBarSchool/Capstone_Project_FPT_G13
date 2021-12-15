@@ -167,7 +167,12 @@
             <a-modal v-model="showModalAdd" title="Thêm lệnh sản xuất">
               <template slot="footer">
                 <a-button key="back" @click="handleCancelAdd"> Đóng </a-button>
-                <a-button key="submit" type="primary" @click="checkBeforeSave">
+                <a-button
+                  :loading="loadingAdd"
+                  key="submit"
+                  type="primary"
+                  @click="checkBeforeSave"
+                >
                   Lưu
                 </a-button>
               </template>
@@ -529,6 +534,7 @@ export default {
   },
   data() {
     return {
+      loadingAdd: false,
       pagination: {
         current: 1,
         pageSize: 10,
@@ -972,6 +978,7 @@ export default {
         "1",
         "days"
       );
+      this.loadingAdd = true;
       ProductionOrderService.addOrUpdateProductOrder(this.dataSubmit)
         .then((response) => {
           this.showModalAdd = false;
@@ -981,8 +988,10 @@ export default {
           let description = response.data.message;
           this.notifi(type, message, description);
           this.showModalEdit = false;
+          this.loadingAdd = false;
         })
         .catch((e) => {
+          this.loadingAdd = false;
           console.log(e);
         });
     },
@@ -991,6 +1000,7 @@ export default {
         "1",
         "days"
       );
+      this.loadingAdd = true;
       ProductionOrderService.addOrUpdateProductOrder(this.dataSubmit)
         .then((response) => {
           this.showModalAdd = false;
@@ -999,8 +1009,10 @@ export default {
           let message = "sửa thành công";
           let description = response.data.message;
           this.notifi(type, message, description);
+          this.loadingAdd = false;
         })
         .catch((e) => {
+          this.loadingAdd = false;
           console.log(e);
         });
     },
