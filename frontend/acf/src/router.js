@@ -73,7 +73,7 @@ export const router = new Router({
                     name: "XinNghi",
                     // lazy-loaded
                     component: () =>
-                        import ("./pages/XinNghi.vue"),
+                        import ("./pages/LeaveApplication.vue"),
                 },
                 {
                     path: "acceptxinnghi",

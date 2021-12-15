@@ -206,7 +206,7 @@
 </template>
 
 <script>
-import acceptXinNghiService from "../service/acceptXinNghiService";
+import acceptXinNghiService from "../service/acceptLeaveApplicationService";
 export default {
   name: "AcceptXinNghi",
   components: {},
