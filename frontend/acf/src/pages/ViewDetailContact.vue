@@ -939,7 +939,7 @@ export default {
 
       if (
         this.addProductForm.priceProduct != null &&
-        this.addProductForm.priceProduct.trim() != ""
+        this.addProductForm.priceProduct != ""
       ) {
         this.checkMoneyProduct.show = false;
         this.checkMoneyProduct.message = "";

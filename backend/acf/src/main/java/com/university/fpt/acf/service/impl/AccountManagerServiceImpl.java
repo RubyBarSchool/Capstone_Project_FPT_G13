@@ -147,8 +147,6 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                 ac.setModified_by(accountSercurity.getUserName());
                 accountManagerRepository.save(ac);
                 check = true;
-            }else{
-                throw new RuntimeException("Mật khẩu cũ không đúng");
             }
         } catch (Exception ex) {
             throw new RuntimeException("Không thể cài lại mật khẩu");

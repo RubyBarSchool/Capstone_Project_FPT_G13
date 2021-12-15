@@ -205,7 +205,7 @@ public class AccountController {
             if (checkUpdate) {
                 message = "Thay đổi mật khẩu thành công!";
             } else {
-                message = "Thay dổi mật khẩu không thành công   !";
+                message = "Mật khẩu cũ không đúng!";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkUpdate);
