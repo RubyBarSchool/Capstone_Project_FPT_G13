@@ -2,6 +2,7 @@ package com.university.fpt.acf.repository;
 
 import com.university.fpt.acf.form.EmployeeNotAttendanceForm;
 import com.university.fpt.acf.form.SearchAllEmployeeForm;
+import com.university.fpt.acf.vo.DetailEmployeeInformationVO;
 import com.university.fpt.acf.vo.GetAllEmployeeVO;
 import com.university.fpt.acf.vo.SearchEmployeeVO;
 

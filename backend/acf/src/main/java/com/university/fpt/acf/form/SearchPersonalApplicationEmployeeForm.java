@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class SearchPersonalApplicationEmployeeForm {
+public class  SearchPersonalApplicationEmployeeForm {
     private String title;
     private String status;
     private List<LocalDate> date;

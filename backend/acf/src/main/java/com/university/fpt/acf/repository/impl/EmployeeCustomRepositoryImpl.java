@@ -141,4 +141,5 @@ public class EmployeeCustomRepositoryImpl extends CommonRepository implements Em
         TypedQuery<Long> query = super.createQuery(sql.toString(), params, Long.class);
         return query.getSingleResult().intValue();
     }
+
 }

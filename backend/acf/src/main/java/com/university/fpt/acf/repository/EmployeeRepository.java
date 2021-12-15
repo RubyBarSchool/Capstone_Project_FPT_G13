@@ -1,6 +1,7 @@
 package com.university.fpt.acf.repository;
 
 import com.university.fpt.acf.entity.Employee;
+import com.university.fpt.acf.vo.DetailEmployeeInformationVO;
 import com.university.fpt.acf.vo.EmployeeDetailVO;
 import com.university.fpt.acf.vo.GetAllEmployeeVO;
 import org.springframework.data.domain.Pageable;
@@ -51,5 +52,8 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
 
     @Query("SELECT e FROM Employee e inner join  e.position p where e.deleted = false and p.code = 'GD' ")
     List<Employee> getEmployeeGD();
+    @Query("SELECT new com.university.fpt.acf.vo.DetailEmployeeInformationVO(img.name,e.fullName,e.gender,e.nation, e.dob,e.email,p.name,e.phone,e.address,e.salary,a.username,r.name) FROM Account a left  join a.employee e left join a.roles r left join e.image img left join e.position p where a.username=:username ")
+    List<DetailEmployeeInformationVO> getDetailEmployee(@Param("username")String username);
+
 
 }

@@ -59,7 +59,7 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     @Query("select new com.university.fpt.acf.vo.MaterialSuggestVO(pm.material.id,SUM(prm.count*p.count)) from Contact c inner join c.products p inner  join  p.productMaterials prm inner join  prm.priceMaterial pm where c.statusDone = 1 and c.dateFinish between :dateStart and :dateEnd group by pm.material.id order by pm.material.id asc")
     List<MaterialSuggestVO> getMaterialSuggest(@Param("dateStart") LocalDate dateStart, @Param("dateEnd") LocalDate dateEnd);
 
-    @Query("select m from Material m where m.id in :id order by m.id asc")
+    @Query("select m from Material m where m.id in :id  order by m.id asc")
     List<Material> getMaterialByIds(@Param("id") List<Long> id);
 }
 

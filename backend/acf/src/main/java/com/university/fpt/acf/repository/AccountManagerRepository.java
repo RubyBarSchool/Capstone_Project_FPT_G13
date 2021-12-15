@@ -54,4 +54,5 @@ public interface AccountManagerRepository extends JpaRepository<Account,Long> {
 
     @Query("select a.username from  Account  a inner  join  a.employee e where a.deleted = false  and e.id = :idEmployee  ")
     String getUsername(@Param("idEmployee") Long idEmployees);
+
 }

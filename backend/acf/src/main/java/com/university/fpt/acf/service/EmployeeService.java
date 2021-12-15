@@ -2,9 +2,7 @@ package com.university.fpt.acf.service;
 
 import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.repository.EmployeeRepository;
-import com.university.fpt.acf.vo.EmployeeDetailVO;
-import com.university.fpt.acf.vo.GetAllEmployeeVO;
-import com.university.fpt.acf.vo.SearchEmployeeVO;
+import com.university.fpt.acf.vo.*;
 
 
 import java.util.List;
@@ -20,4 +18,5 @@ public interface EmployeeService  {
     Boolean UpdateEmployee(UpdateEmployeeForm updateEmployeeForm);
     Boolean DeleteEmployee(Long id);
     List<GetAllEmployeeVO> getEmployeeSNotDelete( SearchEmployeeForm employeeForm);
+    DetailEmployeeVO getDetailEmployeeByUsername();
 }

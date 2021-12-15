@@ -45,6 +45,31 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    @GetMapping("/profile")
+    public ResponseEntity<ResponseCommon> getProfile(){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message="";
+        DetailEmployeeVO em = new DetailEmployeeVO();
+        try{
+            em = employeeService.getDetailEmployeeByUsername();
+            if(em==null){
+                message ="Không tồn tại";
+            }
+            message ="Thành công";
+            responseCommon.setMessage(message);
+            responseCommon.setData(em);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+
+        }catch (Exception e){
+            message=e.getMessage();
+            responseCommon.setMessage(message);
+            responseCommon.setData(em);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+
     @PostMapping("/fullnameEmNotAccount")
     public ResponseEntity<ResponseCommon> GetAllFullNameNotAccount(@RequestBody SearchEmployeeForm searchEmployeeForm){
         ResponseCommon responseCommon = new ResponseCommon();

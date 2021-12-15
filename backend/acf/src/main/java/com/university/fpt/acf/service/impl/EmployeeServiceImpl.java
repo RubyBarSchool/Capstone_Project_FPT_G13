@@ -7,9 +7,7 @@ import com.university.fpt.acf.repository.*;
 import com.university.fpt.acf.service.EmployeeService;
 import com.university.fpt.acf.service.FileStorageService;
 import com.university.fpt.acf.util.EmployeeValidate.EmployeeValidate;
-import com.university.fpt.acf.vo.EmployeeDetailVO;
-import com.university.fpt.acf.vo.GetAllEmployeeVO;
-import com.university.fpt.acf.vo.SearchEmployeeVO;
+import com.university.fpt.acf.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -44,6 +42,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return  getAlEmployeeVOS;
     }
+
+
 
     @Override
     public int getTotalEmployee(SearchAllEmployeeForm searchAllEmployeeForm) {
@@ -252,5 +252,38 @@ public class EmployeeServiceImpl implements EmployeeService {
         Pageable pageable = PageRequest.of(employeeForm.getPageIndex()-1,employeeForm.getPageSize());
         List<GetAllEmployeeVO > list = employeeRepository.getEmployeeNotDelete("%"+employeeForm.getName().toLowerCase()+"%",pageable);
         return list ;
+    }
+
+    @Override
+    public DetailEmployeeVO getDetailEmployeeByUsername() {
+        AccountSercurity accountSercurity = new AccountSercurity();
+        String username = accountSercurity.getUserName();
+        DetailEmployeeVO detailEmployeeVO = new DetailEmployeeVO();
+        List<DetailEmployeeInformationVO> employeeInformationVO = new ArrayList<>();
+        try{
+             employeeInformationVO = employeeRepository.getDetailEmployee(username);
+             if(employeeInformationVO==null){
+                 throw new Exception("Không tìm thấy");
+             }
+             detailEmployeeVO.setUsername(employeeInformationVO.get(0).getUsername());
+             detailEmployeeVO.setEmail(employeeInformationVO.get(0).getEmail());
+             detailEmployeeVO.setAddress(employeeInformationVO.get(0).getAddress());
+             detailEmployeeVO.setDob(employeeInformationVO.get(0).getDob());
+             detailEmployeeVO.setImage(employeeInformationVO.get(0).getImage());
+             detailEmployeeVO.setFullName(employeeInformationVO.get(0).getFullName());
+             detailEmployeeVO.setGender(employeeInformationVO.get(0).getGender());
+             detailEmployeeVO.setGender(employeeInformationVO.get(0).getGender());
+             detailEmployeeVO.setNation(employeeInformationVO.get(0).getNation());
+             detailEmployeeVO.setPhone(employeeInformationVO.get(0).getPhone());
+             detailEmployeeVO.setSalary(employeeInformationVO.get(0).getSalary());
+             List<String> listRole = new ArrayList<>();
+             for(int i=0;i<employeeInformationVO.size();i++){
+                 listRole.add((employeeInformationVO.get(i).getRoleName()));
+             }
+             detailEmployeeVO.setListRoleName(listRole);
+        }catch (Exception ex){
+            throw new RuntimeException("Could not initialize folder for upload!");
+        }
+        return detailEmployeeVO;
     }
 }
