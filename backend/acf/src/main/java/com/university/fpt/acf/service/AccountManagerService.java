@@ -14,4 +14,5 @@ public interface AccountManagerService {
     GetAccountDetailResponeVO getAccountById(Long id);
     String GenerateUsername(Long id);
     Boolean resetPassword(Long id);
+    Boolean changePassword(ChangePasswordAccountForm  changePasswordAccountForm);
 }

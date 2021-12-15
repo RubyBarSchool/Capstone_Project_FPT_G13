@@ -60,7 +60,6 @@ public class AccountController {
                 message = "Tài khoản không tồn tại";
             } else {
                 message = "Thành công";
-
             }
             responseCommon.setMessage(message);
             responseCommon.setData(getAccountDetailResponeVO);
@@ -195,6 +194,31 @@ public class AccountController {
         }
     }
 
+
+    @PostMapping("/changepassword")
+    public ResponseEntity<ResponseCommon> changePassword(@RequestBody ChangePasswordAccountForm changePasswordAccountForm) {
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        Boolean checkUpdate = false;
+        try {
+            checkUpdate = accountService.changePassword(changePasswordAccountForm);
+            if (checkUpdate == false) {
+                message = "Thay đổi mật khẩu thành công!";
+            } else {
+                message = "Thay dổi mật khẩu không thành công!";
+            }
+            responseCommon.setMessage(message);
+            responseCommon.setData(checkUpdate);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return new ResponseEntity<>(responseCommon, HttpStatus.OK);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(checkUpdate);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+        }
+    }
 
 
 }

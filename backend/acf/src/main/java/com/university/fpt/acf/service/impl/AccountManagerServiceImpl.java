@@ -134,6 +134,28 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         return check;
     }
 
+    @Override
+    public Boolean changePassword(ChangePasswordAccountForm changePasswordAccountForm) {
+        Boolean check = false;
+        try {
+            AccountSercurity accountSercurity = new AccountSercurity();
+            Account ac = accountManagerRepository.findAccountByUsername(accountSercurity.getUserName());
+            String passwordOld = ac.getPassword();
+            if(passwordEncoder.matches(changePasswordAccountForm.getOldPassword(), passwordOld)){
+                ac.setPassword(passwordEncoder.encode(changePasswordAccountForm.getNewPassword()));
+                ac.setModified_date(LocalDate.now());
+                ac.setModified_by(accountSercurity.getUserName());
+                accountManagerRepository.save(ac);
+                check = true;
+            }else{
+                throw new RuntimeException("Mật khẩu cũ không đúng");
+            }
+        } catch (Exception ex) {
+            throw new RuntimeException("Không thể cài lại mật khẩu");
+        }
+        return check;
+    }
+
     private String buildEmailReset(String username, String password, String name, String link) {
         StringBuilder sql = new StringBuilder("");
         sql.append("<div style=\" width:80%; margin: 0 auto;\">\n" +
