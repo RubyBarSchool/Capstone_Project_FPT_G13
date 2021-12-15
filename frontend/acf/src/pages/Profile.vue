@@ -22,8 +22,8 @@
                         class="img-radius"
                       />
                     </div>
-                    <h6>Lê Hoàng Anh</h6>
-                    <p>Giám đốc</p>
+                    <h6>{{ dataProfiles.fullName }}</h6>
+                    <p>{{ dataProfiles.positionName }}</p>
                   </div>
                 </div>
               </a-col>
@@ -68,11 +68,15 @@
                         <div class="row">
                           <div class="col-sm-6">
                             <p class="m-b-10 f-w-600">Giới Tính :</p>
-                            <h6 class="text-muted f-w-400">Nam</h6>
+                            <h6 class="text-muted f-w-400">
+                              {{ dataProfiles.gender ? "Nam" : "Nữ" }}
+                            </h6>
                           </div>
                           <div class="col-sm-6">
                             <p class="m-b-10 f-w-600">Ngày Sinh :</p>
-                            <h6 class="text-muted f-w-400">01-01-2021</h6>
+                            <h6 class="text-muted f-w-400">
+                              {{ dataProfiles.dob }}
+                            </h6>
                           </div>
                         </div>
                         <h6
@@ -81,11 +85,43 @@
                         <div class="row">
                           <div class="col-sm-6">
                             <p class="m-b-10 f-w-600">Email :</p>
-                            <h6 class="text-muted f-w-400">alh@gmail.com</h6>
+                            <h6 class="text-muted f-w-400">
+                              {{ dataProfiles.email }}
+                            </h6>
                           </div>
                           <div class="col-sm-6">
                             <p class="m-b-10 f-w-600">Điện thoại :</p>
-                            <h6 class="text-muted f-w-400">0965340219</h6>
+                            <h6 class="text-muted f-w-400">
+                              {{ dataProfiles.phone }}
+                            </h6>
+                          </div>
+                          <div class="col-sm-6">
+                            <p class="m-b-10 f-w-600">Dân tộc :</p>
+                            <h6 class="text-muted f-w-400">
+                              {{ dataProfiles.nation }}
+                            </h6>
+                          </div>
+                          <div class="col-sm-6">
+                            <p class="m-b-10 f-w-600">Lương :</p>
+                            <h6 class="text-muted f-w-400">
+                              {{ dataProfiles.salary }}
+                            </h6>
+                          </div>
+                          <div class="col-sm-6">
+                            <p class="m-b-10 f-w-600">Tên tài khoản :</p>
+                            <h6 class="text-muted f-w-400">
+                              {{ dataProfiles.username }}
+                            </h6>
+                          </div>
+                          <div class="col-sm-6">
+                            <p class="m-b-10 f-w-600">Vị trí :</p>
+                            <h6
+                              class="text-muted f-w-400"
+                              v-for="(role, index) in dataProfiles.listRoleName"
+                              :key="index"
+                            >
+                              {{ role }}
+                            </h6>
                           </div>
                         </div>
                         <h6
@@ -94,36 +130,62 @@
                         <div class="row">
                           <div class="col-sm-6">
                             <p class="m-b-10 f-w-600">Địa chỉ :</p>
-                            <h6 class="text-muted f-w-400">Mỹ Đình - Hà Nội</h6>
+                            <h6 class="text-muted f-w-400">
+                              {{ dataProfiles.address }}
+                            </h6>
                           </div>
                         </div>
                       </div>
                     </div>
                   </a-tab-pane>
                   <a-tab-pane key="3" tab="Thay đổi mật khẩu">
-                    <h6>Nhập mật khẩu cũ :</h6>
+                    <h6><span style="color: red">*</span>Nhập mật khẩu cũ :</h6>
                     <a-input-password
                       placeholder="Nhập mật khẩu cũ"
                       style="width: 500px"
+                      v-model="dataChangePassword.oldPassword"
+                      @change="inputOldPassword"
                     />
+                    <div style="color: red" v-if="checkInputOldPassword.show">
+                      {{ checkInputOldPassword.message }}
+                    </div>
                     <br />
                     <br />
-                    <h6>Nhập mật khẩu mới :</h6>
+                    <h6><span style="color: red">*</span>Nhập mật khẩu mới :</h6>
                     <a-input-password
                       placeholder="Nhập mật khẩu mới"
                       style="width: 500px"
+                      v-model="dataChangePassword.newPassword"
+                      @change="inputNewPassword"
                     />
+                    <div style="color: red" v-if="checkInputNewPassword.show">
+                      {{ checkInputNewPassword.message }}
+                    </div>
                     <br />
                     <br />
-                    <h6>Nhập lại mật khẩu :</h6>
+                    <h6><span style="color: red">*</span>Nhập lại mật khẩu :</h6>
                     <a-input-password
                       placeholder="Nhập lại mật khẩu"
                       style="width: 500px"
+                      v-model="confirmNewPassword"
+                      @change="inputConfirmPassword"
                     />
+                    <div
+                      style="color: red"
+                      v-if="checkInputConfirmPassword.show"
+                    >
+                      {{ checkInputConfirmPassword.message }}
+                    </div>
                     <br />
                     <br />
                     <a-button type="primary"> Hủy </a-button>
-                    <a-button type="primary"> Lưu </a-button>
+                    <a-button
+                      type="primary"
+                      @click="checkConfirmPassword"
+                      :loading="loadingChangePass"
+                    >
+                      Lưu
+                    </a-button>
                   </a-tab-pane>
                 </a-tabs>
               </a-col>
@@ -136,14 +198,164 @@
   </div>
 </template>
  <script>
+import profileService from "@/service/profileService.js";
 export default {
   name: "Profile",
   data() {
-    return {};
+    return {
+      dataProfiles: [],
+      dataChangePassword: {
+        newPassword: "",
+        oldPassword: "",
+      },
+      confirmNewPassword: "",
+      loadingChangePass: false,
+      checkInputNewPassword: {
+        show: false,
+        message: "",
+      },
+      checkInputOldPassword: {
+        show: false,
+        message: "",
+      },
+      checkInputConfirmPassword: {
+        show: false,
+        message: "",
+      },
+    };
+  },
+  created() {
+    this.getProfile();
   },
   methods: {
     callback(key) {
       console.log(key);
+    },
+    getProfile() {
+      profileService
+        .getProfile()
+        .then((response) => {
+          this.dataProfiles = response.data.data;
+          console.log("data ", this.dataProfiles);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+    changePassword() {
+      this.loadingChangePass = true;
+      profileService
+        .changePassword(this.dataChangePassword)
+        .then((response) => {
+          if (response.data.data) {
+            let type = "success";
+            let message = "Thay đổi mật khẩu";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Thay đổi mật khẩu";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          }
+          this.loadingChangePass = false;
+        })
+        .catch((e) => {
+          console.log(e);
+          this.loadingChangePass = false;
+        });
+    },
+
+    checkConfirmPassword() {
+      let check = true;
+      if (
+        this.dataChangePassword.oldPassword != null &&
+        this.dataChangePassword.oldPassword != ""
+      ) {
+        this.checkInputOldPassword.show = false;
+        this.checkInputOldPassword.message = "";
+      } else {
+        check = false;
+        this.checkInputOldPassword.show = true;
+        this.checkInputOldPassword.message = "Bạn phải nhập mật khẩu cũ";
+      }
+      if (
+        this.dataChangePassword.newPassword != null &&
+        this.dataChangePassword.newPassword != ""
+      ) {
+        this.checkInputNewPassword.show = false;
+        this.checkInputNewPassword.message = "";
+      } else {
+        check = false;
+        this.checkInputNewPassword.show = true;
+        this.checkInputNewPassword.message = "Bạn phải nhập mật khẩu mới";
+      }
+      if (this.confirmNewPassword != null && this.confirmNewPassword != "") {
+        this.checkInputConfirmPassword.show = false;
+        this.checkInputConfirmPassword.message = "";
+      } else {
+        check = false;
+        this.checkInputConfirmPassword.show = true;
+        this.checkInputConfirmPassword.message =
+          "Bạn phải nhập lại mật khẩu mới";
+      }
+      if (this.confirmNewPassword != this.dataChangePassword.newPassword) {
+        check = false;
+        let type = "error";
+        let message = "Thay đổi mật khẩu";
+        let description = "Nhập lại mật khẩu không đúng";
+        this.notifi(type, message, description);
+      }
+      if (this.dataChangePassword.oldPassword == this.dataChangePassword.newPassword) {
+        check = false;
+        let type = "error";
+        let message = "Thay đổi mật khẩu";
+        let description = "Mật khẩu mới và mật khẩu cũ phải khác nhau";
+        this.notifi(type, message, description);
+      }
+      if (check) {
+        this.changePassword();
+      }
+    },
+    inputOldPassword() {
+      if (
+        this.dataChangePassword.oldPassword != null &&
+        this.dataChangePassword.oldPassword != ""
+      ) {
+        this.checkInputOldPassword.show = false;
+        this.checkInputOldPassword.message = "";
+      } else {
+        this.checkInputOldPassword.show = true;
+        this.checkInputOldPassword.message = "Bạn phải nhập mật khẩu cũ";
+      }
+    },
+    inputNewPassword() {
+      if (
+        this.dataChangePassword.newPassword != null &&
+        this.dataChangePassword.newPassword != ""
+      ) {
+        this.checkInputNewPassword.show = false;
+        this.checkInputNewPassword.message = "";
+      } else {
+        this.checkInputNewPassword.show = true;
+        this.checkInputNewPassword.message = "Bạn phải nhập mật khẩu mới";
+      }
+    },
+    inputConfirmPassword() {
+      if (this.confirmNewPassword != null && this.confirmNewPassword != "") {
+        this.checkInputConfirmPassword.show = false;
+        this.checkInputConfirmPassword.message = "";
+      } else {
+        this.checkInputConfirmPassword.show = true;
+        this.checkInputConfirmPassword.message =
+          "Bạn phải nhập lại mật khẩu mới";
+      }
+    },
+    notifi(type, message, description) {
+      this.$notification[type]({
+        message: message,
+        description: description,
+      });
     },
   },
 };
@@ -159,10 +371,10 @@ export default {
 }
 
 .tab {
-    border-radius: 10px;
-    height: 70vh;   
-    padding-left: 30px;
-    box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
+  border-radius: 10px;
+  height: 70vh;
+  padding-left: 30px;
+  box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
     rgba(17, 17, 26, 0.1) 0px 0px 8px;
 }
 </style>
