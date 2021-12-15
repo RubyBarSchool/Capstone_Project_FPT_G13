@@ -214,6 +214,7 @@
                   :disabled-date="disableDateStart"
                   valueFormat="YYYY-MM-DD"
                   @change="inputEffectiveDateAdd"
+                  placeholder="Ngày hiệu lực"
                 >
                 </a-date-picker>
                 <div style="color: red" v-if="checkInputEffectiveDate.show">
@@ -310,6 +311,7 @@
                   format="DD/MM/YYYY"
                   valueFormat="YYYY-MM-DD"
                   @change="inputEffectiveDateEdit"
+                  placeholder="Ngày hiệu lực"
                 />
                 <div style="color: red" v-if="checkInputEffectiveDate.show">
                   {{ checkInputEffectiveDate.message }}

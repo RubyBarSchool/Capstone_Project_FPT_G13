@@ -65,28 +65,48 @@
                   slot="overlay"
                   class="menu"
                 >
+                  <a-menu-item> <h6>Thông báo</h6> </a-menu-item>
+                  <a-menu-divider />
+                  <a-row type="flex" :style="{ 'margin-left': '10px' }">
+                    <a-col flex="110px">
+                      <a-menu-item key="x" @click="readAllNotification">
+                        <button class="viewall">Xem tất cả</button>
+                      </a-menu-item>
+                    </a-col>
+                    <a-col flex="auto">
+                      <a-menu-item key="y" @click="deleteAllNotification">
+                        <button class="viewall">Xóa tất cả</button>
+                      </a-menu-item>
+                    </a-col>
+                  </a-row>
+                  <a-menu-divider />
                   <a-menu-item
                     v-for="(data, index) in dataNotification"
                     :key="index"
                     @click="readNotification(data)"
                   >
-                    <h5>Thông báo</h5>
                     <a-row type="flex">
-                      <a-col flex="auto" :style="{ color: '#000000' }">
-                        <router-link :to="data.path"
-                          ><a-badge :color="!data.read ? 'blue' : ''" />
-                          <strong style="font-size: 17px"
-                            >{{ data.usernameCreate }}
-                          </strong>
-                          <span style="font-size: 16px">
-                            {{ data.content }}
-                          </span>
+                      <a-col
+                        flex="auto"
+                        :style="{ color: '#00000', 'margin-top': '36px' }"
+                      >
+                        <router-link :to="data.path">
+                          <div class="content">
+                            <a-badge :color="!data.read ? 'blue' : ''" />
+
+                            <strong style="font-size: 16px"
+                              >{{ data.usernameCreate }}
+                            </strong>
+                            <span style="font-size: 16px">
+                              {{ data.content }}
+                            </span>
+                          </div>
                           <p style="color: #2e89ff">
                             {{ getdate(data.localDateTime) }}
                           </p>
                         </router-link>
                       </a-col>
-                      <a-col flex="20px">
+                      <a-col flex="30px">
                         <a-popconfirm
                           title="Bạn có chắc chắn muốn xóa thông báo không?"
                           @confirm="deleteNotification(data)"
@@ -95,7 +115,11 @@
                         >
                           <!-- <a-button> -->
                           <font-awesome-icon
-                            :style="{ 'font-size': '30px', color: '#495057' }"
+                            :style="{
+                              'font-size': '20px',
+                              'margin-left': '15px',
+                              color: '#495057',
+                            }"
                             :icon="['fas', 'ellipsis-h']"
                           />
                           <!-- </a-button> -->
@@ -103,24 +127,16 @@
                       </a-col>
                     </a-row>
                   </a-menu-item>
-                  <a-menu-divider />
-                  <a-menu-item key="x" @click="readAllNotification"
-                    >Xem tất cả</a-menu-item
-                  >
-                  <a-menu-item key="y" @click="deleteAllNotification"
-                    >Xóa tất cả</a-menu-item
-                  >
                 </a-menu>
               </a-dropdown>
             </a-col>
-            <a-col flex="200px">
+            <a-col flex="100px">
               <a-dropdown :trigger="['click']" class="menuAva">
                 <a class="ant-dropdown-link">
                   <a-avatar
                     :size="50"
                     :style="{ 'margin-left': '10px', 'margin-bottom': '10px' }"
                     src="https://img.icons8.com/bubbles/100/000000/user.png"
-                    class="avatar"
                   />
                   <font-awesome-icon
                     :style="{ 'font-size': '16px', color: '#495057' }"
@@ -130,7 +146,23 @@
                 <a-menu slot="overlay" class="menu">
                   <a-menu-item :key="1">
                     <router-link to="/profile">
-                      <h6 style="color: black">{{ loadUser }}</h6>
+                      <a-row type="flex">
+                        <a-col :flex="3">
+                          <a-avatar
+                            :size="50"
+                            src="https://img.icons8.com/bubbles/100/000000/user.png"
+                          />
+                        </a-col>
+                        <a-col :flex="2">
+                          <span style="color: black">
+                            <div>
+                              Xin chào, <strong>{{ loadUser }}</strong>
+                            </div>
+                            
+                            <div>Xem trang cá nhân</div>
+                          </span></a-col
+                        >
+                      </a-row>
                     </router-link>
                   </a-menu-item>
                   <a-menu-divider />
@@ -391,10 +423,10 @@ export default {
       let days = Math.floor(x / 24);
       return (
         " " +
-        (days != 0 ? days + " ngày" : "") +
-        (hours != 0 ? hours + " giờ" : "") +
-        (minutes != 0 ? minutes + " phút" : "") +
-        (seconds != 0 ? seconds + " giây" : "0 giây") +
+        (days != 0 ? days + " ngày " : "") +
+        (hours != 0 ? hours + " giờ " : "") +
+        (minutes != 0 ? minutes + " phút " : "") +
+        (seconds != 0 ? seconds + " giây " : "0 giây") +
         " trước"
       );
     },
@@ -596,6 +628,10 @@ export default {
 };
 </script>
 <style scoped>
+.content {
+  color: #000;
+  margin-top: -40px;
+}
 ::v-deep .ant-menu-inline .ant-menu-item {
   font-size: 17px;
 }
@@ -654,5 +690,25 @@ export default {
 .menu {
   margin-bottom: 20vh;
   margin-left: 1vh;
+}
+
+.viewall {
+  border: none;
+  background-color: #e4e6eb;
+  color: #050505;
+  padding: 0px 10px;
+  line-height: 30px;
+  font-size: 14px;
+  border-radius: 23px;
+}
+
+.viewall:hover {
+  border: none;
+  background-color: #deeefd;
+  color: #1877f2;
+  padding: 0px 10px;
+  line-height: 30px;
+  font-size: 16px;
+  border-radius: 23px;
 }
 </style>
