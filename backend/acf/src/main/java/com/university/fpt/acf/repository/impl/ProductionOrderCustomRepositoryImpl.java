@@ -79,7 +79,7 @@ public class ProductionOrderCustomRepositoryImpl extends CommonRepository implem
             params.put("dateStart", searchForm.getDateList().get(0));
             params.put("dateEnd", searchForm.getDateList().get(1));
         }
-        sql.append(" ORDER by po.status asc ");
+        sql.append(" ORDER by po.status asc , po.id desc");
         TypedQuery<SearchProductionOrderVO> query = super.createQuery(sql.toString(),params, SearchProductionOrderVO.class);
         query.setFirstResult((searchForm.getPageIndex()-1)* searchForm.getPageSize());
         query.setMaxResults(searchForm.getPageSize());
