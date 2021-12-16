@@ -84,10 +84,10 @@ export const router = new Router({
                 },
                 {
                     path: "viewluong",
-                    name: "ViewLuong",
+                    name: "ViewSalary",
                     // lazy-loaded
                     component: () =>
-                        import ("./pages/ViewLuong.vue"),
+                        import ("./pages/ViewSalary.vue"),
                 },
                 {
                     path: "acceptluongadmin",
@@ -112,17 +112,17 @@ export const router = new Router({
                 },
                 {
                     path: "thuongadmin",
-                    name: "ThuongAdmin",
+                    name: "BonusAdmin",
                     // lazy-loaded
                     component: () =>
-                        import ("./pages/ThuongAdmin.vue"),
+                        import ("./pages/BonusAdmin.vue"),
                 },
                 {
                     path: "viewthuongphat",
-                    name: "ViewThuongPhat",
+                    name: "ViewBonusPunish",
                     // lazy-loaded
                     component: () =>
-                        import ("./pages/ViewThuongPhat.vue"),
+                        import ("./pages/ViewBonusPunish.vue"),
                 },
                 {
                     path: "unitadmin",
@@ -173,10 +173,10 @@ export const router = new Router({
                 },
                 {
                     path: "vatlieuadmin",
-                    name: "VatLieuAdmin",
+                    name: "MaterialAdmin",
                     // lazy-loaded
                     component: () =>
-                        import ("./pages/VatLieuAdmin.vue"),
+                        import ("./pages/MaterialAdmin.vue"),
                 },
                 {
                     path: "taohopdong",
