@@ -98,10 +98,10 @@ export const router = new Router({
                 },
                 {
                     path: "historyluongadmin",
-                    name: "HistoryLuongAdmin",
+                    name: "HistorySalaryAdmin",
                     // lazy-loaded
                     component: () =>
-                        import ("./pages/HistoryLuongAdmin.vue"),
+                        import ("./pages/HistorySalaryAdmin.vue"),
                 },
                 {
                     path: "phatadmin",
@@ -184,13 +184,6 @@ export const router = new Router({
                     // lazy-loaded
                     component: () =>
                         import ("./pages/Contact.vue"),
-                },
-                {
-                    path: "lichsutamung",
-                    name: "LichSuTamUng",
-                    // lazy-loaded
-                    component: () =>
-                        import ("./pages/LichSuTamUng.vue"),
                 },
                 {
                     path: "viewdetailcontact",
