@@ -63,10 +63,10 @@ export const router = new Router({
                 },
                 {
                     path: "acceptungluong",
-                    name: "AcceptUngLuong",
+                    name: "AcceptAdvanceSalary",
                     // lazy-loaded
                     component: () =>
-                        import ("./pages/AcceptUngLuong.vue"),
+                        import ("./pages/AcceptAdvanceSalary.vue"),
                 },
                 {
                     path: "xinnghi",
@@ -91,10 +91,10 @@ export const router = new Router({
                 },
                 {
                     path: "acceptluongadmin",
-                    name: "AccecptLuongAdmin",
+                    name: "AccecptSalaryAdmin",
                     // lazy-loaded
                     component: () =>
-                        import ("./pages/AccecptLuongAdmin.vue"),
+                        import ("./pages/AccecptSalaryAdmin.vue"),
                 },
                 {
                     path: "historyluongadmin",
