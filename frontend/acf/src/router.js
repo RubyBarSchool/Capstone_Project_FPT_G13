@@ -220,9 +220,9 @@ export const router = new Router({
                         import ("./layouts/Slider.vue"),
                 }, {
                     path: 'chieucao',
-                    name: 'chieuCao',
+                    name: 'Height',
                     component: () =>
-                        import ("./pages/ChieuCao.vue")
+                        import ("./pages/Height.vue")
                 },
                 {
                     path: 'profile',

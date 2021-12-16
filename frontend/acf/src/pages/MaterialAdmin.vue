@@ -721,7 +721,7 @@
 import companyService from "@/service/companyService.js";
 import unitService from "@/service/unitService.js";
 import groupMaterialService from "@/service/groupMaterialService.js";
-import chieuCaoService from "@/service/chieuCaoService.js";
+import heightService from "@/service/heightService.js";
 import vatLieuAdminService from "@/service/materialAdminService.js";
 import fileService from "../service/fileService";
 
@@ -2012,7 +2012,7 @@ export default {
 
     //chiều cao
     getAllHeight() {
-      chieuCaoService
+      heightService
         .getAllFrameHeight(this.dataHeight)
         .then((response) => {
           this.dataHeights = response.data.data;
