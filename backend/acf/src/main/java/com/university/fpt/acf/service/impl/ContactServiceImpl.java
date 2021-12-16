@@ -24,10 +24,7 @@ import javax.transaction.Transactional;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class ContactServiceImpl implements ContactService {
@@ -474,7 +471,11 @@ public class ContactServiceImpl implements ContactService {
             case NUMERIC:
                 cellValue = cell.getNumericCellValue();
                 Double aDouble = Double.parseDouble(cellValue.toString());
-                cellValue = aDouble.intValue() + "";
+                String value = aDouble.doubleValue()+"";
+                if(value.indexOf(".")==value.length()-2&&value.charAt(value.length()-1)=='0'){
+                    value = value.substring(0,value.length()-2);
+                }
+                cellValue = value;
                 break;
             case STRING:
                 cellValue = cell.getStringCellValue();

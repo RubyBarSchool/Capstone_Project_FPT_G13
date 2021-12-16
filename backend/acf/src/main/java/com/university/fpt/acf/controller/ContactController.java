@@ -40,7 +40,7 @@ public class ContactController {
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
-            message = "Không thêm được hợp đồng";
+            message = e.getMessage();
             responseCommon.setData(false);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);

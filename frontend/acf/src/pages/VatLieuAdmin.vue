@@ -996,7 +996,9 @@ export default {
         });
     },
     submitSearch() {
+
       this.dataSearch.total = 0;
+      this.dataSearch.pageIndex = 1;
       vatLieuAdminService
         .searchMaterial(this.dataSearch)
         .then((response) => {
@@ -1017,6 +1019,7 @@ export default {
           }
           this.dataSearch.total = response.data.total;
           this.pagination.total = response.data.total;
+          this.pagination.current = 1;
         })
         .catch((e) => {
           console.log(e);

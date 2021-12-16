@@ -10,12 +10,12 @@ import java.util.List;
 
 @Repository
 public interface PriceMaterialRepository extends JpaRepository<PriceMaterial, Long> {
-    @Query("select p from PriceMaterial p inner join p.frameMaterial fm inner join  p.heightMaterial hm " +
-            " where p.deleted = false and p.unitMeasure.id = :idUnit " +
-            " and p.material.id = :idMaterial and fm.frameWidth = :width and fm.frameLength = :length " +
+    @Query("select p from PriceMaterial p inner join p.material m inner join p.frameMaterial fm inner join  p.heightMaterial hm inner join p.unitMeasure um  " +
+            " where p.deleted = false and um.id = :idUnit  and m.id = :idMaterial and fm.frameWidth = :width and fm.frameLength = :length " +
             " and hm.frameHeight = :height ")
     PriceMaterial getPriceMaterial(@Param("idUnit") Long idUnit, @Param("idMaterial") Long idMaterial
             , @Param("width") String width, @Param("length") String length, @Param("height") String height);
+
     @Query("select pm from PriceMaterial pm inner join  pm.material m where m.checkMaterial =true and m.deleted = false and m.id=:id")
     List<PriceMaterial> getListPriceMaterialById(@Param("id")Long id);
     @Query("select pm from PriceMaterial pm inner join  pm.material m where m.checkMaterial =false and m.deleted = false and m.id=:id")
