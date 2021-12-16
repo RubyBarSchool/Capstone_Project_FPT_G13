@@ -180,7 +180,7 @@
 import acceptAdvanceSalaryService from "@/service/acceptAdvanceSalaryService.js";
 
 export default {
-  name: "acceptungluong",
+  name: "AcceptAdvanceSalary",
   data() {
     return {
       pagination: {
@@ -283,7 +283,7 @@ export default {
   },
   watch: {
     urlState(newValue) {
-      if (newValue.indexOf("/acceptungluong") != -1) {
+      if (newValue.indexOf("/acceptadvancesalary") != -1) {
         this.submitSearch();
       }
     },

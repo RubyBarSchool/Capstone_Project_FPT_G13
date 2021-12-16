@@ -462,7 +462,7 @@ export default {
   },
   watch: {
     urlState(newValue) {
-      if (newValue.indexOf("/xinnghi") != -1) {
+      if (newValue.indexOf("/leaveapplication") != -1) {
         this.submitSearch();
       }
     },

@@ -726,7 +726,7 @@ import vatLieuAdminService from "@/service/materialAdminService.js";
 import fileService from "../service/fileService";
 
 export default {
-  name: "VatLieuAdmin",
+  name: "MaterialAdmin",
   components: {},
   data() {
     return {

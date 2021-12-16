@@ -452,7 +452,7 @@ export default {
   },
   watch: {
     urlState(newValue) {
-      if (newValue.indexOf("/viewluong") != -1) {
+      if (newValue.indexOf("/viewsalary") != -1) {
         this.searchSalaryNow();
         this.searchBonusNow();
         this.searchPunishNow();

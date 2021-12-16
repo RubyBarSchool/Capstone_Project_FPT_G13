@@ -226,7 +226,7 @@ export default {
           name: "Quản lý Hợp đồng",
           menu: [
             {
-              path: "/taohopdong",
+              path: "/contact",
               name: "Tạo hợp đồng",
             },
             {
@@ -278,27 +278,27 @@ export default {
               name: "Nhân viên",
             },
             {
-              path: "/acceptungluong",
+              path: "/acceptadvancesalary",
               name: "Đơn ứng lương",
             },
             {
-              path: "/acceptxinnghi",
+              path: "/acceptleaveapplication",
               name: "Đơn xin nghỉ",
             },
             {
-              path: "/phatadmin",
+              path: "/punishadmin",
               name: "Quyết định kỷ luật",
             },
             {
-              path: "/thuongadmin",
+              path: "/bonusadmin",
               name: "Quyết định khen thưởng",
             },
             {
-              path: "/acceptluongadmin",
+              path: "/acceptsalaryadmin",
               name: "Thanh toán lương",
             },
             {
-              path: "/historyluongadmin",
+              path: "/historysalaryadmin",
               name: "Lịch sử thanh toán lương",
             },
           ],
@@ -313,7 +313,7 @@ export default {
               name: "Đơn vị đo",
             },
             {
-              path: "/chieucao",
+              path: "/height",
               name: "Chiều cao",
             },
             {
@@ -333,7 +333,7 @@ export default {
               name: "Tấm phủ",
             },
             {
-              path: "/vatlieuadmin",
+              path: "/materialadmin",
               name: "Vật liệu",
             },
           ],
@@ -356,19 +356,19 @@ export default {
           name: "Lương thưởng",
           menu: [
             {
-              path: "/viewluong",
+              path: "/viewsalary",
               name: "Xem lương",
             },
             {
-              path: "/ungluong",
+              path: "/advancesalary",
               name: "Ứng lương",
             },
             {
-              path: "/xinnghi",
+              path: "/leaveapplication",
               name: "Đơn xin nghỉ",
             },
             {
-              path: "/viewthuongphat",
+              path: "/viewbonuspunish",
               name: "Xem Khen Thưởng (Kỷ luật)",
             },
           ],

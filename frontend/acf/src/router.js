@@ -55,70 +55,70 @@ export const router = new Router({
                         import ("./pages/Company.vue"),
                 },
                 {
-                    path: "ungluong",
+                    path: "advancesalary",
                     name: "AdvanceSalary",
                     // lazy-loaded
                     component: () =>
                         import ("./pages/AdvanceSalary.vue"),
                 },
                 {
-                    path: "acceptungluong",
+                    path: "acceptadvancesalary",
                     name: "AcceptAdvanceSalary",
                     // lazy-loaded
                     component: () =>
                         import ("./pages/AcceptAdvanceSalary.vue"),
                 },
                 {
-                    path: "xinnghi",
-                    name: "XinNghi",
+                    path: "leaveapplication",
+                    name: "LeaveApplication",
                     // lazy-loaded
                     component: () =>
                         import ("./pages/LeaveApplication.vue"),
                 },
                 {
-                    path: "acceptxinnghi",
-                    name: "AcceptXinNghi",
+                    path: "acceptleaveapplication",
+                    name: "AcceptLeaveApplication",
                     // lazy-loaded
                     component: () =>
-                        import ("./pages/AcceptXinNghi.vue"),
+                        import ("./pages/AcceptLeaveApplication.vue"),
                 },
                 {
-                    path: "viewluong",
+                    path: "viewsalary",
                     name: "ViewSalary",
                     // lazy-loaded
                     component: () =>
                         import ("./pages/ViewSalary.vue"),
                 },
                 {
-                    path: "acceptluongadmin",
+                    path: "acceptsalaryadmin",
                     name: "AccecptSalaryAdmin",
                     // lazy-loaded
                     component: () =>
                         import ("./pages/AccecptSalaryAdmin.vue"),
                 },
                 {
-                    path: "historyluongadmin",
+                    path: "historysalaryadmin",
                     name: "HistorySalaryAdmin",
                     // lazy-loaded
                     component: () =>
                         import ("./pages/HistorySalaryAdmin.vue"),
                 },
                 {
-                    path: "phatadmin",
+                    path: "punishadmin",
                     name: "PunishAdmin",
                     // lazy-loaded
                     component: () =>
                         import ("./pages/PunishAdmin.vue"),
                 },
                 {
-                    path: "thuongadmin",
+                    path: "bonusadmin",
                     name: "BonusAdmin",
                     // lazy-loaded
                     component: () =>
                         import ("./pages/BonusAdmin.vue"),
                 },
                 {
-                    path: "viewthuongphat",
+                    path: "viewbonuspunish",
                     name: "ViewBonusPunish",
                     // lazy-loaded
                     component: () =>
@@ -172,14 +172,14 @@ export const router = new Router({
                         import ("./pages/MaterialSuggest.vue"),
                 },
                 {
-                    path: "vatlieuadmin",
+                    path: "materialadmin",
                     name: "MaterialAdmin",
                     // lazy-loaded
                     component: () =>
                         import ("./pages/MaterialAdmin.vue"),
                 },
                 {
-                    path: "taohopdong",
+                    path: "contact",
                     name: "Contact",
                     // lazy-loaded
                     component: () =>
@@ -219,7 +219,7 @@ export const router = new Router({
                     component: () =>
                         import ("./layouts/Slider.vue"),
                 }, {
-                    path: 'chieucao',
+                    path: 'height',
                     name: 'Height',
                     component: () =>
                         import ("./pages/Height.vue")

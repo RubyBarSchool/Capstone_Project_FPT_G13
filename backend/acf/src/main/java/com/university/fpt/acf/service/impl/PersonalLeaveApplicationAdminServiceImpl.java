@@ -86,7 +86,7 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
                     notification.setUsername(p.getCreated_by());
                     notification.setUsernameCreate(accountSercurity.getUserName());
                     notification.setContent(" chấp nhận đơn xin nghỉ của bạn");
-                    notification.setPath("/xinnghi");
+                    notification.setPath("/leaveapplication");
                     HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
                     simpMessagingTemplate.convertAndSendToUser(p.getCreated_by(), "/queue/notification", dataOutPut);
                 }
@@ -124,7 +124,7 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
                     notification.setUsername(p.getCreated_by());
                     notification.setUsernameCreate(accountSercurity.getUserName());
                     notification.setContent(" từ chối đơn xin nghỉ của bạn");
-                    notification.setPath("/xinnghi");
+                    notification.setPath("/leaveapplication");
                     HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
                     simpMessagingTemplate.convertAndSendToUser(p.getCreated_by(), "/queue/notification", dataOutPut);
                 }

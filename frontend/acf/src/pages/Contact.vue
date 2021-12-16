@@ -466,7 +466,7 @@ export default {
   },
   watch: {
     urlState(newValue) {
-      if (newValue.indexOf("/taohopdong") != -1) {
+      if (newValue.indexOf("/contact") != -1) {
         this.submitSearch();
       }
     },

@@ -434,7 +434,7 @@ export default {
   },
   watch: {
     urlState(newValue) {
-      if (newValue.indexOf("/ungluong") != -1) {
+      if (newValue.indexOf("/advancesalary") != -1) {
         this.submitSearch();
       }
     },
