@@ -252,7 +252,7 @@ public class BonusServiceImpl implements BonusService {
                     notification.setUsername(s);
                     notification.setUsernameCreate(accountSercurity.getUserName());
                     notification.setContent(" tạo một đơn khen thưởng cho bạn");
-                    notification.setPath("/viewthuongphat");
+                    notification.setPath("/viewbonuspunish");
                     HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
                     simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
                 }
@@ -333,7 +333,7 @@ public class BonusServiceImpl implements BonusService {
                     notification.setUsername(s);
                     notification.setUsernameCreate(accountSercurity.getUserName());
                     notification.setContent(" đã xóa đơn khen thưởng cho bạn");
-                    notification.setPath("/viewthuongphat");
+                    notification.setPath("/viewbonuspunish");
                     HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
                     simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
                 }
@@ -427,7 +427,7 @@ public class BonusServiceImpl implements BonusService {
                     notification.setUsername(s);
                     notification.setUsernameCreate(accountSercurity.getUserName());
                     notification.setContent(" cập nhật lại đơn khen thưởng cho bạn");
-                    notification.setPath("/viewthuongphat");
+                    notification.setPath("/viewbonuspunish");
                     HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
                     simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
                 }

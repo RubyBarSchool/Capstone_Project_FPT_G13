@@ -98,7 +98,7 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
                 notification.setUsername(data.getCreated_by());
                 notification.setUsernameCreate(accountSercurity.getUserName());
                 notification.setContent(" chấp nhận đơn xin ứng lương của bạn");
-                notification.setPath("/ungluong");
+                notification.setPath("/advancesalary");
                 HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
                 simpMessagingTemplate.convertAndSendToUser(data.getCreated_by(), "/queue/notification", dataOutPut);
             }
@@ -148,7 +148,7 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
                 notification.setUsername(data.getCreated_by());
                 notification.setUsernameCreate(accountSercurity.getUserName());
                 notification.setContent(" không chấp nhận đơn xin ứng lương của bạn");
-                notification.setPath("/ungluong");
+                notification.setPath("/advancesalary");
                 HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
                 simpMessagingTemplate.convertAndSendToUser(data.getCreated_by(), "/queue/notification", dataOutPut);
             }

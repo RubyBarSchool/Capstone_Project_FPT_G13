@@ -116,7 +116,7 @@ public class ContactServiceImpl implements ContactService {
                 notification.setUsername(s);
                 notification.setUsernameCreate(accountSercurity.getUserName());
                 notification.setContent(" tạo mới một hợp đồng");
-                notification.setPath("/taohopdong");
+                notification.setPath("/contact");
                 HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
                 simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
             }
@@ -392,7 +392,7 @@ public class ContactServiceImpl implements ContactService {
                 notification.setUsername(s);
                 notification.setUsernameCreate(accountSercurity.getUserName());
                 notification.setContent(" chỉnh sửa một hợp đồng");
-                notification.setPath("/taohopdong");
+                notification.setPath("/contact");
                 HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
                 simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
             }
@@ -425,7 +425,7 @@ public class ContactServiceImpl implements ContactService {
                 notification.setUsername(s);
                 notification.setUsernameCreate(accountSercurity.getUserName());
                 notification.setContent(" xóa một hợp đồng");
-                notification.setPath("/taohopdong");
+                notification.setPath("/contact");
                 HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
                 simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
             }

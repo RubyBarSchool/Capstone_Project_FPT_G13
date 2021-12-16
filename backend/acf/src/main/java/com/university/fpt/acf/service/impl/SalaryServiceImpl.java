@@ -135,7 +135,7 @@ public class SalaryServiceImpl implements SalaryService {
                     notification.setUsername(username);
                     notification.setUsernameCreate(accountSercurity.getUserName());
                     notification.setContent(" đã thanh toán lương cho bạn");
-                    notification.setPath("/viewluong");
+                    notification.setPath("/viewsalary");
                     HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
                     simpMessagingTemplate.convertAndSendToUser(username, "/queue/notification", dataOutPut);
                 }

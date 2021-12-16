@@ -74,7 +74,7 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
                 notification.setUsername(s);
                 notification.setUsernameCreate(accountSercurity.getUserName());
                 notification.setContent(" tạo một đơn xin nghỉ");
-                notification.setPath("/acceptxinnghi");
+                notification.setPath("/acceptleaveapplication");
                 HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
                 simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
             }

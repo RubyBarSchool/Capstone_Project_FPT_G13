@@ -164,7 +164,7 @@ public class PunishServiceImpl implements PunishService {
                     notification.setUsername(s);
                     notification.setUsernameCreate(accountSercurity.getUserName());
                     notification.setContent(" tạo một đơn kỉ luật cho bạn");
-                    notification.setPath("/viewthuongphat");
+                    notification.setPath("/viewbonuspunish");
                     HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
                     simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
                 }
@@ -245,7 +245,7 @@ public class PunishServiceImpl implements PunishService {
                     notification.setUsername(s);
                     notification.setUsernameCreate(accountSercurity.getUserName());
                     notification.setContent(" đã xóa đơn kỉ luật cho bạn");
-                    notification.setPath("/viewthuongphat");
+                    notification.setPath("/viewbonuspunish");
                     HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
                     simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
                 }
@@ -344,7 +344,7 @@ public class PunishServiceImpl implements PunishService {
                     notification.setUsername(s);
                     notification.setUsernameCreate(accountSercurity.getUserName());
                     notification.setContent(" cập nhật lại đơn kỉ luật cho bạn");
-                    notification.setPath("/viewthuongphat");
+                    notification.setPath("/viewbonuspunish");
                     HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
                     simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
                 }

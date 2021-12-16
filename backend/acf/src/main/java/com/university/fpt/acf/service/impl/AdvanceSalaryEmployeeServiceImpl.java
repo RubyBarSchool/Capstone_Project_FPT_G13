@@ -102,7 +102,7 @@ public class AdvanceSalaryEmployeeServiceImpl implements AdvanceSalaryEmployeeSe
                 notification.setUsername(s);
                 notification.setUsernameCreate(accountSercurity.getUserName());
                 notification.setContent(" tạo một đơn xin ứng lương");
-                notification.setPath("/acceptungluong");
+                notification.setPath("/acceptadvancesalary");
                 HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
                 simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
             }

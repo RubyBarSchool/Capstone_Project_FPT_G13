@@ -160,7 +160,7 @@ public class AttendancesServiceImpl implements AttendancesService {
                     notification.setUsername(s);
                     notification.setUsernameCreate(accountSercurity.getUserName());
                     notification.setContent(" chấm công cho bạn");
-                    notification.setPath("/viewluong");
+                    notification.setPath("/viewsalary");
                     HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
                     simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
                 }
