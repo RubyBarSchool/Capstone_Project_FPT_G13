@@ -72,8 +72,8 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                     ac.setPassword(passwordEncoder.encode(password));
                     ac.setUsername(addAccountForm.getUsername());
                     AccountSercurity accountSercurity = new AccountSercurity();
-                    ac.setCreated_date(LocalDate.now());
                     ac.setCreated_by(accountSercurity.getUserName());
+                    ac.setModified_by(accountSercurity.getUserName());
                     List<Role> listRole = new ArrayList<>();
                     for (Long i : addAccountForm.getListRole()) {
                         Role role = new Role();

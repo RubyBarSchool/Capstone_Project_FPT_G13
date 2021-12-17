@@ -114,7 +114,7 @@
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-row>
-                  <!-- <a-col :span="8">
+                  <a-col :span="8">
                     <a-button
                       id="user"
                       @click="showDetail(record.id)"
@@ -122,7 +122,7 @@
                     >
                       <font-awesome-icon :icon="['fas', 'user']" />
                     </a-button>
-                  </a-col> -->
+                  </a-col>
                   <a-col :span="8">
                     <a-button
                       id="edit"

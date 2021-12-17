@@ -7,6 +7,7 @@ import com.university.fpt.acf.service.impl.AccountManagerServiceImpl;
 import com.university.fpt.acf.vo.GetAccountDetailResponeVO;
 import com.university.fpt.acf.vo.GetAllAccountResponseVO;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +24,7 @@ class AccountManagerServiceTest {
     private AccountManagerServiceImpl underTest;
 
     @Test
-    @Disabled
+    @Order(2)
     void insertAccount() {
         //given
         AddAccountForm addAccountForm = new AddAccountForm();
@@ -102,7 +103,7 @@ class AccountManagerServiceTest {
     }
 
     @Test
-    @Disabled
+
     void getAccountById() {
         //given
         Long id =1l;
