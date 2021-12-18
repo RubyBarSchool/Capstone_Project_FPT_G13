@@ -8,32 +8,25 @@
             background: 'white',
           }"
         >
-          <a-back-top>
-            <div class="ant-back-top-inner">
-              <font-awesome-icon
-                :icon="['fas', 'angle-double-up']"
-                :style="{ width: '160px', height: '50px', color: '#15AABF' }"
-              />
-            </div>
-          </a-back-top>
+          <a-back-top :style="{ width: '5vh', height: '15vh' }" />
           <!-- menu trên -->
           <a-input
             placeholder="Nhân viên"
             style="width: 150px"
             v-model="dataSearch.nameEmployee"
-            :style="{'margin-right': '5px', 'width': '12%'}"
+            :style="{ 'margin-right': '5px', width: '12%' }"
           />
           <a-input
             placeholder="Tiêu đề"
             v-model="dataSearch.title"
-            :style="{'margin-right': '10px', 'width': '12%'}"
+            :style="{ 'margin-right': '10px', width: '12%' }"
           />
           Trạng thái
           <a-select
             placeholder="Trạng thái"
             @change="submitSearch"
             v-model="dataSearch.status"
-            :style="{'margin-right': '10px', 'width':'8%'}"
+            :style="{ 'margin-right': '10px', width: '8%' }"
           >
             <a-select-option value=""> Tất cả </a-select-option>
             <a-select-option value="-1"> Chờ duyệt </a-select-option>
@@ -45,7 +38,7 @@
             v-model="dataSearch.date"
             @change="submitSearch"
             :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-            format="YYYY-MM-DD"
+            format="DD/MM/YYYY"
           >
           </a-range-picker>
           <a-button
@@ -79,7 +72,13 @@
                 {{ record.nameEmployee }}
               </template>
               <template slot="date" slot-scope="text, record">
-                {{ record.date }}
+                {{
+                  new Date(record.date).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
               </template>
               <template slot="statusAccept" slot-scope="text, record">
                 <a-tag
@@ -207,6 +206,7 @@
 
 <script>
 import acceptXinNghiService from "../service/acceptLeaveApplicationService";
+import moment from "moment";
 export default {
   name: "AcceptLeaveApplication",
   components: {},
@@ -369,15 +369,18 @@ export default {
     ) {
       this.dataDetail.nameEmployee = nameEmployee;
       this.dataDetail.title = title;
-      this.dataDetail.date = date;
+      let date1 = moment(date).format("DD/MM/YYYY");
+      this.dataDetail.date = date1;
       this.dataDetail.content = content;
       this.dataDetail.comment = comment;
       this.dataDetail.fileAttach = fileAttach;
       this.dataDetail.statusAccept = statusAccept;
       this.dataDetail.idEmployee = idEmployee;
       this.dataDetail.idApplication = idApplication;
-      this.dataDetail.dateStart = dateStart;
-      this.dataDetail.dateEnd = dateEnd;
+      let dateStart1 = moment(dateStart).format("DD/MM/YYYY");
+      this.dataDetail.dateStart = dateStart1;
+      let dateEnd1 = moment(dateEnd).format("DD/MM/YYYY");
+      this.dataDetail.dateEnd = dateEnd1;
       this.visibleView = true;
     },
 
@@ -523,12 +526,6 @@ export default {
 </script>
 
 <style scoped>
-/* back top */
-.ant-back-top-inner {
-  color: rgb(241, 237, 237);
-  text-align: center;
-}
-
 /* button icon */
 #view {
   background-color: rgb(76, 238, 12);

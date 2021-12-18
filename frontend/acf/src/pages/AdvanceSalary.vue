@@ -8,14 +8,7 @@
             background: 'white',
           }"
         >
-          <a-back-top>
-            <div class="ant-back-top-inner">
-              <font-awesome-icon
-                :icon="['fas', 'angle-double-up']"
-                :style="{ width: '160px', height: '50px', color: '#15AABF' }"
-              />
-            </div>
-          </a-back-top>
+           <a-back-top :style="{ width: '5vh', height: '15vh' }" />
           <!-- menu trên -->
           <a-input
             placeholder="Tiêu đề"
@@ -107,6 +100,15 @@
                       : "Đã duyệt"
                   }}
                 </a-tag>
+              </template>
+              <template slot="dateCreate" slot-scope="text, record">
+                {{
+                  new Date(record.dateCreate).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-row>
@@ -461,9 +463,9 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
-      this.visibleAdd=false;
-      this.visibleEdit=false;
-      this.visibleView=false;
+      this.visibleAdd = false;
+      this.visibleEdit = false;
+      this.visibleView = false;
       advanceSalaryService
         .searchAdvanceSalaryEmployee(this.dataSearch)
         .then((response) => {
@@ -738,12 +740,6 @@ export default {
 </script>
 
 <style scoped>
-/* back top */
-.ant-back-top-inner {
-  color: rgb(241, 237, 237);
-  text-align: center;
-}
-
 /* button icon */
 #delete {
   background-color: rgb(255, 0, 0);

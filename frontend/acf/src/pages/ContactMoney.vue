@@ -8,14 +8,7 @@
             background: 'white',
           }"
         >
-          <a-back-top>
-            <div class="ant-back-top-inner">
-              <font-awesome-icon
-                :icon="['fas', 'angle-double-up']"
-                :style="{ width: '160px', height: '50px', color: '#15AABF' }"
-              />
-            </div>
-          </a-back-top>
+           <a-back-top :style="{ width: '5vh', height: '15vh' }" />
           <!-- menu trên -->
           <a-input
             placeholder="Tên hợp đồng"
@@ -92,6 +85,24 @@
                       : "Đã bàn giao"
                   }}
                 </a-tag>
+              </template>
+              <template slot="dateStart" slot-scope="text, record">
+                {{
+                  new Date(record.dateStart).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
+              </template>
+              <template slot="dateEnd" slot-scope="text, record">
+                {{
+                  new Date(record.dateEnd).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-row>
@@ -186,6 +197,15 @@
               }
             "
           >
+            <template slot="date" slot-scope="text, record">
+              {{
+                new Date(record.date).toLocaleDateString("en-GB", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                })
+              }}
+            </template>
             <template slot="action" slot-scope="text, record">
               <a-col :span="8" v-if="disableEditAndDelete">
                 <a-button
@@ -250,8 +270,7 @@ import viewDetailContactService from "@/service/viewDetailContactService";
 
 export default {
   name: "ContatcMoney",
-  components: {
-  },
+  components: {},
   data() {
     return {
       loadingEdit: false,
@@ -285,12 +304,14 @@ export default {
           dataIndex: "dateStart",
           key: "dateStart",
           width: 150,
+          scopedSlots: { customRender: "dateStart" },
         },
         {
           title: "Ngày bàn giao",
           dataIndex: "dateEnd",
           key: "dateEnd",
           width: 150,
+          scopedSlots: { customRender: "dateEnd" },
         },
         {
           title: "Tiền tạm ứng",
@@ -338,6 +359,7 @@ export default {
           dataIndex: "date",
           key: "date",
           width: 150,
+          scopedSlots: { customRender: "date" },
         },
         {
           title: "Số tiền tạm ứng",
@@ -584,11 +606,6 @@ export default {
 </script>
 
 <style scoped>
-/* back top */
-.ant-back-top-inner {
-  color: rgb(241, 237, 237);
-  text-align: center;
-}
 /* button icon */
 #delete {
   background-color: rgb(255, 0, 0);

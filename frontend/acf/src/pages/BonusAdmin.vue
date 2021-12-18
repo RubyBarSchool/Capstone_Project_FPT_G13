@@ -8,14 +8,7 @@
             background: 'white',
           }"
         >
-          <a-back-top>
-            <div class="ant-back-top-inner">
-              <font-awesome-icon
-                :icon="['fas', 'angle-double-up']"
-                :style="{ width: '160px', height: '50px', color: '#15AABF' }"
-              />
-            </div>
-          </a-back-top>
+          <a-back-top :style="{ width: '5vh', height: '15vh' }" />
           <!-- menu trên -->
           <a-input
             placeholder="Tiêu đề"
@@ -80,6 +73,15 @@
                 <a-tag :color="record.status ? 'green' : 'blue'">
                   {{ record.status ? "Công khai" : "Nháp" }}
                 </a-tag>
+              </template>
+              <template slot="effectiveDate" slot-scope="text, record">
+                {{
+                  new Date(record.effectiveDate).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
               </template>
               <template slot="listIdEmployee" slot-scope="text, record">
                 <div
@@ -424,6 +426,7 @@ export default {
           dataIndex: "effectiveDate",
           key: "effectiveDate",
           width: 150,
+          scopedSlots: { customRender: "effectiveDate" },
         },
         {
           title: "Trạng thái",
@@ -932,12 +935,6 @@ export default {
 </script>
 
 <style scoped>
-/* back top */
-.ant-back-top-inner {
-  color: rgb(241, 237, 237);
-  text-align: center;
-}
-
 /* button icon */
 #delete {
   background-color: rgb(255, 0, 0);

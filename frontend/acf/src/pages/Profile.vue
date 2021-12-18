@@ -29,37 +29,7 @@
               </a-col>
               <a-col flex="auto">
                 <a-tabs default-active-key="1" class="tab">
-                  <a-tab-pane key="1" tab="Timeline">
-                    <a-timeline>
-                      <a-timeline-item color="green">
-                        Đã nộp đơn xin nghỉ 2015-09-01
-                      </a-timeline-item>
-                      <a-timeline-item color="green">
-                        Đã nộp đơn xin nghỉ 2015-09-01
-                      </a-timeline-item>
-                      <a-timeline-item color="red">
-                        <p>Đã nộp đơn xin nghỉ</p>
-                        <p>Đã nộp đơn xin nghỉ</p>
-                        <p>Đã nộp đơn xin nghỉ 2015-09-01</p>
-                      </a-timeline-item>
-                      <a-timeline-item>
-                        <p>Đã nộp đơn xin nghỉ</p>
-                        <p>Đã nộp đơn xin nghỉ</p>
-                        <p>Đã nộp đơn xin nghỉ 2015-09-01</p>
-                      </a-timeline-item>
-                      <a-timeline-item color="gray">
-                        <p>Đã nộp đơn xin nghỉ</p>
-                        <p>Đã nộp đơn xin nghỉ</p>
-                        <p>Đã nộp đơn xin nghỉ 2015-09-01</p>
-                      </a-timeline-item>
-                      <a-timeline-item color="gray">
-                        <p>Đã nộp đơn xin nghỉ</p>
-                        <p>Đã nộp đơn xin nghỉ</p>
-                        <p>Đã nộp đơn xin nghỉ 2015-09-01</p>
-                      </a-timeline-item>
-                    </a-timeline>
-                  </a-tab-pane>
-                  <a-tab-pane key="2" tab="Thông tin">
+                  <a-tab-pane key="1" tab="Thông tin">
                     <div class="col-md-8">
                       <div class="card-block">
                         <h5 class="m-b-20 p-b-5 b-b-default f-w-600">
@@ -138,7 +108,7 @@
                       </div>
                     </div>
                   </a-tab-pane>
-                  <a-tab-pane key="3" tab="Thay đổi mật khẩu">
+                  <a-tab-pane key="2" tab="Thay đổi mật khẩu">
                     <h6><span style="color: red">*</span>Nhập mật khẩu cũ :</h6>
                     <a-input-password
                       placeholder="Nhập mật khẩu cũ"
@@ -178,7 +148,6 @@
                     </div>
                     <br />
                     <br />
-                    <a-button type="primary"> Hủy </a-button>
                     <a-button
                       type="primary"
                       @click="checkConfirmPassword"

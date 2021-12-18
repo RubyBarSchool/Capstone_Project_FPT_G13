@@ -8,14 +8,7 @@
             background: 'white',
           }"
         >
-          <a-back-top>
-            <div class="ant-back-top-inner">
-              <font-awesome-icon
-                :icon="['fas', 'arrow-alt-circle-up']"
-                :style="{ width: '100px', height: '50px' }"
-              />
-            </div>
-          </a-back-top>
+          <a-back-top :style="{ width: '5vh', height: '15vh' }" />
           <!-- menu trên -->
           <a-input
             placeholder="Tên công ty"
@@ -203,8 +196,7 @@ import companyService from "@/service/companyService";
 
 export default {
   name: "Company",
-  components: {
-  },
+  components: {},
   data() {
     return {
       loading: false,
@@ -643,12 +635,6 @@ export default {
 </script>
 
 <style>
-/* back top */
-.ant-back-top-inner {
-  color: rgb(241, 237, 237);
-  text-align: center;
-}
-
 /* button icon */
 #delete {
   background-color: red;
@@ -663,52 +649,4 @@ export default {
   color: white;
 }
 
-/* profile */
-.bg-c-lite-green {
-  border-radius: 5px;
-  background: linear-gradient(to right, #000000, #000000);
-}
-.card-block {
-  padding: 1.25rem;
-}
-.m-b-25 {
-  margin-bottom: 30px;
-}
-.img-radius {
-  border-radius: 5px;
-}
-h6 {
-  font-size: 13.5px;
-}
-.card-block p {
-  line-height: 25px;
-}
-.card-block {
-  padding: 1.25rem;
-}
-.b-b-default {
-  border-bottom: 1px solid #e0e0e0;
-}
-.m-b-20 {
-  margin-bottom: 20px;
-}
-.p-b-5 {
-  padding-bottom: 5px !important;
-}
-.m-b-10 {
-  margin-bottom: 10px;
-  color: black;
-}
-.text-muted {
-  color: #919aa3 !important;
-}
-.text-white {
-  color: white;
-}
-.f-w-600 {
-  font-weight: 600;
-}
-.m-t-40 {
-  margin-top: 20px;
-}
 </style>

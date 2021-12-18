@@ -8,14 +8,7 @@
             background: 'white',
           }"
         >
-          <a-back-top>
-            <div class="ant-back-top-inner">
-              <font-awesome-icon
-                :icon="['fas', 'angle-double-up']"
-                :style="{ width: '160px', height: '50px', color: '#15AABF' }"
-              />
-            </div>
-          </a-back-top>
+          <a-back-top :style="{ width: '5vh', height: '15vh' }" />
           <!-- menu trên -->
           <a-input
             v-model="dataSearch.title"
@@ -77,6 +70,15 @@
               "
               @change="handleTableChange"
             >
+              <template slot="effectiveDate" slot-scope="text, record">
+                {{
+                  new Date(record.effectiveDate).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
+              </template>
               <template slot="status" slot-scope="text, record">
                 <a-tag :color="record.status ? 'green' : 'orange'">
                   {{ record.status ? "Đã duyệt" : "Chờ duyệt" }}
@@ -123,7 +125,7 @@
               <a-form-model-item label="Ngày hiệu lực">
                 <a-date-picker
                   v-model="dataDetail.effectiveDate"
-                  format="YYYY-MM-DD"
+                  format="DD/MM/YYYY"
                   valueFormat="YYYY-MM-DD"
                   disabled
                 >
@@ -200,6 +202,7 @@ export default {
           dataIndex: "effectiveDate",
           key: "effectiveDate",
           width: 150,
+          scopedSlots: { customRender: "effectiveDate" },
         },
         {
           title: "Trạng thái",
@@ -286,12 +289,6 @@ export default {
 </script>
 
 <style scoped>
-/* back top */
-.ant-back-top-inner {
-  color: rgb(241, 237, 237);
-  text-align: center;
-}
-
 /* button icon */
 #view {
   background-color: rgb(76, 238, 12);

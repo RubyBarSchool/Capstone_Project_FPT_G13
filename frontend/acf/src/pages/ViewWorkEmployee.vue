@@ -8,15 +8,8 @@
             background: 'white',
           }"
         >
-          <a-back-top>
-            <div class="ant-back-top-inner">
-              <font-awesome-icon
-                :icon="['fas', 'angle-double-up']"
-                :style="{ width: '160px', height: '50px', color: '#15AABF' }"
-              />
-            </div>
-          </a-back-top>
-          Trạng thái: 
+          <a-back-top :style="{ width: '5vh', height: '15vh' }" />
+          Trạng thái:
           <a-select
             v-model="dataSearch.status"
             @change="changeSearch"
@@ -64,7 +57,24 @@
                   }}
                 </a-tag>
               </template>
-
+              <template slot="dateStart" slot-scope="text, record">
+                {{
+                  new Date(record.dateStart).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
+              </template>
+              <template slot="dateEnd" slot-scope="text, record">
+                {{
+                  new Date(record.dateEnd).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
+              </template>
               <template slot="action" slot-scope="text, record">
                 <a-row v-if="record.status == -1">
                   <a-col :span="8">
@@ -73,12 +83,10 @@
                       title="Bạn có chắc chắn xác nhận thực hiện không?"
                       @confirm="confirmWork(record)"
                     >
-                    <a-button
-                    >
-                      <font-awesome-icon :icon="['fas', 'check-circle']" />
-                    </a-button>
+                      <a-button>
+                        <font-awesome-icon :icon="['fas', 'check-circle']" />
+                      </a-button>
                     </a-popconfirm>
-
                   </a-col>
                 </a-row>
 
@@ -233,12 +241,14 @@ export default {
           dataIndex: "dateStart",
           key: "dateStart",
           width: 150,
+          scopedSlots: { customRender: "dateStart" },
         },
         {
           title: "Ngày hoàn thành",
           dataIndex: "dateEnd",
           key: "dateEnd",
           width: 150,
+          scopedSlots: { customRender: "dateEnd" },
         },
         {
           title: "Trạng thái",
@@ -465,10 +475,4 @@ export default {
 </script>
 
 <style scoped>
-/* back top */
-
-.ant-back-top-inner {
-  color: rgb(241, 237, 237);
-  text-align: center;
-}
 </style>

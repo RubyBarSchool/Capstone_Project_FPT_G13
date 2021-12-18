@@ -1,27 +1,6 @@
 <template>
   <div class="chieucao">
-    <!-- <a-layout :style="{ background: 'white' }">
-      <Header />
-      <a-layout-content :style="{ margin: '24px 16px 0' }">
-        <div
-          :style="{
-            minHeight: '360px',
-            background: 'white',
-          }"
-        >
-          
-        </div>
-      </a-layout-content>
-      <Footer />
-    </a-layout> -->
-     <a-back-top>
-        <div class="ant-back-top-inner">
-          <font-awesome-icon
-            :icon="['fas', 'angle-double-up']"
-            :style="{ width: '160px', height: '50px', color: '#15AABF' }"
-          />
-        </div>
-      </a-back-top>
+      <a-back-top :style="{ width: '5vh', height: '15vh' }" />
       <!-- menu trên -->
       <a-button
         type="primary"
@@ -235,11 +214,6 @@ export default {
 </script>
 
 <style scoped>
-/* back top */
-.ant-back-top-inner {
-  color: rgb(241, 237, 237);
-  text-align: center;
-}
 /* button icon */
 #delete {
   background-color: rgb(255, 0, 0);

@@ -8,14 +8,7 @@
             background: 'white',
           }"
         >
-          <a-back-top>
-            <div class="ant-back-top-inner">
-              <font-awesome-icon
-                :icon="['fas', 'angle-double-up']"
-                :style="{ width: '160px', height: '50px', color: '#15AABF' }"
-              />
-            </div>
-          </a-back-top>
+          <a-back-top :style="{ width: '5vh', height: '15vh' }" />
           <!-- menu trên -->
           <a-input
             placeholder="Tên nhân viên"
@@ -194,6 +187,7 @@
                         style="width: 100%"
                         @change="inputDoBAdd"
                         v-model="dataAdd.dob"
+                        format="DD/MM/YYYY"
                       >
                         <a-icon slot="suffixIcon" type="smile" />
                       </a-date-picker>
@@ -358,8 +352,7 @@
                     <a-form-model-item>
                       <a-date-picker
                         v-model="dataEdit.dob"
-                        format="YYYY-MM-DD"
-                        valueFormat="YYYY-MM-DD"
+                        format="DD/MM/YYYY"
                         @change="inputDoBEdit"
                       >
                         <a-icon slot="suffixIcon" type="smile" />
@@ -1402,12 +1395,6 @@ export default {
 </script>
 
 <style>
-/* back top */
-.ant-back-top-inner {
-  color: rgb(241, 237, 237);
-  text-align: center;
-}
-
 /* button icon */
 #delete {
   background-color: rgb(255, 0, 0);

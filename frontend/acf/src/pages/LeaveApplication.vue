@@ -8,14 +8,7 @@
             background: 'white',
           }"
         >
-          <a-back-top>
-            <div class="ant-back-top-inner">
-              <font-awesome-icon
-                :icon="['fas', 'angle-double-up']"
-                :style="{ width: '160px', height: '50px', color: '#15AABF' }"
-              />
-            </div>
-          </a-back-top>
+           <a-back-top :style="{ width: '5vh', height: '15vh' }" />
           <!-- menu trên -->
           <a-input
             placeholder="Tiêu đề"
@@ -82,16 +75,34 @@
                 {{ record.title }}
               </template>
               <template slot="dateCreate" slot-scope="text, record">
-                {{ record.dateCreate }}
+                {{
+                  new Date(record.dateCreate).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
               </template>
               <template slot="dateAccept" slot-scope="text, record">
                 {{ record.dateAccept }}
               </template>
               <template slot="dateStart" slot-scope="text, record">
-                {{ record.dateStart }}
+                {{
+                  new Date(record.dateStart).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
               </template>
               <template slot="dateEnd" slot-scope="text, record">
-                {{ record.dateEnd }}
+                {{
+                  new Date(record.dateEnd).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
               </template>
               <template slot="status" slot-scope="text, record">
                 <a-tag
@@ -311,7 +322,7 @@
               <a-form-model-item label="Ngày xác nhận">
                 <a-date-picker
                   disabled
-                  v-model="dataPersonalLeaveEmployeeDetail.dateAccept"
+                  v-model="dataPersonalLeaveEmployeeDetail.dateAccept" placeholder="Ngày xác nhận"
                   format="DD/MM/YYYY"
                 >
                 </a-date-picker>
@@ -772,12 +783,6 @@ export default {
 </script>
 
 <style scoped>
-/* back top */
-.ant-back-top-inner {
-  color: rgb(241, 237, 237);
-  text-align: center;
-}
-
 /* button icon */
 #delete {
   background-color: rgb(255, 0, 0);

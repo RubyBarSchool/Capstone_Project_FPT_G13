@@ -49,7 +49,7 @@
             mode="multiple"
             v-model="dataSearch.listUnitId"
             @change="submitSearch"
-            :style="{ width: '150px', 'margin-right': '5px' }"
+            style="width: 150px"
           >
             <a-select-option
               v-for="(unit, index) in listUnits"
@@ -1983,12 +1983,6 @@ export default {
 </script>
 
 <style scoped>
-/* back top */
-.ant-back-top-inner {
-  color: rgb(241, 237, 237);
-  text-align: center;
-}
-
 /* button icon */
 #delete {
   background-color: rgb(255, 0, 0);

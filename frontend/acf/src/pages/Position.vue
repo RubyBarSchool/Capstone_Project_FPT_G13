@@ -8,14 +8,7 @@
             minHeight: '360px',
           }"
         >
-          <a-back-top>
-            <div class="ant-back-top-inner">
-              <font-awesome-icon
-                :icon="['fas', 'angle-double-up']"
-                :style="{ width: '160px', height: '50px', color: '#15AABF' }"
-              />
-            </div>
-          </a-back-top>
+        <a-back-top :style="{ width: '5vh', height: '15vh' }" />
           <a-row type="flex">
             <a-col flex="auto">
               <a-carousel autoplay>
@@ -415,12 +408,7 @@ export default {
 };
 </script>
 
-<style>
-/* back top */
-.ant-back-top-inner {
-  color: rgb(241, 237, 237);
-  text-align: center;
-}
+<style scoped>
 /* button icon */
 #delete {
   background-color: rgb(255, 0, 0);

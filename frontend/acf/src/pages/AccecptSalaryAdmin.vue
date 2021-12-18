@@ -2,14 +2,7 @@
   <div class="acceptluongadmin">
     <a-layout :style="{ background: 'white' }">
       <a-layout-content :style="{ margin: '24px 16px 0' }">
-        <a-back-top>
-          <div class="ant-back-top-inner">
-            <font-awesome-icon
-              :icon="['fas', 'angle-double-up']"
-              :style="{ width: '160px', height: '50px', color: '#15AABF' }"
-            />
-          </div>
-        </a-back-top>
+         <a-back-top :style="{ width: '5vh', height: '15vh' }" />
         <!-- menu -->
         <a-input
           placeholder="Họ và tên"
@@ -66,7 +59,13 @@
             @change="handleTableChange"
           >
             <template slot="date" slot-scope="text, record">
-              {{ record.date }}
+              {{
+                new Date(record.date).toLocaleDateString("en-GB", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                })
+              }}
             </template>
             <template slot="nameEmployee" slot-scope="text, record">
               {{ record.nameEmployee }}
@@ -122,8 +121,7 @@ import accecptSalaryAdminService from "@/service/accecptSalaryAdminService.js";
 import moment from "moment";
 export default {
   name: "acceptluongadmin",
-  components: {
-  },
+  components: {},
   data() {
     return {
       pagination: {

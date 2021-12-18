@@ -2,14 +2,7 @@
   <div class="viewluong">
     <a-layout :style="{ background: 'white' }">
       <a-layout-content :style="{ margin: '24px 16px 0' }">
-        <a-back-top>
-          <div class="ant-back-top-inner">
-            <font-awesome-icon
-              :icon="['fas', 'angle-double-up']"
-              :style="{ width: '160px', height: '50px', color: '#15AABF' }"
-            />
-          </div>
-        </a-back-top>
+         <a-back-top :style="{ width: '5vh', height: '15vh' }" />
         <a-tabs default-active-key="1" @change="changeTab">
           <!-- Hiện tại -->
           <a-tab-pane key="1">
@@ -30,6 +23,15 @@
                 <a-tag :color="record.status ? 'green' : 'blue'">
                   {{ record.status ? "Đã thanh toán" : "Chưa thanh toán" }}
                 </a-tag>
+              </template>
+              <template slot="date" slot-scope="text, record">
+                {{
+                  new Date(record.date).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
               </template>
             </a-table>
             <div class="container-fluid">
@@ -55,6 +57,18 @@
                         }}
                       </a-tag>
                     </template>
+                    <template slot="effectiveDate" slot-scope="text, record">
+                      {{
+                        new Date(record.effectiveDate).toLocaleDateString(
+                          "en-GB",
+                          {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                          }
+                        )
+                      }}
+                    </template>
                   </a-table>
                 </div>
                 <div class="col-6">
@@ -77,6 +91,18 @@
                           record.status ? "Đã có hiệu lực" : "Chưa có hiệu lực"
                         }}
                       </a-tag>
+                    </template>
+                    <template slot="effectiveDate" slot-scope="text, record">
+                      {{
+                        new Date(record.effectiveDate).toLocaleDateString(
+                          "en-GB",
+                          {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                          }
+                        )
+                      }}
                     </template>
                   </a-table>
                 </div>
@@ -109,6 +135,15 @@
                   {{ record.status ? "Đã thanh toán" : "Chưa thanh toán" }}
                 </a-tag>
               </template>
+              <template slot="date" slot-scope="text, record">
+                {{
+                  new Date(record.date).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
+              </template>
             </a-table>
             <div class="container-fluid">
               <div class="row">
@@ -133,6 +168,18 @@
                         }}
                       </a-tag>
                     </template>
+                    <template slot="effectiveDate" slot-scope="text, record">
+                      {{
+                        new Date(record.effectiveDate).toLocaleDateString(
+                          "en-GB",
+                          {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                          }
+                        )
+                      }}
+                    </template>
                   </a-table>
                 </div>
                 <div class="col-6">
@@ -155,6 +202,18 @@
                           record.status ? "Chưa có hiệu lực" : "Đã có hiệu lực"
                         }}
                       </a-tag>
+                    </template>
+                    <template slot="effectiveDate" slot-scope="text, record">
+                      {{
+                        new Date(record.effectiveDate).toLocaleDateString(
+                          "en-GB",
+                          {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                          }
+                        )
+                      }}
                     </template>
                   </a-table>
                 </div>
@@ -188,6 +247,7 @@ export default {
           dataIndex: "date",
           key: "date",
           width: 150,
+          scopedSlots: { customRender: "date" },
         },
         {
           title: "Họ Và Tên",
@@ -259,6 +319,7 @@ export default {
           dataIndex: "date",
           key: "date",
           width: 150,
+          scopedSlots: { customRender: "date" },
         },
         {
           title: "Họ Và Tên",
@@ -342,6 +403,7 @@ export default {
           dataIndex: "effectiveDate",
           key: "effectiveDate",
           width: 150,
+          scopedSlots: { customRender: "effectiveDate" },
         },
         {
           title: "Tiêu đề",
