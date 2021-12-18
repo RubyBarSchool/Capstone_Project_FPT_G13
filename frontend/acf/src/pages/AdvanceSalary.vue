@@ -101,6 +101,15 @@
                   }}
                 </a-tag>
               </template>
+              <template slot="dateCreate" slot-scope="text, record">
+                {{
+                  new Date(record.dateCreate).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
+              </template>
               <template slot="action" slot-scope="text, record">
                 <a-row>
                   <a-col :span="8">
@@ -454,9 +463,9 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
-      this.visibleAdd=false;
-      this.visibleEdit=false;
-      this.visibleView=false;
+      this.visibleAdd = false;
+      this.visibleEdit = false;
+      this.visibleView = false;
       advanceSalaryService
         .searchAdvanceSalaryEmployee(this.dataSearch)
         .then((response) => {

@@ -74,6 +74,15 @@
                   {{ record.status ? "Công khai" : "Nháp" }}
                 </a-tag>
               </template>
+              <template slot="effectiveDate" slot-scope="text, record">
+                {{
+                  new Date(record.effectiveDate).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
+              </template>
               <template slot="listIdEmployee" slot-scope="text, record">
                 <div
                   :key="index"
@@ -417,6 +426,7 @@ export default {
           dataIndex: "effectiveDate",
           key: "effectiveDate",
           width: 150,
+          scopedSlots: { customRender: "effectiveDate" },
         },
         {
           title: "Trạng thái",

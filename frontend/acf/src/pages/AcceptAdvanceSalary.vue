@@ -69,7 +69,13 @@
                 {{ record.nameEmployee }}
               </template>
               <template slot="date" slot-scope="text, record">
-                {{ record.date }}
+                {{
+                  new Date(record.date).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
               </template>
               <template slot="titlee" slot-scope="text, record">
                 {{ record.title }}

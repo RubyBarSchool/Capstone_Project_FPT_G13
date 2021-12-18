@@ -70,6 +70,15 @@
               "
               @change="handleTableChange"
             >
+              <template slot="effectiveDate" slot-scope="text, record">
+                {{
+                  new Date(record.effectiveDate).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
+              </template>
               <template slot="status" slot-scope="text, record">
                 <a-tag :color="record.status ? 'green' : 'orange'">
                   {{ record.status ? "Đã duyệt" : "Chờ duyệt" }}
@@ -116,7 +125,7 @@
               <a-form-model-item label="Ngày hiệu lực">
                 <a-date-picker
                   v-model="dataDetail.effectiveDate"
-                  format="YYYY-MM-DD"
+                  format="DD/MM/YYYY"
                   valueFormat="YYYY-MM-DD"
                   disabled
                 >
@@ -193,6 +202,7 @@ export default {
           dataIndex: "effectiveDate",
           key: "effectiveDate",
           width: 150,
+          scopedSlots: { customRender: "effectiveDate" },
         },
         {
           title: "Trạng thái",

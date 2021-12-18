@@ -85,6 +85,33 @@
               "
               @change="handleTableChange"
             >
+              <template slot="createDate" slot-scope="text, record">
+                {{
+                  new Date(record.createDate).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
+              </template>
+              <template slot="dateStart" slot-scope="text, record">
+                {{
+                  new Date(record.dateStart).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
+              </template>
+              <template slot="dateEnd" slot-scope="text, record">
+                {{
+                  new Date(record.dateEnd).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
+              </template>
               <template slot="status" slot-scope="text, record">
                 <a-tag
                   :color="
@@ -236,6 +263,7 @@
                     :disabled-date="disableDateStartAdd"
                     v-model="dataSubmit.dateStart"
                     placeholder="Ngày bắt đầu"
+                    format="DD/MM/YYYY"
                   />
                   <div style="color: red" v-if="checkDateStart.show">
                     {{ checkDateStart.message }}
@@ -251,6 +279,7 @@
                     :disabled-date="disableDateEndAdd"
                     v-model="dataSubmit.dateEnd"
                     placeholder="Ngày hoàn thành"
+                    format="DD/MM/YYYY"
                   />
                   <div style="color: red" v-if="checkDateEnd.show">
                     {{ checkDateEnd.message }}
@@ -401,6 +430,7 @@
                     :disabled-date="disableDateStart"
                     v-model="dataSubmit.dateStart"
                     placeholder="Ngày bắt đầu"
+                    format="DD/MM/YYYY"
                   />
                   <div style="color: red" v-if="checkDateStart.show">
                     {{ checkDateStart.message }}
@@ -416,6 +446,7 @@
                     :disabled-date="disableDateEnd"
                     v-model="dataSubmit.dateEnd"
                     placeholder="Ngày hoàn thành"
+                    format="DD/MM/YYYY"
                   />
                   <div style="color: red" v-if="checkDateEnd.show">
                     {{ checkDateEnd.message }}
@@ -572,6 +603,7 @@ export default {
           dataIndex: "createDate",
           key: "createDate",
           width: 150,
+          scopedSlots: { customRender: "createDate" },
         },
         {
           title: "Hợp đồng",
@@ -602,12 +634,14 @@ export default {
           dataIndex: "dateStart",
           key: "dateStart",
           width: 150,
+          scopedSlots: { customRender: "dateStart" },
         },
         {
           title: "Ngày hoàn thành",
           dataIndex: "dateEnd",
           key: "dateEnd",
           width: 150,
+          scopedSlots: { customRender: "dateEnd" },
         },
         {
           title: "Trạng thái",

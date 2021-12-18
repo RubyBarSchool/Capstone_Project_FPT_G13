@@ -21,6 +21,7 @@
             :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
             :style="{ 'margin-right': '5px' }"
             v-model="dataSearch.listDate"
+            format="DD/MM/YYYY"
           />
           <a-select
             placeholder="Khách hàng"
@@ -101,6 +102,24 @@
               </template>
               <template slot="note" slot-scope="text, record">
                 {{ record.note }}
+              </template>
+              <template slot="createDate" slot-scope="text, record">
+                {{
+                  new Date(record.createDate).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
+              </template>
+              <template slot="dateFinish" slot-scope="text, record">
+                {{
+                  new Date(record.dateFinish).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-button
@@ -192,6 +211,7 @@
                   @change="selectDateEnd"
                   v-model="dataAdd.time"
                   placeholder="Hạn hoàn thành"
+                  format="DD/MM/YYYY"
                 />
                 <div style="color: red" v-if="checkDateEnd.show">
                   {{ checkDateEnd.message }}
@@ -301,6 +321,7 @@
                   @change="selectEditDateEnd"
                   :disabled-date="disableDateStart"
                   v-model="dataEdit.dateFinish"
+                  format="DD/MM/YYYY"
                 />
                 <div style="color: red" v-if="checkDateEnd.show">
                   {{ checkDateEnd.message }}
@@ -395,12 +416,14 @@ export default {
           dataIndex: "createDate",
           key: "createDate",
           width: 150,
+          scopedSlots: { customRender: "createDate" },
         },
         {
           title: "Ngày bàn giao",
           dataIndex: "dateFinish",
           key: "dateFinish",
           width: 150,
+          scopedSlots: { customRender: "dateFinish" },
         },
         {
           title: "Khách hàng",

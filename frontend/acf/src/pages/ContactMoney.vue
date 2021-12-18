@@ -86,6 +86,24 @@
                   }}
                 </a-tag>
               </template>
+              <template slot="dateStart" slot-scope="text, record">
+                {{
+                  new Date(record.dateStart).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
+              </template>
+              <template slot="dateEnd" slot-scope="text, record">
+                {{
+                  new Date(record.dateEnd).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
+              </template>
               <template slot="action" slot-scope="text, record">
                 <a-row>
                   <a-col :span="8">
@@ -179,6 +197,15 @@
               }
             "
           >
+            <template slot="date" slot-scope="text, record">
+              {{
+                new Date(record.date).toLocaleDateString("en-GB", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                })
+              }}
+            </template>
             <template slot="action" slot-scope="text, record">
               <a-col :span="8" v-if="disableEditAndDelete">
                 <a-button
@@ -243,8 +270,7 @@ import viewDetailContactService from "@/service/viewDetailContactService";
 
 export default {
   name: "ContatcMoney",
-  components: {
-  },
+  components: {},
   data() {
     return {
       loadingEdit: false,
@@ -278,12 +304,14 @@ export default {
           dataIndex: "dateStart",
           key: "dateStart",
           width: 150,
+          scopedSlots: { customRender: "dateStart" },
         },
         {
           title: "Ngày bàn giao",
           dataIndex: "dateEnd",
           key: "dateEnd",
           width: 150,
+          scopedSlots: { customRender: "dateEnd" },
         },
         {
           title: "Tiền tạm ứng",
@@ -331,6 +359,7 @@ export default {
           dataIndex: "date",
           key: "date",
           width: 150,
+          scopedSlots: { customRender: "date" },
         },
         {
           title: "Số tiền tạm ứng",

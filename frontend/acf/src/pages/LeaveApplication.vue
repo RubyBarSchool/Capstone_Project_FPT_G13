@@ -75,16 +75,34 @@
                 {{ record.title }}
               </template>
               <template slot="dateCreate" slot-scope="text, record">
-                {{ record.dateCreate }}
+                {{
+                  new Date(record.dateCreate).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
               </template>
               <template slot="dateAccept" slot-scope="text, record">
                 {{ record.dateAccept }}
               </template>
               <template slot="dateStart" slot-scope="text, record">
-                {{ record.dateStart }}
+                {{
+                  new Date(record.dateStart).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
               </template>
               <template slot="dateEnd" slot-scope="text, record">
-                {{ record.dateEnd }}
+                {{
+                  new Date(record.dateEnd).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
               </template>
               <template slot="status" slot-scope="text, record">
                 <a-tag
@@ -304,7 +322,7 @@
               <a-form-model-item label="Ngày xác nhận">
                 <a-date-picker
                   disabled
-                  v-model="dataPersonalLeaveEmployeeDetail.dateAccept"
+                  v-model="dataPersonalLeaveEmployeeDetail.dateAccept" placeholder="Ngày xác nhận"
                   format="DD/MM/YYYY"
                 >
                 </a-date-picker>

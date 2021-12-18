@@ -187,6 +187,7 @@
                         style="width: 100%"
                         @change="inputDoBAdd"
                         v-model="dataAdd.dob"
+                        format="DD/MM/YYYY"
                       >
                         <a-icon slot="suffixIcon" type="smile" />
                       </a-date-picker>
@@ -351,8 +352,7 @@
                     <a-form-model-item>
                       <a-date-picker
                         v-model="dataEdit.dob"
-                        format="YYYY-MM-DD"
-                        valueFormat="YYYY-MM-DD"
+                        format="DD/MM/YYYY"
                         @change="inputDoBEdit"
                       >
                         <a-icon slot="suffixIcon" type="smile" />

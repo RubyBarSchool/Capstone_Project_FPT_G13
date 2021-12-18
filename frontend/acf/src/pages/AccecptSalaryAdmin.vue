@@ -59,7 +59,13 @@
             @change="handleTableChange"
           >
             <template slot="date" slot-scope="text, record">
-              {{ record.date }}
+              {{
+                new Date(record.date).toLocaleDateString("en-GB", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                })
+              }}
             </template>
             <template slot="nameEmployee" slot-scope="text, record">
               {{ record.nameEmployee }}
@@ -115,8 +121,7 @@ import accecptSalaryAdminService from "@/service/accecptSalaryAdminService.js";
 import moment from "moment";
 export default {
   name: "acceptluongadmin",
-  components: {
-  },
+  components: {},
   data() {
     return {
       pagination: {

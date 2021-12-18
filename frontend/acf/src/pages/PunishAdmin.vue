@@ -84,6 +84,15 @@
                   <div>{{ data.name }}</div>
                 </div>
               </template>
+              <template slot="effectiveDate" slot-scope="text, record">
+                {{
+                  new Date(record.effectiveDate).toLocaleDateString("en-GB", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit",
+                  })
+                }}
+              </template>
               <template slot="action" slot-scope="text, record">
                 <a-row v-if="!record.status" >
                   <a-col :span="9" v-if="checkEditOrDelete(record)">
@@ -203,7 +212,7 @@
               <a-form-model-item>
                 <a-date-picker
                   v-model="dataAdd.effectiveDate"
-                  format="YYYY-MM-DD"
+                  format="DD/MM/YYYY"
                   :disabled-date="disableDateStart"
                   valueFormat="YYYY-MM-DD"
                   @change="inputEffectiveDateAdd"
@@ -404,6 +413,7 @@ export default {
           dataIndex: "effectiveDate",
           key: "effectiveDate",
           width: 150,
+          scopedSlots: { customRender: "effectiveDate" },
         },
         {
           title: "Trạng thái",
