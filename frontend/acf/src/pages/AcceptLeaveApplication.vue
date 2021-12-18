@@ -8,14 +8,7 @@
             background: 'white',
           }"
         >
-          <a-back-top>
-            <div class="ant-back-top-inner">
-              <font-awesome-icon
-                :icon="['fas', 'angle-double-up']"
-                :style="{ width: '160px', height: '50px', color: '#15AABF' }"
-              />
-            </div>
-          </a-back-top>
+          <a-back-top :style="{ width: '5vh', height: '15vh' }" />
           <!-- menu trên -->
           <a-input
             placeholder="Nhân viên"
@@ -523,12 +516,6 @@ export default {
 </script>
 
 <style scoped>
-/* back top */
-.ant-back-top-inner {
-  color: rgb(241, 237, 237);
-  text-align: center;
-}
-
 /* button icon */
 #view {
   background-color: rgb(76, 238, 12);

@@ -2,14 +2,7 @@
   <div class="historyluongadmin">
     <a-layout :style="{ background: 'white' }">
       <a-layout-content :style="{ margin: '24px 16px 0' }">
-        <a-back-top>
-          <div class="ant-back-top-inner">
-            <font-awesome-icon
-              :icon="['fas', 'angle-double-up']"
-              :style="{ width: '160px', height: '50px', color: '#15AABF' }"
-            />
-          </div>
-        </a-back-top>
+         <a-back-top :style="{ width: '5vh', height: '15vh' }" />
         <!-- menu -->
         <a-input
           placeholder="Họ và tên"
