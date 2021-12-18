@@ -12,6 +12,8 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { SpreadsheetPlugin } from "@syncfusion/ej2-vue-spreadsheet";
+import VueResource from 'vue-resource'
+Vue.use(VueResource)
 Vue.use(SpreadsheetPlugin);
 library.add(fas, far);
 

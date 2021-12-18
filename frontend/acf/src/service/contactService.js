@@ -16,6 +16,9 @@ class contactService {
     deleteContact(id) {
         return http.delete(`/admin/contact?id=${id}`);
     }
+    exportContact(id) {
+        return http.post(`/admin/contact/exportcontact?idContact=${id}`, { responseType: 'blob' });
+    }
 }
 
 export default new contactService();

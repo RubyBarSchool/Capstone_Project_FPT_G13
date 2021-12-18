@@ -367,6 +367,7 @@ export default {
           link.setAttribute("download", "Attendance.xlsx");
           document.body.appendChild(link);
           link.click();
+          URL.revokeObjectURL(link.href);
         })
         .catch((e) => {
           console.log(e);

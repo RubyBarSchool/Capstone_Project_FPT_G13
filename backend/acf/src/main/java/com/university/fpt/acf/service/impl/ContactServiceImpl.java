@@ -5,14 +5,13 @@ import com.university.fpt.acf.config.websocket.model.Notification;
 import com.university.fpt.acf.config.websocket.service.NotificationService;
 import com.university.fpt.acf.entity.*;
 import com.university.fpt.acf.form.*;
-import com.university.fpt.acf.repository.AccountManagerRepository;
-import com.university.fpt.acf.repository.ContactCustomRepository;
-import com.university.fpt.acf.repository.ContactRepository;
-import com.university.fpt.acf.repository.PriceMaterialRepository;
+import com.university.fpt.acf.repository.*;
 import com.university.fpt.acf.service.ContactService;
 import com.university.fpt.acf.vo.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -23,16 +22,33 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.Convert;
 import javax.transaction.Transactional;
-import java.awt.print.Book;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
 public class ContactServiceImpl implements ContactService {
+
+    public static final int COLUMN_INDEX_STT = 0;
+    public static final int COLUMN_INDEX_PRODUCT = 1;
+    public static final int COLUMN_INDEX_COUNT_PRODUCT = 2;
+    public static final int COLUMN_INDEX_LENGTH_PRODUCT = 3;
+    public static final int COLUMN_INDEX_WIDTH_PRODUCT = 4;
+    public static final int COLUMN_INDEX_HEIGHT_PRODUCT = 5;
+    public static final int COLUMN_INDEX_MATERIAL = 6;
+    public static final int COLUMN_INDEX_FRAME = 7;
+    public static final int COLUMN_INDEX_UNIT = 8;
+    public static final int COLUMN_INDEX_COUNT_MATERIAL = 9;
+    public static final int COLUMN_INDEX_NOTE_MATERIAL = 10;
+    public static final int COLUMN_INDEX_COMPANY = 11;
+    public static final int COLUMN_INDEX_PRICE = 12;
+    public static final int COLUMN_INDEX_MONEY = 13;
+    public static final int COLUMN_INDEX_NOTE_PRODUCT = 14;
+
 
     @Autowired
     private PriceMaterialRepository priceMaterialRepository;
@@ -112,8 +128,8 @@ public class ContactServiceImpl implements ContactService {
             contactRepository.saveAndFlush(contact);
 
             List<String> accountAdmin = accountManagerRepository.getUsernameAdmin();
-            for(String s : accountAdmin){
-                if(s.equals(accountSercurity.getUserName())){
+            for (String s : accountAdmin) {
+                if (s.equals(accountSercurity.getUserName())) {
                     continue;
                 }
                 Notification notification = new Notification();
@@ -122,7 +138,7 @@ public class ContactServiceImpl implements ContactService {
                 notification.setUsernameCreate(accountSercurity.getUserName());
                 notification.setContent(" tạo mới một hợp đồng");
                 notification.setPath("/contact");
-                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
                 simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
             }
 
@@ -204,9 +220,9 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public List<MaterialInContactDetailVO> getMaterialInProduct(Long idProduct) {
         List<MaterialInContactDetailVO> materialInContactDetailVOS = new ArrayList<>();
-        try{
+        try {
             materialInContactDetailVOS = contactRepository.getMaterialInProduct(idProduct);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Không thể lấy được vật liệu theo sản phẩm trong hợp đồng");
         }
         return materialInContactDetailVOS;
@@ -364,7 +380,7 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public int totalSearchCreateContact(SearchCreateContactFrom search) {
-        int size=0;
+        int size = 0;
         try {
             size = contactCustomRepository.totalSearchCreateContact(search);
         } catch (Exception e) {
@@ -377,7 +393,7 @@ public class ContactServiceImpl implements ContactService {
     @Transactional
     public Boolean updateContact(UpdateContractForm updateForm) {
         Boolean check = false;
-        try{
+        try {
             AccountSercurity accountSercurity = new AccountSercurity();
             Contact c = contactRepository.getContactByID(updateForm.getId());
             c.setModified_by(accountSercurity.getUserName());
@@ -385,11 +401,11 @@ public class ContactServiceImpl implements ContactService {
             c.setName(updateForm.getName());
             c.setDateFinish(updateForm.getDateFinish());
             contactRepository.save(c);
-            check=true;
+            check = true;
 
             List<String> accountAdmin = accountManagerRepository.getUsernameAdmin();
-            for(String s : accountAdmin){
-                if(s.equals(accountSercurity.getUserName())){
+            for (String s : accountAdmin) {
+                if (s.equals(accountSercurity.getUserName())) {
                     continue;
                 }
                 Notification notification = new Notification();
@@ -398,11 +414,11 @@ public class ContactServiceImpl implements ContactService {
                 notification.setUsernameCreate(accountSercurity.getUserName());
                 notification.setContent(" chỉnh sửa một hợp đồng");
                 notification.setPath("/contact");
-                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
                 simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Error contact repository " + e.getMessage());
         }
         return check;
@@ -412,17 +428,17 @@ public class ContactServiceImpl implements ContactService {
     @Transactional
     public Boolean deleteContact(Long id) {
         Boolean check = false;
-        try{
+        try {
             Contact c = contactRepository.getContactByID(id);
             String numberFinish = c.getNumberFinish().strip();
-            if(c.getStatusDone()==-2 && numberFinish.startsWith("0")){
+            if (c.getStatusDone() == -2 && numberFinish.startsWith("0")) {
                 contactRepository.delete(c);
                 check = true;
             }
             AccountSercurity accountSercurity = new AccountSercurity();
             List<String> accountAdmin = accountManagerRepository.getUsernameAdmin();
-            for(String s : accountAdmin){
-                if(s.equals(accountSercurity.getUserName())){
+            for (String s : accountAdmin) {
+                if (s.equals(accountSercurity.getUserName())) {
                     continue;
                 }
                 Notification notification = new Notification();
@@ -431,94 +447,229 @@ public class ContactServiceImpl implements ContactService {
                 notification.setUsernameCreate(accountSercurity.getUserName());
                 notification.setContent(" xóa một hợp đồng");
                 notification.setPath("/contact");
-                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
                 simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Error contact repository " + e.getMessage());
         }
         return check;
     }
 
+    @Autowired
+    private AttendancesCustomRepository attendancesCustomRepository;
+
     @Override
-    public InputStreamResource exportContact(Long id) {
-        try{
+    public ByteArrayInputStream exportContact(Long id) {
+        try {
+
+//
+//            XSSFWorkbook xssfWorkbook = new XSSFWorkbook();
+//            XSSFSheet sheet = xssfWorkbook.createSheet("Hợp đồng");
+//            int rowIndex = 0;
+//            this.writeHeader(sheet,rowIndex);
+//
+//            //Write data
+//            rowIndex++;
+//            List<ExportContactVO> exportContactVOS = contactRepository.exportContactByID(id);
+//            for(ExportContactVO exportContactVO : exportContactVOS){
+//                // Create row
+//                Row row = sheet.createRow(rowIndex);
+//                // Write data on row
+//                writeBook(exportContactVO, row);
+//                rowIndex++;
+//            }
+//
+//            if(rowIndex!=1){
+//                // Write footer
+//                writeFooter(sheet, rowIndex,"Demo");
+//            }
+//
+//            ByteArrayOutputStream out = new ByteArrayOutputStream();
+//            xssfWorkbook.write(out);
+//            return new ByteArrayInputStream(out.toByteArray());
+
+
+
+            XSSFWorkbook workbook = new XSSFWorkbook();
+            XSSFSheet sheet = workbook.createSheet("Attendance");
+            // Create font
+            Font font = sheet.getWorkbook().createFont();
+            font.setFontName("Times New Roman");
+            font.setBold(true);
+            font.setFontHeightInPoints((short) 14);
+            font.setColor(IndexedColors.WHITE.getIndex());
+
+            // Create CellStyle
+            CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+            cellStyle.setFont(font);
+            cellStyle.setFillForegroundColor(IndexedColors.BLUE.getIndex());
+            cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+            cellStyle.setBorderBottom(BorderStyle.THIN);
+            cellStyle.setAlignment(HorizontalAlignment.CENTER);
+            cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+
+            CellStyle cellStyleData = sheet.getWorkbook().createCellStyle();
+            cellStyleData.setWrapText(true);
+            cellStyleData.setAlignment(HorizontalAlignment.LEFT);
+            cellStyleData.setVerticalAlignment(VerticalAlignment.CENTER);
+
             ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-            Workbook xssfWorkbook = new XSSFWorkbook();
-            Sheet sheet = xssfWorkbook.createSheet("Hợp đồng");
-            List<ExportContactVO> exportContactVOS = contactRepository.exportContactByID(id);
-            xssfWorkbook.write(out);
-
-            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(out.toByteArray());
-            InputStreamResource file = new InputStreamResource(byteArrayInputStream);
-
-            return file;
-        }catch (Exception e){
+            workbook.write(out);
+            return new ByteArrayInputStream(out.toByteArray());
+        } catch (Exception e) {
             throw new RuntimeException("Không xuất được file hợp đồng");
         }
     }
 
+    // Create CellStyle for header
+    private static CellStyle createStyleForHeader(Sheet sheet) {
+        // Create font
+        Font font = sheet.getWorkbook().createFont();
+        font.setFontName("Times New Roman");
+        font.setBold(true);
+        font.setFontHeightInPoints((short) 14); // font size
+        font.setColor(IndexedColors.WHITE.getIndex()); // text color
+
+        // Create CellStyle
+        CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+        cellStyle.setFont(font);
+        cellStyle.setFillForegroundColor(IndexedColors.BLUE.getIndex());
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        cellStyle.setBorderBottom(BorderStyle.THIN);
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+
+
+        CellStyle cellStyleData = sheet.getWorkbook().createCellStyle();
+        cellStyleData.setWrapText(true);
+        cellStyleData.setAlignment(HorizontalAlignment.LEFT);
+        cellStyleData.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        return cellStyle;
+    }
+
 
     // Write header with format
-    private static void writeHeader(Sheet sheet, int rowIndex) {
-//        // create CellStyle
-//        CellStyle cellStyle = createStyleForHeader(sheet);
-//
-//        // Create row
-//        Row row = sheet.createRow(rowIndex);
-//
-//        // Create cells
-//        Cell cell = row.createCell(COLUMN_INDEX_ID);
-//        cell.setCellStyle(cellStyle);
-//        cell.setCellValue("Id");
-//
-//        cell = row.createCell(COLUMN_INDEX_TITLE);
-//        cell.setCellStyle(cellStyle);
-//        cell.setCellValue("Title");
-//
-//        cell = row.createCell(COLUMN_INDEX_PRICE);
-//        cell.setCellStyle(cellStyle);
-//        cell.setCellValue("Price");
-//
-//        cell = row.createCell(COLUMN_INDEX_QUANTITY);
-//        cell.setCellStyle(cellStyle);
-//        cell.setCellValue("Quantity");
-//
-//        cell = row.createCell(COLUMN_INDEX_TOTAL);
-//        cell.setCellStyle(cellStyle);
-//        cell.setCellValue("Total money");
+    private void writeHeader(Sheet sheet, int rowIndex) {
+        // create CellStyle
+        CellStyle cellStyle = createStyleForHeader(sheet);
+
+        // Create row
+        Row row = sheet.createRow(rowIndex);
+
+        // Create cells
+        Cell cell = row.createCell(COLUMN_INDEX_STT);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("STT");
+
+        cell = row.createCell(COLUMN_INDEX_PRODUCT);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Hạng mục");
+
+        cell = row.createCell(COLUMN_INDEX_COUNT_PRODUCT);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("SL");
+
+        cell = row.createCell(COLUMN_INDEX_LENGTH_PRODUCT);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Dài");
+
+        cell = row.createCell(COLUMN_INDEX_WIDTH_PRODUCT);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Rộng");
+
+        cell = row.createCell(COLUMN_INDEX_HEIGHT_PRODUCT);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Cao");
+
+        cell = row.createCell(COLUMN_INDEX_MATERIAL);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Tên chất liệu");
+
+        cell = row.createCell(COLUMN_INDEX_FRAME);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Thông số");
+
+        cell = row.createCell(COLUMN_INDEX_UNIT);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Đơn vị");
+
+        cell = row.createCell(COLUMN_INDEX_COUNT_MATERIAL);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Số lượng vật liệu");
+
+        cell = row.createCell(COLUMN_INDEX_NOTE_MATERIAL);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Ghi chú");
+
+        cell = row.createCell(COLUMN_INDEX_COMPANY);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Công ty");
+
+        cell = row.createCell(COLUMN_INDEX_PRICE);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Đơn giá");
+
+        cell = row.createCell(COLUMN_INDEX_MONEY);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Thành tiền");
+
+        cell = row.createCell(COLUMN_INDEX_NOTE_PRODUCT);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Ghi chú");
     }
 
     // Write data
-    private static void writeBook(Book book, Row row) {
-//        if (cellStyleFormatNumber == null) {
-//            // Format number
-//            short format = (short)BuiltinFormats.getBuiltinFormat("#,##0");
-//            // DataFormat df = workbook.createDataFormat();
-//            // short format = df.getFormat("#,##0");
+    private static void writeBook(ExportContactVO exportContactVO, Row row) {
+        Cell cell = row.createCell(COLUMN_INDEX_STT);
+        cell.setCellValue(row.getRowNum());
+
+        cell = row.createCell(COLUMN_INDEX_PRODUCT);
+        cell.setCellValue(exportContactVO.getNameProduct());
+
+//        cell = row.createCell(COLUMN_INDEX_COUNT_PRODUCT);
+//        cell.setCellValue(exportContactVO.getCountProduct());
+
+//        cell = row.createCell(COLUMN_INDEX_LENGTH_PRODUCT);
+//        cell.setCellValue(exportContactVO.getLengthProduct());
 //
-//            //Create CellStyle
-//            Workbook workbook = row.getSheet().getWorkbook();
-//            cellStyleFormatNumber = workbook.createCellStyle();
-//            cellStyleFormatNumber.setDataFormat(format);
-//        }
+//        cell = row.createCell(COLUMN_INDEX_WIDTH_PRODUCT);
+//        cell.setCellValue(exportContactVO.getWidthProduct());
 //
-//        Cell cell = row.createCell(COLUMN_INDEX_ID);
-//        cell.setCellValue(book.getId());
+//        cell = row.createCell(COLUMN_INDEX_HEIGHT_PRODUCT);
+//        cell.setCellValue(exportContactVO.getHeightProduct());
+
+        cell = row.createCell(COLUMN_INDEX_MATERIAL);
+        cell.setCellValue(exportContactVO.getNameMaterial());
+
+//        cell = row.createCell(COLUMN_INDEX_FRAME);
+//        cell.setCellValue(""+exportContactVO.getFrameLength()+"x"+exportContactVO.getFrameWidth()+"x"+exportContactVO.getFrameHeight());
+
+        cell = row.createCell(COLUMN_INDEX_UNIT);
+        cell.setCellValue(exportContactVO.getNameUnit());
 //
-//        cell = row.createCell(COLUMN_INDEX_TITLE);
-//        cell.setCellValue(book.getTitle());
+//        cell = row.createCell(COLUMN_INDEX_COUNT_MATERIAL);
+//        cell.setCellValue(exportContactVO.getCountMaterialInProduct());
+
+        cell = row.createCell(COLUMN_INDEX_NOTE_MATERIAL);
+        cell.setCellValue(exportContactVO.getNoteMaterialInProduct());
+
+        cell = row.createCell(COLUMN_INDEX_COMPANY);
+        cell.setCellValue(exportContactVO.getCompanyName());
 //
 //        cell = row.createCell(COLUMN_INDEX_PRICE);
-//        cell.setCellValue(book.getPrice());
-//        cell.setCellStyle(cellStyleFormatNumber);
+//        cell.setCellValue(exportContactVO.getPriceMaterial());
 //
-//        cell = row.createCell(COLUMN_INDEX_QUANTITY);
-//        cell.setCellValue(book.getQuantity());
-//
-//        // Create cell formula
-//        // totalMoney = price * quantity
+//        cell = row.createCell(COLUMN_INDEX_MONEY);
+//        cell.setCellValue(Integer.valueOf(exportContactVO.getPriceMaterial())* exportContactVO.getCountMaterialInProduct());
+
+//        cell = row.createCell(COLUMN_INDEX_NOTE_PRODUCT);
+//        cell.setCellValue(exportContactVO.getNoteProduct());
+
+        // Create cell formula
+        // totalMoney = price * quantity
 //        cell = row.createCell(COLUMN_INDEX_TOTAL, CellType.FORMULA);
 //        cell.setCellStyle(cellStyleFormatNumber);
 //        int currentRow = row.getRowNum() + 1;
@@ -527,39 +678,27 @@ public class ContactServiceImpl implements ContactService {
 //        cell.setCellFormula(columnPrice + currentRow + "*" + columnQuantity + currentRow);
     }
 
-    // Create CellStyle for header
-    private static CellStyle createStyleForHeader(Sheet sheet) {
-//        // Create font
-//        Font font = sheet.getWorkbook().createFont();
-//        font.setFontName("Times New Roman");
-//        font.setBold(true);
-//        font.setFontHeightInPoints((short) 14); // font size
-//        font.setColor(IndexedColors.WHITE.getIndex()); // text color
-//
-//        // Create CellStyle
-//        CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
-//        cellStyle.setFont(font);
-//        cellStyle.setFillForegroundColor(IndexedColors.BLUE.getIndex());
-//        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-//        cellStyle.setBorderBottom(BorderStyle.THIN);
-//        return cellStyle;
-    }
-
     // Write footer
-    private static void writeFooter(Sheet sheet, int rowIndex) {
+    private void writeFooter(Sheet sheet, int rowIndex, String note) {
         // Create row
-//        Row row = sheet.createRow(rowIndex);
-//        Cell cell = row.createCell(COLUMN_INDEX_TOTAL, CellType.FORMULA);
-//        cell.setCellFormula("SUM(E2:E6)");
+        Row row = sheet.createRow(rowIndex);
+        Cell cell = row.createCell(0, CellType.STRING);
+        cell.setCellValue("Ghi Chú: " + note);
+        sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 0, 6));
+        Cell cell1 = row.createCell(7, CellType.STRING);
+        cell1.setCellValue("TỔNG ( Chưa bao gồm VAT 10%): ");
+        sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 7, 11));
+        Cell cell2 = row.createCell(12, CellType.FORMULA);
+        cell2.setCellFormula("SUM(M1:M" + (rowIndex - 1) + ")");
     }
 
     // Auto resize column width
-    private static void autosizeColumn(Sheet sheet, int lastColumn) {
-//        for (int columnIndex = 0; columnIndex < lastColumn; columnIndex++) {
-//            sheet.autoSizeColumn(columnIndex);
-//        }
+    private void autosizeColumn(Sheet sheet, int lastColumn) {
+        for (int columnIndex = 0; columnIndex < lastColumn; columnIndex++) {
+            sheet.autoSizeColumn(columnIndex);
+        }
     }
-    
+
 
     private String subString(String input) {
         if (input.endsWith(".0")) {
@@ -597,9 +736,9 @@ public class ContactServiceImpl implements ContactService {
             case NUMERIC:
                 cellValue = cell.getNumericCellValue();
                 Double aDouble = Double.parseDouble(cellValue.toString());
-                String value = aDouble.doubleValue()+"";
-                if(value.indexOf(".")==value.length()-2&&value.charAt(value.length()-1)=='0'){
-                    value = value.substring(0,value.length()-2);
+                String value = aDouble.doubleValue() + "";
+                if (value.indexOf(".") == value.length() - 2 && value.charAt(value.length() - 1) == '0') {
+                    value = value.substring(0, value.length() - 2);
                 }
                 cellValue = value;
                 break;

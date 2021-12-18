@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 public interface ContactService {
@@ -37,6 +38,6 @@ public interface ContactService {
     Boolean updateContact(UpdateContractForm updateForm);
     Boolean deleteContact(Long id);
 
-    InputStreamResource exportContact(Long id);
+    ByteArrayInputStream exportContact(Long id);
 
 }

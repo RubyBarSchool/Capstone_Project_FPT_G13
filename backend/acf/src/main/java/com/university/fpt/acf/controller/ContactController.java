@@ -3,9 +3,9 @@ package com.university.fpt.acf.controller;
 import com.university.fpt.acf.common.entity.ResponseCommon;
 import com.university.fpt.acf.entity.Contact;
 import com.university.fpt.acf.form.*;
+import com.university.fpt.acf.service.AttendancesService;
 import com.university.fpt.acf.service.ContactService;
 import com.university.fpt.acf.vo.*;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,9 @@ public class ContactController {
 
     @Autowired
     private ContactService contactService;
+
+    @Autowired
+    private AttendancesService attendancesService;
 
     @PostMapping()
     public ResponseEntity<ResponseCommon> addContact(@Valid @RequestBody AddContactForm addContactForm) {
@@ -181,17 +185,22 @@ public class ContactController {
     @PostMapping("/exportcontact")
     public ResponseEntity<Resource> exportContact(@RequestParam("idContact") Long idContact) {
         try {
-            InputStreamResource file = contactService.exportContact(1l);
+            ByteArrayInputStream file = contactService.exportContact(idContact);
+            String filename = "tutorials.xlsx";
+            InputStreamResource filex = new InputStreamResource(file);
+
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + "fileexcel" + "\"")
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
                     .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
-                    .body(file);
+                    .body(filex);
         } catch (Exception exception) {
             return ResponseEntity.ok()
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + "null" + "\"")
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "null" + "")
                     .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
                     .body(null);
         }
+
+
     }
 
 

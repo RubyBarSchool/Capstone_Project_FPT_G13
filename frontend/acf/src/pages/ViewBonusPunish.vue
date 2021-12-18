@@ -226,7 +226,7 @@ export default {
   },
   watch: {
     urlState(newValue) {
-      if (newValue.indexOf("/viewthuongphat") != -1) {
+      if (newValue.indexOf("/viewbonuspunish") != -1) {
         this.submitSearch();
       }
     },

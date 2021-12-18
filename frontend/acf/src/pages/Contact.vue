@@ -126,6 +126,14 @@
                   <font-awesome-icon :icon="['fas', 'edit']" />
                 </a-button>
 
+                <a-button
+                  v-if="record.statusDone == 0"
+                  @click="submitExport(record.id)"
+                  :style="{ width: '44.25px' }"
+                >
+                  <font-awesome-icon :icon="['fas', 'download']" />
+                </a-button>
+
                 <a-popconfirm
                   v-if="record.statusDone == -2"
                   title="Bạn có chắc chắn muốn xóa không?"
@@ -190,7 +198,7 @@
                   :disabled-date="disableDateStart"
                   @change="selectDateEnd"
                   v-model="dataAdd.time"
-                  placeholder= "Hạn hoàn thành"
+                  placeholder="Hạn hoàn thành"
                 />
                 <div style="color: red" v-if="checkDateEnd.show">
                   {{ checkDateEnd.message }}
@@ -471,12 +479,28 @@ export default {
       }
     },
   },
-    computed: {
+  computed: {
     urlState() {
       return this.$store.state.url;
     },
   },
   methods: {
+    submitExport(id) {
+      contactService
+        .exportContact(id)
+        .then((response) => {
+          const url = window.URL.createObjectURL(new Blob([response.data]));
+          const link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "Attendance.xlsx");
+          document.body.appendChild(link);
+          link.click();
+          URL.revokeObjectURL(link.href);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     disableDateStart(current) {
       return current < moment().subtract(1, "days");
     },
