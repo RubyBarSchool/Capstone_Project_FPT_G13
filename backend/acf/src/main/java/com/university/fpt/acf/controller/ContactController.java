@@ -5,8 +5,13 @@ import com.university.fpt.acf.entity.Contact;
 import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.service.ContactService;
 import com.university.fpt.acf.vo.*;
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -47,6 +52,7 @@ public class ContactController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+
     @PutMapping()
     public ResponseEntity<ResponseCommon> updateContact(@Valid @RequestBody UpdateContractForm updateContactForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -70,6 +76,7 @@ public class ContactController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+
     @DeleteMapping()
     public ResponseEntity<ResponseCommon> deleteContact(@RequestParam Long id) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -143,18 +150,19 @@ public class ContactController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+
     @PostMapping("/search")
-    public ResponseEntity<ResponseCommon> searchCreateContact(@RequestBody SearchCreateContactFrom searchForm){
+    public ResponseEntity<ResponseCommon> searchCreateContact(@RequestBody SearchCreateContactFrom searchForm) {
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
-        int total=0;
+        int total = 0;
         List<GetCreateContactVO> list = new ArrayList<>();
         try {
             list = contactService.searchCreateContact(searchForm);
             total = contactService.totalSearchCreateContact(searchForm);
             responseCommon.setData(list);
             message = "Thành công";
-            if(total==0){
+            if (total == 0) {
                 message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
@@ -169,5 +177,22 @@ public class ContactController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+
+    @PostMapping("/exportcontact")
+    public ResponseEntity<Resource> exportContact(@RequestParam("idContact") Long idContact) {
+        try {
+            InputStreamResource file = contactService.exportContact(1l);
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + "fileexcel" + "\"")
+                    .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                    .body(file);
+        } catch (Exception exception) {
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + "null" + "\"")
+                    .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                    .body(null);
+        }
+    }
+
 
 }
