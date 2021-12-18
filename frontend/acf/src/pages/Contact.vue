@@ -489,10 +489,14 @@ export default {
       contactService
         .exportContact(id)
         .then((response) => {
-          const url = window.URL.createObjectURL(new Blob([response.data]));
-          const link = document.createElement("a");
+          let url = window.URL.createObjectURL(
+            new Blob([response.data], {
+              type: "application/vnd.ms-excel",
+            })
+          );
+          let  link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", "Attendance.xlsx");
+          link.setAttribute("download", "contact.xlsx");
           document.body.appendChild(link);
           link.click();
           URL.revokeObjectURL(link.href);

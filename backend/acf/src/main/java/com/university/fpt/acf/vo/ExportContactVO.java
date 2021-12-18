@@ -16,6 +16,7 @@ public class ExportContactVO {
     private String totalMoney;
     private Integer statusContact;
 
+    private Long idProduct;
     private String nameProduct;
     private Integer statusProduct;
     private Integer countProduct;

@@ -38,12 +38,12 @@ public interface ContactRepository extends JpaRepository<Contact,Long> {
     Long getTotalProduct(@Param("dateStart") LocalDate dateStart, @Param("dateEnd") LocalDate dateEnd);
 
     @Query(" select new com.university.fpt.acf.vo.ExportContactVO(c.name,c.dateFinish,c.note,c.numberFinish,c.totalMoney,c.statusDone" +
-            " ,p.name,p.status,p.count,p.width,p.height,p.length,p.note,p.price,p.priceInContact,pm.count,pm.note,pm.priceAtCreateContact" +
+            " ,p.id,p.name,p.status,p.count,p.width,p.height,p.length,p.note,p.price,p.priceInContact,pm.count,pm.note,pm.priceAtCreateContact" +
             ", prm.price,um.name,m.name,fm.frameLength,fm.frameWidth,hm.frameHeight,cm.name)  from Contact c " +
             " inner join c.products p  inner join p.productMaterials pm inner join  pm.priceMaterial prm " +
             " inner join prm.material m  inner join m.company cm inner join prm.frameMaterial fm " +
             " inner join prm.heightMaterial hm inner join prm.unitMeasure um where c.deleted = false and p.deleted = false" +
-            " and pm.deleted = false and  c.id = :idContact ")
+            " and pm.deleted = false and  c.id = :idContact order by p.id asc")
     List<ExportContactVO> exportContactByID(@Param("idContact") Long idContact);
 
 }
