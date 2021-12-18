@@ -477,17 +477,17 @@ public class ContactServiceImpl implements ContactService {
                 if(i!=0){
                     if((!exportContactVOS.get(i).getIdProduct().equals(exportContactVOS.get(i-1).getIdProduct()))
                             ||(i==exportContactVOS.size()-1 && exportContactVOS.get(i).getIdProduct().equals(exportContactVOS.get(i-1).getIdProduct()))){
-                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,rowIndex-1,0,0));
-                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,rowIndex-1,1,1));
-                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,rowIndex-1,2,2));
-                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,rowIndex-1,3,3));
-                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,rowIndex-1,4,4));
-                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,rowIndex-1,5,5));
-                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,rowIndex-1,14,14));
-                        indexRowStartMerge = i;
+                        int indexLastRow = (i==exportContactVOS.size()-1)? rowIndex : rowIndex-1;
+                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,indexLastRow,0,0));
+                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,indexLastRow,1,1));
+                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,indexLastRow,2,2));
+                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,indexLastRow,3,3));
+                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,indexLastRow,4,4));
+                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,indexLastRow,5,5));
+                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,indexLastRow,14,14));
+                        indexRowStartMerge = rowIndex;
                     }
                 }
-
                 rowIndex++;
             }
 
@@ -510,7 +510,7 @@ public class ContactServiceImpl implements ContactService {
         Font font = sheet.getWorkbook().createFont();
         font.setFontName("Times New Roman");
         font.setBold(true);
-        font.setFontHeightInPoints((short) 14); // font size
+        font.setFontHeightInPoints((short) 16); // font size
         font.setColor(IndexedColors.WHITE.getIndex()); // text color
 
         // Create CellStyle
@@ -529,8 +529,22 @@ public class ContactServiceImpl implements ContactService {
         // Create font
         Font font = sheet.getWorkbook().createFont();
         font.setFontName("Times New Roman");
+        font.setFontHeightInPoints((short) 12); // font size
+        font.setColor(IndexedColors.BLACK.getIndex()); // text color
+
+        // Create CellStyle
+        CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+        cellStyle.setFont(font);
+        return cellStyle;
+    }
+
+    // Create CellStyle for header
+    private static CellStyle createStyleForFooter(Sheet sheet) {
+        // Create font
+        Font font = sheet.getWorkbook().createFont();
+        font.setFontName("Times New Roman");
         font.setBold(true);
-        font.setFontHeightInPoints((short) 10); // font size
+        font.setFontHeightInPoints((short) 12); // font size
         font.setColor(IndexedColors.BLACK.getIndex()); // text color
 
         // Create CellStyle
@@ -579,7 +593,7 @@ public class ContactServiceImpl implements ContactService {
         cell.setCellValue("Hạng mục");
 
         cell = row.createCell(COLUMN_INDEX_COUNT_PRODUCT);
-        sheet.setColumnWidth(COLUMN_INDEX_COUNT_PRODUCT,2000);
+        sheet.setColumnWidth(COLUMN_INDEX_COUNT_PRODUCT,3000);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("SLHM");
 
@@ -614,7 +628,7 @@ public class ContactServiceImpl implements ContactService {
         cell.setCellValue("Đơn vị");
 
         cell = row.createCell(COLUMN_INDEX_COUNT_MATERIAL);
-        sheet.setColumnWidth(COLUMN_INDEX_COUNT_MATERIAL,2000);
+        sheet.setColumnWidth(COLUMN_INDEX_COUNT_MATERIAL,3000);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("SLVL");
 
@@ -624,7 +638,7 @@ public class ContactServiceImpl implements ContactService {
         cell.setCellValue("Ghi chú");
 
         cell = row.createCell(COLUMN_INDEX_COMPANY);
-        sheet.setColumnWidth(COLUMN_INDEX_COMPANY,3500);
+        sheet.setColumnWidth(COLUMN_INDEX_COMPANY,4500);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("Công ty");
 
@@ -705,7 +719,7 @@ public class ContactServiceImpl implements ContactService {
 
         cell = row.createCell(COLUMN_INDEX_MONEY);
         cell.setCellStyle(createStyleForBodyRight(createStyleForBody(sheet)));
-        cell.setCellValue(Integer.valueOf(exportContactVO.getPriceMaterial())* exportContactVO.getCountMaterialInProduct());
+        cell.setCellFormula("J"+(rowIndex+1)+"*M" + (rowIndex+1) +"");
 
         cell = row.createCell(COLUMN_INDEX_NOTE_PRODUCT);
         cell.setCellStyle(createStyleForBodyLeft(createStyleForBody(sheet)));
@@ -725,13 +739,19 @@ public class ContactServiceImpl implements ContactService {
     private void writeFooter(Sheet sheet, int rowIndex, String note) {
         // Create row
         Row row = sheet.createRow(rowIndex);
+
         Cell cell = row.createCell(0, CellType.STRING);
+        cell.setCellStyle(createStyleForBodyLeft(createStyleForFooter(sheet)));
         cell.setCellValue("Ghi Chú: " + note);
         sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 0, 6));
-        Cell cell1 = row.createCell(9, CellType.STRING);
+
+        Cell cell1 = row.createCell(11, CellType.STRING);
+        cell1.setCellStyle(createStyleForBodyLeft(createStyleForFooter(sheet)));
         cell1.setCellValue("TỔNG ( Chưa bao gồm VAT 10%): ");
-        sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 9, 12));
+        sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 11, 12));
+
         Cell cell2 = row.createCell(13, CellType.FORMULA);
+        cell2.setCellStyle(createStyleForBodyRight(createStyleForFooter(sheet)));
         cell2.setCellFormula("SUM(N1:N" + rowIndex + ")");
     }
 
