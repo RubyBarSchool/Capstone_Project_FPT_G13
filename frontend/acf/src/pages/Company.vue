@@ -19,12 +19,12 @@
           <!-- menu trên -->
           <a-input
             placeholder="Tên công ty"
-            style="width: 150px"
+            :style="{ width: '150px', 'margin-right': '5px' }"
             v-model="dataSearch.name"
           />
           <a-input
             placeholder="Địa chỉ"
-            style="width: 150px"
+            :style="{ width: '150px', 'margin-right': '5px' }"
             v-model="dataSearch.address"
           />
           <a-input

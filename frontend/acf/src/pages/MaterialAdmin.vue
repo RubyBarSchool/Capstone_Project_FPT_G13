@@ -19,13 +19,13 @@
           <!-- menu trên -->
           <a-input
             placeholder="Mã vật liệu"
-            style="width: 150px"
+            :style="{ width: '150px', 'margin-right': '5px' }"
             v-model="dataSearch.codeMaterial"
             @pressEnter="submitSearch"
           />
           <a-input
             placeholder="Thông số"
-            style="width: 150px"
+            :style="{ width: '150px', 'margin-right': '5px' }"
             @pressEnter="submitSearch"
             v-model="dataSearch.frame"
           />
@@ -36,7 +36,7 @@
             :filter-option="false"
             @search="fetchGroupMaterial"
             @change="submitSearch"
-            style="width: 150px"
+            :style="{ width: '150px', 'margin-right': '5px' }"
           >
             <a-select-option
               v-for="(group, index) in dataGroupMaterials"
@@ -51,7 +51,7 @@
             mode="multiple"
             @change="submitSearch"
             v-model="dataSearch.listUnitId"
-            style="width: 150px"
+            :style="{ width: '150px', 'margin-right': '5px' }"
           >
             <a-select-option
               v-for="(unit, index) in dataUnits"

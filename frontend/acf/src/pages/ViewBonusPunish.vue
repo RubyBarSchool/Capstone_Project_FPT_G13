@@ -20,14 +20,14 @@
           <a-input
             v-model="dataSearch.title"
             placeholder="Tiêu đề"
-            style="width: 150px"
+            :style="{ width: '150px', 'margin-right': '5px' }"
           />
           Loại đơn:
           <a-select
             v-model="dataSearch.bonus"
             @change="submitSearch"
             placeholder="Loại đơn"
-            style="width: 150px"
+            :style="{ width: '150px', 'margin-right': '5px' }"
           >
             <a-select-option value=""> Tất cả </a-select-option>
             <a-select-option value="false"> Phạt </a-select-option>
@@ -38,7 +38,7 @@
             v-model="dataSearch.status"
             @change="submitSearch"
             placeholder="Trạng thái"
-            style="width: 150px"
+           :style="{ width: '150px', 'margin-right': '5px' }"
           >
             <a-select-option value=""> Tất cả </a-select-option>
             <a-select-option value="false"> Chờ duyệt </a-select-option>

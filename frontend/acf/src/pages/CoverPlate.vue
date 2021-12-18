@@ -19,13 +19,13 @@
           <!-- menu trên -->
           <a-input
             placeholder="Mã tấm phủ"
-            style="width: 150px"
+            :style="{ width: '150px', 'margin-right': '5px' }"
             @pressEnter="submitSearch"
             v-model="dataSearch.codeMaterial"
           />
           <a-input
             placeholder="Thông số"
-            style="width: 150px"
+            :style="{ width: '150px', 'margin-right': '5px' }"
             @pressEnter="submitSearch"
             v-model="dataSearch.frame"
           />
@@ -34,7 +34,7 @@
             mode="multiple"
             v-model="dataSearch.listGroupID"
             @change="submitSearch"
-            style="width: 150px"
+            :style="{ width: '150px', 'margin-right': '5px' }"
           >
             <a-select-option
               v-for="(cover, index) in listGroupCoverPlate"
@@ -49,7 +49,7 @@
             mode="multiple"
             v-model="dataSearch.listUnitId"
             @change="submitSearch"
-            style="width: 150px"
+            :style="{ width: '150px', 'margin-right': '5px' }"
           >
             <a-select-option
               v-for="(unit, index) in listUnits"
