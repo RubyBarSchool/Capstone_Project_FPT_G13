@@ -19,15 +19,15 @@
           <!-- menu trên -->
           <a-input
             placeholder="Tiêu đề"
-            style="width: 150px"
             v-model="dataSearch.title"
+            :style="{ width: '150px', 'margin-right': '5px' }"
           />
           Trạng thái:
           <a-select
             placeholder="Trạng thái"
             @change="search"
             v-model="dataSearch.status"
-            style="width: 150px"
+            :style="{ width: '150px', 'margin-right': '5px' }"
           >
             <a-select-option value=""> Tất cả </a-select-option>
             <a-select-option :value="false"> Nháp </a-select-option>

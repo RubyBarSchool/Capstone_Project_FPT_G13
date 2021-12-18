@@ -13,14 +13,14 @@
         <!-- menu -->
         <a-input
           placeholder="Họ và tên"
-          style="width: 150px"
+          :style="{ width: '150px', 'margin-right': '5px' }"
           v-model="dataSearch.name"
         />
         <a-select
           placeholder="Chức vụ"
           :filter-option="false"
           @search="fetchPosition"
-          style="width: 140px"
+          :style="{ width: '150px', 'margin-right': '5px' }"
           v-model="dataSearch.idPosition"
           show-search
         >

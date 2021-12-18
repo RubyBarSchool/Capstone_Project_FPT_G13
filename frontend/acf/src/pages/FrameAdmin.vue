@@ -19,7 +19,7 @@
           <!-- menu trên -->
           <a-input
             placeholder="Chiều dài"
-            style="width: 150px"
+            :style="{ width: '150px', 'margin-right': '5px' }"
             v-model="dataSearch.length"
           />
           <a-input

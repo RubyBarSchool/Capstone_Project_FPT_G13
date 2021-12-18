@@ -13,7 +13,7 @@
         <!-- menu -->
         <a-input
           placeholder="Họ và tên"
-          style="width: 150px"
+          :style="{ width: '150px', 'margin-right': '5px' }"
           v-model="dataSearch.name"
         />
         <a-select
@@ -21,7 +21,7 @@
           :filter-option="false"
           @change="search"
           @search="fetchPosition"
-          style="width: 140px"
+          :style="{ width: '150px', 'margin-right': '5px' }"
           v-model="dataSearch.idPosition"
         >
           <a-select-option
