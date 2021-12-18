@@ -16,8 +16,17 @@ class contactService {
     deleteContact(id) {
         return http.delete(`/admin/contact?id=${id}`);
     }
-    exportContact(id) {
-        return http.post(`/admin/contact/exportcontact?idContact=${id}`, { responseType: 'blob' });
+    exportContact(idContact) {
+        let data = {
+            id: idContact
+        };
+        return http.post(`/admin/contact/exportcontact`, data, { responseType: 'blob' });
+    }
+    templateContact() {
+        let data = {
+            id: 0
+        };
+        return http.post(`/admin/contact/templatecontact`, data, { responseType: 'blob' });
     }
 }
 

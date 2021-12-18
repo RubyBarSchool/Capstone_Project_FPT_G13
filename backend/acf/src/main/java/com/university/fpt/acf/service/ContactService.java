@@ -39,5 +39,5 @@ public interface ContactService {
     Boolean deleteContact(Long id);
 
     ByteArrayInputStream exportContact(Long id);
-
+    ByteArrayInputStream templateContact(Long id);
 }

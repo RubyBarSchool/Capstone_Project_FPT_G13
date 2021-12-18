@@ -33,6 +33,7 @@ import java.util.*;
 @Service
 public class ContactServiceImpl implements ContactService {
 
+    // export
     public static final int COLUMN_INDEX_STT = 0;
     public static final int COLUMN_INDEX_PRODUCT = 1;
     public static final int COLUMN_INDEX_COUNT_PRODUCT = 2;
@@ -48,7 +49,27 @@ public class ContactServiceImpl implements ContactService {
     public static final int COLUMN_INDEX_PRICE = 12;
     public static final int COLUMN_INDEX_MONEY = 13;
     public static final int COLUMN_INDEX_NOTE_PRODUCT = 14;
-
+    // template
+    public static final int COLUMN_INDEX_STT_TEMPLATE = 0;
+    public static final int COLUMN_INDEX_PRODUCT_TEMPLATE = 1;
+    public static final int COLUMN_INDEX_COUNT_PRODUCT_TEMPLATE = 2;
+    public static final int COLUMN_INDEX_LENGTH_PRODUCT_TEMPLATE = 3;
+    public static final int COLUMN_INDEX_WIDTH_PRODUCT_TEMPLATE = 4;
+    public static final int COLUMN_INDEX_HEIGHT_PRODUCT_TEMPLATE = 5;
+    public static final int COLUMN_INDEX_ID_MATERIAL_TEMPLATE = 6;
+    public static final int COLUMN_INDEX_MATERIAL_TEMPLATE = 7;
+    public static final int COLUMN_INDEX_LENGTH_MATERIAL_TEMPLATE = 8;
+    public static final int COLUMN_INDEX_WIDTH_MATERIAL_TEMPLATE = 9;
+    public static final int COLUMN_INDEX_HEIGHT_MATERIAL_TEMPLATE = 10;
+    public static final int COLUMN_INDEX_ID_UNIT_TEMPLATE = 11;
+    public static final int COLUMN_INDEX_NAME_UNIT_TEMPLATE = 12;
+    public static final int COLUMN_INDEX_ID_COMPANY_TEMPLATE = 13;
+    public static final int COLUMN_INDEX_NAME_COMPANY_TEMPLATE = 14;
+    public static final int COLUMN_INDEX_COUNT_MATERIAL_TEMPLATE = 15;
+    public static final int COLUMN_INDEX_NOTE_MATERIAL_TEMPLATE = 16;
+    public static final int COLUMN_INDEX_PRICE_TEMPLATE = 17;
+    public static final int COLUMN_INDEX_MONEY_TEMPLATE = 18;
+    public static final int COLUMN_INDEX_NOTE_PRODUCT_TEMPLATE= 19;
 
     @Autowired
     private PriceMaterialRepository priceMaterialRepository;
@@ -465,35 +486,35 @@ public class ContactServiceImpl implements ContactService {
             Workbook xssfWorkbook = new XSSFWorkbook();
             Sheet sheet = xssfWorkbook.createSheet("Hợp đồng");
             int rowIndex = 0;
-            this.writeHeader(sheet,rowIndex);
+            this.writeHeader(sheet, rowIndex);
             //Write data
             rowIndex++;
             List<ExportContactVO> exportContactVOS = contactRepository.exportContactByID(id);
 
             int indexRowStartMerge = 1;
-            for(int i = 0 ; i < exportContactVOS.size() ; i++){
+            for (int i = 0; i < exportContactVOS.size(); i++) {
                 // Write data on row
                 writeBook(exportContactVOS.get(i), sheet, rowIndex);
-                if(i!=0){
-                    if((!exportContactVOS.get(i).getIdProduct().equals(exportContactVOS.get(i-1).getIdProduct()))
-                            ||(i==exportContactVOS.size()-1 && exportContactVOS.get(i).getIdProduct().equals(exportContactVOS.get(i-1).getIdProduct()))){
-                        int indexLastRow = (i==exportContactVOS.size()-1)? rowIndex : rowIndex-1;
-                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,indexLastRow,0,0));
-                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,indexLastRow,1,1));
-                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,indexLastRow,2,2));
-                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,indexLastRow,3,3));
-                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,indexLastRow,4,4));
-                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,indexLastRow,5,5));
-                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge,indexLastRow,14,14));
+                if (i != 0) {
+                    if ((!exportContactVOS.get(i).getIdProduct().equals(exportContactVOS.get(i - 1).getIdProduct()))
+                            || (i == exportContactVOS.size() - 1 && exportContactVOS.get(i).getIdProduct().equals(exportContactVOS.get(i - 1).getIdProduct()))) {
+                        int indexLastRow = (i == exportContactVOS.size() - 1) ? rowIndex : rowIndex - 1;
+                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge, indexLastRow, 0, 0));
+                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge, indexLastRow, 1, 1));
+                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge, indexLastRow, 2, 2));
+                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge, indexLastRow, 3, 3));
+                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge, indexLastRow, 4, 4));
+                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge, indexLastRow, 5, 5));
+                        sheet.addMergedRegionUnsafe(new CellRangeAddress(indexRowStartMerge, indexLastRow, 14, 14));
                         indexRowStartMerge = rowIndex;
                     }
                 }
                 rowIndex++;
             }
 
-            if(rowIndex!=1){
+            if (rowIndex != 1) {
                 // Write footer
-                writeFooter(sheet, rowIndex,"Demo");
+                writeFooter(sheet, rowIndex, "Demo");
             }
 
             ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -502,6 +523,176 @@ public class ContactServiceImpl implements ContactService {
         } catch (Exception e) {
             throw new RuntimeException("Không xuất được file hợp đồng");
         }
+    }
+
+    @Override
+    public ByteArrayInputStream templateContact(Long id) {
+        try {
+            Workbook xssfWorkbook = new XSSFWorkbook();
+            Sheet sheet = xssfWorkbook.createSheet("Hợp đồng");
+            int rowIndex = 0;
+            this.writeHeaderTemplate(sheet, rowIndex);
+            //Write data
+            rowIndex++;
+            writeBookTemplate(sheet, rowIndex);
+            rowIndex++;
+            // write footer
+            writeFooterTemplate(sheet, rowIndex, "(Ghi chú hợp đồng)");
+
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            xssfWorkbook.write(out);
+            return new ByteArrayInputStream(out.toByteArray());
+        } catch (Exception e) {
+            throw new RuntimeException("Không xuất được file hợp đồng");
+        }
+    }
+    // Create CellStyle for header
+    private static CellStyle createStyleForHeaderTemplate(Sheet sheet) {
+        // Create font
+        Font font = sheet.getWorkbook().createFont();
+        font.setFontName("Times New Roman");
+        font.setBold(true);
+        font.setFontHeightInPoints((short) 16); // font size
+        font.setColor(IndexedColors.WHITE.getIndex()); // text color
+
+        // Create CellStyle
+        CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+        cellStyle.setFont(font);
+        cellStyle.setFillForegroundColor(IndexedColors.BLUE.getIndex());
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        cellStyle.setBorderBottom(BorderStyle.THIN);
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        return cellStyle;
+    }
+    // Write header with format
+    private void writeHeaderTemplate(Sheet sheet, int rowIndex) {
+        // create CellStyle
+        CellStyle cellStyle = createStyleForHeaderTemplate(sheet);
+        // Create row
+        Row row = sheet.createRow(rowIndex);
+        // Create cells
+        Cell cell = row.createCell(COLUMN_INDEX_STT_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_STT_TEMPLATE, 2000);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("STT");
+
+        cell = row.createCell(COLUMN_INDEX_PRODUCT_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_PRODUCT_TEMPLATE, 5000);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Hạng mục");
+
+        cell = row.createCell(COLUMN_INDEX_COUNT_PRODUCT_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_COUNT_PRODUCT_TEMPLATE, 3000);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("SLHM");
+
+        cell = row.createCell(COLUMN_INDEX_LENGTH_PRODUCT_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_LENGTH_PRODUCT_TEMPLATE, 4000);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Dài(HM)");
+
+        cell = row.createCell(COLUMN_INDEX_WIDTH_PRODUCT_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_WIDTH_PRODUCT_TEMPLATE, 4000);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Rộng(HM)");
+
+        cell = row.createCell(COLUMN_INDEX_HEIGHT_PRODUCT_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_HEIGHT_PRODUCT_TEMPLATE, 4000);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Cao(HM)");
+
+        cell = row.createCell(COLUMN_INDEX_ID_MATERIAL_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_ID_MATERIAL_TEMPLATE, 5000);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Mã chất liệu");
+
+        cell = row.createCell(COLUMN_INDEX_MATERIAL_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_MATERIAL_TEMPLATE, 5000);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Tên chất liệu");
+
+
+        cell = row.createCell(COLUMN_INDEX_LENGTH_MATERIAL_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_LENGTH_MATERIAL_TEMPLATE, 4000);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Dài(CL)");
+
+        cell = row.createCell(COLUMN_INDEX_WIDTH_MATERIAL_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_WIDTH_MATERIAL_TEMPLATE, 4000);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Rộng(CL)");
+
+        cell = row.createCell(COLUMN_INDEX_HEIGHT_MATERIAL_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_HEIGHT_MATERIAL_TEMPLATE, 4000);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Cao(CL)");
+
+        cell = row.createCell(COLUMN_INDEX_ID_UNIT_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_ID_UNIT_TEMPLATE, 4000);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Mã Đơn vị");
+
+        cell = row.createCell(COLUMN_INDEX_NAME_UNIT_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_NAME_UNIT_TEMPLATE, 3500);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Đơn vị");
+
+        cell = row.createCell(COLUMN_INDEX_ID_COMPANY_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_ID_COMPANY_TEMPLATE, 4500);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Mã Công ty");
+
+        cell = row.createCell(COLUMN_INDEX_NAME_COMPANY_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_NAME_COMPANY_TEMPLATE, 4500);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Công ty");
+
+        cell = row.createCell(COLUMN_INDEX_COUNT_MATERIAL_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_COUNT_MATERIAL_TEMPLATE, 3000);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("SLCL");
+
+        cell = row.createCell(COLUMN_INDEX_NOTE_MATERIAL_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_NOTE_MATERIAL_TEMPLATE, 7000);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Ghi chú chất liệu");
+
+
+        cell = row.createCell(COLUMN_INDEX_PRICE_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_PRICE_TEMPLATE, 5000);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Đơn giá");
+
+        cell = row.createCell(COLUMN_INDEX_MONEY_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_MONEY_TEMPLATE, 5000);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Thành tiền");
+
+        cell = row.createCell(COLUMN_INDEX_NOTE_PRODUCT_TEMPLATE);
+        sheet.setColumnWidth(COLUMN_INDEX_NOTE_PRODUCT_TEMPLATE, 10000);
+        cell.setCellStyle(cellStyle);
+        cell.setCellValue("Ghi chú");
+    }
+
+    // Write footer
+    private void writeFooterTemplate(Sheet sheet, int rowIndex, String note) {
+        // Create row
+        Row row = sheet.createRow(rowIndex);
+
+        Cell cell = row.createCell(0, CellType.STRING);
+        cell.setCellStyle(createStyleForBodyLeftTemplate(createStyleForFooterTemplate(sheet)));
+        cell.setCellValue("Ghi Chú: " + note);
+        sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 0, 9));
+
+        Cell cell1 = row.createCell(16, CellType.STRING);
+        cell1.setCellStyle(createStyleForBodyLeftTemplate(createStyleForFooterTemplate(sheet)));
+        cell1.setCellValue("TỔNG ( Chưa bao gồm VAT 10%): ");
+        sheet.addMergedRegion(new CellRangeAddress(rowIndex, rowIndex, 16, 17));
+
+        Cell cell2 = row.createCell(18, CellType.FORMULA);
+        cell2.setCellStyle(createStyleForBodyRightTemplate(createStyleForFooterTemplate(sheet)));
+        cell2.setCellFormula("SUM(S1:S" + rowIndex + ")");
     }
 
     // Create CellStyle for header
@@ -523,6 +714,21 @@ public class ContactServiceImpl implements ContactService {
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         return cellStyle;
     }
+
+    // Create CellStyle for header
+    private static CellStyle createStyleForBodyTemplate(Sheet sheet) {
+        // Create font
+        Font font = sheet.getWorkbook().createFont();
+        font.setFontName("Times New Roman");
+        font.setFontHeightInPoints((short) 12); // font size
+        font.setColor(IndexedColors.BLACK.getIndex()); // text color
+
+        // Create CellStyle
+        CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+        cellStyle.setFont(font);
+        return cellStyle;
+    }
+
 
     // Create CellStyle for header
     private static CellStyle createStyleForBody(Sheet sheet) {
@@ -550,6 +756,42 @@ public class ContactServiceImpl implements ContactService {
         // Create CellStyle
         CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
         cellStyle.setFont(font);
+        return cellStyle;
+    }
+
+    // Create CellStyle for header
+    private static CellStyle createStyleForFooterTemplate(Sheet sheet) {
+        // Create font
+        Font font = sheet.getWorkbook().createFont();
+        font.setFontName("Times New Roman");
+        font.setBold(true);
+        font.setFontHeightInPoints((short) 12); // font size
+        font.setColor(IndexedColors.BLACK.getIndex()); // text color
+
+        // Create CellStyle
+        CellStyle cellStyle = sheet.getWorkbook().createCellStyle();
+        cellStyle.setFont(font);
+        return cellStyle;
+    }
+
+    private static CellStyle createStyleForBodyCenterTemplate(CellStyle cellStyle) {
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        cellStyle.setWrapText(true);
+        return cellStyle;
+    }
+
+    private static CellStyle createStyleForBodyLeftTemplate(CellStyle cellStyle) {
+        cellStyle.setWrapText(true);
+        cellStyle.setAlignment(HorizontalAlignment.LEFT);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+        return cellStyle;
+    }
+
+    private static CellStyle createStyleForBodyRightTemplate(CellStyle cellStyle) {
+        cellStyle.setWrapText(true);
+        cellStyle.setAlignment(HorizontalAlignment.RIGHT);
+        cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         return cellStyle;
     }
 
@@ -583,79 +825,168 @@ public class ContactServiceImpl implements ContactService {
         Row row = sheet.createRow(rowIndex);
         // Create cells
         Cell cell = row.createCell(COLUMN_INDEX_STT);
-        sheet.setColumnWidth(COLUMN_INDEX_STT,2000);
+        sheet.setColumnWidth(COLUMN_INDEX_STT, 2000);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("STT");
 
         cell = row.createCell(COLUMN_INDEX_PRODUCT);
-        sheet.setColumnWidth(COLUMN_INDEX_PRODUCT,5000);
+        sheet.setColumnWidth(COLUMN_INDEX_PRODUCT, 5000);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("Hạng mục");
 
         cell = row.createCell(COLUMN_INDEX_COUNT_PRODUCT);
-        sheet.setColumnWidth(COLUMN_INDEX_COUNT_PRODUCT,3000);
+        sheet.setColumnWidth(COLUMN_INDEX_COUNT_PRODUCT, 3000);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("SLHM");
 
         cell = row.createCell(COLUMN_INDEX_LENGTH_PRODUCT);
-        sheet.setColumnWidth(COLUMN_INDEX_LENGTH_PRODUCT,2000);
+        sheet.setColumnWidth(COLUMN_INDEX_LENGTH_PRODUCT, 2000);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("Dài");
 
         cell = row.createCell(COLUMN_INDEX_WIDTH_PRODUCT);
-        sheet.setColumnWidth(COLUMN_INDEX_WIDTH_PRODUCT,2000);
+        sheet.setColumnWidth(COLUMN_INDEX_WIDTH_PRODUCT, 2000);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("Rộng");
 
         cell = row.createCell(COLUMN_INDEX_HEIGHT_PRODUCT);
-        sheet.setColumnWidth(COLUMN_INDEX_HEIGHT_PRODUCT,2000);
+        sheet.setColumnWidth(COLUMN_INDEX_HEIGHT_PRODUCT, 2000);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("Cao");
 
         cell = row.createCell(COLUMN_INDEX_MATERIAL);
-        sheet.setColumnWidth(COLUMN_INDEX_MATERIAL,5000);
+        sheet.setColumnWidth(COLUMN_INDEX_MATERIAL, 5000);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("Tên chất liệu");
 
         cell = row.createCell(COLUMN_INDEX_FRAME);
-        sheet.setColumnWidth(COLUMN_INDEX_FRAME,5000);
+        sheet.setColumnWidth(COLUMN_INDEX_FRAME, 5000);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("Thông số");
 
         cell = row.createCell(COLUMN_INDEX_UNIT);
-        sheet.setColumnWidth(COLUMN_INDEX_UNIT,4000);
+        sheet.setColumnWidth(COLUMN_INDEX_UNIT, 4000);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("Đơn vị");
 
         cell = row.createCell(COLUMN_INDEX_COUNT_MATERIAL);
-        sheet.setColumnWidth(COLUMN_INDEX_COUNT_MATERIAL,3000);
+        sheet.setColumnWidth(COLUMN_INDEX_COUNT_MATERIAL, 3000);
         cell.setCellStyle(cellStyle);
-        cell.setCellValue("SLVL");
+        cell.setCellValue("SLCL");
 
         cell = row.createCell(COLUMN_INDEX_NOTE_MATERIAL);
-        sheet.setColumnWidth(COLUMN_INDEX_NOTE_MATERIAL,5000);
+        sheet.setColumnWidth(COLUMN_INDEX_NOTE_MATERIAL, 5000);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("Ghi chú");
 
         cell = row.createCell(COLUMN_INDEX_COMPANY);
-        sheet.setColumnWidth(COLUMN_INDEX_COMPANY,4500);
+        sheet.setColumnWidth(COLUMN_INDEX_COMPANY, 4500);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("Công ty");
 
         cell = row.createCell(COLUMN_INDEX_PRICE);
-        sheet.setColumnWidth(COLUMN_INDEX_PRICE,5000);
+        sheet.setColumnWidth(COLUMN_INDEX_PRICE, 5000);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("Đơn giá");
 
         cell = row.createCell(COLUMN_INDEX_MONEY);
-        sheet.setColumnWidth(COLUMN_INDEX_MONEY,5000);
+        sheet.setColumnWidth(COLUMN_INDEX_MONEY, 5000);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("Thành tiền");
 
         cell = row.createCell(COLUMN_INDEX_NOTE_PRODUCT);
-        sheet.setColumnWidth(COLUMN_INDEX_NOTE_PRODUCT,10000);
+        sheet.setColumnWidth(COLUMN_INDEX_NOTE_PRODUCT, 10000);
         cell.setCellStyle(cellStyle);
         cell.setCellValue("Ghi chú");
+    }
+
+    // Write data
+    private static void writeBookTemplate(Sheet sheet, int rowIndex) {
+
+        // Create row
+        Row row = sheet.createRow(rowIndex);
+
+        Cell cell = row.createCell(COLUMN_INDEX_STT_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyCenterTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellValue(1);
+
+        cell = row.createCell(COLUMN_INDEX_PRODUCT_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyCenterTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellValue("Tủ gỗ");
+
+        cell = row.createCell(COLUMN_INDEX_COUNT_PRODUCT_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyCenterTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellValue(1);
+
+        cell = row.createCell(COLUMN_INDEX_LENGTH_PRODUCT_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyCenterTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellValue(4880);
+
+        cell = row.createCell(COLUMN_INDEX_WIDTH_PRODUCT_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyCenterTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellValue(2200);
+
+        cell = row.createCell(COLUMN_INDEX_HEIGHT_PRODUCT_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyCenterTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellValue(1.0);
+
+        cell = row.createCell(COLUMN_INDEX_ID_MATERIAL_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyCenterTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellValue(1);
+
+        cell = row.createCell(COLUMN_INDEX_MATERIAL_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyLeftTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellValue("HDF");
+
+        cell = row.createCell(COLUMN_INDEX_LENGTH_MATERIAL_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyCenterTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellValue(4880);
+
+        cell = row.createCell(COLUMN_INDEX_WIDTH_MATERIAL_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyCenterTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellValue(2200);
+
+        cell = row.createCell(COLUMN_INDEX_HEIGHT_MATERIAL_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyCenterTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellValue(1.0);
+
+
+        cell = row.createCell(COLUMN_INDEX_ID_UNIT_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyCenterTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellValue(1);
+
+        cell = row.createCell(COLUMN_INDEX_NAME_UNIT_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyCenterTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellValue("mm");
+
+        cell = row.createCell(COLUMN_INDEX_ID_COMPANY_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyCenterTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellValue(1);
+
+        cell = row.createCell(COLUMN_INDEX_NAME_COMPANY_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyCenterTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellValue("An Cường");
+
+        cell = row.createCell(COLUMN_INDEX_COUNT_MATERIAL_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyCenterTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellValue(1);
+
+
+        cell = row.createCell(COLUMN_INDEX_NOTE_MATERIAL_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyLeftTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellValue("Phủ chống ẩm acrylic");
+
+        cell = row.createCell(COLUMN_INDEX_PRICE_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyRightTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellValue(300000);
+
+        cell = row.createCell(COLUMN_INDEX_MONEY_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyRightTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellFormula("P" + (rowIndex + 1) + "*R" + (rowIndex + 1) + "");
+
+        cell = row.createCell(COLUMN_INDEX_NOTE_PRODUCT_TEMPLATE);
+        cell.setCellStyle(createStyleForBodyLeftTemplate(createStyleForBodyTemplate(sheet)));
+        cell.setCellValue("Thiết kế ôm tường, che chân tủ");
     }
 
     // Write data
@@ -695,7 +1026,7 @@ public class ContactServiceImpl implements ContactService {
 
         cell = row.createCell(COLUMN_INDEX_FRAME);
         cell.setCellStyle(createStyleForBodyCenter(createStyleForBody(sheet)));
-        cell.setCellValue(""+exportContactVO.getFrameLength()+"x"+exportContactVO.getFrameWidth()+"x"+exportContactVO.getFrameHeight());
+        cell.setCellValue("" + exportContactVO.getFrameLength() + "x" + exportContactVO.getFrameWidth() + "x" + exportContactVO.getFrameHeight());
 
         cell = row.createCell(COLUMN_INDEX_UNIT);
         cell.setCellStyle(createStyleForBodyCenter(createStyleForBody(sheet)));
@@ -719,20 +1050,11 @@ public class ContactServiceImpl implements ContactService {
 
         cell = row.createCell(COLUMN_INDEX_MONEY);
         cell.setCellStyle(createStyleForBodyRight(createStyleForBody(sheet)));
-        cell.setCellFormula("J"+(rowIndex+1)+"*M" + (rowIndex+1) +"");
+        cell.setCellFormula("J" + (rowIndex + 1) + "*M" + (rowIndex + 1) + "");
 
         cell = row.createCell(COLUMN_INDEX_NOTE_PRODUCT);
         cell.setCellStyle(createStyleForBodyLeft(createStyleForBody(sheet)));
         cell.setCellValue(exportContactVO.getNoteProduct());
-
-        // Create cell formula
-        // totalMoney = price * quantity
-//        cell = row.createCell(COLUMN_INDEX_TOTAL, CellType.FORMULA);
-//        cell.setCellStyle(cellStyleFormatNumber);
-//        int currentRow = row.getRowNum() + 1;
-//        String columnPrice = CellReference.convertNumToColString(COLUMN_INDEX_PRICE);
-//        String columnQuantity = CellReference.convertNumToColString(COLUMN_INDEX_QUANTITY);
-//        cell.setCellFormula(columnPrice + currentRow + "*" + columnQuantity + currentRow);
     }
 
     // Write footer

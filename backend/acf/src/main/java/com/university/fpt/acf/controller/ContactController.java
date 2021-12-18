@@ -13,6 +13,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -183,9 +184,9 @@ public class ContactController {
     }
 
     @PostMapping("/exportcontact")
-    public ResponseEntity<Resource> exportContact(@RequestParam("idContact") Long idContact) {
+    public ResponseEntity<Resource> exportContact(@RequestBody ExportContactForm exportContactForm) {
         try {
-            ByteArrayInputStream file = contactService.exportContact(idContact);
+            ByteArrayInputStream file = contactService.exportContact(exportContactForm.getId());
             String filename = "tutorials.xlsx";
             InputStreamResource filex = new InputStreamResource(file);
 
@@ -199,8 +200,25 @@ public class ContactController {
                     .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
                     .body(null);
         }
+    }
 
+    @PostMapping("/templatecontact")
+    public ResponseEntity<Resource> templateContact(@RequestBody ExportContactForm exportContactForm) {
+        try {
+            ByteArrayInputStream file = contactService.templateContact(exportContactForm.getId());
+            String filename = "tutorials.xlsx";
+            InputStreamResource filex = new InputStreamResource(file);
 
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + filename)
+                    .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                    .body(filex);
+        } catch (Exception exception) {
+            return ResponseEntity.ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "null" + "")
+                    .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                    .body(null);
+        }
     }
 
 

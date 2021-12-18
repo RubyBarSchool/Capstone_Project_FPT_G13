@@ -61,6 +61,18 @@
             />
             Thêm
           </a-button>
+
+          <a-button
+            type="primary"
+            @click="downloadTemplate"
+            :style="{ 'margin-left': '5px' }"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'download']"
+              :style="{ 'margin-right': '5px' }"
+            />
+            Mẫu hợp đồng
+          </a-button>
           <!-- menu trên -->
 
           <!-- table content -->
@@ -501,6 +513,27 @@ export default {
     },
   },
   methods: {
+    downloadTemplate() {
+      contactService
+        .templateContact()
+        .then((response) => {
+          let url = window.URL.createObjectURL(
+            new Blob([response.data], {
+              type: "application/vnd.ms-excel",
+            })
+          );
+          let link = document.createElement("a");
+          link.href = url;
+          link.setAttribute("download", "Mẫu hợp đồng.xlsx");
+          document.body.appendChild(link);
+          link.click();
+          URL.revokeObjectURL(link.href);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
+
     submitExport(id) {
       contactService
         .exportContact(id)
@@ -510,9 +543,9 @@ export default {
               type: "application/vnd.ms-excel",
             })
           );
-          let  link = document.createElement("a");
+          let link = document.createElement("a");
           link.href = url;
-          link.setAttribute("download", "contact.xlsx");
+          link.setAttribute("download", "Hợp đồng.xlsx");
           document.body.appendChild(link);
           link.click();
           URL.revokeObjectURL(link.href);
