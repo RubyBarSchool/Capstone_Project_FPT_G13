@@ -344,7 +344,7 @@ export default {
           dataIndex: "action",
           key: "action",
           fixed: "right",
-          width: 150,
+          width: 180,
           scopedSlots: { customRender: "action" },
         },
       ],

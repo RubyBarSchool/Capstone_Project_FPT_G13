@@ -174,6 +174,8 @@
                       v-if="record.status == '-1'"
                       title="Bạn có chắc chắn muốn xóa không?"
                       @confirm="deleteProductionOrder(record)"
+                      ok-text="Đồng ý"
+                      cancel-text="Hủy"
                     >
                       <a-button id="delete">
                         <font-awesome-icon :icon="['fas', 'trash']" />
@@ -390,109 +392,137 @@
                   Lưu
                 </a-button>
               </template>
+
               <a-form-model>
-                <span style="color: red">*</span>Lệnh sản xuất:
-                <a-form-model-item>
-                  <a-input
-                    v-model="dataSubmit.name"
-                    @change="changeNameProductionOrder"
-                    style="width: 100%"
-                    placeholder="Nhập tên lệnh sản xuất"
-                  />
-                  <div style="color: red" v-if="checkNameProductionOrder.show">
-                    {{ checkNameProductionOrder.message }}
-                  </div>
-                </a-form-model-item>
-
-                <span style="color: red">*</span>Tên hợp đồng:
-                <a-form-model-item>
-                  <a-select
-                    v-model="nameConatctEdit"
-                    disabled
-                    @change="changeContact"
-                    placeholder="Hợp đồng"
-                    style="width: 100%"
-                  >
-                    <a-select-option
-                      v-for="(contact, index) in dataContactInForm"
-                      :value="contact.idContact"
-                      :key="index"
+                <a-row type="flex">
+                  <a-col flex="150px">
+                    <span style="color: red">*</span>Lệnh sản xuất:
+                  </a-col>
+                  <a-col flex="auto">
+                    <a-input
+                      v-model="dataSubmit.name"
+                      @change="changeNameProductionOrder"
+                      style="width: 100%"
+                      placeholder="Nhập tên lệnh sản xuất"
+                    />
+                    <div
+                      style="color: red"
+                      v-if="checkNameProductionOrder.show"
                     >
-                      {{ contact.name }}
-                    </a-select-option>
-                  </a-select>
-                  <div style="color: red" v-if="checkNameContact.show">
-                    {{ checkNameContact.message }}
-                  </div>
-                </a-form-model-item>
-
-                <span style="color: red">*</span>Tên sản phẩm:
-                <a-form-model-item>
-                  <a-select
-                    @change="changeNameProduct"
-                    v-model="nameProductEdit"
-                    disabled
-                    placeholder="Hợp đồng"
-                    style="width: 100%"
-                  >
-                    <a-select-option
-                      v-for="(contact, index) in dataProductIncontact"
-                      :value="contact.id"
-                      :key="index"
+                      {{ checkNameProductionOrder.message }}
+                    </div>
+                  </a-col>
+                </a-row>
+                <br />
+                <a-row type="flex">
+                  <a-col flex="150px">
+                    <span style="color: red">*</span>Tên hợp đồng:
+                  </a-col>
+                  <a-col flex="auto">
+                    <a-select
+                      v-model="nameConatctEdit"
+                      disabled
+                      @change="changeContact"
+                      placeholder="Hợp đồng"
+                      style="width: 100%"
                     >
-                      {{ contact.name }}
-                    </a-select-option>
-                  </a-select>
-                  <div style="color: red" v-if="checkNameProduct.show">
-                    {{ checkNameProduct.message }}
-                  </div>
-                </a-form-model-item>
-
-                <span style="color: red">*</span>Ngày bắt đầu:
-                <a-form-model-item>
-                  <a-date-picker
-                    :disabled="disabledDate"
-                    style="width: 100%"
-                    @change="changeDateStart"
-                    :disabled-date="disableDateStart"
-                    v-model="dataSubmit.dateStart"
-                    placeholder="Ngày bắt đầu"
-                    format="DD/MM/YYYY"
-                  />
-                  <div style="color: red" v-if="checkDateStart.show">
-                    {{ checkDateStart.message }}
-                  </div>
-                </a-form-model-item>
-
-                <span style="color: red">*</span>Ngày hoàn thành:
-                <a-form-model-item>
-                  <a-date-picker
-                    :disabled="disabledDate"
-                    @change="changeDateEnd"
-                    style="width: 100%"
-                    :disabled-date="disableDateEnd"
-                    v-model="dataSubmit.dateEnd"
-                    placeholder="Ngày hoàn thành"
-                    format="DD/MM/YYYY"
-                  />
-                  <div style="color: red" v-if="checkDateEnd.show">
-                    {{ checkDateEnd.message }}
-                  </div>
-                </a-form-model-item>
-
-                <span style="color: red">*</span>Xem công việc:
-                <a-form-model-item>
-                  <a-button
-                    :disabled="disabledDate"
-                    type="primary"
-                    @click="showWorkEmployeeEdit"
-                  >
-                    Chi tiết công việc
-                  </a-button>
-                  <div style="color: red" v-if="checkEmployees.show">
-                    {{ checkEmployees.message }}
-                  </div>
-                </a-form-model-item>
+                      <a-select-option
+                        v-for="(contact, index) in dataContactInForm"
+                        :value="contact.idContact"
+                        :key="index"
+                      >
+                        {{ contact.name }}
+                      </a-select-option>
+                    </a-select>
+                    <div style="color: red" v-if="checkNameContact.show">
+                      {{ checkNameContact.message }}
+                    </div>
+                  </a-col>
+                </a-row>
+                <br />
+                <a-row type="flex">
+                  <a-col flex="150px">
+                    <span style="color: red">*</span>Tên sản phẩm:
+                  </a-col>
+                  <a-col flex="auto">
+                    <a-select
+                      @change="changeNameProduct"
+                      v-model="nameProductEdit"
+                      disabled
+                      placeholder="Hợp đồng"
+                      style="width: 100%"
+                    >
+                      <a-select-option
+                        v-for="(contact, index) in dataProductIncontact"
+                        :value="contact.id"
+                        :key="index"
+                      >
+                        {{ contact.name }}
+                      </a-select-option>
+                    </a-select>
+                    <div style="color: red" v-if="checkNameProduct.show">
+                      {{ checkNameProduct.message }}
+                    </div>
+                  </a-col>
+                </a-row>
+                <br />
+                <a-row type="flex">
+                  <a-col flex="150px">
+                    <span style="color: red">*</span>Ngày bắt đầu:
+                  </a-col>
+                  <a-col flex="auto">
+                    <a-date-picker
+                      :disabled="disabledDate"
+                      style="width: 100%"
+                      @change="changeDateStart"
+                      :disabled-date="disableDateStart"
+                      v-model="dataSubmit.dateStart"
+                      placeholder="Ngày bắt đầu"
+                      format="DD/MM/YYYY"
+                    />
+                    <div style="color: red" v-if="checkDateStart.show">
+                      {{ checkDateStart.message }}
+                    </div>
+                  </a-col>
+                </a-row>
+                <br />
+                <a-row type="flex">
+                  <a-col flex="150px">
+                    <span style="color: red">*</span>Ngày hoàn thành:
+                  </a-col>
+                  <a-col flex="auto">
+                    <a-date-picker
+                      :disabled="disabledDate"
+                      @change="changeDateEnd"
+                      style="width: 100%"
+                      :disabled-date="disableDateEnd"
+                      v-model="dataSubmit.dateEnd"
+                      placeholder="Ngày hoàn thành"
+                      format="DD/MM/YYYY"
+                    />
+                    <div style="color: red" v-if="checkDateEnd.show">
+                      {{ checkDateEnd.message }}
+                    </div>
+                  </a-col>
+                </a-row>
+                <br />
+                <a-row type="flex">
+                  <a-col flex="150px">
+                    <span style="color: red">*</span>Xem công việc:
+                  </a-col>
+                  <a-col flex="auto">
+                    <a-button
+                      :disabled="disabledDate"
+                      type="primary"
+                      @click="showWorkEmployeeEdit"
+                    >
+                      Chi tiết công việc
+                    </a-button>
+                    <div style="color: red" v-if="checkEmployees.show">
+                      {{ checkEmployees.message }}
+                    </div>
+                  </a-col>
+                </a-row>
               </a-form-model>
             </a-modal>
 
@@ -687,7 +717,7 @@ export default {
           title: "",
           dataIndex: "action",
           key: "action",
-          width: 150,
+          width: 180,
           fixed: "right",
           scopedSlots: { customRender: "action" },
         },
@@ -1020,8 +1050,7 @@ export default {
       } else {
         check = false;
         this.checkEmployees.show = true;
-        this.checkEmployees.message =
-          "Bạn phải chọn nhân viên thực hiện";
+        this.checkEmployees.message = "Bạn phải chọn nhân viên thực hiện";
       }
       if (check) {
         this.submitAddProductionOrder();

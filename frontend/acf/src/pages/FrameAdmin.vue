@@ -69,6 +69,8 @@
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
                       @confirm="deleteFrame(record.id)"
+                      ok-text="Đồng ý"
+                      cancel-text="Hủy"
                     >
                       <a-button id="delete">
                         <font-awesome-icon :icon="['fas', 'trash']" />

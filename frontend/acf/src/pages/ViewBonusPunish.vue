@@ -231,7 +231,7 @@ export default {
           scopedSlots: { customRender: "status" },
         },
         {
-          title: "Hành động",
+          title: "",
           dataIndex: "action",
           key: "action",
           fixed: "right",

@@ -162,7 +162,7 @@
                   v-if="record.statusDone == -2"
                   title="Bạn có chắc chắn muốn xóa không?"
                   ok-text="Đồng ý"
-                  cancel-text="Không đồng ý"
+                  cancel-text="Hủy"
                   @confirm="deleteContact(record.id)"
                 >
                   <a-button id="delete">
@@ -332,6 +332,7 @@
                   </div>
                 </a-col>
               </a-row>
+              <br />
               <a-row type="flex">
                 <a-col flex="150px">
                   <span style="color: red">*</span>Khách hàng:
@@ -355,6 +356,7 @@
                   </div></a-col
                 >
               </a-row>
+              <br />
               <a-row type="flex">
                 <a-col flex="150px"
                   ><span style="color: red">*</span>Hạn hoàn thành:

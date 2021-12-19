@@ -513,11 +513,11 @@ export default {
           scopedSlots: { customRender: "status" },
         },
         {
-          title: "Hành động",
+          title: "",
           dataIndex: "action",
           key: "action",
           fixed: "right",
-          width: 150,
+          width: 180,
           scopedSlots: { customRender: "action" },
         },
       ],

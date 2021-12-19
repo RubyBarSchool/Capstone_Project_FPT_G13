@@ -142,6 +142,8 @@
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
                       @confirm="deleteAdvanceSalary(record.id)"
+                      ok-text="Đồng ý"
+                      cancel-text="Hủy"
                     >
                       <a-button id="delete">
                         <font-awesome-icon :icon="['fas', 'trash']" />
@@ -493,7 +495,7 @@ export default {
           dataIndex: "action",
           key: "action",
           fixed: "right",
-          width: 150,
+          width: 180,
           scopedSlots: { customRender: "action" },
         },
       ],

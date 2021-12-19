@@ -1,77 +1,79 @@
 <template>
   <div class="chieucao">
-      <a-back-top :style="{ width: '5vh', height: '15vh' }" />
-      <!-- menu trên -->
-      <a-button
-        type="primary"
-        @click="showModalAdd"
-        :style="{ 'margin-left': '5px' }"
+    <a-back-top :style="{ width: '5vh', height: '15vh' }" />
+    <!-- menu trên -->
+    <a-button
+      type="primary"
+      @click="showModalAdd"
+      :style="{ 'margin-left': '5px' }"
+    >
+      <font-awesome-icon
+        :icon="['fas', 'plus-square']"
+        :style="{ 'margin-right': '5px' }"
+      />
+      Thêm
+    </a-button>
+    <!-- menu trên -->
+    <!-- table content -->
+    <div :style="{ 'padding-top': '10px' }">
+      <a-table
+        :columns="columns"
+        :data-source="dataSourceTable"
+        :rowKey="
+          (record, index) => {
+            return index;
+          }
+        "
       >
-        <font-awesome-icon
-          :icon="['fas', 'plus-square']"
-          :style="{ 'margin-right': '5px' }"
-        />
-        Thêm
-      </a-button>
-      <!-- menu trên -->
-      <!-- table content -->
-      <div :style="{ 'padding-top': '10px' }">
-        <a-table
-          :columns="columns"
-          :data-source="dataSourceTable"
-          :rowKey="
-            (record, index) => {
-              return index;
-            }
-          "
-        >
-          <template slot="frameHeight" slot-scope="text, record">
-            {{ record.frameHeight }}
-          </template>
-          <template slot="action" slot-scope="text, record">
-            <a-popconfirm
-              v-if="dataSourceTable.length"
-              title="Bạn có chắc chắn muốn xóa không?"
-              @confirm="deleteFrameHeight(record.id)"
-            >
-              <a-button id="delete">
-                <font-awesome-icon :icon="['fas', 'trash']" />
-              </a-button>
-            </a-popconfirm>
-          </template>
-        </a-table>
-      </div>
-      <!-- table content -->
-
-      <!-- popup add -->
-      <a-modal v-model="visibleAdd" title="Thêm chiều cao">
-        <template slot="footer">
-          <a-button key="back" @click="handleCancel"> Hủy </a-button>
-          <a-button
-            key="submit"
-            type="primary"
-            @click="checkFormAdd"
-            :loading="loadingAdd"
-          >
-            Lưu
-          </a-button>
+        <template slot="frameHeight" slot-scope="text, record">
+          {{ record.frameHeight }}
         </template>
-        <a-form-model>
-          <span style="color: red">*</span>Chiều cao :
-          <a-form-model-item>
-            <a-input-number
-              style="width: 100%"
-              v-model="frameHeight"
-              :min="0"
-              @change="inputNameAdd"
-            />
-            <div style="color: red" v-if="checkDataInputName.show">
-              {{ checkDataInputName.message }}
-            </div>
-          </a-form-model-item>
-        </a-form-model>
-      </a-modal>
-      <!-- popup add -->
+        <template slot="action" slot-scope="text, record">
+          <a-popconfirm
+            v-if="dataSourceTable.length"
+            title="Bạn có chắc chắn muốn xóa không?"
+            @confirm="deleteFrameHeight(record.id)"
+            ok-text="Đồng ý"
+            cancel-text="Hủy"
+          >
+            <a-button id="delete">
+              <font-awesome-icon :icon="['fas', 'trash']" />
+            </a-button>
+          </a-popconfirm>
+        </template>
+      </a-table>
+    </div>
+    <!-- table content -->
+
+    <!-- popup add -->
+    <a-modal v-model="visibleAdd" title="Thêm chiều cao">
+      <template slot="footer">
+        <a-button key="back" @click="handleCancel"> Hủy </a-button>
+        <a-button
+          key="submit"
+          type="primary"
+          @click="checkFormAdd"
+          :loading="loadingAdd"
+        >
+          Lưu
+        </a-button>
+      </template>
+      <a-form-model>
+        <span style="color: red">*</span>Chiều cao :
+        <a-form-model-item>
+          <a-input-number
+            style="width: 100%"
+            v-model="frameHeight"
+            :min="0"
+            @change="inputNameAdd"
+          />
+          <div style="color: red" v-if="checkDataInputName.show">
+            {{ checkDataInputName.message }}
+          </div>
+        </a-form-model-item>
+      </a-form-model>
+    </a-modal>
+    <!-- popup add -->
   </div>
 </template>
 

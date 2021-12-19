@@ -179,7 +179,7 @@
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
                       ok-text="Đồng ý"
-                      cancel-text="Không đồng ý"
+                      cancel-text="Hủy"
                       @confirm="deleteMaterial(record.id)"
                     >
                       <a-button id="delete">
@@ -889,7 +889,7 @@ export default {
           dataIndex: "action",
           key: "action",
           fixed: "right",
-          width: 150,
+          width: 180,
           scopedSlots: { customRender: "action" },
         },
       ],

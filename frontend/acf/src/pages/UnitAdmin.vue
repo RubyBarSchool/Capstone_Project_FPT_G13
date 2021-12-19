@@ -8,7 +8,7 @@
             background: 'white',
           }"
         >
-        <a-back-top :style="{ width: '5vh', height: '15vh' }" />
+          <a-back-top :style="{ width: '5vh', height: '15vh' }" />
           <a-button
             type="primary"
             @click="showModalAdd"
@@ -41,6 +41,8 @@
                     v-if="dataSourceTable.length"
                     title="Bạn có chắc chắn muốn xóa không?"
                     @confirm="deleteUnitAdmin(record.id)"
+                    ok-text="Đồng ý"
+                    cancel-text="Hủy"
                   >
                     <a-button id="delete">
                       <font-awesome-icon :icon="['fas', 'trash']" />
@@ -86,8 +88,7 @@ import unitService from "../service/unitService.js";
 
 export default {
   name: "UnitAdmin",
-  components: {
-  },
+  components: {},
   data() {
     return {
       dataSourceTable: [],

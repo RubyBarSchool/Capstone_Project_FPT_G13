@@ -2,7 +2,7 @@
   <div class="acceptluongadmin">
     <a-layout :style="{ background: 'white' }">
       <a-layout-content :style="{ margin: '24px 16px 0' }">
-         <a-back-top :style="{ width: '5vh', height: '15vh' }" />
+        <a-back-top :style="{ width: '5vh', height: '15vh' }" />
         <!-- menu -->
         <a-input
           placeholder="Họ và tên"
@@ -101,6 +101,8 @@
                 :disabled="!checkShow(record)"
                 title="Bạn có chắc chắn muốn thanh toán tiền lương không?"
                 @confirm="bill(record.id)"
+                ok-text="Đồng ý"
+                cancel-text="Hủy"
               >
                 <a-button :disabled="!checkShow(record)" type="primary">
                   Thanh toán
@@ -223,7 +225,7 @@ export default {
           scopedSlots: { customRender: "status" },
         },
         {
-          title: "Hành động",
+          title: "",
           dataIndex: "action",
           key: "action",
           fixed: "right",
