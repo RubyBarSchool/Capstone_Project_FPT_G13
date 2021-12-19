@@ -173,6 +173,7 @@ public class ContactMoneyServiceImpl implements ContactMoneyService {
             contactNew.setModified_date(LocalDate.now());
             contactNew.setStatusDone(1);
             contactRepository.save(contactNew);
+            check = true;
         }catch (Exception ex){
             throw new RuntimeException("không thể thêm mới tạm ứng hợp đồng");
         }
