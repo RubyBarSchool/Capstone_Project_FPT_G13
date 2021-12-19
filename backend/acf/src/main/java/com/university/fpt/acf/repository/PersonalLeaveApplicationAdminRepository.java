@@ -22,4 +22,6 @@ public interface PersonalLeaveApplicationAdminRepository extends JpaRepository<P
  @Query("SELECT new com.university.fpt.acf.vo.SearchPersonalLeaveApplicationAdminVO(p.id,p.created_date,p.dateStart,p.dateEnd,p.fileAttach,p.title,p.comment,p.content,e.id,e.fullName,p.accept,p.dateAccept) From PersonaLeaveApplication p left join p.employee e where 1=1")
  SearchPersonalLeaveApplicationAdminVO getQ();
 
+ @Query("SELECT COUNT(p.id) From PersonaLeaveApplication p where p.deleted = false and p.accept ='-1'")
+ Integer getPersonaLeaveApplicationConfirm();
 }

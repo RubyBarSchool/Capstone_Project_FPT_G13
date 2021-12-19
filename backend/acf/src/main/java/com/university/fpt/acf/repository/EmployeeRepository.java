@@ -55,5 +55,7 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
     @Query("SELECT new com.university.fpt.acf.vo.DetailEmployeeInformationVO(img.name,e.fullName,e.gender,e.nation, e.dob,e.email,p.name,e.phone,e.address,e.salary,a.username,r.name) FROM Account a left  join a.employee e left join a.roles r left join e.image img left join e.position p where a.username=:username ")
     List<DetailEmployeeInformationVO> getDetailEmployee(@Param("username")String username);
 
-
+    @Query("select COUNT(e.id)from Employee e  left join Account a on e.id = a.employee.id  " +
+            "where e.deleted= false and a.username is null")
+    Integer getEmployeeNotAccount();
 }

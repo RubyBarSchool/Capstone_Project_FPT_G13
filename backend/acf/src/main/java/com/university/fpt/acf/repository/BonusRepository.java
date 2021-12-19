@@ -13,11 +13,15 @@ import java.util.List;
 
 @Transactional
 @Repository
-public interface BonusRepository extends JpaRepository<BonusPenalty,Long> {
+public interface BonusRepository extends JpaRepository<BonusPenalty, Long> {
     @Query("select  b from BonusPenalty b where b.id=:id and b.bonus = true")
     BonusPenalty getBonusById(@Param("id") Long id);
 
 
     @Query("select  b from BonusPenalty b inner  join  b.employees e where e.id =:id and b.effectiveDate between :dateStart and :dateEnd and b.status = true")
     List<BonusPenalty> getBonusPenaltyOfEmployee(@Param("id") Long id, @Param("dateStart") LocalDate dateStart, @Param("dateEnd") LocalDate dateEnd);
+
+    @Query(" select  COUNT(b.id) from Account a inner  join a.employee e inner  join  e.bonusPenalties b  " +
+            " where a.username = :username and  b.effectiveDate between :dateStart and :dateEnd and b.status = true ")
+    Integer getBonusInMonth(@Param("username") String username, @Param("dateStart") LocalDate dateStart, @Param("dateEnd") LocalDate dateEnd);
 }

@@ -46,4 +46,6 @@ public interface ContactRepository extends JpaRepository<Contact,Long> {
             " and pm.deleted = false and  c.id = :idContact order by p.id asc")
     List<ExportContactVO> exportContactByID(@Param("idContact") Long idContact);
 
+    @Query(" select COUNT(c.id)  from Contact c where c.deleted = false and c.statusDone = 0")
+    Integer getContactDone();
 }

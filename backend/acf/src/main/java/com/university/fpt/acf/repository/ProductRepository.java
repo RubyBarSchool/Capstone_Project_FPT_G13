@@ -26,4 +26,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Transactional
     @Query("delete from Product  p where p.id = :id")
     void deleteProductInContact(@Param("id") Long id);
+
+    @Query("select COUNT(p.id) from Product p left join p.productionOrder po where p.deleted = false and po.id is null ")
+    Integer getProductHaveNotD();
 }

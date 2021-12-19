@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -28,5 +29,20 @@ public interface ProductionOrderRepository extends JpaRepository<ProductionOrder
     @Transactional
     @Query("delete from ProductionOrder po where po.id = :id")
     void deleteProductionOrderById(@Param("id") Long id);
+
+    @Query("select COUNT(po.id)  from ProductionOrder po where po.deleted = false  and po.status = -2")
+    Integer getProducttionOrderConfirmAdmin();
+
+    @Query("select COUNT(po.id)  from ProductionOrder po where po.deleted = false  and po.status = -1")
+    Integer getProducttionOrderConfirmEmployee();
+
+    @Query("select COUNT(po.id)  from Account a inner  join  a.employee e inner  join  e.productionOrders po " +
+            " where po.deleted = false  and po.status = -1 and a.username = :username ")
+    Integer getProducttionOrderConfirmEmployeeByUsername(@Param("username") String username);
+
+    @Query("select COUNT(po.id)  from Account a inner  join  a.employee e inner  join  e.productionOrders po " +
+            " where po.deleted = false  and po.status = 1 and a.username = :username and po.modified_date >= :dateStart and po.modified_date < :dateEnd")
+    Integer getProducttionOrderDoneEmployeeByUsername(@Param("username") String username,@Param("dateStart") LocalDate dateStart, @Param("dateEnd") LocalDate dateEnd);
+
 
 }

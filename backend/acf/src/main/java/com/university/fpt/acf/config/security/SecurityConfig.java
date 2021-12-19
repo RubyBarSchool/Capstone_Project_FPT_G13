@@ -60,22 +60,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 hasAnyAuthority("ADMIN");
         http.authorizeRequests().antMatchers("/employee/**").
                 hasAnyAuthority("EMPLOYEE");
-        http.authorizeRequests().antMatchers(HttpMethod.GET,"/files/**").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.GET,"/ws/**").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.GET,"/wse/**").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/dashboard/spadmin/**")
+                .hasAnyAuthority("SP_ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/dashboard/admin/**")
+                .hasAnyAuthority("ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/dashboard/employee/**")
+                .hasAnyAuthority("EMPLOYEE");
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/files/**").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/ws/**").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/wse/**").permitAll();
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilterBefore(customAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
     }
 
     @Bean
     @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception{
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         log.info("authenticationManagerBean in SecurityConfig");
         return super.authenticationManagerBean();
     }
 
     @Bean
-    BCryptPasswordEncoder bCryptPasswordEncoder(){
-        return  new BCryptPasswordEncoder();
+    BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }
