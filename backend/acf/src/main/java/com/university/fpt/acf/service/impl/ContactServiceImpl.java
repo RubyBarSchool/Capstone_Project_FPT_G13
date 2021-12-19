@@ -272,10 +272,13 @@ public class ContactServiceImpl implements ContactService {
             Iterator<Row> iterator = sheet.iterator();
             FileProductVO fileProductVO = new FileProductVO();
             Boolean checkLastRow = false;
+            iterator.next();
             while (iterator.hasNext()) {
                 FileMaterialVO fileMaterialVO = new FileMaterialVO();
                 Row nextRow = iterator.next();
                 Iterator<Cell> cellIterator = nextRow.cellIterator();
+
+
                 while (cellIterator.hasNext()) {
                     Cell cell = cellIterator.next();
                     Object objectValue = getCellValue(cell);
@@ -283,16 +286,22 @@ public class ContactServiceImpl implements ContactService {
                         continue;
                     }
                     int columnIndex = cell.getColumnIndex();
-                    if (columnIndex == 0 && objectValue.toString().startsWith("Ghi chú")) {
+                    if (columnIndex == 0 && objectValue.toString().toLowerCase().startsWith("ghi chú")) {
                         fileContactVO.setNoteContact(objectValue.toString());
-                        for (int i = 0; i < 17; i++) {
+                        for (int i = 0; i < 2; i++) {
                             cell = cellIterator.next();
                         }
                         objectValue = getCellValue(cell);
-                        fileContactVO.setPriceContact(objectValue.toString());
+                        String value = objectValue.toString();
+                        if (value.indexOf(".") == value.length() - 2 && value.charAt(value.length() - 1) == '0') {
+                            value = value.substring(0, value.length() - 2);
+                        }
+                        fileContactVO.setPriceContact(value);
                         checkLastRow = true;
                         break;
                     }
+
+
                     switch (columnIndex) {
                         case 1:
                             String productName = objectValue.toString();
@@ -343,20 +352,20 @@ public class ContactServiceImpl implements ContactService {
                             fileMaterialVO.setFrameHeightMaterial(materialHeight);
                             break;
                         case 11:
-                            String materialNote = objectValue.toString();
-                            fileMaterialVO.setNoteMaterial(materialNote);
-                            break;
-                        case 12:
-                            String idCompany = subString(objectValue.toString());
-                            fileMaterialVO.setIdCompanyMaterial(Long.parseLong(idCompany));
-                            break;
-                        case 14:
                             String idUnit = subString(objectValue.toString());
                             fileMaterialVO.setIdUnitMaterial(Long.parseLong(idUnit));
                             break;
-                        case 16:
+                        case 13:
+                            String idCompany = subString(objectValue.toString());
+                            fileMaterialVO.setIdCompanyMaterial(Long.parseLong(idCompany));
+                            break;
+                        case 15:
                             String coutMaterial = subString(objectValue.toString());
                             fileMaterialVO.setCountMaterial(Integer.parseInt(coutMaterial));
+                            break;
+                        case 16:
+                            String materialNote = objectValue.toString();
+                            fileMaterialVO.setNoteMaterial(materialNote);
                             break;
                         case 17:
                             String priceMaterial = subString(objectValue.toString());
@@ -476,9 +485,6 @@ public class ContactServiceImpl implements ContactService {
         }
         return check;
     }
-
-    @Autowired
-    private AttendancesCustomRepository attendancesCustomRepository;
 
     @Override
     public ByteArrayInputStream exportContact(Long id) {
@@ -692,7 +698,7 @@ public class ContactServiceImpl implements ContactService {
 
         Cell cell2 = row.createCell(18, CellType.FORMULA);
         cell2.setCellStyle(createStyleForBodyRightTemplate(createStyleForFooterTemplate(sheet)));
-        cell2.setCellFormula("SUM(S1:S" + rowIndex + ")");
+        cell2.setCellFormula("SUM(S2:S" + rowIndex + ")");
     }
 
     // Create CellStyle for header
@@ -1074,16 +1080,8 @@ public class ContactServiceImpl implements ContactService {
 
         Cell cell2 = row.createCell(13, CellType.FORMULA);
         cell2.setCellStyle(createStyleForBodyRight(createStyleForFooter(sheet)));
-        cell2.setCellFormula("SUM(N1:N" + rowIndex + ")");
+        cell2.setCellFormula("SUM(N2:N" + rowIndex + ")");
     }
-
-    // Auto resize column width
-    private void autosizeColumn(Sheet sheet, int lastColumn) {
-        for (int columnIndex = 0; columnIndex < lastColumn; columnIndex++) {
-            sheet.autoSizeColumn(columnIndex);
-        }
-    }
-
 
     private String subString(String input) {
         if (input.endsWith(".0")) {

@@ -268,7 +268,7 @@ public class BonusServiceImpl implements BonusService {
                             HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(idEmpl, LocalDate.of(date.getYear(), date.getMonthValue(), 10));
                             Integer bonusMoney = Integer.parseInt(historySalary.getBonus());
                             bonusMoney += Integer.valueOf(addBonus.getMoney());
-                            historySalary.setPenalty(bonusMoney + "");
+                            historySalary.setBonus(bonusMoney + "");
                             historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) + Integer.valueOf(addBonus.getMoney())) + "");
                             historySalary.setModified_by(accountSercurity.getUserName());
                             historySalary.setModified_date(LocalDate.now());
@@ -284,7 +284,7 @@ public class BonusServiceImpl implements BonusService {
                             HistorySalary historySalary = historySalaryRepository.getSalaryByEmployee(idEmpl, LocalDate.of(dateStart.getYear(), dateStart.getMonthValue(), 10));
                             Integer bonusMoney = Integer.parseInt(historySalary.getBonus());
                             bonusMoney += Integer.valueOf(addBonus.getMoney());
-                            historySalary.setPenalty(bonusMoney + "");
+                            historySalary.setBonus(bonusMoney + "");
                             historySalary.setTotalMoney((Integer.parseInt(historySalary.getTotalMoney()) + Integer.valueOf(addBonus.getMoney())) + "");
                             historySalary.setModified_by(accountSercurity.getUserName());
                             historySalary.setModified_date(LocalDate.now());
