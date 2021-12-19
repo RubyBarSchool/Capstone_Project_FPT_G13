@@ -84,7 +84,7 @@
                 <img
                   v-if="record.image !== null"
                   alt="example"
-                  style="width: 20%"
+                  style="width: 50%"
                   :src="record.image"
                 />
               </template>
