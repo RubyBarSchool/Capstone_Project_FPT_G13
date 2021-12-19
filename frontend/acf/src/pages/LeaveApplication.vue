@@ -8,11 +8,11 @@
             background: 'white',
           }"
         >
-           <a-back-top :style="{ width: '5vh', height: '15vh' }" />
+          <a-back-top :style="{ width: '5vh', height: '15vh' }" />
           <!-- menu trên -->
           <a-input
             placeholder="Tiêu đề"
-           :style="{ width: '150px', 'margin-right': '5px' }"
+            :style="{ width: '150px', 'margin-right': '5px' }"
             v-model="dataSearch.title"
           />
           Trạng thái
@@ -174,35 +174,53 @@
                 Lưu
               </a-button>
             </template>
-            <a-form-model>
-              <span style="color: red">*</span> Tiêu đề :
-              <a-input @change="inputTitle" v-model="dataAdd.title" />
-              <div style="color: red" v-if="checkDataInputTitle.show">
-                {{ checkDataInputTitle.message }}
-              </div>
-              <span style="color: red">*</span> Ngày :
-              <a-range-picker
-                @change="inputDate"
-                v-model="dataAdd.date"
-                :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-                :disabled-date="disableDateStart"
-                format="DD/MM/YYYY"
-                :style="{ width: '472px' }"
-              />
-              <div style="color: red" v-if="checkDataInputDate.show">
-                {{ checkDataInputDate.message }}
-              </div>
-              <span style="color: red">*</span> Nội dung :
-              <a-textarea
-                @change="inputContent"
-                v-model="dataAdd.content"
-                placeholder="Bạn hãy điền nội dung vào đây"
-                :row="4"
-              />
-              <div style="color: red" v-if="checkDataInputContent.show">
-                {{ checkDataInputContent.message }}
-              </div>
-            </a-form-model>
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Tiêu đề :</a-col
+              >
+              <a-col flex="auto">
+                <a-input @change="inputTitle" v-model="dataAdd.title" />
+                <div style="color: red" v-if="checkDataInputTitle.show">
+                  {{ checkDataInputTitle.message }}
+                </div>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Ngày :</a-col
+              >
+              <a-col flex="auto">
+                <a-range-picker
+                  @change="inputDate"
+                  v-model="dataAdd.date"
+                  :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+                  :disabled-date="disableDateStart"
+                  format="DD/MM/YYYY"
+                  :style="{ width: '100%' }"
+                />
+                <div style="color: red" v-if="checkDataInputDate.show">
+                  {{ checkDataInputDate.message }}
+                </div>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Nội dung :</a-col
+              >
+              <a-col flex="auto">
+                <a-textarea
+                  @change="inputContent"
+                  v-model="dataAdd.content"
+                  placeholder="Bạn hãy điền nội dung vào đây"
+                  :row="4"
+                />
+                <div style="color: red" v-if="checkDataInputContent.show">
+                  {{ checkDataInputContent.message }}
+                </div>
+              </a-col>
+            </a-row>
           </a-modal>
           <!-- popup add -->
 
@@ -219,35 +237,53 @@
                 Lưu
               </a-button>
             </template>
-            <a-form-model>
-              <span style="color: red">*</span> Tiêu đề :
-              <a-input @change="inputEditTitle" v-model="dataEdit.title" />
-              <div style="color: red" v-if="checkDataInputTitle.show">
-                {{ checkDataInputTitle.message }}
-              </div>
-              <span style="color: red">*</span> Ngày :
-              <a-range-picker
-                @change="inputEditDate"
-                v-model="dataEdit.date"
-                :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
-                format="DD/MM/YYYY"
-                :disabled-date="disableDateStart"
-                :style="{ width: '472px' }"
-              />
-              <div style="color: red" v-if="checkDataInputDate.show">
-                {{ checkDataInputDate.message }}
-              </div>
-              <span style="color: red">*</span> Nội dung :
-              <a-textarea
-                @change="inputEditContent"
-                v-model="dataEdit.content"
-                placeholder="Bạn hãy điền nội dung vào đây"
-                :row="4"
-              />
-              <div style="color: red" v-if="checkDataInputContent.show">
-                {{ checkDataInputContent.message }}
-              </div>
-            </a-form-model>
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Tiêu đề :</a-col
+              >
+              <a-col flex="auto">
+                <a-input @change="inputEditTitle" v-model="dataEdit.title" />
+                <div style="color: red" v-if="checkDataInputTitle.show">
+                  {{ checkDataInputTitle.message }}
+                </div>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Ngày :</a-col
+              >
+              <a-col flex="auto">
+                <a-range-picker
+                  @change="inputEditDate"
+                  v-model="dataEdit.date"
+                  :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
+                  format="DD/MM/YYYY"
+                  :disabled-date="disableDateStart"
+                  :style="{ width: '100%' }"
+                />
+                <div style="color: red" v-if="checkDataInputDate.show">
+                  {{ checkDataInputDate.message }}
+                </div>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Nội dung :</a-col
+              >
+              <a-col flex="auto">
+                <a-textarea
+                  @change="inputEditContent"
+                  v-model="dataEdit.content"
+                  placeholder="Bạn hãy điền nội dung vào đây"
+                  :row="4"
+                />
+                <div style="color: red" v-if="checkDataInputContent.show">
+                  {{ checkDataInputContent.message }}
+                </div>
+              </a-col>
+            </a-row>
           </a-modal>
           <!-- popup edit-->
 
@@ -256,37 +292,56 @@
             <template slot="footer">
               <a-button key="submit" @click="handleCancel">Đóng</a-button>
             </template>
-            <a-form-model>
-              <a-form-model-item label="Tiêu đề">
+            <a-row type="flex">
+              <a-col flex="100px"> Tiêu đề</a-col>
+              <a-col flex="auto">
                 <a-input
                   v-model="dataPersonalLeaveEmployeeDetail.title"
                   disabled
                 />
-              </a-form-model-item>
-              <a-form-model-item label="Ngày bắt đầu">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px"> Ngày bắt đầu</a-col>
+              <a-col flex="auto">
                 <a-date-picker
                   disabled
                   v-model="dataPersonalLeaveEmployeeDetail.dateStart"
                   format="DD/MM/YYYY"
+                  style="width:100%"
                 >
                 </a-date-picker>
-              </a-form-model-item>
-              <a-form-model-item label="Ngày kết thúc">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px"> Ngày kết thúc</a-col>
+              <a-col flex="auto">
                 <a-date-picker
                   disabled
                   v-model="dataPersonalLeaveEmployeeDetail.dateEnd"
                   format="DD/MM/YYYY"
+                  style="width:100%"
                 >
                 </a-date-picker>
-              </a-form-model-item>
-              <a-form-model-item label="Nội dung">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px"> Nội dung</a-col>
+              <a-col flex="auto">
                 <a-textarea
                   v-model="dataPersonalLeaveEmployeeDetail.content"
                   :row="4"
                   disabled
                 />
-              </a-form-model-item>
-              <a-form-model-item label="Nội dung">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px"> Trạng thái</a-col>
+              <a-col flex="auto">
                 <a-tag
                   :color="
                     dataPersonalLeaveEmployeeDetail.statusAccept == '-1'
@@ -304,37 +359,56 @@
                       : "Đã duyệt"
                   }}
                 </a-tag>
-              </a-form-model-item>
-              <a-form-model-item label="Ngày tạo">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px"> Ngày tạo</a-col>
+              <a-col flex="auto">
                 <a-date-picker
                   disabled
                   v-model="dataPersonalLeaveEmployeeDetail.dateCreate"
                   format="DD/MM/YYYY"
+                  style="width:100%"
                 >
                 </a-date-picker>
-              </a-form-model-item>
-              <a-form-model-item label="Quản lý xác nhận">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px"> Quản lý xác nhận</a-col>
+              <a-col flex="auto">
                 <a-input
                   v-model="dataPersonalLeaveEmployeeDetail.nameEmployeeAccess"
                   disabled
                 />
-              </a-form-model-item>
-              <a-form-model-item label="Ngày xác nhận">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px"> Ngày xác nhận</a-col>
+              <a-col flex="auto">
                 <a-date-picker
                   disabled
-                  v-model="dataPersonalLeaveEmployeeDetail.dateAccept" placeholder="Ngày xác nhận"
+                  v-model="dataPersonalLeaveEmployeeDetail.dateAccept"
+                  placeholder="Ngày xác nhận"
                   format="DD/MM/YYYY"
+                  style="width:100%"
                 >
                 </a-date-picker>
-              </a-form-model-item>
-              <a-form-model-item label="Ghi chú của quản lý">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px"> Ghi chú của quản lý</a-col>
+              <a-col flex="auto">
                 <a-textarea
                   v-model="dataPersonalLeaveEmployeeDetail.comment"
                   :row="4"
                   disabled
                 />
-              </a-form-model-item>
-            </a-form-model>
+              </a-col>
+            </a-row>
           </a-modal>
           <!-- popup view-->
         </div>

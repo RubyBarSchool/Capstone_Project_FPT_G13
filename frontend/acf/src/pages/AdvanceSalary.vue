@@ -227,16 +227,23 @@
                 Lưu
               </a-button>
             </template>
-            <a-form-model>
-              <span style="color: red">*</span> Tiêu đề:
-              <a-form-model-item>
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Tiêu đề:</a-col
+              >
+              <a-col flex="auto">
                 <a-input v-model="dataEdit.title" @change="inputTitleEdit" />
                 <div style="color: red" v-if="checkInputTitle.show">
                   {{ checkInputTitle.message }}
                 </div>
-              </a-form-model-item>
-              <span style="color: red">*</span> Số tiền:
-              <a-form-model-item>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Số tiền:</a-col
+              >
+              <a-col flex="auto">
                 <a-input-number
                   style="width: 100%"
                   v-model="dataEdit.advanceSalary"
@@ -246,9 +253,14 @@
                 <div style="color: red" v-if="checkInputSalary.show">
                   {{ checkInputSalary.message }}
                 </div>
-              </a-form-model-item>
-              <span style="color: red">*</span> Nội dung:
-              <a-form-model-item>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Nội dung:
+              </a-col>
+              <a-col flex="auto">
                 <a-textarea
                   v-model="dataEdit.content"
                   placeholder="Lý do viết vào đây"
@@ -258,27 +270,52 @@
                 <div style="color: red" v-if="checkInputContent.show">
                   {{ checkInputContent.message }}
                 </div>
-              </a-form-model-item>
-            </a-form-model>
+              </a-col>
+            </a-row>
           </a-modal>
           <!-- popup edit-->
 
           <!-- popup view-->
-          <a-modal v-model="visibleView" class="view">
+          <a-modal
+            v-model="visibleView"
+            class="view"
+            title="Thông tin ứng lương"
+          >
             <template slot="footer">
               <a-button key="submit" @click="handleCancel">Đóng</a-button>
             </template>
-            <a-form-model>
-              <a-form-model-item label="Tiêu đề">
+            <a-row type="flex">
+              <a-col flex="100px">
+                Tiêu đề:</a-col
+              >
+              <a-col flex="auto">
                 <a-input v-model="dataDetail.title" disabled />
-              </a-form-model-item>
-              <a-form-model-item label="Số tiền">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                Số tiền:</a-col
+              >
+              <a-col flex="auto">
                 <a-input v-model="dataDetail.advanceSalary" disabled />
-              </a-form-model-item>
-              <a-form-model-item label="Nội dung">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                Nội dung:</a-col
+              >
+              <a-col flex="auto">
                 <a-textarea v-model="dataDetail.content" :row="4" disabled />
-              </a-form-model-item>
-              <a-form-model-item label="Trạng thái">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                Trạng thái:</a-col
+              >
+              <a-col flex="auto">
                 <a-tag
                   :color="
                     dataDetail.accept == '-1'
@@ -296,30 +333,54 @@
                       : "Đã duyệt"
                   }}
                 </a-tag>
-              </a-form-model-item>
-              <a-form-model-item label="Ngày tạo">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                Ngày tạo:</a-col
+              >
+              <a-col flex="auto">
                 <a-date-picker
                   disabled
                   v-model="dataDetail.dateCreate"
                   format="DD/MM/YYYY"
                 >
                 </a-date-picker>
-              </a-form-model-item>
-              <a-form-model-item label="Quản lý xác nhận">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                Quản lý xác nhận:</a-col
+              >
+              <a-col flex="auto">
                 <a-input v-model="dataDetail.employeeAccept" disabled />
-              </a-form-model-item>
-              <a-form-model-item label="Ngày xác nhận">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                Ngày xác nhận:</a-col
+              >
+              <a-col flex="auto">
                 <a-date-picker
                   disabled
                   v-model="dataDetail.dateAccept"
                   format="DD/MM/YYYY"
                 >
                 </a-date-picker>
-              </a-form-model-item>
-              <a-form-model-item label="Ghi chú của quản lý">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                Ghi chú của quản lý:</a-col
+              >
+              <a-col flex="auto">
                 <a-textarea v-model="dataDetail.comment" :row="4" disabled />
-              </a-form-model-item>
-            </a-form-model>
+              </a-col>
+            </a-row>
           </a-modal>
           <!-- popup view-->
         </div>

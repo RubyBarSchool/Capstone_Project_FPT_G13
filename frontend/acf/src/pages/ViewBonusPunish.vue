@@ -31,7 +31,7 @@
             v-model="dataSearch.status"
             @change="submitSearch"
             placeholder="Trạng thái"
-           :style="{ width: '150px', 'margin-right': '5px' }"
+            :style="{ width: '150px', 'margin-right': '5px' }"
           >
             <a-select-option value=""> Tất cả </a-select-option>
             <a-select-option value="false"> Chờ duyệt </a-select-option>
@@ -107,31 +107,50 @@
             <template slot="footer">
               <a-button @click="handelCancel">Đóng</a-button>
             </template>
-            <a-form-model>
-              <a-form-model-item label="Tiêu đề">
+            <a-row type="flex">
+              <a-col flex="100px"> Tiêu đề</a-col>
+              <a-col flex="auto">
                 <a-input v-model="dataDetail.title" disabled />
-              </a-form-model-item>
-              <a-form-model-item label="Lý do">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px"> Lý do</a-col>
+              <a-col flex="auto">
                 <a-textarea v-model="dataDetail.reason" disabled :row="4" />
-              </a-form-model-item>
-              <a-form-model-item label="Số tiền">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px"> Số tiền</a-col>
+              <a-col flex="auto">
                 <a-input v-model="dataDetail.money" disabled />
-              </a-form-model-item>
-              <a-form-model-item label="Trạng thái">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px"> Trạng thái</a-col>
+              <a-col flex="auto">
                 <a-tag :color="dataDetail.status ? 'green' : 'orange'">
                   {{ dataDetail.status ? "Đã duyệt" : "Chờ duyệt" }}
                 </a-tag>
-              </a-form-model-item>
-              <a-form-model-item label="Ngày hiệu lực">
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px"> Ngày hiệu lực</a-col>
+              <a-col flex="auto">
                 <a-date-picker
                   v-model="dataDetail.effectiveDate"
                   format="DD/MM/YYYY"
                   valueFormat="YYYY-MM-DD"
+                  style="width:100%"
                   disabled
                 >
                 </a-date-picker>
-              </a-form-model-item>
-            </a-form-model>
+              </a-col>
+            </a-row>
+            <br />
           </a-modal>
           <!-- popup view -->
         </div>
