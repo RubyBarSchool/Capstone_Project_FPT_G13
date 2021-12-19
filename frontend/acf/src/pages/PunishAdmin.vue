@@ -8,7 +8,7 @@
             background: 'white',
           }"
         >
-         <a-back-top :style="{ width: '5vh', height: '15vh' }" />
+          <a-back-top :style="{ width: '5vh', height: '15vh' }" />
           <!-- menu trên -->
           <a-input
             placeholder="Tiêu đề"
@@ -94,7 +94,7 @@
                 }}
               </template>
               <template slot="action" slot-scope="text, record">
-                <a-row v-if="!record.status" >
+                <a-row v-if="!record.status">
                   <a-col :span="9" v-if="checkEditOrDelete(record)">
                     <a-button
                       id="edit"
@@ -132,7 +132,7 @@
           <!-- table content -->
 
           <!-- popup add-->
-          <a-modal v-model="visibleAdd" title="Thêm hình phạt">
+          <a-modal v-model="visibleAdd" title="Thêm hình thức kỷ luật">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button
@@ -145,90 +145,120 @@
               </a-button>
             </template>
             <a-form-model>
-              <span style="color: red">*</span> Tiêu đề:
-              <a-form-model-item>
-                <a-input
-                  v-model="dataAdd.title"
-                  @change="inputTitleAdd"
-                  placeholder="Tiêu đề"
-                />
-                <div style="color: red" v-if="checkInputTitle.show">
-                  {{ checkInputTitle.message }}
-                </div>
-              </a-form-model-item>
-              <span style="color: red">*</span> Họ và tên:
-              <a-form-model-item>
-                <a-select
-                  placeholder="Họ và tên"
-                  mode="multiple"
-                  v-model="dataAdd.listIdEmployee"
-                  :filter-option="false"
-                  @search="fetchEmployees"
-                  @change="inputListEmployeeAdd"
-                >
-                  <a-select-option
-                    v-for="(employee, index) in dataEmployees"
-                    :value="employee.id"
-                    :key="index"
+              <a-row type="flex">
+                <a-col flex="120px">
+                  <span style="color: red">*</span> Tiêu đề:
+                </a-col>
+                <a-col flex="auto">
+                  <a-input
+                    v-model="dataAdd.title"
+                    @change="inputTitleAdd"
+                    placeholder="Tiêu đề"
+                  />
+                  <div style="color: red" v-if="checkInputTitle.show">
+                    {{ checkInputTitle.message }}
+                  </div>
+                </a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="120px">
+                  <span style="color: red">*</span> Họ và tên:
+                </a-col>
+                <a-col flex="auto">
+                  <a-select
+                    placeholder="Họ và tên"
+                    mode="multiple"
+                    v-model="dataAdd.listIdEmployee"
+                    :filter-option="false"
+                    @search="fetchEmployees"
+                    @change="inputListEmployeeAdd"
                   >
-                    {{ employee.fullName }}
-                  </a-select-option>
-                </a-select>
-                <div style="color: red" v-if="checkInputListIdEmployee.show">
-                  {{ checkInputListIdEmployee.message }}
-                </div>
-              </a-form-model-item>
-              <span style="color: red">*</span> Lý do:
-              <a-form-model-item>
-                <a-textarea
-                  placeholder="Lý do"
-                  :rows="4"
-                  v-model="dataAdd.reason"
-                  @change="inputReasonAdd"
-                />
-                <div style="color: red" v-if="checkInputReason.show">
-                  {{ checkInputReason.message }}
-                </div>
-              </a-form-model-item>
-              <span style="color: red">*</span> Số tiền:
-              <a-form-model-item>
-                <a-input-number
-                  v-model="dataAdd.money"
-                  :min="100000"
-                  @change="inputMoneyAdd"
-                />
-                <div style="color: red" v-if="checkInputMoney.show">
-                  {{ checkInputMoney.message }}
-                </div>
-              </a-form-model-item>
-              <span style="color: red">*</span> Trạng thái:
-              <a-form-model-item>
-                <a-radio-group name="radioGroup" v-model="dataAdd.status">
-                  <a-radio :value="false"> Nháp </a-radio>
-                  <a-radio :value="true"> Hiệu lực </a-radio>
-                </a-radio-group>
-              </a-form-model-item>
-              <span style="color: red">*</span> Ngày hiệu lực:
-              <a-form-model-item>
-                <a-date-picker
-                  v-model="dataAdd.effectiveDate"
-                  format="DD/MM/YYYY"
-                  :disabled-date="disableDateStart"
-                  valueFormat="YYYY-MM-DD"
-                  @change="inputEffectiveDateAdd"
-                  placeholder="Ngày hiệu lực"
+                    <a-select-option
+                      v-for="(employee, index) in dataEmployees"
+                      :value="employee.id"
+                      :key="index"
+                    >
+                      {{ employee.fullName }}
+                    </a-select-option>
+                  </a-select>
+                  <div style="color: red" v-if="checkInputListIdEmployee.show">
+                    {{ checkInputListIdEmployee.message }}
+                  </div>
+                </a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="120px">
+                  <span style="color: red">*</span> Lý do:
+                </a-col>
+                <a-col flex="auto">
+                  <a-textarea
+                    placeholder="Lý do"
+                    :rows="4"
+                    v-model="dataAdd.reason"
+                    @change="inputReasonAdd"
+                  />
+                  <div style="color: red" v-if="checkInputReason.show">
+                    {{ checkInputReason.message }}
+                  </div></a-col
                 >
-                </a-date-picker>
-                <div style="color: red" v-if="checkInputEffectiveDate.show">
-                  {{ checkInputEffectiveDate.message }}
-                </div>
-              </a-form-model-item>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="120px">
+                  <span style="color: red">*</span> Số tiền:
+                </a-col>
+                <a-col flex="auto">
+                  <a-input-number
+                    v-model="dataAdd.money"
+                    :min="100000"
+                    @change="inputMoneyAdd"
+                    style="width: 100%"
+                  />
+                  <div style="color: red" v-if="checkInputMoney.show">
+                    {{ checkInputMoney.message }}
+                  </div></a-col
+                >
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="120px">
+                  <span style="color: red">*</span> Trạng thái:
+                </a-col>
+                <a-col flex="auto">
+                  <a-radio-group name="radioGroup" v-model="dataAdd.status">
+                    <a-radio :value="false"> Nháp </a-radio>
+                    <a-radio :value="true"> Hiệu lực </a-radio>
+                  </a-radio-group></a-col
+                >
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="120px"
+                  ><span style="color: red">*</span> Ngày hiệu lực:
+                </a-col>
+                <a-col flex="auto">
+                  <a-date-picker
+                    v-model="dataAdd.effectiveDate"
+                    format="DD/MM/YYYY"
+                    :disabled-date="disableDateStart"
+                    valueFormat="YYYY-MM-DD"
+                    @change="inputEffectiveDateAdd"
+                    placeholder="Ngày hiệu lực"
+                  >
+                  </a-date-picker>
+                  <div style="color: red" v-if="checkInputEffectiveDate.show">
+                    {{ checkInputEffectiveDate.message }}
+                  </div>
+                </a-col>
+              </a-row>
             </a-form-model>
           </a-modal>
           <!-- popup add -->
 
           <!-- popup edit-->
-          <a-modal v-model="visibleEdit" title="Chỉnh sửa hình phạt">
+          <a-modal v-model="visibleEdit" title="Chỉnh sửa hình thức kỷ luật">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button
@@ -332,8 +362,7 @@ import punishAdminService from "@/service/punishAdminService";
 import moment from "moment";
 export default {
   name: "PunishAdmin",
-  components: {
-  },
+  components: {},
   data() {
     return {
       pagination: {
@@ -802,7 +831,7 @@ export default {
       title
     ) {
       this.dataEdit.id = id;
-      this.dataEdit.effectiveDate = '';
+      this.dataEdit.effectiveDate = "";
       this.dataEdit.listIdEmployee = [];
       for (var i = 0; i < listIdEmployees.length; i++) {
         this.dataEdit.listIdEmployee.push(listIdEmployees[i].id);

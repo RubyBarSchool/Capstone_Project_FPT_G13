@@ -188,71 +188,91 @@
               </a-button>
             </template>
             <a-form-model>
-              <span style="color: red">*</span>Tên hợp đồng:
-              <a-form-model-item>
-                <a-input @change="inputNameContact" v-model="dataAdd.name" />
-                <div style="color: red" v-if="checkNameContact.show">
-                  {{ checkNameContact.message }}
-                </div>
-              </a-form-model-item>
-
-              <span style="color: red">*</span>Khách hàng:
-              <a-form-model-item>
-                <a-select
-                  @change="selectCompany"
-                  v-model="dataAdd.idCompany"
-                  style="width: 100%"
-                >
-                  <a-select-option
-                    v-for="(company, index) in companys"
-                    :value="company.id"
-                    :key="index"
+              <a-row type="flex">
+                <a-col flex="150px">
+                  <span style="color: red">*</span>Tên hợp đồng:
+                </a-col>
+                <a-col flex="auto">
+                  <a-input @change="inputNameContact" v-model="dataAdd.name" />
+                  <div style="color: red" v-if="checkNameContact.show">
+                    {{ checkNameContact.message }}
+                  </div>
+                </a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="150px"
+                  ><span style="color: red">*</span>Khách hàng:
+                </a-col>
+                <a-col flex="auto">
+                  <a-select
+                    @change="selectCompany"
+                    v-model="dataAdd.idCompany"
+                    style="width: 100%"
                   >
-                    {{ company.name }}
-                  </a-select-option>
-                </a-select>
-                <div style="color: red" v-if="checkCompany.show">
-                  {{ checkCompany.message }}
-                </div>
-              </a-form-model-item>
+                    <a-select-option
+                      v-for="(company, index) in companys"
+                      :value="company.id"
+                      :key="index"
+                    >
+                      {{ company.name }}
+                    </a-select-option>
+                  </a-select>
+                  <div style="color: red" v-if="checkCompany.show">
+                    {{ checkCompany.message }}
+                  </div></a-col
+                >
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="150px">
+                  <span style="color: red">*</span>Hạn hoàn thành:
+                </a-col>
+                <a-col flex="auto">
+                  <a-date-picker
+                    :disabled-date="disableDateStart"
+                    @change="selectDateEnd"
+                    v-model="dataAdd.time"
+                    placeholder="Hạn hoàn thành"
+                    format="DD/MM/YYYY"
+                    style="width: 100%"
+                  />
+                  <div style="color: red" v-if="checkDateEnd.show">
+                    {{ checkDateEnd.message }}
+                  </div>
+                </a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="150px"
+                  ><span style="color: red">*</span>Tổng giá trị:
+                </a-col>
+                <a-col flex="auto">
+                  <a-input
+                    @change="changeTotalMoney"
+                    v-model="fileExcel.priceContact"
+                    disabled
+                  />
+                  <div style="color: red" v-if="checkTotalMoney.show">
+                    {{ checkTotalMoney.message }}
+                  </div></a-col
+                >
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="150px"> Ghi chú: </a-col>
+                <a-col flex="auto">
+                  <a-textarea
+                    :auto-size="{
+                      minRows: 1,
+                      maxRows: 6,
+                    }"
+                    v-model="fileExcel.noteContact"
+                    disabled
+                /></a-col>
+              </a-row>
+              <br />
 
-              <span style="color: red">*</span>Hạn hoàn thành:
-              <a-form-model-item>
-                <a-date-picker
-                  :disabled-date="disableDateStart"
-                  @change="selectDateEnd"
-                  v-model="dataAdd.time"
-                  placeholder="Hạn hoàn thành"
-                  format="DD/MM/YYYY"
-                />
-                <div style="color: red" v-if="checkDateEnd.show">
-                  {{ checkDateEnd.message }}
-                </div>
-              </a-form-model-item>
-
-              <span style="color: red">*</span>Tổng giá trị:
-              <a-form-model-item>
-                <a-input
-                  @change="changeTotalMoney"
-                  v-model="fileExcel.priceContact"
-                  disabled
-                />
-                <div style="color: red" v-if="checkTotalMoney.show">
-                  {{ checkTotalMoney.message }}
-                </div>
-              </a-form-model-item>
-
-              Ghi chú:
-              <a-form-model-item>
-                <a-textarea
-                  :auto-size="{
-                    minRows: 1,
-                    maxRows: 6,
-                  }"
-                  v-model="fileExcel.noteContact"
-                  disabled
-                />
-              </a-form-model-item>
               <div
                 class="progress-bar progress-bar-info progress-bar-striped"
                 role="progressbar"
@@ -263,28 +283,29 @@
               >
                 {{ progress }}%
               </div>
-              <a-row :gutter="[16, 16]">
-                <a-col :span="8">
+
+              <a-row type="flex">
+                <a-col flex="150px">
                   <span style="color: red">*</span>Bảng chi tiết:</a-col
                 >
-                <a-col :span="8">
+                <a-col flex="auto">
                   <input
                     type="file"
                     ref="fileupload"
                     accept=".xls, .xlsx"
                     @change="importFile($event)"
                   />
+                  <div style="color: red" v-if="checkTableDetail.show">
+                    {{ checkTableDetail.message }}
+                  </div>
                 </a-col>
               </a-row>
             </a-form-model>
-            <div style="color: red" v-if="checkTableDetail.show">
-              {{ checkTableDetail.message }}
-            </div>
           </a-modal>
           <!-- popup add-->
 
           <!-- popup edit-->
-          <a-modal v-model="visibleEdit" title="Sửa hợp đồng">
+          <a-modal v-model="visibleEdit" title="Chỉnh sửa hợp đồng">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button
@@ -297,48 +318,60 @@
               </a-button>
             </template>
             <a-form-model>
-              <span style="color: red">*</span>Tên hợp đồng:
-              <a-form-model-item>
-                <a-input
-                  @change="inputEditNameContact"
-                  v-model="dataEdit.name"
-                />
-                <div style="color: red" v-if="checkNameContact.show">
-                  {{ checkNameContact.message }}
-                </div>
-              </a-form-model-item>
-
-              <span style="color: red">*</span>Khách hàng:
-              <a-form-model-item>
-                <a-select
-                  v-model="dataEditCompany.id"
-                  style="width: 100%"
-                  disabled
-                >
-                  <a-select-option
-                    v-for="(company, index) in companys"
-                    :value="company.id"
-                    :key="index"
+              <a-row type="flex">
+                <a-col flex="150px"
+                  ><span style="color: red">*</span>Tên hợp đồng:
+                </a-col>
+                <a-col flex="auto">
+                  <a-input
+                    @change="inputEditNameContact"
+                    v-model="dataEdit.name"
+                  />
+                  <div style="color: red" v-if="checkNameContact.show">
+                    {{ checkNameContact.message }}
+                  </div>
+                </a-col>
+              </a-row>
+              <a-row type="flex">
+                <a-col flex="150px">
+                  <span style="color: red">*</span>Khách hàng:
+                </a-col>
+                <a-col flex="auto">
+                  <a-select
+                    v-model="dataEditCompany.id"
+                    style="width: 100%"
+                    disabled
                   >
-                    {{ company.name }}
-                  </a-select-option>
-                </a-select>
-                <div style="color: red" v-if="checkCompany.show">
-                  {{ checkCompany.message }}
-                </div>
-              </a-form-model-item>
-              <span style="color: red">*</span>Hạn hoàn thành:
-              <a-form-model-item>
-                <a-date-picker
-                  @change="selectEditDateEnd"
-                  :disabled-date="disableDateStart"
-                  v-model="dataEdit.dateFinish"
-                  format="DD/MM/YYYY"
-                />
-                <div style="color: red" v-if="checkDateEnd.show">
-                  {{ checkDateEnd.message }}
-                </div>
-              </a-form-model-item>
+                    <a-select-option
+                      v-for="(company, index) in companys"
+                      :value="company.id"
+                      :key="index"
+                    >
+                      {{ company.name }}
+                    </a-select-option>
+                  </a-select>
+                  <div style="color: red" v-if="checkCompany.show">
+                    {{ checkCompany.message }}
+                  </div></a-col
+                >
+              </a-row>
+              <a-row type="flex">
+                <a-col flex="150px"
+                  ><span style="color: red">*</span>Hạn hoàn thành:
+                </a-col>
+                <a-col flex="auto">
+                  <a-date-picker
+                    @change="selectEditDateEnd"
+                    :disabled-date="disableDateStart"
+                    v-model="dataEdit.dateFinish"
+                    format="DD/MM/YYYY"
+                     style="width: 100%"
+                  />
+                  <div style="color: red" v-if="checkDateEnd.show">
+                    {{ checkDateEnd.message }}
+                  </div></a-col
+                >
+              </a-row>
             </a-form-model>
           </a-modal>
           <!-- popup edit-->
@@ -802,6 +835,7 @@ export default {
       this.checkTableDetail.message = "";
     },
     handleCancel() {
+      this.visibleAdd = false;
       this.visibleEdit = false;
     },
     showModalEdit(name, id, time, idCompany) {

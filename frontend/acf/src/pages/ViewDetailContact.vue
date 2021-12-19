@@ -15,7 +15,7 @@
             @change="changeSelect"
             placeholder="Hợp đồng"
             mode="multiple"
-            :style="{'margin-right': '5px', 'width': '20%'}"
+            :style="{ 'margin-right': '5px', width: '20%' }"
           >
             <a-select-option
               v-for="(contact, index) in dataContact"
@@ -92,7 +92,7 @@
                 </a-tag>
               </template>
               <template slot="action" slot-scope="text, record">
-                <a-row>
+                <a-row :gutter="[16,16]">
                   <a-col :span="8">
                     <a-button id="view" @click="showModalView(record)">
                       <font-awesome-icon :icon="['fas', 'eye']" />
@@ -111,6 +111,8 @@
                     <a-popconfirm
                       title="Bạn có chắc chắn muốn xóa không?"
                       @confirm="deleteProduct(record.idProduct)"
+                      ok-text="Đồng ý"
+                      cancel-text="Hủy"
                     >
                       <a-button
                         v-if="record.status == '-2' || record.status == '-1'"
@@ -125,6 +127,7 @@
             </a-table>
           </div>
 
+          <!-- view detail -->
           <a-modal
             v-model="showViewMaterialDetail"
             height="100%"
@@ -147,6 +150,7 @@
             >
             </a-table>
           </a-modal>
+          <!-- view detail -->
           <!-- form add -->
           <a-modal
             v-model="showAddProductDetail"
@@ -166,109 +170,141 @@
               </a-button>
             </template>
             <a-form-model>
-              <span style="color: red">*</span>Tên hợp đồng:
-              <a-form-model-item>
-                <a-select
-                  @change="changeNameCOntact"
-                  v-model="addProductForm.idContact"
-                  placeholder="Hợp đồng"
-                  style="width: 100%"
-                >
-                  <a-select-option
-                    v-for="(contact, index) in dataContactInAdd"
-                    :value="contact.id"
-                    :key="index"
+              <a-row type="flex">
+                <a-col flex="150px">
+                  <span style="color: red">*</span>Tên hợp đồng:
+                </a-col>
+                <a-col flex="auto">
+                  <a-select
+                    @change="changeNameCOntact"
+                    v-model="addProductForm.idContact"
+                    placeholder="Hợp đồng"
+                    style="width: 100%"
                   >
-                    {{ contact.name }}
-                  </a-select-option>
-                </a-select>
-                <div style="color: red" v-if="checkNameContact.show">
-                  {{ checkNameContact.message }}
-                </div>
-              </a-form-model-item>
-
-              <span style="color: red">*</span>Tên sản phẩm:
-              <a-form-model-item>
-                <a-input
-                  @change="changeNameProduct"
-                  style="width: 100%"
-                  v-model="addProductForm.nameProduct"
-                  placeholder="Nhập tên sản phẩm"
-                />
-                <div style="color: red" v-if="checkNameProduct.show">
-                  {{ checkNameProduct.message }}
-                </div>
-              </a-form-model-item>
-
-              <span style="color: red">*</span>Số lượng:
-              <a-form-model-item>
-                <a-input-number
-                  style="width: 100%"
-                  v-model="addProductForm.countProduct"
-                  @change="changeCountProduct"
-                  :min="0"
-                  placeholder="Nhập số lượng sản phẩm"
-                />
-                <div style="color: red" v-if="checkCountProduct.show">
-                  {{ checkCountProduct.message }}
-                </div>
-              </a-form-model-item>
-
-              <span style="color: red">*</span>Thông số:
-              <a-form-model-item>
-                <a-input-number
-                  @change="changeFrameProduct"
-                  style="width: 100%"
-                  :min="0"
-                  v-model="addProductForm.lengthFrame"
-                  placeholder="Chiều rộng"
-                />
-                <a-input-number
-                  @change="changeFrameProduct"
-                  style="width: 100%"
-                  :min="0"
-                  v-model="addProductForm.widthFrame"
-                  placeholder="Chiều dài"
-                />
-                <a-input-number
-                  @change="changeFrameProduct"
-                  style="width: 100%"
-                  :min="0"
-                  v-model="addProductForm.heightFrame"
-                  placeholder="Chiều cao"
-                />
-                <div style="color: red" v-if="checkFrameProduct.show">
-                  {{ checkFrameProduct.message }}
-                </div>
-              </a-form-model-item>
-
-              <a-form-model-item label="Ghi chú">
-                <a-textarea
-                  v-model="addProductForm.noteProduct"
-                  placeholder="Nhập ghi chú"
-                  :auto-size="{ minRows: 4, maxRows: 10 }"
-                />
-              </a-form-model-item>
-
-              <span style="color: red">*</span>Giá tiền:
-              <a-form-model-item>
-                <a-input v-model="addProductForm.priceProduct" disabled />
-                <div style="color: red" v-if="checkMoneyProduct.show">
-                  {{ checkMoneyProduct.message }}
-                </div>
-              </a-form-model-item>
-
-              <span style="color: red">*</span>Bảng giá chi tiết:
-              <a-form-model-item>
-                <a-button type="primary" @click="handleAddMaterialDetail">
-                  Thêm vật liệu
-                </a-button>
-                <div style="color: red" v-if="checkMaterialInProduct.show">
-                  {{ checkMaterialInProduct.message }}
-                </div>
-              </a-form-model-item>
+                    <a-select-option
+                      v-for="(contact, index) in dataContactInAdd"
+                      :value="contact.id"
+                      :key="index"
+                    >
+                      {{ contact.name }}
+                    </a-select-option>
+                  </a-select>
+                  <div style="color: red" v-if="checkNameContact.show">
+                    {{ checkNameContact.message }}
+                  </div>
+                </a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="150px">
+                  <span style="color: red">*</span>Tên sản phẩm:</a-col
+                >
+                <a-col flex="auto">
+                  <a-input
+                    @change="changeNameProduct"
+                    style="width: 100%"
+                    v-model="addProductForm.nameProduct"
+                    placeholder="Nhập tên sản phẩm"
+                  />
+                  <div style="color: red" v-if="checkNameProduct.show">
+                    {{ checkNameProduct.message }}
+                  </div>
+                </a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="150px"
+                  ><span style="color: red">*</span>Số lượng:
+                </a-col>
+                <a-col flex="auto">
+                  <a-input-number
+                    style="width: 100%"
+                    v-model="addProductForm.countProduct"
+                    @change="changeCountProduct"
+                    :min="0"
+                    placeholder="Nhập số lượng sản phẩm"
+                  />
+                  <div style="color: red" v-if="checkCountProduct.show">
+                    {{ checkCountProduct.message }}
+                  </div>
+                </a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="150px">
+                  <span style="color: red">*</span>Thông số:
+                </a-col>
+                <a-col flex="auto">
+                  <a-input-number
+                    @change="changeFrameProduct"
+                    style="width: 100%"
+                    :min="0"
+                    v-model="addProductForm.lengthFrame"
+                    placeholder="Chiều rộng"
+                  />
+                  <br />
+                  <br />
+                  <a-input-number
+                    @change="changeFrameProduct"
+                    style="width: 100%"
+                    :min="0"
+                    v-model="addProductForm.widthFrame"
+                    placeholder="Chiều dài"
+                  />
+                  <br />
+                  <br />
+                  <a-input-number
+                    @change="changeFrameProduct"
+                    style="width: 100%"
+                    :min="0"
+                    v-model="addProductForm.heightFrame"
+                    placeholder="Chiều cao"
+                  />
+                  <div style="color: red" v-if="checkFrameProduct.show">
+                    {{ checkFrameProduct.message }}
+                  </div>
+                </a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="150px">Ghi chú: </a-col>
+                <a-col flex="auto">
+                  <a-textarea
+                    v-model="addProductForm.noteProduct"
+                    placeholder="Nhập ghi chú"
+                    :auto-size="{ minRows: 4, maxRows: 10 }"
+                /></a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="150px">
+                  <span style="color: red">*</span>Giá tiền:
+                </a-col>
+                <a-col flex="auto">
+                  <a-input v-model="addProductForm.priceProduct" disabled />
+                  <div style="color: red" v-if="checkMoneyProduct.show">
+                    {{ checkMoneyProduct.message }}
+                  </div></a-col
+                >
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="150px">
+                  <span style="color: red">*</span>Bảng giá chi tiết:
+                </a-col>
+                <a-col flex="auto">
+                  <a-button type="primary" @click="handleAddMaterialDetail">
+                    Thêm vật liệu
+                  </a-button>
+                  <div style="color: red" v-if="checkMaterialInProduct.show">
+                    {{ checkMaterialInProduct.message }}
+                  </div></a-col
+                >
+              </a-row>
             </a-form-model>
           </a-modal>
+          <!-- form add -->
+
           <!-- hiển thị bảng mã vật liệu theo sản phẩm -->
           <a-modal
             v-model="showAddMaterialDetail"
@@ -360,113 +396,145 @@
               </a-button>
             </template>
             <a-form-model>
-              <span style="color: red">*</span>Tên hợp đồng:
-              <a-form-model-item>
-                <a-select
-                  @change="changeNameCOntact"
-                  v-model="addProductForm.idContact"
-                  disabled
-                  placeholder="Hợp đồng"
-                  style="width: 100%"
-                >
-                  <a-select-option
-                    v-for="(contact, index) in dataContactInAdd"
-                    :value="contact.id"
-                    :key="index"
+              <a-row type="flex">
+                <a-col flex="150px">
+                  <span style="color: red">*</span>Tên hợp đồng:
+                </a-col>
+                <a-col flex="auto">
+                  <a-select
+                    @change="changeNameCOntact"
+                    v-model="addProductForm.idContact"
+                    disabled
+                    placeholder="Hợp đồng"
+                    style="width: 100%"
                   >
-                    {{ contact.name }}
-                  </a-select-option>
-                </a-select>
-                <div style="color: red" v-if="checkNameContact.show">
-                  {{ checkNameContact.message }}
-                </div>
-              </a-form-model-item>
+                    <a-select-option
+                      v-for="(contact, index) in dataContactInAdd"
+                      :value="contact.id"
+                      :key="index"
+                    >
+                      {{ contact.name }}
+                    </a-select-option>
+                  </a-select>
+                  <div style="color: red" v-if="checkNameContact.show">
+                    {{ checkNameContact.message }}
+                  </div>
+                </a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="150px">
+                  <span style="color: red">*</span>Tên sản phẩm:
+                </a-col>
+                <a-col flex="auto">
+                  <a-input
+                    @change="changeNameProduct"
+                    style="width: 100%"
+                    v-model="addProductForm.nameProduct"
+                    placeholder="Nhập tên sản phẩm"
+                  />
+                  <div style="color: red" v-if="checkNameProduct.show">
+                    {{ checkNameProduct.message }}
+                  </div></a-col
+                >
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="150px">
+                  <span style="color: red">*</span>Số lượng:</a-col
+                >
+                <a-col flex="auto">
+                  <a-input-number
+                    @change="changeCountProduct"
+                    style="width: 100%"
+                    :min="0"
+                    v-model="addProductForm.countProduct"
+                    placeholder="Nhập số lượng sản phẩm"
+                  />
+                  <div style="color: red" v-if="checkCountProduct.show">
+                    {{ checkCountProduct.message }}
+                  </div></a-col
+                >
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="150px">
+                  <span style="color: red">*</span>Thông số:</a-col
+                >
+                <a-col flex="auto">
+                  <a-input-number
+                    @change="changeFrameProduct"
+                    style="width: 100%"
+                    :min="0"
+                    v-model="addProductForm.lengthFrame"
+                    placeholder="Chiều rộng"
+                  />
+                  <br />
+                  <br />
+                  <a-input-number
+                    @change="changeFrameProduct"
+                    style="width: 100%"
+                    :min="0"
+                    v-model="addProductForm.widthFrame"
+                    placeholder="Chiều dài"
+                  />
+                  <br />
+                  <br />
+                  <a-input-number
+                    @change="changeFrameProduct"
+                    style="width: 100%"
+                    :min="0"
+                    v-model="addProductForm.heightFrame"
+                    placeholder="Chiều cao"
+                  />
+                  <div style="color: red" v-if="checkFrameProduct.show">
+                    {{ checkFrameProduct.message }}
+                  </div></a-col
+                >
+              </a-row>
+              <br />
 
-              <span style="color: red">*</span>Tên sản phẩm:
-              <a-form-model-item>
-                <a-input
-                  @change="changeNameProduct"
-                  style="width: 100%"
-                  v-model="addProductForm.nameProduct"
-                  placeholder="Nhập tên sản phẩm"
-                />
-                <div style="color: red" v-if="checkNameProduct.show">
-                  {{ checkNameProduct.message }}
-                </div>
-              </a-form-model-item>
+              <a-row type="flex">
+                <a-col flex="150px">Ghi chú:</a-col>
+                <a-col flex="auto">
+                  <a-textarea
+                    style="width: 100%"
+                    v-model="addProductForm.noteProduct"
+                    placeholder="Nhập ghi chú"
+                    :auto-size="{ minRows: 4, maxRows: 10 }"
+                /></a-col>
+              </a-row>
 
-              <span style="color: red">*</span>Số lượng:
-              <a-form-model-item>
-                <a-input-number
-                  @change="changeCountProduct"
-                  style="width: 100%"
-                  :min="0"
-                  v-model="addProductForm.countProduct"
-                  placeholder="Nhập số lượng sản phẩm"
-                />
-                <div style="color: red" v-if="checkCountProduct.show">
-                  {{ checkCountProduct.message }}
-                </div>
-              </a-form-model-item>
-
-              <span style="color: red">*</span>Thông số:
-              <a-form-model-item>
-                <a-input-number
-                  @change="changeFrameProduct"
-                  style="width: 100%"
-                  :min="0"
-                  v-model="addProductForm.lengthFrame"
-                  placeholder="Chiều rộng"
-                />
-                <a-input-number
-                  @change="changeFrameProduct"
-                  style="width: 100%"
-                  :min="0"
-                  v-model="addProductForm.widthFrame"
-                  placeholder="Chiều dài"
-                />
-                <a-input-number
-                  @change="changeFrameProduct"
-                  style="width: 100%"
-                  :min="0"
-                  v-model="addProductForm.heightFrame"
-                  placeholder="Chiều cao"
-                />
-                <div style="color: red" v-if="checkFrameProduct.show">
-                  {{ checkFrameProduct.message }}
-                </div>
-              </a-form-model-item>
-
-              <a-form-model-item label="Ghi chú">
-                <a-textarea
-                  style="width: 100%"
-                  v-model="addProductForm.noteProduct"
-                  placeholder="Nhập ghi chú"
-                  :auto-size="{ minRows: 4, maxRows: 10 }"
-                />
-              </a-form-model-item>
-
-              <span style="color: red">*</span>Giá tiền:
-              <a-form-model-item>
-                <a-input
-                  style="width: 100%"
-                  v-model="addProductForm.priceProduct"
-                  disabled
-                />
-                <div style="color: red" v-if="checkMoneyProduct.show">
-                  {{ checkMoneyProduct.message }}
-                </div>
-              </a-form-model-item>
-
-              <span style="color: red">*</span>Bảng giá chi tiết:
-              <a-form-model-item>
-                <a-button type="primary" @click="handleEditMaterialDetail">
-                  Thêm vật liệu
-                </a-button>
-                <div style="color: red" v-if="checkMaterialInProduct.show">
-                  {{ checkMaterialInProduct.message }}
-                </div>
-              </a-form-model-item>
+              <br />
+              <a-row type="flex">
+                <a-col flex="150px">
+                  <span style="color: red">*</span>Giá tiền:</a-col
+                >
+                <a-col flex="auto">
+                  <a-input
+                    style="width: 100%"
+                    v-model="addProductForm.priceProduct"
+                    disabled
+                  />
+                  <div style="color: red" v-if="checkMoneyProduct.show">
+                    {{ checkMoneyProduct.message }}
+                  </div></a-col
+                >
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="150px"
+                  ><span style="color: red">*</span>Bảng giá chi tiết:
+                </a-col>
+                <a-col flex="auto">
+                  <a-button type="primary" @click="handleEditMaterialDetail">
+                    Thêm vật liệu
+                  </a-button>
+                  <div style="color: red" v-if="checkMaterialInProduct.show">
+                    {{ checkMaterialInProduct.message }}
+                  </div></a-col
+                >
+              </a-row>
             </a-form-model>
           </a-modal>
         </div>
@@ -508,7 +576,7 @@ export default {
       columns: [
         {
           title: "STT",
-          width: 100,
+          width: 80,
           dataIndex: "idProduct",
           key: "idProduct",
           fixed: "left",
@@ -535,7 +603,7 @@ export default {
           title: "Số lượng",
           dataIndex: "count",
           key: "count",
-          width: 150,
+          width: 120,
         },
         {
           title: "Ghi chú",
@@ -557,11 +625,11 @@ export default {
           scopedSlots: { customRender: "status" },
         },
         {
-          title: "Hành động",
+          title: "",
           dataIndex: "action",
           key: "action",
           fixed: "right",
-          width: 150,
+          width: 180,
           scopedSlots: { customRender: "action" },
         },
       ],
@@ -752,7 +820,7 @@ export default {
       } else {
         this.checkFrameProduct.show = true;
         this.checkFrameProduct.message =
-          "Bạn phải điền đầy đủ 3 thông số (chiều rộng, chiều dài, chiều cao) của sản phẩm";
+          "Bạn phải điền đầy đủ 3 thông số của sản phẩm";
       }
     },
     onCellChangeCount(key, value) {
@@ -927,7 +995,7 @@ export default {
         check = false;
         this.checkFrameProduct.show = true;
         this.checkFrameProduct.message =
-          "Bạn phải điền 3 thông số (chiều rộng, chiều dài, chiều cao) của sản phẩm";
+          "Bạn phải điền 3 thông số của sản phẩm";
       }
 
       if (

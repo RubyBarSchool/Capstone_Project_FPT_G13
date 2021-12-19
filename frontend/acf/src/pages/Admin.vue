@@ -110,13 +110,9 @@
                 }}
               </template>
               <template slot="action" slot-scope="text, record">
-                <a-row>
+                <a-row :gutter="[16, 16]">
                   <a-col :span="6">
-                    <a-button
-                      id="user"
-                      @click="getAccountByID(record.id)"
-                      :style="{ 'margin-right': '100px' }"
-                    >
+                    <a-button id="user" @click="getAccountByID(record.id)">
                       <font-awesome-icon :icon="['fas', 'user']" />
                     </a-button>
                   </a-col>
@@ -128,7 +124,9 @@
                       ok-text="Đồng ý"
                       cancel-text="Hủy"
                     >
-                      <a-button id="reset" :style="{ 'margin-right': '100px' }">
+                      <a-button
+                        id="reset"
+                      >
                         <font-awesome-icon :icon="['fas', 'retweet']" />
                       </a-button>
                     </a-popconfirm>
@@ -144,7 +142,6 @@
                           record.status
                         )
                       "
-                      :style="{ width: '44.25px' }"
                     >
                       <font-awesome-icon :icon="['fas', 'edit']" />
                     </a-button>
@@ -158,7 +155,6 @@
                       cancel-text="Hủy"
                     >
                       <a-button id="delete">
-                        <!-- :loading = "loadingDelete" -->
                         <font-awesome-icon :icon="['fas', 'trash']" />
                       </a-button>
                     </a-popconfirm>
@@ -399,9 +395,9 @@
               >
               <a-col flex="auto">
                 <a-radio-group name="radioGroup" v-model="dataEdit.status">
-                <a-radio :value="false"> Nháp </a-radio>
-                <a-radio :value="true"> Công khai </a-radio>
-              </a-radio-group>
+                  <a-radio :value="false"> Nháp </a-radio>
+                  <a-radio :value="true"> Công khai </a-radio>
+                </a-radio-group>
               </a-col>
             </a-row>
           </a-modal>
@@ -939,6 +935,14 @@ export default {
 }
 #user:hover {
   background-color: rgb(42, 253, 0);
+  color: white;
+}
+#reset {
+  background-color: #ff8800;
+  color: white;
+}
+#reset:hover {
+  background-color: #FF6600;
   color: white;
 }
 /* profile */

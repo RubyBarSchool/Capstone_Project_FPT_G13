@@ -144,7 +144,7 @@
             </a-button>
           </template>
           <a-row type="flex">
-            <a-col flex="100px">
+            <a-col flex="150px">
               <span style="color: red">*</span> Tên hợp đồng</a-col
             >
             <a-col flex="auto">
@@ -169,7 +169,7 @@
           </a-row>
           <br />
           <a-row type="flex">
-            <a-col flex="100px">
+            <a-col flex="150px">
               <span style="color: red">*</span> Số tiền tạm ứng</a-col
             >
             <a-col flex="auto">
@@ -200,7 +200,7 @@
             :columns="columnsTableView"
             :data-source="dataSourceTableView"
             :pagination="false"
-            :scroll="{ x: 1000 }"
+            :scroll="{ x: 800 }"
             :rowKey="
               (record, index) => {
                 return index;
@@ -217,27 +217,25 @@
               }}
             </template>
             <template slot="action" slot-scope="text, record">
-              <a-col :span="8" v-if="disableEditAndDelete">
-                <a-button
-                  id="edit"
-                  @click="showEditForm(record)"
-                  :style="{ width: '44.25px' }"
-                >
-                  <font-awesome-icon :icon="['fas', 'edit']" />
-                </a-button>
-              </a-col>
-              <a-col :span="8" v-if="disableEditAndDelete">
-                <a-popconfirm
-                  title="Bạn có chắc chắn muốn xóa không?"
-                  @confirm="deleteProductionOrder(record)"
-                  ok-text="Đồng ý"
-                  cancel-text="Đóng"
-                >
-                  <a-button id="delete">
-                    <font-awesome-icon :icon="['fas', 'trash']" />
+              <a-row :gutter="[16, 16]">
+                <a-col :span="12" v-if="disableEditAndDelete">
+                  <a-button id="edit" @click="showEditForm(record)">
+                    <font-awesome-icon :icon="['fas', 'edit']" />
                   </a-button>
-                </a-popconfirm>
-              </a-col>
+                </a-col>
+                <a-col :span="12" v-if="disableEditAndDelete">
+                  <a-popconfirm
+                    title="Bạn có chắc chắn muốn xóa không?"
+                    @confirm="deleteProductionOrder(record)"
+                    ok-text="Đồng ý"
+                    cancel-text="Đóng"
+                  >
+                    <a-button id="delete">
+                      <font-awesome-icon :icon="['fas', 'trash']" />
+                    </a-button>
+                  </a-popconfirm>
+                </a-col>
+              </a-row>
             </template>
           </a-table>
         </a-modal>
@@ -349,7 +347,7 @@ export default {
           scopedSlots: { customRender: "statusDone" },
         },
         {
-          title: "Hành động",
+          title: "",
           key: "operation",
           width: 150,
           scopedSlots: { customRender: "action" },
@@ -361,26 +359,26 @@ export default {
           title: "STT",
           dataIndex: "id",
           key: "id",
-          width: 150,
+          width: 80,
           fixed: "left",
         },
         {
           title: "Ngày ứng tiền",
           dataIndex: "date",
           key: "date",
-          width: 150,
+          width: 100,
           scopedSlots: { customRender: "date" },
         },
         {
           title: "Số tiền tạm ứng",
           dataIndex: "money",
           key: "money",
-          width: 150,
+          width: 100,
         },
         {
-          title: "Hành động",
+          title: "",
           key: "operation",
-          width: 150,
+          width: 80,
           scopedSlots: { customRender: "action" },
         },
       ],
