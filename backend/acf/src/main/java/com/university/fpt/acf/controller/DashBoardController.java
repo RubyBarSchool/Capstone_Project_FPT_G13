@@ -7,6 +7,7 @@ import com.university.fpt.acf.service.MaterialService;
 import com.university.fpt.acf.vo.DashboardAdmin;
 import com.university.fpt.acf.vo.DashboardEmployee;
 import com.university.fpt.acf.vo.MaterialVO;
+import com.university.fpt.acf.vo.ReportTopEmployeeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -100,6 +102,54 @@ public class DashBoardController {
         }
     }
 
+
+    @PostMapping("/admin/reportContact")
+    public ResponseEntity<ResponseCommon> reportContact(){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<HashMap<String,Object>> dashboardEmployee = new ArrayList<>();
+        try {
+            dashboardEmployee = dashBoardService.getDataReportContact();
+            responseCommon.setData(dashboardEmployee);
+            total= dashboardEmployee.size();
+            message = "Thành công!";
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(dashboardEmployee);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
+
+    @PostMapping("/admin/topemployee")
+    public ResponseEntity<ResponseCommon> getTopEmployee(){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<ReportTopEmployeeVO> dashboardEmployee = new ArrayList<>();
+        try {
+            dashboardEmployee = dashBoardService.getTopEmployee();
+            responseCommon.setData(dashboardEmployee);
+            total= dashboardEmployee.size();
+            message = "Thành công!";
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(dashboardEmployee);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
 
 
 }

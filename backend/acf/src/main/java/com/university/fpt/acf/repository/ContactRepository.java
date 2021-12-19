@@ -48,4 +48,7 @@ public interface ContactRepository extends JpaRepository<Contact,Long> {
 
     @Query(" select COUNT(c.id)  from Contact c where c.deleted = false and c.statusDone = 0")
     Integer getContactDone();
+
+    @Query(" select c  from Contact c where c.deleted = false and c.statusDone <> 1")
+    List<Contact> getReportContact();
 }

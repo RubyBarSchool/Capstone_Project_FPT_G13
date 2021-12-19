@@ -13,6 +13,9 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { far } from '@fortawesome/free-regular-svg-icons';
 import { SpreadsheetPlugin } from "@syncfusion/ej2-vue-spreadsheet";
 import VueResource from 'vue-resource'
+import VueApexCharts from 'vue-apexcharts'
+Vue.use(VueApexCharts)
+Vue.component('apexchart', VueApexCharts)
 Vue.use(VueResource)
 Vue.use(SpreadsheetPlugin);
 library.add(fas, far);
