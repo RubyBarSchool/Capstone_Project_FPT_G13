@@ -556,43 +556,53 @@
                 Lưu
               </a-button>
             </template>
-            <a-form-model>
-              <span style="color: red">*</span> Mã tấm phủ
-              <a-select
-                v-model="dataAddUnitCoverSheet.idMaterial"
-                style="width: 100%"
-                @change="handleChangeCodeSheet"
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Mã tấm phủ</a-col
               >
-                <a-select-option
-                  v-for="(code, index) in listCodeCoverSheets"
-                  :value="code.id"
-                  :key="index"
+              <a-col flex="auto">
+                <a-select
+                  v-model="dataAddUnitCoverSheet.idMaterial"
+                  style="width: 100%"
+                  @change="handleChangeCodeSheet"
                 >
-                  {{ code.name }}
-                </a-select-option>
-              </a-select>
-              <div style="color: red" v-if="checkDataInputAddMaterial.show">
-                {{ checkDataInputAddMaterial.message }}
-              </div>
-
-              <span style="color: red">*</span> Đơn vị đo
-              <a-select
-                v-model="dataAddUnitCoverSheet.idUnit"
-                style="width: 100%"
-                @change="handleChangeUnit"
+                  <a-select-option
+                    v-for="(code, index) in listCodeCoverSheets"
+                    :value="code.id"
+                    :key="index"
+                  >
+                    {{ code.name }}
+                  </a-select-option>
+                </a-select>
+                <div style="color: red" v-if="checkDataInputAddMaterial.show">
+                  {{ checkDataInputAddMaterial.message }}
+                </div>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Đơn vị đo</a-col
               >
-                <a-select-option
-                  v-for="(unit, index) in listUnits"
-                  :value="unit.id"
-                  :key="index"
+              <a-col flex="auto">
+                <a-select
+                  v-model="dataAddUnitCoverSheet.idUnit"
+                  style="width: 100%"
+                  @change="handleChangeUnit"
                 >
-                  {{ unit.name }}
-                </a-select-option>
-              </a-select>
-              <div style="color: red" v-if="checkDataInputAddUnit.show">
-                {{ checkDataInputAddUnit.message }}
-              </div>
-            </a-form-model>
+                  <a-select-option
+                    v-for="(unit, index) in listUnits"
+                    :value="unit.id"
+                    :key="index"
+                  >
+                    {{ unit.name }}
+                  </a-select-option>
+                </a-select>
+                <div style="color: red" v-if="checkDataInputAddUnit.show">
+                  {{ checkDataInputAddUnit.message }}
+                </div>
+              </a-col>
+            </a-row>
           </a-modal>
           <!-- popup unit-->
 
@@ -612,68 +622,84 @@
                 Lưu
               </a-button>
             </template>
-            <a-form-model>
-              <span style="color: red">*</span> Mã tấm phủ
-              <a-select
-                placeholder="Mã tấm phủ"
-                v-model="dataAddFrameHeight.idMaterial"
-                :filter-option="false"
-                style="width: 100%"
-                @change="handleChangeCodeCoverSheet"
-                :disabled="disable"
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Mã tấm phủ</a-col
               >
-                <a-select-option
-                  v-for="(code, index) in listCodeCoverSheets"
-                  :value="code.id"
-                  :key="index"
+              <a-col flex="auto">
+                <a-select
+                  placeholder="Mã tấm phủ"
+                  v-model="dataAddFrameHeight.idMaterial"
+                  :filter-option="false"
+                  style="width: 100%"
+                  @change="handleChangeCodeCoverSheet"
+                  :disabled="disable"
                 >
-                  {{ code.name }}
-                </a-select-option>
-              </a-select>
-              <div style="color: red" v-if="checkDataInputAddCoverPlate.show">
-                {{ checkDataInputAddCoverPlate.message }}
-              </div>
-
-              <span style="color: red">*</span> Khung
-              <a-select
-                placeholder="Khung"
-                v-model="dataAddFrameHeight.idFrame"
-                style="width: 100%"
-                @change="handleChangeFrame"
-                :disabled="disable"
+                  <a-select-option
+                    v-for="(code, index) in listCodeCoverSheets"
+                    :value="code.id"
+                    :key="index"
+                  >
+                    {{ code.name }}
+                  </a-select-option>
+                </a-select>
+                <div style="color: red" v-if="checkDataInputAddCoverPlate.show">
+                  {{ checkDataInputAddCoverPlate.message }}
+                </div>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Khung</a-col
               >
-                <a-select-option
-                  v-for="(frame, index) in listFrames"
-                  :value="frame.id"
-                  :key="index"
+              <a-col flex="auto">
+                <a-select
+                  placeholder="Khung"
+                  v-model="dataAddFrameHeight.idFrame"
+                  style="width: 100%"
+                  @change="handleChangeFrame"
+                  :disabled="disable"
                 >
-                  {{ frame.frame }}
-                </a-select-option>
-              </a-select>
-              <div style="color: red" v-if="checkDataInputAddFrame.show">
-                {{ checkDataInputAddFrame.message }}
-              </div>
-
-              <span style="color: red">*</span> Chiều cao
-              <a-select
-                placeholder="Chiều cao"
-                v-model="dataAddFrameHeight.idHeight"
-                style="width: 100%"
-                @change="handleChangeHeight"
-                :disabled="disable"
+                  <a-select-option
+                    v-for="(frame, index) in listFrames"
+                    :value="frame.id"
+                    :key="index"
+                  >
+                    {{ frame.frame }}
+                  </a-select-option>
+                </a-select>
+                <div style="color: red" v-if="checkDataInputAddFrame.show">
+                  {{ checkDataInputAddFrame.message }}
+                </div>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Chiều cao</a-col
               >
-                <a-select-option
-                  v-for="(height, index) in listFrameHeights"
-                  :value="height.id"
-                  :key="index"
+              <a-col flex="auto">
+                <a-select
+                  placeholder="Chiều cao"
+                  v-model="dataAddFrameHeight.idHeight"
+                  style="width: 100%"
+                  @change="handleChangeHeight"
+                  :disabled="disable"
                 >
-                  {{ height.frameHeight }}
-                </a-select-option>
-              </a-select>
-              <div style="color: red" v-if="checkDataInputAddHeight.show">
-                {{ checkDataInputAddHeight.message }}
-              </div>
-            </a-form-model>
+                  <a-select-option
+                    v-for="(height, index) in listFrameHeights"
+                    :value="height.id"
+                    :key="index"
+                  >
+                    {{ height.frameHeight }}
+                  </a-select-option>
+                </a-select>
+                <div style="color: red" v-if="checkDataInputAddHeight.show">
+                  {{ checkDataInputAddHeight.message }}
+                </div>
+              </a-col>
+            </a-row>
           </a-modal>
         </div>
       </a-layout-content>

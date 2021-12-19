@@ -8,7 +8,7 @@
             background: 'white',
           }"
         >
-           <a-back-top :style="{ width: '5vh', height: '15vh' }" />
+          <a-back-top :style="{ width: '5vh', height: '15vh' }" />
           <!-- menu trên -->
           <a-input
             placeholder="Tiêu đề"
@@ -166,16 +166,23 @@
                 Lưu
               </a-button>
             </template>
-            <a-form-model>
-              <span style="color: red">*</span> Tiêu đề:
-              <a-form-model-item>
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Tiêu đề:</a-col
+              >
+              <a-col flex="auto">
                 <a-input v-model="dataAdd.title" @change="inputTitleAdd" />
                 <div style="color: red" v-if="checkInputTitle.show">
                   {{ checkInputTitle.message }}
                 </div>
-              </a-form-model-item>
-              <span style="color: red">*</span> Số tiền:
-              <a-form-model-item>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Số tiền:</a-col
+              >
+              <a-col flex="auto">
                 <a-input-number
                   style="width: 100%"
                   v-model="dataAdd.advanceSalary"
@@ -185,9 +192,14 @@
                 <div style="color: red" v-if="checkInputSalary.show">
                   {{ checkInputSalary.message }}
                 </div>
-              </a-form-model-item>
-              <span style="color: red">*</span> Nội dung:
-              <a-form-model-item>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Nội dung:
+              </a-col>
+              <a-col flex="auto">
                 <a-textarea
                   v-model="dataAdd.content"
                   placeholder="Lý do viết vào đây"
@@ -197,8 +209,8 @@
                 <div style="color: red" v-if="checkInputContent.show">
                   {{ checkInputContent.message }}
                 </div>
-              </a-form-model-item>
-            </a-form-model>
+              </a-col>
+            </a-row>
           </a-modal>
           <!-- popup add -->
 

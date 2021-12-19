@@ -1200,4 +1200,28 @@ export default {
 </script>
 
 <style scoped>
+#delete {
+  background-color: rgb(255, 0, 0);
+  color: white;
+}
+#delete:hover {
+  background-color: rgba(233, 15, 15, 0.863);
+  color: white;
+}
+#edit {
+  background-color: rgb(10, 208, 243);
+  color: white;
+}
+#edit:hover {
+  background-color: rgb(0, 181, 253);
+  color: white;
+}
+#view {
+  background-color: rgb(76, 238, 12);
+  color: white;
+}
+#view:hover {
+  background-color: rgb(42, 253, 0);
+  color: white;
+}
 </style>

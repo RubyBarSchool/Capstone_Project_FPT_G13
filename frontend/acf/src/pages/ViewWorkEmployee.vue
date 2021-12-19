@@ -475,4 +475,20 @@ export default {
 </script>
 
 <style scoped>
+#edit {
+  background-color: rgb(10, 208, 243);
+  color: white;
+}
+#edit:hover {
+  background-color: rgb(0, 181, 253);
+  color: white;
+}
+#view {
+  background-color: rgb(76, 238, 12);
+  color: white;
+}
+#view:hover {
+  background-color: rgb(42, 253, 0);
+  color: white;
+}
 </style>

@@ -8,7 +8,7 @@
             background: 'white',
           }"
         >
-         <a-back-top :style="{ width: '5vh', height: '15vh' }" />
+          <a-back-top :style="{ width: '5vh', height: '15vh' }" />
           <!-- menu trên -->
           <a-input
             placeholder="Chiều dài"
@@ -94,9 +94,11 @@
                 Lưu
               </a-button>
             </template>
-            <a-form-model>
-              <span style="color: red">*</span>Chiều dài :
-              <a-form-model-item>
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span>Chiều dài :</a-col
+              >
+              <a-col flex="auto">
                 <a-input-number
                   style="width: 100%"
                   v-model="dataAdd.length"
@@ -106,9 +108,14 @@
                 <div style="color: red" v-if="checkInputLength.show">
                   {{ checkInputLength.message }}
                 </div>
-              </a-form-model-item>
-              <span style="color: red">*</span>Chiều rộng :
-              <a-form-model-item>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span>Chiều rộng :</a-col
+              >
+              <a-col flex="auto">
                 <a-input-number
                   style="width: 100%"
                   v-model="dataAdd.width"
@@ -118,8 +125,8 @@
                 <div style="color: red" v-if="checkInputWidth.show">
                   {{ checkInputWidth.message }}
                 </div>
-              </a-form-model-item>
-            </a-form-model>
+              </a-col>
+            </a-row>
           </a-modal>
           <!-- popup add -->
         </div>
@@ -132,8 +139,7 @@ import frameAdminService from "../service/frameAdminService";
 
 export default {
   name: "FrameAdmin",
-  components: {
-  },
+  components: {},
   data() {
     return {
       pagination: {

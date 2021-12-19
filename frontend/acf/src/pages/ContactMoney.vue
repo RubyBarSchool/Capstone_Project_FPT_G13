@@ -8,7 +8,7 @@
             background: 'white',
           }"
         >
-           <a-back-top :style="{ width: '5vh', height: '15vh' }" />
+          <a-back-top :style="{ width: '5vh', height: '15vh' }" />
           <!-- menu trên -->
           <a-input
             placeholder="Tên hợp đồng"
@@ -143,38 +143,48 @@
               Lưu
             </a-button>
           </template>
-          <a-form-model>
-            <span style="color: red">*</span> Tên hợp đồng
-            <a-select
-              v-model="dataSubmit.contact"
-              placeholder="Hợp đồng"
-              style="width: 80%"
-              @change="inputContract"
+          <a-row type="flex">
+            <a-col flex="100px">
+              <span style="color: red">*</span> Tên hợp đồng</a-col
             >
-              <a-select-option
-                v-for="(contact, index) in dataContact"
-                :value="contact.id"
-                :key="index"
+            <a-col flex="auto">
+              <a-select
+                v-model="dataSubmit.contact"
+                placeholder="Hợp đồng"
+                style="width: 80%"
+                @change="inputContract"
               >
-                {{ contact.name }}
-              </a-select-option>
-            </a-select>
-            <div style="color: red" v-if="checkDataInputContract.show">
-              {{ checkDataInputContract.message }}
-            </div>
-            <br />
-            <span style="color: red">*</span> Số tiền tạm ứng
-            <a-input-number
-              @change="inputMoney"
-              v-model="dataSubmit.money"
-              placeholder="Nhập số tiền tạm ứng"
-              style="width: 80%"
-              :min="100000"
-            />
-            <div style="color: red" v-if="checkDataInputMoney.show">
-              {{ checkDataInputMoney.message }}
-            </div>
-          </a-form-model>
+                <a-select-option
+                  v-for="(contact, index) in dataContact"
+                  :value="contact.id"
+                  :key="index"
+                >
+                  {{ contact.name }}
+                </a-select-option>
+              </a-select>
+              <div style="color: red" v-if="checkDataInputContract.show">
+                {{ checkDataInputContract.message }}
+              </div>
+            </a-col>
+          </a-row>
+          <br />
+          <a-row type="flex">
+            <a-col flex="100px">
+              <span style="color: red">*</span> Số tiền tạm ứng</a-col
+            >
+            <a-col flex="auto">
+              <a-input-number
+                @change="inputMoney"
+                v-model="dataSubmit.money"
+                placeholder="Nhập số tiền tạm ứng"
+                style="width: 80%"
+                :min="100000"
+              />
+              <div style="color: red" v-if="checkDataInputMoney.show">
+                {{ checkDataInputMoney.message }}
+              </div>
+            </a-col>
+          </a-row>
         </a-modal>
 
         <!-- Xem chi tiết ứng tiền hợp đồng -->
@@ -613,6 +623,22 @@ export default {
 }
 #delete:hover {
   background-color: rgba(233, 15, 15, 0.863);
+  color: white;
+}
+#edit {
+  background-color: rgb(10, 208, 243);
+  color: white;
+}
+#edit:hover {
+  background-color: rgb(0, 181, 253);
+  color: white;
+}
+#view {
+  background-color: rgb(76, 238, 12);
+  color: white;
+}
+#view:hover {
+  background-color: rgb(42, 253, 0);
   color: white;
 }
 </style>

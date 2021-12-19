@@ -8,13 +8,13 @@
             background: 'white',
           }"
         >
-           <a-back-top :style="{ width: '5vh', height: '15vh' }" />
+          <a-back-top :style="{ width: '5vh', height: '15vh' }" />
           <!-- menu trên -->
           <a-input
             placeholder="Tên tài khoản"
             style="width: 150px"
             v-model="dataSearch.name"
-            :style="{'margin-right': '5px'}"
+            :style="{ 'margin-right': '5px' }"
           />
           <a-select
             placeholder="Quyền"
@@ -23,7 +23,7 @@
             :filter-option="false"
             @search="fetchRoles"
             @change="search"
-            :style="{'margin-right': '5px', 'width': '150px'}"
+            :style="{ 'margin-right': '5px', width: '150px' }"
           >
             <a-select-option
               v-for="(role, index) in dataRoles"
@@ -37,7 +37,7 @@
             placeholder="Trạng thái"
             mode="multiple"
             v-model="dataSearch.listStatus"
-            :style="{'margin-right': '5px', 'width': '150px'}"
+            :style="{ 'margin-right': '5px', width: '150px' }"
             @change="search"
           >
             <a-select-option value="false"> Nháp </a-select-option>
@@ -266,65 +266,77 @@
                 Lưu
               </a-button>
             </template>
-            <a-form-model>
-              <span style="color: red">*</span> Nhân viên :
-              <a-select
-                show-search
-                placeholder="Tên nhân viên"
-                :filter-option="false"
-                v-model="dataAdd.employee"
-                @change="generateUsername"
-                @search="fetchEmployees"
-                style="width: 100%"
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span>Nhân viên :</a-col
               >
-                <a-select-option
-                  v-for="(employee, index) in dataEmployees"
-                  :value="employee.id"
-                  :key="index"
+              <a-col flex="auto">
+                <a-select
+                  show-search
+                  placeholder="Tên nhân viên"
+                  :filter-option="false"
+                  v-model="dataAdd.employee"
+                  @change="generateUsername"
+                  @search="fetchEmployees"
+                  style="width: 100%"
                 >
-                  {{ employee.name }}
-                </a-select-option>
-              </a-select>
-              <div style="color: red" v-if="checkDataInputEmployee.show">
-                {{ checkDataInputEmployee.message }}
-              </div>
-              <span style="color: red">*</span> Tài khoản :
-              <a-input
-                @change="inputUsername"
-                v-model="dataAdd.username"
-                disabled
-              />
-              <div style="color: red" v-if="checkDataInputUsername.show">
-                {{ checkDataInputUsername.message }}
-              </div>
-              <!-- <a-form-model-item label="Mật khẩu">
-                <a-input-password v-model="dataAdd.password" />
-                <div style="color: red" v-if="checkDataInput.show">
-                  {{ checkDataInput.message }}
+                  <a-select-option
+                    v-for="(employee, index) in dataEmployees"
+                    :value="employee.id"
+                    :key="index"
+                  >
+                    {{ employee.name }}
+                  </a-select-option>
+                </a-select>
+                <div style="color: red" v-if="checkDataInputEmployee.show">
+                  {{ checkDataInputEmployee.message }}
                 </div>
-              </a-form-model-item> -->
-              <span style="color: red">*</span> Chức vụ :
-              <a-select
-                placeholder="Chức vụ"
-                mode="multiple"
-                v-model="dataAdd.listRole"
-                :filter-option="false"
-                @search="fetchRoles"
-                style="width: 100%"
-                @change="inputNamePosition"
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Tài khoản :</a-col
               >
-                <a-select-option
-                  v-for="(role, index) in dataRoles"
-                  :value="role.id"
-                  :key="index"
+              <a-col flex="auto">
+                <a-input
+                  @change="inputUsername"
+                  v-model="dataAdd.username"
+                  disabled
+                />
+                <div style="color: red" v-if="checkDataInputUsername.show">
+                  {{ checkDataInputUsername.message }}
+                </div>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Chức vụ :</a-col
+              >
+              <a-col flex="auto">
+                <a-select
+                  placeholder="Chức vụ"
+                  mode="multiple"
+                  v-model="dataAdd.listRole"
+                  :filter-option="false"
+                  @search="fetchRoles"
+                  style="width: 100%"
+                  @change="inputNamePosition"
                 >
-                  {{ role.name }}
-                </a-select-option>
-              </a-select>
-              <div style="color: red" v-if="checkDataInputRole.show">
-                {{ checkDataInputRole.message }}
-              </div>
-            </a-form-model>
+                  <a-select-option
+                    v-for="(role, index) in dataRoles"
+                    :value="role.id"
+                    :key="index"
+                  >
+                    {{ role.name }}
+                  </a-select-option>
+                </a-select>
+                <div style="color: red" v-if="checkDataInputRole.show">
+                  {{ checkDataInputRole.message }}
+                </div>
+              </a-col>
+            </a-row>
           </a-modal>
           <!-- popup add -->
 
@@ -341,39 +353,57 @@
                 Lưu
               </a-button>
             </template>
-            <a-form-model>
-              <span style="color: red">*</span> Tài khoản :
-              <a-input v-model="dataEdit.username" disabled />
-              <div style="color: red" v-if="checkDataInputUsername.show">
-                {{ checkDataInputUsername.message }}
-              </div>
-              <span style="color: red">*</span> Chức vụ :
-              <a-select
-                placeholder="Chức vụ"
-                mode="multiple"
-                v-model="dataEdit.listRole"
-                :filter-option="false"
-                @search="fetchRoles"
-                style="width: 100%"
-                @change="inputEditPosition"
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Tài khoản :</a-col
               >
-                <a-select-option
-                  v-for="(role, index) in dataRoles"
-                  :value="role.id"
-                  :key="index"
+              <a-col flex="auto">
+                <a-input v-model="dataEdit.username" disabled />
+                <div style="color: red" v-if="checkDataInputUsername.show">
+                  {{ checkDataInputUsername.message }}
+                </div>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Chức vụ :</a-col
+              >
+              <a-col flex="auto">
+                <a-select
+                  placeholder="Chức vụ"
+                  mode="multiple"
+                  v-model="dataEdit.listRole"
+                  :filter-option="false"
+                  @search="fetchRoles"
+                  style="width: 100%"
+                  @change="inputEditPosition"
                 >
-                  {{ role.name }}
-                </a-select-option>
-              </a-select>
-              <div style="color: red" v-if="checkDataInputRole.show">
-                {{ checkDataInputRole.message }}
-              </div>
-              <span style="color: red">*</span> Trạng thái :
-              <a-radio-group name="radioGroup" v-model="dataEdit.status">
+                  <a-select-option
+                    v-for="(role, index) in dataRoles"
+                    :value="role.id"
+                    :key="index"
+                  >
+                    {{ role.name }}
+                  </a-select-option>
+                </a-select>
+                <div style="color: red" v-if="checkDataInputRole.show">
+                  {{ checkDataInputRole.message }}
+                </div>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Trạng thái :</a-col
+              >
+              <a-col flex="auto">
+                <a-radio-group name="radioGroup" v-model="dataEdit.status">
                 <a-radio :value="false"> Nháp </a-radio>
                 <a-radio :value="true"> Công khai </a-radio>
               </a-radio-group>
-            </a-form-model>
+              </a-col>
+            </a-row>
           </a-modal>
           <!-- popup edit-->
         </div>

@@ -116,30 +116,58 @@
                 Lưu
               </a-button>
             </template>
-            <div class="container">
-              <a-form-model>
-                <span style="color: red">*</span> Tên công ty
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Tên công ty</a-col
+              >
+              <a-col flex="auto">
                 <a-input @change="inputCompany" v-model="dataAdd.name" />
                 <div style="color: red" v-if="checkDataInputCompany.show">
                   {{ checkDataInputCompany.message }}
                 </div>
-                <span style="color: red">*</span> Địa chỉ
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Địa chỉ</a-col
+              >
+              <a-col flex="auto">
                 <a-input @change="inputAddress" v-model="dataAdd.address" />
                 <div style="color: red" v-if="checkDataInputAddress.show">
                   {{ checkDataInputAddress.message }}
                 </div>
-                <span style="color: red">*</span> Số điện thoại
-                <a-input @change="inputPhone" v-model="dataAdd.phone" />
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Số điện thoại</a-col
+              >
+              <a-col flex="auto">
+                <a-input-number
+                  v-model="dataAdd.phone"
+                  @change="inputPhone"
+                  :min="0"
+                  style="width: 100%"
+                />
                 <div style="color: red" v-if="checkDataInputPhone.show">
                   {{ checkDataInputPhone.message }}
                 </div>
-                <span style="color: red">*</span> Email
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Email</a-col
+              >
+              <a-col flex="auto">
                 <a-input @change="inputEmail" v-model="dataAdd.email" />
                 <div style="color: red" v-if="checkDataInputEmail.show">
                   {{ checkDataInputEmail.message }}
                 </div>
-              </a-form-model>
-            </div>
+              </a-col>
+            </a-row>
           </a-modal>
           <!-- popup add -->
 
@@ -156,14 +184,23 @@
                 Lưu
               </a-button>
             </template>
-            <div class="container">
-              <a-form-model>
-                <span style="color: red">*</span> Tên công ty
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Tên công ty</a-col
+              >
+              <a-col flex="auto">
                 <a-input @change="inputEditCompany" v-model="dataEdit.name" />
                 <div style="color: red" v-if="checkDataInputCompany.show">
                   {{ checkDataInputCompany.message }}
                 </div>
-                <span style="color: red">*</span> Địa chỉ
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Địa chỉ</a-col
+              >
+              <a-col flex="auto">
                 <a-input
                   @change="inputEditAddress"
                   v-model="dataEdit.address"
@@ -171,18 +208,37 @@
                 <div style="color: red" v-if="checkDataInputAddress.show">
                   {{ checkDataInputAddress.message }}
                 </div>
-                <span style="color: red">*</span> Số điện thoại
-                <a-input @change="inputEditPhone" v-model="dataEdit.phone" />
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Số điện thoại</a-col
+              >
+              <a-col flex="auto">
+                <a-input-number
+                  v-model="dataEdit.phone"
+                  @change="inputEditPhone"
+                  :min="0"
+                  style="width: 100%"
+                />
                 <div style="color: red" v-if="checkDataInputPhone.show">
                   {{ checkDataInputPhone.message }}
                 </div>
-                <span style="color: red">*</span> Email
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Email</a-col
+              >
+              <a-col flex="auto">
                 <a-input @change="inputEditEmail" v-model="dataEdit.email" />
                 <div style="color: red" v-if="checkDataInputEmail.show">
                   {{ checkDataInputEmail.message }}
                 </div>
-              </a-form-model>
-            </div>
+              </a-col>
+            </a-row>
           </a-modal>
           <!-- popup update -->
         </div>
@@ -648,5 +704,4 @@ export default {
   background-color: rgb(24, 216, 24);
   color: white;
 }
-
 </style>
