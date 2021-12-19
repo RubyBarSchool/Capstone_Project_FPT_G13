@@ -55,9 +55,9 @@
                   :overflow-count="30"
                 >
                   <font-awesome-icon
-                    :style="{ 'font-size': '30px', color: '#495057' }"
-                    if=""
+                    :style="{ 'font-size': '40px','margin-top':'1vh' }"
                     :icon="['far', 'bell']"
+                    class="bell"
                   />
                 </a-badge>
                 <a-menu
@@ -113,7 +113,6 @@
                           ok-text="Đồng ý"
                           cancel-text="Hủy"
                         >
-                          <!-- <a-button> -->
                           <font-awesome-icon
                             :style="{
                               'font-size': '20px',
@@ -122,7 +121,6 @@
                             }"
                             :icon="['fas', 'ellipsis-h']"
                           />
-                          <!-- </a-button> -->
                         </a-popconfirm>
                       </a-col>
                     </a-row>
@@ -134,7 +132,7 @@
               <a-dropdown :trigger="['click']" class="menuAva">
                 <a class="ant-dropdown-link">
                   <a-avatar
-                    :size="50"
+                    :size="60"
                     :style="{ 'margin-left': '10px', 'margin-bottom': '10px' }"
                     src="https://img.icons8.com/bubbles/100/000000/user.png"
                   />
@@ -628,6 +626,12 @@ export default {
 };
 </script>
 <style scoped>
+.bell {
+  color: #001100;
+}
+.bell:hover {
+  color: rgb(87, 83, 83);
+}
 .content {
   color: #000;
   margin-top: -40px;
@@ -678,7 +682,7 @@ export default {
 .menuAva {
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .menuAva:hover {

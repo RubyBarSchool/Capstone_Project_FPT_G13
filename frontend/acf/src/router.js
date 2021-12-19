@@ -229,7 +229,14 @@ export const router = new Router({
                     name: 'profile',
                     component: () =>
                         import ("./pages/Profile.vue")
-                }
+                },
+                {
+                    path: "dashboard",
+                    name: "Dashboard",
+                    // lazy-loaded
+                    component: () =>
+                        import ("./pages/Dashboard.vue"),
+                },
             ]
         },
         {
