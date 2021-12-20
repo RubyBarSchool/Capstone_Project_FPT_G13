@@ -48,6 +48,9 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     @Autowired
     private JavaMailSender emailSender;
 
+    //************************************
+    // tự động tạo password với độ dài 8 có số và có viết hoa thường
+    //************************************
     private String generatePassword() {
         String result = "";
         result = RandomStringUtils.random(8, true, true);
@@ -57,6 +60,11 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     @Value( "${acf.scross.path}" )
     private String path;
 
+    //************************************
+    // thêm account vào db
+    // 1. thêm account
+    // 2. gửi mail về cho nhân viên
+    //************************************
     @Override
     public Boolean insertAccount(AddAccountForm addAccountForm) {
         Boolean insert = false;
@@ -109,6 +117,12 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         return insert;
     }
 
+
+    //************************************
+    // reset password cho account
+    // 1. reset password
+    // 2. send mail
+    //************************************
     @Override
     public Boolean resetPassword(Long id) {
         Boolean check = false;
@@ -134,6 +148,12 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         return check;
     }
 
+
+    //************************************
+    // change password of account
+    // 1. check password old
+    // 2. change password
+    //************************************
     @Override
     public Boolean changePassword(ChangePasswordAccountForm changePasswordAccountForm) {
         Boolean check = false;
@@ -154,6 +174,9 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         return check;
     }
 
+    //************************************
+    // build template mail reset pass
+    //************************************
     private String buildEmailReset(String username, String password, String name, String link) {
         StringBuilder sql = new StringBuilder("");
         sql.append("<div style=\" width:80%; margin: 0 auto;\">\n" +
@@ -182,6 +205,9 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         return sql.toString();
     }
 
+    //************************************
+    // build template mail create account
+    //************************************
     private String buildEmail(String username, String password, String name, String link) {
         StringBuilder sql = new StringBuilder("");
         sql.append("<div style=\" width:80%; margin: 0 auto;\">\n" +
@@ -210,6 +236,9 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         return sql.toString();
     }
 
+    //************************************
+    // update account
+    //************************************
     @Override
     public Boolean updateAccount(UpdateAccountForm updateAccountForm) {
         try {
@@ -239,6 +268,9 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         return false;
     }
 
+    //************************************
+    //  delete account by id
+    //************************************
     @Override
     public Boolean deleteAccount(Long idAccount) {
         try {
@@ -258,6 +290,9 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         return false;
     }
 
+    //************************************
+    // search account by name,role,status,date
+    //************************************
     @Override
     public List<GetAllAccountResponseVO> searchAccount(SearchAccountForm searchAccountForm) {
         List<GetAllAccountVO> listAcc = accountCustomRepository.getAllAccount(searchAccountForm);
@@ -288,6 +323,9 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         return result;
     }
 
+    //************************************
+    // total search
+    //************************************
     @Override
     public int getTotalSearchAccount(SearchAccountForm searchAccountForm) {
         if (searchAccountForm.getTotal() != null && searchAccountForm.getTotal().intValue() != 0) {
@@ -296,6 +334,9 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         return accountCustomRepository.getTotalAllAccount(searchAccountForm);
     }
 
+    //************************************
+    // get account by id
+    //************************************
     @Override
     public GetAccountDetailResponeVO getAccountById(Long id) {
         try {
@@ -326,6 +367,9 @@ public class AccountManagerServiceImpl implements AccountManagerService {
 
     }
 
+    //************************************
+    // Generate Username by id employee
+    //************************************
     @Override
     public String GenerateUsername(Long id) {
         try {

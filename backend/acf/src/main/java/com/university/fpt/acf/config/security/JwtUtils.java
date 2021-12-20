@@ -22,6 +22,9 @@ public class JwtUtils {
     private int jwtExpirationMs;
 
     public String generateJwtToken(Authentication authentication)  {
+        //************************************
+        // generate token từ authentication
+        //************************************
         log.info("successfulAuthentication in CustomAuthenticationFilter");
         User user = (User) authentication.getPrincipal();
         Algorithm algorithm = Algorithm.HMAC256(this.jwtSecret.getBytes());

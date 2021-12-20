@@ -19,7 +19,7 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role saveRole(Role role) {
         //************************************
-        // lưu role
+        // save role
         //************************************
         log.info("Saving new role to database");
         return roleRepository.save(role);

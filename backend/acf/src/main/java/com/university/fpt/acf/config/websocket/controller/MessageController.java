@@ -29,6 +29,9 @@ public class MessageController {
 
     @MessageMapping("/hello")
     public void send(SimpMessageHeaderAccessor sha, @Payload String username) {
+        //************************************
+        // get message login
+        //************************************
         String message = "Hello from " + sha.getUser().getName();
         HashMap<String, String> stringStringHashMap = new HashMap<>();
         stringStringHashMap.put("mess", message);
@@ -38,6 +41,9 @@ public class MessageController {
 
     @MessageMapping("/login")
     public void addUserOnline(SimpMessageHeaderAccessor sha) {
+        //************************************
+        // add user after login and return all user login 
+        //************************************
         this.userService.insertUserLogout(sha.getUser().getName());
         List<String> userLogin = this.userService.getListUserOnline();
         for (String s : userLogin) {
@@ -47,12 +53,18 @@ public class MessageController {
 
     @MessageMapping("/online")
     public void getUserOnline(SimpMessageHeaderAccessor sha) {
+        //************************************
+        //get user is online
+        //************************************
         List<String> userLogin = this.userService.getListUserOnline();
         simpMessagingTemplate.convertAndSendToUser(sha.getUser().getName(), "/queue/online", userLogin);
     }
 
     @MessageMapping("/logout")
     public void deleteUserOnline(SimpMessageHeaderAccessor sha) {
+        //************************************
+        // delete user in list user online
+        //************************************
         this.userService.deleteUserLogout(sha.getUser().getName());
         List<String> userLogin = this.userService.getListUserOnline();
         for (String s : userLogin) {
@@ -62,30 +74,45 @@ public class MessageController {
 
     @MessageMapping("/notification")
     public void getNotification(SimpMessageHeaderAccessor sha) {
+        //************************************
+        // get notification of user login
+        //************************************
         HashMap<String, Object> notifications = this.notificationService.getListNotification(sha.getUser().getName());
         simpMessagingTemplate.convertAndSendToUser(sha.getUser().getName(), "/queue/notification", notifications);
     }
 
     @MessageMapping("/readnotification")
     public void readNotification(SimpMessageHeaderAccessor sha, @Payload Notification notification) {
+        //************************************
+        // read notification of user login
+        //************************************
         HashMap<String, Object> notifications = this.notificationService.readNotification(notification);
         simpMessagingTemplate.convertAndSendToUser(sha.getUser().getName(), "/queue/notification", notifications);
     }
 
     @MessageMapping("/readallnotification")
     public void readAllNotification(SimpMessageHeaderAccessor sha) {
+        //************************************
+        // read all notification of user login
+        //************************************
         HashMap<String, Object> notifications = this.notificationService.readAllNotification(sha.getUser().getName());
         simpMessagingTemplate.convertAndSendToUser(sha.getUser().getName(), "/queue/notification", notifications);
     }
 
     @MessageMapping("/deleteallnotification")
     public void deleteAllNotification(SimpMessageHeaderAccessor sha) {
+        //************************************
+        // delete all notification of user login
+        //************************************
         HashMap<String, Object> notifications = this.notificationService.deleteAllNotification(sha.getUser().getName());
         simpMessagingTemplate.convertAndSendToUser(sha.getUser().getName(), "/queue/notification", notifications);
     }
 
     @MessageMapping("/deletenotification")
     public void deleteNotification(SimpMessageHeaderAccessor sha, @Payload Notification notification) {
+        //************************************
+        // delete notification of user login
+        //************************************
         HashMap<String, Object> notifications = this.notificationService.deleteNotification(notification);
         simpMessagingTemplate.convertAndSendToUser(sha.getUser().getName(), "/queue/notification", notifications);
     }

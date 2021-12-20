@@ -23,6 +23,9 @@ import static springfox.documentation.schema.AlternateTypeRules.newRule;
 public class SwaggerConfig {
     @Bean
     public Docket api(TypeResolver typeResolver) {
+        //************************************
+        // cấu hình swagger
+        //************************************
         return new Docket(DocumentationType.SWAGGER_2)
                 .alternateTypeRules(
                         newRule(
@@ -42,6 +45,9 @@ public class SwaggerConfig {
     }
 
     private ApiInfo apiEndPointsInfo() {
+        //************************************
+        // trả về thông tin swagger
+        //************************************
         return new ApiInfoBuilder().title("Capstone Project of FPT University")
                 .description("Project Spring Boot Anh Chung Furniture")
                 .contact(new Contact("truongtv", "https://www.facebook.com/i.am.money.addict/", "truongtv1399it@gmail.com"))

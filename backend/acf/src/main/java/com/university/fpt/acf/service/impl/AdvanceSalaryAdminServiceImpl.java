@@ -42,6 +42,9 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
     private NotificationService notificationService;
 
 
+    //************************************
+    // get đơn xin ứng lương cho admin
+    //************************************
     @Override
     public List<SearchAdvanceSalaryAdminVO> searchAdvanceSalaryAdmin(SearchAdvanceSalaryAdminForm searchForm) {
         List<SearchAdvanceSalaryAdminVO> list = new ArrayList<>();

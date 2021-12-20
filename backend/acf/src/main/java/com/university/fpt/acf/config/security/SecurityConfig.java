@@ -31,6 +31,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        //************************************
+        // config AuthenticationManagerBuilder với password là BCryptPasswordEncoder
+        //************************************
         log.info("configure(AuthenticationManagerBuilder auth) in SecurityConfig");
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
     }
@@ -49,6 +52,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        //************************************
+        // cấu hình phân quyền theo đường dẫn
+        //************************************
         log.info("configure(HttpSecurity http) in SecurityConfig");
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);

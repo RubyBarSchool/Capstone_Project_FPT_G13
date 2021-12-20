@@ -17,6 +17,9 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
+        //************************************
+        // config endpoint để clien có thể kết nối và đẩy sự kiện
+        //************************************
         registry.addEndpoint("/wse/hello")
                 .setAllowedOrigins(path)
                 .withSockJS();
@@ -27,6 +30,9 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
     }
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
+        //************************************
+        // cấu hình nơi để client có thể đăng ký để nhận notification
+        //************************************
         registry.enableSimpleBroker("queue");
         registry.setApplicationDestinationPrefixes("/ws");
         registry.setUserDestinationPrefix("/users");

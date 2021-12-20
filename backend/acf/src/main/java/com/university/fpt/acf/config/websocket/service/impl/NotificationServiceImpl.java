@@ -14,6 +14,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public HashMap<String, Object> getListNotification(String username) {
+        //************************************
+        // get list notification of user
+        //************************************
         HashMap<String, Object> stringObjectHashMap = new HashMap<>();
         int count = 0;
         List<Notification> notificationsOutput = new ArrayList<>();
@@ -32,6 +35,10 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public HashMap<String, Object> addNotification(Notification notification) {
+
+        //************************************
+        // add notification of user
+        //************************************
         HashMap<String, Object> stringObjectHashMap = new HashMap<>();
         int count = 0;
         List<Notification> notificationsOutput = new ArrayList<>();
@@ -53,6 +60,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public HashMap<String, Object> deleteNotification(Notification notification) {
+        //************************************
+        // delete notification of user
+        //************************************
         HashMap<String, Object> stringObjectHashMap = new HashMap<>();
         int count = 0;
         List<Notification> notificationsOutput = new ArrayList<>();
@@ -75,6 +85,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public HashMap<String, Object> deleteAllNotification(String username) {
+        //************************************
+        // delete all notification of user
+        //************************************
         HashMap<String, Object> stringObjectHashMap = new HashMap<>();
         int count = 0;
         List<Notification> notificationsOutput = new ArrayList<>();
@@ -92,6 +105,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public HashMap<String, Object> readAllNotification(String username) {
+        //************************************
+        // read all notification of user
+        //************************************
         HashMap<String, Object> stringObjectHashMap = new HashMap<>();
         int count = 0;
         List<Notification> notificationsOutput = new ArrayList<>();
@@ -108,6 +124,9 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public HashMap<String, Object> readNotification(Notification notification) {
+        //************************************
+        // read notification of user
+        //************************************
         HashMap<String, Object> stringObjectHashMap = new HashMap<>();
         int count = 0;
         List<Notification> notificationsOutput = new ArrayList<>();
