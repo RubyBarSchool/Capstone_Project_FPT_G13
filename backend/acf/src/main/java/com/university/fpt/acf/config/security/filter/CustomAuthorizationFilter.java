@@ -41,6 +41,11 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
+        //************************************
+        // Get client request information then check that request information
+        // Check the token information sent with the request
+        // Check role, time out, user information
+        //************************************
         log.info("doFilterInternal in CustomAuthorizationFilter");
             String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
             if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){

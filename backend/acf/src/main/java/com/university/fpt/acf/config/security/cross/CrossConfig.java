@@ -20,6 +20,9 @@ public class CrossConfig {
 
     @Bean
     public FilterRegistrationBean simpleCorsFilter() {
+        //************************************
+        // Configure the cross with the corresponding path on the front end
+        //************************************
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);

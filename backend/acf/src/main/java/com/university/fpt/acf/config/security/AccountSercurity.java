@@ -20,6 +20,9 @@ public class AccountSercurity {
     }
 
     public String getUserName() {
+        //************************************
+        // Get username login information in the system
+        //************************************
         if (!(this.authentication instanceof AnonymousAuthenticationToken)) {
             String currentUserName = this.authentication.getName();
             return currentUserName;
@@ -28,6 +31,9 @@ public class AccountSercurity {
     }
 
     public List<String> getRoleList() {
+        //************************************
+        // Get the login user's role information
+        //************************************
         return  this.authentication.getAuthorities().stream()
                 .map(item -> item.getAuthority())
                 .collect(Collectors.toList());

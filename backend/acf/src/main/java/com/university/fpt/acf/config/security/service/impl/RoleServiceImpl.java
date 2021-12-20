@@ -5,6 +5,7 @@ import com.university.fpt.acf.config.security.repository.RoleRepository;
 import com.university.fpt.acf.config.security.service.RoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -17,6 +18,9 @@ public class RoleServiceImpl implements RoleService {
     private RoleRepository roleRepository;
     @Override
     public Role saveRole(Role role) {
+        //************************************
+        // lưu role
+        //************************************
         log.info("Saving new role to database");
         return roleRepository.save(role);
     }

@@ -25,6 +25,11 @@ public class SalaryJobServiceImpl implements SalaryJobService {
     private BonusRepository bonusRepository;
     @Override
     public void payroll() {
+        //************************************
+        // Generate automatic payroll of employees
+        // 1. Search full information of reward, discipline,
+        // 2. Add a new salary history for each employee
+        //************************************
         try{
             LocalDate dateStart = LocalDate.now();
             LocalDate nextMonth = dateStart.plusMonths(1);

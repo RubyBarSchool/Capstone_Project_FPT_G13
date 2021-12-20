@@ -35,6 +35,9 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     public Account saveAccount(Account account) {
+        //************************************
+        // Add account
+        //************************************
         log.info("Saving new user to database");
         account.setPassword(passwordEncoder.encode(account.getPassword()));
         return accountRepository.save(account);
@@ -42,6 +45,9 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     public void addRoleToAccount(String username, String roleName) {
+        //************************************
+        // Add a new role for account
+        //************************************
         log.info("Adding role {} to user {}",roleName,username);
         Account user = accountRepository.findByUsername(username);
         Role role = roleRepository.findByName(roleName);
@@ -50,18 +56,27 @@ public class AccountServiceImpl implements AccountService, UserDetailsService {
 
     @Override
     public Account getAccount(String username) {
+        //************************************
+        // Get account by username
+        //************************************
         log.info("Fetching user {}",username);
         return accountRepository.findByUsername(username);
     }
 
     @Override
     public List<Account> getAccounts() {
+        //************************************
+        // Get all accounts
+        //************************************
         log.info("Fetching all users");
         return accountRepository.findAll();
     }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        //************************************
+        // Return UserDetails by username login to spring security configure and review login permissions
+        //************************************
         Account account = accountRepository.findByUsername(s);
         if(account == null ){
             log.error("User not found in the database");

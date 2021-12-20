@@ -11,6 +11,9 @@ public class SalaryAutoJob extends QuartzJobBean {
     private SalaryJobService salaryJobService;
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        //************************************
+        // Configure Quatz's execution function to automatically generate payroll for employees when the new month comes
+        //************************************
         salaryJobService.payroll();
     }
 }

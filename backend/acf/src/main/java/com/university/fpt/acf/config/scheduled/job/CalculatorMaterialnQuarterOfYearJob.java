@@ -11,6 +11,9 @@ public class CalculatorMaterialnQuarterOfYearJob extends QuartzJobBean {
     private MaterialSuggestService materialSuggestService;
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        //************************************
+        // Configure Quatz's execution function to automatically calculate the amount of material made in the quarter
+        //************************************
         materialSuggestService.calculatorMaterialInQuarterOfYear();
     }
 }

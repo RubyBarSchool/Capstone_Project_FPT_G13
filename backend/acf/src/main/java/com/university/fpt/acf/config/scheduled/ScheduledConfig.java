@@ -17,6 +17,9 @@ public class ScheduledConfig {
 
     @Bean
     public JobDetail jobCheckAttendance() {
+        //************************************
+        // Create a jobdetail with information and running content is attendance check
+        //************************************
         return JobBuilder
                 .newJob(AttendanceCheckJob.class)
                 .withIdentity(JobKey.jobKey("checkAttendance"))
@@ -26,6 +29,9 @@ public class ScheduledConfig {
 
     @Bean
     public Trigger triggerCheckAttendance() {
+        //************************************
+        // Create a trigger associated with the job, the attendance check will automatically run every 15 minutes from 6pm to 7pm daily
+        //************************************
         return TriggerBuilder
                 .newTrigger()
                 .forJob(jobCheckAttendance())
@@ -36,6 +42,9 @@ public class ScheduledConfig {
 
     @Bean
     public JobDetail jobAttendanceAuto() {
+        //************************************
+        // Create a jobdetail with information and running content is attendance for employees
+        //************************************
         return JobBuilder
                 .newJob(AttendanceAutoJob.class)
                 .withIdentity(JobKey.jobKey("attendaneAuto"))
@@ -45,6 +54,9 @@ public class ScheduledConfig {
 
     @Bean
     public Trigger triggerAttendanceAuto() {
+        //************************************
+        // Create a trigger attached to the job that automatically takes attendance for employees at 11pm every day
+        //************************************
         return TriggerBuilder
                 .newTrigger()
                 .forJob(jobAttendanceAuto())
@@ -55,6 +67,9 @@ public class ScheduledConfig {
 
     @Bean
     public JobDetail jobCalculatorMaterialInMonth() {
+        //************************************
+        // Create a jobdetail with information and running content is calculating the amount of material used in the last month
+        //************************************
         return JobBuilder
                 .newJob(CalculatorMaterialInMonthJob.class)
                 .withIdentity(JobKey.jobKey("calculatorMaterialInMonth"))
@@ -64,6 +79,9 @@ public class ScheduledConfig {
 
     @Bean
     public Trigger triggerCalculatorMaterialInMonth() {
+        //************************************
+        // Create a trigger attached to a job calculates material usage in the previous month on the 1st of every month
+        //************************************
         return TriggerBuilder
                 .newTrigger()
                 .forJob(jobCalculatorMaterialInMonth())
@@ -74,6 +92,9 @@ public class ScheduledConfig {
 
     @Bean
     public JobDetail jobCalculatorMaterialnQuarterOfYear() {
+        //************************************
+        // Create a jobdetail with information and running content is calculating the amount of material used in the last quarter
+        //************************************
         return JobBuilder
                 .newJob(CalculatorMaterialnQuarterOfYearJob.class)
                 .withIdentity(JobKey.jobKey("calculatorMaterialnQuarterOfYear"))
@@ -83,6 +104,9 @@ public class ScheduledConfig {
 
     @Bean
     public Trigger triggerCalculatorMaterialnQuarterOfYear() {
+        //************************************
+        // tạo ra một trigger associated with a job calculates material usage in the previous quarter on the 1st of every month 1, 4, 7, and 10
+        //************************************
         return TriggerBuilder
                 .newTrigger()
                 .forJob(jobCalculatorMaterialnQuarterOfYear())
@@ -93,6 +117,9 @@ public class ScheduledConfig {
 
     @Bean
     public JobDetail jobCalculatorMaterialInYear() {
+        //************************************
+        // Create a jobdetail with information and running content is calculating the amount of material used in the last year
+        //************************************
         return JobBuilder
                 .newJob(CalculatorMaterialnQuarterOfYearJob.class)
                 .withIdentity(JobKey.jobKey("calculatorMaterialInYear"))
@@ -102,6 +129,9 @@ public class ScheduledConfig {
 
     @Bean
     public Trigger triggerCalculatorMaterialInYear() {
+        //************************************
+        // Create a trigger associated with a job calculates material usage in the previous year on the 1st of every month
+        //************************************
         return TriggerBuilder
                 .newTrigger()
                 .forJob(jobCalculatorMaterialInYear())
@@ -112,6 +142,9 @@ public class ScheduledConfig {
 
     @Bean
     public JobDetail jobSalary() {
+        //************************************
+        // Create a jobdetail with information and running content is automatically generating new payroll
+        //************************************
         return JobBuilder
                 .newJob(SalaryAutoJob.class)
                 .withIdentity(JobKey.jobKey("salary"))
@@ -121,6 +154,9 @@ public class ScheduledConfig {
 
     @Bean
     public Trigger triggerSalary() {
+        //************************************
+        // Create a trigger gắn với job tạo ra bảng lương mới vào 1 h ngày 10 hàng tháng
+        //************************************
         return TriggerBuilder
                 .newTrigger()
                 .forJob(jobSalary())

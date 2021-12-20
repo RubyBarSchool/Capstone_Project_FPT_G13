@@ -22,6 +22,11 @@ public class MaterialSuggestServiceImpl implements MaterialSuggestService {
     private ContactRepository contactRepository;
     @Override
     public void calculatorMaterialInMonth() {
+        //************************************
+        //Calculating the amount of material usage by month
+        // 1. Get the start and end date of the month to calculate
+        // 2. Get each material and divide by the total number of materials
+        //************************************
         try{
             LocalDate localDate = LocalDate.now();
             LocalDate dateLast = localDate.minusDays(1);
@@ -46,6 +51,11 @@ public class MaterialSuggestServiceImpl implements MaterialSuggestService {
 
     @Override
     public void calculatorMaterialInQuarterOfYear() {
+        //************************************
+        //Calculating the amount of material usage by quarter
+        // 1. Get the start and end date of the month to calculate
+        // 2. Get each material and divide by the total number of materials
+        //************************************
         try{
             LocalDate localDate = LocalDate.now();
             LocalDate dateLast = localDate.minusDays(1);
@@ -71,6 +81,11 @@ public class MaterialSuggestServiceImpl implements MaterialSuggestService {
 
     @Override
     public void calculatorMaterialInYear() {
+        //************************************
+        //Calculating the amount of material usage by year
+        // 1. Get the start and end date of the month to calculate
+        // 2. Get each material and divide by the total number of materials
+        //************************************
         try{
             LocalDate localDate = LocalDate.now();
             LocalDate dateLast = localDate.minusDays(1);

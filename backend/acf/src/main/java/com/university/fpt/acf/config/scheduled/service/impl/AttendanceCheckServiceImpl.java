@@ -41,6 +41,11 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
 
     @Override
     public void checkAttendance() {
+        //************************************
+        // Check attendance of employees in combination with sending mail
+        // 1. Compare employee information and attendance information. If the employee does not have attendance information, configure the mail
+        // 2. Transfer the list of non-attendant employees to email content to send reports via email to admin
+        //************************************
         try {
             LocalDateTime dateTime = LocalDateTime.now();
             int count = 0;
@@ -77,6 +82,11 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
 
     @Override
     public void autoAttendance() {
+        //************************************
+        // Automatic attendance for employees
+        // 1. Search all employees who do not have attendance information
+        // 2. Make timekeeping for employees
+        //************************************
         try {
             List<GetAllEmployeeVO> getAllEmployeeVOList = employeeCustomRepository.getAllEmployeeNotAttendanceJob();
             List<TimeKeep> timeKeeps = new ArrayList<>();
@@ -100,6 +110,9 @@ public class AttendanceCheckServiceImpl implements AttendanceCheckService {
     }
 
     private String buildEmail(List<GetAllEmployeeVO> getAllEmployeeVOList, String link) {
+        //************************************
+        // Function build content mail
+        //************************************
         LocalDateTime dateTime = LocalDateTime.now();
         DateTimeFormatter dateTimeFormat = DateTimeFormatter.ofPattern("HH:mm dd-MM-yyyy");
 

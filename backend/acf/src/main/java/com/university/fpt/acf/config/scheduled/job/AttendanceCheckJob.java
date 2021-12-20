@@ -12,6 +12,9 @@ public class AttendanceCheckJob extends QuartzJobBean  {
 
     @Override
     protected void executeInternal(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        //************************************
+        // Configure Quatz's execution function to check which employees have not been timekeeping
+        //************************************
         attendanceCheckService.checkAttendance();
     }
 

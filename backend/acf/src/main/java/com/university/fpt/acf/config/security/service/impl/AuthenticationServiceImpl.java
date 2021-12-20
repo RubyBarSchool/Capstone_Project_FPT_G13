@@ -24,6 +24,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     JwtUtils jwtUtils;
     @Override
     public JwtResponse generateJwtResponse(ObjectLogin objectLogin) throws AuthenticationException {
+        //************************************
+        // Pass the login information to the Authentication spring security check if it is satisfied, it will continue otherwise it will give an error
+        // set Authentication to sercurityContextHolder
+        // Call the function that generates the token and returns the client
+        //************************************
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(objectLogin.getUsername(), objectLogin.getPassword()));
 
