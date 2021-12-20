@@ -17,6 +17,9 @@ import java.util.List;
 public class CompanyController {
     @Autowired
     private CompanyService companyService;
+    //************************************
+    // Search company with combination of fields: name, address, phone
+    //************************************
     @PostMapping("/search")
     public ResponseEntity<ResponseCommon> searchCompany(@RequestBody SearchCompanyForm searchCompanyForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -43,6 +46,9 @@ public class CompanyController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Add company
+    //************************************
     @PostMapping("/add")
     public  ResponseEntity<ResponseCommon> addCompany(@RequestBody AddCompanyForm addCompanyForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -71,6 +77,9 @@ public class CompanyController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Update company
+    //************************************
     @PutMapping("/update")
     public  ResponseEntity<ResponseCommon> updateCompany(@RequestBody UpdateCompanyForm updateCompanyForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -99,6 +108,9 @@ public class CompanyController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Delete company
+    //************************************
     @DeleteMapping("/delete")
     public  ResponseEntity<ResponseCommon> deleteCompany(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();

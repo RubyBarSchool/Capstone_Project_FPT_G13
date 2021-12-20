@@ -21,6 +21,9 @@ public class UnitMeasureServiceImpl implements UnitMeasureService {
     @Autowired
     private UnitMeasureRepository unitMeasureRepository;
     @Override
+    //************************************
+    // Add unit measure
+    //************************************
     public Boolean addUnitMeasure(String name) {
         Boolean insert = false;
         try {
@@ -40,7 +43,9 @@ public class UnitMeasureServiceImpl implements UnitMeasureService {
         }
         return insert;
     }
-
+    //************************************
+    // Delete unit measure
+    //************************************
     @Override
     public Boolean deleteUnitMeasure(Long id) {
         Boolean delete = false;
@@ -60,7 +65,9 @@ public class UnitMeasureServiceImpl implements UnitMeasureService {
         }
         return delete;
     }
-
+    //************************************
+    //GEt all units
+    //************************************
     @Override
     public List<UnitMeasureVO> getAllUnit() {
         List<UnitMeasureVO> list = new ArrayList<>();
@@ -74,7 +81,9 @@ public class UnitMeasureServiceImpl implements UnitMeasureService {
         }
         return list;
     }
-
+    //************************************
+    // Get units to Insert material
+    //************************************
     @Override
     public List<UnitMeasureVO> getUnitsToInsertMaterial() {
         List<UnitMeasureVO> list = new ArrayList<>();
@@ -88,7 +97,9 @@ public class UnitMeasureServiceImpl implements UnitMeasureService {
         }
         return list;
     }
-
+    //************************************
+    // Get Units to Insert Cover Insert
+    //************************************
     @Override
     public List<UnitMeasureVO> getUnitsToInsertCoverInsert() {
         List<UnitMeasureVO> list = new ArrayList<>();

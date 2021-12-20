@@ -33,7 +33,9 @@ public class FrameMaterialServiceImpl implements FrameMaterialService {
     private HeightMaterialRepository heightMaterialRepository;
     @Autowired
     private UnitMeasureRepository unitMeasureRepository;
-
+    //************************************
+    // Add frame
+    //************************************
     @Override
     @Transactional
     public Boolean addFrame(AddFrameMaterialForm addForm) {
@@ -57,7 +59,9 @@ public class FrameMaterialServiceImpl implements FrameMaterialService {
         }
         return check;
     }
-
+    //************************************
+    // search frame by width, length
+    //************************************
     @Override
     public List<SearchFrameMaterialVO> searchFrame(SearchFrameMaterialForm searchForm) {
         List<SearchFrameMaterialVO> list = new ArrayList<>();
@@ -83,7 +87,9 @@ public class FrameMaterialServiceImpl implements FrameMaterialService {
         }
         return size;
     }
-
+    //************************************
+    // Delete frame
+    //************************************
     @Override
     @Transactional
     public Boolean deleteFrame(Long id) {
@@ -104,7 +110,9 @@ public class FrameMaterialServiceImpl implements FrameMaterialService {
         }
         return check;
     }
-
+    //************************************
+    // Get Frame coversheet to insert
+    //************************************
     @Override
     public List<FrameMaterialVO> getFrameCoverSheetToInsert() {
         List<FrameMaterialVO> list = new ArrayList<>();
@@ -119,7 +127,9 @@ public class FrameMaterialServiceImpl implements FrameMaterialService {
         }
         return list;
     }
-
+    //************************************
+    // Get frame material to insert
+    //************************************
     @Override
     public List<FrameMaterialVO> getFrameMaterialToInsert() {
         List<FrameMaterialVO> list = new ArrayList<>();
@@ -134,7 +144,9 @@ public class FrameMaterialServiceImpl implements FrameMaterialService {
         }
         return list;
     }
-
+    //************************************
+    // Search all frame  by framename
+    //************************************
     @Override
     public List<FrameMaterialVO> searchAllFrame(SearchAllFrame searchForm) {
         List<FrameMaterialVO> list = new ArrayList<>();

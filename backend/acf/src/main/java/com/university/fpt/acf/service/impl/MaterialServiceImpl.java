@@ -30,6 +30,9 @@ public class MaterialServiceImpl implements MaterialService {
     private PriceMaterialRepository priceMaterialRepository;
     @Autowired
     private FileRepository fileRepository;
+    //************************************
+    // Search suggest material  with combination of fields: count, type
+    //************************************
     @Override
     public List<SuggestMaterialVO> searchSuggestMaterial(MaterialSuggestFrom materialSuggestFrom) {
         List<SuggestMaterialVO> suggestMaterialVOS = new ArrayList<>();
@@ -40,7 +43,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return suggestMaterialVOS;
     }
-
+    //************************************
+    // Search material  with combination of fields: codeMaterial, frame,group, unit, company
+    //************************************
     @Override
     public List<MaterialVO> searchMaterial(SearchMaterialForm searchForm) {
         List<MaterialVO> list= new ArrayList<>();
@@ -62,7 +67,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return size;
     }
-
+    //************************************
+    // Get material in add product  with combination of fields: codeMaterial, frame,group, unit, company
+    //************************************
     @Override
     public List<MaterialInContactDetailVO> searchMaterialInAddProduct(SearchMaterialForm searchForm) {
         List<MaterialInContactDetailVO> list= new ArrayList<>();
@@ -84,7 +91,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return size;
     }
-
+    //************************************
+    // Search coverSheet  with combination of fields: codeMaterial, frame,group, unit, company
+    //************************************
     @Override
     public List<MaterialVO> searchCoverSheet(SearchMaterialForm searchForm) {
         List<MaterialVO> list= new ArrayList<>();
@@ -106,7 +115,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return size;
     }
-
+    //************************************
+    // Add material
+    //************************************
     @Override
     @Transactional
     public Boolean addMaterial(AddMaterialForm addForm) {
@@ -174,7 +185,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return check;
     }
-
+    //************************************
+    // Delete material
+    //************************************
     @Override
     public Boolean deleteMaterial(Long id) {
         Boolean check = false;
@@ -192,7 +205,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return check;
     }
-
+    //************************************
+    // Update material
+    //************************************
     @Override
     public Boolean updateMaterial(UpdateMaterialForm updateForm) {
         Boolean check = false;
@@ -228,7 +243,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return check;
     }
-
+    //************************************
+    // add cover sheet
+    //************************************
     @Override
     public Boolean addCoverSheet(AddMaterialForm addForm) {
         Boolean check = false;
@@ -296,7 +313,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return check;
     }
-
+    //************************************
+    // Delete cover sheet
+    //************************************
     @Override
     public Boolean deleteCoverSheet(Long id) {
         Boolean check = false;
@@ -313,7 +332,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return check;
     }
-
+    //************************************
+    // Update cover sheet
+    //************************************
     @Override
     public Boolean updateCoverSheet(UpdateMaterialForm updateForm) {
         Boolean check = false;
@@ -351,7 +372,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return check;
     }
-
+    //************************************
+    // Add unit in material
+    //************************************
     @Override
     public Boolean addUnitInMaterial(AddUnitFrameHeightForm addForm) {
         Boolean check = false;
@@ -376,7 +399,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return check;
     }
-
+    //************************************
+    // Add Unit in coversheet
+    //************************************
     @Override
     public Boolean addUnitInCoverSheet(AddUnitFrameHeightForm addForm) {
         Boolean check = false;
@@ -401,7 +426,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return check;
     }
-
+    //************************************
+    // Add frame material
+    //************************************
     @Override
     public Boolean addFrameHeightMaterial(AddUnitFrameHeightForm addForm) {
         Boolean check = false;
@@ -437,7 +464,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return check;
     }
-
+    //************************************
+    // Add frame height coversheet
+    //************************************
     @Override
     public Boolean addFrameHeightCoverSheet(AddUnitFrameHeightForm addForm) {
         Boolean check = false;
@@ -473,7 +502,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return check;
     }
-
+    //************************************
+    // Get all materials
+    //************************************
     @Override
     public List<GetAllMaterialVO> getAllMaterial() {
         List<GetAllMaterialVO> list= new ArrayList<>();
@@ -484,7 +515,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return list;
     }
-
+    //************************************
+    // Get all cover sheet
+    //************************************
     @Override
     public List<GetAllMaterialVO> getAllCoverSheet() {
         List<GetAllMaterialVO> list= new ArrayList<>();
@@ -495,7 +528,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return list;
     }
-
+    //************************************
+    // Get unit material by id material
+    //************************************
     @Override
     public List<UnitMeasureVO> getUnitsByMaterial(Long id) {
 
@@ -507,7 +542,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return list;
     }
-
+    //************************************
+    // Get unit by id coversheet
+    //************************************
     @Override
     public List<UnitMeasureVO> getUnitsByCoverSheet(Long id) {
         List<UnitMeasureVO> list= new ArrayList<>();
@@ -518,7 +555,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return list;
     }
-
+    //************************************
+    // Get material by idUnit
+    //************************************
     @Override
     public List<GetAllMaterialVO> getMaterialByUnit(Long id) {
         List<GetAllMaterialVO> list= new ArrayList<>();
@@ -529,7 +568,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return list;
     }
-
+    //************************************
+    // Get cover sheet by id unit
+    //************************************
     @Override
     public List<GetAllMaterialVO> getCoverSheetByUnit(Long id) {
         List<GetAllMaterialVO> list= new ArrayList<>();
@@ -540,7 +581,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return list;
     }
-
+    //************************************
+    // Get heights by material anh Frame
+    //************************************
     @Override
     public List<HeightMaterialVO> getHeightSByMaterialAndFrame(Long idMaterial, Long idFrame) {
         List<HeightMaterialVO> list= new ArrayList<>();
@@ -551,7 +594,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return list;
     }
-
+    //************************************
+    // Get Height by coversheet and frame
+    //************************************
     @Override
     public List<HeightMaterialVO> getHeightByCoverSheetAndFrame(Long idMaterial, Long idFrame) {
         List<HeightMaterialVO> list= new ArrayList<>();
@@ -562,7 +607,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return list;
     }
-
+    //************************************
+    // Get material by height frame
+    //************************************
     @Override
     public List<GetAllMaterialVO> getMaterialByHeightFrame(Long idHeight, Long idFrame) {
         List<GetAllMaterialVO> list= new ArrayList<>();
@@ -573,7 +620,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return list;
     }
-
+    //************************************
+    // Get coversheet by height , frame
+    //************************************
     @Override
     public List<GetAllMaterialVO> getCoverSheetByHeightFrame(Long idHeight, Long idFrame) {
         List<GetAllMaterialVO> list= new ArrayList<>();
@@ -584,7 +633,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return list;
     }
-
+    //************************************
+    // Get Frame by material and height
+    //************************************
     @Override
     public List<FrameMaterialVO> getFrameByMaterialAndHeight(Long idMaterial,Long idHeight) {
         List<FrameMaterialVO> list= new ArrayList<>();
@@ -595,7 +646,9 @@ public class MaterialServiceImpl implements MaterialService {
         }
         return list;
     }
-
+    //************************************
+    // Get Frame by coverSheet and height
+    //************************************
     @Override
     public List<FrameMaterialVO> getFrameByCoverSheetAndHeight(Long idCoverSheet,Long idHeight) {
         List<FrameMaterialVO> list= new ArrayList<>();

@@ -47,7 +47,9 @@ public class PunishServiceImpl implements PunishService {
     @Autowired
     private AccountManagerRepository accountManagerRepository;
 
-
+    //************************************
+    // Search punish  with combination of fields: codeMaterial, frame,group, unit, company
+    //************************************
     @Override
     public List<ResultSearchBonusAdminVO> searchPunish(SearchBonusAdminForm searchBonus) {
         List<SearchBonusAdminVO> list = new ArrayList<>();
@@ -107,7 +109,9 @@ public class PunishServiceImpl implements PunishService {
         }
         return size;
     }
-
+    //************************************
+    // Search punish user
+    //************************************
     @Override
     public List<SearchBonusAdminVO> searchPunishUser(BonusPunishForm bonusPunishForm) {
         List<SearchBonusAdminVO> list = new ArrayList<>();
@@ -134,7 +138,9 @@ public class PunishServiceImpl implements PunishService {
         }
         return size;
     }
-
+    //************************************
+    // Add punish
+    //************************************
     @Override
     @Transactional
     public Boolean addPunish(AddBonusAdminForm addPunish) {
@@ -214,7 +220,9 @@ public class PunishServiceImpl implements PunishService {
         }
         return check;
     }
-
+    //************************************
+    // Delete punish
+    //************************************
     @Override
     public Boolean deletePunish(Long id) {
         boolean check = false;

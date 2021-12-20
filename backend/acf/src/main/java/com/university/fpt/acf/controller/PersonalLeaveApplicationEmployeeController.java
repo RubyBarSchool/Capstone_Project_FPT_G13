@@ -18,7 +18,9 @@ public class PersonalLeaveApplicationEmployeeController {
 
     @Autowired
     PersonalLeaveApplicationEmployeeService personalLeaveApplicationService;
-
+    //************************************
+    // Search personal leave application  with combination of fields: title,status, date
+    //************************************
     @PostMapping("/search")
     public ResponseEntity<ResponseCommon> searchPersonalLeaveApplication(@RequestBody SearchPersonalApplicationEmployeeForm searchForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -45,7 +47,9 @@ public class PersonalLeaveApplicationEmployeeController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-
+    //************************************
+    // Add personal leave appication
+    //************************************
     @PostMapping("/add")
     public ResponseEntity<ResponseCommon> addPersonalApplication(@RequestBody AddPerLeaveAppEmployeeForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -74,7 +78,9 @@ public class PersonalLeaveApplicationEmployeeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Update personal leave application
+    //************************************
     @PutMapping("/update")
     public ResponseEntity<ResponseCommon> updatePersonalApplication(@RequestBody UpdatePersonalAppEmployeeForm updateForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -103,7 +109,9 @@ public class PersonalLeaveApplicationEmployeeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Delete personal leave application
+    //************************************
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseCommon> deletePersonalApplication(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -132,30 +140,5 @@ public class PersonalLeaveApplicationEmployeeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
-//    @GetMapping("/detail")
-//    public ResponseEntity<ResponseCommon> getDetailPersonalLeaveApplicationEmployee(@RequestParam Long id){
-//        ResponseCommon responseCommon = new ResponseCommon();
-//        String message="";
-//        SearchPersonalApplicationEmployeeVO data = new SearchPersonalApplicationEmployeeVO();
-//        try {
-//            data = personalLeaveApplicationService.detailPersonalLeaveAppEmployee(id);
-//            if(data==null){
-//                message="Không tìm thấy đơn nghỉ phép";
-//            }else{
-//                message="Lấy đơn nghỉ phép thành công!";
-//            }
-//            responseCommon.setMessage(message);
-//            responseCommon.setData(data);
-//            responseCommon.setStatus(HttpStatus.OK.value());
-//            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
-//        }catch (Exception e){
-//            message = e.getMessage();
-//            responseCommon.setData(data);
-//            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
-//            responseCommon.setMessage(message);
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
-//        }
-//    }
 
 }

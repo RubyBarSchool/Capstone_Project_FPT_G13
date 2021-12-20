@@ -17,6 +17,9 @@ import java.util.List;
 public class RoleController {
     @Autowired
     private RolesService rolesService;
+    //************************************
+    // Search role  by name
+    //************************************
     @PostMapping
     public ResponseEntity<ResponseCommon> searchRoles(@RequestBody RolesForm rolesForm){
         ResponseCommon responseCommon = new ResponseCommon();

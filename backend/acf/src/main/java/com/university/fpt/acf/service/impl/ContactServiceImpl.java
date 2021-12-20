@@ -88,7 +88,9 @@ public class ContactServiceImpl implements ContactService {
 
     @Autowired
     private NotificationService notificationService;
-
+    //************************************
+    // Add contract
+    //************************************
     @Override
     public Contact addContact(AddContactForm addContactForm) {
         Contact contact = new Contact();
@@ -168,7 +170,9 @@ public class ContactServiceImpl implements ContactService {
         }
         return contact;
     }
-
+    //************************************
+    // Search contract  by name
+    //************************************
     @Override
     public List<ContactVO> searchContact(ContactInSearchForm contactInSearchForm) {
         List<ContactVO> contactVOS = new ArrayList<>();
@@ -179,7 +183,9 @@ public class ContactServiceImpl implements ContactService {
         }
         return contactVOS;
     }
-
+    //************************************
+    // Search contract money  by name
+    //************************************
     @Override
     public List<ContactVO> searchContactMmoney(ContactInSearchForm contactInSearchForm) {
         List<ContactVO> contactVOS = new ArrayList<>();
@@ -190,7 +196,9 @@ public class ContactServiceImpl implements ContactService {
         }
         return contactVOS;
     }
-
+    //************************************
+    // Get all contract production order
+    //************************************
     @Override
     public List<ContactProductionVO> searchContactProduction() {
         List<ContactProductionVO> contactVOS = new ArrayList<>();
@@ -201,7 +209,9 @@ public class ContactServiceImpl implements ContactService {
         }
         return contactVOS;
     }
-
+    //************************************
+    // Get all contrcat not done
+    //************************************
     @Override
     public List<ContactVO> searchContactNotDone() {
         List<ContactVO> contactVOS = new ArrayList<>();
@@ -226,7 +236,9 @@ public class ContactServiceImpl implements ContactService {
         }
         return total;
     }
-
+    //************************************
+    // Search Contract detail  with combination of fields: contract, name product
+    //************************************
     @Override
     public List<SearchContactDetailVO> searchContactDetail(SearchContactDetailForm searchContactDetailForm) {
         List<SearchContactDetailVO> SearchContactDetailVOS = new ArrayList<>();
@@ -237,7 +249,9 @@ public class ContactServiceImpl implements ContactService {
         }
         return SearchContactDetailVOS;
     }
-
+    //************************************
+    // GEt material product by id
+    //************************************
     @Override
     public List<MaterialInContactDetailVO> getMaterialInProduct(Long idProduct) {
         List<MaterialInContactDetailVO> materialInContactDetailVOS = new ArrayList<>();
@@ -262,7 +276,9 @@ public class ContactServiceImpl implements ContactService {
         }
         return total;
     }
-
+    //************************************
+    // Read file contract excel
+    //************************************
     @Override
     public FileContactVO readFileContact(MultipartFile file) {
         try {
@@ -396,7 +412,9 @@ public class ContactServiceImpl implements ContactService {
             throw new RuntimeException("Không thể đọc tệp hợp đồng");
         }
     }
-
+    //************************************
+    // Search contract  with combination of fields: name, date, company
+    //************************************
     @Override
     public List<GetCreateContactVO> searchCreateContact(SearchCreateContactFrom searchForm) {
         List<GetCreateContactVO> list = new ArrayList<>();
@@ -418,7 +436,9 @@ public class ContactServiceImpl implements ContactService {
         }
         return size;
     }
-
+    //************************************
+    // Update contract
+    //************************************
     @Override
     @Transactional
     public Boolean updateContact(UpdateContractForm updateForm) {
@@ -453,7 +473,9 @@ public class ContactServiceImpl implements ContactService {
         }
         return check;
     }
-
+    //************************************
+    // Delete contract
+    //************************************
     @Override
     @Transactional
     public Boolean deleteContact(Long id) {
@@ -485,7 +507,9 @@ public class ContactServiceImpl implements ContactService {
         }
         return check;
     }
-
+    //************************************
+    // Export contract
+    //************************************
     @Override
     public ByteArrayInputStream exportContact(Long id) {
         try {
@@ -530,7 +554,9 @@ public class ContactServiceImpl implements ContactService {
             throw new RuntimeException("Không xuất được file hợp đồng");
         }
     }
-
+    //************************************
+    // Template contract
+    //************************************
     @Override
     public ByteArrayInputStream templateContact(Long id) {
         try {
@@ -552,7 +578,9 @@ public class ContactServiceImpl implements ContactService {
             throw new RuntimeException("Không xuất được file hợp đồng");
         }
     }
-    // Create CellStyle for header
+    //************************************
+    // Create cellStyle for header
+    //************************************
     private static CellStyle createStyleForHeaderTemplate(Sheet sheet) {
         // Create font
         Font font = sheet.getWorkbook().createFont();
@@ -571,7 +599,10 @@ public class ContactServiceImpl implements ContactService {
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         return cellStyle;
     }
+
+    //************************************
     // Write header with format
+    //************************************
     private void writeHeaderTemplate(Sheet sheet, int rowIndex) {
         // create CellStyle
         CellStyle cellStyle = createStyleForHeaderTemplate(sheet);
@@ -681,7 +712,10 @@ public class ContactServiceImpl implements ContactService {
         cell.setCellValue("Ghi chú");
     }
 
+
+    //************************************
     // Write footer
+    //************************************
     private void writeFooterTemplate(Sheet sheet, int rowIndex, String note) {
         // Create row
         Row row = sheet.createRow(rowIndex);
@@ -700,8 +734,9 @@ public class ContactServiceImpl implements ContactService {
         cell2.setCellStyle(createStyleForBodyRightTemplate(createStyleForFooterTemplate(sheet)));
         cell2.setCellFormula("SUM(S2:S" + rowIndex + ")");
     }
-
-    // Create CellStyle for header
+    //************************************
+    // Create cellStyle for header
+    //************************************
     private static CellStyle createStyleForHeader(Sheet sheet) {
         // Create font
         Font font = sheet.getWorkbook().createFont();
@@ -720,8 +755,9 @@ public class ContactServiceImpl implements ContactService {
         cellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
         return cellStyle;
     }
-
-    // Create CellStyle for header
+    //************************************
+    // Create cellStyle for header
+    //************************************
     private static CellStyle createStyleForBodyTemplate(Sheet sheet) {
         // Create font
         Font font = sheet.getWorkbook().createFont();
@@ -906,7 +942,10 @@ public class ContactServiceImpl implements ContactService {
         cell.setCellValue("Ghi chú");
     }
 
+
+    //************************************
     // Write data
+    //************************************
     private static void writeBookTemplate(Sheet sheet, int rowIndex) {
 
         // Create row

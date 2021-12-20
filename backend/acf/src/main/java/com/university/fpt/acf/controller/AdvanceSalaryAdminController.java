@@ -18,7 +18,9 @@ import java.util.List;
 public class AdvanceSalaryAdminController {
     @Autowired
     private AdvanceSalaryAdminService adminService;
-
+    //************************************
+    // Search all advance salary with combination of fields by title, employeeName, date, accept
+    //************************************
     @PostMapping("/search")
     public ResponseEntity<ResponseCommon> searchAdvanceSalaryAdmin(@RequestBody SearchAdvanceSalaryAdminForm searchForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -45,7 +47,9 @@ public class AdvanceSalaryAdminController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-
+    //************************************
+    // Accept advance salary
+    //************************************
     @PutMapping("/accept")
     public ResponseEntity<ResponseCommon> acceptAdvanceSalaryAdmin(@RequestBody AcceptAdvanceSalaryAdminForm acceptForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -70,7 +74,9 @@ public class AdvanceSalaryAdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Reject advance salary
+    //************************************
     @PutMapping("/reject")
     public ResponseEntity<ResponseCommon> rejectAdvanceSalaryAdmin(@RequestBody AcceptAdvanceSalaryAdminForm acceptForm) {
         ResponseCommon responseCommon = new ResponseCommon();

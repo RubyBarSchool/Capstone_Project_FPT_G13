@@ -21,7 +21,9 @@ public class ViewWorkEmployeeController {
 
     @Autowired
     private ProductionOrderService productionOrderService;
-
+    //************************************
+    // Search working employee by status
+    //************************************
     @PostMapping("/search")
     public ResponseEntity<ResponseCommon> searchWorkEmployee(@Valid @RequestBody SearchWorkEmployeeForm searchWorkEmployeeForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -49,7 +51,9 @@ public class ViewWorkEmployeeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Search working employee  by id
+    //************************************
     @PostMapping("/{id}")
     public ResponseEntity<ResponseCommon> searchWorkEmployee(@PathVariable("id") Long id) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -75,7 +79,9 @@ public class ViewWorkEmployeeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Confirm work
+    //************************************
     @PostMapping("/confirm/{id}")
     public ResponseEntity<ResponseCommon> confirmWork(@PathVariable("id") Long id) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -103,7 +109,9 @@ public class ViewWorkEmployeeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Update working employee
+    //************************************
     @PutMapping()
     public ResponseEntity<ResponseCommon> updateWorkEmployee(@Valid @RequestBody UpdateWorkEmployeeFrom updateWorkEmployeeFrom) {
         ResponseCommon responseCommon = new ResponseCommon();

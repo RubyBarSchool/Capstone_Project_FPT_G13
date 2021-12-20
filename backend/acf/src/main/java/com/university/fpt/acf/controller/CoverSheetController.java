@@ -20,6 +20,9 @@ import java.util.List;
 public class CoverSheetController {
     @Autowired
     private MaterialService materialService;
+    //************************************
+    // Search all cover sheet with combination of fields: codeMaterial,frame,group, unit, company
+    //************************************
     @PostMapping("/search")
     public ResponseEntity<ResponseCommon> searchCoverSheet(@RequestBody SearchMaterialForm searchForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -46,6 +49,9 @@ public class CoverSheetController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Get all cover sheet
+    //************************************
     @GetMapping("/getcoversheets")
     public ResponseEntity<ResponseCommon> getCoverSheets(){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -72,6 +78,9 @@ public class CoverSheetController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Get all unit by id cover sheet
+    //************************************
     @PostMapping("/getunitbycoversheet")
     public ResponseEntity<ResponseCommon> getUnitByCoverSheet(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -98,6 +107,9 @@ public class CoverSheetController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Get all cover sheet by id unit
+    //************************************
     @PostMapping("/getcoversheetbyunit")
     public ResponseEntity<ResponseCommon> searchCoverSheetByUnit(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -124,6 +136,9 @@ public class CoverSheetController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Get all height with combination of fields: coversheet, frame
+    //************************************
     @PostMapping("/getheightbycoversheetandframe")
     public ResponseEntity<ResponseCommon> getHeightsByCoverSheetAndFrame(@RequestBody Add2MaterialForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -150,6 +165,9 @@ public class CoverSheetController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Get all cover sheet with combination of fields: frame, height
+    //************************************
     @PostMapping("/getcoversheetbyframeandheight")
     public ResponseEntity<ResponseCommon> getCoverSheetByFrameAndHeight(@RequestBody Add2MaterialForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -176,6 +194,9 @@ public class CoverSheetController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Get all frame with combination of fields: coversheet, height
+    //************************************
     @PostMapping("/getframebycoversheetandheight")
     public ResponseEntity<ResponseCommon> getFrameByCoverSheetAndHeight(@RequestBody Add2MaterialForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -202,6 +223,9 @@ public class CoverSheetController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Add cover sheet
+    //************************************
     @PostMapping("/add")
     public ResponseEntity<ResponseCommon> addCoverSheet(@RequestBody AddMaterialForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -226,6 +250,9 @@ public class CoverSheetController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Update coversheet
+    //************************************
     @PutMapping("/update")
     public ResponseEntity<ResponseCommon> updateCoverSheet(@RequestBody UpdateMaterialForm updateForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -250,6 +277,9 @@ public class CoverSheetController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Delete coversheet
+    //************************************
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseCommon> deleteCoverSheet(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -274,6 +304,9 @@ public class CoverSheetController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Add unit for coversheet
+    //************************************
     @PostMapping("/addunit")
     public ResponseEntity<ResponseCommon> addUnitCoverSheet(@RequestBody AddUnitFrameHeightForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -298,6 +331,9 @@ public class CoverSheetController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Add frameheight for coversheet
+    //************************************
     @PostMapping("/addframeheight")
     public ResponseEntity<ResponseCommon> addFrameHeightCoverSheet(@RequestBody AddUnitFrameHeightForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();

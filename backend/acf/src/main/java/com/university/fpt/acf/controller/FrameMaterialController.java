@@ -22,6 +22,9 @@ import java.util.List;
 public class FrameMaterialController {
     @Autowired
     private FrameMaterialService  frameService;
+    //************************************
+    // Add frame material
+    //************************************
     @PostMapping("/add")
     public ResponseEntity<ResponseCommon> addFrameMaterial(@RequestBody AddFrameMaterialForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -46,6 +49,9 @@ public class FrameMaterialController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Search all frame material with combination of fields: length, width
+    //************************************
     @PostMapping("/search")
     public ResponseEntity<ResponseCommon> searchFrame(@RequestBody SearchFrameMaterialForm searchForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -72,6 +78,9 @@ public class FrameMaterialController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Search all frame by frameName
+    //************************************
     @PostMapping("/getframe")
     public ResponseEntity<ResponseCommon> getAllFrame(@RequestBody SearchAllFrame searchForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -98,7 +107,9 @@ public class FrameMaterialController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-
+    //************************************
+    // Delete frame material by id
+    //************************************
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseCommon> deleteFrameMaterial(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -123,6 +134,9 @@ public class FrameMaterialController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Get all frame coversheet
+    //************************************
     @GetMapping("/getframecoversheet")
     public ResponseEntity<ResponseCommon> getAllFrameCoverSheet(){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -149,7 +163,9 @@ public class FrameMaterialController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-
+    //************************************
+    // Search all frame material
+    //************************************
     @GetMapping("/getframematerial")
     public ResponseEntity<ResponseCommon> getAllFrameMaterial(){
         ResponseCommon responseCommon = new ResponseCommon();

@@ -25,7 +25,9 @@ import java.util.List;
 public class DashBoardController {
     @Autowired
     private DashBoardService dashBoardService;
-
+    //************************************
+    // Get number employee that don't have account
+    //************************************
     @PostMapping("/spadmin/getnumberemployeehavenotaccount")
     public ResponseEntity<ResponseCommon> countEmployeeHaveNotAccount(){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -52,6 +54,9 @@ public class DashBoardController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Get count dashboard admin
+    //************************************
 
     @PostMapping("/admin/countdashboardadmin")
     public ResponseEntity<ResponseCommon> countDashboardAdmin(){
@@ -77,7 +82,9 @@ public class DashBoardController {
         }
     }
 
-
+    //************************************
+    // Get count dashboard employee
+    //************************************
     @PostMapping("/employee/countdashboardemployee")
     public ResponseEntity<ResponseCommon> countDashboardEmployee(){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -101,7 +108,9 @@ public class DashBoardController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-
+    //************************************
+    //Report contract
+    //************************************
 
     @PostMapping("/admin/reportContact")
     public ResponseEntity<ResponseCommon> reportContact(){
@@ -126,7 +135,9 @@ public class DashBoardController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-
+    //************************************
+    // Get top employee
+    //************************************
     @PostMapping("/admin/topemployee")
     public ResponseEntity<ResponseCommon> getTopEmployee(){
         ResponseCommon responseCommon = new ResponseCommon();

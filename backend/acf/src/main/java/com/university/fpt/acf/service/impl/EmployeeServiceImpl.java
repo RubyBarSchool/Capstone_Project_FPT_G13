@@ -31,7 +31,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private HistorySalaryRepository historySalaryRepository;
-
+    //************************************
+    // Search employee  with combination of fields: name, position, status
+    //************************************
     @Override
     public List<SearchEmployeeVO> searchEmployee(SearchAllEmployeeForm searchAllEmployeeForm) {
         List<SearchEmployeeVO> getAlEmployeeVOS = new ArrayList<>();
@@ -55,14 +57,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return size;
     }
-
+    //************************************
+    //GEt fullname employee that not account
+    //************************************
     @Override
     public List<GetAllEmployeeVO> getFullNameEmployeeNotAccount(SearchEmployeeForm searchEmployeeForm) {
         Pageable pageable = PageRequest.of(searchEmployeeForm.getPageIndex()-1,searchEmployeeForm.getPageSize());
         List<GetAllEmployeeVO > list = employeeRepository.getTop10EmployeeNotAccount("%"+searchEmployeeForm.getName().toLowerCase()+"%",pageable);
         return list ;
     }
-
+    //************************************
+    // GEt all employee that not attendance by date
+    //************************************
     @Override
     public List<GetAllEmployeeVO> getAllEmployeeNotAttendance(EmployeeNotAttendanceForm employeeNotAttendanceForm) {
         List<GetAllEmployeeVO> employeeVOS = new ArrayList<>();
@@ -84,7 +90,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return size;
     }
-
+    //************************************
+    // Get detail employee by id
+    //************************************
     @Override
     public EmployeeDetailVO getEmployeeDetailById(Long id) {
         EmployeeDetailVO em = new EmployeeDetailVO();
@@ -96,7 +104,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return em;
     }
-
+    //************************************
+    // Add employee
+    //************************************
     @Override
     public Boolean AddEmployee(AddEmployeeForm addEmployeeForm) {
         boolean check = false;
@@ -169,7 +179,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return check;
     }
-
+    //************************************
+    // Update employee
+    //************************************
     @Override
     public Boolean UpdateEmployee(UpdateEmployeeForm updateEmployeeForm) {
         boolean check = false;
@@ -226,7 +238,9 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return check;
     }
-
+    //************************************
+    // Delete employee
+    //************************************
     @Override
     public Boolean DeleteEmployee(Long id) {
         boolean check = false;
@@ -246,14 +260,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return check;
     }
-
+    //************************************
+    // GEt employee that not delete in system
+    //************************************
     @Override
     public List<GetAllEmployeeVO> getEmployeeSNotDelete(SearchEmployeeForm employeeForm) {
         Pageable pageable = PageRequest.of(employeeForm.getPageIndex()-1,employeeForm.getPageSize());
         List<GetAllEmployeeVO > list = employeeRepository.getEmployeeNotDelete("%"+employeeForm.getName().toLowerCase()+"%",pageable);
         return list ;
     }
-
+    //************************************
+    // GEt detail employee by username
+    //************************************
     @Override
     public DetailEmployeeVO getDetailEmployeeByUsername() {
         AccountSercurity accountSercurity = new AccountSercurity();

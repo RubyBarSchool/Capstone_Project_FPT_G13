@@ -20,7 +20,9 @@ import java.util.List;
 public class AccountController {
     @Autowired
     private AccountManagerService accountService;
-
+    //************************************
+    // Search all account  with combination of fields:name, role,status, date
+    //************************************
     @PostMapping(path = "/search")
     public ResponseEntity<ResponseCommon> searchAccount(@RequestBody SearchAccountForm searchAccountForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -48,7 +50,9 @@ public class AccountController {
         }
     }
 
-
+    //************************************
+    // Get account by id
+    //************************************
     @PostMapping("/getAcc")
     public ResponseEntity<ResponseCommon> GetAccountByID(@RequestParam Long id) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -73,7 +77,9 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Add account
+    //************************************
     @PostMapping("/add")
     public ResponseEntity<ResponseCommon> addAccount(@RequestBody AddAccountForm addAccountForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -93,6 +99,9 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Update account
+    //************************************
 
     @PutMapping("/update")
     public ResponseEntity<ResponseCommon> updateAccount(@RequestBody UpdateAccountForm updateAccountForm) {
@@ -118,7 +127,9 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Delete account
+    //************************************
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseCommon> deleteAccount(@RequestParam Long id) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -143,7 +154,9 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Generate Username by id employee
+    //************************************
     @GetMapping("/generateUsername")
     public ResponseEntity<ResponseCommon> generateUsername(@RequestParam Long id) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -167,7 +180,9 @@ public class AccountController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Reset password by id employee
+    //************************************
 
     @PostMapping("/resetpassword/{id}")
     public ResponseEntity<ResponseCommon> resetPassword(@PathVariable Long id) {
@@ -194,7 +209,9 @@ public class AccountController {
         }
     }
 
-
+    //************************************
+    // Change password for user
+    //************************************
     @PostMapping("/changepassword")
     public ResponseEntity<ResponseCommon> changePassword(@RequestBody ChangePasswordAccountForm changePasswordAccountForm) {
         ResponseCommon responseCommon = new ResponseCommon();

@@ -19,6 +19,9 @@ import java.util.List;
 public class PunishController {
     @Autowired
     private PunishService punishService;
+    //************************************
+    // Search punish  with combination of fields: title, date,status
+    //************************************
     @PostMapping("/search")
     public ResponseEntity<ResponseCommon> searchPunish(@RequestBody SearchBonusAdminForm searchForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -45,6 +48,9 @@ public class PunishController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Add punish
+    //************************************
     @PostMapping("/add")
     public ResponseEntity<ResponseCommon> addPunish(@RequestBody AddBonusAdminForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -73,6 +79,9 @@ public class PunishController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Delete punish
+    //************************************
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseCommon> deletePunish(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -97,6 +106,9 @@ public class PunishController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    //Update punish
+    //************************************
     @PutMapping("/update")
     public ResponseEntity<ResponseCommon> updatePunish(@RequestBody UpdateBonusForm updateForm){
         ResponseCommon responseCommon = new ResponseCommon();

@@ -19,6 +19,9 @@ import java.util.List;
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
+    //************************************
+    // Search all employee with combination of fields: name,position, status
+    //************************************
     @PostMapping("/search")
     public ResponseEntity<ResponseCommon> searchEmployee(@RequestBody SearchAllEmployeeForm searchAllEmployeeForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -45,6 +48,9 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Get profile
+    //************************************
     @GetMapping("/profile")
     public ResponseEntity<ResponseCommon> getProfile(){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -69,7 +75,9 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-
+    //************************************
+    // Get all fullname of employee that employee don't account
+    //************************************
     @PostMapping("/fullnameEmNotAccount")
     public ResponseEntity<ResponseCommon> GetAllFullNameNotAccount(@RequestBody SearchEmployeeForm searchEmployeeForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -77,6 +85,9 @@ public class EmployeeController {
         responseCommon.setStatus(HttpStatus.OK.value());
         return new ResponseEntity<>(responseCommon,HttpStatus.OK);
     }
+    //************************************
+    // Get detail employee of information by id employee
+    //************************************
     @GetMapping("/getEmployee")
     public ResponseEntity<ResponseCommon> GetEmployeeDetailById(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -101,6 +112,9 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Search all cover sheet with combination of fields: name
+    //************************************
     @PostMapping("/getAllEmployee")
     public ResponseEntity<ResponseCommon> GetEmployeesNotDelete( @RequestBody SearchEmployeeForm employeeForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -108,6 +122,9 @@ public class EmployeeController {
         responseCommon.setStatus(HttpStatus.OK.value());
         return new ResponseEntity<>(responseCommon,HttpStatus.OK);
     }
+    //************************************
+    // Add employee
+    //************************************
     @PostMapping("/add")
     public  ResponseEntity<ResponseCommon> addEmployee(@RequestBody AddEmployeeForm addEmployeeForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -132,6 +149,9 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Update employee
+    //************************************
     @PutMapping("/update")
     public  ResponseEntity<ResponseCommon> updateEmployee(@Valid @RequestBody UpdateEmployeeForm updateEmployeeForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -156,6 +176,9 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Delete employee
+    //************************************
     @DeleteMapping("/delete")
     public  ResponseEntity<ResponseCommon> deleteEmployee(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();

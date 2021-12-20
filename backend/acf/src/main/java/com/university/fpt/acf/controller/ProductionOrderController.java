@@ -22,7 +22,9 @@ import java.util.List;
 public class ProductionOrderController {
     @Autowired
     private ProductionOrderService productionOrderService;
-
+    //************************************
+    // Add product for contract
+    //************************************
     @PostMapping("/add")
     public ResponseEntity<ResponseCommon> addProductIncontact(@Valid @RequestBody AddProductionOrderFrom addProductionOrderFrom) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -50,7 +52,9 @@ public class ProductionOrderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Update product of contract
+    //************************************
     @PostMapping("/update")
     public ResponseEntity<ResponseCommon> updateProductIncontact(@Valid @RequestBody AddProductionOrderFrom addProductionOrderFrom) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -78,7 +82,9 @@ public class ProductionOrderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // View working employee
+    //************************************
     @PostMapping("/viewworkemployee")
     public ResponseEntity<ResponseCommon> viewWorkEmployee(@Valid @RequestBody DateWorkEmployeeFrom dateWorkEmployeeFrom) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -106,9 +112,11 @@ public class ProductionOrderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Search productionOrder  with combination of fields: contractName, nameProduction, date,status
+    //************************************
     @PostMapping("/search")
-    public ResponseEntity<ResponseCommon> searchProductOrder(@RequestBody SearchProductionOrderForm searchForm) {
+    public ResponseEntity<ResponseCommon> searchProductionOrder(@RequestBody SearchProductionOrderForm searchForm) {
         ResponseCommon responseCommon = new ResponseCommon();
         String message = "";
         int total = 0;
@@ -133,7 +141,9 @@ public class ProductionOrderController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-
+    //************************************
+    // Get detail productionOrder  by idProduct
+    //************************************
     @GetMapping("/getdetailproductionorder")
     public ResponseEntity<ResponseCommon> getProductInContact(@RequestParam("idproduction") Long idProduction) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -160,7 +170,9 @@ public class ProductionOrderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Confirm working
+    //************************************
     @PostMapping("/confirm/{id}")
     public ResponseEntity<ResponseCommon> confirmWork(@PathVariable("id") Long id) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -188,7 +200,9 @@ public class ProductionOrderController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Delete production order
+    //************************************
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseCommon> deleteProductionOrder(@PathVariable("id") Long idProduction) {
         ResponseCommon responseCommon = new ResponseCommon();

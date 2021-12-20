@@ -31,7 +31,9 @@ public class ContactController {
 
     @Autowired
     private AttendancesService attendancesService;
-
+    //************************************
+    // Add contract
+    //************************************
     @PostMapping()
     public ResponseEntity<ResponseCommon> addContact(@Valid @RequestBody AddContactForm addContactForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -57,7 +59,9 @@ public class ContactController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Update contract
+    //************************************
     @PutMapping()
     public ResponseEntity<ResponseCommon> updateContact(@Valid @RequestBody UpdateContractForm updateContactForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -81,7 +85,9 @@ public class ContactController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Delete contract
+    //************************************
     @DeleteMapping()
     public ResponseEntity<ResponseCommon> deleteContact(@RequestParam Long id) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -105,7 +111,9 @@ public class ContactController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Get all contract
+    //************************************
     @PostMapping("/getcontact")
     public ResponseEntity<ResponseCommon> getContactInFormSearch() {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -131,7 +139,9 @@ public class ContactController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Read file excel
+    //************************************
     @PostMapping("/readexcel")
     public ResponseEntity<ResponseCommon> readFileContact(@RequestParam("file") MultipartFile file) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -155,7 +165,9 @@ public class ContactController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Search contract with combination of fields: name, date, company
+    //************************************
     @PostMapping("/search")
     public ResponseEntity<ResponseCommon> searchCreateContact(@RequestBody SearchCreateContactFrom searchForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -182,7 +194,9 @@ public class ContactController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-
+    //************************************
+    // Export file excel contract
+    //************************************
     @PostMapping("/exportcontact")
     public ResponseEntity<Resource> exportContact(@RequestBody ExportContactForm exportContactForm) {
         try {
@@ -201,7 +215,9 @@ public class ContactController {
                     .body(null);
         }
     }
-
+    //************************************
+    // create template file contract
+    //************************************
     @PostMapping("/templatecontact")
     public ResponseEntity<Resource> templateContact(@RequestBody ExportContactForm exportContactForm) {
         try {

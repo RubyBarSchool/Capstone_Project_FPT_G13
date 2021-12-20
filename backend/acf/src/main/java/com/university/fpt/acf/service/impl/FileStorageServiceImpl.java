@@ -5,12 +5,10 @@ import com.university.fpt.acf.entity.Employee;
 import com.university.fpt.acf.entity.File;
 import com.university.fpt.acf.repository.EmployeeRepository;
 import com.university.fpt.acf.repository.FileRepository;
-import com.university.fpt.acf.service.EmployeeService;
 import com.university.fpt.acf.service.FileStorageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
@@ -35,7 +33,9 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     @Autowired
     private EmployeeRepository employeeRepository;
-
+    //************************************
+    // create Directory to save file
+    //************************************
     @Override
     public void init() {
         try {
@@ -46,7 +46,9 @@ public class FileStorageServiceImpl implements FileStorageService {
             throw new RuntimeException("Could not initialize folder for upload!");
         }
     }
-
+    //************************************
+    // Save file
+    //************************************
     @Override
     public void save(MultipartFile file) {
         try {
@@ -64,7 +66,9 @@ public class FileStorageServiceImpl implements FileStorageService {
             throw new RuntimeException("Could not store the file. Error: " + e.getMessage());
         }
     }
-
+    //************************************
+    // Load file
+    //************************************
     @Override
     public Resource load(String filename) {
         try {
@@ -80,7 +84,9 @@ public class FileStorageServiceImpl implements FileStorageService {
             throw new RuntimeException("Error: " + e.getMessage());
         }
     }
-
+    //************************************
+    // Get uri of file
+    //************************************
     @Override
     public String loadUri(String filename) {
         try {
@@ -90,7 +96,9 @@ public class FileStorageServiceImpl implements FileStorageService {
             throw new RuntimeException("Error: " + e.getMessage());
         }
     }
-
+    //************************************
+    // Delete all file of Directory
+    //************************************
     @Override
     public void deleteAll() {
         FileSystemUtils.deleteRecursively(root.toFile());
@@ -100,7 +108,9 @@ public class FileStorageServiceImpl implements FileStorageService {
     public Stream<Path> loadAll() {
         return null;
     }
-
+    //************************************
+    // Save image of Directory
+    //************************************
     @Override
     public File saveImage(MultipartFile file) {
         File file1 = new File();
@@ -122,7 +132,9 @@ public class FileStorageServiceImpl implements FileStorageService {
         }
         return file1;
     }
-
+    //************************************
+    // Delete file by fileId
+    //************************************
     @Override
     public Boolean deleteFile(String fileId) {
         Boolean check = false;

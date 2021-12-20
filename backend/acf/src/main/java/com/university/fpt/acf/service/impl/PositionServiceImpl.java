@@ -22,7 +22,9 @@ public class PositionServiceImpl implements PositionService {
     private PositionRespository positionRespository;
     @Autowired
     private PositionCustomRepository positionCustomRepository;
-
+    //************************************
+    // Search position by title,date,status
+    //************************************
     @Override
     public List<PositionResponseVO> searchPosition(PositionForm positionForm) {
         List<PositionResponseVO> getAlPositionVOS = new ArrayList<>();
@@ -44,7 +46,9 @@ public class PositionServiceImpl implements PositionService {
         }
         return total;
     }
-
+    //************************************
+    // Add position
+    //************************************
     @Override
     public Boolean addPosition(AddPositionForm addPositionForm) {
         boolean check = false;
@@ -72,7 +76,9 @@ public class PositionServiceImpl implements PositionService {
         }
         return check;
     }
-
+    //************************************
+    // Update position
+    //************************************
     @Override
     public Boolean updatePosition(UpdatePositionForm updatePositionForm) {
         boolean check = false;
@@ -106,7 +112,9 @@ public class PositionServiceImpl implements PositionService {
         }
         return check;
     }
-
+    //************************************
+    // Delete position
+    //************************************
     @Override
     public Boolean deletePosition(Long id) {
         boolean check = false;

@@ -22,7 +22,9 @@ import java.util.List;
 public class ContactDetailController {
     @Autowired
     private ContactService contactService;
-
+    //************************************
+    // Search all contract with fields: name
+    //************************************
     @PostMapping("/getcontactinsearch")
     public ResponseEntity<ResponseCommon> getContactInFormSearch(@Valid @RequestBody ContactInSearchForm contactInSearchForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -51,7 +53,9 @@ public class ContactDetailController {
         }
     }
 
-
+    //************************************
+    // Get all contract
+    //************************************
 
     @PostMapping("/getcontactinadd")
     public ResponseEntity<ResponseCommon> getContactInFormAdd() {
@@ -79,7 +83,9 @@ public class ContactDetailController {
         }
     }
 
-
+    //************************************
+    // Search contract with combination of fields: contractName, nameProduct
+    //************************************
     @PostMapping()
     public ResponseEntity<ResponseCommon> searchContactDetail(@Valid @RequestBody SearchContactDetailForm searchContactDetailForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -107,7 +113,9 @@ public class ContactDetailController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Get all material by id product
+    //************************************
     @GetMapping("/getmaterial/{id}")
     public ResponseEntity<ResponseCommon> getMaterialInProduct(@PathVariable Long id) {
         ResponseCommon responseCommon = new ResponseCommon();

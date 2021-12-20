@@ -17,6 +17,9 @@ import java.util.List;
     public class BonusController {
     @Autowired
     private BonusService bonusService;
+    //************************************
+    // Search all bonus for employee with combination of fields:title,date,status
+    //************************************
     @PostMapping("/search")
     public ResponseEntity<ResponseCommon> searchBonus(@RequestBody SearchBonusAdminForm searchForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -43,6 +46,9 @@ import java.util.List;
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Add bonus for employee
+    //************************************
     @PostMapping("/add")
     public ResponseEntity<ResponseCommon> addBonus(@RequestBody AddBonusAdminForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -71,6 +77,9 @@ import java.util.List;
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Delete bonus for employee
+    //************************************
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseCommon> deleteBonus(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -95,6 +104,9 @@ import java.util.List;
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Update bonus for employee
+    //************************************
     @PutMapping("/update")
     public ResponseEntity<ResponseCommon> updateBonus(@RequestBody UpdateBonusForm updateForm){
         ResponseCommon responseCommon = new ResponseCommon();

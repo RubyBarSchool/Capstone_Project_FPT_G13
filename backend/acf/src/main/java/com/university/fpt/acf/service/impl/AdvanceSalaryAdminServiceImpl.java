@@ -41,9 +41,8 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
     @Autowired
     private NotificationService notificationService;
 
-
     //************************************
-    // get đơn xin ứng lương cho admin
+    // Search Advance salary with combination of fields: title, nameEmployee, status, date
     //************************************
     @Override
     public List<SearchAdvanceSalaryAdminVO> searchAdvanceSalaryAdmin(SearchAdvanceSalaryAdminForm searchForm) {
@@ -55,7 +54,9 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
         }
         return list;
     }
-
+    //************************************
+    //Get total search advance salary
+    //************************************
     @Override
     public int totalSearch(SearchAdvanceSalaryAdminForm searchForm) {
         int size;
@@ -66,20 +67,9 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
         }
         return  size;
     }
-
-
-
-//    @Override
-//    public DetailAdvanceSalaryAdminVO getDetailAdvanceSalaryAdmin(Long id) {
-//        DetailAdvanceSalaryAdminVO data ;
-//        try {
-//            data =adminRepository.getDetailById(id);
-//        }catch (Exception e){
-//            throw new RuntimeException("Error Advance Salary Detail repository " + e.getMessage());
-//        }
-//        return data;
-//    }
-
+    //************************************
+    // Accept advance salary
+    //************************************
     @Override
     public Boolean acceptAddvanceSalary(AcceptAdvanceSalaryAdminForm acceptForm) {
         boolean check = false;
@@ -128,7 +118,9 @@ public class AdvanceSalaryAdminServiceImpl implements AdvanceSalaryAdminService 
         }
         return check;
     }
-
+    //************************************
+    // Reject advance salary
+    //************************************
     @Override
     public Boolean rejectAdvanceSalary(AcceptAdvanceSalaryAdminForm acceptForm) {
         boolean check = false;

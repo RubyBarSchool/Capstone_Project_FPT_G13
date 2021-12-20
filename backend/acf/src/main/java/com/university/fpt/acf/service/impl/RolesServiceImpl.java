@@ -23,7 +23,9 @@ public class RolesServiceImpl implements RolesService {
     @Autowired
     private RolesCustomRepository rolesCustomRepository;
 
-
+    //************************************
+    // Get all roles
+    //************************************
     @Override
     public List<GetAllRoleVO> getRoles(RolesForm rolesForm) {
         List<GetAllRoleVO> getAllRoleVOS = new ArrayList<>();
@@ -34,7 +36,9 @@ public class RolesServiceImpl implements RolesService {
         }
         return getAllRoleVOS;
     }
-
+    //************************************
+    // Get total all roles
+    //************************************
     @Override
     public int totalGetAllRole(RolesForm rolesForm) {
         int size = 0;

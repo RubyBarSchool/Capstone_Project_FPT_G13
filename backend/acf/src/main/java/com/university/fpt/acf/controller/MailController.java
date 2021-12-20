@@ -12,7 +12,9 @@ public class MailController {
 
     @Autowired
     private AttendanceCheckService attendanceCheckService;
-
+    //************************************
+    // Create a Simple MailMessage.
+    //************************************
 
     @GetMapping
     public String sendSimpleEmail() {

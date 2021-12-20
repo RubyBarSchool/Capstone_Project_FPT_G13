@@ -21,7 +21,9 @@ import java.util.List;
 public class ContactMoneyController {
     @Autowired
     private ContactMoneyService contactMoneyService;
-
+    //************************************
+    // Search contract money with combination of fields: nameContact,statusDone
+    //************************************
     @PostMapping("/search")
     public ResponseEntity<ResponseCommon> searchContactMoney(@Valid @RequestBody SearchContactMoneyForm searchContactMoneyForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -49,7 +51,9 @@ public class ContactMoneyController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Add contract money
+    //************************************
     @PostMapping()
     public ResponseEntity<ResponseCommon> addContactMoney(@Valid @RequestBody AddContactMoneyForm addContactMoneyForm ) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -77,7 +81,9 @@ public class ContactMoneyController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Edit contract money
+    //************************************
     @PutMapping()
     public ResponseEntity<ResponseCommon> editContactMoney(@Valid @RequestBody AddContactMoneyForm addContactMoneyForm ) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -105,7 +111,9 @@ public class ContactMoneyController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Delete contract money
+    //************************************
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseCommon> deleteContactMoney(@PathVariable Long id) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -133,7 +141,9 @@ public class ContactMoneyController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Confirm contract money
+    //************************************
     @PostMapping("/confirm")
     public ResponseEntity<ResponseCommon> confirmContactMoney(@RequestBody AddContactMoneyForm addContactMoneyForm ) {
         ResponseCommon responseCommon = new ResponseCommon();

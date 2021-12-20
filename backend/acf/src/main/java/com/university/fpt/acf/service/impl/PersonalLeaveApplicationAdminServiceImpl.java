@@ -37,6 +37,9 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
     @Autowired
     private NotificationService notificationService;
 
+    //************************************
+    // Search material  with combination of fields: codeMaterial, frame,group, unit, company
+    //************************************
     @Override
     public List<SearchPersonalLeaveApplicationAdminVO> searchPersonalApplication(SearchPersonalLeaveAdminApplicationForm personalApplicationForm) {
         List<SearchPersonalLeaveApplicationAdminVO> listPersonalApplication = new ArrayList<>();
@@ -45,29 +48,32 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
         } catch (Exception e) {
             throw new RuntimeException("Error Personal Leave Application  repository " + e.getMessage());
         }
-        return  listPersonalApplication;
+        return listPersonalApplication;
     }
 
     @Override
     public int totalPersonalApplication(SearchPersonalLeaveAdminApplicationForm personalApplicationForm) {
-        int total=0;
+        int total = 0;
         try {
             total = personalLeaveApplicationCustomRepository.totalSearchApplication(personalApplicationForm);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
         }
         return total;
     }
 
+    //************************************
+    // Accept persional leave application
+    //************************************
     @Override
     public Boolean acceptPersonalLeaveApplication(AcceptPersonalLeaveApplicationAdminForm acceptForm) {
         boolean check = false;
-        try{
-            if(acceptForm.getIdApplication()==null ){
+        try {
+            if (acceptForm.getIdApplication() == null) {
                 throw new Exception("idApplication is null");
-            }else{
+            } else {
                 PersonaLeaveApplication p = personalLeaveApplicationAdminRepository.getApplicationById(acceptForm.getIdApplication());
-                if(p==null){
+                if (p == null) {
                     throw new Exception(" Personal Leave Application ko ton tai ");
                 }
                 p.setAccept("1");
@@ -79,33 +85,36 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
                 p.setModified_by(accountSercurity.getUserName());
                 p.setModified_date(LocalDate.now());
                 personalLeaveApplicationAdminRepository.save(p);
-                check=true;
+                check = true;
 
-                if(!p.getCreated_by().equals(accountSercurity.getUserName())){
+                if (!p.getCreated_by().equals(accountSercurity.getUserName())) {
                     Notification notification = new Notification();
                     notification.setUsername(p.getCreated_by());
                     notification.setUsernameCreate(accountSercurity.getUserName());
                     notification.setContent(" chấp nhận đơn xin nghỉ của bạn");
                     notification.setPath("/leaveapplication");
-                    HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                    HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
                     simpMessagingTemplate.convertAndSendToUser(p.getCreated_by(), "/queue/notification", dataOutPut);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
         return check;
     }
 
+    //************************************
+    // Reject personal leave application
+    //************************************
     @Override
     public Boolean rejectPersonalLeaveApplication(AcceptPersonalLeaveApplicationAdminForm acceptForm) {
         boolean check = false;
-        try{
-            if(acceptForm.getIdApplication()==null ){
+        try {
+            if (acceptForm.getIdApplication() == null) {
                 throw new Exception("idApplication is  Null");
-            }else{
+            } else {
                 PersonaLeaveApplication p = personalLeaveApplicationAdminRepository.getApplicationById(acceptForm.getIdApplication());
-                if(p==null){
+                if (p == null) {
                     throw new Exception(" Không tìm thấy đơn! ");
                 }
                 p.setAccept("0");
@@ -118,32 +127,21 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
                 p.setModified_date(LocalDate.now());
                 personalLeaveApplicationAdminRepository.save(p);
 
-                if(!p.getCreated_by().equals(accountSercurity.getUserName())){
+                if (!p.getCreated_by().equals(accountSercurity.getUserName())) {
                     Notification notification = new Notification();
                     notification.setType("error");
                     notification.setUsername(p.getCreated_by());
                     notification.setUsernameCreate(accountSercurity.getUserName());
                     notification.setContent(" từ chối đơn xin nghỉ của bạn");
                     notification.setPath("/leaveapplication");
-                    HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                    HashMap<String, Object> dataOutPut = notificationService.addNotification(notification);
                     simpMessagingTemplate.convertAndSendToUser(p.getCreated_by(), "/queue/notification", dataOutPut);
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
         return check;
     }
 
-//    @Override
-//    public SearchPersonalLeaveApplicationAdminVO detailPersonalApplicationById(Long id) {
-//        SearchPersonalLeaveApplicationAdminVO data = new SearchPersonalLeaveApplicationAdminVO();
-//        try {
-//            data = personalLeaveApplicationAdminRepository.detailPersonLeaveApplication(id);
-//        } catch (Exception e) {
-//            throw new RuntimeException("Error Personal Leave Application  repository " + e.getMessage());
-//        }
-//        return  data;
-//
-//    }
 }

@@ -18,6 +18,9 @@ import java.util.List;
 public class GroupMaterialServiceImpl implements GroupMaterialService {
     @Autowired
     private GroupMaterialRepository repository;
+    //************************************
+    // Add group material
+    //************************************
     @Override
     public Boolean addGroupMaterial(String name) {
         Boolean insert = false;
@@ -38,7 +41,9 @@ public class GroupMaterialServiceImpl implements GroupMaterialService {
         }
         return insert;
     }
-
+    //************************************
+    // Delete group material
+    //************************************
     @Override
     public Boolean deleteGroupMaterial(Long id) {
         Boolean delete = false;
@@ -58,7 +63,9 @@ public class GroupMaterialServiceImpl implements GroupMaterialService {
         }
         return delete;
     }
-
+    //************************************
+    // GEt all group material
+    //************************************
     @Override
     public List<GroupMaterialVO> getAllGroupMaterial() {
         List<GroupMaterialVO> list = new ArrayList<>();
@@ -72,7 +79,9 @@ public class GroupMaterialServiceImpl implements GroupMaterialService {
         }
         return list;
     }
-
+    //************************************
+    // Add group coverplate
+    //************************************
     @Override
     public Boolean addGroupCoverPlate(String name) {
         Boolean insert = false;
@@ -94,7 +103,9 @@ public class GroupMaterialServiceImpl implements GroupMaterialService {
         }
         return insert;
     }
-
+    //************************************
+    // Delete group cover plate
+    //************************************
     @Override
     public Boolean deleteGroupCoverPlate(Long id) {
         Boolean delete = false;
@@ -114,7 +125,9 @@ public class GroupMaterialServiceImpl implements GroupMaterialService {
         }
         return delete;
     }
-
+    //************************************
+    // Get all group cover plate
+    //************************************
     @Override
     public List<GroupMaterialVO> getAllGroupCoverPlate() {
         List<GroupMaterialVO> list = new ArrayList<>();

@@ -16,6 +16,9 @@ import java.util.List;
 public class GroupMaterialController {
     @Autowired
     private GroupMaterialService service;
+    //************************************
+    // Get all group material
+    //************************************
     @GetMapping("/get")
     public ResponseEntity<ResponseCommon> getAllGroupS(){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -42,6 +45,9 @@ public class GroupMaterialController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Add group material
+    //************************************
     @PostMapping("/add")
     public ResponseEntity<ResponseCommon> addGroup(@RequestParam String name){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -66,6 +72,9 @@ public class GroupMaterialController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Delete group material by id
+    //************************************
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseCommon> deleteGroup(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();

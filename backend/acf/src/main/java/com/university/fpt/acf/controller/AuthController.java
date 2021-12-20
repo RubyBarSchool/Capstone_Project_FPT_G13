@@ -16,7 +16,9 @@ public class AuthController {
 
     @Autowired
     private AuthenticationService authenticationService;
-
+    //************************************
+    // Login
+    //************************************
     @PostMapping("/signin")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody ObjectLogin loginRequest) {
         return ResponseEntity.ok(authenticationService.generateJwtResponse(loginRequest));

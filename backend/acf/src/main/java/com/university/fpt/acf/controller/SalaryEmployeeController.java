@@ -34,8 +34,10 @@ public class SalaryEmployeeController {
 
     @Autowired
     private SalaryService salaryService;
+    //************************************
+    // Get salary with account
+    //************************************
 
-    // get salary with account
     @PostMapping("")
     public ResponseEntity<ResponseCommon> salary(@Valid @RequestBody BonusPunishForm bonusPunishForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -63,7 +65,9 @@ public class SalaryEmployeeController {
         }
     }
 
-    // get bonus
+    //************************************
+    // Get bonus  with combination of fields: date, checkNow
+    //************************************
     @PostMapping("/bonus")
     public ResponseEntity<ResponseCommon> getBonus(@Valid @RequestBody BonusPunishForm bonusPunishForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -90,7 +94,9 @@ public class SalaryEmployeeController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-    // get
+    //************************************
+    // Get punish
+    //************************************
     @PostMapping("/punish")
     public ResponseEntity<ResponseCommon> getPunish(@Valid @RequestBody BonusPunishForm bonusPunishForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -118,7 +124,9 @@ public class SalaryEmployeeController {
         }
     }
 
-
+    //************************************
+    // Get bonus and punish
+    //************************************
     @PostMapping("/bonusandpunish")
     public ResponseEntity<ResponseCommon> getBonusAndPunish(@Valid @RequestBody SearchBonusAndPunishForm searchBonusAndPunishForm) {
         ResponseCommon responseCommon = new ResponseCommon();

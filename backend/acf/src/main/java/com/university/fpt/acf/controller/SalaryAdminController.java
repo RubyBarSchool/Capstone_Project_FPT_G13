@@ -20,7 +20,9 @@ public class SalaryAdminController {
     @Autowired
     private SalaryService salaryService;
 
-
+    //************************************
+    // Get history salary by name, position, date
+    //************************************
     @PostMapping("/history")
     public ResponseEntity<ResponseCommon> salaryHistory(@Valid @RequestBody SearchSalaryForm searchSalaryForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -47,7 +49,9 @@ public class SalaryAdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Accept salary
+    //************************************
     @PostMapping("/accept")
     public ResponseEntity<ResponseCommon> salaryAccept(@Valid @RequestBody SearchSalaryForm searchSalaryForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -74,7 +78,9 @@ public class SalaryAdminController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Accept salary done
+    //************************************
     @PutMapping("/accept/{id}")
     public ResponseEntity<ResponseCommon> salaryAcceptDone(@PathVariable Long id) {
         ResponseCommon responseCommon = new ResponseCommon();

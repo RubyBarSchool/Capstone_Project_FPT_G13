@@ -39,7 +39,9 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
 
     @Autowired
     private NotificationService notificationService;
-
+    //************************************
+    // Add persional leave application
+    //************************************
     @Override
     public Boolean AddLeaveApplication(AddPerLeaveAppEmployeeForm addPerLeaveAppEmployeeForm) {
         boolean check = false;
@@ -83,7 +85,9 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
         }
         return check;
     }
-
+    //************************************
+    // Update Persional Leave application
+    //************************************
     @Override
     public Boolean UpdateLeaveApplication(UpdatePersonalAppEmployeeForm updateForm) {
         boolean check = false;
@@ -116,7 +120,9 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
         }
         return check;
     }
-
+    //************************************
+    // Delete Persional Leave Applycation
+    //************************************
     @Override
     public Boolean DeleteLeaveApplication(Long id) {
         boolean check = false;
@@ -137,7 +143,9 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
         }
         return check;
     }
-
+    //************************************
+    // Search persional leave application  with combination of fields:title, status, date
+    //************************************
     @Override
     public List<SearchPersonalApplicationEmployeeVO> searchPersonalLeaveApplicationEmployee(SearchPersonalApplicationEmployeeForm searchForm) {
         List<SearchPersonalApplicationEmployeeVO> list = new ArrayList<>();
@@ -164,7 +172,9 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
         }
         return size;
     }
-
+    //************************************
+    // Get detail persional leave application employee
+    //************************************
     @Override
     public SearchPersonalApplicationEmployeeVO detailPersonalLeaveAppEmployee(Long id) {
         SearchPersonalApplicationEmployeeVO data = new SearchPersonalApplicationEmployeeVO();

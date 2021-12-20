@@ -27,7 +27,9 @@ public class MaterialSuggestController {
     @Autowired
     private MaterialService materialService;
 
-
+    //************************************
+    // Search suggest material  with combination of fields: count, type
+    //************************************
     @PostMapping("/search")
     public ResponseEntity<ResponseCommon> searchSuggestMaterial(@RequestBody MaterialSuggestFrom materialSuggestFrom){
         ResponseCommon responseCommon = new ResponseCommon();

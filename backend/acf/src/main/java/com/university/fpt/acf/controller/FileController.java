@@ -23,7 +23,9 @@ import java.util.stream.Collectors;
 public class FileController {
     @Autowired
     private FileStorageService fileStorageService;
-
+    //************************************
+    // Upload file
+    //************************************
     @PostMapping("/upload")
     public ResponseEntity<ResponseCommon> uploadFile(@RequestParam("file") MultipartFile file) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -43,7 +45,9 @@ public class FileController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-
+    //************************************
+    // Upload file image
+    //************************************
     @PostMapping("/image")
     public ResponseEntity<ResponseCommon> uploadImage(@RequestParam("file") MultipartFile file) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -63,7 +67,9 @@ public class FileController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-
+    //************************************
+    // Read excel
+    //************************************
 
     @PostMapping("/readexcel")
     public ResponseEntity<ResponseCommon> readExcel(@RequestParam("file") MultipartFile file) {
@@ -85,19 +91,9 @@ public class FileController {
         }
     }
 
-//    @GetMapping("/files")
-//    public ResponseEntity<List<FileInfo>> getListFiles() {
-//        List<FileInfo> fileInfos = fileStorageService.loadAll().map(path -> {
-//            String filename = path.getFileName().toString();
-//            String url = MvcUriComponentsBuilder
-//                    .fromMethodName(FileController.class, "getFile", path.getFileName().toString()).build().toString();
-//
-//            return new FileInfo(filename, url);
-//        }).collect(Collectors.toList());
-//
-//        return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
-//    }
-
+    //************************************
+    // Get file by name
+    //************************************
     @GetMapping("/{filename:.+}")
     public ResponseEntity<Resource> getFile(@PathVariable String filename) throws IOException {
         try {
@@ -110,7 +106,9 @@ public class FileController {
         }
 
     }
-
+    //************************************
+    // Delete file by name
+    //************************************
     @DeleteMapping("/{filename:.+}")
     public ResponseEntity<ResponseCommon> deleteFile(@PathVariable String filename) throws IOException {
         ResponseCommon responseCommon = new ResponseCommon();

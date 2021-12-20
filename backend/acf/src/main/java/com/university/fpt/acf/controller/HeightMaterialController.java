@@ -17,6 +17,9 @@ import java.util.List;
 public class HeightMaterialController {
     @Autowired
     private HeightMaterialService heightMaterialService;
+    //************************************
+    // Get all frame height
+    //************************************
     @GetMapping("/get")
     public ResponseEntity<ResponseCommon> getAllFrameHeight(){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -43,6 +46,9 @@ public class HeightMaterialController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Get all height material to insert
+    //************************************
     @GetMapping("/getheightmaterial")
     public ResponseEntity<ResponseCommon> getAllFrameHeightMaterialToInset(){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -69,6 +75,9 @@ public class HeightMaterialController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Get all height coversheet
+    //************************************
     @GetMapping("/getheightcoversheet")
     public ResponseEntity<ResponseCommon> getAllFrameHeightCoverSheet(){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -95,6 +104,9 @@ public class HeightMaterialController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Add frame height
+    //************************************
     @PostMapping("/add")
     public ResponseEntity<ResponseCommon> addFrameHeight(@RequestParam String frameHeight){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -119,6 +131,9 @@ public class HeightMaterialController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Delete frame height by id
+    //************************************
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseCommon> deleteFrameHeight(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();

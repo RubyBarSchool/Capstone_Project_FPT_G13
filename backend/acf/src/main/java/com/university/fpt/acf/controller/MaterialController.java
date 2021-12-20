@@ -17,6 +17,9 @@ import java.util.List;
 public class MaterialController {
     @Autowired
     private MaterialService materialService;
+    //************************************
+    // Search material  with combination of fields: codeMaterial, frame,group, unit, company
+    //************************************
     @PostMapping("/search")
     public ResponseEntity<ResponseCommon> searchMaterial(@RequestBody SearchMaterialForm searchForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -43,7 +46,9 @@ public class MaterialController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-
+    //************************************
+    // Search material in add product  with combination of fields: codeMaterial, frame,group, unit, company
+    //************************************
     @PostMapping("/searchmaterial")
     public ResponseEntity<ResponseCommon> searchMaterialInAddProductDetail(@RequestBody SearchMaterialForm searchForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -70,7 +75,9 @@ public class MaterialController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-
+    //************************************
+    // Get unit by idMaterial
+    //************************************
     @PostMapping("/getunitbymaterial")
     public ResponseEntity<ResponseCommon> getUnitByMaterial(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -97,6 +104,9 @@ public class MaterialController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Search all material  by id unit
+    //************************************
     @PostMapping("/getmaterialbyunit")
     public ResponseEntity<ResponseCommon> searchMaterialByUnit(@RequestParam Long unit){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -123,6 +133,9 @@ public class MaterialController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Search height  with combination of fields: material, frame
+    //************************************
     @PostMapping("/getheightbymaterialandframe")
     public ResponseEntity<ResponseCommon> getHeightsByMaterialAndFrame(@RequestBody Add2MaterialForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -149,7 +162,9 @@ public class MaterialController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-
+    //************************************
+    // Search material  with combination of fields: frame, height
+    //************************************
     @PostMapping("/getMaterialbyframeandheight")
     public ResponseEntity<ResponseCommon> getMaterialByFrameAndHeight(@RequestBody Add2MaterialForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -176,7 +191,9 @@ public class MaterialController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-
+    //************************************
+    // Search frame  with combination of fields: material, height
+    //************************************
     @PostMapping("/getframebymaterialandheight")
     public ResponseEntity<ResponseCommon> getFrameByMaterialAndHeight(@RequestBody Add2MaterialForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -203,7 +220,9 @@ public class MaterialController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-    
+    //************************************
+    // Get all material
+    //************************************
     @GetMapping("/getmaterials")
     public ResponseEntity<ResponseCommon> getMaterials(){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -230,6 +249,9 @@ public class MaterialController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Add material
+    //************************************
     @PostMapping("/add")
     public ResponseEntity<ResponseCommon> addMaterial(@RequestBody AddMaterialForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -254,6 +276,9 @@ public class MaterialController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Update material
+    //************************************
     @PutMapping("/update")
     public ResponseEntity<ResponseCommon> updateMaterial(@RequestBody UpdateMaterialForm updateForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -278,6 +303,9 @@ public class MaterialController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Delete material
+    //************************************
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseCommon> deleteMaterial(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -302,6 +330,9 @@ public class MaterialController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Add unit for material
+    //************************************
     @PostMapping("/addunit")
     public ResponseEntity<ResponseCommon> addUnitMaterial(@RequestBody AddUnitFrameHeightForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -326,6 +357,9 @@ public class MaterialController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Add frame height for material
+    //************************************
     @PostMapping("/addframeheight")
     public ResponseEntity<ResponseCommon> addFrameHeightMaterial(@RequestBody AddUnitFrameHeightForm addForm){
         ResponseCommon responseCommon = new ResponseCommon();

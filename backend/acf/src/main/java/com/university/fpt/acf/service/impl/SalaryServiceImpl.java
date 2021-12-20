@@ -38,7 +38,9 @@ public class SalaryServiceImpl implements SalaryService {
 
     @Autowired
     private AccountManagerRepository accountManagerRepository;
-
+    //************************************
+    // Search salary  with combination of fields:date , check now
+    //************************************
     @Override
     public List<SearchSalaryVO> searchSalary(BonusPunishForm bonusPunishForm) {
         List<SearchSalaryVO> searchSalaryVOS = new ArrayList<>();

@@ -20,7 +20,9 @@ import java.util.List;
 public class ProductController {
     @Autowired
     private ProductService productService;
-
+    //************************************
+    // Add product for contract
+    //************************************
     @PostMapping("/addproduct")
     public ResponseEntity<ResponseCommon> addProductIncontact(@Valid @RequestBody AddProductForm addProductForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -49,7 +51,9 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Delete product of contract by id contract
+    //************************************
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseCommon> deleteProductIncontact(@PathVariable Long id) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -78,7 +82,9 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Get all product of contract by id contract
+    //************************************
     @GetMapping("/getproductincontact")
     public ResponseEntity<ResponseCommon> getProductInContact(@RequestParam("idcontact") Long idContact) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -104,7 +110,9 @@ public class ProductController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Get all product
+    //************************************
     @GetMapping("/getproductincontactall")
     public ResponseEntity<ResponseCommon> getProductInContactAll(@RequestParam("idcontact") Long idContact) {
         ResponseCommon responseCommon = new ResponseCommon();

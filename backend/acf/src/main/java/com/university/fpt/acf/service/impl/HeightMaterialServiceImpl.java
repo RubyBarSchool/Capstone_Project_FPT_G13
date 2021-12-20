@@ -17,6 +17,9 @@ import java.util.List;
 public class HeightMaterialServiceImpl implements HeightMaterialService {
     @Autowired
     private HeightMaterialRepository heightMaterialRepository;
+    //************************************
+    // Add height material
+    //************************************
     @Override
     public Boolean addHeightMaterial(String frameHeight) {
         Boolean insert = false;
@@ -37,7 +40,9 @@ public class HeightMaterialServiceImpl implements HeightMaterialService {
         }
         return insert;
     }
-
+    //************************************
+    // Delete height material
+    //************************************
     @Override
     @Transactional
     public Boolean deleteHeightMaterial(Long id) {
@@ -58,7 +63,9 @@ public class HeightMaterialServiceImpl implements HeightMaterialService {
         }
         return delete;
     }
-
+    //************************************
+    // GEt all heights
+    //************************************
     @Override
     public List<HeightMaterialVO> getAllHeights() {
         List<HeightMaterialVO> list = new ArrayList<>();
@@ -72,7 +79,9 @@ public class HeightMaterialServiceImpl implements HeightMaterialService {
         }
         return list;
     }
-
+    //************************************
+    // Get all heights to Insert material
+    //************************************
     @Override
     public List<HeightMaterialVO> getHeightsToInsertMaterial() {
         List<HeightMaterialVO> list = new ArrayList<>();
@@ -86,7 +95,9 @@ public class HeightMaterialServiceImpl implements HeightMaterialService {
         }
         return list;
     }
-
+    //************************************
+    // Get all heights to insert
+    //************************************
     @Override
     public List<HeightMaterialVO> getHeightsToInsertCoverInsert() {
         List<HeightMaterialVO> list = new ArrayList<>();

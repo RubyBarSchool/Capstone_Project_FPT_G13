@@ -29,7 +29,9 @@ public class ContactMoneyServiceImpl implements ContactMoneyService {
 
     @Autowired
     private ContactRepository contactRepository;
-
+    //************************************
+    // Search contract money  with combination of fields: name contract, status done
+    //************************************
     @Override
     public List<HashMap<String, Object>> searchContactMoney(SearchContactMoneyForm searchContactMoneyForm) {
         List<ContactMoney> contactMonies = new ArrayList<>();
@@ -104,7 +106,9 @@ public class ContactMoneyServiceImpl implements ContactMoneyService {
         }
         return total;
     }
-
+    //************************************
+    // Add contract money
+    //************************************
     @Override
     public Boolean addContactMoney(AddContactMoneyForm addContactMoneyForm) {
         Boolean check = false;
@@ -125,7 +129,9 @@ public class ContactMoneyServiceImpl implements ContactMoneyService {
         }
         return check;
     }
-
+    //************************************
+    // Update contract money
+    //************************************
     @Override
     public Boolean editContactMoney(AddContactMoneyForm addContactMoneyForm) {
         Boolean check = false;
@@ -144,7 +150,9 @@ public class ContactMoneyServiceImpl implements ContactMoneyService {
         }
         return check;
     }
-
+    //************************************
+    // Delete contract money
+    //************************************
     @Override
     public Boolean deleteContactMoney(Long id) {
         Boolean check = false;
@@ -162,7 +170,9 @@ public class ContactMoneyServiceImpl implements ContactMoneyService {
         }
         return check;
     }
-
+    //************************************
+    // Confirm contract money
+    //************************************
     @Override
     public Boolean confirmContactMoney(AddContactMoneyForm addContactMoneyForm) {
         Boolean check = false;

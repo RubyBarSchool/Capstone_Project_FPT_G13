@@ -40,7 +40,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private NotificationService notificationService;
-
+    //************************************
+    // Add production order
+    //************************************
     @Override
     public Boolean addProductInContact(AddProductForm addProductForm) {
         AccountSercurity accountSercurity = new AccountSercurity();
@@ -110,7 +112,9 @@ public class ProductServiceImpl implements ProductService {
         }
         return check;
     }
-
+    //************************************
+    //Delete product in contract
+    //************************************
     @Override
     public Boolean deleteProductInContact(Long id) {
         boolean check = false;

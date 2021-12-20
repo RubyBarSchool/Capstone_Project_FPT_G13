@@ -17,6 +17,9 @@ import java.util.List;
 public class PositionController {
     @Autowired
     private PositionService positionService;
+    //************************************
+    // Search position  with combination of fields: name
+    //************************************
     @PostMapping
     public ResponseEntity<ResponseCommon> searchPositions(@RequestBody PositionForm positionForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -43,6 +46,9 @@ public class PositionController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Add position
+    //************************************
     @PostMapping("/add")
     public  ResponseEntity<ResponseCommon> addPosition(@RequestBody AddPositionForm addPositionForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -71,7 +77,9 @@ public class PositionController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Update position
+    //************************************
     @PutMapping("/update")
     public  ResponseEntity<ResponseCommon> updatePosition(@RequestBody UpdatePositionForm updatePositionForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -100,8 +108,11 @@ public class PositionController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Delete position
+    //************************************
     @DeleteMapping("/delete")
-    public  ResponseEntity<ResponseCommon> deleteAccount(@RequestParam Long id){
+    public  ResponseEntity<ResponseCommon> deletePosition(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();
         String message="";
         Boolean checkDelete = false;

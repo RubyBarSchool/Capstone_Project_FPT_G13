@@ -49,7 +49,7 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     private JavaMailSender emailSender;
 
     //************************************
-    // tự động tạo password với độ dài 8 có số và có viết hoa thường
+    // generate password with length 8 with numbers and lowercase letters
     //************************************
     private String generatePassword() {
         String result = "";
@@ -59,11 +59,8 @@ public class AccountManagerServiceImpl implements AccountManagerService {
 
     @Value( "${acf.scross.path}" )
     private String path;
-
     //************************************
-    // thêm account vào db
-    // 1. thêm account
-    // 2. gửi mail về cho nhân viên
+    // Add account
     //************************************
     @Override
     public Boolean insertAccount(AddAccountForm addAccountForm) {
@@ -116,8 +113,6 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         }
         return insert;
     }
-
-
     //************************************
     // reset password cho account
     // 1. reset password
@@ -147,8 +142,6 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         }
         return check;
     }
-
-
     //************************************
     // change password of account
     // 1. check password old
@@ -173,7 +166,6 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         }
         return check;
     }
-
     //************************************
     // build template mail reset pass
     //************************************
@@ -235,9 +227,8 @@ public class AccountManagerServiceImpl implements AccountManagerService {
                 "    </div>");
         return sql.toString();
     }
-
     //************************************
-    // update account
+    // Update account
     //************************************
     @Override
     public Boolean updateAccount(UpdateAccountForm updateAccountForm) {
@@ -267,7 +258,6 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         }
         return false;
     }
-
     //************************************
     //  delete account by id
     //************************************
@@ -289,9 +279,8 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         }
         return false;
     }
-
     //************************************
-    // search account by name,role,status,date
+    // Search account  with combination of fields: name, role, status, date
     //************************************
     @Override
     public List<GetAllAccountResponseVO> searchAccount(SearchAccountForm searchAccountForm) {
@@ -322,9 +311,8 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         }
         return result;
     }
-
     //************************************
-    // total search
+    // Get total search account
     //************************************
     @Override
     public int getTotalSearchAccount(SearchAccountForm searchAccountForm) {
@@ -333,9 +321,8 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         }
         return accountCustomRepository.getTotalAllAccount(searchAccountForm);
     }
-
     //************************************
-    // get account by id
+    // Get detail account by id
     //************************************
     @Override
     public GetAccountDetailResponeVO getAccountById(Long id) {
@@ -366,9 +353,8 @@ public class AccountManagerServiceImpl implements AccountManagerService {
         return null;
 
     }
-
     //************************************
-    // Generate Username by id employee
+    // Generate username by id employee
     //************************************
     @Override
     public String GenerateUsername(Long id) {

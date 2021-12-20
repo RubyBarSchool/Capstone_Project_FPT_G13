@@ -43,7 +43,9 @@ public class AdvanceSalaryEmployeeServiceImpl implements AdvanceSalaryEmployeeSe
 
     @Autowired
     private NotificationService notificationService;
-
+    //************************************
+    // Search advance salary  with combination of fields: title, content, status, date
+    //************************************
     @Override
     public List<GetAllAdvanceSalaryEmployeeVO> searchAdvanceSalaryEmployee(SearchAdvanceEmployeeForm searchForm) {
         List<GetAllAdvanceSalaryEmployeeVO> list = new ArrayList<>();
@@ -56,7 +58,9 @@ public class AdvanceSalaryEmployeeServiceImpl implements AdvanceSalaryEmployeeSe
         }
         return  list;
     }
-
+    //************************************
+    // Get total search advance salary
+    //************************************
     @Override
     public int totalSearch(SearchAdvanceEmployeeForm searchForm) {
        int size;
@@ -69,7 +73,9 @@ public class AdvanceSalaryEmployeeServiceImpl implements AdvanceSalaryEmployeeSe
         }
         return  size;
     }
-
+    //************************************
+    // Add advance salary
+    //************************************
     @Override
     public Boolean addAdvanceSalaryEmployee(AddAdvanceSalaryEmployeeForm addForm) {
         boolean check = false;
@@ -112,7 +118,9 @@ public class AdvanceSalaryEmployeeServiceImpl implements AdvanceSalaryEmployeeSe
         }
         return check;
     }
-
+    //************************************
+    // Update advance salary
+    //************************************
     @Override
     public Boolean updateAdvanceSalaryEmployee(UpdateAdvanceSalaryEmployeeForm updateForm) {
         boolean check = false;
@@ -140,7 +148,9 @@ public class AdvanceSalaryEmployeeServiceImpl implements AdvanceSalaryEmployeeSe
         }
         return check;
     }
-
+    //************************************
+    // Delete advance salary
+    //************************************
     @Override
     public Boolean deleteAdvanceSalaryEmployee(Long id) {
         boolean check = false;
@@ -158,7 +168,9 @@ public class AdvanceSalaryEmployeeServiceImpl implements AdvanceSalaryEmployeeSe
         }
         return check;
     }
-
+    //************************************
+    // Get detail advance salary employee by id
+    //************************************
     @Override
     public DetailAdvanceSalaryEmployeeVO getDetailAdvanceSalaryEmployee(Long id) {
         DetailAdvanceSalaryEmployeeVO data = new DetailAdvanceSalaryEmployeeVO();

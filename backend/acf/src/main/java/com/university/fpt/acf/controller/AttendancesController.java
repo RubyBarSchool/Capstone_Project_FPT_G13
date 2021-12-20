@@ -34,7 +34,9 @@ public class AttendancesController {
     @Autowired
     private AttendancesService attendancesService;
 
-
+    //************************************
+    // Add attendance for employee
+    //************************************
     @PostMapping
     public ResponseEntity<ResponseCommon> addAttendance(@Valid @RequestBody AddAttendanceForm addAccountForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -58,6 +60,9 @@ public class AttendancesController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Update attendance for employee
+    //************************************
 
     @PutMapping
     public ResponseEntity<ResponseCommon> updateAttendance(@Valid @RequestBody UpdateAttendanceForm updateAttendanceForm) {
@@ -83,7 +88,9 @@ public class AttendancesController {
         }
     }
 
-
+    //************************************
+    // Search all employee attendance for employee with combination of fields:date
+    //************************************
     @PostMapping(path = "/getemployee")
     public ResponseEntity<ResponseCommon> searchAttendances(@Valid @RequestBody EmployeeNotAttendanceForm employeeNotAttendanceForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -110,7 +117,9 @@ public class AttendancesController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Search all attendance for employee with combination of fields:name,date,type,note
+    //************************************
     @PostMapping(path = "/search")
     public ResponseEntity<ResponseCommon> searchAttendance(@Valid @RequestBody AttendanceFrom attendanceFrom) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -137,7 +146,9 @@ public class AttendancesController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Preview excel
+    //************************************
     @PostMapping(path = "/preview")
     public ResponseEntity<ResponseCommon> previewExcel(@Valid @RequestBody ExportExcelForm exportExcelForm) {
         ResponseCommon responseCommon = new ResponseCommon();
@@ -159,7 +170,9 @@ public class AttendancesController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
-
+    //************************************
+    // Download excel
+    //************************************
     @PostMapping("/down")
     public ResponseEntity<Resource> downExcel( @Valid @RequestBody ExportExcelForm exportExcelForm) {
         ByteArrayInputStream file = attendancesService.downExcel(exportExcelForm);
@@ -170,6 +183,4 @@ public class AttendancesController {
                 .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
                 .body(filex);
     }
-
-
 }

@@ -19,6 +19,9 @@ import java.util.List;
 public class AdvanceSalaryEmployeeController {
     @Autowired
     private AdvanceSalaryEmployeeService advanceSalaryEmployeeService;
+    //************************************
+    // Search all advance salary  with combination of fields: title, content,accept, date
+    //************************************
     @PostMapping("/search")
     public ResponseEntity<ResponseCommon> searchAdvanceSalaryEmployee(@RequestBody SearchAdvanceEmployeeForm searchForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -46,30 +49,9 @@ public class AdvanceSalaryEmployeeController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
-//    @GetMapping("/detail")
-//    public ResponseEntity<ResponseCommon> getDetailAdvanceSalaryEmployee(@RequestParam Long id){
-//        ResponseCommon responseCommon = new ResponseCommon();
-//        String message="";
-//        DetailAdvanceSalaryEmployeeVO data = new DetailAdvanceSalaryEmployeeVO();
-//        try {
-//            data = advanceSalaryEmployeeService.getDetailAdvanceSalaryEmployee(id);
-//            if(data==null){
-//                message="Không tìm thấy đơn ứng lương";
-//            }else{
-//                message="Lấy đơn ứng lương  thành công!";
-//            }
-//            responseCommon.setMessage(message);
-//            responseCommon.setData(data);
-//            responseCommon.setStatus(HttpStatus.OK.value());
-//            return new ResponseEntity<>(responseCommon,HttpStatus.OK);
-//        }catch (Exception e){
-//            message = e.getMessage();
-//            responseCommon.setData(data);
-//            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
-//            responseCommon.setMessage(message);
-//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
-//        }
-//    }
+    //************************************
+    // Add advance salary of employee
+    //************************************
 
     @PostMapping("/add")
     public ResponseEntity<ResponseCommon> addAdvanceSalary(@RequestBody AddAdvanceSalaryEmployeeForm addForm){
@@ -99,6 +81,9 @@ public class AdvanceSalaryEmployeeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Update advance salary of employee
+    //************************************
     @PutMapping("/update")
     public ResponseEntity<ResponseCommon> updateAdvanceSalary(@RequestBody UpdateAdvanceSalaryEmployeeForm updateForm){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -127,6 +112,9 @@ public class AdvanceSalaryEmployeeController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Delete advance salary of employee
+    //************************************
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseCommon> deleteAdvanceSalary(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();

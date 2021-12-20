@@ -22,7 +22,9 @@ public class CompanyServiceImpl implements CompanyService {
     private CompanyRespository companyRespository;
     @Autowired
     private CompanyCustomRepository companyCustomRepository;
-
+    //************************************
+    // Search company  with combination of fields: name, address, phone
+    //************************************
     @Override
     public List<CompanyVO> searchCompany(SearchCompanyForm searchCompanyForm) {
         List<CompanyVO> listCompany = new ArrayList<>();
@@ -44,7 +46,9 @@ public class CompanyServiceImpl implements CompanyService {
         }
         return size;
     }
-
+    //************************************
+    // Add company
+    //************************************
     @Override
     public Boolean insertCompany(AddCompanyForm addCompanyForm) {
         boolean check = false;
@@ -80,7 +84,9 @@ public class CompanyServiceImpl implements CompanyService {
         }
         return check;
     }
-
+    //************************************
+    // Update company
+    //************************************
     @Override
     public Boolean updateCompany(UpdateCompanyForm updateCompanyForm) {
         boolean check = false;
@@ -121,7 +127,9 @@ public class CompanyServiceImpl implements CompanyService {
         }
         return check;
     }
-
+    //************************************
+    // Delete Company
+    //************************************
     @Override
     public Boolean deleteCompany(Long id) {
         boolean check = false;

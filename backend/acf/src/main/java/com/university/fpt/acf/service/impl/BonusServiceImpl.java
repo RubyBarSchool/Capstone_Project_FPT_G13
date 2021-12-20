@@ -42,7 +42,9 @@ public class BonusServiceImpl implements BonusService {
 
     @Autowired
     private AccountManagerRepository accountManagerRepository;
-
+    //************************************
+    // Search bonus  with combination of fields: title, date, status
+    //************************************
     @Override
     public List<ResultSearchBonusAdminVO> searchBonus(SearchBonusAdminForm searchBonus) {
         List<SearchBonusAdminVO> list = new ArrayList<>();
@@ -50,41 +52,6 @@ public class BonusServiceImpl implements BonusService {
         int dem = 0;
         try {
             list = bonusCustomRepository.searchBonus(searchBonus);
-//            for(int i=dem;i<list.size();i++){
-//                dem++;
-//                List<GetAllEmployeeVO> listId = new ArrayList<>();
-//                ResultSearchBonusAdminVO re = new ResultSearchBonusAdminVO();
-//                re.setId(list.get(i).getId());
-//                re.setMoney(list.get(i).getMoney());
-//                re.setReason(list.get(i).getReason());
-//                re.setTitle(list.get(i).getTitle());
-//                re.setEffectiveDate(list.get(i).getEffectiveDate());
-//                re.setStatus(list.get(i).getStatus());
-//                Long idBonus = list.get(i).getId();
-//                GetAllEmployeeVO em = new GetAllEmployeeVO();
-//                em.setId(list.get(i).getIdEmployee());
-//                em.setName(list.get(i).getNameEmployee());
-//                listId.add(em);
-//                for(int j=i+1;j< list.size();j++){
-//                    if(list.get(j).getId()==idBonus){
-//                        dem=j;
-//                        GetAllEmployeeVO employeeVO = new GetAllEmployeeVO();
-//                        employeeVO.setId(list.get(j).getIdEmployee());
-//                        employeeVO.setName(list.get(j).getNameEmployee());
-//                        listId.add(employeeVO);
-//                    }else {
-//                        break;
-//                    }
-//                }
-//                re.setListIdEmployee(listId);
-//                listResult.add(re);
-//                if(dem<list.size()){
-//                    i=dem;
-//                }else{
-//                    break;
-//                }
-//             }
-
             ResultSearchBonusAdminVO re = new ResultSearchBonusAdminVO();
             for (int i = 0; i < list.size(); i++) {
                 if (i == 0) {
@@ -127,7 +94,9 @@ public class BonusServiceImpl implements BonusService {
         }
         return listResult;
     }
-
+    //************************************
+    // Get total search bunus
+    //************************************
     @Override
     public int totalSearchBonus(SearchBonusAdminForm searchBonus) {
         int size;
@@ -138,38 +107,9 @@ public class BonusServiceImpl implements BonusService {
         }
         return size;
     }
-
-//    @Override
-//    public List<ResultSearchBonusAdminVO> resultSearchBonus(List<SearchBonusAdminVO> list) {
-//        List<ResultSearchBonusAdminVO> listResult = new ArrayList<>();
-//        int dem=0;
-//        for(int i=0;i<list.size();i++){
-//            List<Long> listId = new ArrayList<>();
-//            ResultSearchBonusAdminVO re = new ResultSearchBonusAdminVO();
-//            re.setId(list.get(i).getId());
-//            re.setMoney(list.get(i).getMoney());
-//            re.setReason(list.get(i).getReason());
-//            re.setTitle(list.get(i).getTitle());
-//            re.setEffectiveDate(list.get(i).getEffectiveDate());
-//            re.setStatus(list.get(i).getStatus());
-//            Long idBonus = list.get(i).getId();
-//            for(int j=0;j< list.size();j++){
-//                dem =j;
-//                if(list.get(j).getId()==idBonus){
-//                    listId.add(list.get(i).getIdEmployee());
-//                }else {
-//                    break;
-//                }
-//
-//            }
-//            re.setListIdEmployee(listId);
-//            listResult.add(re);
-//            i=dem+1;
-//
-//        }
-//        return listResult;
-//    }
-
+    //************************************
+    // Search Bunus and punish  with combination of fields: title, date, status,bonus
+    //************************************
     @Override
     public List<SearchBonusAndPunishVO> searchBonusAndPunish(SearchBonusAndPunishForm searchBonusAndPunishForm) {
         List<SearchBonusAndPunishVO> list = new ArrayList<>();
@@ -181,7 +121,9 @@ public class BonusServiceImpl implements BonusService {
         }
         return list;
     }
-
+    //************************************
+    // Get total search bonus and punish
+    //************************************
     @Override
     public int totalSearchBonusAndPunish(SearchBonusAndPunishForm searchBonusAndPunishForm) {
         int size;
@@ -193,7 +135,9 @@ public class BonusServiceImpl implements BonusService {
         }
         return size;
     }
-
+    //************************************
+    // Search Bonus user
+    //************************************
     @Override
     public List<SearchBonusAdminVO> searchBonusUser(BonusPunishForm bonusPunishForm) {
         List<SearchBonusAdminVO> list = new ArrayList<>();
@@ -205,7 +149,9 @@ public class BonusServiceImpl implements BonusService {
         }
         return list;
     }
-
+    //************************************
+    // Get total search bonus user
+    //************************************
     @Override
     public int totalSearchBonusUser(BonusPunishForm bonusPunishForm) {
         if (bonusPunishForm.getTotal() != null && bonusPunishForm.getTotal() != 0) {
@@ -221,7 +167,9 @@ public class BonusServiceImpl implements BonusService {
         return size;
     }
 
-
+    //************************************
+    // Add bonus
+    //************************************
     @Override
     @Transactional
     public Boolean addBonus(AddBonusAdminForm addBonus) {
@@ -298,7 +246,9 @@ public class BonusServiceImpl implements BonusService {
         }
         return check;
     }
-
+    //************************************
+    // Delete bonus
+    //************************************
     @Override
     public Boolean deleteBonus(Long id) {
         boolean check = false;
@@ -400,7 +350,9 @@ public class BonusServiceImpl implements BonusService {
         }
         return check;
     }
-
+    //************************************
+    // Update bonus
+    //************************************
     @Override
     public Boolean updateBonus(UpdateBonusForm updateBonus) {
         boolean check = false;

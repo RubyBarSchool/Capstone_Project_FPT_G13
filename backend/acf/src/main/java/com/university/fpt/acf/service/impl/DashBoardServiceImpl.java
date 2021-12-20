@@ -47,7 +47,9 @@ public class DashBoardServiceImpl implements DashBoardService {
 
     @Autowired
     private PunishRepository punishRepository;
-
+    //************************************
+    // Count employee dont have account
+    //************************************
     @Override
     public Integer countEmployeeHaveNotAccount() {
         Integer outPut = 0;
@@ -58,7 +60,9 @@ public class DashBoardServiceImpl implements DashBoardService {
         }
         return outPut;
     }
-
+    //************************************
+    // Get data dashboard Admin
+    //************************************
     @Override
     public DashboardAdmin getDataDashboardAdmin() {
         DashboardAdmin dashboardAdmin = new DashboardAdmin();
@@ -74,7 +78,9 @@ public class DashBoardServiceImpl implements DashBoardService {
         }
         return dashboardAdmin;
     }
-
+    //************************************
+    // Get data dashboard employee
+    //************************************
     @Override
     public DashboardEmployee getDataDashboardEmployee() {
         DashboardEmployee dashboardEmployee = new DashboardEmployee();
@@ -107,7 +113,9 @@ public class DashBoardServiceImpl implements DashBoardService {
         }
         return dashboardEmployee;
     }
-
+    //************************************
+    // Get data Report contract
+    //************************************
     @Override
     public  List<HashMap<String,Object>> getDataReportContact() {
         try{
@@ -140,7 +148,9 @@ public class DashBoardServiceImpl implements DashBoardService {
             throw new RuntimeException("Không lấy được dữ liệu hợp đồng");
         }
     }
-
+    //************************************
+    // Get top employee
+    //************************************
     @Override
     public List<ReportTopEmployeeVO> getTopEmployee() {
         try{

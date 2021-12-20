@@ -17,6 +17,9 @@ import java.util.List;
 public class UnitMeasureController {
     @Autowired
     private UnitMeasureService unitMeasureService;
+    //************************************
+    // Get all units
+    //************************************
     @GetMapping("/get")
     public ResponseEntity<ResponseCommon> getAllUnits(){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -43,6 +46,9 @@ public class UnitMeasureController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Add units
+    //************************************
     @PostMapping("/add")
     public ResponseEntity<ResponseCommon> addUnit(@RequestParam String name){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -67,6 +73,9 @@ public class UnitMeasureController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Delete unit
+    //************************************
     @DeleteMapping("/delete")
     public ResponseEntity<ResponseCommon> deleteUnit(@RequestParam Long id){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -91,6 +100,9 @@ public class UnitMeasureController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
         }
     }
+    //************************************
+    // Get units material to insert
+    //************************************
     @GetMapping("/getunitsmaterial")
     public ResponseEntity<ResponseCommon> getAllUnitsMaterialToInset(){
         ResponseCommon responseCommon = new ResponseCommon();
@@ -117,6 +129,9 @@ public class UnitMeasureController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+    //************************************
+    // Get all units coversheet to insert
+    //************************************
     @GetMapping("/getunitcoversheet")
     public ResponseEntity<ResponseCommon> getUnitCoverSheetToCoverInsert(){
         ResponseCommon responseCommon = new ResponseCommon();

@@ -68,7 +68,9 @@ public class AttendancesServiceImpl implements AttendancesService {
     @Autowired
     private NotificationService notificationService;
 
-
+    //************************************
+    // Get all attendance  with combination of fields: name, date, type, note
+    //************************************
     @Override
     public List<AttendanceVO> getAllAttendance(AttendanceFrom attendanceFrom) {
         List<AttendanceVO> attendanceVOS = new ArrayList<>();
@@ -79,7 +81,9 @@ public class AttendancesServiceImpl implements AttendancesService {
         }
         return attendanceVOS;
     }
-
+    //************************************
+    // Get total search attendanceFrom
+    //************************************
     @Override
     public int getTotalAllAttendance(AttendanceFrom attendanceFrom) {
         if (attendanceFrom.getTotal() != null && attendanceFrom.getTotal() != 0) {
@@ -93,7 +97,9 @@ public class AttendancesServiceImpl implements AttendancesService {
         }
         return total;
     }
-
+    //************************************
+    // Save attendance
+    //************************************
     @Override
     public List<TimeKeep> saveAttendance(AddAttendanceForm addAttendanceForm) {
         List<TimeKeep> timeKeeps = new ArrayList<>();
@@ -187,7 +193,9 @@ public class AttendancesServiceImpl implements AttendancesService {
         }
         return timeKeeps;
     }
-
+    //************************************
+    // Update attendance
+    //************************************
     @Override
     public TimeKeep updateAttendance(UpdateAttendanceForm updateAttendanceForm) {
         TimeKeep timeKeep = new TimeKeep();
@@ -279,7 +287,9 @@ public class AttendancesServiceImpl implements AttendancesService {
         }
         return timeKeep;
     }
-
+    //************************************
+    // Build email
+    //************************************
     private String buildEmail(String fullNameChange,LocalDate dateChange,String typeOld,String typeNew,String noteOld,String noteNew, String fullName, String link) {
         StringBuilder sql = new StringBuilder("");
         sql.append("<div style=\" width:80%; margin: 0 auto;\">\n" +
@@ -310,7 +320,9 @@ public class AttendancesServiceImpl implements AttendancesService {
                 "    </div>");
         return sql.toString();
     }
-
+    //************************************
+    // Preview excel
+    //************************************
     @Override
     public List<Object> priviewExcel(ExportExcelForm exportExcelForm) {
         List<AttendanceVO> attendanceVOS = new ArrayList<>();
@@ -415,7 +427,9 @@ public class AttendancesServiceImpl implements AttendancesService {
         }
         return sheets;
     }
-
+    //************************************
+    // Download excel
+    //************************************
     @Override
     public ByteArrayInputStream downExcel(ExportExcelForm exportExcelForm) {
         List<AttendanceVO> attendanceVOS = new ArrayList<>();
