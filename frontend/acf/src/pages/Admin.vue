@@ -932,6 +932,7 @@ export default {
 #user {
   background-color: rgb(76, 238, 12);
   color: white;
+  margin-left: 0.5vh;
 }
 #user:hover {
   background-color: rgb(42, 253, 0);
@@ -940,6 +941,7 @@ export default {
 #reset {
   background-color: #ff8800;
   color: white;
+  margin-right: 1vh;
 }
 #reset:hover {
   background-color: #FF6600;

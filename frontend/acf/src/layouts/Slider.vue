@@ -55,7 +55,7 @@
                   :overflow-count="30"
                 >
                   <font-awesome-icon
-                    :style="{ 'font-size': '40px','margin-top':'1vh' }"
+                    :style="{ 'font-size': '40px', 'margin-top': '1vh' }"
                     :icon="['far', 'bell']"
                     class="bell"
                   />
@@ -156,7 +156,7 @@
                             <div>
                               Xin chào, <strong>{{ loadUser }}</strong>
                             </div>
-                            
+
                             <div>Xem trang cá nhân</div>
                           </span></a-col
                         >
@@ -630,7 +630,8 @@ export default {
   color: #001100;
 }
 .bell:hover {
-  color: rgb(87, 83, 83);
+  background-color: rgb(224, 217, 217);
+  border-radius: 10px;
 }
 .content {
   color: #000;
@@ -674,8 +675,8 @@ export default {
   margin: 10px;
 }
 #layout .logo1 {
-  height: 45px;
-  width: 45px;
+  height: 60px;
+  width: 65px;
   background-image: url("../assets/logo3.png");
   margin: 10px;
 }
@@ -684,13 +685,6 @@ export default {
     "Lucida Sans", Arial, sans-serif;
   font-size: 18px;
 }
-
-.menuAva:hover {
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
-  font-size: 18px;
-}
-
 .menu {
   margin-bottom: 20vh;
   margin-left: 1vh;

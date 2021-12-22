@@ -42,133 +42,168 @@
                       <div class="card-block">
                         <div class="row">
                           <div class="col-sm-6">
-                            <p class="m-b-10 f-w-600">Tên tài khoản:</p>
-                            <h6 class="f-w-400">
+                            <h5 class="m-b-10 f-w-600">Tên tài khoản:</h5>
+                            <p class="f-w-400">
                               {{ dataProfiles.username }}
-                            </h6>
+                            </p>
                           </div>
                           <div class="col-sm-6">
-                            <p class="m-b-10 f-w-600">Giới tính:</p>
-                            <h6 class="f-w-400">
+                            <h5 class="m-b-10 f-w-600">Giới tính:</h5>
+                            <p class="f-w-400">
                               {{ dataProfiles.gender ? "Nam" : "Nữ" }}
-                            </h6>
+                            </p>
                           </div>
                         </div>
                         <hr />
                         <div class="row">
                           <div class="col-sm-6">
-                            <p class="m-b-10 f-w-600">Vị trí:</p>
-                            <h6
+                            <h5 class="m-b-10 f-w-600">Vị trí:</h5>
+                            <p
                               class="f-w-400"
                               v-for="(role, index) in dataProfiles.listRoleName"
                               :key="index"
                             >
                               {{ role }}
-                            </h6>
+                            </p>
                           </div>
                           <div class="col-sm-6">
-                            <p class="m-b-10 f-w-600">Lương:</p>
-                            <h6 class="f-w-400">
+                            <h5 class="m-b-10 f-w-600">Lương:</h5>
+                            <p class="f-w-400">
                               {{ dataProfiles.salary }}
-                            </h6>
+                            </p>
                           </div>
                         </div>
                         <hr />
                         <div class="row">
                           <div class="col-sm-6">
-                            <p class="m-b-10 f-w-600">Ngày sinh:</p>
-                            <h6 class="f-w-400">
+                            <h5 class="m-b-10 f-w-600">Ngày sinh:</h5>
+                            <p class="f-w-400">
                               {{ dataProfiles.dob }}
-                            </h6>
+                            </p>
                           </div>
                           <div class="col-sm-6">
-                            <p class="m-b-10 f-w-600">Email:</p>
-                            <h6 class="f-w-400">
+                            <h5 class="m-b-10 f-w-600">Email:</h5>
+                            <p class="f-w-400">
                               {{ dataProfiles.email }}
-                            </h6>
+                            </p>
                           </div>
                         </div>
                         <hr />
                         <div class="row">
                           <div class="col-sm-6">
-                            <p class="m-b-10 f-w-600">Điện thoại:</p>
-                            <h6 class="f-w-400">
+                            <h5 class="m-b-10 f-w-600">Điện thoại:</h5>
+                            <p class="f-w-400">
                               {{ dataProfiles.phone }}
-                            </h6>
+                            </p>
                           </div>
                           <div class="col-sm-6">
-                            <p class="m-b-10 f-w-600">Dân tộc:</p>
-                            <h6 class="f-w-400">
+                            <h5 class="m-b-10 f-w-600">Dân tộc:</h5>
+                            <p class="f-w-400">
                               {{ dataProfiles.nation }}
-                            </h6>
+                            </p>
                           </div>
                         </div>
                         <hr />
                         <div class="row">
                           <div class="col-sm-6">
-                            <p class="m-b-10 f-w-600">Địa chỉ:</p>
-                            <h6 class="f-w-400">
+                            <h5 class="m-b-10 f-w-600">Địa chỉ:</h5>
+                            <p class="f-w-400">
                               {{ dataProfiles.address }}
-                            </h6>
+                            </p>
                           </div>
                           <div class="col-sm-6"></div>
                         </div>
                       </div>
                     </div>
                   </a-tab-pane>
-                  <a-tab-pane key="2" tab="Thay đổi mật khẩu">
-                    <h6>
-                      <span style="color: red">*</span> Nhập mật khẩu cũ :
-                    </h6>
-                    <a-input-password
-                      placeholder="Nhập mật khẩu cũ"
-                      style="width: 50vh"
-                      v-model="dataChangePassword.oldPassword"
-                      @change="inputOldPassword"
-                    />
-                    <div style="color: red" v-if="checkInputOldPassword.show">
-                      {{ checkInputOldPassword.message }}
-                    </div>
+                  <a-tab-pane key="2" tab="Thay đổi mật khẩu" class="change">
+                    <a-row type="flex">
+                      <a-col flex="200px">
+                        <strong style="font-size: 15px">
+                          <span style="color: red">*</span>
+                          <span style="color: black"
+                            > Nhập mật khẩu cũ :
+                          </span></strong
+                        >
+                      </a-col>
+                      <a-col flex="auto">
+                        <a-input-password
+                          placeholder="Nhập mật khẩu cũ"
+                          style="width: 300px"
+                          v-model="dataChangePassword.oldPassword"
+                          @change="inputOldPassword"
+                        />
+                        <div
+                          style="color: red"
+                          v-if="checkInputOldPassword.show"
+                        >
+                          {{ checkInputOldPassword.message }}
+                        </div></a-col
+                      >
+                    </a-row>
                     <br />
+                    <a-row type="flex">
+                      <a-col flex="200px">
+                        <strong style="font-size: 15px"
+                          ><span style="color: red">*</span>
+                          <span style="color: black"
+                            > Nhập mật khẩu mới :</span
+                          ></strong
+                        >
+                      </a-col>
+                      <a-col flex="auto">
+                        <a-input-password
+                          placeholder="Nhập mật khẩu mới"
+                          style="width: 300px"
+                          v-model="dataChangePassword.newPassword"
+                          @change="inputNewPassword"
+                        />
+                        <div
+                          style="color: red"
+                          v-if="checkInputNewPassword.show"
+                        >
+                          {{ checkInputNewPassword.message }}
+                        </div></a-col
+                      >
+                    </a-row>
                     <br />
-                    <h6>
-                      <span style="color: red">*</span> Nhập mật khẩu mới :
-                    </h6>
-                    <a-input-password
-                      placeholder="Nhập mật khẩu mới"
-                      style="width: 50vh"
-                      v-model="dataChangePassword.newPassword"
-                      @change="inputNewPassword"
-                    />
-                    <div style="color: red" v-if="checkInputNewPassword.show">
-                      {{ checkInputNewPassword.message }}
-                    </div>
+                    <a-row type="flex">
+                      <a-col flex="200px">
+                        <strong style="font-size: 15px"
+                          ><span style="color: red">*</span>
+                          <span style="color: black"
+                            > Nhập lại mật khẩu :</span
+                          ></strong
+                        >
+                      </a-col>
+                      <a-col flex="auto">
+                        <a-input-password
+                          placeholder="Nhập lại mật khẩu"
+                          style="width: 300px"
+                          v-model="confirmNewPassword"
+                          @change="inputConfirmPassword"
+                        />
+                        <div
+                          style="color: red"
+                          v-if="checkInputConfirmPassword.show"
+                        >
+                          {{ checkInputConfirmPassword.message }}
+                        </div></a-col
+                      >
+                    </a-row>
                     <br />
-                    <br />
-                    <h6>
-                      <span style="color: red">*</span> Nhập lại mật khẩu :
-                    </h6>
-                    <a-input-password
-                      placeholder="Nhập lại mật khẩu"
-                      style="width: 50vh"
-                      v-model="confirmNewPassword"
-                      @change="inputConfirmPassword"
-                    />
-                    <div
-                      style="color: red"
-                      v-if="checkInputConfirmPassword.show"
-                    >
-                      {{ checkInputConfirmPassword.message }}
-                    </div>
-                    <br />
-                    <br />
-                    <a-button
-                      type="primary"
-                      @click="checkConfirmPassword"
-                      :loading="loadingChangePass"
-                    >
-                      Lưu
-                    </a-button>
+                    <a-row type="flex">
+                      <a-col flex="200px"></a-col>
+                      <a-col flex="auto">
+                        <a-button
+                          type="primary"
+                          @click="checkConfirmPassword"
+                          :loading="loadingChangePass"
+                        >
+                          Lưu
+                        </a-button></a-col
+                      >
+                    </a-row>
                   </a-tab-pane>
                 </a-tabs>
               </a-col>
@@ -352,16 +387,17 @@ export default {
 .col-md-4 {
   border-radius: 10px;
   height: 55vh;
-  width: 50vh;
+  width: 45vh;
   box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
     rgba(17, 17, 26, 0.1) 0px 0px 8px;
+  margin-left: 12vh;
 }
 
 .tab {
   background-color: rgba(255, 255, 255, 0.65);
   border-radius: 10px;
   height: 70vh;
-  width: 80vh;
+  width: 70vh;
   padding-left: 5vh;
   box-shadow: rgba(17, 17, 26, 0.05) 0px 1px 0px,
     rgba(17, 17, 26, 0.1) 0px 0px 8px;
@@ -377,7 +413,19 @@ export default {
 }
 
 p {
-  font-size: 19px;
-  color: rgb(14, 1, 1);
+  font-family: sans-serif;
+  font-size: 16px;
+  color: rgb(29, 27, 27);
+}
+
+h5 {
+  font-family: sans-serif;
+  font-size: 16px;
+  font-weight: bold;
+  color: rgb(8, 8, 61);
+}
+
+.change {
+  padding-top: 15px;
 }
 </style>
