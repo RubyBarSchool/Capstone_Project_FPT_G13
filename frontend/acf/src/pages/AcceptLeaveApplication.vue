@@ -345,6 +345,7 @@ export default {
       this.dataSearch.total = 0;
       this.dataSearch.nameEmployee =  this.dataSearch.nameEmployee.trim();
       this.dataSearch.title = this.dataSearch.title.trim();
+      this.dataSearch.pageIndex = 1;
       this.visibleView = false;
       acceptXinNghiService
         .searchPersonalLeaveApplication(this.dataSearch)
@@ -352,6 +353,7 @@ export default {
           this.dataSourceTable = response.data.data;
           this.dataSearch.total = response.data.total;
           this.pagination.total = response.data.total;
+          this.pagination.current = 1;
         })
         .catch((e) => {
           console.log(e);

@@ -240,12 +240,14 @@ export default {
     submitSearch() {
       this.dataSearch.total = 0;
       this.dataSearch.name = this.dataSearch.name.trim();
+      this.dataSearch.pageIndex = 1; 
       positionService
         .getAllPosition(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
           this.dataSearch.total = response.data.total;
           this.pagination.total = response.data.total;
+          this.pagination.current = 1;
         })
         .catch((e) => {
           console.log(e);
