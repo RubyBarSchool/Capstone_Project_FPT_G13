@@ -31,6 +31,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Autowired
     private HistorySalaryRepository historySalaryRepository;
+
     //************************************
     // Search employee  with combination of fields: name, position, status
     //************************************
@@ -42,9 +43,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         } catch (Exception e) {
             throw new RuntimeException("Error position repository " + e.getMessage());
         }
-        return  getAlEmployeeVOS;
+        return getAlEmployeeVOS;
     }
-
 
 
     @Override
@@ -52,29 +52,31 @@ public class EmployeeServiceImpl implements EmployeeService {
         int size = 0;
         try {
             size = employeeCustomRepository.getTotalEmployee(searchAllEmployeeForm);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Could not initialize folder for upload!");
         }
         return size;
     }
+
     //************************************
     //GEt fullname employee that not account
     //************************************
     @Override
     public List<GetAllEmployeeVO> getFullNameEmployeeNotAccount(SearchEmployeeForm searchEmployeeForm) {
-        Pageable pageable = PageRequest.of(searchEmployeeForm.getPageIndex()-1,searchEmployeeForm.getPageSize());
-        List<GetAllEmployeeVO > list = employeeRepository.getTop10EmployeeNotAccount("%"+searchEmployeeForm.getName().toLowerCase()+"%",pageable);
-        return list ;
+        Pageable pageable = PageRequest.of(searchEmployeeForm.getPageIndex() - 1, searchEmployeeForm.getPageSize());
+        List<GetAllEmployeeVO> list = employeeRepository.getTop10EmployeeNotAccount("%" + searchEmployeeForm.getName().toLowerCase() + "%", pageable);
+        return list;
     }
+
     //************************************
     // GEt all employee that not attendance by date
     //************************************
     @Override
     public List<GetAllEmployeeVO> getAllEmployeeNotAttendance(EmployeeNotAttendanceForm employeeNotAttendanceForm) {
         List<GetAllEmployeeVO> employeeVOS = new ArrayList<>();
-        try{
+        try {
             employeeVOS.addAll(employeeCustomRepository.getAllEmployeeNotAttendance(employeeNotAttendanceForm));
-        }catch (Exception ex){
+        } catch (Exception ex) {
             throw new RuntimeException("Could not initialize folder for upload!");
         }
         return employeeVOS;
@@ -85,43 +87,45 @@ public class EmployeeServiceImpl implements EmployeeService {
         int size = 0;
         try {
             size = employeeCustomRepository.getTotalEmployeeNotAttendance(employeeNotAttendanceForm);
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new RuntimeException("Could not initialize folder for upload!");
         }
         return size;
     }
+
     //************************************
     // Get detail employee by id
     //************************************
     @Override
     public EmployeeDetailVO getEmployeeDetailById(Long id) {
         EmployeeDetailVO em = new EmployeeDetailVO();
-        try{
+        try {
             em = employeeRepository.getEmployeeById(id);
 
-        }catch (Exception e){
-             e.getMessage();
+        } catch (Exception e) {
+            e.getMessage();
         }
         return em;
     }
+
     //************************************
     // Add employee
     //************************************
     @Override
     public Boolean AddEmployee(AddEmployeeForm addEmployeeForm) {
         boolean check = false;
-        try{
-            if(addEmployeeForm == null){
+        try {
+            if (addEmployeeForm == null) {
                 throw new Exception("Data position is null");
-            }else{
+            } else {
                 EmployeeValidate validate = new EmployeeValidate();
-                if(validate.checkFormEmail(addEmployeeForm.getEmail())&&validate.checkFormPhone(addEmployeeForm.getPhone())){
-                    if(employeeRepository.checkExitPhone(addEmployeeForm.getPhone())==null && employeeRepository.checkExitEmail(addEmployeeForm.getEmail())== null){
-                        String checkPosition =positionRespository.CheckExitPositionById(addEmployeeForm.getIdPosition());
-                        if(checkPosition !=null && !checkPosition.isEmpty()){
+                if (validate.checkFormEmail(addEmployeeForm.getEmail()) && validate.checkFormPhone(addEmployeeForm.getPhone())) {
+                    if (employeeRepository.checkExitPhone(addEmployeeForm.getPhone()) == null && employeeRepository.checkExitEmail(addEmployeeForm.getEmail()) == null) {
+                        String checkPosition = positionRespository.CheckExitPositionById(addEmployeeForm.getIdPosition());
+                        if (checkPosition != null && !checkPosition.isEmpty()) {
                             Employee e = new Employee();
                             e.setFullName(addEmployeeForm.getFullName());
-                            if(addEmployeeForm.getImage() != null && !addEmployeeForm.getImage().equals("")){
+                            if (addEmployeeForm.getImage() != null && !addEmployeeForm.getImage().equals("")) {
                                 File file = new File();
                                 file.setId(addEmployeeForm.getImage());
                                 e.setImage(file);
@@ -137,86 +141,87 @@ public class EmployeeServiceImpl implements EmployeeService {
                             p.setId(addEmployeeForm.getIdPosition());
                             e.setPosition(p);
                             AccountSercurity accountSercurity = new AccountSercurity();
-                            e.setCreated_date(LocalDate.now());;
+                            e.setCreated_date(LocalDate.now());
+                            ;
                             e.setCreated_by(accountSercurity.getUserName());
                             Employee ex = employeeRepository.save(e);
                             LocalDate dateNow = LocalDate.now();
                             LocalDate dateCreat = LocalDate.now();
-                            if(dateNow.getDayOfMonth() >= 10){
-                                dateCreat = LocalDate.of(dateNow.getYear(),dateNow.getMonthValue(),10);
-                            }else{
+                            if (dateNow.getDayOfMonth() >= 10) {
+                                dateCreat = LocalDate.of(dateNow.getYear(), dateNow.getMonthValue(), 10);
+                            } else {
                                 LocalDate dateMinus = dateNow.minusMonths(1);
-                                dateCreat = LocalDate.of(dateMinus.getYear(),dateMinus.getMonthValue(),10);
+                                dateCreat = LocalDate.of(dateMinus.getYear(), dateMinus.getMonthValue(), 10);
                             }
                             HistorySalary historySalary = new HistorySalary();
                             historySalary.setCreated_by("JOB_AUTO");
                             historySalary.setCreated_date(dateCreat);
                             historySalary.setModified_by("JOB_AUTO");
                             historySalary.setCountWork(0.0);
-                            historySalary.setSalary(ex.getSalary()+"");
+                            historySalary.setSalary(ex.getSalary() + "");
                             historySalary.setEmployee(ex);
                             historySalary.setBonus("0");
                             historySalary.setPenalty("0");
                             historySalary.setAdvanceSalary("0");
                             historySalary.setTotalMoney("0");
                             historySalaryRepository.save(historySalary);
-                            check =true;
-                        }else{
+                            check = true;
+                        } else {
                             throw new Exception("Chức vụ không tồn tại!");
                         }
 
-                    }else{
+                    } else {
                         throw new Exception("SĐT/ Email  tồn tại!");
                     }
-                }
-                else {
+                } else {
                     throw new Exception("SĐT/Email sai quy chuẩn");
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
         }
         return check;
     }
+
     //************************************
     // Update employee
     //************************************
     @Override
     public Boolean UpdateEmployee(UpdateEmployeeForm updateEmployeeForm) {
         boolean check = false;
-        try{
-            if(updateEmployeeForm==null){
+        try {
+            if (updateEmployeeForm == null) {
                 throw new Exception("Data update employee is null");
             }
-            String checkPosition =positionRespository.CheckExitPositionById(updateEmployeeForm.getIdPosition());
-            if(checkPosition ==null || checkPosition.isEmpty()) {
+            String checkPosition = positionRespository.CheckExitPositionById(updateEmployeeForm.getIdPosition());
+            if (checkPosition == null || checkPosition.isEmpty()) {
                 throw new Exception("Chức vụ không tồn tại!");
             }
             Employee e = employeeRepository.getEmployeeToUpdateById(updateEmployeeForm.getId());
             String fileName = "";
-            if(e.getImage() != null && !e.getImage().equals("")){
+            if (e.getImage() != null && !e.getImage().equals("")) {
                 fileName = e.getImage().getId();
             }
             EmployeeValidate validate = new EmployeeValidate();
-            if(e!=null){
-                if(validate.checkFormEmail(updateEmployeeForm.getEmail())&&validate.checkFormPhone(updateEmployeeForm.getPhone())){
+            if (e != null) {
+                if (validate.checkFormEmail(updateEmployeeForm.getEmail()) && validate.checkFormPhone(updateEmployeeForm.getPhone())) {
                     String phoneNew = updateEmployeeForm.getPhone();
                     String emailNew = updateEmployeeForm.getEmail();
-                    if(!e.getPhone().equals(phoneNew)){
-                        if(employeeRepository.checkExitPhone(phoneNew)==null){
+                    if (!e.getPhone().equals(phoneNew)) {
+                        if (employeeRepository.checkExitPhone(phoneNew) == null) {
                             e.setPhone(updateEmployeeForm.getPhone());
-                        }else{
+                        } else {
                             throw new Exception("SĐT tồn tại!");
                         }
                     }
-                    if(!e.getEmail().equals(emailNew)){
-                        if(employeeRepository.checkExitEmail(emailNew)== null){
+                    if (!e.getEmail().equals(emailNew)) {
+                        if (employeeRepository.checkExitEmail(emailNew) == null) {
                             e.setEmail(updateEmployeeForm.getEmail());
-                        }else{
+                        } else {
                             throw new Exception("Email  tồn tại!");
                         }
                     }
-                    if(updateEmployeeForm.getImage() != null && !updateEmployeeForm.getImage().equals("")){
+                    if (updateEmployeeForm.getImage() != null && !updateEmployeeForm.getImage().equals("")) {
                         File file = new File();
                         file.setId(updateEmployeeForm.getImage());
                         e.setImage(file);
@@ -234,54 +239,57 @@ public class EmployeeServiceImpl implements EmployeeService {
                     e.setModified_by(accountSercurity.getUserName());
                     e.setModified_date(LocalDate.now());
                     employeeRepository.save(e);
-                    if(updateEmployeeForm.getImage() != null && !updateEmployeeForm.getImage().equals("")){
-                        if(fileName!= null && !fileName.equals("")) {
+                    if (updateEmployeeForm.getImage() != null && !updateEmployeeForm.getImage().equals("")) {
+                        if (fileName != null && !fileName.equals("")) {
                             fileRepository.deleteByID(fileName);
                         }
                     }
-                    check =true;
-                }else {
+                    check = true;
+                } else {
                     throw new Exception("Employee is not format Phone/ Email!");
-                    }
-            }else {
+                }
+            } else {
                 throw new Exception("Employee ko tổn tại hoặc đã bị xóa");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
         }
         return check;
     }
+
     //************************************
     // Delete employee
     //************************************
     @Override
     public Boolean DeleteEmployee(Long id) {
         boolean check = false;
-        try{
+        try {
             Employee employee = employeeRepository.getEmployeeToUpdateById(id);
-            if(employee != null){
+            if (employee != null) {
                 employee.setDeleted(true);
                 AccountSercurity accountSercurity = new AccountSercurity();
                 employee.setModified_by(accountSercurity.getUserName());
                 employeeRepository.save(employee);
-                check =true;
-            }else {
+                check = true;
+            } else {
                 throw new Exception("Position is not existed");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.getMessage();
         }
         return check;
     }
+
     //************************************
     // GEt employee that not delete in system
     //************************************
     @Override
     public List<GetAllEmployeeVO> getEmployeeSNotDelete(SearchEmployeeForm employeeForm) {
-        Pageable pageable = PageRequest.of(employeeForm.getPageIndex()-1,employeeForm.getPageSize());
-        List<GetAllEmployeeVO > list = employeeRepository.getEmployeeNotDelete("%"+employeeForm.getName().toLowerCase()+"%",pageable);
-        return list ;
+        Pageable pageable = PageRequest.of(employeeForm.getPageIndex() - 1, employeeForm.getPageSize());
+        List<GetAllEmployeeVO> list = employeeRepository.getEmployeeNotDelete("%" + employeeForm.getName().toLowerCase() + "%", pageable);
+        return list;
     }
+
     //************************************
     // GEt detail employee by username
     //************************************
@@ -291,30 +299,60 @@ public class EmployeeServiceImpl implements EmployeeService {
         String username = accountSercurity.getUserName();
         DetailEmployeeVO detailEmployeeVO = new DetailEmployeeVO();
         List<DetailEmployeeInformationVO> employeeInformationVO = new ArrayList<>();
-        try{
-             employeeInformationVO = employeeRepository.getDetailEmployee(username);
-             if(employeeInformationVO==null){
-                 throw new Exception("Không tìm thấy");
-             }
-             detailEmployeeVO.setUsername(employeeInformationVO.get(0).getUsername());
-             detailEmployeeVO.setEmail(employeeInformationVO.get(0).getEmail());
-             detailEmployeeVO.setAddress(employeeInformationVO.get(0).getAddress());
-             detailEmployeeVO.setDob(employeeInformationVO.get(0).getDob());
-             detailEmployeeVO.setImage(employeeInformationVO.get(0).getImage());
-             detailEmployeeVO.setFullName(employeeInformationVO.get(0).getFullName());
-             detailEmployeeVO.setGender(employeeInformationVO.get(0).getGender());
-             detailEmployeeVO.setGender(employeeInformationVO.get(0).getGender());
-             detailEmployeeVO.setNation(employeeInformationVO.get(0).getNation());
-             detailEmployeeVO.setPhone(employeeInformationVO.get(0).getPhone());
-             detailEmployeeVO.setSalary(employeeInformationVO.get(0).getSalary());
-             List<String> listRole = new ArrayList<>();
-             for(int i=0;i<employeeInformationVO.size();i++){
-                 listRole.add((employeeInformationVO.get(i).getRoleName()));
-             }
-             detailEmployeeVO.setListRoleName(listRole);
-        }catch (Exception ex){
+        try {
+            employeeInformationVO = employeeRepository.getDetailEmployee(username);
+            if (employeeInformationVO == null) {
+                throw new Exception("Không tìm thấy");
+            }
+            detailEmployeeVO.setUsername(employeeInformationVO.get(0).getUsername());
+            detailEmployeeVO.setEmail(employeeInformationVO.get(0).getEmail());
+            detailEmployeeVO.setAddress(employeeInformationVO.get(0).getAddress());
+            detailEmployeeVO.setDob(employeeInformationVO.get(0).getDob());
+            detailEmployeeVO.setImage(employeeInformationVO.get(0).getImage());
+            detailEmployeeVO.setFullName(employeeInformationVO.get(0).getFullName());
+            detailEmployeeVO.setGender(employeeInformationVO.get(0).getGender());
+            detailEmployeeVO.setGender(employeeInformationVO.get(0).getGender());
+            detailEmployeeVO.setNation(employeeInformationVO.get(0).getNation());
+            detailEmployeeVO.setPhone(employeeInformationVO.get(0).getPhone());
+            detailEmployeeVO.setSalary(employeeInformationVO.get(0).getSalary());
+            List<String> listRole = new ArrayList<>();
+            for (int i = 0; i < employeeInformationVO.size(); i++) {
+                listRole.add((employeeInformationVO.get(i).getRoleName()));
+            }
+            detailEmployeeVO.setListRoleName(listRole);
+        } catch (Exception ex) {
             throw new RuntimeException("Could not initialize folder for upload!");
         }
         return detailEmployeeVO;
+    }
+
+    @Override
+    public Boolean changeImage(String idFile) {
+        Boolean check = false;
+        AccountSercurity accountSercurity = new AccountSercurity();
+        String username = accountSercurity.getUserName();
+        DetailEmployeeVO detailEmployeeVO = new DetailEmployeeVO();
+        Employee employee = new Employee();
+        try {
+            employee = employeeRepository.getEmployeeByUsername(username);
+            if (employee == null) {
+                throw new Exception("Không tồn tại employee  với account: " + username);
+            }
+            String idImage = "";
+            if (employee.getImage() != null && !employee.getImage().equals("")) {
+                idImage = employee.getImage().getId();
+            }
+            File file = new File();
+            file.setId(idFile);
+            employee.setImage(file);
+            employeeRepository.save(employee);
+            if (idImage != null && !idImage.equals("")) {
+                fileRepository.deleteByID(idImage);
+            }
+            check = true;
+        } catch (Exception ex) {
+            throw new RuntimeException("Could not initialize folder for upload!");
+        }
+        return check;
     }
 }

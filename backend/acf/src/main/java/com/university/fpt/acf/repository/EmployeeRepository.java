@@ -47,13 +47,17 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
     List<Employee> getAllEmployee();
 
 
-    @Query("SELECT e FROM Employee e inner join e.image img where img.id = :idFile")
+    @Query("SELECT e FROM Employee e inner join e.image img where img.name = :idFile or img.id = :idFile")
     Employee getEmployeeByFile(@Param("idFile") String image);
 
     @Query("SELECT e FROM Employee e inner join  e.position p where e.deleted = false and p.code = 'GD' ")
     List<Employee> getEmployeeGD();
     @Query("SELECT new com.university.fpt.acf.vo.DetailEmployeeInformationVO(img.name,e.fullName,e.gender,e.nation, e.dob,e.email,p.name,e.phone,e.address,e.salary,a.username,r.name) FROM Account a left  join a.employee e left join a.roles r left join e.image img left join e.position p where a.username=:username ")
     List<DetailEmployeeInformationVO> getDetailEmployee(@Param("username")String username);
+
+
+    @Query("SELECT e FROM Account a inner join a.employee e  where a.username=:username and a.deleted = false  and e.deleted = false")
+    Employee getEmployeeByUsername(@Param("username")String username);
 
     @Query("select COUNT(e.id)from Employee e  left join Account a on e.id = a.employee.id  " +
             "where e.deleted= false and a.username is null")

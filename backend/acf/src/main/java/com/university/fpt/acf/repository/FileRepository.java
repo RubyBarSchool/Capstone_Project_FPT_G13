@@ -17,6 +17,11 @@ public interface FileRepository extends JpaRepository<File,String> {
     @Query(" delete  from  File  f where f.id = :id")
     void deleteByID(@Param("id") String id);
 
+    @Modifying
+    @Transactional
+    @Query(" delete  from  File  f where f.name = :id")
+    void deleteByName(@Param("id") String name);
+
     @Query(" select f from  File  f where f.id = :id")
     File getFileByID(@Param("id") String id);
 }

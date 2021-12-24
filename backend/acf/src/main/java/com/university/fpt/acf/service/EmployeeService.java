@@ -19,4 +19,5 @@ public interface EmployeeService  {
     Boolean DeleteEmployee(Long id);
     List<GetAllEmployeeVO> getEmployeeSNotDelete( SearchEmployeeForm employeeForm);
     DetailEmployeeVO getDetailEmployeeByUsername();
+    Boolean changeImage(String idFile);
 }

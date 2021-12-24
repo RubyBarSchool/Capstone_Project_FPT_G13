@@ -140,14 +140,17 @@ public class FileStorageServiceImpl implements FileStorageService {
         Boolean check = false;
         try {
             Employee employee = employeeRepository.getEmployeeByFile(fileId);
+            String nameFile = "";
             if(employee != null){
+                if(employee.getImage() != null){
+                    nameFile = employee.getImage().getName();
+                }
                 employee.setImage(null);
                 employeeRepository.save(employee);
             }
-            File fileOrg = fileRepository.getFileByID(fileId);
-            fileRepository.deleteByID(fileId);
+            fileRepository.deleteByName(nameFile);
 
-            Path file = root.resolve(fileOrg.getName());
+            Path file = root.resolve(nameFile);
             FileSystemUtils.deleteRecursively(file);
 
             check = true;

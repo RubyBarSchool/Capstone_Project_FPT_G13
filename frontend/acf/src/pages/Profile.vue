@@ -18,17 +18,37 @@
                   <div class="card-block text-center">
                     <div class="m-b-25">
                       <img
+                        v-if="dataProfiles.image == null"
                         src="https://img.icons8.com/bubbles/100/000000/user.png"
                         class="img-radius"
                         :style="{ width: '40vh', height: '40vh' }"
                       />
+
+                      <img
+                        v-else
+                        :src="dataProfiles.image"
+                        class="img-radius"
+                        :style="{ width: '40vh', height: '40vh' }"
+                      />
                       <br />
-                      <a href="#">
+                      <!-- <a href="#">
                         <font-awesome-icon
                           :style="{ 'font-size': '20px' }"
                           :icon="['fas', 'camera-retro']"
                         />
-                      </a>
+                      </a> -->
+                      <input
+                        type="file"
+                        accept=" .jpg , .png "
+                        ref="fileupload"
+                        @change="importFile($event)"
+                      />
+                      <a-button type="primary" @click="saveFile">
+                        <font-awesome-icon
+                          :icon="['fas', 'plus-square']"
+                          :style="{ 'margin-right': '5px' }"
+                        />
+                      </a-button>
                     </div>
                     <h6>{{ dataProfiles.username }}</h6>
                     <h4>{{ dataProfiles.fullName }}</h4>
@@ -218,10 +238,12 @@
 </template>
  <script>
 import profileService from "@/service/profileService.js";
+import fileService from "../service/fileService";
 export default {
   name: "Profile",
   data() {
     return {
+      imageOld: null,
       dataProfiles: [],
       dataChangePassword: {
         newPassword: "",
@@ -241,12 +263,62 @@ export default {
         show: false,
         message: "",
       },
+      dataAdd: {
+        image: "",
+      },
     };
   },
   created() {
     this.getProfile();
   },
   methods: {
+    importFile(event1) {
+      if (event1.target.files[0]) {
+        this.dataAdd.image = event1.target.files[0];
+        console.log("data image", this.dataAdd.image);
+        this.dataProfiles.image = window.URL.createObjectURL(
+          event1.target.files[0]
+        );
+      }
+    },
+    saveFile() {
+      if (this.dataAdd.image != "") {
+        if (this.imageOld != null) {
+          profileService
+            .delete(this.imageOld)
+            .then(() => {
+              fileService
+                .uploadImage(this.dataAdd.image)
+                .then((response) => {
+                  this.imageOld = response.data.data;
+                  profileService
+                    .changeImage(response.data.data)
+                    .then(() => {})
+                    .catch(() => {});
+                })
+                .catch((e) => {
+                  console.log(e);
+                });
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        } else {
+          fileService
+            .uploadImage(this.dataAdd.image)
+            .then((response) => {
+              this.imageOld = response.data.data;
+              profileService
+                .changeImage(response.data.data)
+                .then(() => {})
+                .catch(() => {});
+            })
+            .catch((e) => {
+              console.log(e);
+            });
+        }
+      }
+    },
     callback(key) {
       console.log(key);
     },
@@ -255,6 +327,19 @@ export default {
         .getProfile()
         .then((response) => {
           this.dataProfiles = response.data.data;
+          this.imageOld = this.dataProfiles.image;
+          if (this.dataProfiles.image != null) {
+            profileService
+              .preview(this.dataProfiles.image)
+              .then((response) => {
+                this.dataProfiles.image = window.URL.createObjectURL(
+                  response.data
+                );
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          }
           console.log("data ", this.dataProfiles);
         })
         .catch((e) => {
