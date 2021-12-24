@@ -1332,13 +1332,13 @@ export default {
         .then((response) => {
           if (response.data.data) {
             let type = "success";
-            let message = "Xóa";
+            let message = "Xóa vật liệu";
             let description = "Xóa vật liệu thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           } else {
             let type = "error";
-            let message = "Xóa";
+            let message = "Xóa vật liệu";
             let description = "Xóa vật liệu không thành công";
             this.notifi(type, message, description);
             this.submitSearch();
@@ -1474,12 +1474,12 @@ export default {
                 if (response.data.data) {
                   let type = "success";
                   let message = "Cập nhật";
-                  let description = "Cập nhật đơn thành công";
+                  let description = "Cập nhật vật liệu thành công";
                   this.notifi(type, message, description);
                 } else {
                   let type = "error";
                   let message = "Cập nhật";
-                  let description = "Cập nhật đơn không thành công";
+                  let description = "Cập nhật vật liệu không thành công";
                   this.notifi(type, message, description);
                   vatLieuAdminService.deleteImage(this.dataEdit.image);
                 }
@@ -1505,12 +1505,12 @@ export default {
             if (response.data.data) {
               let type = "success";
               let message = "Cập nhật";
-              let description = "Cập nhật đơn thành công";
+              let description = "Cập nhật vật liệu thành công";
               this.notifi(type, message, description);
             } else {
               let type = "error";
               let message = "Cập nhật";
-              let description = "Cập nhật đơn không thành công";
+              let description = "Cập nhật vật liệu không thành công";
               this.notifi(type, message, description);
             }
             this.loadingEdit = false;
@@ -1647,12 +1647,12 @@ export default {
           this.submitSearch();
           if (response.data.data) {
             let type = "success";
-            let message = "Thêm đơn vị mới";
+            let message = "Thêm đơn vị";
             let description = response.data.message;
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Thêm đơn vị mới";
+            let message = "Thêm đơn vị";
             let description = response.data.message;
             this.notifi(type, message, description);
           }

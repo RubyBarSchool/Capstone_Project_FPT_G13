@@ -1282,7 +1282,6 @@ export default {
     },
     submitUpdate() {
       this.loadingEdit = true;
-      this.dataEdit.price = this.dataEdit.price.trim();
       if (this.dataEdit.image != "") {
         fileService
           .uploadImage(this.dataEdit.image)
@@ -1544,12 +1543,12 @@ export default {
                 this.submitSearch();
                 if (response.data.data) {
                   let type = "success";
-                  let message = "Thêm mới";
+                  let message = "Thêm mới tấm phủ";
                   let description = response.data.message;
                   this.notifi(type, message, description);
                 } else {
                   let type = "error";
-                  let message = "Thêm mới";
+                  let message = "Thêm mới tấm phủ";
                   let description = response.data.message;
                   this.notifi(type, message, description);
                   coverSheetService.deleteImage(this.dataAdd.image);

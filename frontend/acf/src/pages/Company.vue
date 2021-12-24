@@ -461,6 +461,14 @@ export default {
         });
     },
     showModalEdit(record) {
+      this.checkDataInputCompany.show = false;
+      this.checkDataInputCompany.message = "";
+      this.checkDataInputAddress.show = false;
+      this.checkDataInputAddress.message = "";
+      this.checkDataInputPhone.show = false;
+      this.checkDataInputPhone.message = "";
+      this.checkDataInputEmail.show = false;
+      this.checkDataInputEmail.message = "";
       this.dataEdit.id = record.id;
       this.dataEdit.name = record.name;
       this.dataEdit.email = record.email;
@@ -508,14 +516,14 @@ export default {
         .then((response) => {
           if (response.data.data) {
             let type = "success";
-            let message = "Xóa";
+            let message = "Xóa công ty";
             let description =
-              "Xóa thông tin công ty " + this.dataEdit.name + " thành công !!";
+              "Xóa thông tin công ty " + this.dataEdit.name + " thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           } else {
             let type = "error";
-            let message = "Xóa";
+            let message = "Xóa công ty";
             let description =
               "Xóa thông tin công ty " +
               this.dataEdit.name +
