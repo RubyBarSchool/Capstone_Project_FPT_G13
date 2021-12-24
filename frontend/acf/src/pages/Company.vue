@@ -14,19 +14,16 @@
             placeholder="Tên công ty"
             :style="{ width: '150px', 'margin-right': '5px' }"
             v-model="dataSearch.name"
-            @pressEnter="submitSearch"
           />
           <a-input
             placeholder="Địa chỉ"
             :style="{ width: '150px', 'margin-right': '5px' }"
             v-model="dataSearch.address"
-            @pressEnter="submitSearch"
           />
           <a-input
             placeholder="Số điện thoại"
             style="width: 150px"
             v-model="dataSearch.phone"
-            @pressEnter="submitSearch"
           />
           <a-button
             type="primary"
@@ -148,7 +145,7 @@
                 <span style="color: red">*</span> Số điện thoại</a-col
               >
               <a-col flex="auto">
-                <a-input
+                <a-input-number
                   v-model="dataAdd.phone"
                   @change="inputPhone"
                   :min="0"
@@ -219,7 +216,7 @@
                 <span style="color: red">*</span> Số điện thoại</a-col
               >
               <a-col flex="auto">
-                <a-input
+                <a-input-number
                   v-model="dataEdit.phone"
                   @change="inputEditPhone"
                   :min="0"
@@ -396,9 +393,6 @@ export default {
     submitSearch() {
       this.dataSearch.total = 0;
       this.dataSearch.pageIndex = 1;
-      this.dataSearch.name = this.dataSearch.name.trim();
-      this.dataSearch.address = this.dataSearch.address.trim();
-      this.dataSearch.phone = this.dataSearch.phone.trim();
       companyService
         .searchCompany(this.dataSearch)
         .then((response) => {
@@ -439,7 +433,7 @@ export default {
             let type = "success";
             let message = "Thêm mới";
             let description =
-              "Thêm mới công ty " + this.dataAdd.name + " thành công";
+              "Thêm mới công ty " + this.dataAdd.name + " thành công !!";
             this.notifi(type, message, description);
           } else {
             let type = "error";
@@ -461,14 +455,6 @@ export default {
         });
     },
     showModalEdit(record) {
-      this.checkDataInputCompany.show = false;
-      this.checkDataInputCompany.message = "";
-      this.checkDataInputAddress.show = false;
-      this.checkDataInputAddress.message = "";
-      this.checkDataInputPhone.show = false;
-      this.checkDataInputPhone.message = "";
-      this.checkDataInputEmail.show = false;
-      this.checkDataInputEmail.message = "";
       this.dataEdit.id = record.id;
       this.dataEdit.name = record.name;
       this.dataEdit.email = record.email;
@@ -490,6 +476,7 @@ export default {
             let message = "Cập nhật";
             let description =
               "Chỉnh sửa thông tin công ty " + this.dataEdit.name + " thành công";
+              "Sửa thông tin công ty " + this.dataEdit.name + " thành công !!";
             this.notifi(type, message, description);
           } else {
             let type = "error";
@@ -516,14 +503,14 @@ export default {
         .then((response) => {
           if (response.data.data) {
             let type = "success";
-            let message = "Xóa công ty";
+            let message = "Xóa";
             let description =
-              "Xóa thông tin công ty " + this.dataEdit.name + " thành công";
+              "Xóa thông tin công ty " + this.dataEdit.name + " thành công !!";
             this.notifi(type, message, description);
             this.submitSearch();
           } else {
             let type = "error";
-            let message = "Xóa công ty";
+            let message = "Xóa";
             let description =
               "Xóa thông tin công ty " +
               this.dataEdit.name +
@@ -555,7 +542,7 @@ export default {
       }
     },
     inputPhone() {
-      if (this.dataAdd.phone != null && this.dataAdd.phone.trim() != "") {
+      if (this.dataAdd.phone != null && this.dataAdd.phone != "") {
         this.checkDataInputPhone.show = false;
         this.checkDataInputPhone.message = "";
       } else {
@@ -592,7 +579,7 @@ export default {
       }
     },
     inputEditPhone() {
-      if (this.dataEdit.phone != null && this.dataEdit.phone.trim() != "") {
+      if (this.dataEdit.phone != null && this.dataEdit.phone != "") {
         this.checkDataInputPhone.show = false;
         this.checkDataInputPhone.message = "";
       } else {
@@ -629,7 +616,7 @@ export default {
         this.checkDataInputAddress.message = "Bạn phải điền địa chỉ";
       }
 
-      if (this.dataAdd.phone != null && this.dataAdd.phone.trim() != "") {
+      if (this.dataAdd.phone != null && this.dataAdd.phone != "") {
         this.checkDataInputPhone.show = false;
         this.checkDataInputPhone.message = "";
       } else {
@@ -672,7 +659,7 @@ export default {
         this.checkDataInputAddress.message = "Bạn phải điền địa chỉ";
       }
 
-      if (this.dataEdit.phone != null && this.dataEdit.phone.trim() != "") {
+      if (this.dataEdit.phone != null && this.dataEdit.phone != "") {
         this.checkDataInputPhone.show = false;
         this.checkDataInputPhone.message = "";
       } else {
