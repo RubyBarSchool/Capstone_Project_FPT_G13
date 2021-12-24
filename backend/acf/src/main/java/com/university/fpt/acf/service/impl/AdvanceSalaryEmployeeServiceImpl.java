@@ -85,7 +85,7 @@ public class AdvanceSalaryEmployeeServiceImpl implements AdvanceSalaryEmployeeSe
             AdvaceSalary p = new AdvaceSalary();
             String em = employeeRepository.getFullNameById(id);
             if(em==null || em.isEmpty()){
-                throw new Exception("Nhan vien ko ton tai");
+                throw new Exception("Nhân viên không tồn tại");
             }
             p.setTitle(addForm.getTitle());
             p.setContent(addForm.getContent());
@@ -107,7 +107,7 @@ public class AdvanceSalaryEmployeeServiceImpl implements AdvanceSalaryEmployeeSe
                 notification.setType("success");
                 notification.setUsername(s);
                 notification.setUsernameCreate(accountSercurity.getUserName());
-                notification.setContent(" tạo một đơn xin ứng lương");
+                notification.setContent(" Tạo một đơn xin ứng lương");
                 notification.setPath("/acceptadvancesalary");
                 HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
                 simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
@@ -130,7 +130,7 @@ public class AdvanceSalaryEmployeeServiceImpl implements AdvanceSalaryEmployeeSe
             AdvaceSalary p = advanceSalaryEmployeeRepository.getAdvanceSalaryById(updateForm.getId());
             String em = employeeRepository.getFullNameById(id);
             if(em==null || em.isEmpty()){
-                throw new Exception("Nhan vien ko ton tai");
+                throw new Exception("Nhân viên không tồn tại");
             }
             p.setTitle(updateForm.getTitle());
             p.setContent(updateForm.getContent());

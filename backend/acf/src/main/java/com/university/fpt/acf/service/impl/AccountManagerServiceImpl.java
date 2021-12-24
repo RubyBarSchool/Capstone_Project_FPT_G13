@@ -103,10 +103,10 @@ public class AccountManagerServiceImpl implements AccountManagerService {
 
                     insert = true;
                 } else {
-                    throw new Exception("Username not correct!");
+                    throw new Exception("Username not correct");
                 }
             } else {
-                throw new Exception("Employee has account exit!");
+                throw new Exception("Employee has account exit");
             }
         } catch (Exception e) {
             e.getMessage();

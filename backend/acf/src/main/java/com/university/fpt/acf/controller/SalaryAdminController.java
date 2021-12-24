@@ -63,7 +63,7 @@ public class SalaryAdminController {
             total = salaryService.getTotalAllSalaryAccept(searchSalaryForm);
             responseCommon.setData(searchSalaryVOS);
             responseCommon.setTotal(total);
-            message = "Thành công!";
+            message = "Thành công";
             if (total.intValue() == 0) {
                 message = "Không tìm thấy";
             }
@@ -90,9 +90,9 @@ public class SalaryAdminController {
             status = salaryService.acceptSalary(id);
             responseCommon.setData(status);
             responseCommon.setTotal(0);
-            message = "Duyệt ứng lương thành công!";
+            message = "Duyệt ứng lương thành công";
             if (!status) {
-                message = "Duyệt ứng lương lỗi!";
+                message = "Duyệt ứng lương lỗi";
             }
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);

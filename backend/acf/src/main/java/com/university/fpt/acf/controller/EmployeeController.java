@@ -160,9 +160,9 @@ public class EmployeeController {
         try{
             checkUpdate =employeeService.UpdateEmployee(updateEmployeeForm);
             if(checkUpdate==false){
-                message="Chỉnh sửa không thành công!";
+                message="Chỉnh sửa không thành công";
             }else{
-                message="Chỉnh sửa thành công!";
+                message="Chỉnh sửa thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkUpdate);

@@ -43,9 +43,9 @@ public class AttendancesController {
         String message = "";
         try {
             List<TimeKeep> timeKeeps = attendancesService.saveAttendance(addAccountForm);
-            message = "Thêm thành công !";
+            message = "Thêm thành công";
             if (timeKeeps.size() == 0) {
-                message = "Thêm không thành công!";
+                message = "Thêm không thành công";
                 responseCommon.setData(false);
             }
             responseCommon.setData(true);
@@ -53,7 +53,7 @@ public class AttendancesController {
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
-            message = "Could not add attendances !";
+            message = "Could not add attendances";
             responseCommon.setData(false);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
@@ -70,7 +70,7 @@ public class AttendancesController {
         String message = "";
         try {
             TimeKeep timeKeeps = attendancesService.updateAttendance(updateAttendanceForm);
-            message = "Chỉnh sửa thành công!";
+            message = "Chỉnh sửa thành công";
             if (timeKeeps.getId() == null) {
                 message = "update false";
                 responseCommon.setData(false);
@@ -80,7 +80,7 @@ public class AttendancesController {
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
-            message = "Could not update attendances !";
+            message = "Could not update attendances";
             responseCommon.setData(false);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
@@ -110,7 +110,7 @@ public class AttendancesController {
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
-            message = "Could not get Employee not attendances !";
+            message = "Could not get Employee not attendances";
             responseCommon.setData(employeeVOS);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
@@ -131,7 +131,7 @@ public class AttendancesController {
             total = attendancesService.getTotalAllAttendance(attendanceFrom);
             responseCommon.setData(attendanceVOS);
             responseCommon.setTotal(total);
-            message = "Thành công!";
+            message = "Thành công";
             if (total == 0) {
                 message = "Không tìm thấy";
             }
@@ -139,7 +139,7 @@ public class AttendancesController {
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
-            message = "Could not get  attendances !";
+            message = "Could not get  attendances";
             responseCommon.setData(attendanceVOS);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);
@@ -163,7 +163,7 @@ public class AttendancesController {
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
-            message = "Could not get  attendances !";
+            message = "Could not get  attendances";
             responseCommon.setData(priviewExcel);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);

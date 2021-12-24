@@ -43,7 +43,7 @@ public class ViewWorkEmployeeController {
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
-            message = "Không thể lấy danh sách công việc!";
+            message = "Không thể lấy danh sách công việc";
             responseCommon.setData(ViewWorkVOS);
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());

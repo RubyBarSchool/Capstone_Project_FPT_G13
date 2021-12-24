@@ -57,13 +57,13 @@ import java.util.List;
         try {
 
             if(addForm==null){
-                message="Thông tin đang trống!";
+                message="Thông tin đang trống";
             }
             checkAdd = bonusService.addBonus(addForm);
             if(checkAdd==true){
-                message="Thêm đơn thưởng thành công!";
+                message="Thêm đơn thưởng thành công";
             }else{
-                message="Thêm đơn thưởng lỗi!";
+                message="Thêm đơn thưởng lỗi";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
@@ -88,9 +88,9 @@ import java.util.List;
         try {
             checkDelete = bonusService.deleteBonus(id);
             if(checkDelete==true){
-                message="Hủy đơn  thành công!";
+                message="Hủy đơn  thành công";
             }else{
-                message="Hủy đơn không thành công!";
+                message="Hủy đơn không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkDelete);
@@ -115,9 +115,9 @@ import java.util.List;
         try {
             checkDelete = bonusService.updateBonus(updateForm);
             if(checkDelete==true){
-                message="Chỉnh sửa đơn thưởng thành công!";
+                message="Chỉnh sửa đơn thưởng thành công";
             }else{
-                message="Chỉnh sửa đơn thưởng không thành công!";
+                message="Chỉnh sửa đơn thưởng không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkDelete);

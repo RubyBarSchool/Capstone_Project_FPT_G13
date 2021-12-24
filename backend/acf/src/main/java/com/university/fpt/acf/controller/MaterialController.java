@@ -30,9 +30,9 @@ public class MaterialController {
             list = materialService.searchMaterial(searchForm);
             responseCommon.setData(list);
             total= materialService.totalSearchMaterial(searchForm);
-            message = "Thành công!";
+            message = "Thành công";
             if(total==0){
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -59,9 +59,9 @@ public class MaterialController {
             list = materialService.searchMaterialInAddProduct(searchForm);
             responseCommon.setData(list);
             total= materialService.totalSearchMaterialInAddProduct(searchForm);
-            message = "Thành công!";
+            message = "Thành công";
             if(total==0){
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -88,9 +88,9 @@ public class MaterialController {
             listUnits = materialService.getUnitsByMaterial(id);
             responseCommon.setData(listUnits);
             total = listUnits.size();
-            message = "Thành công!";
+            message = "Thành công";
             if (total == 0) {
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -117,9 +117,9 @@ public class MaterialController {
             listUnits = materialService.getMaterialByUnit(unit);
             responseCommon.setData(listUnits);
             total = listUnits.size();
-            message = "Thành công!";
+            message = "Thành công";
             if (total == 0) {
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -146,7 +146,7 @@ public class MaterialController {
             listUnits = materialService.getHeightSByMaterialAndFrame(addForm.getId1(),addForm.getId2());
             responseCommon.setData(listUnits);
             total = listUnits.size();
-            message = "Thành công!";
+            message = "Thành công";
             if (total == 0) {
                 message = "Đã tồn tại tất cả chiều cao với mã vật liệu "+addForm.getName1()+" và khung "+addForm.getName2();
             }
@@ -175,7 +175,7 @@ public class MaterialController {
             listUnits = materialService.getMaterialByHeightFrame(addForm.getId2(), addForm.getId1());
             responseCommon.setData(listUnits);
             total = listUnits.size();
-            message = "Thành công!";
+            message = "Thành công";
             if (total == 0) {
                 message = "Đã tồn tại tất cả mã vật liệu với khung "+addForm.getName2()+" và chiều cao "+addForm.getName1();
             }
@@ -204,7 +204,7 @@ public class MaterialController {
             listUnits = materialService.getFrameByMaterialAndHeight(addForm.getId1(),addForm.getId2());
             responseCommon.setData(listUnits);
             total = listUnits.size();
-            message = "Thành công!";
+            message = "Thành công";
             if (total == 0) {
                 message = "Đã tổn tại tất cả khung với mã vật liệu "+addForm.getName1()+" chiều cao "+addForm.getName2();
             }
@@ -233,9 +233,9 @@ public class MaterialController {
             list = materialService.getAllMaterial();
             responseCommon.setData(list);
             total= list.size();
-            message = "Thành công!";
+            message = "Thành công";
             if(total==0){
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -260,9 +260,9 @@ public class MaterialController {
         try {
             checkAdd = materialService.addMaterial(addForm);
             if(checkAdd==true){
-                message="Thêm thành công!";
+                message="Thêm thành công";
             }else{
-                message="Thêm không thành công!";
+                message="Thêm không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
@@ -287,9 +287,9 @@ public class MaterialController {
         try {
             checkAdd = materialService.updateMaterial(updateForm);
             if(checkAdd==true){
-                message="Chỉnh sửa thành công!";
+                message="Chỉnh sửa thành công";
             }else{
-                message="Chỉnh sửa không thành công!";
+                message="Chỉnh sửa không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
@@ -314,9 +314,9 @@ public class MaterialController {
         try {
             checkAdd = materialService.deleteMaterial(id);
             if(checkAdd==true){
-                message="Xóa thành công!";
+                message="Xóa thành công";
             }else{
-                message="Xóa không thành công!";
+                message="Xóa không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
@@ -341,9 +341,9 @@ public class MaterialController {
         try {
             checkAdd = materialService.addUnitInMaterial(addForm);
             if(checkAdd==true){
-                message="Thêm thành công!";
+                message="Thêm thành công";
             }else{
-                message="Thêm không thành công!";
+                message="Thêm không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
@@ -368,9 +368,9 @@ public class MaterialController {
         try {
             checkAdd = materialService.addFrameHeightMaterial(addForm);
             if(checkAdd==true){
-                message="Thêm thành công!";
+                message="Thêm thành công";
             }else{
-                message="Thêm không thành công!";
+                message="Thêm không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);

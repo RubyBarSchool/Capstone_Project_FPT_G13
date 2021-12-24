@@ -218,9 +218,9 @@ public class AccountController {
         try {
             checkUpdate = accountService.changePassword(changePasswordAccountForm);
             if (checkUpdate) {
-                message = "Thay đổi mật khẩu thành công!";
+                message = "Thay đổi mật khẩu thành công";
             } else {
-                message = "Mật khẩu cũ không đúng!";
+                message = "Mật khẩu cũ không đúng";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkUpdate);

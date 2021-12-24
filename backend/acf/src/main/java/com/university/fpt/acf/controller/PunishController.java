@@ -32,7 +32,7 @@ public class PunishController {
             listResult = punishService.searchPunish(searchForm);
             total = punishService.totalSearchPunish(searchForm);
             responseCommon.setData(listResult);
-            message = "Thành công!";
+            message = "Thành công";
             if (total == 0) {
                 message = "Không tìm thấy";
             }
@@ -59,13 +59,13 @@ public class PunishController {
         try {
 
             if(addForm==null){
-                message="Thông tin đang chống!";
+                message="Thông tin đang chống";
             }
             checkAdd = punishService.addPunish(addForm);
             if(checkAdd==true){
-                message="Thêm đơn phạt thành công!";
+                message="Thêm đơn phạt thành công";
             }else{
-                message="Thêm đơn phạt lỗi!";
+                message="Thêm đơn phạt lỗi";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
@@ -90,9 +90,9 @@ public class PunishController {
         try {
             checkDelete = punishService.deletePunish(id);
             if(checkDelete==true){
-                message="Hủy đơn phạt thành công!";
+                message="Hủy đơn phạt thành công";
             }else{
-                message="Hủy đơn phạt không thành công!";
+                message="Hủy đơn phạt không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkDelete);
@@ -117,9 +117,9 @@ public class PunishController {
         try {
             checkDelete = punishService.updatePunish(updateForm);
             if(checkDelete==true){
-                message="Chỉnh sửa đơn phạt thành công!";
+                message="Chỉnh sửa đơn phạt thành công";
             }else{
-                message="Chỉnh sửa đơn phạt không thành công!";
+                message="Chỉnh sửa đơn phạt không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkDelete);

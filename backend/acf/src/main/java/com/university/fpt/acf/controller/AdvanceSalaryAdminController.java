@@ -58,9 +58,9 @@ public class AdvanceSalaryAdminController {
         try {
             check = adminService.acceptAddvanceSalary(acceptForm);
             if (check == true) {
-                message = "Duyệt đơn ứng lương thành công!";
+                message = "Duyệt đơn ứng lương thành công";
             } else {
-                message = "Duyệt đơn ứng lương không thành công!";
+                message = "Duyệt đơn ứng lương không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(check);
@@ -85,9 +85,9 @@ public class AdvanceSalaryAdminController {
         try {
             check = adminService.rejectAdvanceSalary(acceptForm);
             if (check == true) {
-                message = "Loại bỏ đơn ứng lương thành công!";
+                message = "Loại bỏ đơn ứng lương thành công";
             } else {
-                message = "Loại bỏ đơn ứng lương không thành công!";
+                message = "Loại bỏ đơn ứng lương không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(check);

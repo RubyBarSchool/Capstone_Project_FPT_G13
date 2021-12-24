@@ -151,14 +151,14 @@ public class ContactController {
             addAccountForm = contactService.readFileContact(file);
             message = "Đọc tệp hợp đồng thành công";
             if (addAccountForm != null && addAccountForm.getPriceContact().equals("0")) {
-                message = "Đọc tệp hợp đồng không thành công!";
+                message = "Đọc tệp hợp đồng không thành công";
             }
             responseCommon.setData(addAccountForm);
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
-            message = "Không thể đọc được tệp hợp đồng!";
+            message = "Không thể đọc được tệp hợp đồng";
             responseCommon.setData(addAccountForm);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
             responseCommon.setMessage(message);

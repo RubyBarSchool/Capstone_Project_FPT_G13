@@ -58,13 +58,13 @@ public class PersonalLeaveApplicationEmployeeController {
         try {
 
                 if(addForm==null){
-                    message="Đơn gửi Chống!";
+                    message="Đơn gửi trống";
                 }
                 checkAdd = personalLeaveApplicationService.AddLeaveApplication(addForm);
                 if(checkAdd==true){
-                    message="Thêm đơn thành công!";
+                    message="Thêm đơn thành công";
                 }else{
-                    message="Thêm đơn không thành công!";
+                    message="Thêm đơn không thành công";
                 }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
@@ -89,13 +89,13 @@ public class PersonalLeaveApplicationEmployeeController {
         try {
 
             if(updateForm==null){
-                message="Đơn gửi đang trống!";
+                message="Đơn gửi đang trống";
             }
             checkUpdate = personalLeaveApplicationService.UpdateLeaveApplication(updateForm);
             if(checkUpdate==true){
-                message="Chỉnh sửa đơn gửi thành công!";
+                message="Chỉnh sửa đơn gửi thành công";
             }else{
-                message="Chỉnh sửa đơn gửi không thành công!";
+                message="Chỉnh sửa đơn gửi không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkUpdate);
@@ -124,9 +124,9 @@ public class PersonalLeaveApplicationEmployeeController {
             }
             checkDelete = personalLeaveApplicationService.DeleteLeaveApplication(id);
             if(checkDelete==true){
-                message="Xóa đơn gửi thành công!";
+                message="Xóa đơn gửi thành công";
             }else{
-                message="Xóa sửa đơn gửi không thành công!";
+                message="Xóa sửa đơn gửi không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkDelete);

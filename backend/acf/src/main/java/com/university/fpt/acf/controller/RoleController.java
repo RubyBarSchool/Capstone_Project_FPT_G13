@@ -30,9 +30,9 @@ public class RoleController {
             getAllRoleVOList = rolesService.getRoles(rolesForm);
             responseCommon.setData(getAllRoleVOList);
             total=rolesService.totalGetAllRole(rolesForm);
-            message = "Thành công!";
+            message = "Thành công";
             if(total==0){
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());

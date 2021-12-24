@@ -61,13 +61,13 @@ public class AdvanceSalaryEmployeeController {
         try {
 
             if(addForm==null){
-                message="Thông tin đang trống!";
+                message="Thông tin đang trống";
             }
             checkAdd = advanceSalaryEmployeeService.addAdvanceSalaryEmployee(addForm);
             if(checkAdd==true){
-                message="Thêm đơn thành công!";
+                message="Thêm đơn thành công";
             }else{
-                message="Thêm đơn không thành công!";
+                message="Thêm đơn không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
@@ -92,13 +92,13 @@ public class AdvanceSalaryEmployeeController {
         try {
 
             if(updateForm==null){
-                message="Thông tin đang trống!";
+                message="Thông tin đang trống";
             }
             checkUpdate = advanceSalaryEmployeeService.updateAdvanceSalaryEmployee(updateForm);
             if(checkUpdate==true){
-                message="Chỉnh sửa đơn thành công!";
+                message="Chỉnh sửa đơn thành công";
             }else{
-                message="Chỉnh sửa đơn không thành công!";
+                message="Chỉnh sửa đơn không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkUpdate);
@@ -123,9 +123,9 @@ public class AdvanceSalaryEmployeeController {
         try {
             checkDelete = advanceSalaryEmployeeService.deleteAdvanceSalaryEmployee(id);
             if(checkDelete==true){
-                message="Xóa đơn thành công!";
+                message="Xóa đơn thành công";
             }else{
-                message="Xóa đơn không thành công!";
+                message="Xóa đơn không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkDelete);

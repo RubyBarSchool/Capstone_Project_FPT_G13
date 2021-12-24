@@ -31,7 +31,7 @@ public class PersonalLeaveApplicationAdminController {
             getAllPositionVOList = personalLeaveApplicationService.searchPersonalApplication(personalLeaveApplicationForm);
             total = personalLeaveApplicationService.totalPersonalApplication(personalLeaveApplicationForm);
             responseCommon.setData(getAllPositionVOList);
-            message = "Thành công!";
+            message = "Thành công";
             if(total==0){
                 message = "Không tìm thấy";
             }
@@ -57,13 +57,13 @@ public class PersonalLeaveApplicationAdminController {
         Boolean checkAccept = false;
         try {
             if(acceptForm.getIdApplication()==null ){
-                message="Dữ liệu NULL! ";
+                message="Dữ liệu NULL";
             }else {
                 checkAccept =personalLeaveApplicationService.acceptPersonalLeaveApplication(acceptForm);
                 if(checkAccept==false){
-                    message="Duyệt đơn lỗi!";
+                    message="Duyệt đơn lỗi";
                 }else{
-                    message="Duyệt đơn thành công!";
+                    message="Duyệt đơn thành công";
                 }
             }
             responseCommon.setMessage(message);
@@ -88,13 +88,13 @@ public class PersonalLeaveApplicationAdminController {
         Boolean checkAccept = false;
         try {
             if(acceptForm.getIdApplication()==null ){
-                message="Dữ liệu NULL! ";
+                message="Dữ liệu NULL";
             }else {
                 checkAccept =personalLeaveApplicationService.rejectPersonalLeaveApplication(acceptForm);
                 if(checkAccept==false){
-                    message="Loại bỏ đơn lỗi!";
+                    message="Loại bỏ đơn lỗi";
                 }else{
-                    message="Loại bỏ đơn thành công!";
+                    message="Loại bỏ đơn thành công";
                 }
             }
             responseCommon.setMessage(message);

@@ -87,13 +87,13 @@ public class PositionController {
         Boolean checkUpdate = false;
         try{
             if(updatePositionForm.getName()==null || updatePositionForm.getName()==""){
-                message="Dữ liệu Null hoặc trống!";
+                message="Dữ liệu Null hoặc trống";
             }else {
                 checkUpdate =positionService.updatePosition(updatePositionForm);
                 if(checkUpdate==false){
                     message="Chỉnh sửa không thành công";
                 }else{
-                    message="Chình sửa thành công!";
+                    message="Chình sửa thành công";
                 }
             }
             responseCommon.setMessage(message);
@@ -119,9 +119,9 @@ public class PositionController {
         try{
             checkDelete = positionService.deletePosition(id);
             if(checkDelete==false){
-                message="Xóa không thành công!";
+                message="Xóa không thành công";
             }else{
-                message="Xóa thành công!";
+                message="Xóa thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkDelete);

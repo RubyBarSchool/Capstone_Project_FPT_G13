@@ -49,9 +49,9 @@ public class SalaryEmployeeController {
             total = salaryService.getTotalAllSalary(bonusPunishForm);
             responseCommon.setData(searchSalaryVOS);
             responseCommon.setTotal(total);
-            message = "Thành công !";
+            message = "Thành công ";
             if (total.intValue() == 0) {
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
@@ -78,9 +78,9 @@ public class SalaryEmployeeController {
             list = bonusService.searchBonusUser(bonusPunishForm);
             total = bonusService.totalSearchBonusUser(bonusPunishForm);
             responseCommon.setData(list);
-            message = "Thành công!";
+            message = "Thành công";
             if (total == 0) {
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -107,9 +107,9 @@ public class SalaryEmployeeController {
             list = punishService.searchPunishUser(bonusPunishForm);
             total = punishService.totalSearchPunishUser(bonusPunishForm);
             responseCommon.setData(list);
-            message = "Thành công!";
+            message = "Thành công";
             if (total == 0) {
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -137,9 +137,9 @@ public class SalaryEmployeeController {
             list = bonusService.searchBonusAndPunish(searchBonusAndPunishForm);
             total = bonusService.totalSearchBonusAndPunish(searchBonusAndPunishForm);
             responseCommon.setData(list);
-            message = "Thành công!";
+            message = "Thành công";
             if (total == 0) {
-                message = "Không thành công!";
+                message = "Không thành công";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());

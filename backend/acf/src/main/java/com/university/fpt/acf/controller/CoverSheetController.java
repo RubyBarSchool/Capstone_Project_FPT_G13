@@ -33,9 +33,9 @@ public class CoverSheetController {
             list = materialService.searchCoverSheet(searchForm);
             responseCommon.setData(list);
             total= materialService.totalSearchCoverSheet(searchForm);
-            message = "Thành công!";
+            message = "Thành công";
             if(total==0){
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -62,9 +62,9 @@ public class CoverSheetController {
             list = materialService.getAllCoverSheet();
             responseCommon.setData(list);
             total= list.size();
-            message = "Thành công!";
+            message = "Thành công";
             if(total==0){
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -91,9 +91,9 @@ public class CoverSheetController {
             listUnits = materialService.getUnitsByCoverSheet(id);
             responseCommon.setData(listUnits);
             total = listUnits.size();
-            message = "Thành công!";
+            message = "Thành công";
             if (total == 0) {
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -120,9 +120,9 @@ public class CoverSheetController {
             listCoverSheet = materialService.getCoverSheetByUnit(id);
             responseCommon.setData(listCoverSheet);
             total = listCoverSheet.size();
-            message = "Thành công!";
+            message = "Thành công";
             if (total == 0) {
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -149,7 +149,7 @@ public class CoverSheetController {
             listUnits = materialService.getHeightByCoverSheetAndFrame(addForm.getId1(),addForm.getId2());
             responseCommon.setData(listUnits);
             total = listUnits.size();
-            message = "Thành công!";
+            message = "Thành công";
             if (total == 0) {
                 message = "Đã tồn tại tất cả chiều cao với mã tấm phủ"+addForm.getName1()+" và khung "+addForm.getName2();
             }
@@ -178,7 +178,7 @@ public class CoverSheetController {
             listUnits = materialService.getCoverSheetByHeightFrame(addForm.getId2(),addForm.getId1());
             responseCommon.setData(listUnits);
             total = listUnits.size();
-            message = "Thành công!";
+            message = "Thành công";
             if (total == 0) {
                 message = "Đã tồn tại tất cả mã tấm phủ với khung "+addForm.getName2()+" và chiều cao "+addForm.getName1();
             }
@@ -207,7 +207,7 @@ public class CoverSheetController {
             listUnits = materialService.getFrameByCoverSheetAndHeight(addForm.getId1(), addForm.getId2());
             responseCommon.setData(listUnits);
             total = listUnits.size();
-            message = "Thành công!";
+            message = "Thành công";
             if (total == 0) {
                 message = "Đã tổn tại tất cả khung với mã tấm phủ "+addForm.getName1()+" chiều cao "+addForm.getName2();
             }
@@ -234,9 +234,9 @@ public class CoverSheetController {
         try {
             checkAdd = materialService.addCoverSheet(addForm);
             if(checkAdd==true){
-                message="Thêm thành công!";
+                message="Thêm thành công";
             }else{
-                message="Thêm không thành công!";
+                message="Thêm không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
@@ -261,9 +261,9 @@ public class CoverSheetController {
         try {
             checkAdd = materialService.updateCoverSheet(updateForm);
             if(checkAdd==true){
-                message="Chỉnh sửa thành công!";
+                message="Chỉnh sửa thành công";
             }else{
-                message="Chỉnh sửa không thành công!";
+                message="Chỉnh sửa không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
@@ -288,9 +288,9 @@ public class CoverSheetController {
         try {
             checkAdd = materialService.deleteCoverSheet(id);
             if(checkAdd==true){
-                message="Xóa thành công!";
+                message="Xóa thành công";
             }else{
-                message="Xóa không thành công!";
+                message="Xóa không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
@@ -315,9 +315,9 @@ public class CoverSheetController {
         try {
             checkAdd = materialService.addUnitInCoverSheet(addForm);
             if(checkAdd==true){
-                message="Thêm thành công!";
+                message="Thêm thành công";
             }else{
-                message="Thêm không thành công!";
+                message="Thêm không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
@@ -342,9 +342,9 @@ public class CoverSheetController {
         try {
             checkAdd = materialService.addFrameHeightCoverSheet(addForm);
             if(checkAdd==true){
-                message="Thêm thành công!";
+                message="Thêm thành công";
             }else{
-                message="Thêm không thành công!";
+                message="Thêm không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);

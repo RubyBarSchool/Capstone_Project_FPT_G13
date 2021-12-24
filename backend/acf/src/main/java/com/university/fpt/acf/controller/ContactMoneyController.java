@@ -43,7 +43,7 @@ public class ContactMoneyController {
             responseCommon.setMessage(message);
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
-            message = "Không thể lấy danh sách ứng tiền hợp đồng!";
+            message = "Không thể lấy danh sách ứng tiền hợp đồng";
             responseCommon.setData(contactMoney);
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -133,7 +133,7 @@ public class ContactMoneyController {
             responseCommon.setStatus(HttpStatus.OK.value());
             return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         } catch (Exception e) {
-            message = "Không thể xáo lịch sử tạm ứng!";
+            message = "Không thể xáo lịch sử tạm ứng";
             responseCommon.setData(check);
             responseCommon.setTotal(0);
             responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());

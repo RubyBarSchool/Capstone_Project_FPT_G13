@@ -25,7 +25,7 @@ public class MailController {
         }catch (Exception e){
             e.printStackTrace();
         }
-        return "Email Sent!";
+        return "Email Sent";
     }
 
 }

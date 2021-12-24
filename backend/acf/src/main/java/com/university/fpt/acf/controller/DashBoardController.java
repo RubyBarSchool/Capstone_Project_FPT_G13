@@ -38,9 +38,9 @@ public class DashBoardController {
             output = dashBoardService.countEmployeeHaveNotAccount();
             responseCommon.setData(output);
             total= output;
-            message = "Thành công!";
+            message = "Thành công";
             if(total==0){
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -68,7 +68,7 @@ public class DashBoardController {
             dashboardAdmin = dashBoardService.getDataDashboardAdmin();
             responseCommon.setData(dashboardAdmin);
             total= 1;
-            message = "Thành công!";
+            message = "Thành công";
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
@@ -95,7 +95,7 @@ public class DashBoardController {
             dashboardEmployee = dashBoardService.getDataDashboardEmployee();
             responseCommon.setData(dashboardEmployee);
             total= 1;
-            message = "Thành công!";
+            message = "Thành công";
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
@@ -122,7 +122,7 @@ public class DashBoardController {
             dashboardEmployee = dashBoardService.getDataReportContact();
             responseCommon.setData(dashboardEmployee);
             total= dashboardEmployee.size();
-            message = "Thành công!";
+            message = "Thành công";
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
@@ -148,7 +148,7 @@ public class DashBoardController {
             dashboardEmployee = dashBoardService.getTopEmployee();
             responseCommon.setData(dashboardEmployee);
             total= dashboardEmployee.size();
-            message = "Thành công!";
+            message = "Thành công";
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);

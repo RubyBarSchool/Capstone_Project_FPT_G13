@@ -30,9 +30,9 @@ public class UnitMeasureController {
             list = unitMeasureService.getAllUnit();
             responseCommon.setData(list);
             total=list.size();
-            message = "Thành công!";
+            message = "Thành công";
             if(total==0){
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -57,9 +57,9 @@ public class UnitMeasureController {
         try {
             checkAdd = unitMeasureService.addUnitMeasure(name);
             if(checkAdd==true){
-                message="Thêm thành công!";
+                message="Thêm thành công";
             }else{
-                message="Thêm không thành công!";
+                message="Thêm không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
@@ -84,9 +84,9 @@ public class UnitMeasureController {
         try {
             checkDelete = unitMeasureService.deleteUnitMeasure(id);
             if(checkDelete==true){
-                message="Xóa thành công!";
+                message="Xóa thành công";
             }else{
-                message="Xóa không thành công!";
+                message="Xóa không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkDelete);
@@ -113,9 +113,9 @@ public class UnitMeasureController {
             list = unitMeasureService.getUnitsToInsertMaterial();
             responseCommon.setData(list);
             total=list.size();
-            message = "Thành công!";
+            message = "Thành công";
             if(total==0){
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -142,9 +142,9 @@ public class UnitMeasureController {
             list = unitMeasureService.getUnitsToInsertCoverInsert();
             responseCommon.setData(list);
             total=list.size();
-            message = "Thành công!";
+            message = "Thành công";
             if(total==0){
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
