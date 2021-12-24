@@ -111,11 +111,6 @@
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-row :gutter="[16, 16]">
-                  <a-col :span="6">
-                    <a-button id="user" @click="getAccountByID(record.id)">
-                      <font-awesome-icon :icon="['fas', 'user']" />
-                    </a-button>
-                  </a-col>
                   <a-col :span="6" v-if="checkDisable(record.username)">
                     <a-popconfirm
                       v-if="dataSourceTable.length"
@@ -164,90 +159,6 @@
             </a-table>
           </div>
           <!-- table content -->
-
-          <!-- popup profile-->
-          <a-modal v-model="visibleProfile" class="profile">
-            <template slot="footer">
-              <a-button key="a" hidden></a-button>
-              <a-button key="b" hidden></a-button>
-            </template>
-            <div class="row m-l-0 m-r-0">
-              <!-- cột trái   -->
-              <div class="col-md-4 bg-c-lite-green user-profile">
-                <div class="card-block text-center text-white">
-                  <div class="m-b-25">
-                    <img
-                      src="https://img.icons8.com/bubbles/100/000000/user.png"
-                      class="img-radius"
-                    />
-                  </div>
-                  <h6 class="text-white f-w-400">
-                    {{ dataAccountDetail.fullname }}
-                  </h6>
-                  <p
-                    v-for="(role, index) in dataAccountDetail.roles"
-                    :value="role.id"
-                    :key="index"
-                    class="text-white f-w-400"
-                  >
-                    {{ role.name }}
-                  </p>
-                </div>
-              </div>
-              <!-- cột phải  -->
-              <div class="col-md-8">
-                <div class="card-block">
-                  <h5 class="m-b-20 p-b-5 b-b-default f-w-600">
-                    Thông tin tài khoản
-                  </h5>
-                  <div class="row">
-                    <div class="col-sm-6">
-                      <p class="m-b-10 f-w-600">Giới Tính</p>
-                      <h6 class="text-muted f-w-400">
-                        {{ dataAccountDetail.gender ? "Nam" : "Nữ" }}
-                      </h6>
-                    </div>
-                    <div class="col-sm-6">
-                      <p class="m-b-10 f-w-600">Ngày Sinh</p>
-                      <h6 class="text-muted f-w-400">
-                        {{
-                          new Date(dataAccountDetail.dob).toLocaleDateString(
-                            "en-GB",
-                            {
-                              year: "numeric",
-                              month: "2-digit",
-                              day: "2-digit",
-                            }
-                          )
-                        }}
-                      </h6>
-                    </div>
-                  </div>
-                  <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600"></h6>
-                  <div class="row">
-                    <div class="col-sm-6">
-                      <p class="m-b-10 f-w-600">Email</p>
-                      <h6 class="text-muted f-w-400">tvt@gmail.com</h6>
-                    </div>
-                    <div class="col-sm-6">
-                      <p class="m-b-10 f-w-600">Điện thoại</p>
-                      <h6 class="text-muted f-w-400">
-                        {{ dataAccountDetail.phone }}
-                      </h6>
-                    </div>
-                  </div>
-                  <h6 class="m-b-20 m-t-40 p-b-5 b-b-default f-w-600"></h6>
-                  <div class="row">
-                    <div class="col-sm-6">
-                      <p class="m-b-10 f-w-600">Địa chỉ</p>
-                      <h6 class="text-muted f-w-400">Mỹ Đình - Hà Nội</h6>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </a-modal>
-          <!-- popup profile-->
 
           <!-- popup add-->
           <a-modal v-model="visibleAdd" title="Thêm tài khoản">
