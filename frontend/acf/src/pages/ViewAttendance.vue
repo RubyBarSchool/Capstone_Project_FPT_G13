@@ -15,6 +15,7 @@
             placeholder="Tên nhân viên"
             style="width: 15%"
             :style="{'margin-right': '5px'}"
+            @pressEnter="search"
           />
           <a-range-picker
             @change="search"

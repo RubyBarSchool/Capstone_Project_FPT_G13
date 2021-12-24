@@ -28,6 +28,7 @@
             v-model="dataSearch.nameProduction"
             placeholder="Tên lệnh sản xuất"
             :style="{ 'margin-right': '10px', width: '15%' }"
+             @pressEnter="beforeSearch"
           />
           Ngày hoàn thành:
           <a-range-picker

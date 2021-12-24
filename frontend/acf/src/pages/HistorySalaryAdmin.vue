@@ -8,6 +8,7 @@
           placeholder="Họ và tên"
           :style="{ width: '150px', 'margin-right': '5px' }"
           v-model="dataSearch.name"
+           @pressEnter="submitSearch"
         />
         <a-select
           placeholder="Chức vụ"

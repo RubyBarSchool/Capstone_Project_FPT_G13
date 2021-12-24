@@ -981,6 +981,8 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
+      this.dataSearch.codeMaterial =  this.dataSearch.codeMaterial.trim();
+      this.dataSearch.frame = this.dataSearch.frame.trim();
       this.dataSearch.pageIndex = 1;
       coverSheetService
         .searchCoverSheet(this.dataSearch)
@@ -1345,7 +1347,7 @@ export default {
     },
     checkFormUpdate() {
       let check = true;
-      if (this.dataEdit.price != null && this.dataEdit.price.trim() != "") {
+      if (this.dataEdit.price != null && this.dataEdit.price != "") {
         this.checkDataInputPrice.show = false;
         this.checkDataInputPrice.message = "";
       } else {

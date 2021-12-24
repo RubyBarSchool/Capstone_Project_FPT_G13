@@ -990,6 +990,8 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
+      this.dataSearch.codeMaterial =  this.dataSearch.codeMaterial.trim();
+      this.dataSearch.frame = this.dataSearch.frame.trim();
       this.dataSearch.pageIndex = 1;
       vatLieuAdminService
         .searchMaterial(this.dataSearch)

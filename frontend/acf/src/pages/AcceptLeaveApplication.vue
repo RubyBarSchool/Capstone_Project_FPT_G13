@@ -15,11 +15,13 @@
             style="width: 150px"
             v-model="dataSearch.nameEmployee"
             :style="{ 'margin-right': '5px', width: '12%' }"
+            @pressEnter="submitSearch"
           />
           <a-input
             placeholder="Tiêu đề"
             v-model="dataSearch.title"
             :style="{ 'margin-right': '10px', width: '12%' }"
+            @pressEnter="submitSearch"
           />
           Trạng thái
           <a-select

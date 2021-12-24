@@ -14,6 +14,7 @@
             placeholder="Tên hợp đồng"
             :style="{ width: '150px', 'margin-right': '5px' }"
             v-model="dataSearch.name"
+            @pressEnter="submitSearch"
           />
           Ngày bàn giao
           <a-range-picker

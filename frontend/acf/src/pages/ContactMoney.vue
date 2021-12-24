@@ -14,6 +14,7 @@
             placeholder="Tên hợp đồng"
             :style="{ width: '150px', 'margin-right': '5px' }"
             v-model="dataSearch.nameContact"
+            @pressEnter="beforeSearch"
           />
           Trạng thái:
           <a-select

@@ -25,6 +25,7 @@
                 placeholder="Tên chức vụ"
                 :style="{ width: '150px', 'margin-right': '5px' }"
                 v-model="dataSearch.name"
+                @pressEnter="submitSearch"
               />
               <a-button
                 type="primary"

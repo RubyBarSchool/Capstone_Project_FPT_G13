@@ -14,6 +14,7 @@
             placeholder="Tên nhân viên"
             v-model="dataSearch.name"
             :style="{ 'margin-right': '10px', width: '12%' }"
+            @pressEnter="submitSearch"
           />
           Chức vụ:
           <a-select

@@ -30,6 +30,7 @@
             v-model="dataSearch.nameProduct"
             placeholder="Tên sản phẩm"
             style="width: 15%"
+            @pressEnter="search"
           />
 
           <a-button
@@ -92,7 +93,7 @@
                 </a-tag>
               </template>
               <template slot="action" slot-scope="text, record">
-                <a-row :gutter="[16,16]">
+                <a-row :gutter="[16, 16]">
                   <a-col :span="8">
                     <a-button id="view" @click="showModalView(record)">
                       <font-awesome-icon :icon="['fas', 'eye']" />

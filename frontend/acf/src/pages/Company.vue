@@ -14,16 +14,19 @@
             placeholder="Tên công ty"
             :style="{ width: '150px', 'margin-right': '5px' }"
             v-model="dataSearch.name"
+            @pressEnter="submitSearch"
           />
           <a-input
             placeholder="Địa chỉ"
             :style="{ width: '150px', 'margin-right': '5px' }"
             v-model="dataSearch.address"
+            @pressEnter="submitSearch"
           />
           <a-input
             placeholder="Số điện thoại"
             style="width: 150px"
             v-model="dataSearch.phone"
+            @pressEnter="submitSearch"
           />
           <a-button
             type="primary"
@@ -145,7 +148,7 @@
                 <span style="color: red">*</span> Số điện thoại</a-col
               >
               <a-col flex="auto">
-                <a-input-number
+                <a-input
                   v-model="dataAdd.phone"
                   @change="inputPhone"
                   :min="0"
@@ -216,7 +219,7 @@
                 <span style="color: red">*</span> Số điện thoại</a-col
               >
               <a-col flex="auto">
-                <a-input-number
+                <a-input
                   v-model="dataEdit.phone"
                   @change="inputEditPhone"
                   :min="0"
@@ -393,6 +396,9 @@ export default {
     submitSearch() {
       this.dataSearch.total = 0;
       this.dataSearch.pageIndex = 1;
+      this.dataSearch.name = this.dataSearch.name.trim();
+      this.dataSearch.address = this.dataSearch.address.trim();
+      this.dataSearch.phone = this.dataSearch.phone.trim();
       companyService
         .searchCompany(this.dataSearch)
         .then((response) => {
@@ -433,7 +439,7 @@ export default {
             let type = "success";
             let message = "Thêm mới";
             let description =
-              "Thêm mới công ty " + this.dataAdd.name + " thành công !!";
+              "Thêm mới công ty " + this.dataAdd.name + " thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
@@ -475,7 +481,7 @@ export default {
             let type = "success";
             let message = "Cập nhật";
             let description =
-              "Sửa thông tin công ty " + this.dataEdit.name + " thành công !!";
+              "Sửa thông tin công ty " + this.dataEdit.name + " thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
@@ -541,7 +547,7 @@ export default {
       }
     },
     inputPhone() {
-      if (this.dataAdd.phone != null && this.dataAdd.phone != "") {
+      if (this.dataAdd.phone != null && this.dataAdd.phone.trim() != "") {
         this.checkDataInputPhone.show = false;
         this.checkDataInputPhone.message = "";
       } else {
@@ -578,7 +584,7 @@ export default {
       }
     },
     inputEditPhone() {
-      if (this.dataEdit.phone != null && this.dataEdit.phone != "") {
+      if (this.dataEdit.phone != null && this.dataEdit.phone.trim() != "") {
         this.checkDataInputPhone.show = false;
         this.checkDataInputPhone.message = "";
       } else {
@@ -615,7 +621,7 @@ export default {
         this.checkDataInputAddress.message = "Bạn phải điền địa chỉ";
       }
 
-      if (this.dataAdd.phone != null && this.dataAdd.phone != "") {
+      if (this.dataAdd.phone != null && this.dataAdd.phone.trim() != "") {
         this.checkDataInputPhone.show = false;
         this.checkDataInputPhone.message = "";
       } else {
@@ -658,7 +664,7 @@ export default {
         this.checkDataInputAddress.message = "Bạn phải điền địa chỉ";
       }
 
-      if (this.dataEdit.phone != null && this.dataEdit.phone != "") {
+      if (this.dataEdit.phone != null && this.dataEdit.phone.trim() != "") {
         this.checkDataInputPhone.show = false;
         this.checkDataInputPhone.message = "";
       } else {

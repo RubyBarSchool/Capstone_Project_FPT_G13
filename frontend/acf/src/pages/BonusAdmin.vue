@@ -14,6 +14,7 @@
             placeholder="Tiêu đề"
             :style="{ width: '150px', 'margin-right': '5px' }"
             v-model="dataSearch.title"
+             @pressEnter="search"
           />
           Trạng thái:
           <a-select
