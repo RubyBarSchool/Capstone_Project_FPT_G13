@@ -989,7 +989,6 @@ export default {
         });
     },
     submitSearch() {
-
       this.dataSearch.total = 0;
       this.dataSearch.pageIndex = 1;
       vatLieuAdminService

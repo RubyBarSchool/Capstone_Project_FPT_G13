@@ -49,7 +49,7 @@
             mode="multiple"
             v-model="dataSearch.listUnitId"
             @change="submitSearch"
-             :style="{ width: '150px', 'margin-right': '5px' }"
+            :style="{ width: '150px', 'margin-right': '5px' }"
           >
             <a-select-option
               v-for="(unit, index) in listUnits"
@@ -981,6 +981,7 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
+      this.dataSearch.pageIndex = 1;
       coverSheetService
         .searchCoverSheet(this.dataSearch)
         .then((response) => {
@@ -1001,6 +1002,7 @@ export default {
           }
           this.dataSearch.total = response.data.total;
           this.pagination.total = response.data.total;
+          this.pagination.current = 1;
         })
         .catch((e) => {
           console.log(e);

@@ -121,8 +121,8 @@
                       <a-col flex="200px">
                         <strong style="font-size: 15px">
                           <span style="color: red">*</span>
-                          <span style="color: black"
-                            > Nhập mật khẩu cũ :
+                          <span style="color: black">
+                            Nhập mật khẩu cũ :
                           </span></strong
                         >
                       </a-col>
@@ -146,8 +146,8 @@
                       <a-col flex="200px">
                         <strong style="font-size: 15px"
                           ><span style="color: red">*</span>
-                          <span style="color: black"
-                            > Nhập mật khẩu mới :</span
+                          <span style="color: black">
+                            Nhập mật khẩu mới :</span
                           ></strong
                         >
                       </a-col>
@@ -171,8 +171,8 @@
                       <a-col flex="200px">
                         <strong style="font-size: 15px"
                           ><span style="color: red">*</span>
-                          <span style="color: black"
-                            > Nhập lại mật khẩu :</span
+                          <span style="color: black">
+                            Nhập lại mật khẩu :</span
                           ></strong
                         >
                       </a-col>
@@ -302,8 +302,15 @@ export default {
         this.dataChangePassword.newPassword != null &&
         this.dataChangePassword.newPassword != ""
       ) {
-        this.checkInputNewPassword.show = false;
-        this.checkInputNewPassword.message = "";
+        if (this.dataChangePassword.newPassword.length < 8) {
+          this.checkInputNewPassword.show = true;
+          this.checkInputNewPassword.message =
+            "Bạn phải nhập mật khẩu mới phải lớn hơn 8 ký tự";
+          check = false;
+        } else {
+          this.checkInputNewPassword.show = false;
+          this.checkInputNewPassword.message = "";
+        }
       } else {
         check = false;
         this.checkInputNewPassword.show = true;
@@ -356,8 +363,14 @@ export default {
         this.dataChangePassword.newPassword != null &&
         this.dataChangePassword.newPassword != ""
       ) {
-        this.checkInputNewPassword.show = false;
-        this.checkInputNewPassword.message = "";
+        if (this.dataChangePassword.newPassword.length < 8) {
+          this.checkInputNewPassword.show = true;
+          this.checkInputNewPassword.message =
+            "Bạn phải nhập mật khẩu mới phải lớn hơn 8 ký tự";
+        } else {
+          this.checkInputNewPassword.show = false;
+          this.checkInputNewPassword.message = "";
+        }
       } else {
         this.checkInputNewPassword.show = true;
         this.checkInputNewPassword.message = "Bạn phải nhập mật khẩu mới";
