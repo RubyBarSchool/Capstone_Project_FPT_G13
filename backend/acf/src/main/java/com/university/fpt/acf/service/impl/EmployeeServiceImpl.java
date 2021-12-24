@@ -116,8 +116,7 @@ public class EmployeeServiceImpl implements EmployeeService {
             }else{
                 EmployeeValidate validate = new EmployeeValidate();
                 if(validate.checkFormEmail(addEmployeeForm.getEmail())&&validate.checkFormPhone(addEmployeeForm.getPhone())){
-                    if(employeeRepository.checkExitPhone(addEmployeeForm.getPhone())==null &&
-                            employeeRepository.checkExitEmail(addEmployeeForm.getEmail())== null){
+                    if(employeeRepository.checkExitPhone(addEmployeeForm.getPhone())==null && employeeRepository.checkExitEmail(addEmployeeForm.getEmail())== null){
                         String checkPosition =positionRespository.CheckExitPositionById(addEmployeeForm.getIdPosition());
                         if(checkPosition !=null && !checkPosition.isEmpty()){
                             Employee e = new Employee();
@@ -167,7 +166,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                         }
 
                     }else{
-                        throw new Exception("SĐT/ Email không tồn tại!");
+                        throw new Exception("SĐT/ Email  tồn tại!");
                     }
                 }
                 else {
@@ -201,19 +200,33 @@ public class EmployeeServiceImpl implements EmployeeService {
             EmployeeValidate validate = new EmployeeValidate();
             if(e!=null){
                 if(validate.checkFormEmail(updateEmployeeForm.getEmail())&&validate.checkFormPhone(updateEmployeeForm.getPhone())){
-                    e.setFullName(updateEmployeeForm.getFullName());
+                    String phoneNew = updateEmployeeForm.getPhone();
+                    String emailNew = updateEmployeeForm.getEmail();
+                    if(!e.getPhone().equals(phoneNew)){
+                        if(employeeRepository.checkExitPhone(phoneNew)==null){
+                            e.setPhone(updateEmployeeForm.getPhone());
+                        }else{
+                            throw new Exception("SĐT tồn tại!");
+                        }
+                    }
+                    if(!e.getEmail().equals(emailNew)){
+                        if(employeeRepository.checkExitEmail(emailNew)== null){
+                            e.setEmail(updateEmployeeForm.getEmail());
+                        }else{
+                            throw new Exception("Email  tồn tại!");
+                        }
+                    }
                     if(updateEmployeeForm.getImage() != null && !updateEmployeeForm.getImage().equals("")){
                         File file = new File();
                         file.setId(updateEmployeeForm.getImage());
                         e.setImage(file);
                     }
+                    e.setFullName(updateEmployeeForm.getFullName());
                     e.setDob(updateEmployeeForm.getDob());
                     e.setGender(updateEmployeeForm.getGender());
                     e.setAddress(updateEmployeeForm.getAddress());
-                    e.setEmail(updateEmployeeForm.getEmail());
                     e.setSalary(updateEmployeeForm.getSalary());
                     e.setNation(updateEmployeeForm.getNation());
-                    e.setPhone(updateEmployeeForm.getPhone());
                     Position p = new Position();
                     p.setId(updateEmployeeForm.getIdPosition());
                     e.setPosition(p);

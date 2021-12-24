@@ -3,6 +3,7 @@ package com.university.fpt.acf.controller;
 import com.university.fpt.acf.common.entity.ResponseCommon;
 import com.university.fpt.acf.form.*;
 import com.university.fpt.acf.service.CompanyService;
+import com.university.fpt.acf.util.EmployeeValidate.EmployeeValidate;
 import com.university.fpt.acf.vo.CompanyVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,6 +18,7 @@ import java.util.List;
 public class CompanyController {
     @Autowired
     private CompanyService companyService;
+
     //************************************
     // Search company with combination of fields: name, address, phone
     //************************************
@@ -56,13 +58,18 @@ public class CompanyController {
         Boolean checkAdd = false;
         try {
             if (addCompanyForm.getName() == null || addCompanyForm.getName() == "") {
-                message = "Dữ liệu bị NULL ! Thêm không thành công!";
-            } else {
+                message = "Dữ liệu bị NULL";
+            }
+            EmployeeValidate employeeValidate = new EmployeeValidate();
+            if(employeeValidate.checkFormEmail(addCompanyForm.getEmail())==false){
+                checkAdd = false;
+                message ="Email không đúng định dạng";
+            }else {
                 checkAdd = companyService.insertCompany(addCompanyForm);
                 if (checkAdd == false) {
-                    message = "Thêm không thành công!";
+                    message = "Thêm không thành công";
                 } else {
-                    message = "Thêm thành công!";
+                    message = "Thêm thành công";
                 }
             }
             responseCommon.setMessage(message);
@@ -88,12 +95,18 @@ public class CompanyController {
         try{
             if(updateCompanyForm.getName()==null || updateCompanyForm.getName()==""){
                 message="Tên công ty trống";
+            }
+            EmployeeValidate employeeValidate = new EmployeeValidate();
+
+            if(!employeeValidate.checkFormEmail(updateCompanyForm.getEmail()) || !employeeValidate.checkFormPhone(updateCompanyForm.getPhone())){
+                checkUpdate =false;
+                message ="Không đúng định dạng email/SĐT";
             }else {
-                checkUpdate =companyService.updateCompany(updateCompanyForm);
-                if(checkUpdate==false){
-                    message="Chỉnh sửa không thành công!";
-                }else{
-                    message="Chỉnh sửa thành công!";
+                checkUpdate = companyService.updateCompany(updateCompanyForm);
+                if (checkUpdate == false) {
+                    message = "Chỉnh sửa công ty không thành công";
+                } else {
+                    message = "Chỉnh sửa công ty thành công";
                 }
             }
             responseCommon.setMessage(message);
@@ -119,9 +132,9 @@ public class CompanyController {
         try{
             checkDelete = companyService.deleteCompany(id);
             if(checkDelete==false){
-                message="Xóa không thành công!";
+                message="Xóa không thành công";
             }else{
-                message="Xóa thành công!";
+                message="Xóa thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkDelete);
