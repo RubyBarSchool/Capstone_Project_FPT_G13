@@ -116,7 +116,7 @@
                       <font-awesome-icon :icon="['fas', 'user']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="8">
+                  <a-col :span="8" v-if="!record.statusDelete">
                     <a-button
                       id="edit"
                       @click="showModalEdit(record)"
@@ -125,7 +125,7 @@
                       <font-awesome-icon :icon="['fas', 'edit']" />
                     </a-button>
                   </a-col>
-                  <a-col :span="8">
+                  <a-col :span="8" v-if="!record.statusDelete">
                     <a-popconfirm
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
