@@ -1033,17 +1033,13 @@ export default {
                   let message = "Thêm mới";
                   let description =
                     "Thêm mới nhân viên " +
-                    this.dataAdd.username +
+                    this.dataAdd.fullName +
                     " thành công !!";
                   this.notifi(type, message, description);
                 } else {
                   let type = "error";
                   let message = "Thêm mới";
-                  let description =
-                    "Thêm mới tài khoản " +
-                    this.dataAdd.fullName +
-                    " không thành công vì " +
-                    response.data.message;
+                  let description = response.data.message;
                   this.notifi(type, message, description);
                   userService.deleteImage(this.dataAdd.image);
                 }
