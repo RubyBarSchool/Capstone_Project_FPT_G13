@@ -24,8 +24,8 @@
             :style="{ width: '150px', 'margin-right': '5px' }"
           >
             <a-select-option value=""> Tất cả </a-select-option>
-            <a-select-option :value="false"> Nháp </a-select-option>
-            <a-select-option :value="true"> Công khai </a-select-option>
+            <a-select-option value="false"> Nháp </a-select-option>
+            <a-select-option value="true"> Công khai </a-select-option>
           </a-select>
           <a-range-picker
             @change="search"
