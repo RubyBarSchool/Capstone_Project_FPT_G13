@@ -304,15 +304,21 @@ public class ContactServiceImpl implements ContactService {
                     int columnIndex = cell.getColumnIndex();
                     if (columnIndex == 0 && objectValue.toString().toLowerCase().startsWith("ghi chú")) {
                         fileContactVO.setNoteContact(objectValue.toString());
-                        for (int i = 0; i < 2; i++) {
+
+                        while (true) {
                             cell = cellIterator.next();
+                            if(cell.getColumnIndex() == 18){
+                                break;
+                            }
                         }
                         objectValue = getCellValue(cell);
-                        String value = objectValue.toString();
-                        if (value.indexOf(".") == value.length() - 2 && value.charAt(value.length() - 1) == '0') {
-                            value = value.substring(0, value.length() - 2);
+                        if(objectValue != null){
+                            String value = objectValue.toString();
+                            if (value.indexOf(".") == value.length() - 2 && value.charAt(value.length() - 1) == '0') {
+                                value = value.substring(0, value.length() - 2);
+                            }
+                            fileContactVO.setPriceContact(value);
                         }
-                        fileContactVO.setPriceContact(value);
                         checkLastRow = true;
                         break;
                     }
