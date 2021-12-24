@@ -431,15 +431,15 @@ export default {
           this.submitSearch();
           if (response.data.data) {
             let type = "success";
-            let message = "Thêm mới";
+            let message = "Thêm công ty mới";
             let description =
-              "Thêm mới công ty " + this.dataAdd.name + " thành công !!";
+              "Thêm công ty " + this.dataAdd.name + " thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Thêm mới";
+            let message = "Thêm công ty mới";
             let description =
-              "Thêm mới công ty " +
+              "Thêm công ty " +
               this.dataAdd.name +
               " không thành công vì " +
               response.data.message;
@@ -476,7 +476,6 @@ export default {
             let message = "Cập nhật";
             let description =
               "Chỉnh sửa thông tin công ty " + this.dataEdit.name + " thành công";
-              "Sửa thông tin công ty " + this.dataEdit.name + " thành công !!";
             this.notifi(type, message, description);
           } else {
             let type = "error";
@@ -503,14 +502,14 @@ export default {
         .then((response) => {
           if (response.data.data) {
             let type = "success";
-            let message = "Xóa";
+            let message = "Xóa công ty";
             let description =
-              "Xóa thông tin công ty " + this.dataEdit.name + " thành công !!";
+              "Xóa thông tin công ty " + this.dataEdit.name + " thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           } else {
             let type = "error";
-            let message = "Xóa";
+            let message = "Xóa công ty";
             let description =
               "Xóa thông tin công ty " +
               this.dataEdit.name +
