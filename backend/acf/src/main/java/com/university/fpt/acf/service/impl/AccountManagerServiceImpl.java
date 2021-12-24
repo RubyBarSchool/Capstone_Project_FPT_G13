@@ -155,6 +155,9 @@ public class AccountManagerServiceImpl implements AccountManagerService {
             Account ac = accountManagerRepository.findAccountByUsername(accountSercurity.getUserName());
             String passwordOld = ac.getPassword();
             if(passwordEncoder.matches(changePasswordAccountForm.getOldPassword(), passwordOld)){
+                if(changePasswordAccountForm.getNewPassword().length() < 8){
+                    return check;
+                }
                 ac.setPassword(passwordEncoder.encode(changePasswordAccountForm.getNewPassword()));
                 ac.setModified_date(LocalDate.now());
                 ac.setModified_by(accountSercurity.getUserName());
