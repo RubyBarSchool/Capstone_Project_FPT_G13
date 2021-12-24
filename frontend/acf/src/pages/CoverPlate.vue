@@ -1326,12 +1326,12 @@ export default {
             if (response.data.data) {
               let type = "success";
               let message = "Cập nhật";
-              let description = "Account đang đăng nhập không được xóa";
+              let description = "Cập nhật tấm phủ thành công";
               this.notifi(type, message, description);
             } else {
               let type = "error";
               let message = "Cập nhật";
-              let description = "Account đang đăng nhập không được xóa";
+              let description = "Cập nhật tấm phủ không thành công";
               this.notifi(type, message, description);
             }
             this.loadingEdit = false;
