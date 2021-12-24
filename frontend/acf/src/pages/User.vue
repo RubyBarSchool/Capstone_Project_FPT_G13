@@ -21,7 +21,6 @@
             @change="submitSearch"
             v-model="dataSearch.idPosition"
             :style="{ 'margin-right': '10px', width: '8%' }"
-
           >
             <a-select-option value=""> Tất cả </a-select-option>
             <a-select-option
@@ -32,7 +31,7 @@
               {{ position.name }}
             </a-select-option>
           </a-select>
-          Trạng thái: 
+          Trạng thái:
           <a-select
             @change="submitSearch"
             default-value=""
@@ -813,6 +812,7 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
+      this.dataSearch.name = this.dataSearch.name.trim();
       userService
         .searchUser(this.dataSearch)
         .then((response) => {

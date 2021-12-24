@@ -87,7 +87,7 @@ public class AttendancesServiceImpl implements AttendancesService {
     @Override
     public int getTotalAllAttendance(AttendanceFrom attendanceFrom) {
         if (attendanceFrom.getTotal() != null && attendanceFrom.getTotal() != 0) {
-            return attendanceFrom.getTotal().intValue();
+            return attendanceFrom.getTotal().intValue(  );
         }
         int total = 0;
         try {

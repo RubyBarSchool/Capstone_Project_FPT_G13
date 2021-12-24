@@ -47,7 +47,7 @@
                   </template>
                 </a-table>
                 <!-- Table content -->
-
+                <br />
                 <a-row type="flex">
                   <a-col flex="435px"></a-col>
                   <a-col flex="auto">
