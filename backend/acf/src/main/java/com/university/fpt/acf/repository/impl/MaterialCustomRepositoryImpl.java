@@ -190,8 +190,8 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
             params.put("frame", "%"+searchForm.getFrame().toLowerCase()+"%");
         }
         if (searchForm.getListUnitId()!=null && !searchForm.getListUnitId().isEmpty() ){
-            sql.append(" and u.id= :idUnit ");
-            params.put("idUnit", searchForm.getListUnitId());
+            sql.append(" and u.id in :listUnitId ");
+            params.put("listUnitId", searchForm.getListUnitId());
         }
         if (searchForm.getListGroupID()!=null && !searchForm.getListGroupID().isEmpty() ){
             sql.append(" and g.id in :listGroupId ");

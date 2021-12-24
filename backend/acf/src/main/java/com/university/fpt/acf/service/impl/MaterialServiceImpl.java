@@ -100,7 +100,7 @@ public class MaterialServiceImpl implements MaterialService {
         try{
             list = materialCustomRepository.searchCoverSheet(searchForm);
         }catch (Exception e){
-            throw new RuntimeException("Không tìm thấy! ");
+            throw new RuntimeException("Không tìm thấy ");
         }
         return list;
     }
