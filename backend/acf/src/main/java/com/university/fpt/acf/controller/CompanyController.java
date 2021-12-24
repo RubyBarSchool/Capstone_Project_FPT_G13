@@ -98,9 +98,9 @@ public class CompanyController {
             }
             EmployeeValidate employeeValidate = new EmployeeValidate();
 
-            if(!employeeValidate.checkFormEmail(updateCompanyForm.getEmail()) || !employeeValidate.checkFormPhone(updateCompanyForm.getPhone())){
+            if(!employeeValidate.checkFormEmail(updateCompanyForm.getEmail())){
                 checkUpdate =false;
-                message ="Không đúng định dạng email/SĐT";
+                message ="Không đúng định dạng email";
             }else {
                 checkUpdate = companyService.updateCompany(updateCompanyForm);
                 if (checkUpdate == false) {
