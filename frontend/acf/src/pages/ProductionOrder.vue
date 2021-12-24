@@ -202,7 +202,7 @@
               </template>
               <a-form-model>
                 <a-row type="flex">
-                  <a-col flex="200px"
+                  <a-col flex="150px"
                     ><span style="color: red">*</span>Lệnh sản xuất:
                   </a-col>
                   <a-col flex="auto">
@@ -222,7 +222,7 @@
                 </a-row>
                 <br />
                 <a-row type="flex">
-                  <a-col flex="200px">
+                  <a-col flex="150px">
                     <span style="color: red">*</span>Tên hợp đồng:
                   </a-col>
                   <a-col flex="auto">
@@ -247,7 +247,7 @@
                 </a-row>
                 <br />
                 <a-row type="flex">
-                  <a-col flex="200px">
+                  <a-col flex="150px">
                     <span style="color: red">*</span>Tên sản phẩm:
                   </a-col>
                   <a-col flex="auto">
@@ -273,7 +273,7 @@
                 </a-row>
                 <br />
                 <a-row type="flex">
-                  <a-col flex="200px">
+                  <a-col flex="150px">
                     <span style="color: red">*</span>Ngày bắt đầu:</a-col
                   >
                   <a-col flex="auto">
@@ -293,7 +293,7 @@
                 </a-row>
                 <br />
                 <a-row type="flex">
-                  <a-col flex="200px">
+                  <a-col flex="150px">
                     <span style="color: red">*</span>Ngày hoàn thành:
                   </a-col>
                   <a-col flex="auto">
@@ -313,7 +313,7 @@
                 </a-row>
                 <br />
                 <a-row type="flex">
-                  <a-col flex="200px">
+                  <a-col flex="150px">
                     <span style="color: red">*</span>Xem công việc:
                   </a-col>
                   <a-col flex="auto">
@@ -1069,7 +1069,7 @@ export default {
           this.showModalAdd = false;
           this.beforeSearch();
           let type = "success";
-          let message = "Thêm mới thành công";
+          let message = "Thêm lệnh sản xuất mới thành công";
           let description = response.data.message;
           this.notifi(type, message, description);
           this.showModalEdit = false;
@@ -1091,7 +1091,7 @@ export default {
           this.showModalAdd = false;
           this.beforeSearch();
           let type = "success";
-          let message = "sửa thành công";
+          let message = "Chỉnh sửa lệnh sản xuất thành công";
           let description = response.data.message;
           this.notifi(type, message, description);
           this.loadingAdd = false;

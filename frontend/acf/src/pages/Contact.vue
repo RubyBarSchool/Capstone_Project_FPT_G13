@@ -60,7 +60,7 @@
               :icon="['fas', 'file-signature']"
               :style="{ 'margin-right': '5px' }"
             />
-            Thêm
+            Thêm hợp đồng
           </a-button>
 
           <a-button
@@ -447,7 +447,7 @@ export default {
       columns: [
         {
           title: "STT",
-          width: 100,
+          width: 80,
           dataIndex: "id",
           key: "id",
           fixed: "left",
@@ -462,33 +462,33 @@ export default {
           title: "Ngày tạo hợp đồng",
           dataIndex: "createDate",
           key: "createDate",
-          width: 150,
+          width: 200,
           scopedSlots: { customRender: "createDate" },
         },
         {
           title: "Ngày bàn giao",
           dataIndex: "dateFinish",
           key: "dateFinish",
-          width: 150,
+          width: 140,
           scopedSlots: { customRender: "dateFinish" },
         },
         {
           title: "Khách hàng",
           dataIndex: "nameCompany",
           key: "nameCompany",
-          width: 150,
+          width: 140,
         },
         {
           title: "Tổng giá trị",
           dataIndex: "totalMoney",
           key: "totalMoney",
-          width: 150,
+          width: 140,
         },
         {
           title: "Định mức hoàn thành",
           dataIndex: "numberFinish",
           key: "numberFinish",
-          width: 150,
+          width: 200,
         },
         {
           title: "Trạng thái",

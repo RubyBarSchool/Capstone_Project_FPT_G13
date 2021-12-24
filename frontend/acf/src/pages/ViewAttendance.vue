@@ -8,13 +8,13 @@
             background: 'white',
           }"
         >
-       <a-back-top :style="{ width: '5vh', height: '15vh' }" />
+          <a-back-top :style="{ width: '5vh', height: '15vh' }" />
           <!-- menu trên -->
           <a-input
             v-model="dataSearch.name"
             placeholder="Tên nhân viên"
             style="width: 15%"
-            :style="{'margin-right': '5px'}"
+            :style="{ 'margin-right': '5px' }"
             @pressEnter="search"
           />
           <a-range-picker
@@ -22,7 +22,7 @@
             v-model="dataSearch.date"
             :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
             format="DD/MM/YYYY"
-            :style="{'margin-right': '10px'}"
+            :style="{ 'margin-right': '10px' }"
           />
           Loại chấm công:
           <a-select
@@ -39,7 +39,7 @@
             v-model="dataSearch.note"
             placeholder="Ghi Chú"
             style="width: 15%"
-            :style="{'margin-left': '5px'}"
+            :style="{ 'margin-left': '5px' }"
           />
           <a-button
             type="primary"
@@ -132,31 +132,48 @@
             </a-button>
           </template>
           <a-form-model>
-            <span style="color: red">*</span> Họ và tên :
-            <a-input @change="inputName" v-model="nameEdit" disabled />
-            <div style="color: red" v-if="checkDataInputName.show">
-              {{ checkDataInputName.message }}
-            </div>
-            <span style="color: red">*</span> Số công :
-            <a-select
-              @change="inputNumber"
-              v-model="dataEdit.type"
-              style="width: 100%"
-            >
-              <a-select-option key="1"> Cả ngày </a-select-option>
-              <a-select-option key="0.5"> Nửa ngày </a-select-option>
-              <a-select-option key="0"> Nghỉ </a-select-option>
-            </a-select>
-            <div style="color: red" v-if="checkDataInputNumber.show">
-              {{ checkDataInputNumber.message }}
-            </div>
-            <a-form-model-item label="Ghi chú">
-              <a-textarea
-                v-model="dataEdit.note"
-                placeholder="Nhập ghi chú"
-                :auto-size="{ minRows: 2, maxRows: 6 }"
-              />
-            </a-form-model-item>
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Họ và tên :
+              </a-col>
+              <a-col flex="auto">
+                <a-input @change="inputName" v-model="nameEdit" disabled />
+                <div style="color: red" v-if="checkDataInputName.show">
+                  {{ checkDataInputName.message }}
+                </div></a-col
+              >
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Số công :
+              </a-col>
+              <a-col flex="auto">
+                <a-select
+                  @change="inputNumber"
+                  v-model="dataEdit.type"
+                  style="width: 100%"
+                >
+                  <a-select-option key="1"> Cả ngày </a-select-option>
+                  <a-select-option key="0.5"> Nửa ngày </a-select-option>
+                  <a-select-option key="0"> Nghỉ </a-select-option>
+                </a-select>
+                <div style="color: red" v-if="checkDataInputNumber.show">
+                  {{ checkDataInputNumber.message }}
+                </div>
+              </a-col>
+            </a-row>
+             <br />
+            <a-row type="flex">
+              <a-col flex="100px">  Ghi chú : </a-col>
+              <a-col flex="auto">
+                <a-textarea
+                  v-model="dataEdit.note"
+                  placeholder="Nhập ghi chú"
+                  :auto-size="{ minRows: 2, maxRows: 6 }"
+                />
+              </a-col>
+            </a-row>
           </a-form-model>
         </a-modal>
         <!-- popup edit -->
@@ -203,8 +220,7 @@ import attendanceService from "@/service/attendanceService.js";
 import moment from "moment";
 export default {
   name: "Attendance",
-  components: {
-  },
+  components: {},
   data() {
     return {
       loading: false,
@@ -329,10 +345,7 @@ export default {
     },
     getDate() {
       let datex = moment();
-      this.dataSearch.date = [
-        datex,
-        datex
-      ];
+      this.dataSearch.date = [datex, datex];
       this.search();
     },
     handleCancelPriview() {
@@ -347,7 +360,7 @@ export default {
       attendanceService
         .downExcel(this.dataExport)
         .then((response) => {
-          let  url = window.URL.createObjectURL(new Blob([response.data]));
+          let url = window.URL.createObjectURL(new Blob([response.data]));
           let link = document.createElement("a");
           link.href = url;
           link.setAttribute("download", "Attendance.xlsx");

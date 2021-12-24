@@ -8,145 +8,132 @@
             minHeight: '360px',
           }"
         >
-        <a-back-top :style="{ width: '5vh', height: '15vh' }" />
-          <a-row type="flex">
-            <a-col flex="auto">
-              <a-carousel autoplay>
-                <div><img src="../assets/1.png" /></div>
-                <div><img src="../assets/2.png" /></div>
-                <div><img src="../assets/3.png" /></div>
-                <div><img src="../assets/4.png" /></div>
-                <div><img src="../assets/5.png" /></div>
-              </a-carousel>
-            </a-col>
-            <a-col flex="400px">
-              <!-- menu trên -->
-              <a-input
-                placeholder="Tên chức vụ"
-                :style="{ width: '150px', 'margin-right': '5px' }"
-                v-model="dataSearch.name"
-                @pressEnter="submitSearch"
-              />
+          <a-back-top :style="{ width: '5vh', height: '15vh' }" />
+          <!-- menu trên -->
+          <a-input
+            placeholder="Tên chức vụ"
+            :style="{ width: '150px', 'margin-right': '5px' }"
+            v-model="dataSearch.name"
+            @pressEnter="submitSearch"
+          />
+          <a-button
+            type="primary"
+            @click="submitSearch"
+            :style="{ 'margin-right': '5px' }"
+          >
+            <font-awesome-icon
+              :icon="['fas', 'search']"
+              :style="{ 'margin-right': '5px' }"
+            />
+            Tìm kiếm
+          </a-button>
+          <a-button type="primary" @click="showModalAdd">
+            <font-awesome-icon
+              :icon="['fas', 'user-plus']"
+              :style="{ 'margin-right': '5px' }"
+            />
+            Thêm
+          </a-button>
+
+          <!-- table content -->
+          <div :style="{ 'padding-top': '10px' }">
+            <a-table
+              :columns="columns"
+              :data-source="dataSourceTable"
+              :pagination="pagination"
+              :scroll="{ x: 600 }"
+              :rowKey="
+                (record, index) => {
+                  return index;
+                }
+              "
+              @change="handleTableChange"
+            >
+              <template slot="id" slot-scope="text, record">
+                {{ record.id }}
+              </template>
+              <template slot="position" slot-scope="text, record">
+                {{ record.name }}
+              </template>
+              <template slot="action" slot-scope="text, record">
+                <a-row>
+                  <a-col :span="8">
+                    <a-button
+                      id="edit"
+                      @click="showModalEdit(record.id, record.name)"
+                      :style="{ width: '44.25px', 'margin-right': '100px' }"
+                    >
+                      <font-awesome-icon :icon="['fas', 'edit']" />
+                    </a-button>
+                  </a-col>
+                  <a-col :span="8">
+                    <a-popconfirm
+                      v-if="dataSourceTable.length"
+                      title="Bạn có chắc chắn muốn xóa không?"
+                      @confirm="deletePosition(record.id)"
+                      ok-text="Đồng ý"
+                      cancel-text="Hủy"
+                    >
+                      <a-button id="delete">
+                        <!-- :loading = "loadingDelete" -->
+                        <font-awesome-icon :icon="['fas', 'trash']" />
+                      </a-button>
+                    </a-popconfirm>
+                  </a-col>
+                </a-row>
+              </template>
+            </a-table>
+          </div>
+          <!-- table content -->
+
+          <!-- popup add-->
+          <a-modal v-model="visibleAdd" title="Thêm chức vụ">
+            <template slot="footer">
+              <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button
+                key="submit"
                 type="primary"
-                @click="submitSearch"
-                :style="{ 'margin-right': '5px' }"
+                :loading="loading"
+                @click="checkFormAdd"
               >
-                <font-awesome-icon
-                  :icon="['fas', 'search']"
-                  :style="{ 'margin-right': '5px' }"
-                />
-                Tìm kiếm
+                Lưu
               </a-button>
-              <a-button type="primary" @click="showModalAdd">
-                <font-awesome-icon
-                  :icon="['fas', 'user-plus']"
-                  :style="{ 'margin-right': '5px' }"
-                />
-                Thêm
+            </template>
+            <a-form-model>
+              <span style="color: red">*</span> Tên chức vụ:
+              <a-form-model-item>
+                <a-input @change="inputNameAdd" v-model="dataAdd.name" />
+                <div style="color: red" v-if="checkDataInputName.show">
+                  {{ checkDataInputName.message }}
+                </div>
+              </a-form-model-item>
+            </a-form-model>
+          </a-modal>
+          <!-- popup add -->
+          <!-- popup update -->
+          <a-modal v-model="visibleEdit" title="Chỉnh sửa chức vụ">
+            <template slot="footer">
+              <a-button key="back" @click="handleCancel"> Hủy </a-button>
+              <a-button
+                :loading="loading"
+                key="submit"
+                type="primary"
+                @click="checkFormEdit"
+              >
+                Lưu
               </a-button>
-
-              <!-- table content -->
-              <div :style="{ 'padding-top': '10px' }">
-                <a-table
-                  :columns="columns"
-                  :data-source="dataSourceTable"
-                  :pagination="pagination"
-                  :scroll="{ x: 600 }"
-                  :rowKey="
-                    (record, index) => {
-                      return index;
-                    }
-                  "
-                  @change="handleTableChange  "
-                >
-                  <template slot="id" slot-scope="text, record">
-                    {{ record.id }}
-                  </template>
-                  <template slot="position" slot-scope="text, record">
-                    {{ record.name }}
-                  </template>
-                  <template slot="action" slot-scope="text, record">
-                    <a-row>
-                      <a-col :span="8">
-                        <a-button
-                          id="edit"
-                          @click="showModalEdit(record.id, record.name)"
-                          :style="{ width: '44.25px', 'margin-right': '100px' }"
-                        >
-                          <font-awesome-icon :icon="['fas', 'edit']" />
-                        </a-button>
-                      </a-col>
-                      <a-col :span="8">
-                        <a-popconfirm
-                          v-if="dataSourceTable.length"
-                          title="Bạn có chắc chắn muốn xóa không?"
-                          @confirm="deletePosition(record.id)"
-                          ok-text="Đồng ý"
-                          cancel-text="Hủy"
-                        >
-                          <a-button id="delete">
-                            <!-- :loading = "loadingDelete" -->
-                            <font-awesome-icon :icon="['fas', 'trash']" />
-                          </a-button>
-                        </a-popconfirm>
-                      </a-col>
-                    </a-row>
-                  </template>
-                </a-table>
-              </div>
-              <!-- table content -->
-
-              <!-- popup add-->
-              <a-modal v-model="visibleAdd" title="Thêm chức vụ">
-                <template slot="footer">
-                  <a-button key="back" @click="handleCancel"> Hủy </a-button>
-                  <a-button
-                    key="submit"
-                    type="primary"
-                    :loading="loading"
-                    @click="checkFormAdd"
-                  >
-                    Lưu
-                  </a-button>
-                </template>
-                <a-form-model>
-                  <span style="color: red">*</span> Tên chức vụ:
-                  <a-form-model-item>
-                    <a-input @change="inputNameAdd" v-model="dataAdd.name" />
-                    <div style="color: red" v-if="checkDataInputName.show">
-                      {{ checkDataInputName.message }}
-                    </div>
-                  </a-form-model-item>
-                </a-form-model>
-              </a-modal>
-              <!-- popup add -->
-              <!-- popup update -->
-              <a-modal v-model="visibleEdit" title="Chỉnh sửa chức vụ">
-                <template slot="footer">
-                  <a-button key="back" @click="handleCancel"> Hủy </a-button>
-                  <a-button
-                    :loading="loading"
-                    key="submit"
-                    type="primary"
-                    @click="checkFormEdit"
-                  >
-                    Lưu
-                  </a-button>
-                </template>
-                <a-form-model>
-                  <span style="color: red">*</span> Tên chức vụ:
-                  <a-form-model-item>
-                    <a-input @change="inputNameEdit" v-model="dataEdit.name" />
-                    <div style="color: red" v-if="checkDataInputName.show">
-                      {{ checkDataInputName.message }}
-                    </div>
-                  </a-form-model-item>
-                </a-form-model>
-              </a-modal>
-              <!-- popup update -->
-            </a-col>
-          </a-row>
+            </template>
+            <a-form-model>
+              <span style="color: red">*</span> Tên chức vụ:
+              <a-form-model-item>
+                <a-input @change="inputNameEdit" v-model="dataEdit.name" />
+                <div style="color: red" v-if="checkDataInputName.show">
+                  {{ checkDataInputName.message }}
+                </div>
+              </a-form-model-item>
+            </a-form-model>
+          </a-modal>
+          <!-- popup update -->
         </div>
       </a-layout-content>
     </a-layout>
@@ -158,8 +145,7 @@ import positionService from "../service/positionService";
 
 export default {
   name: "Position",
-  components: {
-  },
+  components: {},
   data() {
     return {
       loading: false,
@@ -240,7 +226,7 @@ export default {
     submitSearch() {
       this.dataSearch.total = 0;
       this.dataSearch.name = this.dataSearch.name.trim();
-      this.dataSearch.pageIndex = 1; 
+      this.dataSearch.pageIndex = 1;
       positionService
         .getAllPosition(this.dataSearch)
         .then((response) => {
