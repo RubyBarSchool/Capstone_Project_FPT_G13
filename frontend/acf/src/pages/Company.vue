@@ -420,7 +420,6 @@ export default {
     },
     submitAdd() {
       this.dataAdd.name = this.dataAdd.name.trim();
-      this.dataAdd.phone = this.dataAdd.phone.trim();
       this.dataAdd.email = this.dataAdd.email.trim();
       this.dataAdd.address = this.dataAdd.address.trim();
       this.loading = true;
@@ -463,7 +462,6 @@ export default {
     },
     submitUpdate() {
       this.dataEdit.name = this.dataEdit.name.trim();
-      this.dataEdit.phone = this.dataEdit.phone.trim();
       this.dataEdit.email = this.dataEdit.email.trim();
       this.dataEdit.address = this.dataEdit.address.trim();
       this.loadingUpdate = true;
@@ -541,7 +539,7 @@ export default {
       }
     },
     inputPhone() {
-      if (this.dataAdd.phone != null && this.dataAdd.phone.trim() != "") {
+      if (this.dataAdd.phone != null && this.dataAdd.phone != "") {
         this.checkDataInputPhone.show = false;
         this.checkDataInputPhone.message = "";
       } else {
@@ -578,7 +576,7 @@ export default {
       }
     },
     inputEditPhone() {
-      if (this.dataEdit.phone != null && this.dataEdit.phone.trim() != "") {
+      if (this.dataEdit.phone != null && this.dataEdit.phone != "") {
         this.checkDataInputPhone.show = false;
         this.checkDataInputPhone.message = "";
       } else {
@@ -615,7 +613,7 @@ export default {
         this.checkDataInputAddress.message = "Bạn phải điền địa chỉ";
       }
 
-      if (this.dataAdd.phone != null && this.dataAdd.phone.trim() != "") {
+      if (this.dataAdd.phone != null && this.dataAdd.phone != "") {
         this.checkDataInputPhone.show = false;
         this.checkDataInputPhone.message = "";
       } else {
@@ -658,7 +656,7 @@ export default {
         this.checkDataInputAddress.message = "Bạn phải điền địa chỉ";
       }
 
-      if (this.dataEdit.phone != null && this.dataEdit.phone.trim() != "") {
+      if (this.dataEdit.phone != null && this.dataEdit.phone != "") {
         this.checkDataInputPhone.show = false;
         this.checkDataInputPhone.message = "";
       } else {

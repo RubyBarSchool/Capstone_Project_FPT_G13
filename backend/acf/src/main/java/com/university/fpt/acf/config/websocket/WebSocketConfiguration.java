@@ -33,8 +33,11 @@ public class WebSocketConfiguration implements WebSocketMessageBrokerConfigurer 
         //************************************
         // cấu hình nơi để client có thể đăng ký để nhận notification
         //************************************
+        // cấu hình prefix của các endpoint mà các client có thể subscribe vào để nhận mess từ serve
         registry.enableSimpleBroker("queue");
+        // cấu hình prefix của các destination  mà client sẽ gửi thông báo cho serve
         registry.setApplicationDestinationPrefixes("/ws");
+        // cấu hình prefix end point nhận mess theo user mặc định là users
         registry.setUserDestinationPrefix("/users");
     }
 
