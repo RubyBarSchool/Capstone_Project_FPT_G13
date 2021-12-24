@@ -541,12 +541,14 @@ export default {
       this.visibleAdd = false;
       this.visibleEdit = false;
       this.visibleView = false;
+      this.dataSearch.pageIndex = 1;
       advanceSalaryService
         .searchAdvanceSalaryEmployee(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
           this.dataSearch.total = response.data.total;
           this.pagination.total = response.data.total;
+          this.pagination.current = 1;
         })
         .catch((e) => {
           console.log(e);

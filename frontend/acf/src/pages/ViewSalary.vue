@@ -117,6 +117,7 @@
               v-model="dateSelect"
               :disabled-date="disabledDate"
               @change="changeDate"
+              placeholder="Chọn ngày"
             />
             <a-table
               :columns="columnsSalaryNotNow"

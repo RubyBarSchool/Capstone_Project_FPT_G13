@@ -11,20 +11,29 @@
           <a-back-top :style="{ width: '5vh', height: '15vh' }" />
 
           <!-- menu trên -->
-          Số lượng: 
+          Số lượng:
           <a-input
             placeholder="Số lượng"
             v-model="dataSearch.count"
             :style="{ width: '150px', 'margin-right': '5px' }"
           />
 
-          <a-select @change="searchSuggestMaterial()" default-value="thang" v-model="dataSearch.type" style="width: 120px">
+          <a-select
+            @change="searchSuggestMaterial()"
+            default-value="thang"
+            v-model="dataSearch.type"
+            style="width: 120px"
+          >
             <a-select-option value="thang"> Tháng </a-select-option>
             <a-select-option value="quy"> Quý </a-select-option>
             <a-select-option value="nam"> Năm </a-select-option>
           </a-select>
 
-          <a-button type="primary" @click="searchSuggestMaterial()" :style="{ 'margin-left': '5px' }">
+          <a-button
+            type="primary"
+            @click="searchSuggestMaterial()"
+            :style="{ 'margin-left': '5px' }"
+          >
             <font-awesome-icon
               :icon="['fas', 'search']"
               :style="{ 'margin-right': '5px' }"
@@ -36,6 +45,7 @@
           <!-- table content -->
           <div :style="{ 'padding-top': '10px' }">
             <a-table
+              :pagination="false"
               :columns="columns"
               :data-source="dataSourceTable"
               :scroll="{ x: 1000 }"
@@ -58,8 +68,7 @@
 import materialSuggestService from "@/service/materialSuggestService";
 export default {
   name: "MaterialSuggest",
-  components: {
-  },
+  components: {},
   data() {
     return {
       dataSourceTable: [],
@@ -68,12 +77,12 @@ export default {
         type: "thang",
       },
       columns: [
-                {
+        {
           title: "STT",
           dataIndex: "idMaterial",
           key: "idMaterial",
           width: 100,
-          fixed:"left"
+          fixed: "left",
         },
         {
           title: "Mã vật tư",
