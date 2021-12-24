@@ -489,13 +489,13 @@ export default {
             let type = "success";
             let message = "Cập nhật";
             let description =
-              "Sửa thông tin công ty " + this.dataEdit.name + " thành công";
+              "Chỉnh sửa thông tin công ty " + this.dataEdit.name + " thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
             let message = "Cập nhật";
             let description =
-              "Sửa thông tin công ty " +
+              "Chỉnh sửa thông tin công ty " +
               this.dataEdit.name +
               " không thành công vì " +
               response.data.message;
