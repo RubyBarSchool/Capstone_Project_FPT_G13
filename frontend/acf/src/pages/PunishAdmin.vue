@@ -551,6 +551,7 @@ export default {
     search() {
       this.dataSearch.pageIndex = 1;
       this.dataSearch.total = 0;
+      this.dataSearch.title = this.dataSearch.title.trim();
       this.submitSearch();
     },
     fetchEmployees(value) {

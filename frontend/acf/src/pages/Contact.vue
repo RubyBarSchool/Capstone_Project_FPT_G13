@@ -272,18 +272,6 @@
                 /></a-col>
               </a-row>
               <br />
-
-              <div
-                class="progress-bar progress-bar-info progress-bar-striped"
-                role="progressbar"
-                :aria-valuenow="progress"
-                aria-valuemin="0"
-                aria-valuemax="100"
-                :style="{ width: progress + '%' }"
-              >
-                {{ progress }}%
-              </div>
-
               <a-row type="flex">
                 <a-col flex="150px">
                   <span style="color: red">*</span>Bảng chi tiết:</a-col
@@ -300,6 +288,17 @@
                   </div>
                 </a-col>
               </a-row>
+
+              <div
+                class="progress-bar progress-bar-info progress-bar-striped"
+                role="progressbar"
+                :aria-valuenow="progress"
+                aria-valuemin="0"
+                aria-valuemax="100"
+                :style="{ width: progress + '%' }"
+              >
+                {{ progress }}%
+              </div>
             </a-form-model>
           </a-modal>
           <!-- popup add-->
@@ -367,7 +366,7 @@
                     :disabled-date="disableDateStart"
                     v-model="dataEdit.dateFinish"
                     format="DD/MM/YYYY"
-                     style="width: 100%"
+                    style="width: 100%"
                   />
                   <div style="color: red" v-if="checkDateEnd.show">
                     {{ checkDateEnd.message }}
@@ -679,6 +678,7 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
+      this.dataSearch.name = this.dataSearch.name.trim();
       contactService
         .searchCompany(this.dataSearch)
         .then((response) => {

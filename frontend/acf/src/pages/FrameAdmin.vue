@@ -305,6 +305,8 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
+      this.dataSearch.length = this.dataSearch.length.trim();
+      this.dataSearch.width = this.dataSearch.width.trim();
       frameAdminService
         .searchFrame(this.dataSearch)
         .then((response) => {

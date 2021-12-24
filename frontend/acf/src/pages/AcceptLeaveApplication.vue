@@ -341,6 +341,8 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
+      this.dataSearch.nameEmployee =  this.dataSearch.nameEmployee.trim();
+      this.dataSearch.title = this.dataSearch.title.trim();
       this.visibleView = false;
       acceptXinNghiService
         .searchPersonalLeaveApplication(this.dataSearch)

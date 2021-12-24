@@ -447,6 +447,8 @@ export default {
         });
     },
     search() {
+      this.dataSearch.name = this.dataSearch.name.trim();
+      this.dataSearch.note = this.dataSearch.note.trim();
       this.dataSearch.pageIndex = 1;
       this.dataSearch.total = 0;
       this.searchAttendance();

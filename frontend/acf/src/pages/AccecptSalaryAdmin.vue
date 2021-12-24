@@ -291,6 +291,7 @@ export default {
     search() {
       this.dataSearch.pageIndex = 1;
       this.dataSearch.total = 0;
+      this.dataSearch.name = this.dataSearch.name.trim();
       this.submitSearch();
     },
     bill(id) {

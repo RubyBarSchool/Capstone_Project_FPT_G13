@@ -604,6 +604,7 @@ export default {
         });
     },
     beforeSearch() {
+      this.dataSearch.nameContact = this.dataSearch.nameContact.trim();
       this.dataSearch.pageIndex = 1;
       this.dataSearch.total = 0;
       this.pagination.current = 1;

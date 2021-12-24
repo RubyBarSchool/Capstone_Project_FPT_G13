@@ -1177,6 +1177,7 @@ export default {
       this.search();
     },
     beforeSearch() {
+      this.dataSearch.nameProduction = this.dataSearch.nameProduction.trim();
       this.dataSearch.pageIndex = 1;
       this.pagination.current = 1;
       this.search();

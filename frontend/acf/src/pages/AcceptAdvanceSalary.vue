@@ -309,6 +309,8 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
+      this.dataSearch.employeeName =  this.dataSearch.employeeName.trim();
+      this.dataSearch.title = this.dataSearch.title.trim();
       this.visibleView = false;
       acceptAdvanceSalaryService
         .searchAdvanceSalaryAdmin(this.dataSearch)

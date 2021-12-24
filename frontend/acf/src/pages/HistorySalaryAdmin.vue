@@ -231,7 +231,8 @@ export default {
         });
     },
     submitSearch() {
-      this.dataSearch.total = 0;
+      this.dataSearch.total = 0;  
+      this.dataSearch.name = this.dataSearch.name.trim();
       historySalaryAdminService
         .salaryHistory(this.dataSearch)
         .then((response) => {

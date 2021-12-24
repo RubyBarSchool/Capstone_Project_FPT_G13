@@ -1253,6 +1253,7 @@ export default {
       this.searchContactDetail();
     },
     search() {
+      this.dataSearch.nameProduct = this.dataSearch.nameProduct.trim();
       this.dataSearch.pageIndex = 1;
       this.dataSearch.total = 0;
       this.searchContactDetail();

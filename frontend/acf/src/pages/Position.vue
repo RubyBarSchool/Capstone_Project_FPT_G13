@@ -238,6 +238,7 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
+      this.dataSearch.name = this.dataSearch.name.trim();
       positionService
         .getAllPosition(this.dataSearch)
         .then((response) => {
