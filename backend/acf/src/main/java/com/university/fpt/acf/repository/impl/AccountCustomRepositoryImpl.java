@@ -37,6 +37,7 @@ public class AccountCustomRepositoryImpl extends CommonRepository implements Acc
             paramsAcc.put("roles",searchAccountForm.getListRole());
         }
         sqlAcc.append(" GROUP BY a.id ");
+        sqlAcc.append(" ORDER by a.id desc ");
         TypedQuery<Long> queryAcc = super.createQuery(sqlAcc.toString(),paramsAcc, Long.class);
         queryAcc.setFirstResult((searchAccountForm.getPageIndex()-1)*searchAccountForm.getPageSize());
         queryAcc.setMaxResults(searchAccountForm.getPageSize());
