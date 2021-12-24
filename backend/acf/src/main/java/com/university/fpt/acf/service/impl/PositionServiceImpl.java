@@ -58,7 +58,7 @@ public class PositionServiceImpl implements PositionService {
             } else {
                 if (positionRespository.checkExitPosition(addPositionForm.getName()) == null) {
                     Position p = new Position();
-                    p.setName(addPositionForm.getName().toLowerCase());
+                    p.setName(addPositionForm.getName());
                     p.setCode(addPositionForm.getCode());
                     AccountSercurity accountSercurity = new AccountSercurity();
                     p.setCreated_date(LocalDate.now());
@@ -88,7 +88,7 @@ public class PositionServiceImpl implements PositionService {
             } else {
                 if (positionRespository.checkDeletePositionById(updatePositionForm.getId()) == null) {
                     if (positionRespository.CheckExitPositionById(updatePositionForm.getId()) != null) {
-                        if (positionRespository.checkExitPosition(updatePositionForm.getName()) != null ) {
+                        if (positionRespository.checkExitPosition(updatePositionForm.getName()) == null ) {
                             Position p = positionRespository.getPositionById(updatePositionForm.getId());
                             p.setName(updatePositionForm.getName());
                             p.setCode(updatePositionForm.getCode());
@@ -97,7 +97,7 @@ public class PositionServiceImpl implements PositionService {
                             positionRespository.save(p);
                             check = true;
                         } else {
-                            throw new Exception("Tên chức vụ không được để chống");
+                            throw new Exception("Tên chức vụ đã tồn tại");
                         }
 
                     } else {
