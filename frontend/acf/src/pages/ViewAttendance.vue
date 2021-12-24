@@ -328,18 +328,10 @@ export default {
       }
     },
     getDate() {
-      let datex = new Date();
-      let month =
-        (datex.getMonth() + 1 + "").length == 1
-          ? "0" + datex.getMonth() + 1
-          : datex.getMonth() + 1;
-      let date =
-        (datex.getDate() + "").length == 1
-          ? "0" + datex.getDate()
-          : datex.getDate();
+      let datex = moment();
       this.dataSearch.date = [
-        datex.getFullYear() + "-" + month + "-" + date,
-        datex.getFullYear() + "-" + month + "-" + date,
+        datex,
+        datex
       ];
       this.search();
     },
