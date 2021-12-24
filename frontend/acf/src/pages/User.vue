@@ -190,6 +190,7 @@
                         @change="inputDoBAdd"
                         v-model="dataAdd.dob"
                         format="DD/MM/YYYY"
+                        placeholder="Ngày sinh"
                       >
                         <a-icon slot="suffixIcon" type="smile" />
                       </a-date-picker>
@@ -356,6 +357,7 @@
                         v-model="dataEdit.dob"
                         format="DD/MM/YYYY"
                         @change="inputDoBEdit"
+                        placeholder="Ngày sinh"
                       >
                         <a-icon slot="suffixIcon" type="smile" />
                       </a-date-picker>
@@ -482,10 +484,9 @@
                       src="https://img.icons8.com/bubbles/100/000000/user.png"
                       class="img-radius"
                     />
-                    <a href="#"><a-icon type="camera" /></a>
                   </div>
                   <h6 class="text-white f-w-400">
-                    {{ dataUserDetail.fullname }}
+                    {{ dataUserDetail.fullName }}
                   </h6>
                   <p class="text-white f-w-400">
                     {{ dataUserDetail.positionName }}
@@ -1033,15 +1034,15 @@ export default {
                 this.loadingAdd = false;
                 if (response.data.data) {
                   let type = "success";
-                  let message = "Thêm mới";
+                  let message = "Thêm nhân viên mới";
                   let description =
-                    "Thêm mới nhân viên " +
+                    "Thêm nhân viên " +
                     this.dataAdd.fullName +
-                    " thành công !!";
+                    " thành công";
                   this.notifi(type, message, description);
                 } else {
                   let type = "error";
-                  let message = "Thêm mới";
+                  let message = "Thêm nhân viên mới";
                   let description = response.data.message;
                   this.notifi(type, message, description);
                   userService.deleteImage(this.dataAdd.image);
@@ -1065,15 +1066,15 @@ export default {
             this.loadingAdd = false;
             if (response.data.data) {
               let type = "success";
-              let message = "Thêm mới";
+              let message = "Thêm nhân viên mới";
               let description =
-                "Thêm mới nhân viên " +
-                this.dataAdd.username +
-                " thành công !!";
+                "Thêm nhân viên " +
+                this.dataAdd.fullName +
+                " thành công";
               this.notifi(type, message, description);
             } else {
               let type = "error";
-              let message = "Thêm mới";
+              let message = "Thêm nhân viên mới";
               let description =
                 "Thêm mới tài khoản " +
                 this.dataAdd.fullName +
@@ -1300,15 +1301,15 @@ export default {
                   let type = "success";
                   let message = "Cập nhật";
                   let description =
-                    "Sửa thông tin nhân viên " +
+                    "Chỉnh sửa thông tin nhân viên " +
                     this.dataEdit.fullName +
-                    " thành công !!";
+                    " thành công";
                   this.notifi(type, message, description);
                 } else {
                   let type = "error";
                   let message = "Cập nhật";
                   let description =
-                    "Sửa thông tin nhân viên " +
+                    "Chỉnh sửa thông tin nhân viên " +
                     this.dataEdit.fullName +
                     " không thành công vì " +
                     response.data.message;
@@ -1335,15 +1336,15 @@ export default {
               let type = "success";
               let message = "Cập nhật";
               let description =
-                "Sửa thông tin nhân viên " +
+                "Chỉnh sửa thông tin nhân viên " +
                 this.dataEdit.fullName +
-                " thành công !!";
+                " thành công";
               this.notifi(type, message, description);
             } else {
               let type = "error";
               let message = "Cập nhật";
               let description =
-                "Sửa thông tin nhân viên " +
+                "Chỉnh sửa thông tin nhân viên " +
                 this.dataEdit.fullName +
                 " không thành công vì " +
                 response.data.message;
@@ -1376,7 +1377,7 @@ export default {
         .then((response) => {
           if (response.data.data) {
             var task = "success";
-            var text = "Xóa";
+            var text = "Xóa nhân viên thành công";
             this.notifi(task, text);
             this.submitSearch();
           }

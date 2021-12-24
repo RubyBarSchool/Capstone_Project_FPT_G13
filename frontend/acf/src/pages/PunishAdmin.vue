@@ -326,6 +326,7 @@
                   v-model="dataEdit.money"
                   :min="100000"
                   @change="inputMoneyEdit"
+                  style="width: 100%"
                 />
                 <div style="color: red" v-if="checkInputMoney.show">
                   {{ checkInputMoney.message }}
@@ -434,7 +435,7 @@ export default {
           width: 150,
         },
         {
-          title: "Nhân viên chịu hình phạt",
+          title: "Nhân viên chịu kỷ luật",
           dataIndex: "listIdEmployee",
           key: "listIdEmployee",
           width: 150,
@@ -704,14 +705,14 @@ export default {
           this.submitSearch();
           if (response.data.data) {
             let type = "success";
-            let message = "Thêm đơn phạt";
-            let description = "Thêm mới đơn phạt thành công !!";
+            let message = "Thêm đơn kỷ luật";
+            let description = "Thêm đơn kỷ luật mới thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Thêm đơn phạt";
+            let message = "Thêm đơn kỷ luật";
             let description =
-              "Thêm mới đơn phạt không thành công vì " + response.data.message;
+              "Thêm đơn kỷ luật mới không thành công vì " + response.data.message;
             this.notifi(type, message, description);
           }
           this.loadingAdd = false;
@@ -870,12 +871,12 @@ export default {
           if (response.data.data) {
             let type = "success";
             let message = "Cập nhật";
-            let description = "Cập nhật đơn phạt thành công";
+            let description = "Cập nhật đơn kỷ luật thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
             let message = "Cập nhật";
-            let description = "Cập nhật đơn phạt không thành công";
+            let description = "Cập nhật đơn kỷ luật không thành công";
             this.notifi(type, message, description);
           }
           this.loadingEdit = false;
@@ -892,16 +893,16 @@ export default {
         .then((response) => {
           if (response.data.data) {
             let type = "success";
-            let message = "Xóa";
+            let message = "Xóa đơn kỷ luật";
             let description =
-              "Xóa đơn phạt " + this.dataAdd.title + " thành công";
+              "Xóa đơn kỷ luật " + this.dataAdd.title + " thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           } else {
             let type = "error";
-            let message = "Xóa";
+            let message = "Xóa đơn kỷ luật";
             let description =
-              "Xóa đơn phạt " + this.dataAdd.title + " không thành công";
+              "Xóa đơn kỷ luật " + this.dataAdd.title + " không thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           }

@@ -172,12 +172,12 @@ export default {
           this.getAllUnits();
           if (response.data.data) {
             let type = "success";
-            let message = "Thêm mới";
+            let message = "Thêm đơn vị đo mới";
             let description = response.data.message;
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Thêm mới";
+            let message = "Thêm đơn vị đo mới";
             let description = response.data.message;
             this.notifi(type, message, description);
           }
@@ -199,12 +199,12 @@ export default {
           this.getAllUnits();
           if (response.data.data) {
             let type = "success";
-            let message = "Xóa";
+            let message = "Xóa đơn vị đo";
             let description = "Xóa đơn vị thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Xóa";
+            let message = "Xóa đơn vị đo";
             let description = "Đơn vị đang sử dụng, không được xóa";
             this.notifi(type, message, description);
           }

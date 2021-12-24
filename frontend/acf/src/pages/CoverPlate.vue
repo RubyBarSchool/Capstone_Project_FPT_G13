@@ -981,7 +981,7 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
-      this.dataSearch.codeMaterial =  this.dataSearch.codeMaterial.trim();
+      this.dataSearch.codeMaterial = this.dataSearch.codeMaterial.trim();
       this.dataSearch.frame = this.dataSearch.frame.trim();
       this.dataSearch.pageIndex = 1;
       coverSheetService
@@ -1090,27 +1090,6 @@ export default {
         .listCodeCoverSheet()
         .then((response) => {
           this.listCodeCoverSheets = response.data.data;
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-    },
-    getCoverSheetByUnit(id) {
-      coverSheetService
-        .getCoverSheetByUnit(id)
-        .then((response) => {
-          // this.submitSearch();
-          if (response.data.data) {
-            let type = "success";
-            let message = "OK";
-            let description = response.data.data.message;
-            this.notifi(type, message, description);
-          } else {
-            let type = "error";
-            let message = "Error";
-            let description = response.data.data.message;
-            this.notifi(type, message, description);
-          }
         })
         .catch((e) => {
           console.log(e);
@@ -1543,12 +1522,12 @@ export default {
                 this.submitSearch();
                 if (response.data.data) {
                   let type = "success";
-                  let message = "Thêm mới tấm phủ";
+                  let message = "Thêm tấm phủ mới";
                   let description = response.data.message;
                   this.notifi(type, message, description);
                 } else {
                   let type = "error";
-                  let message = "Thêm mới tấm phủ";
+                  let message = "Thêm tấm phủ mới";
                   let description = response.data.message;
                   this.notifi(type, message, description);
                   coverSheetService.deleteImage(this.dataAdd.image);
@@ -1576,12 +1555,12 @@ export default {
             this.submitSearch();
             if (response.data.data) {
               let type = "success";
-              let message = "Thêm mới";
+              let message = "Thêm tấm phủ mới";
               let description = response.data.message;
               this.notifi(type, message, description);
             } else {
               let type = "error";
-              let message = "Thêm mới";
+              let message = "Thêm tấm phủ mới";
               let description = response.data.message;
               this.notifi(type, message, description);
             }
@@ -1678,12 +1657,12 @@ export default {
           this.submitSearch();
           if (response.data.data) {
             let type = "success";
-            let message = "Thêm mới";
+            let message = "Thêm đơn vị mới";
             let description = response.data.message;
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Thêm mới";
+            let message = "Thêm đơn vị mới";
             let description = response.data.message;
             this.notifi(type, message, description);
           }
@@ -1869,12 +1848,12 @@ export default {
           this.submitSearch();
           if (response.data.data) {
             let type = "success";
-            let message = "Thêm mới";
+            let message = "Thêm khung và chiều cao mới";
             let description = response.data.message;
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Thêm mới";
+            let message = "Thêm khung và chiều cao mới";
             let description = response.data.message;
             this.notifi(type, message, description);
           }
@@ -1944,8 +1923,8 @@ export default {
           this.submitSearch();
           if (response.data.data) {
             let type = "success";
-            let message = "Xóa";
-            let description = "Xóa thành công";
+            let message = "Xóa tấm phủ";
+            let description = "Xóa tấm phủ thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";

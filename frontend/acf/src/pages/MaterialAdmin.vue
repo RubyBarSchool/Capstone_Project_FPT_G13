@@ -990,7 +990,7 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
-      this.dataSearch.codeMaterial =  this.dataSearch.codeMaterial.trim();
+      this.dataSearch.codeMaterial = this.dataSearch.codeMaterial.trim();
       this.dataSearch.frame = this.dataSearch.frame.trim();
       this.dataSearch.pageIndex = 1;
       vatLieuAdminService
@@ -1647,12 +1647,12 @@ export default {
           this.submitSearch();
           if (response.data.data) {
             let type = "success";
-            let message = "Thêm đơn vị";
+            let message = "Thêm đơn vị mới";
             let description = response.data.message;
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Thêm đơn vị";
+            let message = "Thêm đơn vị mới";
             let description = response.data.message;
             this.notifi(type, message, description);
           }
@@ -1903,7 +1903,6 @@ export default {
       }
 
       this.dataSelect.push(data);
-      console.log("data select", this.dataSelect);
       if (this.dataSelect.length == 2) {
         this.dataForm.id1 = data.id;
         this.dataForm.name1 = data.name;

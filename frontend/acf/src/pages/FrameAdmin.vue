@@ -285,12 +285,12 @@ export default {
           this.submitSearch();
           if (response.data.data) {
             let type = "success";
-            let message = "Thêm mới";
+            let message = "Thêm khung và chiều cao mới";
             let description = response.data.message;
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Thêm mới";
+            let message = "Thêm khung và chiều cao mới";
             let description = response.data.message;
             this.notifi(type, message, description);
           }
@@ -329,12 +329,12 @@ export default {
           this.submitSearch();
           if (response.data.data) {
             let type = "success";
-            let message = "Xóa";
+            let message = "Xóa khung và chiều cao";
             let description = response.data.message;
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Xóa";
+            let message = "Xóa khung và chiều cao";
             let description = response.data.message;
             this.notifi(type, message, description);
           }

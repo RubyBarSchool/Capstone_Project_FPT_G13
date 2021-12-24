@@ -156,12 +156,12 @@ export default {
           this.getAllGroupS();
           if (response.data.data) {
             let type = "success";
-            let message = "Thêm mới";
+            let message = "Thêm nhóm tấm phủ mới";
             let description = response.data.message;
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Thêm mới";
+            let message = "Thêm nhóm tấm phủ mới";
             let description = response.data.message;
             this.notifi(type, message, description);
           }
@@ -184,13 +184,13 @@ export default {
           this.getAllGroupS();
           if (response.data.data) {
             let type = "success";
-            let message = "Xóa";
-            let description = "Xóa đơn vị thành công";
+            let message = "Xóa nhóm tấm phủ";
+            let description = "Xóa nhóm tấm phủ thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Xóa";
-            let description = "Đơn vị đang sử dụng, không được xóa";
+            let message = "Xóa nhóm tấm phủ";
+            let description = "Nhóm tấm phủ đang sử dụng, không được xóa";
             this.notifi(type, message, description);
           }
         })

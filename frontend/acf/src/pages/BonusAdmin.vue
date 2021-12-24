@@ -14,7 +14,7 @@
             placeholder="Tiêu đề"
             :style="{ width: '150px', 'margin-right': '5px' }"
             v-model="dataSearch.title"
-             @pressEnter="search"
+            @pressEnter="search"
           />
           Trạng thái:
           <a-select
@@ -134,7 +134,7 @@
           <!-- table content -->
 
           <!-- popup add-->
-          <a-modal v-model="visibleAdd" title="Thêm khen thưởng">
+          <a-modal v-model="visibleAdd" title="Thêm đơn khen thưởng">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button
@@ -213,6 +213,7 @@
                   v-model="dataAdd.money"
                   @change="inputMoney"
                   :min="100000"
+                  style="width: 100%"
                 />
                 <div style="color: red" v-if="checkDataInputMoney.show">
                   {{ checkDataInputMoney.message }}
@@ -340,6 +341,7 @@
                   v-model="dataEdit.money"
                   @change="inputEditMoney"
                   :min="100000"
+                  style="width: 100%"
                 />
                 <div style="color: red" v-if="checkDataInputMoney.show">
                   {{ checkDataInputMoney.message }}
@@ -636,14 +638,14 @@ export default {
           this.submitSearch();
           if (response.data.data) {
             let type = "success";
-            let message = "Thêm khen thưởng";
-            let description = "Thêm mới khen thưởng thành công !!";
+            let message = "Thêm đơn khen thưởng";
+            let description = "Thêm đơn khen thưởng mới thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Thêm khen thưởng";
+            let message = "Thêm đơn khen thưởng";
             let description =
-              "Thêm mới khen thưởng không thành công vì " +
+              "Thêm đơn khen thưởng mới không thành công vì " +
               response.data.message;
             this.notifi(type, message, description);
           }

@@ -152,12 +152,12 @@ export default {
           this.getAllGroupMaterial();
           if (response.data.data) {
             let type = "success";
-            let message = "Thêm mới";
+            let message = "Thêm nhóm vật liệu mới";
             let description = response.data.message;
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Thêm mới";
+            let message = "Thêm nhóm vật liệu mới";
             let description = response.data.message;
             this.notifi(type, message, description);
           }
@@ -180,13 +180,13 @@ export default {
           this.getAllGroupMaterial();
           if (response.data.data) {
             let type = "success";
-            let message = "Xóa";
-            let description = "Xóa đơn vị thành công";
+            let message = "Xóa nhóm vật liệu";
+            let description = "Xóa nhóm vật liệu thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Xóa";
-            let description = "Đơn vị đang sử dụng, không được xóa";
+            let message = "Xóa nhóm vật liệu";
+            let description = "Nhóm vật liệu đang sử dụng, không được xóa";
             this.notifi(type, message, description);
           }
         })
