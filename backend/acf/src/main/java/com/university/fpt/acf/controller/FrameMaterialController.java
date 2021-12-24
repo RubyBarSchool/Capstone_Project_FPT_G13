@@ -33,9 +33,9 @@ public class FrameMaterialController {
         try {
             checkAdd = frameService.addFrame(addForm);
             if(checkAdd==true){
-                message="Thêm thành công!";
+                message="Thêm thành công";
             }else{
-                message="Thêm không thành công!";
+                message="Khung đã tồn tại";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
@@ -62,9 +62,9 @@ public class FrameMaterialController {
             list = frameService.searchFrame(searchForm);
             responseCommon.setData(list);
             total=frameService.totalSearch(searchForm);
-            message = "Thành công!";
+            message = "Thành công";
             if(total==0){
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -91,9 +91,9 @@ public class FrameMaterialController {
             list = frameService.searchAllFrame(searchForm);
             responseCommon.setData(list);
             total=frameService.totalsearchAllFrame(searchForm);
-            message = "Thành công!";
+            message = "Thành công";
             if(total==0){
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -118,9 +118,9 @@ public class FrameMaterialController {
         try {
             checkAdd = frameService.deleteFrame(id);
             if(checkAdd==true){
-                message="Xóa thành công!";
+                message="Xóa thành công";
             }else{
-                message="Xóa không thành công!";
+                message="Xóa không thành công";
             }
             responseCommon.setMessage(message);
             responseCommon.setData(checkAdd);
@@ -147,9 +147,9 @@ public class FrameMaterialController {
             list = frameService.getFrameCoverSheetToInsert();
             responseCommon.setData(list);
             total=list.size();
-            message = "Thành công!";
+            message = "Thành công";
             if(total==0){
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());
@@ -176,9 +176,9 @@ public class FrameMaterialController {
             list = frameService.getFrameMaterialToInsert();
             responseCommon.setData(list);
             total=list.size();
-            message = "Thành công!";
+            message = "Thành công";
             if(total==0){
-                message = "Không tìm thấy!";
+                message = "Không tìm thấy";
             }
             responseCommon.setTotal(total);
             responseCommon.setStatus(HttpStatus.OK.value());

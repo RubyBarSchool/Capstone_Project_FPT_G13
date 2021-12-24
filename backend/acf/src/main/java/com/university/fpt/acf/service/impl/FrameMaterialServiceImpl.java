@@ -43,7 +43,7 @@ public class FrameMaterialServiceImpl implements FrameMaterialService {
         try {
             Long id = repository.getIdByLengthWith(addForm.getWidth(), addForm.getLength());
             if(id!=null){
-                throw new RuntimeException("Đã tồn tại!");
+                return  check;
             }
             FrameMaterial frame = new FrameMaterial();
             frame.setFrameLength(addForm.getLength());
