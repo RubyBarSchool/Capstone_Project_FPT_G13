@@ -20,7 +20,7 @@ public interface UnitMeasureRepository extends JpaRepository<UnitMeasure,Long> {
     @Query("select u from UnitMeasure  u where  u.id =:id and u.deleted=false ")
     UnitMeasure getUnitByID(@Param("id") Long id);
 
-    @Query("select new com.university.fpt.acf.vo.UnitMeasureVO(u.id,u.name) from UnitMeasure u where u.deleted=false ")
+    @Query("select new com.university.fpt.acf.vo.UnitMeasureVO(u.id,u.name) from UnitMeasure u where u.deleted = false ")
     List<UnitMeasureVO> getAllUnit();
     @Query("SELECT new  com.university.fpt.acf.vo.UnitMeasureVO(h.id,h.name) from UnitMeasure h left join PriceMaterial p inner join p.material m where m.checkMaterial=true and m.deleted =false and  p.unitMeasure.id is null and h.deleted=false ")
     List<UnitMeasureVO> getUnitsMaterialToInsert();
