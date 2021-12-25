@@ -43,6 +43,7 @@
             type="primary"
             @click="showModalAddF"
             :style="{ 'margin-left': '5px' }"
+            :loading="loadingAdd"
           >
             <font-awesome-icon
               :icon="['fas', 'file-signature']"
@@ -482,9 +483,20 @@ export default {
     deleteProductionOrder(record) {
       contactMoneyService
         .deleteContactMoney(record.id)
-        .then(() => {
+        .then((response) => {
           this.showModalView = false;
           this.beforeSearch();
+          if (!response.data.data) {
+            let type = "success";
+            let message = "Xóa";
+            let description = "Xóa lịch sử tạm ứng thành công";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Thêm mới";
+            let description = "Xóa lịch sử tạm ứng không thành công";
+            this.notifi(type, message, description);
+          }
         })
         .catch((e) => {
           console.log(e);
@@ -526,13 +538,28 @@ export default {
       this.loadingAdd = true;
       contactMoneyService
         .addContactMoney(this.dataSubmit)
-        .then(() => {
+        .then((response) => {
           this.beforeSearch();
+          if (!response.data.data) {
+            let type = "success";
+            let message = "Thêm mới";
+            let description = "Thêm tạm ứng tiền hợp đồng mới thành công";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Thêm mới";
+            let description = "Thêm tạm ứng tiền hợp đồng mới không thành công";
+            this.notifi(type, message, description);
+          }
           this.showModalAdd = false;
           this.loadingAdd = false;
         })
         .catch((e) => {
           console.log(e);
+          let type = "error";
+          let message = "Thêm tạm ứng tiền hợp đồng mới";
+          let description = "Thêm tạm ứng tiền hợp đồng mới không thành công";
+          this.notifi(type, message, description);
           this.showModalAdd = false;
           this.loadingAdd = false;
         });
@@ -610,6 +637,12 @@ export default {
       this.dataSearch.total = 0;
       this.pagination.current = 1;
       this.search();
+    },
+    notifi(type, message, description) {
+      this.$notification[type]({
+        message: message,
+        description: description,
+      });
     },
   },
 };
