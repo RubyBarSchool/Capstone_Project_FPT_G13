@@ -8,15 +8,16 @@
           placeholder="Họ và tên"
           :style="{ width: '150px', 'margin-right': '5px' }"
           v-model="dataSearch.name"
-           @pressEnter="search"
+          @pressEnter="search"
         />
         <a-select
           placeholder="Chức vụ"
+          mode="multiple"
           :filter-option="false"
           @change="search"
           @search="fetchPosition"
           :style="{ width: '150px', 'margin-right': '5px' }"
-          v-model="dataSearch.idPosition"
+          v-model="dataSearch.idPositons"
         >
           <a-select-option
             v-for="(position, index) in dataPositions"
@@ -156,7 +157,7 @@ export default {
           fixed: "left",
         },
         {
-          title: "Tháng",
+          title: "Ngày",
           dataIndex: "date",
           key: "date",
           width: 150,
