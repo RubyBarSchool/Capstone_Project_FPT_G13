@@ -30,8 +30,8 @@ public class EmployeeCustomRepositoryImpl extends CommonRepository implements Em
 
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append(" select new  com.university.fpt.acf.vo.GetAllEmployeeVO(e.id,e.fullName) " +
-                " from Employee e where e.deleted = false ");
+        sql.append(" select new  com.university.fpt.acf.vo.GetAllEmployeeVO(e.id,a.username) " +
+                " from Account a inner  join a.employee e where a.deleted = false and e.deleted = false ");
 
         if (listID != null && listID.size() != 0) {
             sql.append(" and e.id NOT IN :listId ");
@@ -82,7 +82,7 @@ public class EmployeeCustomRepositoryImpl extends CommonRepository implements Em
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
         sql.append(" select e.id " +
-                " from Employee e where e.deleted = false ");
+                " from Account a inner  join a.employee e where e.deleted = false ");
 
         if (listID != null && listID.size() != 0) {
             sql.append(" and e.id NOT IN :listId ");

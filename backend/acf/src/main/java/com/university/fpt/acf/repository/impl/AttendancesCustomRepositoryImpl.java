@@ -18,9 +18,9 @@ public class AttendancesCustomRepositoryImpl extends CommonRepository implements
     public List<AttendanceVO> getAllAttendance(AttendanceFrom attendanceFrom) {
         StringBuilder sqlAcc = new StringBuilder("");
         Map<String, Object> paramsAcc = new HashMap<>();
-        sqlAcc.append(" select new com.university.fpt.acf.vo.AttendanceVO(t.id,t.date,e.id,e.fullName,t.type,t.note) from TimeKeep t inner join t.employee e where 1=1");
+        sqlAcc.append(" select new com.university.fpt.acf.vo.AttendanceVO(t.id,t.date,e.id,a.username,t.type,t.note) from Account a inner join a.employee e inner join e.timeKeeps t where 1=1");
         if (attendanceFrom.getName() != null && !attendanceFrom.getName().isEmpty()) {
-            sqlAcc.append(" and LOWER(e.fullName) like :name ");
+            sqlAcc.append(" and LOWER(a.username) like :name ");
             paramsAcc.put("name", "%" + attendanceFrom.getName().toLowerCase() + "%");
         }
         if (attendanceFrom.getDate() != null && !attendanceFrom.getDate().isEmpty()) {
@@ -76,9 +76,9 @@ public class AttendancesCustomRepositoryImpl extends CommonRepository implements
     public int getTotalAttendances(AttendanceFrom attendanceFrom) {
         StringBuilder sqlAcc = new StringBuilder("");
         Map<String, Object> paramsAcc = new HashMap<>();
-        sqlAcc.append(" select COUNT(*) from TimeKeep t inner join t.employee e where t.deleted = false ");
+        sqlAcc.append(" select COUNT(*) from Account a inner join a.employee e inner join e.timeKeeps t where t.deleted = false ");
         if (attendanceFrom.getName() != null && !attendanceFrom.getName().isEmpty()) {
-            sqlAcc.append(" and LOWER(e.fullName) like :name ");
+            sqlAcc.append(" and LOWER(a.username) like :name ");
             paramsAcc.put("name", "%" + attendanceFrom.getName().toLowerCase() + "%");
         }
         if (attendanceFrom.getDate() != null && !attendanceFrom.getDate().isEmpty()) {

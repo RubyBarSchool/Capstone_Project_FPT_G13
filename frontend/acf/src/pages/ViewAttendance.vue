@@ -12,7 +12,7 @@
           <!-- menu trên -->
           <a-input
             v-model="dataSearch.name"
-            placeholder="Tên nhân viên"
+            placeholder="Tài khoản"
             style="width: 15%"
             :style="{ 'margin-right': '5px' }"
             @pressEnter="search"
@@ -262,7 +262,7 @@ export default {
           fixed: "left",
         },
         {
-          title: "Họ Và Tên",
+          title: "Tài khoản",
           dataIndex: "nameEmpl",
           key: "nameEmpl",
           width: 150,
