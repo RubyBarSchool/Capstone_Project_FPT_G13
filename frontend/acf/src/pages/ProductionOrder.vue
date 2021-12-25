@@ -28,7 +28,7 @@
             v-model="dataSearch.nameProduction"
             placeholder="Tên lệnh sản xuất"
             :style="{ 'margin-right': '10px', width: '15%' }"
-             @pressEnter="beforeSearch"
+            @pressEnter="beforeSearch"
           />
           Ngày hoàn thành:
           <a-range-picker
@@ -1068,10 +1068,17 @@ export default {
         .then((response) => {
           this.showModalAdd = false;
           this.beforeSearch();
-          let type = "success";
-          let message = "Thêm lệnh sản xuất mới thành công";
-          let description = response.data.message;
-          this.notifi(type, message, description);
+          if (response.data.data) {
+            let type = "success";
+            let message = "Thêm lệnh sản xuất mới";
+            let description = response.data.message;
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Thêm lệnh sản xuất mới";
+            let description = "Thêm lệnh sản xuất mới không thành công";
+            this.notifi(type, message, description);
+          }
           this.showModalEdit = false;
           this.loadingAdd = false;
         })
@@ -1139,11 +1146,26 @@ export default {
     },
     deleteProductionOrder(record) {
       ProductionOrderService.deleteProductOrder(record.id)
-        .then(() => {
+        .then((response) => {
           this.beforeSearch();
+          if (response.data.data) {
+            let type = "success";
+            let message = "Xóa lệnh sản xuất";
+            let description = "Xóa lệnh sản xuất thành công";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Xóa lệnh sản xuất";
+            let description = "Xóa lệnh sản xuất không thành công";
+            this.notifi(type, message, description);
+          }
         })
         .catch((e) => {
           console.log(e);
+          let type = "error";
+          let message = "Xóa lệnh sản xuất";
+          let description = "Xóa lệnh sản xuất không thành công";
+          this.notifi(type, message, description);
         });
     },
     showModelView(record) {
