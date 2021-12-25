@@ -222,7 +222,7 @@ export default {
         {
           path: "/",
           icon: "file-contract",
-          name: "Quản lý Hợp đồng",
+          name: "Quản lý hợp đồng",
           menu: [
             {
               path: "/contact",

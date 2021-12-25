@@ -643,7 +643,7 @@ export default {
           fixed: "left",
         },
         {
-          title: "Tên vật liệu",
+          title: "Mã vật liệu",
           dataIndex: "nameMaterial",
           key: "nameMaterial",
           width: 150,
