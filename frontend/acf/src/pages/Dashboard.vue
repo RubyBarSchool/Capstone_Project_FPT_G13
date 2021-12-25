@@ -99,6 +99,28 @@
           class="summary-box-graph"
         />
       </div>
+      <!-- <div class="card header">header</div> -->
+      <div class="card list">
+        <a-table
+          :columns="columns"
+          :data-source="dataSourceTable"
+          :pagination="false"
+          :rowKey="
+            (record, index) => {
+              return index;
+            }
+          "
+        >
+        </a-table>
+      </div>
+      <div class="card chart">
+        <apexchart
+          type="bar"
+          height="350"
+          :options="chartOptions"
+          :series="series"
+        ></apexchart>
+      </div>
     </div>
     <div v-if="checkshow('EMPLOYEE')" class="grid grid-responsive">
       Employee
@@ -162,28 +184,6 @@
           alt="sapphire"
           class="summary-box-graph"
         />
-      </div>
-      <!-- <div class="card header">header</div> -->
-      <div class="card list">
-        <a-table
-          :columns="columns"
-          :data-source="dataSourceTable"
-          :pagination="false"
-          :rowKey="
-            (record, index) => {
-              return index;
-            }
-          "
-        >
-        </a-table>
-      </div>
-      <div class="card chart">
-        <apexchart
-          type="bar"
-          height="350"
-          :options="chartOptions"
-          :series="series"
-        ></apexchart>
       </div>
     </div>
   </div>
@@ -277,11 +277,17 @@ export default {
   },
   created() {
     this.connectWebsoket();
-    this.getNumberEmployeeHaveNotAccount();
-    this.countDashboardAdmin();
-    this.countDashboardEmployee();
-    this.reportContact();
-    this.topEmployee();
+    if (this.checkshow("SP_ADMIN")) {
+      this.getNumberEmployeeHaveNotAccount();
+    }
+    if (this.checkshow("ADMIN")) {
+      this.countDashboardAdmin();
+      this.reportContact();
+      this.topEmployee();
+    }
+    if (this.checkshow("EMPLOYEE")) {
+      this.countDashboardEmployee();
+    }
   },
   destroyed() {
     this.disconnect();
