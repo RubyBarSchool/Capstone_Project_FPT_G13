@@ -498,7 +498,7 @@ export default {
           title: "Nhân viên được khen thưởng",
           dataIndex: "listIdEmployee",
           key: "listIdEmployee",
-          width: 150,
+          width: 180,
           scopedSlots: { customRender: "listIdEmployee" },
         },
         {
@@ -798,16 +798,16 @@ export default {
         .then((response) => {
           if (response.data.data) {
             let type = "success";
-            let message = "Xóa";
+            let message = "Xóa đơn khen thưởng";
             let description =
-              "Xóa khen thưởng " + this.dataAdd.title + " thành công";
+              "Xóa đơn khen thưởng " + this.dataAdd.title + " thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           } else {
             let type = "error";
-            let message = "Xóa";
+            let message = "Xóa đơn khen thưởng";
             let description =
-              "Xóa khen thưởng " + this.dataAdd.title + " không thành công";
+              "Xóa đơn khen thưởng " + this.dataAdd.title + " không thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           }
