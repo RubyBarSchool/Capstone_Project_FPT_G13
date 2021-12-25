@@ -552,7 +552,7 @@ export default {
           }
         }
 
-        if (this.router[i] && this.router[i].name == "Quản lý Hợp đồng") {
+        if (this.router[i] && this.router[i].name == "Quản lý hợp đồng") {
           if (!users.roles.includes("ADMIN")) {
             this.router.splice(i, 1);
           }
