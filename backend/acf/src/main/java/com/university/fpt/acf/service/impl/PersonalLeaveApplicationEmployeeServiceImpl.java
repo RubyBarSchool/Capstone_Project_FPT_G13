@@ -115,6 +115,21 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
             personalLeaveApplicationAdminRepository.save(p);
             check=true;
 
+            List<String> accountAdmin = accountManagerRepository.getUsernameAdmin();
+            for(String s : accountAdmin){
+                if(s.equals(accountSercurity.getUserName())){
+                    continue;
+                }
+                Notification notification = new Notification();
+                notification.setType("success");
+                notification.setUsername(s);
+                notification.setUsernameCreate(accountSercurity.getUserName());
+                notification.setContent(" chỉnh sửa một đơn xin nghỉ");
+                notification.setPath("/acceptleaveapplication");
+                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+            }
+
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }
@@ -138,6 +153,20 @@ public class PersonalLeaveApplicationEmployeeServiceImpl implements PersonalLeav
             personalLeaveApplicationAdminRepository.save(p);
             check=true;
 
+            List<String> accountAdmin = accountManagerRepository.getUsernameAdmin();
+            for(String s : accountAdmin){
+                if(s.equals(accountSercurity.getUserName())){
+                    continue;
+                }
+                Notification notification = new Notification();
+                notification.setType("success");
+                notification.setUsername(s);
+                notification.setUsernameCreate(accountSercurity.getUserName());
+                notification.setContent(" xóa một đơn xin nghỉ");
+                notification.setPath("/acceptleaveapplication");
+                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+            }
         }catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }
