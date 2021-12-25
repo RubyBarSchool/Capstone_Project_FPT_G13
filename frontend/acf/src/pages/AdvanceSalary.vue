@@ -613,7 +613,7 @@ export default {
             let type = "success";
             let message = "Viết đơn";
             let description =
-              "Thêm mới đơn " + this.dataAdd.title + " thành công !!";
+              "Thêm mới đơn " + this.dataAdd.title + " thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
@@ -778,14 +778,14 @@ export default {
         .then((response) => {
           if (response.data.data) {
             let type = "success";
-            let message = "Xóa";
-            let description = "Xóa đơn thành công";
+            let message = "Xóa đơn ứng lương";
+            let description = "Xóa đơn ứng lương thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           } else {
             let type = "error";
-            let message = "Xóa";
-            let description = "Xóa đơn không thành công :(";
+            let message = "Xóa đơn ứng lương";
+            let description = "Xóa đơn ứng lương không thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           }
