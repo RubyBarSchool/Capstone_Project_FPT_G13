@@ -164,7 +164,11 @@ public class ProductServiceImpl implements ProductService {
             String[] number = contact.getNumberFinish().split("/");
             Integer numberDone = Integer.parseInt(number[0]);
             Integer numberTotal = Integer.parseInt(number[1])-1;
-            List<String> listUsername = productionOrderRepository.getUsernameByID(product.getProductionOrder().getId());
+            List<String> listUsername = new ArrayList<>();
+
+            if(product.getProductionOrder() != null ){
+                listUsername = productionOrderRepository.getUsernameByID(product.getProductionOrder().getId());
+            }
             if(numberTotal == 0){
                 productMaterialRepository.deleteByIdProduct(id);
                 productionOrderRepository.deleteProductionOrderByIdProduct(id);
