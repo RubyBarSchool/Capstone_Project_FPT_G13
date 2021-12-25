@@ -356,7 +356,7 @@
                 }
               "
               :pagination="false"
-              :scroll="{ x: 1000 }"
+              :scroll="{ x: 1000, y: 500 }"
               :row-selection="{
                 selectedRowKeys: selectedRowKeys,
                 selectedRows: selectedRows,

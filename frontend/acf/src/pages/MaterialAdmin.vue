@@ -44,7 +44,7 @@
             mode="multiple"
             @change="submitSearch"
             v-model="dataSearch.listUnitId"
-            :style="{ width: '100px', 'margin-right': '5px' }"
+            :style="{ width: '250px', 'margin-right': '5px' }"
           >
             <a-select-option
               v-for="(unit, index) in dataUnits"
