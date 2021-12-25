@@ -642,6 +642,13 @@ export default {
       },
       columns: [
         {
+          title: "STT",
+          width: 100,
+          dataIndex: "id",
+          key: "id",
+          fixed: "left",
+        },
+        {
           title: "Ảnh",
           dataIndex: "image",
           key: "image",
@@ -1041,7 +1048,10 @@ export default {
                 } else {
                   let type = "error";
                   let message = "Thêm nhân viên mới";
-                  let description = "Thêm nhân viên " + this.dataAdd.fullName + " không thành công";
+                  let description =
+                    "Thêm nhân viên " +
+                    this.dataAdd.fullName +
+                    " không thành công";
                   this.notifi(type, message, description);
                   userService.deleteImage(this.dataAdd.image);
                 }
@@ -1074,7 +1084,7 @@ export default {
               let description =
                 "Thêm nhân viên mới " +
                 this.dataAdd.fullName +
-                " không thành công"
+                " không thành công";
               this.notifi(type, message, description);
             }
             this.visibleAdd = false;
