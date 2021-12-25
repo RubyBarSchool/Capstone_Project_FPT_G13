@@ -595,7 +595,7 @@ export default {
           width: 150,
         },
         {
-          title: "Thống số",
+          title: "Thông số",
           dataIndex: "frame",
           key: "frame",
           width: 150,
@@ -649,7 +649,7 @@ export default {
           width: 150,
         },
         {
-          title: "Thống số",
+          title: "Thông số",
           dataIndex: "frame",
           key: "frame",
           width: 150,

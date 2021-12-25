@@ -34,7 +34,7 @@
             mode="multiple"
             v-model="dataSearch.listGroupID"
             @change="submitSearch"
-            :style="{ width: '150px', 'margin-right': '5px' }"
+            :style="{ width: '180px', 'margin-right': '5px' }"
           >
             <a-select-option
               v-for="(cover, index) in listGroupCoverPlate"
@@ -49,7 +49,7 @@
             mode="multiple"
             v-model="dataSearch.listUnitId"
             @change="submitSearch"
-            :style="{ width: '150px', 'margin-right': '5px' }"
+            :style="{ width: '100px', 'margin-right': '5px' }"
           >
             <a-select-option
               v-for="(unit, index) in listUnits"
@@ -64,7 +64,7 @@
             mode="multiple"
             v-model="dataSearch.listIdCompany"
             @change="submitSearch"
-            style="width: 250px"
+            style="width: 150px"
           >
             <a-select-option
               v-for="(company, index) in listCompanys"

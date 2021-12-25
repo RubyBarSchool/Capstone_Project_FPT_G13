@@ -29,7 +29,7 @@
             :filter-option="false"
             @search="fetchGroupMaterial"
             @change="submitSearch"
-            :style="{ width: '150px', 'margin-right': '5px' }"
+            :style="{ width: '180px', 'margin-right': '5px' }"
           >
             <a-select-option
               v-for="(group, index) in dataGroupMaterials"
@@ -44,7 +44,7 @@
             mode="multiple"
             @change="submitSearch"
             v-model="dataSearch.listUnitId"
-            :style="{ width: '150px', 'margin-right': '5px' }"
+            :style="{ width: '100px', 'margin-right': '5px' }"
           >
             <a-select-option
               v-for="(unit, index) in dataUnits"
@@ -59,7 +59,7 @@
             mode="multiple"
             @change="submitSearch"
             v-model="dataSearch.listIdCompany"
-            style="width: 250px"
+            style="width: 150px"
           >
             <a-select-option
               v-for="(company, index) in dataCompanys"
