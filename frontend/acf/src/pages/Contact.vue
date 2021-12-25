@@ -680,7 +680,7 @@ export default {
     submitSearch() {
       this.dataSearch.total = 0;
       this.dataSearch.name = this.dataSearch.name.trim();
-      this.dataSearch.pageIndex = 1;  
+      this.dataSearch.pageIndex = 1;
       contactService
         .searchCompany(this.dataSearch)
         .then((response) => {
@@ -802,7 +802,7 @@ export default {
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Thêm mới";
+            let message = "Thêm mới không thành công";
             let description = response.data.message;
             this.notifi(type, message, description);
           }
@@ -811,6 +811,10 @@ export default {
           this.submitSearch();
         })
         .catch((e) => {
+          let type = "error";
+          let message = "Thêm mới không thành công";
+          let description = "File excel không hợp lệ";
+          this.notifi(type, message, description);
           this.loadingAdd = false;
           console.log(e);
         });
