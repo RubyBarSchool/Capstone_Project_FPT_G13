@@ -875,8 +875,8 @@ export default {
       this.dataSubmit.name = record.name;
       this.dataSubmit.idContact = record.idContact;
       this.dataSubmit.idProduct = record.idProduct;
-      this.dataSubmit.dateStart = record.dateStart;
-      this.dataSubmit.dateEnd = record.dateEnd;
+      this.dataSubmit.dateStart = moment(record.dateStart);
+      this.dataSubmit.dateEnd = moment(record.dateEnd);
 
       this.nameConatctEdit = record.nameContact;
       this.nameProductEdit = record.nameProduct;

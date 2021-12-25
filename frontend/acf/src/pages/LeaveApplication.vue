@@ -837,13 +837,13 @@ export default {
     },
     showModelView(record) {
       this.dataPersonalLeaveEmployeeDetail.title = record.title;
-      this.dataPersonalLeaveEmployeeDetail.dateCreate = record.dateCreate;
+      this.dataPersonalLeaveEmployeeDetail.dateCreate = moment(record.dateCreate);
       this.dataPersonalLeaveEmployeeDetail.content = record.content;
-      this.dataPersonalLeaveEmployeeDetail.dateStart = record.dateStart;
-      this.dataPersonalLeaveEmployeeDetail.dateEnd = record.dateEnd;
+      this.dataPersonalLeaveEmployeeDetail.dateStart = moment(record.dateStart);
+      this.dataPersonalLeaveEmployeeDetail.dateEnd = moment(record.dateEnd);
       this.dataPersonalLeaveEmployeeDetail.id = record.idApplication;
       this.dataPersonalLeaveEmployeeDetail.comment = record.comment;
-      this.dataPersonalLeaveEmployeeDetail.dateAccept = record.dateAccept;
+      this.dataPersonalLeaveEmployeeDetail.dateAccept = record.dateAccept ?  moment(record.dateAccept) : null;
       this.dataPersonalLeaveEmployeeDetail.statusAccept = record.statusAccept;
       this.dataPersonalLeaveEmployeeDetail.idEmployeeAccess =
         record.idEmployeeAccess;
