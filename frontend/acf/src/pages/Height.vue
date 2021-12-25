@@ -192,12 +192,12 @@ export default {
           if (response.data.data) {
             let type = "success";
             let message = "Xóa chiều cao";
-            let description = "Xóa đơn vị thành công";
+            let description = "Xóa chiều cao thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
             let message = "Xóa chiều cao";
-            let description = "Đơn vị đang sử dụng, không được xóa";
+            let description = "Chiều cao đang sử dụng, không được xóa";
             this.notifi(type, message, description);
           }
         })
