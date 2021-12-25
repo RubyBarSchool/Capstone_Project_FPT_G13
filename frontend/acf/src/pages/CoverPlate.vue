@@ -1928,8 +1928,8 @@ export default {
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Xóa";
-            let description = "Account đang đăng nhập không được xóa";
+            let message = "Xóa tấm phủ";
+            let description = "Xóa tấm phủ không thành công";
             this.notifi(type, message, description);
           }
         })
