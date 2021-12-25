@@ -213,7 +213,7 @@ public class ProductionOrderController {
             check = productionOrderService.deleteProductionOrder(idProduction);
             message = "Xóa lệnh sản xuất thành công";
 
-            if (check) {
+            if (!check) {
                 message = "Xóa lệnh sản xuất không thành công";
                 total = 0;
             }
