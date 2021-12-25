@@ -180,7 +180,7 @@
                       title="Bạn có chắc chắn muốn xóa không?"
                       ok-text="Đồng ý"
                       cancel-text="Hủy"
-                      @confirm="deleteMaterial(record.id)"
+                      @confirm="deleteMaterial(record.idParameter)"
                     >
                       <a-button id="delete">
                         <font-awesome-icon :icon="['fas', 'trash']" />

@@ -183,7 +183,7 @@
                     <a-popconfirm
                       v-if="dataSourceTable.length"
                       title="Bạn có chắc chắn muốn xóa không?"
-                      @confirm="deleteCoverSheet(record.id)"
+                      @confirm="deleteCoverSheet(record.idParameter)"
                       ok-text="Đồng ý"
                       cancel-text="Đóng"
                     >
