@@ -10,6 +10,8 @@ import java.util.List;
 public interface EmployeeService  {
     List<SearchEmployeeVO> searchEmployee(SearchAllEmployeeForm searchAllEmployeeForm);
     int getTotalEmployee(SearchAllEmployeeForm searchAllEmployeeForm);
+    List<SearchEmployeeVO> searchEmployeeAdd(SearchAllEmployeeForm searchAllEmployeeForm);
+    int getTotalEmployeeAdd(SearchAllEmployeeForm searchAllEmployeeForm);
     List<GetAllEmployeeVO> getFullNameEmployeeNotAccount(SearchEmployeeForm searchEmployeeForm);
     List<GetAllEmployeeVO> getAllEmployeeNotAttendance(EmployeeNotAttendanceForm employeeNotAttendanceForm);
     int getTotalEmployeeNotAttendance(EmployeeNotAttendanceForm employeeNotAttendanceForm);

@@ -48,6 +48,33 @@ public class EmployeeController {
             return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
         }
     }
+
+    @PostMapping("/searchadd")
+    public ResponseEntity<ResponseCommon> searchEmployeeAdd(@RequestBody SearchAllEmployeeForm searchAllEmployeeForm){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message = "";
+        int total;
+        List<SearchEmployeeVO> getAllEmployee = new ArrayList<>();
+        try {
+            getAllEmployee = employeeService.searchEmployeeAdd(searchAllEmployeeForm);
+            responseCommon.setData(getAllEmployee);
+            message = "Search thành công";
+            if(getAllEmployee.isEmpty()){
+                message = "Không tìm thấy";
+            }
+            total = employeeService.getTotalEmployeeAdd(searchAllEmployeeForm);
+            responseCommon.setTotal(total);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        } catch (Exception e) {
+            message = e.getMessage();
+            responseCommon.setData(getAllEmployee);
+            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setMessage(message);
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+        }
+    }
     //************************************
     // Get all fullname of employee that employee don't account
     //************************************

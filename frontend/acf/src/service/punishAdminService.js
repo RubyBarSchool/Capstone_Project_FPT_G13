@@ -5,7 +5,7 @@ class punishAdminService {
         return http.post("admin/punish/search", form);
     }
     getAllEmployee(form) {
-        return http.post("/admin/employee/search", form);
+        return http.post("/admin/employee/searchadd", form);
     }
     addPunishAdmin(form) {
         return http.post(`/admin/punish/add`, form);

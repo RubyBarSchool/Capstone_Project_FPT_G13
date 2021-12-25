@@ -58,6 +58,31 @@ public class EmployeeServiceImpl implements EmployeeService {
         return size;
     }
 
+    @Override
+    public List<SearchEmployeeVO> searchEmployeeAdd(SearchAllEmployeeForm searchAllEmployeeForm) {
+        List<SearchEmployeeVO> getAlEmployeeVOS = new ArrayList<>();
+        try {
+            getAlEmployeeVOS = employeeCustomRepository.searchEmployeeAdd(searchAllEmployeeForm);
+        } catch (Exception e) {
+            throw new RuntimeException("Error position repository " + e.getMessage());
+        }
+        return getAlEmployeeVOS;
+    }
+
+
+    @Override
+    public int getTotalEmployeeAdd(SearchAllEmployeeForm searchAllEmployeeForm) {
+        int size = 0;
+        try {
+            size = employeeCustomRepository.getTotalEmployeeAdd(searchAllEmployeeForm);
+        } catch (Exception e) {
+            throw new RuntimeException("Could not initialize folder for upload!");
+        }
+        return size;
+    }
+
+
+
     //************************************
     //GEt fullname employee that not account
     //************************************

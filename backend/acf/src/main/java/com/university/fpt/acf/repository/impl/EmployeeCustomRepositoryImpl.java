@@ -99,7 +99,7 @@ public class EmployeeCustomRepositoryImpl extends CommonRepository implements Em
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
         sql.append(" SELECT new com.university.fpt.acf.vo.SearchEmployeeVO(e.id,img.name,e.fullName,e.gender,e.dob,e.email,p.id,p.name,e.deleted) " +
-                "FROM Employee e left join e.image img left join e.position p where 1=1 ");
+                "FROM Employee e left join e.image img left join e.position p where  1=1 ");
         if (searchAllEmployeeForm.getName() != null && !searchAllEmployeeForm.getName().isEmpty()) {
             sql.append(" and LOWER(e.fullName) like :name");
             params.put("name", "%" + searchAllEmployeeForm.getName().toLowerCase() + "%");
@@ -125,6 +125,54 @@ public class EmployeeCustomRepositoryImpl extends CommonRepository implements Em
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
         sql.append(" SELECT COUNT(*) FROM Employee e left join e.position p where 1=1 ");
+        if (searchAllEmployeeForm.getName() != null && !searchAllEmployeeForm.getName().isEmpty()) {
+            sql.append(" and LOWER(e.fullName) like :name");
+            params.put("name", "%" + searchAllEmployeeForm.getName().toLowerCase() + "%");
+        }
+        if (searchAllEmployeeForm.getIdPosition() != null) {
+            sql.append(" and p.id = :id ");
+            params.put("id", searchAllEmployeeForm.getIdPosition());
+        }
+        if (searchAllEmployeeForm.getStatusDelete() != null) {
+            sql.append(" and  e.deleted = :delete");
+            params.put("delete", searchAllEmployeeForm.getStatusDelete());
+        }
+        sql.append(" ORDER by e.id desc");
+        TypedQuery<Long> query = super.createQuery(sql.toString(), params, Long.class);
+        return query.getSingleResult().intValue();
+    }
+
+    @Override
+    public List<SearchEmployeeVO> searchEmployeeAdd(SearchAllEmployeeForm searchAllEmployeeForm) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append(" SELECT new com.university.fpt.acf.vo.SearchEmployeeVO(e.id,img.name,e.fullName,e.gender,e.dob,e.email,p.id,p.name,e.deleted) " +
+                "FROM Employee e left join e.image img left join e.position p where  e.deleted = false ");
+        if (searchAllEmployeeForm.getName() != null && !searchAllEmployeeForm.getName().isEmpty()) {
+            sql.append(" and LOWER(e.fullName) like :name");
+            params.put("name", "%" + searchAllEmployeeForm.getName().toLowerCase() + "%");
+        }
+        if (searchAllEmployeeForm.getIdPosition() != null) {
+            sql.append(" and p.id = :id ");
+            params.put("id", searchAllEmployeeForm.getIdPosition());
+        }
+        if (searchAllEmployeeForm.getStatusDelete() != null) {
+            sql.append(" and  e.deleted = :delete");
+            params.put("delete", searchAllEmployeeForm.getStatusDelete());
+        }
+        sql.append(" ORDER by e.id desc");
+        TypedQuery<SearchEmployeeVO> query = super.createQuery(sql.toString(), params, SearchEmployeeVO.class);
+        query.setFirstResult((searchAllEmployeeForm.getPageIndex() - 1) * searchAllEmployeeForm.getPageSize());
+        query.setMaxResults(searchAllEmployeeForm.getPageSize());
+        List<SearchEmployeeVO> positionList = query.getResultList();
+        return positionList;
+    }
+
+    @Override
+    public int getTotalEmployeeAdd(SearchAllEmployeeForm searchAllEmployeeForm) {
+        StringBuilder sql = new StringBuilder("");
+        Map<String, Object> params = new HashMap<>();
+        sql.append(" SELECT COUNT(*) FROM Employee e left join e.position p where e.deleted = false ");
         if (searchAllEmployeeForm.getName() != null && !searchAllEmployeeForm.getName().isEmpty()) {
             sql.append(" and LOWER(e.fullName) like :name");
             params.put("name", "%" + searchAllEmployeeForm.getName().toLowerCase() + "%");
