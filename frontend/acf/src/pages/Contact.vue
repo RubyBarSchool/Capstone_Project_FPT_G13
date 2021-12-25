@@ -848,7 +848,7 @@ export default {
       this.visibleEdit = false;
     },
     showModalEdit(name, id, time, idCompany) {
-      this.dataEdit.dateFinish = time;
+      this.dataEdit.dateFinish = moment(time);
       this.dataEdit.name = name;
       this.dataEdit.id = id;
       this.dataEditCompany.id = idCompany;
