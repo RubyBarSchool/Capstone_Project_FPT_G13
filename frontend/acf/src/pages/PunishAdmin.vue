@@ -210,7 +210,7 @@
               <br />
               <a-row type="flex">
                 <a-col flex="120px">
-                  <span style="color: red">*</span> Số tiền:
+                  <span style="color: red">*</span> Số tiền/người:
                 </a-col>
                 <a-col flex="auto">
                   <a-input-number
@@ -320,7 +320,7 @@
                   {{ checkInputReason.message }}
                 </div>
               </a-form-model-item>
-              <span style="color: red">*</span> Số tiền:
+              <span style="color: red">*</span> Số tiền/người:
               <a-form-model-item>
                 <a-input-number
                   v-model="dataEdit.money"

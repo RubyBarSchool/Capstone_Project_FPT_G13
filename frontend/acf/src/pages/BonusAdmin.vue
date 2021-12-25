@@ -206,7 +206,7 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Số tiền :</a-col
+                <span style="color: red">*</span> Số tiền/người:</a-col
               >
               <a-col flex="auto">
                 <a-input-number
@@ -334,7 +334,7 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Số tiền :</a-col
+                <span style="color: red">*</span> Số tiền/người:</a-col
               >
               <a-col flex="auto">
                 <a-input-number
