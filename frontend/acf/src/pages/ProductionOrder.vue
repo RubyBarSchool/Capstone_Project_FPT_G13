@@ -1053,6 +1053,13 @@ export default {
         this.checkEmployees.show = true;
         this.checkEmployees.message = "Bạn phải chọn nhân viên thực hiện";
       }
+      if (!this.checkDate()) {
+        check = false;
+        let type = "error";
+        let message = "Ngày hoàn thành";
+        let description = "Ngày hoàn thành phải lớn hơn ngày kết thúc";
+        this.notifi(type, message, description);
+      }
       if (check) {
         this.submitAddProductionOrder();
       }
@@ -1179,6 +1186,11 @@ export default {
         .catch((e) => {
           console.log(e);
         });
+    },
+    checkDate() {
+      var mStart = moment(this.dataSubmit.dateStart);
+      var mEnd = moment(this.dataSubmit.dateEnd);
+      return mStart.isBefore(mEnd);
     },
     openModalAdd() {
       this.showModalAdd = true;
