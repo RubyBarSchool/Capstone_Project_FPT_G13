@@ -31,6 +31,11 @@ public interface ProductionOrderRepository extends JpaRepository<ProductionOrder
     @Query("delete from ProductionOrder po where po.id = :id")
     void deleteProductionOrderById(@Param("id") Long id);
 
+    @Modifying
+    @Transactional
+    @Query("delete from ProductionOrder po where po.products.id = :id")
+    void deleteProductionOrderByIdProduct(@Param("id") Long id);
+
     @Query("select COUNT(po.id)  from ProductionOrder po where po.deleted = false  and po.status = -2")
     Integer getProducttionOrderConfirmAdmin();
 

@@ -3,10 +3,7 @@ package com.university.fpt.acf.entity;
 import com.university.fpt.acf.common.entity.EntityCommon;
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -21,7 +18,7 @@ public class ProductMaterial extends EntityCommon {
 
     private String priceAtCreateContact;
 
-    @ManyToOne
+    @ManyToOne(fetch =  FetchType.EAGER)
     @JoinColumn(name = "product_id")
     @ToString.Exclude
     @EqualsAndHashCode.Exclude

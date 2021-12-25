@@ -6,10 +6,7 @@ import com.university.fpt.acf.config.websocket.service.NotificationService;
 import com.university.fpt.acf.entity.*;
 import com.university.fpt.acf.form.AddMaterialInProductForm;
 import com.university.fpt.acf.form.AddProductForm;
-import com.university.fpt.acf.repository.AccountManagerRepository;
-import com.university.fpt.acf.repository.ContactRepository;
-import com.university.fpt.acf.repository.ProductMaterialRepository;
-import com.university.fpt.acf.repository.ProductRepository;
+import com.university.fpt.acf.repository.*;
 import com.university.fpt.acf.service.ProductService;
 import com.university.fpt.acf.vo.ProductVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +27,9 @@ public class ProductServiceImpl implements ProductService {
     private ProductMaterialRepository productMaterialRepository;
 
     @Autowired
+    private ProductionOrderRepository productionOrderRepository;
+
+    @Autowired
     private ContactRepository contactRepository;
 
     @Autowired
@@ -45,13 +45,17 @@ public class ProductServiceImpl implements ProductService {
     //************************************
     @Override
     public Boolean addProductInContact(AddProductForm addProductForm) {
+        List<String> listUsername = new ArrayList<>();
         AccountSercurity accountSercurity = new AccountSercurity();
         boolean check = false;
+        boolean checkUpdate = false;
         try{
             Product product = new Product();
             if(addProductForm.getIdProduct() != null){
-                product.setId(addProductForm.getIdProduct());
                 productMaterialRepository.deleteByIdProduct(product.getId());
+                product = productRepository.getProductByID(addProductForm.getIdProduct());
+                listUsername = productionOrderRepository.getUsernameByID(product.getProductionOrder().getId());
+                checkUpdate = true;
             }
             product.setCreated_by(accountSercurity.getUserName());
             product.setModified_by(accountSercurity.getUserName());
@@ -101,8 +105,42 @@ public class ProductServiceImpl implements ProductService {
                 notification.setType("success");
                 notification.setUsername(s);
                 notification.setUsernameCreate(accountSercurity.getUserName());
-                notification.setContent(" thêm/sửa sản phẩm trong hợp đồng ");
+                if(checkUpdate){
+                    notification.setContent("sửa sản phẩm trong hợp đồng ");
+                }else{
+                    notification.setContent("thêm sản phẩm trong hợp đồng ");
+                }
                 notification.setPath("/viewdetailcontact");
+                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+            }
+
+            if(checkUpdate){
+                for(String s : accountAdmin){
+                    if(s.equals(accountSercurity.getUserName())){
+                        continue;
+                    }
+                    Notification notification = new Notification();
+                    notification.setType("success");
+                    notification.setUsername(s);
+                    notification.setUsernameCreate(accountSercurity.getUserName());
+                    notification.setContent(" sửa sản phẩm trong hợp đồng ");
+                    notification.setPath("/productionorder");
+                    HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                    simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+                }
+            }
+
+            for(String s : listUsername){
+                if(s.equals(accountSercurity.getUserName())){
+                    continue;
+                }
+                Notification notification = new Notification();
+                notification.setType("success");
+                notification.setUsername(s);
+                notification.setUsernameCreate(accountSercurity.getUserName());
+                notification.setContent(" sửa một sản phẩm hợp đồng");
+                notification.setPath("/viewwork");
                 HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
                 simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
             }
@@ -126,17 +164,20 @@ public class ProductServiceImpl implements ProductService {
             String[] number = contact.getNumberFinish().split("/");
             Integer numberDone = Integer.parseInt(number[0]);
             Integer numberTotal = Integer.parseInt(number[1])-1;
+            List<String> listUsername = productionOrderRepository.getUsernameByID(product.getProductionOrder().getId());
             if(numberTotal == 0){
-                productMaterialRepository.deleteByIdProduct(product.getId());
-                productRepository.deleteProductInContact(product.getId());
+                productMaterialRepository.deleteByIdProduct(id);
+                productionOrderRepository.deleteProductionOrderByIdProduct(id);
+                productRepository.deleteProductInContact(id);
                 contactRepository.deleteContact(contact.getId());
             }else{
                 contact.setNumberFinish(numberDone+"/"+numberTotal);
                 contact.setModified_by(accountSercurity.getUserName());
                 contact.setModified_date(LocalDate.now());
                 contact = contactRepository.saveAndFlush(contact);
-                productMaterialRepository.deleteByIdProduct(product.getId());
-                productRepository.deleteProductInContact(product.getId());
+                productMaterialRepository.deleteByIdProduct(id);
+                productionOrderRepository.deleteProductionOrderByIdProduct(id);
+                productRepository.deleteProductInContact(id);
             }
             check = true;
 
@@ -151,6 +192,35 @@ public class ProductServiceImpl implements ProductService {
                 notification.setUsernameCreate(accountSercurity.getUserName());
                 notification.setContent(" xóa một sản phẩm hợp đồng");
                 notification.setPath("/viewdetailcontact");
+                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+            }
+
+
+            for(String s : accountAdmin){
+                if(s.equals(accountSercurity.getUserName())){
+                    continue;
+                }
+                Notification notification = new Notification();
+                notification.setType("success");
+                notification.setUsername(s);
+                notification.setUsernameCreate(accountSercurity.getUserName());
+                notification.setContent(" xóa một sản phẩm hợp đồng");
+                notification.setPath("/productionorder");
+                HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
+                simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
+            }
+
+            for(String s : listUsername){
+                if(s.equals(accountSercurity.getUserName())){
+                    continue;
+                }
+                Notification notification = new Notification();
+                notification.setType("success");
+                notification.setUsername(s);
+                notification.setUsernameCreate(accountSercurity.getUserName());
+                notification.setContent(" xóa một sản phẩm hợp đồng");
+                notification.setPath("/viewwork");
                 HashMap<String,Object> dataOutPut =  notificationService.addNotification(notification);
                 simpMessagingTemplate.convertAndSendToUser(s, "/queue/notification", dataOutPut);
             }
