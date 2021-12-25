@@ -926,12 +926,12 @@ export default {
           this.submitSearch();
           if (response.data.data) {
             let type = "success";
-            let message = "Xóa";
+            let message = "Xóa hợp đồng";
             let description = response.data.message;
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Xóa";
+            let message = "Xóa hợp đồng";
             let description = response.data.message;
             this.notifi(type, message, description);
           }
