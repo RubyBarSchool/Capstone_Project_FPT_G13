@@ -507,7 +507,9 @@ export default {
     },
     showModalViewF(record) {
       this.dataSourceTableView = record.contactMoneyDetail;
+      console.log("here", record.statusDone);
       this.showModalView = true;
+      this.disableEditAndDelete = true;
       if (record.statusDone == 1) {
         this.disableEditAndDelete = false;
       }
