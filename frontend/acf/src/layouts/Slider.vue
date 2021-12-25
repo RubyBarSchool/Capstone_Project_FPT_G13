@@ -53,9 +53,10 @@
                   @click="clickNotification"
                   :count="countmessage"
                   :overflow-count="30"
+                  style="margin-top: 10px"
                 >
                   <font-awesome-icon
-                    :style="{ 'font-size': '40px', 'margin-top': '1vh' }"
+                    :style="{ 'font-size': '40px' }"
                     :icon="['far', 'bell']"
                     class="bell"
                   />

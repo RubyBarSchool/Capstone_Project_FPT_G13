@@ -706,7 +706,7 @@ export default {
             let type = "success";
             let message = "Cập nhật";
             let description =
-              "Cập nhật tài khoản " + this.dataEdit.username + " thành công !!";
+              "Cập nhật tài khoản " + this.dataEdit.username + " thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
@@ -798,7 +798,7 @@ export default {
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Xóa";
+            let message = "Xóa không thành công";
             let description = "Tài khoản đang đăng nhập không được xóa";
             this.notifi(type, message, description);
           }

@@ -31,12 +31,6 @@
                         :style="{ width: '40vh', height: '40vh' }"
                       />
                       <br />
-                      <!-- <a href="#">
-                        <font-awesome-icon
-                          :style="{ 'font-size': '20px' }"
-                          :icon="['fas', 'camera-retro']"
-                        />
-                      </a> -->
                       <input
                         type="file"
                         accept=" .jpg , .png "
