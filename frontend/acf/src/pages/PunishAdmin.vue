@@ -135,7 +135,7 @@
           <!-- table content -->
 
           <!-- popup add-->
-          <a-modal v-model="visibleAdd" title="Thêm hình thức kỷ luật">
+          <a-modal v-model="visibleAdd" title="Thêm quyết định kỷ luật">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button
@@ -261,7 +261,7 @@
           <!-- popup add -->
 
           <!-- popup edit-->
-          <a-modal v-model="visibleEdit" title="Chỉnh sửa hình thức kỷ luật">
+          <a-modal v-model="visibleEdit" title="Chỉnh sửa quyết định kỷ luật">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button
@@ -620,7 +620,7 @@ export default {
       }
       if (
         this.dataAdd.effectiveDate != null &&
-        this.dataAdd.effectiveDate.trim() != ""
+        this.dataAdd.effectiveDate != ""
       ) {
         this.checkInputEffectiveDate.show = false;
         this.checkInputEffectiveDate.message = "";
@@ -675,7 +675,7 @@ export default {
     inputEffectiveDateAdd() {
       if (
         this.dataAdd.effectiveDate != null &&
-        this.dataAdd.effectiveDate.trim() != ""
+        this.dataAdd.effectiveDate != ""
       ) {
         this.checkInputEffectiveDate.show = false;
         this.checkInputEffectiveDate.message = "";
@@ -705,14 +705,14 @@ export default {
           this.submitSearch();
           if (response.data.data) {
             let type = "success";
-            let message = "Thêm đơn kỷ luật";
-            let description = "Thêm đơn kỷ luật mới thành công";
+            let message = "Thêm quyết định kỷ luật";
+            let description = "Thêm quyết định kỷ luật mới thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Thêm đơn kỷ luật";
+            let message = "Thêm quyết định kỷ luật";
             let description =
-              "Thêm đơn kỷ luật mới không thành công vì " + response.data.message;
+              "Thêm quyết định kỷ luật mới không thành công vì " + response.data.message;
             this.notifi(type, message, description);
           }
           this.loadingAdd = false;
@@ -751,7 +751,7 @@ export default {
       }
       if (
         this.dataEdit.effectiveDate != null &&
-        this.dataEdit.effectiveDate.trim() != ""
+        this.dataEdit.effectiveDate != ""
       ) {
         this.checkInputEffectiveDate.show = false;
         this.checkInputEffectiveDate.message = "";
@@ -806,7 +806,7 @@ export default {
     inputEffectiveDateEdit() {
       if (
         this.dataEdit.effectiveDate != null &&
-        this.dataEdit.effectiveDate.trim() != ""
+        this.dataEdit.effectiveDate != ""
       ) {
         this.checkInputEffectiveDate.show = false;
         this.checkInputEffectiveDate.message = "";
@@ -871,12 +871,12 @@ export default {
           if (response.data.data) {
             let type = "success";
             let message = "Cập nhật";
-            let description = "Cập nhật đơn kỷ luật thành công";
+            let description = "Cập nhật quyết định kỷ luật thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
             let message = "Cập nhật";
-            let description = "Cập nhật đơn kỷ luật không thành công";
+            let description = "Cập nhật quyết định kỷ luật không thành công";
             this.notifi(type, message, description);
           }
           this.loadingEdit = false;
@@ -893,16 +893,16 @@ export default {
         .then((response) => {
           if (response.data.data) {
             let type = "success";
-            let message = "Xóa đơn kỷ luật";
+            let message = "Xóa quyết định kỷ luật";
             let description =
-              "Xóa đơn kỷ luật " + this.dataAdd.title + " thành công";
+              "Xóa quyết định kỷ luật " + this.dataAdd.title + " thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           } else {
             let type = "error";
-            let message = "Xóa đơn kỷ luật";
+            let message = "Xóa quyết định kỷ luật";
             let description =
-              "Xóa đơn kỷ luật " + this.dataAdd.title + " không thành công";
+              "Xóa quyết định kỷ luật " + this.dataAdd.title + " không thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           }

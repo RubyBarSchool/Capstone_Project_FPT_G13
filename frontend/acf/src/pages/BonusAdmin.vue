@@ -134,7 +134,7 @@
           <!-- table content -->
 
           <!-- popup add-->
-          <a-modal v-model="visibleAdd" title="Thêm đơn khen thưởng">
+          <a-modal v-model="visibleAdd" title="Thêm quyết định khen thưởng">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button
@@ -263,7 +263,7 @@
           <!-- popup add -->
 
           <!-- popup edit-->
-          <a-modal v-model="visibleEdit" title="Chỉnh sửa khen thưởng">
+          <a-modal v-model="visibleEdit" title="Chỉnh sửa quyết định khen thưởng">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button
@@ -638,14 +638,14 @@ export default {
           this.submitSearch();
           if (response.data.data) {
             let type = "success";
-            let message = "Thêm đơn khen thưởng";
-            let description = "Thêm đơn khen thưởng mới thành công";
+            let message = "Thêm quyết định khen thưởng";
+            let description = "Thêm quyết định khen thưởng mới thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Thêm đơn khen thưởng";
+            let message = "Thêm quyết định khen thưởng";
             let description =
-              "Thêm đơn khen thưởng mới không thành công vì " +
+              "Thêm quyết định khen thưởng mới không thành công vì " +
               response.data.message;
             this.notifi(type, message, description);
           }
@@ -694,6 +694,7 @@ export default {
       this.dataEdit.reason = reason;
       this.dataEdit.money = money;
       this.dataEdit.title = title;
+      this.dataEdit.effectiveDate = moment(effectiveDate);
       this.visibleEdit = true;
       this.getAllEmployee();
     },
@@ -708,12 +709,12 @@ export default {
           if (response.data.data) {
             let type = "success";
             let message = "Cập nhật";
-            let description = "Cập nhật thưởng thành công";
+            let description = "Cập nhật quyết định thưởng thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
             let message = "Cập nhật";
-            let description = "Cập nhật thưởng không thành công";
+            let description = "Cập nhật quyết định thưởng không thành công";
             this.notifi(type, message, description);
           }
           this.loadingEdit = false;
@@ -777,7 +778,7 @@ export default {
 
       if (
         this.dataEdit.effectiveDate != null &&
-        this.dataEdit.effectiveDate.length != 0
+        this.dataEdit.effectiveDate != ""
       ) {
         this.checkDataInputEffectiveDate.show = false;
         this.checkDataInputEffectiveDate.message = "";
@@ -798,16 +799,16 @@ export default {
         .then((response) => {
           if (response.data.data) {
             let type = "success";
-            let message = "Xóa đơn khen thưởng";
+            let message = "Xóa quyết định khen thưởng";
             let description =
-              "Xóa đơn khen thưởng " + this.dataAdd.title + " thành công";
+              "Xóa quyết định khen thưởng " + this.dataAdd.title + " thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           } else {
             let type = "error";
-            let message = "Xóa đơn khen thưởng";
+            let message = "Xóa quyết định khen thưởng";
             let description =
-              "Xóa đơn khen thưởng " + this.dataAdd.title + " không thành công";
+              "Xóa quyết định khen thưởng " + this.dataAdd.title + " không thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           }
@@ -868,7 +869,7 @@ export default {
 
       if (
         this.dataAdd.effectiveDate != null &&
-        this.dataAdd.effectiveDate.length != 0
+        this.dataAdd.effectiveDate != ""
       ) {
         this.checkDataInputEffectiveDate.show = false;
         this.checkDataInputEffectiveDate.message = "";
@@ -934,7 +935,7 @@ export default {
     inputEffectiveDate() {
       if (
         this.dataAdd.effectiveDate != null &&
-        this.dataAdd.effectiveDate.length != 0
+        this.dataAdd.effectiveDate != ""
       ) {
         this.checkDataInputEffectiveDate.show = false;
         this.checkDataInputEffectiveDate.message = "";
@@ -996,7 +997,7 @@ export default {
     inputEditEffectiveDate() {
       if (
         this.dataEdit.effectiveDate != null &&
-        this.dataEdit.effectiveDate.length != 0
+        this.dataEdit.effectiveDate != ""
       ) {
         this.checkDataInputEffectiveDate.show = false;
         this.checkDataInputEffectiveDate.message = "";
