@@ -483,7 +483,7 @@ export default {
           width: 150,
         },
         {
-          title: "Số tiền",
+          title: "Số tiền/người(VNĐ)",
           dataIndex: "money",
           key: "money",
           width: 150,
