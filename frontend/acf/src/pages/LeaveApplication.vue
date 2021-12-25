@@ -309,7 +309,7 @@
                   disabled
                   v-model="dataPersonalLeaveEmployeeDetail.dateStart"
                   format="DD/MM/YYYY"
-                  style="width:100%"
+                  style="width: 100%"
                 >
                 </a-date-picker>
               </a-col>
@@ -322,7 +322,7 @@
                   disabled
                   v-model="dataPersonalLeaveEmployeeDetail.dateEnd"
                   format="DD/MM/YYYY"
-                  style="width:100%"
+                  style="width: 100%"
                 >
                 </a-date-picker>
               </a-col>
@@ -369,7 +369,7 @@
                   disabled
                   v-model="dataPersonalLeaveEmployeeDetail.dateCreate"
                   format="DD/MM/YYYY"
-                  style="width:100%"
+                  style="width: 100%"
                 >
                 </a-date-picker>
               </a-col>
@@ -393,7 +393,7 @@
                   v-model="dataPersonalLeaveEmployeeDetail.dateAccept"
                   placeholder="Ngày xác nhận"
                   format="DD/MM/YYYY"
-                  style="width:100%"
+                  style="width: 100%"
                 >
                 </a-date-picker>
               </a-col>
@@ -441,13 +441,13 @@ export default {
       dataSourceTable: [],
       dataAdd: {
         content: "",
-        date: [],
+        date: [null,null],
         fileAttach: "",
         title: "",
       },
       dataEdit: {
         content: "",
-        date: [],
+        date: [null,null],
         fileAttach: "",
         idApplication: 0,
         title: "",
@@ -609,6 +609,10 @@ export default {
       this.dataAdd.title = this.dataAdd.title.trim();
       this.dataAdd.content = this.dataAdd.content.trim();
       this.loading = true;
+      let date = [];
+      date.push(moment(this.dataAdd.date[0]).add("1", "days"));
+      date.push(moment(this.dataAdd.date[1]).add("1", "days"));
+      this.dataAdd.date = date;
       xinNghiService
         .addPersonalApplication(this.dataAdd)
         .then((response) => {
