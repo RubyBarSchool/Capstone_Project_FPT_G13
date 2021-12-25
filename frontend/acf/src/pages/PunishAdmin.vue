@@ -107,7 +107,7 @@
                           record.money,
                           record.reason,
                           record.status,
-                          record.title
+                          record.title,
                         )
                       "
                       :style="{ width: '44.25px' }"
@@ -835,8 +835,7 @@ export default {
       money,
       reason,
       status,
-      title
-    ) {
+      title ) {
       this.dataEdit.id = id;
       this.dataEdit.effectiveDate = "";
       this.dataEdit.listIdEmployee = [];
@@ -847,6 +846,7 @@ export default {
       this.dataEdit.reason = reason;
       this.dataEdit.money = money;
       this.dataEdit.title = title;
+      this.dataEdit.effectiveDate = moment(effectiveDate);
 
       this.checkInputTitle.show = false;
       this.checkInputTitle.message = "";
