@@ -85,7 +85,6 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
                 p.setModified_by(accountSercurity.getUserName());
                 p.setModified_date(LocalDate.now());
                 personalLeaveApplicationAdminRepository.save(p);
-                check = true;
 
                 if (!p.getCreated_by().equals(accountSercurity.getUserName())) {
                     Notification notification = new Notification();
@@ -97,6 +96,7 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
                     simpMessagingTemplate.convertAndSendToUser(p.getCreated_by(), "/queue/notification", dataOutPut);
                 }
             }
+            check = true;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -138,6 +138,7 @@ public class PersonalLeaveApplicationAdminServiceImpl implements PersonalLeaveAp
                     simpMessagingTemplate.convertAndSendToUser(p.getCreated_by(), "/queue/notification", dataOutPut);
                 }
             }
+            check = true;
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }
