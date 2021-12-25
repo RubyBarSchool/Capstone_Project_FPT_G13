@@ -1040,12 +1040,9 @@ export default {
           this.handleCancelAddProductDetail();
           let task = response.data.data ? "success" : "error";
           let text = response.data.data
-            ? "Thêm thành công"
-            : "Thêm Không thành công";
-          let description = response.data.data
-            ? "Thêm thành công sản phẩm " + this.addProductForm.nameProduct
-            : "Thêm không thành công sản phẩm " +
-              this.addProductForm.nameProduct;
+            ? "Thành công"
+            : "Không thành công";
+          let description = response.data.message;
           this.notifi(task, text, description);
         })
         .catch((e) => {

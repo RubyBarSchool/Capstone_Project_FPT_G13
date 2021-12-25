@@ -1077,13 +1077,13 @@ export default {
           this.beforeSearch();
           if (response.data.data) {
             let type = "success";
-            let message = "Thêm lệnh sản xuất mới";
+            let message = "Thành công";
             let description = response.data.message;
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Thêm lệnh sản xuất mới";
-            let description = "Thêm lệnh sản xuất mới không thành công";
+            let message = "Thành công";
+            let description = response.data.message;
             this.notifi(type, message, description);
           }
           this.showModalEdit = false;
