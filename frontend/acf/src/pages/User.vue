@@ -1036,9 +1036,7 @@ export default {
                   let type = "success";
                   let message = "Thêm nhân viên mới";
                   let description =
-                    "Thêm nhân viên " +
-                    this.dataAdd.fullName +
-                    " thành công";
+                    "Thêm nhân viên " + this.dataAdd.fullName + " thành công";
                   this.notifi(type, message, description);
                 } else {
                   let type = "error";
@@ -1068,9 +1066,7 @@ export default {
               let type = "success";
               let message = "Thêm nhân viên mới";
               let description =
-                "Thêm nhân viên " +
-                this.dataAdd.fullName +
-                " thành công";
+                "Thêm nhân viên " + this.dataAdd.fullName + " thành công";
               this.notifi(type, message, description);
             } else {
               let type = "error";
@@ -1376,9 +1372,14 @@ export default {
         .deleteUser(id)
         .then((response) => {
           if (response.data.data) {
-            var task = "success";
-            var text = "Xóa nhân viên thành công";
-            this.notifi(task, text);
+            let task = "success";
+            let text = "Xóa nhân viên";
+            let description =
+              "Xóa thông tin nhân viên " +
+              this.dataEdit.fullName +
+              "thành công";
+            this.notifi(task, text, description);
+            // this.notifi(task, text);
             this.submitSearch();
           }
         })
