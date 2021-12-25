@@ -1041,7 +1041,7 @@ export default {
                 } else {
                   let type = "error";
                   let message = "Thêm nhân viên mới";
-                  let description = response.data.message;
+                  let description = "Thêm nhân viên " + this.dataAdd.fullName + " không thành công";
                   this.notifi(type, message, description);
                   userService.deleteImage(this.dataAdd.image);
                 }
@@ -1072,10 +1072,9 @@ export default {
               let type = "error";
               let message = "Thêm nhân viên mới";
               let description =
-                "Thêm mới tài khoản " +
+                "Thêm nhân viên mới " +
                 this.dataAdd.fullName +
-                " không thành công vì " +
-                response.data.message;
+                " không thành công"
               this.notifi(type, message, description);
             }
             this.visibleAdd = false;
