@@ -31,10 +31,20 @@ public class ProductController {
         Integer total = 1;
         try {
             check = productService.addProductInContact(addProductForm);
-            message = "Thêm sản phẩm thành công";
+
+            if(addProductForm.getIdProduct() != null){
+                message = "Sửa sản phẩm thành công";
+            }else{
+                message = "Thêm sản phẩm thành công";
+            }
 
             if (!check) {
-                message = "Thêm sản phẩm không thành công";
+
+                if(addProductForm.getIdProduct() != null){
+                    message = "Sửa sản phẩm không thành công";
+                }else{
+                    message = "Thêm sản phẩm không thành công";
+                }
                 total = 0;
             }
             responseCommon.setData(check);

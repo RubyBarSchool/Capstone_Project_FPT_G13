@@ -33,9 +33,17 @@ public class ProductionOrderController {
         Integer total = 1;
         try {
             check = productionOrderService.addProductionOrder(addProductionOrderFrom);
-            message = "Thêm lệnh sản xuất thành công";
+            if (addProductionOrderFrom.getId() != null) {
+                message = "Sửa lệnh sản xuất thành công";
+            }else{
+                message = "Thêm lệnh sản xuất thành công";
+            }
             if (!check) {
-                message = "Thêm lệnh sản xuất không thành công";
+                if (addProductionOrderFrom.getId() != null) {
+                    message = "Sửa lệnh sản xuất không thành công";
+                }else{
+                    message = "Thêm lệnh sản xuất không thành công";
+                }
                 total = 0;
             }
             responseCommon.setData(check);
