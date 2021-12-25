@@ -54,7 +54,9 @@ public class ProductServiceImpl implements ProductService {
             if(addProductForm.getIdProduct() != null){
                 productMaterialRepository.deleteByIdProduct(product.getId());
                 product = productRepository.getProductByID(addProductForm.getIdProduct());
-                listUsername = productionOrderRepository.getUsernameByID(product.getProductionOrder().getId());
+                if(product.getProductionOrder() != null ){
+                    listUsername = productionOrderRepository.getUsernameByID(product.getProductionOrder().getId());
+                }
                 checkUpdate = true;
             }
             product.setCreated_by(accountSercurity.getUserName());
