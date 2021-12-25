@@ -574,7 +574,7 @@
 <script>
 import userService from "../service/userService";
 import fileService from "../service/fileService";
-
+import moment from "moment";
 export default {
   name: "User",
   components: {},
@@ -812,6 +812,20 @@ export default {
         .searchUser(this.dataSearch)
         .then((response) => {
           this.dataSourceTable = response.data.data;
+          for (let i = 0; i < this.dataSourceTable.length; i++) {
+            if (this.dataSourceTable[i].image !== null) {
+              userService
+                .preview(this.dataSourceTable[i].image)
+                .then((response) => {
+                  this.dataSourceTable[i].image = window.URL.createObjectURL(
+                    response.data
+                  );
+                })
+                .catch((e) => {
+                  console.log(e);
+                });
+            }
+          }
           this.dataSearch.total = response.data.total;
           this.pagination.total = response.data.total;
         })
@@ -951,9 +965,21 @@ export default {
         this.checkDataInputSalary.show = true;
         this.checkDataInputSalary.message = "Bạn phải điền vào ô lương";
       }
+      if (!this.checkDate(this.dataAdd.dob)) {
+        check = false;
+        let type = "error";
+        let message = "Tuổi";
+        let description = "Nhân viên cần phải đủ 18 tuổi";
+        this.notifi(type, message, description);
+      }
       if (check == true) {
         this.submitAdd();
       }
+    },
+    checkDate(value) {
+      var dob = moment(value).year();
+      let end = moment().year();
+      return end - dob >= 18;
     },
     inputFullNameAdd() {
       if (this.dataAdd.fullName != null && this.dataAdd.fullName.trim() != "") {
@@ -1209,6 +1235,13 @@ export default {
         check = false;
         this.checkDataInputSalary.show = true;
         this.checkDataInputSalary.message = "Bạn phải điền vào ô lương";
+      }
+      if (!this.checkDate(this.dataEdit.dob)) {
+        check = false;
+        let type = "error";
+        let message = "Tuổi";
+        let description = "Nhân viên cần phải đủ 18 tuổi";
+        this.notifi(type, message, description);
       }
       if (check == true) {
         this.submitUpdate();
