@@ -50,7 +50,11 @@
                 </div>
               </a-col>
               <a-col flex="auto">
-                <a-tabs default-active-key="1" class="tab">
+                <a-tabs
+                  @change="changeMessage"
+                  default-active-key="1"
+                  class="tab"
+                >
                   <a-tab-pane key="1" tab="Thông tin">
                     <div class="col-md-8">
                       <div class="card-block">
@@ -356,6 +360,9 @@ export default {
             let description = response.data.message;
             this.notifi(type, message, description);
           }
+          this.dataChangePassword.oldPassword = "";
+          this.dataChangePassword.newPassword = "";
+          this.confirmNewPassword = "";
           this.loadingChangePass = false;
         })
         .catch((e) => {
@@ -470,6 +477,14 @@ export default {
         message: message,
         description: description,
       });
+    },
+    changeMessage() {
+      this.checkInputOldPassword.show = false;
+      this.checkInputOldPassword.message = "";
+      this.checkInputNewPassword.show = false;
+      this.checkInputNewPassword.message = "";
+      this.checkInputConfirmPassword.show = false;
+      this.checkInputConfirmPassword.message = "";
     },
   },
 };
