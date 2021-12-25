@@ -13,5 +13,5 @@ import java.time.LocalDate;
 public class ContactMoneyVo {
     private Long id;
     private LocalDate date;
-    private Integer Money;
+    private String Money;
 }

@@ -14,6 +14,8 @@ import com.university.fpt.acf.vo.ContactMoneyVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +45,7 @@ public class ContactMoneyServiceImpl implements ContactMoneyService {
             String nameContact = "";
             LocalDate dateStart = LocalDate.now();
             LocalDate dateEnd = LocalDate.now();
-            Integer moneyAdvance = 0;
+            String moneyAdvance = "0";
             String moneyContact = "0";
             String numberFinish = "";
             Integer statusDone = -2;
@@ -57,7 +59,7 @@ public class ContactMoneyServiceImpl implements ContactMoneyService {
                     nameContact = contactMoney.getContact().getName();
                     dateStart = contactMoney.getContact().getCreated_date();
                     dateEnd = contactMoney.getContact().getDateFinish();
-                    moneyAdvance = Integer.parseInt(contactMoney.getMoney());
+                    moneyAdvance = contactMoney.getMoney();
                     moneyContact = contactMoney.getContact().getTotalMoney();
                     numberFinish = contactMoney.getContact().getNumberFinish();
                     statusDone = contactMoney.getContact().getStatusDone();
@@ -65,7 +67,7 @@ public class ContactMoneyServiceImpl implements ContactMoneyService {
                     ContactMoneyVo contactMoneyVo = new ContactMoneyVo();
                     contactMoneyVo.setId(contactMoney.getId());
                     contactMoneyVo.setDate(contactMoney.getDate());
-                    contactMoneyVo.setMoney(Integer.parseInt(contactMoney.getMoney()));
+                    contactMoneyVo.setMoney(contactMoney.getMoney());
                     contactMoneyVos.add(contactMoneyVo);
 
                     stringObjectHashMap.put("idContact",idContact);
@@ -78,11 +80,14 @@ public class ContactMoneyServiceImpl implements ContactMoneyService {
                     stringObjectHashMap.put("statusDone",statusDone);
                     stringObjectHashMap.put("contactMoneyDetail",contactMoneyVos);
                 }else{
-                    stringObjectHashMap.put("moneyAdvance",Integer.parseInt(stringObjectHashMap.get("moneyAdvance").toString())+Integer.parseInt(contactMoney.getMoney()));
+                    BigDecimal bigDecimal = new BigDecimal(stringObjectHashMap.get("moneyAdvance").toString());
+                    BigDecimal bigDecimal2 = new BigDecimal(contactMoney.getMoney());
+                    stringObjectHashMap.put("moneyAdvance",bigDecimal2.add(bigDecimal).toString());
+//                    stringObjectHashMap.put("moneyAdvance",Integer.parseInt(stringObjectHashMap.get("moneyAdvance").toString())+Integer.parseInt(contactMoney.getMoney()));
                     ContactMoneyVo contactMoneyVo = new ContactMoneyVo();
                     contactMoneyVo.setId(contactMoney.getId());
                     contactMoneyVo.setDate(contactMoney.getDate());
-                    contactMoneyVo.setMoney(Integer.parseInt(contactMoney.getMoney()));
+                    contactMoneyVo.setMoney(contactMoney.getMoney());
                     contactMoneyVos.add(contactMoneyVo);
                 }
 
@@ -119,11 +124,12 @@ public class ContactMoneyServiceImpl implements ContactMoneyService {
             contactMoney.setCreated_by(accountSercurity.getUserName());
             contactMoney.setModified_by(accountSercurity.getUserName());
 
-            contactMoney.setMoney(addContactMoneyForm.getMoney()+"");
+            contactMoney.setMoney(addContactMoneyForm.getMoney());
             Contact contact = new Contact();
             contact.setId(addContactMoneyForm.getContact());
             contactMoney.setContact(contact);
             contactMoneyRepository.save(contactMoney);
+            check = true;
         }catch (Exception ex){
             throw new RuntimeException("không thể thêm mới tạm ứng hợp đồng");
         }

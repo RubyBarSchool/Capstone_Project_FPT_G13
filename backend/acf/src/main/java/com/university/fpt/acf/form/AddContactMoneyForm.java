@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddContactMoneyForm {
     private Long contact;
-    private Integer money;
+    private String money;
 }

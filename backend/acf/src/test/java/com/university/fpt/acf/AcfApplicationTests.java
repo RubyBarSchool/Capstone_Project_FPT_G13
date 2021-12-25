@@ -646,7 +646,7 @@ class AcfApplicationTests {
 		//given
 		AddContactMoneyForm addContactMoneyForm = new AddContactMoneyForm();
 		addContactMoneyForm.setContact(1l);
-		addContactMoneyForm.setMoney(46000000);
+		addContactMoneyForm.setMoney("46000000");
 		//when
 		Boolean result = contractMoneyService.confirmContactMoney(addContactMoneyForm);
 		//then
