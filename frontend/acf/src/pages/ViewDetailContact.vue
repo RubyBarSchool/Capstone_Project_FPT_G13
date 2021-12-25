@@ -1087,10 +1087,10 @@ export default {
           let task = response.data.data ? "success" : "error";
           let text = response.data.data
             ? "Xóa thành công"
-            : "Xóa Không thành công";
+            : "Xóa không thành công";
           let description = response.data.data
-            ? "Xóa thành công product "
-            : "Xóa không thành công product ";
+            ? "Xóa thành công sản phẩm "
+            : "Xóa không thành công sản phẩm ";
           this.notifi(task, text, description);
           this.search();
         })
