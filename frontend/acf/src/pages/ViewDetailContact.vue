@@ -133,7 +133,7 @@
             v-model="showViewMaterialDetail"
             height="100%"
             width="80%"
-            title="Xem chi tiết vật liệu của sản phẩm"
+            title="Xem chi tiết vật tư của sản phẩm"
           >
             <template slot="footer">
               <a-button key="back" @click="handleCancelViewMaterialDetail">
@@ -295,7 +295,7 @@
                 </a-col>
                 <a-col flex="auto">
                   <a-button type="primary" @click="handleAddMaterialDetail">
-                    Thêm vật liệu
+                    Thêm vật tư
                   </a-button>
                   <div style="color: red" v-if="checkMaterialInProduct.show">
                     {{ checkMaterialInProduct.message }}
@@ -306,12 +306,12 @@
           </a-modal>
           <!-- form add -->
 
-          <!-- hiển thị bảng mã vật liệu theo sản phẩm -->
+          <!-- hiển thị bảng mã vật tư theo sản phẩm -->
           <a-modal
             v-model="showAddMaterialDetail"
             height="100%"
             width="80%"
-            title="Thêm vật liệu cho sản phẩm"
+            title="Thêm vật tư cho sản phẩm"
           >
             <template slot="footer">
               <a-button key="back" @click="handleCancelAddMaterialDetail">
@@ -327,7 +327,7 @@
               </a-button>
             </template>
             <a-input
-              placeholder="Mã vật liệu"
+              placeholder="Mã vật tư"
               style="width: 150px"
               v-model="dataSearchAddMaterialDetail.codeMaterial"
             />
@@ -381,7 +381,7 @@
           <!-- form edit -->
           <a-modal
             v-model="showEditProductDetail"
-            title="Sửa sản phẩm cho hợp đồng"
+            title="Chỉnh sửa sản phẩm cho hợp đồng"
           >
             <template slot="footer">
               <a-button key="back" @click="handleCancelAddProductDetail">
@@ -529,7 +529,7 @@
                 </a-col>
                 <a-col flex="auto">
                   <a-button type="primary" @click="handleEditMaterialDetail">
-                    Thêm vật liệu
+                    Thêm vật tư
                   </a-button>
                   <div style="color: red" v-if="checkMaterialInProduct.show">
                     {{ checkMaterialInProduct.message }}
@@ -643,7 +643,7 @@ export default {
           fixed: "left",
         },
         {
-          title: "Mã vật liệu",
+          title: "Mã vật tư",
           dataIndex: "nameMaterial",
           key: "nameMaterial",
           width: 150,
@@ -655,13 +655,13 @@ export default {
           width: 150,
         },
         {
-          title: "Đơn vị đo",
+          title: "Đơn vị",
           dataIndex: "unitMaterial",
           key: "unitMaterial",
           width: 150,
         },
         {
-          title: "Nhóm vật liệu",
+          title: "Nhóm vật tư",
           dataIndex: "nameGroupMaterial",
           key: "nameGroupMaterial",
           width: 150,
@@ -673,7 +673,7 @@ export default {
           width: 150,
         },
         {
-          title: "Giá vật liệu",
+          title: "Giá vật tư",
           dataIndex: "price",
           key: "price",
           width: 150,
@@ -829,7 +829,7 @@ export default {
         let task = "error";
         let message = "Nhập đúng giá trị số";
         let description =
-          "Bạn phải nhập giá trị số lượng là một số cụ thể cho mã vật liệu có mã:" +
+          "Bạn phải nhập giá trị số lượng là một số cụ thể cho mã vật tư có mã:" +
           key;
         this.notifi(task, message, description);
         value = 0;
@@ -924,7 +924,7 @@ export default {
           let task = "error";
           let text = "Thiếu số lượng";
           let description =
-            "Bạn bắt buộc phải chọn số lượng cho vật liệu có mã: " +
+            "Bạn bắt buộc phải chọn số lượng cho vật tư có mã: " +
             this.addProductForm.materials[i].id;
           this.notifi(task, text, description);
           checkSuccess = false;
@@ -1009,7 +1009,7 @@ export default {
         check = false;
         this.checkMoneyProduct.show = true;
         this.checkMoneyProduct.message =
-          "Bạn phải chọn vật liệu để lấy giá tiền tương ứng";
+          "Bạn phải chọn vật tư để lấy giá tiền tương ứng";
       }
 
       if (
@@ -1022,7 +1022,7 @@ export default {
         check = false;
         this.checkMaterialInProduct.show = true;
         this.checkMaterialInProduct.message =
-          "Bạn phải chọn vật liệu cấu thành sản phẩm";
+          "Bạn phải chọn vật tư cấu thành sản phẩm";
       }
 
       if (check) {
