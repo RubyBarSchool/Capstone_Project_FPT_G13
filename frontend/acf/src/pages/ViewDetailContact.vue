@@ -1043,8 +1043,8 @@ export default {
             ? "Thêm thành công"
             : "Thêm Không thành công";
           let description = response.data.data
-            ? "Thêm thành công product " + this.addProductForm.nameProduct
-            : "Thêm không thành công product " +
+            ? "Thêm thành công sản phẩm " + this.addProductForm.nameProduct
+            : "Thêm không thành công sản phẩm " +
               this.addProductForm.nameProduct;
           this.notifi(task, text, description);
         })
