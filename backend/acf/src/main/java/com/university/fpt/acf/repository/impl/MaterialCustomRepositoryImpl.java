@@ -113,7 +113,7 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
                 "concat(fm.frameLength,'x',fm.frameWidth,'x',hm.frameHeight),gm.name,um.name,c.name" +
                 ",pm.price) from Material m inner  join m.groupMaterial gm inner join m.company c " +
                 "inner join m.priceMaterials pm inner join pm.unitMeasure um inner join  pm.heightMaterial hm " +
-                "inner  join pm.frameMaterial fm where m.deleted = false and pm.deleted = false ");
+                "inner  join pm.frameMaterial fm where m.deleted = false and pm.deleted = false and gm.deleted = false and c.deleted = false and um.deleted = false and hm.deleted = false");
         if(searchForm.getCodeMaterial()!=null && !searchForm.getCodeMaterial().isEmpty()){
             sql.append(" and LOWER(m.name) like :code ");
             params.put("code", "%"+searchForm.getCodeMaterial().toLowerCase()+"%");
@@ -145,7 +145,7 @@ public class MaterialCustomRepositoryImpl extends CommonRepository implements Ma
         Map<String, Object> params = new HashMap<>();
         sql.append("select  COUNT(*) from Material m inner  join m.groupMaterial gm inner join m.company c " +
                 "inner join m.priceMaterials pm inner join pm.unitMeasure um inner join  pm.heightMaterial hm " +
-                "inner  join pm.frameMaterial fm where m.deleted = false and pm.deleted = false ");
+                "inner  join pm.frameMaterial fm where m.deleted = false and pm.deleted = false and gm.deleted = false and c.deleted = false and um.deleted = false and hm.deleted = false ");
         if(searchForm.getCodeMaterial()!=null && !searchForm.getCodeMaterial().isEmpty()){
             sql.append(" and LOWER(m.name) like :code ");
             params.put("code", "%"+searchForm.getCodeMaterial().toLowerCase()+"%");
