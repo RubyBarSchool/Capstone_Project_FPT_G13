@@ -5,7 +5,7 @@ class bonusAdminService {
         return http.post("/admin/bonus/search", form);
     }
     getAllEmployee(form) {
-        return http.post("/admin/employee/search", form);
+        return http.post("/admin/employee/searchadd", form);
     }
     addBonusAdmin(form) {
         return http.post(`/admin/bonus/add`, form);
