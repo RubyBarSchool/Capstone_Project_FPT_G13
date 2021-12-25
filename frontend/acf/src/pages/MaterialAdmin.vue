@@ -55,7 +55,7 @@
             </a-select-option>
           </a-select>
           <a-select
-            placeholder="Công ty"
+            placeholder="Công ty liên kết"
             mode="multiple"
             @change="submitSearch"
             v-model="dataSearch.listIdCompany"
@@ -990,7 +990,7 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
-      this.dataSearch.codeMaterial =  this.dataSearch.codeMaterial.trim();
+      this.dataSearch.codeMaterial = this.dataSearch.codeMaterial.trim();
       this.dataSearch.frame = this.dataSearch.frame.trim();
       this.dataSearch.pageIndex = 1;
       vatLieuAdminService
@@ -1266,7 +1266,7 @@ export default {
           .then((response) => {
             this.dataAddMaterial.listName = this.tags;
             this.dataAddMaterial.image = response.data.data;
-            
+
             vatLieuAdminService
               .addMaterial(this.dataAddMaterial)
               .then((response) => {

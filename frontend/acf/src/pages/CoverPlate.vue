@@ -60,11 +60,11 @@
             </a-select-option>
           </a-select>
           <a-select
-            placeholder="Công ty"
+            placeholder="Công ty liên kết"
             mode="multiple"
             v-model="dataSearch.listIdCompany"
             @change="submitSearch"
-            style="width: 150px"
+            style="width: 250px"
           >
             <a-select-option
               v-for="(company, index) in listCompanys"
