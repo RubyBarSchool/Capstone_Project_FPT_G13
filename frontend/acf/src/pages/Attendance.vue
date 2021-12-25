@@ -198,12 +198,29 @@ export default {
       this.dataForm.type = this.typeAttendance;
       attendanceService
         .addAttendance(this.dataForm)
-        .then(() => {
+        .then((response) => {
+          if (response.data.data) {
+            let type = "success";
+            let message = "Chấm công";
+            let description = "Chấm công thành công";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Chấm công";
+            let description = "Chấm công không thành công";
+            this.notifi(type, message, description);
+          }
           this.onChangeDate();
         })
         .catch((e) => {
           console.log(e);
         });
+    },
+    notifi(type, message, description) {
+      this.$notification[type]({
+        message: message,
+        description: description,
+      });
     },
     handleTableChange(pagination) {
       this.dataGetEmployee.pageIndex = pagination.current;
