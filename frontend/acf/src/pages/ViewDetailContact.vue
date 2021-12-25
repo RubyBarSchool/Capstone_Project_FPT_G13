@@ -306,7 +306,7 @@
           </a-modal>
           <!-- form add -->
 
-          <!-- hiển thị bảng mã vật tư theo sản phẩm -->
+         <!-- hiển thị bảng mã vật tư theo sản phẩm -->
           <a-modal
             v-model="showAddMaterialDetail"
             height="100%"
@@ -538,6 +538,79 @@
               </a-row>
             </a-form-model>
           </a-modal>
+
+
+                    <!-- hiển thị bảng mã vật tư theo sản phẩm -->
+          <a-modal
+            v-model="showAddMaterialDetailEdit"
+            height="100%"
+            width="80%"
+            title="Thêm vật tư cho sản phẩm"
+          >
+            <template slot="footer">
+              <a-button key="back" @click="handleCancelAddMaterialDetail">
+                Đóng
+              </a-button>
+              <a-button
+                key="submit"
+                type="primary"
+                :disabled="disableSave"
+                @click="submitAddMaterialDetail"
+              >
+                Lưu
+              </a-button>
+            </template>
+            <a-input
+              placeholder="Mã vật tư"
+              style="width: 150px"
+              v-model="dataSearchAddMaterialDetail.codeMaterial"
+            />
+            <a-input
+              placeholder="Thông số"
+              style="width: 150px"
+              v-model="dataSearchAddMaterialDetail.frame"
+            />
+            <a-button
+              type="primary"
+              @click="searchAddMaterialDetail"
+              :style="{ 'margin-left': '5px' }"
+            >
+              <font-awesome-icon
+                :icon="['fas', 'search']"
+                :style="{ 'margin-right': '5px' }"
+              />
+              Tìm kiếm
+            </a-button>
+            <a-table
+              :columns="columnsMaterialDetail"
+              :data-source="dataAddMaterialDetail"
+              :rowKey="
+                (record, index) => {
+                  return record.idMaterial;
+                }
+              "
+              :pagination="false"
+              :scroll="{ x: 1000, y: 500 }"
+              :row-selection="{
+                selectedRowKeys: selectedRowKeys,
+                selectedRows: selectedRows,
+                onChange: onSelectChange,
+              }"
+            >
+              <template slot="count" slot-scope="text, record">
+                <editable-cell
+                  :text="text"
+                  @change="onCellChangeCount(record.idMaterial, $event)"
+                />
+              </template>
+              <template slot="note" slot-scope="text, record">
+                <editable-cell
+                  :text="text"
+                  @change="onCellChangeNote(record.idMaterial, $event)"
+                />
+              </template>
+            </a-table>
+          </a-modal>
         </div>
       </a-layout-content>
     </a-layout>
@@ -711,6 +784,7 @@ export default {
       },
       dataContactInAdd: [],
       showAddMaterialDetail: false,
+      showAddMaterialDetailEdit:false,
       dataAddMaterialDetail: [],
       dataSearchAddMaterialDetail: {
         codeMaterial: "",
@@ -1052,6 +1126,7 @@ export default {
     },
     handleCancelAddMaterialDetail() {
       this.showAddMaterialDetail = false;
+      this.showAddMaterialDetailEdit=false;
     },
     handleAddMaterialDetail() {
       viewDetailContactService
@@ -1065,7 +1140,7 @@ export default {
         });
     },
     handleEditMaterialDetail() {
-      this.showAddMaterialDetail = true;
+      this.showAddMaterialDetailEdit = true;
     },
     searchAddMaterialDetail() {
       viewDetailContactService
@@ -1110,6 +1185,7 @@ export default {
         });
     },
     handleCancelAddProductDetail() {
+      this.showAddMaterialDetailEdit=false;
       this.showAddProductDetail = false;
       this.showEditProductDetail = false;
       this.addProductForm.idProduct = "";
