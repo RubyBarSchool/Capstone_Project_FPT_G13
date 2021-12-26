@@ -118,7 +118,8 @@
             </template>
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Tên công ty</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black"> Tên công ty </strong></a-col
               >
               <a-col flex="auto">
                 <a-input @change="inputCompany" v-model="dataAdd.name" />
@@ -130,7 +131,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Địa chỉ</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black"> Địa chỉ</strong></a-col
               >
               <a-col flex="auto">
                 <a-input @change="inputAddress" v-model="dataAdd.address" />
@@ -142,7 +144,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Số điện thoại</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black"> Số điện thoại</strong></a-col
               >
               <a-col flex="auto">
                 <a-input
@@ -159,7 +162,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Email</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black"> Email</strong></a-col
               >
               <a-col flex="auto">
                 <a-input @change="inputEmail" v-model="dataAdd.email" />
@@ -186,7 +190,8 @@
             </template>
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Tên công ty</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black"> Tên công ty</strong></a-col
               >
               <a-col flex="auto">
                 <a-input @change="inputEditCompany" v-model="dataEdit.name" />
@@ -198,7 +203,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Địa chỉ</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black"> Địa chỉ</strong></a-col
               >
               <a-col flex="auto">
                 <a-input
@@ -213,7 +219,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Số điện thoại</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black"> Số điện thoại</strong></a-col
               >
               <a-col flex="auto">
                 <a-input
@@ -230,7 +237,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Email</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black"> Email</strong> </a-col
               >
               <a-col flex="auto">
                 <a-input @change="inputEditEmail" v-model="dataEdit.email" />

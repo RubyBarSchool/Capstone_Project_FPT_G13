@@ -151,7 +151,7 @@
               <a-row type="flex">
                 <a-col flex="120px">
                   <span style="color: red">*</span>
-                  <strong style="color: black">Tiêu đề:</strong>
+                  <strong> Tiêu đề</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input
@@ -168,7 +168,7 @@
               <a-row type="flex">
                 <a-col flex="120px">
                   <span style="color: red">*</span>
-                  <strong style="color: black">Họ và tên:</strong>
+                  <strong> Họ và tên</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-select
@@ -196,7 +196,7 @@
               <a-row type="flex">
                 <a-col flex="120px">
                   <span style="color: red">*</span>
-                  <strong style="color: black">Lý do:</strong>
+                  <strong> Lý do</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-textarea
@@ -214,7 +214,7 @@
               <a-row type="flex">
                 <a-col flex="120px">
                   <span style="color: red">*</span>
-                  <strong style="color: black">Số tiền/người:</strong>
+                  <strong> Số tiền/người</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input-number
@@ -232,7 +232,7 @@
               <a-row type="flex">
                 <a-col flex="120px">
                   <span style="color: red">*</span>
-                  <strong style="color: black">Trạng thái:</strong>
+                  <strong> Trạng thái</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-radio-group name="radioGroup" v-model="dataAdd.status">
@@ -245,7 +245,7 @@
               <a-row type="flex">
                 <a-col flex="120px"
                   ><span style="color: red">*</span>
-                  <strong style="color: black">Ngày hiệu lực:</strong>
+                  <strong> Ngày hiệu lực</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-date-picker
@@ -283,7 +283,7 @@
               <a-row type="flex">
                 <a-col flex="120px">
                   <span style="color: red">*</span>
-                  <strong style="color: black"> Tiêu đề:</strong></a-col
+                  <strong> Tiêu đề</strong></a-col
                 >
                 <a-col flex="auto">
                   <a-input
@@ -300,7 +300,7 @@
               <a-row type="flex">
                 <a-col flex="120px">
                   <span style="color: red">*</span>
-                  <strong style="color: black"> Họ và tên:</strong>
+                  <strong> Họ và tên</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-select
@@ -329,7 +329,7 @@
               <a-row type="flex">
                 <a-col flex="120px">
                   <span style="color: red">*</span>
-                  <strong style="color: black">Lý do:</strong>
+                  <strong s> Lý do</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-textarea
@@ -347,7 +347,7 @@
               <a-row type="flex">
                 <a-col flex="120px">
                   <span style="color: red">*</span>
-                  <strong style="color: black">Số tiền/người:</strong>
+                  <strong> Số tiền/người</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input-number
@@ -365,7 +365,7 @@
               <a-row type="flex">
                 <a-col flex="120px">
                   <span style="color: red">*</span>
-                  <strong style="color: black">Trạng thái:</strong>
+                  <strong> Trạng thái</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-radio-group name="radioGroup" v-model="dataEdit.status">
@@ -378,7 +378,7 @@
               <a-row type="flex">
                 <a-col flex="120px">
                   <span style="color: red">*</span>
-                  <strong style="color: black">Ngày hiệu lực:</strong>
+                  <strong> Ngày hiệu lực</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-date-picker

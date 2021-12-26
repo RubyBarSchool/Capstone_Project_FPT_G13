@@ -150,7 +150,7 @@
             <a-row type="flex">
               <a-col flex="120px">
                 <span style="color: red">*</span>
-                <strong style="color: black">Tiêu đề : </strong></a-col
+                <strong style="color: black"> Tiêu đề : </strong></a-col
               >
               <a-col flex="auto">
                 <a-input @change="inputTitle" v-model="dataAdd.title" />
@@ -163,7 +163,7 @@
             <a-row type="flex">
               <a-col flex="120px">
                 <span style="color: red">*</span>
-                <strong style="color: black">Họ và tên :</strong></a-col
+                <strong style="color: black"> Họ và tên :</strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -192,7 +192,7 @@
             <a-row type="flex">
               <a-col flex="120px">
                 <span style="color: red">*</span>
-                <strong style="color: black">Lý do :</strong></a-col
+                <strong style="color: black"> Lý do :</strong></a-col
               >
               <a-col flex="auto">
                 <a-textarea
@@ -228,7 +228,7 @@
             <a-row type="flex">
               <a-col flex="120px">
                 <span style="color: red">*</span>
-                <strong style="color: black">Trạng thái : </strong></a-col
+                <strong style="color: black"> Trạng thái : </strong></a-col
               >
               <a-col flex="auto">
                 <a-radio-group
@@ -248,7 +248,7 @@
             <a-row type="flex">
               <a-col flex="120px">
                 <span style="color: red">*</span>
-                <strong style="color: black">Ngày hiệu lực </strong></a-col
+                <strong style="color: black"> Ngày hiệu lực </strong></a-col
               >
               <a-col flex="auto">
                 <a-date-picker
@@ -287,7 +287,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span>
-                <strong style="color: black">Tiêu đề : </strong></a-col
+                <strong style="color: black"> Tiêu đề : </strong></a-col
               >
               <a-col flex="auto">
                 <a-input @change="inputEditTitle" v-model="dataEdit.title" />
@@ -300,7 +300,7 @@
             <a-row type="flex">
               <a-col flex="120px">
                 <span style="color: red">*</span>
-                <strong style="color: black">Họ và tên : </strong></a-col
+                <strong style="color: black"> Họ và tên : </strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -347,7 +347,7 @@
             <a-row type="flex">
               <a-col flex="120px">
                 <span style="color: red">*</span>
-                <strong style="color: black">Số tiền/người: </strong></a-col
+                <strong style="color: black"> Số tiền/người: </strong></a-col
               >
               <a-col flex="auto">
                 <a-input-number
@@ -365,7 +365,7 @@
             <a-row type="flex">
               <a-col flex="120px">
                 <span style="color: red">*</span>
-                <strong style="color: black">Trạng thái :</strong></a-col
+                <strong style="color: black"> Trạng thái :</strong></a-col
               >
               <a-col flex="auto">
                 <a-radio-group
@@ -385,7 +385,7 @@
             <a-row type="flex">
               <a-col flex="120px">
                 <span style="color: red">*</span>
-                <strong style="color: black">Ngày hiệu lực </strong></a-col
+                <strong style="color: black"> Ngày hiệu lực </strong></a-col
               >
               <a-col flex="auto">
                 <a-date-picker
