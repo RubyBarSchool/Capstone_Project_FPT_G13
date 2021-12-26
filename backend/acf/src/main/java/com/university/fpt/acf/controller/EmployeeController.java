@@ -43,9 +43,9 @@ public class EmployeeController {
         } catch (Exception e) {
             message = e.getMessage();
             responseCommon.setData(getAllEmployee);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
 
@@ -70,9 +70,9 @@ public class EmployeeController {
         } catch (Exception e) {
             message = e.getMessage();
             responseCommon.setData(getAllEmployee);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
     //************************************
@@ -108,8 +108,8 @@ public class EmployeeController {
             message=e.getMessage();
             responseCommon.setMessage(message);
             responseCommon.setData(em);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
     //************************************
@@ -144,9 +144,9 @@ public class EmployeeController {
         }catch (Exception e){
             message = e.getMessage();
             responseCommon.setData(checkAdd);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
     //************************************
@@ -171,9 +171,9 @@ public class EmployeeController {
         }catch (Exception e){
             message = e.getMessage();
             responseCommon.setData(checkUpdate);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
     //************************************
@@ -198,9 +198,9 @@ public class EmployeeController {
         }catch (Exception e){
             message = e.getMessage();
             responseCommon.setData(checkDelete);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
 }

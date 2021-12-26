@@ -55,9 +55,9 @@ public class ProductionOrderController {
             message = "Không thể thêm lệnh sản xuất";
             responseCommon.setData(check);
             responseCommon.setTotal(0);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
     //************************************
@@ -85,9 +85,9 @@ public class ProductionOrderController {
             message = "Không thể sửa lệnh sản xuất";
             responseCommon.setData(check);
             responseCommon.setTotal(0);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
     //************************************
@@ -115,9 +115,9 @@ public class ProductionOrderController {
             message = "Không thêm được hợp đồng chưa bàn giao";
             responseCommon.setData(data);
             responseCommon.setTotal(data.size());
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
     //************************************

@@ -51,9 +51,9 @@ public class MaterialSuggestController {
         } catch (Exception e) {
             message = "Không thể tìm kiếm gợi ý vật liệu";
             responseCommon.setData(suggestMaterialVOS);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
 }

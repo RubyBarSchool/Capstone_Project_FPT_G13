@@ -47,9 +47,9 @@ public class ContactDetailController {
             message = "Không thêm được hợp đồng";
             responseCommon.setData(contacts);
             responseCommon.setTotal(total);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
 
@@ -77,9 +77,9 @@ public class ContactDetailController {
             message = "Không thêm được hợp đồng chưa bàn giao";
             responseCommon.setData(contacts);
             responseCommon.setTotal(contacts.size());
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
 
@@ -108,9 +108,9 @@ public class ContactDetailController {
             message = "Không thể tìm kiếm chi tiết hợp đồng";
             responseCommon.setData(searchContactDetailVOS);
             responseCommon.setTotal(total);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
     //************************************
@@ -134,9 +134,9 @@ public class ContactDetailController {
         } catch (Exception e) {
             message = "Không thể tìm kiếm chi tiết hợp đồng";
             responseCommon.setData(materialInContactDetailVOS);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
 

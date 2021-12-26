@@ -46,9 +46,9 @@ public class ContactMoneyController {
             message = "Không thể lấy danh sách ứng tiền hợp đồng";
             responseCommon.setData(contactMoney);
             responseCommon.setTotal(total);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
     //************************************
@@ -76,9 +76,9 @@ public class ContactMoneyController {
             message = "Không thể thêm lịch sử tạm ứng";
             responseCommon.setData(check);
             responseCommon.setTotal(0);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
     //************************************
@@ -106,9 +106,9 @@ public class ContactMoneyController {
             message = "Không thể sửa lịch sử tạm ứng!";
             responseCommon.setData(check);
             responseCommon.setTotal(0);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
     //************************************
@@ -136,9 +136,9 @@ public class ContactMoneyController {
             message = "Không thể xáo lịch sử tạm ứng";
             responseCommon.setData(check);
             responseCommon.setTotal(0);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
     //************************************
@@ -166,9 +166,9 @@ public class ContactMoneyController {
             message = "Không thể thêm lịch sử tạm ứng";
             responseCommon.setData(check);
             responseCommon.setTotal(0);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
 }

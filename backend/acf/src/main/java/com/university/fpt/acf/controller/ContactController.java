@@ -80,9 +80,9 @@ public class ContactController {
         } catch (Exception e) {
             message = "Chỉnh sửa hợp đồng lỗi";
             responseCommon.setData(false);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
     //************************************
@@ -106,9 +106,9 @@ public class ContactController {
         } catch (Exception e) {
             message = "Xóa hợp đồng không thành công";
             responseCommon.setData(false);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
     //************************************
@@ -134,9 +134,9 @@ public class ContactController {
             message = "Không thêm được hợp đồng";
             responseCommon.setData(contacts);
             responseCommon.setTotal(contacts.size());
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
     //************************************
@@ -160,9 +160,9 @@ public class ContactController {
         } catch (Exception e) {
             message = "Không thể đọc được tệp hợp đồng";
             responseCommon.setData(addAccountForm);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
     //************************************
@@ -189,9 +189,9 @@ public class ContactController {
         } catch (Exception e) {
             message = e.getMessage();
             responseCommon.setData(list);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
     //************************************
