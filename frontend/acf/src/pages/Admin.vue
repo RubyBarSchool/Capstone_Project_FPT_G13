@@ -109,7 +109,7 @@
                   })
                 }}
               </template>
-              <template slot="action" slot-scope="text, record">
+              <template slot="action" slot-scope="text, record"  >
                 <a-row :gutter="[16, 16]">
                   <a-col :span="6" v-if="checkDisable(record.username)">
                     <a-popconfirm
@@ -392,7 +392,6 @@ export default {
           width: 100,
           dataIndex: "id",
           key: "id",
-          fixed: "left",
         },
         {
           title: "Tài Khoản",
@@ -832,6 +831,11 @@ export default {
 ::v-deep .anticon svg {
   margin-bottom: 5px;
 }
+
+/* ::v-deep .ant-table-row-cell-break-word {
+  border-spacing: 10px;
+} */
+
 /* button icon */
 #delete {
   background-color: rgb(255, 0, 0);

@@ -1,10 +1,14 @@
 <template>
   <div class="Dashboard">
     <a-back-top :style="{ width: '5vh', height: '5vh' }" />
+
+    <!-- dashboard cho SPAdmin -->
     <div v-if="checkshow('SP_ADMIN')" class="grid grid-responsive">
-      SP_ADMIN
       <div class="card info-1">
-        Số người đang hoạt động: {{ this.listUserOnline.length }}
+        <strong style="font-size: 40px"
+          >{{ this.listUserOnline.length }}
+        </strong>
+        <span style="font-size: 18px">Số người đang hoạt động</span>
         <img
           src="../assets/graph-messages.svg"
           alt="sapphire"
@@ -12,7 +16,10 @@
         />
       </div>
       <div class="card info-2">
-        Số người chưa có tài khoản: {{ countEmployeeHaveNotAccount }}
+        <strong style="font-size: 40px">
+          {{ countEmployeeHaveNotAccount }}
+        </strong>
+        <span style="font-size: 18px"> Số người chưa có tài khoản </span>
         <img
           src="../assets/graph-checkins.svg"
           alt="sapphire"
@@ -20,15 +27,17 @@
         />
       </div>
     </div>
+    <!-- dashboard cho SPAdmin -->
+
+    <!-- dashboard cho admin -->
     <div v-if="checkshow('ADMIN')" class="grid grid-responsive">
-      ADMIN
       <div class="card info-1">
-        {{
-          dashboardAdmin.productNotProductionOrder != 0
-            ? " Sản phẩm chưa được tạo lệnh sản xuất : " +
-              dashboardAdmin.productNotProductionOrder
-            : "Không có sản phẩm nào chưa được làm"
-        }}
+        <strong style="font-size: 40px">
+          {{ this.dashboardAdmin.productNotProductionOrder }}
+        </strong>
+        <span style="font-size: 18px"
+          >Sản phẩm chưa được tạo lệnh sản xuất</span
+        >
         <img
           src="../assets/graph-messages.svg"
           alt="sapphire"
@@ -36,11 +45,10 @@
         />
       </div>
       <div class="card info-2">
-        {{
-          dashboardAdmin.contactDone != 0
-            ? "Số hợp đồng chờ bàn giao : " + dashboardAdmin.contactDone
-            : "Không có hợp dồng nào chờ bàn giao"
-        }}
+        <strong style="font-size: 40px">
+          {{ this.dashboardAdmin.contactDone }}
+        </strong>
+        <span style="font-size: 18px">Số hợp đồng chờ bàn giao</span>
         <img
           src="../assets/graph-checkins.svg"
           alt="sapphire"
@@ -48,25 +56,25 @@
         />
       </div>
       <div class="card info-3">
-        {{
-          dashboardAdmin.producttionOrderConfirmAdmin != 0
-            ? "Số lệnh sản xuất chờ xác nhận hoàn thành: " +
-              dashboardAdmin.producttionOrderConfirmAdmin
-            : "Không có lệnh sản xuất nào đợi xác nhận"
-        }}
+        <strong style="font-size: 40px">
+          {{ this.dashboardAdmin.producttionOrderConfirmAdmin }}
+        </strong>
+        <span style="font-size: 18px"
+          >Số lệnh sản xuất chờ xác nhận hoàn thành</span
+        >
         <img
-          src="../assets/graph-filessynced.svg"
+          src="../assets/graph-messages.svg"
           alt="sapphire"
           class="summary-box-graph"
         />
       </div>
       <div class="card info-4">
-        {{
-          dashboardAdmin.producttionOrderConfirmEmployee != 0
-            ? "Số lệnh sản xuất chờ xác nhận hoàn thành: " +
-              dashboardAdmin.producttionOrderConfirmEmployee
-            : "Không có lệnh sản xuất nào đợi xác nhận"
-        }}
+        <strong style="font-size: 40px">
+          {{ this.dashboardAdmin.producttionOrderConfirmEmployee }}
+        </strong>
+        <span style="font-size: 18px"
+          >Số lệnh sản xuất chờ xác nhận hoàn thành</span
+        >
         <img
           src="../assets/graph-filessynced.svg"
           alt="sapphire"
@@ -74,27 +82,23 @@
         />
       </div>
       <div class="card info-5">
-        {{
-          dashboardAdmin.advaceSalaryConfirm != 0
-            ? "Số đơn xin ứng lương: " +
-              dashboardAdmin.producttionOrderConfirmAdmin
-            : "Không có lệnh sản xuất nào đợi nhân viên xác nhận xác nhận"
-        }}
+        <strong style="font-size: 40px">
+          {{ this.dashboardAdmin.advaceSalaryConfirm }}
+        </strong>
+        <span style="font-size: 18px"> Số đơn xin ứng lương </span>
         <img
-          src="../assets/graph-filessynced.svg"
+          src="../assets/graph-checkins.svg"
           alt="sapphire"
           class="summary-box-graph"
         />
       </div>
       <div class="card info-6">
-        {{
-          dashboardAdmin.personaLeaveApplicationConfirm != 0
-            ? "Số đơn xin nghỉ đợi xác nhận: " +
-              dashboardAdmin.personaLeaveApplicationConfirm
-            : "Không có đơn xin nghỉ"
-        }}
+        <strong style="font-size: 40px">
+          {{ this.dashboardAdmin.personaLeaveApplicationConfirm }}
+        </strong>
+        <span style="font-size: 18px">Số đơn xin nghỉ đợi xác nhận</span>
         <img
-          src="../assets/graph-filessynced.svg"
+          src="../assets/graph-messages.svg"
           alt="sapphire"
           class="summary-box-graph"
         />
@@ -120,65 +124,66 @@
           :series="series"
         ></apexchart>
       </div>
+      <br />
     </div>
+    <!-- dashboard cho admin -->
 
     <!-- dashboard cho employee -->
     <div v-if="checkshow('EMPLOYEE')" class="grid grid-responsive">
       <div class="card info-1">
-        {{
-          dashboardEmployee.timeKeep != 0
-            ? "Tổng số công trong tháng là : " + dashboardEmployee.timeKeep
-            : "Không có ghi nhận chấm công"
-        }}
+        <strong style="font-size: 40px">
+          {{ this.dashboardEmployee.timeKeep }}
+        </strong>
+        <span style="font-size: 18px">Tổng số công trong tháng</span>
         <img
           src="../assets/graph-messages.svg"
           alt="sapphire"
           class="summary-box-graph"
         />
       </div>
+
       <div class="card info-2">
-        {{
-          dashboardEmployee.workConfirm != 0
-            ? "Số công việc cần xác nhận : " + dashboardEmployee.workConfirm
-            : "Không có công việc nào được giao"
-        }}
+        <strong style="font-size: 40px">
+          {{ this.dashboardEmployee.workConfirm }}
+        </strong>
+        <span style="font-size: 18px">Số công việc cần xác nhận</span>
         <img
           src="../assets/graph-checkins.svg"
           alt="sapphire"
           class="summary-box-graph"
         />
       </div>
+
       <div class="card info-3">
-        {{
-          dashboardEmployee.workDone != 0
-            ? "Số công việc đã hoàn thành trong tháng qua: " +
-              dashboardEmployee.workDone
-            : "Không có công việc nào được hoàn thành trong tháng qua"
-        }}
+        <strong style="font-size: 40px">
+          {{ this.dashboardEmployee.workDone }}
+        </strong>
+        <span style="font-size: 18px"
+          >Số công việc đã hoàn thành trong tháng qua</span
+        >
         <img
           src="../assets/graph-filessynced.svg"
           alt="sapphire"
           class="summary-box-graph"
         />
       </div>
+
       <div class="card info-4">
-        {{
-          dashboardEmployee.bonus != 0
-            ? "Số quyết định khen thưởng: " + dashboardEmployee.bonus
-            : "Không có quyết định khen thưởng nào"
-        }}
+        <strong style="font-size: 40px">
+          {{ this.dashboardEmployee.bonus }}
+        </strong>
+        <span style="font-size: 18px">Số quyết định khen thưởng</span>
         <img
-          src="../assets/graph-filessynced.svg"
+          src="../assets/graph-checkins.svg"
           alt="sapphire"
           class="summary-box-graph"
         />
       </div>
       <div class="card info-5">
-        {{
-          dashboardEmployee.punish != 0
-            ? "Số quyết định kỷ luật : " + dashboardEmployee.punish
-            : "Không có quyết định kỉ luật nào"
-        }}
+        <strong style="font-size: 40px">
+          {{ this.dashboardEmployee.punish }}
+        </strong>
+        <span style="font-size: 18px">Số quyết định kỷ luật</span>
         <img
           src="../assets/graph-filessynced.svg"
           alt="sapphire"
@@ -186,6 +191,7 @@
         />
       </div>
     </div>
+    <!-- dashboard cho employee -->
   </div>
 </template>
 
@@ -210,13 +216,13 @@ export default {
           title: "Tên nhân viên",
           dataIndex: "fullName",
           key: "fullName",
-          width: 100,
+          width: 120,
         },
         {
           title: "Số lượng công việc",
           dataIndex: "numberWork",
           key: "numberWork",
-          width: 150,
+          width: 140,
         },
       ],
       dashboardAdmin: {
@@ -444,12 +450,12 @@ export default {
 }
 html {
   font-size: 62.5%;
-  font-family: Arial, sans-serif;
+  font-family: Arial, Helvetica, sans-serif;
 }
 .grid {
   width: 100%;
   height: 100%;
-  padding: 1rem;
+  /* padding: 1rem; */
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: auto auto 1fr;
@@ -457,9 +463,9 @@ html {
   gap: 2.5rem;
 }
 .card {
-  padding: 4rem;
-  font-size: 1.4rem;
-  font-weight: bold;
+  padding: 2rem;
+  /* font-size: 1.2rem; */
+  /* font-weight: bold; */
   box-shadow: 0 2px 10px 0 rgb(0 0 0 / 16%), 0 2px 5px 0 rgb(0 0 0 / 26%);
 }
 .header {
@@ -473,32 +479,43 @@ html {
   width: 100%;
 }
 .info-1 {
-  border-top: 4px solid #0097a7;
-  background-color: #2cbccf;
-  color: black;
+  border-top: 4px solid #022727;
+  background-color: #036666;
+  color: rgb(255, 255, 255);
   grid-area: i1;
+  text-align: center;
 }
 .info-2 {
-  border-top: 4px solid rgb(187, 7, 85);
-  background-color: #ff4d6d;
-  color: black;
+  border-top: 4px solid rgb(128, 29, 72);
+  background-color: #e66666;
+  color: rgb(255, 255, 255);
   grid-area: i2;
+  text-align: center;
 }
 .info-3 {
-  border-top: 4px solid #ff9100;
-  background-color: #ffaa00;
-  color: black;
+  border-top: 4px solid #7e3d01;
+  background-color: #ff7b00;
+  color: rgb(255, 255, 255);
   grid-area: i3;
+  text-align: center;
 }
 .info-4 {
-  background-color: #fec5bb;
-  border-top: 4px solid #c77b6e;
-  color: black;
+  background-color: #a6808c;
+  border-top: 4px solid #4b2c36;
+  color: rgb(255, 255, 255);
+  text-align: center;
 }
 .info-5 {
-  background-color: #a4ac86;
-  border-top: 4px solid #6b744d;
-  color: black;
+  background-color: #a3b18a;
+  border-top: 4px solid #303529;
+  color: rgb(255, 255, 255);
+  text-align: center;
+}
+.info-6 {
+  background-color: #003049;
+  border-top: 4px solid #01111a;
+  color: rgb(255, 255, 255);
+  text-align: center;
 }
 .list {
   grid-area: l;
