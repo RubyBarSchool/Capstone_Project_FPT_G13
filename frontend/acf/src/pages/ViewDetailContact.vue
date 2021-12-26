@@ -174,7 +174,7 @@
               <a-row type="flex">
                 <a-col flex="150px">
                   <span style="color: red">*</span>
-                  <strong style="black">Tên hợp đồng: </strong>
+                  <strong> Tên hợp đồng: </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-select
@@ -200,7 +200,7 @@
               <a-row type="flex">
                 <a-col flex="150px">
                   <span style="color: red">*</span>
-                  <strong style="black">Tên sản phẩm: </strong></a-col
+                  <strong> Tên sản phẩm: </strong></a-col
                 >
                 <a-col flex="auto">
                   <a-input
@@ -218,7 +218,7 @@
               <a-row type="flex">
                 <a-col flex="150px"
                   ><span style="color: red">*</span>
-                  <strong style="black">Số lượng: </strong>
+                  <strong> Số lượng: </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input-number
@@ -237,7 +237,7 @@
               <a-row type="flex">
                 <a-col flex="150px">
                   <span style="color: red">*</span>
-                  <strong style="black">Thông số: </strong>
+                  <strong> Thông số: </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input-number
@@ -273,7 +273,7 @@
               <br />
               <a-row type="flex">
                 <a-col flex="150px">
-                  <strong style="black">Ghi chú: </strong>
+                  <strong> Ghi chú: </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-textarea
@@ -286,7 +286,7 @@
               <a-row type="flex">
                 <a-col flex="150px">
                   <span style="color: red">*</span>
-                  <strong style="black">Giá tiền: </strong>
+                  <strong> Giá tiền: </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input v-model="addProductForm.priceProduct" disabled />
@@ -299,7 +299,7 @@
               <a-row type="flex">
                 <a-col flex="150px">
                   <span style="color: red">*</span>
-                  <strong style="black">Bảng giá chi tiết: </strong>
+                  <strong> Bảng giá chi tiết: </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-button type="primary" @click="handleAddMaterialDetail">
@@ -408,7 +408,7 @@
               <a-row type="flex">
                 <a-col flex="150px">
                   <span style="color: red">*</span
-                  ><strong style="black">Tên hợp đồng: </strong>
+                  ><strong> Tên hợp đồng: </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-select
@@ -435,7 +435,7 @@
               <a-row type="flex">
                 <a-col flex="150px">
                   <span style="color: red">*</span>
-                  <strong style="black">Tên sản phẩm: </strong>
+                  <strong> Tên sản phẩm: </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input
@@ -453,7 +453,7 @@
               <a-row type="flex">
                 <a-col flex="150px">
                   <span style="color: red">*</span>
-                  <strong style="black">Số lượng: </strong></a-col
+                  <strong> Số lượng: </strong></a-col
                 >
                 <a-col flex="auto">
                   <a-input-number
@@ -472,7 +472,7 @@
               <a-row type="flex">
                 <a-col flex="150px">
                   <span style="color: red">*</span>
-                  <strong style="black">Thông số: </strong></a-col
+                  <strong> Thông số: </strong></a-col
                 >
                 <a-col flex="auto">
                   <a-input-number
@@ -509,7 +509,7 @@
 
               <a-row type="flex">
                 <a-col flex="150px">
-                  <strong style="black">Ghi chú: </strong></a-col
+                  <strong> Ghi chú: </strong></a-col
                 >
                 <a-col flex="auto">
                   <a-textarea
@@ -524,7 +524,7 @@
               <a-row type="flex">
                 <a-col flex="150px">
                   <span style="color: red">*</span
-                  ><strong style="black">Giá tiền: </strong></a-col
+                  ><strong> Giá tiền: </strong></a-col
                 >
                 <a-col flex="auto">
                   <a-input
@@ -541,7 +541,7 @@
               <a-row type="flex">
                 <a-col flex="150px"
                   ><span style="color: red">*</span>
-                  <strong style="black">Bảng giá chi tiết: </strong>
+                  <strong> Bảng giá chi tiết: </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-button type="primary" @click="handleEditMaterialDetail">

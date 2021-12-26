@@ -159,35 +159,35 @@
             <div class="container">
               <a-form-model>
                 <span style="color: red">*</span>
-                <strong style="color: black"> Nhân viên : </strong>
+                <strong > Nhân viên : </strong>
                 <a-input v-model="dataDetail.nameEmployee" disabled />
                 <br />
                 <br />
                 <span style="color: red">*</span>
-                <strong style="color: black"> Tiêu đề : </strong>
+                <strong > Tiêu đề : </strong>
                 <a-input v-model="dataDetail.title" disabled />
                 <br />
                 <br />
                 <a-row :gutter="[16, 8]">
                   <a-col :span="8">
                     <span style="color: red">*</span>
-                    <strong style="color: black"> Ngày tạo : </strong>
+                    <strong > Ngày tạo : </strong>
                     <a-input v-model="dataDetail.date" disabled />
                   </a-col>
                   <a-col :span="8">
                     <span style="color: red">*</span
-                    ><strong style="color: black"> Ngày bắt đầu : </strong>
+                    ><strong > Ngày bắt đầu : </strong>
                     <a-input v-model="dataDetail.dateStart" disabled />
                   </a-col>
                   <a-col :span="8">
                     <span style="color: red">*</span>
-                    <strong style="color: black"> Ngày kết thúc : </strong>
+                    <strong > Ngày kết thúc : </strong>
                     <a-input v-model="dataDetail.dateEnd" disabled />
                   </a-col>
                 </a-row>
                 <br />
                 <span style="color: red">*</span>
-                <strong style="color: black"> Nội dung : </strong>
+                <strong > Nội dung : </strong>
                 <a-textarea
                   v-model="dataDetail.content"
                   :auto-size="{
@@ -199,7 +199,7 @@
                 <br />
                 <br />
                 <span style="color: red">*</span>
-                <strong style="color: black"> Ghi chú : </strong>
+                <strong > Ghi chú : </strong>
                 <a-textarea
                   @change="inputNote"
                   placeholder="Viết ghi chú....."

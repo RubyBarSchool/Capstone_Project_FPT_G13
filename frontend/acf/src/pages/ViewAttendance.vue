@@ -135,7 +135,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span>
-                <strong style="color: black"> Họ và tên</strong>
+                <strong> Họ và tên</strong>
               </a-col>
               <a-col flex="auto">
                 <a-input @change="inputName" v-model="nameEdit" disabled />
@@ -148,7 +148,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span>
-                <strong style="color: black"> Số công</strong>
+                <strong> Số công</strong>
               </a-col>
               <a-col flex="auto">
                 <a-select
@@ -168,7 +168,7 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <strong style="color: black"> Ghi chú </strong></a-col
+                <strong> Ghi chú </strong></a-col
               >
               <a-col flex="auto">
                 <a-textarea

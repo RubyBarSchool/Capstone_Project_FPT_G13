@@ -204,7 +204,7 @@
                 <a-row type="flex">
                   <a-col flex="150px"
                     ><span style="color: red">*</span>
-                    <strong style="color: black">Lệnh sản xuất: </strong>
+                    <strong> Lệnh sản xuất: </strong>
                   </a-col>
                   <a-col flex="auto">
                     <a-input
@@ -225,7 +225,7 @@
                 <a-row type="flex">
                   <a-col flex="150px">
                     <span style="color: red">*</span>
-                    <strong style="color: black"> Tên hợp đồng:</strong>
+                    <strong> Tên hợp đồng:</strong>
                   </a-col>
                   <a-col flex="auto">
                     <a-select
@@ -251,7 +251,7 @@
                 <a-row type="flex">
                   <a-col flex="150px">
                     <span style="color: red">*</span>
-                    <strong style="color: black">Tên sản phẩm: </strong>
+                    <strong> Tên sản phẩm: </strong>
                   </a-col>
                   <a-col flex="auto">
                     <a-select
@@ -278,7 +278,7 @@
                 <a-row type="flex">
                   <a-col flex="150px">
                     <span style="color: red">*</span>
-                    <strong style="color: black">Ngày bắt đầu: </strong></a-col
+                    <strong> Ngày bắt đầu: </strong></a-col
                   >
                   <a-col flex="auto">
                     <a-date-picker
@@ -299,7 +299,7 @@
                 <a-row type="flex">
                   <a-col flex="150px">
                     <span style="color: red">*</span>
-                    <strong style="color: black"> Ngày hoàn thành:</strong>
+                    <strong> Ngày hoàn thành:</strong>
                   </a-col>
                   <a-col flex="auto">
                     <a-date-picker
@@ -320,7 +320,7 @@
                 <a-row type="flex">
                   <a-col flex="150px">
                     <span style="color: red">*</span>
-                    <strong style="color: black">Xem công việc: </strong>
+                    <strong> Xem công việc: </strong>
                   </a-col>
                   <a-col flex="auto">
                     <a-button
@@ -404,7 +404,7 @@
                 <a-row type="flex">
                   <a-col flex="150px">
                     <span style="color: red">*</span>
-                    <strong style="color: black"> Lệnh sản xuất:</strong>
+                    <strong> Lệnh sản xuất:</strong>
                   </a-col>
                   <a-col flex="auto">
                     <a-input
@@ -425,7 +425,7 @@
                 <a-row type="flex">
                   <a-col flex="150px">
                     <span style="color: red">*</span>
-                    <strong style="color: black">Tên hợp đồng: </strong>
+                    <strong> Tên hợp đồng: </strong>
                   </a-col>
                   <a-col flex="auto">
                     <a-select
@@ -452,7 +452,7 @@
                 <a-row type="flex">
                   <a-col flex="150px">
                     <span style="color: red">*</span>
-                    <strong style="color: black"> Tên sản phẩm:</strong>
+                    <strong> Tên sản phẩm:</strong>
                   </a-col>
                   <a-col flex="auto">
                     <a-select
@@ -479,7 +479,7 @@
                 <a-row type="flex">
                   <a-col flex="150px">
                     <span style="color: red">*</span>
-                    <strong style="color: black">Ngày bắt đầu: </strong>
+                    <strong> Ngày bắt đầu: </strong>
                   </a-col>
                   <a-col flex="auto">
                     <a-date-picker
@@ -500,7 +500,7 @@
                 <a-row type="flex">
                   <a-col flex="150px">
                     <span style="color: red">*</span>
-                    <strong style="color: black">Ngày hoàn thành: </strong>
+                    <strong> Ngày hoàn thành: </strong>
                   </a-col>
                   <a-col flex="auto">
                     <a-date-picker
@@ -521,7 +521,7 @@
                 <a-row type="flex">
                   <a-col flex="150px">
                     <span style="color: red">*</span>
-                    <strong style="color: black">Xem công việc: </strong>
+                    <strong> Xem công việc: </strong>
                   </a-col>
                   <a-col flex="auto">
                     <a-button

@@ -148,7 +148,7 @@
           <a-row type="flex">
             <a-col flex="150px">
               <span style="color: red">*</span>
-              <strong style="color: black">Tên hợp đồng </strong>
+              <strong> Tên hợp đồng </strong>
             </a-col>
             <a-col flex="auto">
               <a-select
@@ -174,7 +174,7 @@
           <a-row type="flex">
             <a-col flex="150px">
               <span style="color: red">*</span>
-              <strong style="color: black">Số tiền tạm ứng </strong></a-col
+              <strong> Số tiền tạm ứng </strong></a-col
             >
             <a-col flex="auto">
               <a-input-number
@@ -259,7 +259,7 @@
           </template>
           <a-form-model>
             <span style="color: red">*</span>
-            <strong style="color: black">Số tiền tạm ứng </strong>
+            <strong> Số tiền tạm ứng: </strong>
             <a-input-number
               v-model="dataSubmit.money"
               placeholder="Nhập số tiền tạm ứng"

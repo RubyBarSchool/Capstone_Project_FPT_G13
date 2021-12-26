@@ -174,7 +174,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span>
-                <strong style="color: black"> Nhân viên :</strong></a-col
+                <strong> Nhân viên :</strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -203,7 +203,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span>
-                <strong style="color: black">Tài khoản :</strong></a-col
+                <strong> Tài khoản :</strong></a-col
               >
               <a-col flex="auto">
                 <a-input
@@ -220,7 +220,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span>
-                <strong style="color: black">Chức vụ :</strong></a-col
+                <strong> Chức vụ :</strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -264,7 +264,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span
-                ><strong style="color: black"> Tài khoản :</strong></a-col
+                ><strong> Tài khoản :</strong></a-col
               >
               <a-col flex="auto">
                 <a-input v-model="dataEdit.username" disabled />
@@ -277,7 +277,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span>
-                <strong style="color: black">Chức vụ :</strong></a-col
+                <strong> Chức vụ :</strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -306,7 +306,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span>
-                <strong style="color: black">Trạng thái :</strong></a-col
+                <strong> Trạng thái :</strong></a-col
               >
               <a-col flex="auto">
                 <a-radio-group name="radioGroup" v-model="dataEdit.status">
