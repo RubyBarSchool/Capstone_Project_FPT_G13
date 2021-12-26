@@ -106,16 +106,12 @@
                   })
                 }}
               </template>
-               <!-- <template slot="moneyAdvance" slot-scope="text, record">
-                {{
-                  
-                }}
+              <template slot="moneyAdvance" slot-scope="text, record">
+                {{ formatMoney(record.moneyAdvance) }}
               </template>
-                 <template slot="moneyContact" slot-scope="text, record">
-                {{
-                  
-                }}
-              </template> -->
+              <template slot="moneyContact" slot-scope="text, record">
+                {{ formatMoney(record.moneyContact) }}
+              </template>
               <template slot="action" slot-scope="text, record">
                 <a-row>
                   <a-col :span="8">
@@ -194,8 +190,7 @@
                 style="width: 80%"
                 :min="100000"
                 :formatter="
-                  (value) =>
-                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  (value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
                 "
                 :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
               />
@@ -234,6 +229,9 @@
                   day: "2-digit",
                 })
               }}
+            </template>
+            <template slot="money" slot-scope="text, record">
+              {{formatMoney(record.money)}}
             </template>
             <template slot="action" slot-scope="text, record">
               <a-row :gutter="[16, 16]">
@@ -350,14 +348,14 @@ export default {
           dataIndex: "moneyAdvance",
           key: "moneyAdvance",
           width: 150,
-          scopedSlots: {customRender: 'moneyAdvance'},
+          scopedSlots: { customRender: "moneyAdvance" },
         },
         {
           title: "Tổng giá trị",
           dataIndex: "moneyContact",
           key: "moneyContact",
           width: 150,
-           scopedSlots: {customRender: 'moneyContact'},
+          scopedSlots: { customRender: "moneyContact" },
         },
         {
           title: "Định mức hoàn thành",
@@ -399,6 +397,7 @@ export default {
           title: "Số tiền tạm ứng",
           dataIndex: "money",
           key: "money",
+          scopedSlots: { customRender: "money" },
           width: 100,
         },
         {
@@ -433,6 +432,9 @@ export default {
     this.getDataContact();
   },
   methods: {
+    formatMoney(value) {
+      return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
     confirm(record) {
       let data = {
         contact: record.idContact,
