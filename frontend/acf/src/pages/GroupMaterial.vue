@@ -14,7 +14,7 @@
             @click="showModalAdd"
             :style="{ 'margin-left': '5px' }"
           >
-           <font-awesome-icon
+            <font-awesome-icon
               :icon="['fas', 'plus-square']"
               :style="{ 'margin-right': '5px' }"
             />
@@ -68,7 +68,8 @@
               </a-button>
             </template>
             <a-form-model>
-              <span style="color: red">*</span> Tên nhóm vật liệu
+              <span style="color: red">*</span>
+              <strong style="color: black"> Tên nhóm vật liệu: </strong>
               <a-input @change="inputGroup" v-model="name" />
               <div style="color: red" v-if="checkDataInputGroup.show">
                 {{ checkDataInputGroup.message }}
@@ -86,8 +87,7 @@ import groupMaterialService from "../service/groupMaterialService.js";
 
 export default {
   name: "GroupMaterial",
-  components: {
-  },
+  components: {},
   data() {
     return {
       loading: false,

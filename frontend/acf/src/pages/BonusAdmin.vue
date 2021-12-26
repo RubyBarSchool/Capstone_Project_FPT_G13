@@ -148,8 +148,9 @@
             </template>
 
             <a-row type="flex">
-              <a-col flex="100px">
-                <span style="color: red">*</span> Tiêu đề :</a-col
+              <a-col flex="120px">
+                <span style="color: red">*</span>
+                <strong style="color: black">Tiêu đề : </strong></a-col
               >
               <a-col flex="auto">
                 <a-input @change="inputTitle" v-model="dataAdd.title" />
@@ -160,8 +161,9 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">
-                <span style="color: red">*</span> Họ và tên :</a-col
+              <a-col flex="120px">
+                <span style="color: red">*</span>
+                <strong style="color: black">Họ và tên :</strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -188,8 +190,9 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">
-                <span style="color: red">*</span> Lý do :</a-col
+              <a-col flex="120px">
+                <span style="color: red">*</span>
+                <strong style="color: black">Lý do :</strong></a-col
               >
               <a-col flex="auto">
                 <a-textarea
@@ -205,8 +208,9 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">
-                <span style="color: red">*</span> Số tiền/người:</a-col
+              <a-col flex="120px">
+                <span style="color: red">*</span>
+                <strong style="color: black"> Số tiền/người: </strong></a-col
               >
               <a-col flex="auto">
                 <a-input-number
@@ -222,8 +226,9 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">
-                <span style="color: red">*</span> Trạng thái :</a-col
+              <a-col flex="120px">
+                <span style="color: red">*</span>
+                <strong style="color: black">Trạng thái : </strong></a-col
               >
               <a-col flex="auto">
                 <a-radio-group
@@ -241,8 +246,9 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">
-                <span style="color: red">*</span> Ngày hiệu lực</a-col
+              <a-col flex="120px">
+                <span style="color: red">*</span>
+                <strong style="color: black">Ngày hiệu lực </strong></a-col
               >
               <a-col flex="auto">
                 <a-date-picker
@@ -263,7 +269,10 @@
           <!-- popup add -->
 
           <!-- popup edit-->
-          <a-modal v-model="visibleEdit" title="Chỉnh sửa quyết định khen thưởng">
+          <a-modal
+            v-model="visibleEdit"
+            title="Chỉnh sửa quyết định khen thưởng"
+          >
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button
@@ -277,7 +286,8 @@
             </template>
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Tiêu đề :</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black">Tiêu đề : </strong></a-col
               >
               <a-col flex="auto">
                 <a-input @change="inputEditTitle" v-model="dataEdit.title" />
@@ -288,8 +298,9 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">
-                <span style="color: red">*</span> Họ và tên :</a-col
+              <a-col flex="120px">
+                <span style="color: red">*</span>
+                <strong style="color: black">Họ và tên : </strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -316,8 +327,9 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">
-                <span style="color: red">*</span> Lý do :</a-col
+              <a-col flex="120px">
+                <span style="color: red">*</span>
+                <strong style="color: black"> Lý do : </strong></a-col
               >
               <a-col flex="auto">
                 <a-textarea
@@ -333,8 +345,9 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">
-                <span style="color: red">*</span> Số tiền/người:</a-col
+              <a-col flex="120px">
+                <span style="color: red">*</span>
+                <strong style="color: black">Số tiền/người: </strong></a-col
               >
               <a-col flex="auto">
                 <a-input-number
@@ -350,8 +363,9 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">
-                <span style="color: red">*</span> Trạng thái :</a-col
+              <a-col flex="120px">
+                <span style="color: red">*</span>
+                <strong style="color: black">Trạng thái :</strong></a-col
               >
               <a-col flex="auto">
                 <a-radio-group
@@ -369,8 +383,9 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">
-                <span style="color: red">*</span> Ngày hiệu lực</a-col
+              <a-col flex="120px">
+                <span style="color: red">*</span>
+                <strong style="color: black">Ngày hiệu lực </strong></a-col
               >
               <a-col flex="auto">
                 <a-date-picker
@@ -801,14 +816,18 @@ export default {
             let type = "success";
             let message = "Xóa quyết định khen thưởng";
             let description =
-              "Xóa quyết định khen thưởng " + this.dataAdd.title + " thành công";
+              "Xóa quyết định khen thưởng " +
+              this.dataAdd.title +
+              " thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           } else {
             let type = "error";
             let message = "Xóa quyết định khen thưởng";
             let description =
-              "Xóa quyết định khen thưởng " + this.dataAdd.title + " không thành công";
+              "Xóa quyết định khen thưởng " +
+              this.dataAdd.title +
+              " không thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           }

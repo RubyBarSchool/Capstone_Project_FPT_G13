@@ -158,25 +158,36 @@
             </template>
             <div class="container">
               <a-form-model>
-                <span style="color: red">*</span> Nhân viên :
+                <span style="color: red">*</span>
+                <strong style="color: black">Nhân viên : </strong>
                 <a-input v-model="dataDetail.nameEmployee" disabled />
-                <span style="color: red">*</span> Tiêu đề :
+                <br />
+                <br />
+                <span style="color: red">*</span>
+                <strong style="color: black">Tiêu đề : </strong>
                 <a-input v-model="dataDetail.title" disabled />
+                <br />
+                <br />
                 <a-row :gutter="[16, 8]">
                   <a-col :span="8">
-                    <span style="color: red">*</span> Ngày tạo :
+                    <span style="color: red">*</span>
+                    <strong style="color: black">Ngày tạo : </strong>
                     <a-input v-model="dataDetail.date" disabled />
                   </a-col>
                   <a-col :span="8">
-                    <span style="color: red">*</span> Ngày bắt đầu :
+                    <span style="color: red">*</span
+                    ><strong style="color: black">Ngày bắt đầu : </strong>
                     <a-input v-model="dataDetail.dateStart" disabled />
                   </a-col>
                   <a-col :span="8">
-                    <span style="color: red">*</span> Ngày kết thúc :
+                    <span style="color: red">*</span>
+                    <strong style="color: black">Ngày kết thúc : </strong>
                     <a-input v-model="dataDetail.dateEnd" disabled />
                   </a-col>
                 </a-row>
-                <span style="color: red">*</span> Nội dung :
+                <br />
+                <span style="color: red">*</span>
+                <strong style="color: black">Nội dung : </strong>
                 <a-textarea
                   v-model="dataDetail.content"
                   :auto-size="{
@@ -185,7 +196,10 @@
                   }"
                   disabled
                 />
-                <span style="color: red">*</span> Ghi chú ;
+                <br />
+                <br />
+                <span style="color: red">*</span>
+                <strong style="color: black">Ghi chú : </strong>
                 <a-textarea
                   @change="inputNote"
                   placeholder="Viết ghi chú....."
@@ -343,7 +357,7 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
-      this.dataSearch.nameEmployee =  this.dataSearch.nameEmployee.trim();
+      this.dataSearch.nameEmployee = this.dataSearch.nameEmployee.trim();
       this.dataSearch.title = this.dataSearch.title.trim();
       this.dataSearch.pageIndex = 1;
       this.visibleView = false;
@@ -373,6 +387,8 @@ export default {
       dateStart,
       dateEnd
     ) {
+      this.checkDataInputNote.show = false;
+      this.checkDataInputNote.message = "";
       this.dataDetail.nameEmployee = nameEmployee;
       this.dataDetail.title = title;
       let date1 = moment(date).format("DD/MM/YYYY");

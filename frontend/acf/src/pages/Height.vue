@@ -59,7 +59,7 @@
         </a-button>
       </template>
       <a-form-model>
-        <span style="color: red">*</span>Chiều cao :
+        <span style="color: red">*</span> <strong style="color: black">Chiều cao : </strong>
         <a-form-model-item>
           <a-input-number
             style="width: 100%"

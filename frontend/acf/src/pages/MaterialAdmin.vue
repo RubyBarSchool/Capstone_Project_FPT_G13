@@ -208,7 +208,8 @@
             </template>
             <a-row type="flex">
               <a-col flex="100px"
-                ><span style="color: red">*</span>Mã vật liệu</a-col
+                ><span style="color: red">*</span>
+                <strong style="color: black">Mã vật liệu</strong></a-col
               >
               <a-col flex="auto">
                 <template v-for="tag in tags">
@@ -245,7 +246,10 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"><span style="color: red">*</span>Khung</a-col>
+              <a-col flex="100px"
+                ><span style="color: red">*</span>
+                <strong style="color: black">Khung </strong></a-col
+              >
               <a-col flex="auto">
                 <a-select
                   placeholder="Thông số"
@@ -272,7 +276,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px"
-                ><span style="color: red">*</span>Chiều cao</a-col
+                ><span style="color: red">*</span>
+                <strong style="color: black">Chiều cao </strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -300,7 +305,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px"
-                ><span style="color: red">*</span>Nhóm vật liệu</a-col
+                ><span style="color: red">*</span>
+                <strong style="color: black">Nhóm vật liệu </strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -325,7 +331,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px"
-                ><span style="color: red">*</span>Đơn vị đo</a-col
+                ><span style="color: red">*</span>
+                <strong style="color: black">Đơn vị đo</strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -350,7 +357,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px"
-                ><span style="color: red">*</span>Công ty</a-col
+                ><span style="color: red">*</span>
+                <strong style="color: black">Công ty</strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -376,7 +384,8 @@
 
             <a-row type="flex">
               <a-col flex="100px"
-                ><span style="color: red">*</span>Giá thành</a-col
+                ><span style="color: red">*</span>
+                <strong style="color: black">Giá thành</strong></a-col
               >
               <a-col flex="auto">
                 <a-input-number
@@ -392,7 +401,9 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Ảnh</a-col>
+              <a-col flex="100px">
+                <strong style="color: black"> Ảnh</strong></a-col
+              >
               <a-col flex="auto">
                 <input
                   type="file"
@@ -429,7 +440,8 @@
             </template>
             <a-row type="flex">
               <a-col flex="100px"
-                ><span style="color: red">*</span>Mã vật liệu</a-col
+                ><span style="color: red">*</span>
+                <strong style="color: black">Mã vật liệu</strong></a-col
               >
               <a-col flex="auto">
                 <a-input
@@ -445,7 +457,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px"
-                ><span style="color: red">*</span>Thông số</a-col
+                ><span style="color: red">*</span>
+                <strong style="color: black">Thông số</strong></a-col
               >
               <a-col flex="auto">
                 <a-input
@@ -461,7 +474,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px"
-                ><span style="color: red">*</span>Nhóm vật liệu</a-col
+                ><span style="color: red">*</span>
+                <strong style="color: black">Nhóm vật liệu</strong></a-col
               >
               <a-col flex="auto">
                 <a-input
@@ -477,7 +491,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px"
-                ><span style="color: red">*</span>Đơn vị đo</a-col
+                ><span style="color: red">*</span>
+                <strong style="color: black">Đơn vị đo</strong></a-col
               >
               <a-col flex="auto">
                 <a-input
@@ -493,7 +508,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px"
-                ><span style="color: red">*</span>Công ty</a-col
+                ><span style="color: red">*</span>
+                <strong style="color: black">Công ty</strong></a-col
               >
               <a-col flex="auto">
                 <a-input
@@ -509,7 +525,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px"
-                ><span style="color: red">*</span>Giá thành</a-col
+                ><span style="color: red">*</span>
+                <strong style="color: black">Giá thành</strong></a-col
               >
               <a-col flex="auto">
                 <a-input-number
@@ -525,7 +542,9 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px">Ảnh</a-col>
+              <a-col flex="100px">
+                <strong style="color: black">Ảnh</strong></a-col
+              >
               <a-col flex="auto">
                 <input
                   type="file"
@@ -562,7 +581,8 @@
             </template>
             <a-row type="flex">
               <a-col flex="100px"
-                ><span style="color: red">*</span>Mã vật liệu :</a-col
+                ><span style="color: red">*</span>
+                <strong style="color: black">Mã vật liệu</strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -586,7 +606,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px"
-                ><span style="color: red">*</span>Đơn vị đo :</a-col
+                ><span style="color: red">*</span>
+                <strong style="color: black">Đơn vị đo</strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -615,7 +636,7 @@
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button key="reset" type="danger" @click="resetFrame">
-                Reset
+                Cài lại
               </a-button>
               <a-button
                 key="submit"
@@ -628,7 +649,8 @@
             </template>
             <a-row type="flex">
               <a-col flex="100px"
-                ><span style="color: red">*</span>Mã vật liệu :</a-col
+                ><span style="color: red">*</span>
+                <strong style="color: black">Mã vật liệu</strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -654,7 +676,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span>Khung :</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black">Khung</strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -680,7 +703,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span>Chiều cao :</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black">Chiều cao</strong></a-col
               >
               <a-col flex="auto">
                 <a-select

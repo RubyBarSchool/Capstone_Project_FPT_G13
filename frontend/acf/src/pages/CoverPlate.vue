@@ -206,7 +206,8 @@
             </template>
             <a-row type="flex">
               <a-col flex="120px">
-                <span style="color: red">*</span> Mã tấm phủ</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black"> Mã tấm phủ </strong></a-col
               >
               <a-col flex="auto">
                 <template v-for="tag in tags">
@@ -248,7 +249,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="120px">
-                <span style="color: red">*</span> Thông số</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black">Thông số </strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -276,7 +278,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="120px">
-                <span style="color: red">*</span> Chiều cao</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black">Chiều cao </strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -303,7 +306,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="120px">
-                <span style="color: red">*</span> Nhóm tấm phủ</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black"> Nhóm tấm phủ </strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -328,7 +332,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="120px">
-                <span style="color: red">*</span> Đơn vị đo</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black">Đơn vị đo </strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -353,7 +358,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="120px">
-                <span style="color: red">*</span> Công ty</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black">Công ty </strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -378,7 +384,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="120px">
-                <span style="color: red">*</span> Giá thành</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black">Giá thành </strong></a-col
               >
               <a-col flex="auto">
                 <a-input-number
@@ -394,7 +401,9 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="120px">Ảnh</a-col>
+              <a-col flex="120px"
+                ><strong style="color: black">Ảnh </strong></a-col
+              >
               <a-col flex="auto">
                 <input
                   type="file"
@@ -432,7 +441,8 @@
             <a-form-model>
               <a-row type="flex">
                 <a-col flex="120px">
-                  <span style="color: red">*</span> Mã tấm phủ
+                  <span style="color: red">*</span>
+                  <strong style="color: black"> Mã tấm phủ </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input
@@ -445,7 +455,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="120px">
-                  <span style="color: red">*</span> Thông số
+                  <span style="color: red">*</span>
+                  <strong style="color: black"> Thông số </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input
@@ -458,7 +469,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="120px">
-                  <span style="color: red">*</span> Nhóm tấm phủ
+                  <span style="color: red">*</span>
+                  <strong style="color: black"> Nhóm tấm phủ </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input
@@ -471,7 +483,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="120px">
-                  <span style="color: red">*</span> Đơn vị
+                  <span style="color: red">*</span>
+                  <strong style="color: black"> Đơn vị </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input
@@ -484,7 +497,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="120px">
-                  <span style="color: red">*</span> Công ty
+                  <span style="color: red">*</span>
+                  <strong style="color: black"> Công ty </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input
@@ -498,7 +512,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="120px">
-                  <span style="color: red">*</span> Giá thành
+                  <span style="color: red">*</span>
+                  <strong style="color: black"> Giá thành </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input-number
@@ -514,7 +529,9 @@
               <br />
             </a-form-model>
             <a-row type="flex">
-              <a-col flex="120px"> Ảnh : </a-col>
+              <a-col flex="120px">
+                <strong style="color: black"> Ảnh </strong></a-col
+              >
               <a-col flex="auto">
                 <a-form-model-item>
                   <input
@@ -551,7 +568,8 @@
             </template>
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Mã tấm phủ</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black">Mã tấm phủ</strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -575,7 +593,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Đơn vị đo</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black">Đơn vị đo</strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -600,7 +619,7 @@
           <!-- popup unit-->
 
           <!-- popup khung-->
-          <a-modal v-model="visibleAddHW" title="Thêm Khung và chiều cao">
+          <a-modal v-model="visibleAddHW" title="Thêm khung và chiều cao">
             <template slot="footer">
               <a-button key="back" @click="handleCancel"> Hủy </a-button>
               <a-button key="reset" type="danger" @click="resetFrame">
@@ -617,7 +636,8 @@
             </template>
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Mã tấm phủ</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black">Mã tấm phủ</strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -644,7 +664,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Khung</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black">Khung</strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -670,8 +691,9 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Chiều cao</a-col
-              >
+                <span style="color: red">*</span>
+                <strong style="color: black">Chiều cao</strong>
+              </a-col>
               <a-col flex="auto">
                 <a-select
                   placeholder="Chiều cao"

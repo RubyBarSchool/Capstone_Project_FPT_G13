@@ -68,7 +68,7 @@
               </a-button>
             </template>
             <a-form-model>
-              <span style="color: red">*</span> Loại đơn vị đo:
+              <span style="color: red">*</span> <strong style="color: black">Loại đơn vị đo: </strong> 
               <a-form-model-item>
                 <a-input v-model="name" @change="inputNameAdd" />
                 <div style="color: red" v-if="checkDataInputName.show">

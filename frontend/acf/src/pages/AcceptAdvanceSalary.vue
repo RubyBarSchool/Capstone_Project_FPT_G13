@@ -141,7 +141,8 @@
             </template>
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Nhân viên:
+                <span style="color: red">*</span>
+                <strong style="color: black">Nhân viên: </strong>
               </a-col>
               <a-col flex="auto">
                 <a-input v-model="dataDetail.nameEmployee" disabled />
@@ -150,7 +151,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Tiêu đề:
+                <span style="color: red">*</span>
+                <strong style="color: black">Tiêu đề: </strong>
               </a-col>
               <a-col flex="auto">
                 <a-input v-model="dataDetail.title" disabled />
@@ -159,7 +161,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Số tiền:
+                <span style="color: red">*</span>
+                <strong style="color: black">Số tiền: </strong>
               </a-col>
               <a-col flex="auto">
                 <a-input v-model="dataDetail.advanceSalary" disabled />
@@ -168,7 +171,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Nội dung:
+                <span style="color: red">*</span>
+                <strong style="color: black">Nội dung:</strong>
               </a-col>
               <a-col flex="auto">
                 <a-textarea v-model="dataDetail.content" :rows="4" disabled />
@@ -177,7 +181,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Ghi chú:
+                <span style="color: red">*</span>
+                <strong style="color: black">Ghi chú:</strong>
               </a-col>
               <a-col flex="auto">
                 <a-textarea

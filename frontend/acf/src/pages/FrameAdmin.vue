@@ -100,7 +100,8 @@
             </template>
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span>Chiều dài :</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black"> Chiều dài : </strong></a-col
               >
               <a-col flex="auto">
                 <a-input-number
@@ -117,7 +118,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span>Chiều rộng :</a-col
+                <span style="color: red">*</span
+                ><strong style="color: black">Chiều rộng : </strong></a-col
               >
               <a-col flex="auto">
                 <a-input-number
@@ -307,7 +309,7 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
-      this.dataSearch.pageIndex = 1;      
+      this.dataSearch.pageIndex = 1;
       this.dataSearch.length = this.dataSearch.length.trim();
       this.dataSearch.width = this.dataSearch.width.trim();
       frameAdminService

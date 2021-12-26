@@ -168,7 +168,8 @@
                 </div>
                 <div class="row">
                   <div class="col">
-                    <span style="color: red">*</span> Họ Và Tên :
+                    <span style="color: red">*</span>
+                    <strong style="color: black"> Họ Và Tên :</strong>
                     <a-form-model-item>
                       <a-input
                         style="width: 100%"
@@ -183,7 +184,8 @@
                       </div>
                     </a-form-model-item>
 
-                    <span style="color: red">*</span> Ngày Sinh :
+                    <span style="color: red">*</span>
+                    <strong style="color: black">Ngày Sinh : </strong>
                     <a-form-model-item>
                       <a-date-picker
                         style="width: 100%"
@@ -199,7 +201,8 @@
                       </div>
                     </a-form-model-item>
 
-                    <span style="color: red">*</span> Giới tính :
+                    <span style="color: red">*</span>
+                    <strong style="color: black">Giới tính :</strong>
                     <a-form-model-item>
                       <a-radio-group
                         style="width: 100%"
@@ -210,7 +213,8 @@
                       </a-radio-group>
                     </a-form-model-item>
 
-                    <span style="color: red">*</span> Chức Vụ :
+                    <span style="color: red">*</span>
+                    <strong style="color: black">Chức Vụ :</strong>
                     <a-form-model-item>
                       <a-select
                         placeholder="Chức vụ"
@@ -235,7 +239,8 @@
                       </div>
                     </a-form-model-item>
 
-                    <span style="color: red">*</span> Số điện thoại :
+                    <span style="color: red">*</span>
+                    <strong style="color: black">Số điện thoại :</strong>
                     <a-form-model-item>
                       <a-input
                         style="width: 100%"
@@ -248,7 +253,8 @@
                     </a-form-model-item>
                   </div>
                   <div class="col">
-                    <span style="color: red">*</span> Email :
+                    <span style="color: red">*</span>
+                    <strong style="color: black">Email :</strong>
                     <a-form-model-item>
                       <a-input
                         style="width: 100%"
@@ -260,7 +266,8 @@
                       </div>
                     </a-form-model-item>
 
-                    <span style="color: red">*</span> Địa chỉ :
+                    <span style="color: red">*</span>
+                    <strong style="color: black">Địa chỉ :</strong>
                     <a-form-model-item>
                       <a-input
                         style="width: 100%"
@@ -272,7 +279,8 @@
                       </div>
                     </a-form-model-item>
 
-                    <span style="color: red">*</span> Dân tộc :
+                    <span style="color: red">*</span>
+                    <strong style="color: black">Dân tộc :</strong>
                     <a-form-model-item>
                       <a-input
                         style="width: 100%"
@@ -284,7 +292,8 @@
                       </div>
                     </a-form-model-item>
 
-                    <span style="color: red">*</span> Lương :
+                    <span style="color: red">*</span>
+                    <strong style="color: black">Lương :</strong>
                     <a-form-model-item>
                       <a-input-number
                         style="width: 100%"
@@ -296,7 +305,7 @@
                       </div>
                     </a-form-model-item>
 
-                    Ảnh :
+                    <strong style="color: black"> Ảnh :</strong>
                     <a-form-model-item>
                       <input
                         type="file"
@@ -337,7 +346,8 @@
                 </div>
                 <div class="row">
                   <div class="col">
-                    <span style="color: red">*</span> Họ Và Tên :
+                    <span style="color: red">*</span>
+                    <strong style="color: black"> Họ Và Tên : </strong>
                     <a-form-model-item>
                       <a-input
                         @change="inputFullNameEdit"
@@ -351,7 +361,8 @@
                       </div>
                     </a-form-model-item>
 
-                    <span style="color: red">*</span> Ngày Sinh :
+                    <span style="color: red">*</span>
+                    <strong style="color: black">Ngày Sinh : </strong>
                     <a-form-model-item>
                       <a-date-picker
                         v-model="dataEdit.dob"
@@ -366,7 +377,8 @@
                       </div>
                     </a-form-model-item>
 
-                    <span style="color: red">*</span> Giới tính :
+                    <span style="color: red">*</span>
+                    <strong style="color: black">Giới tính : </strong>
                     <a-form-model-item>
                       <a-radio-group v-model="dataEdit.gender">
                         <a-radio :value="true"> Nam </a-radio>
@@ -374,7 +386,8 @@
                       </a-radio-group>
                     </a-form-model-item>
 
-                    <span style="color: red">*</span> Chức Vụ :
+                    <span style="color: red">*</span>
+                    <strong style="color: black">Chức Vụ : </strong>
                     <a-form-model-item>
                       <a-select
                         placeholder="Chức vụ"
@@ -398,7 +411,8 @@
                       </div>
                     </a-form-model-item>
 
-                    <span style="color: red">*</span> Số điện thoại :
+                    <span style="color: red">*</span>
+                    <strong style="color: black">Số điện thoại : </strong>
                     <a-form-model-item>
                       <a-input
                         v-model="dataEdit.phone"
@@ -410,7 +424,8 @@
                     </a-form-model-item>
                   </div>
                   <div class="col">
-                    <span style="color: red">*</span> Email :
+                    <span style="color: red">*</span>
+                    <strong style="color: black">Email : </strong>
                     <a-form-model-item>
                       <a-input
                         v-model="dataEdit.email"
@@ -421,7 +436,8 @@
                       </div>
                     </a-form-model-item>
 
-                    <span style="color: red">*</span> Địa chỉ :
+                    <span style="color: red">*</span>
+                    <strong style="color: black">Địa chỉ : </strong>
                     <a-form-model-item>
                       <a-input
                         v-model="dataEdit.address"
@@ -432,7 +448,8 @@
                       </div>
                     </a-form-model-item>
 
-                    <span style="color: red">*</span> Dân tộc :
+                    <span style="color: red">*</span>
+                    <strong style="color: black">Dân tộc : </strong>
                     <a-form-model-item>
                       <a-input
                         v-model="dataEdit.nation"
@@ -443,7 +460,8 @@
                       </div>
                     </a-form-model-item>
 
-                    <span style="color: red">*</span> Lương :
+                    <span style="color: red">*</span>
+                    <strong style="color: black">Lương : </strong>
                     <a-form-model-item>
                       <a-input-number
                         v-model="dataEdit.salary"
@@ -454,7 +472,7 @@
                       </div>
                     </a-form-model-item>
 
-                    Ảnh :
+                    <strong style="color: black">Ảnh : </strong>
                     <a-form-model-item>
                       <input
                         type="file"

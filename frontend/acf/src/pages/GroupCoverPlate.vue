@@ -68,7 +68,7 @@
               </a-button>
             </template>
             <a-form-model>
-              <span style="color: red">*</span> Tên nhóm tấm phủ
+              <span style="color: red">*</span> <strong style="color: black">  Tên nhóm tấm phủ: </strong>
               <a-input @change="inputGroup" v-model="name" />
               <div style="color: red" v-if="checkDataInputGroup.show">
                 {{ checkDataInputGroup.message }}

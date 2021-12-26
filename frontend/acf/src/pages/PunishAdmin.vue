@@ -107,7 +107,7 @@
                           record.money,
                           record.reason,
                           record.status,
-                          record.title,
+                          record.title
                         )
                       "
                       :style="{ width: '44.25px' }"
@@ -150,7 +150,8 @@
             <a-form-model>
               <a-row type="flex">
                 <a-col flex="120px">
-                  <span style="color: red">*</span> Tiêu đề:
+                  <span style="color: red">*</span>
+                  <strong style="color: black">Tiêu đề:</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input
@@ -166,7 +167,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="120px">
-                  <span style="color: red">*</span> Họ và tên:
+                  <span style="color: red">*</span>
+                  <strong style="color: black">Họ và tên:</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-select
@@ -193,7 +195,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="120px">
-                  <span style="color: red">*</span> Lý do:
+                  <span style="color: red">*</span>
+                  <strong style="color: black">Lý do:</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-textarea
@@ -210,7 +213,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="120px">
-                  <span style="color: red">*</span> Số tiền/người:
+                  <span style="color: red">*</span>
+                  <strong style="color: black">Số tiền/người:</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input-number
@@ -227,7 +231,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="120px">
-                  <span style="color: red">*</span> Trạng thái:
+                  <span style="color: red">*</span>
+                  <strong style="color: black">Trạng thái:</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-radio-group name="radioGroup" v-model="dataAdd.status">
@@ -239,7 +244,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="120px"
-                  ><span style="color: red">*</span> Ngày hiệu lực:
+                  ><span style="color: red">*</span>
+                  <strong style="color: black">Ngày hiệu lực:</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-date-picker
@@ -274,85 +280,120 @@
               </a-button>
             </template>
             <a-form-model>
-              <span style="color: red">*</span> Tiêu đề:
-              <a-form-model-item>
-                <a-input
-                  v-model="dataEdit.title"
-                  @change="inputTitleEdit"
-                  placeholder="Tiêu đề"
-                />
-                <div style="color: red" v-if="checkInputTitle.show">
-                  {{ checkInputTitle.message }}
-                </div>
-              </a-form-model-item>
-              <span style="color: red">*</span> Họ và tên:
-              <a-form-model-item>
-                <a-select
-                  placeholder="Họ và tên"
-                  mode="multiple"
-                  disabled
-                  v-model="dataEdit.listIdEmployee"
-                  :filter-option="false"
-                  @search="fetchEmployees"
-                  @change="inputListEmployeeEdit"
+              <a-row type="flex">
+                <a-col flex="120px">
+                  <span style="color: red">*</span>
+                  <strong style="color: black"> Tiêu đề:</strong></a-col
                 >
-                  <a-select-option
-                    v-for="(employee, index) in dataEmployees"
-                    :value="employee.id"
-                    :key="index"
+                <a-col flex="auto">
+                  <a-input
+                    v-model="dataEdit.title"
+                    @change="inputTitleEdit"
+                    placeholder="Tiêu đề"
+                  />
+                  <div style="color: red" v-if="checkInputTitle.show">
+                    {{ checkInputTitle.message }}
+                  </div>
+                </a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="120px">
+                  <span style="color: red">*</span>
+                  <strong style="color: black"> Họ và tên:</strong>
+                </a-col>
+                <a-col flex="auto">
+                  <a-select
+                    placeholder="Họ và tên"
+                    mode="multiple"
+                    disabled
+                    v-model="dataEdit.listIdEmployee"
+                    :filter-option="false"
+                    @search="fetchEmployees"
+                    @change="inputListEmployeeEdit"
                   >
-                    {{ employee.fullName }}
-                  </a-select-option>
-                </a-select>
-                <div style="color: red" v-if="checkInputListIdEmployee.show">
-                  {{ checkInputListIdEmployee.message }}
-                </div>
-              </a-form-model-item>
-              <span style="color: red">*</span> Lý do:
-              <a-form-model-item>
-                <a-textarea
-                  placeholder="Lý do"
-                  :rows="4"
-                  v-model="dataEdit.reason"
-                  @change="inputReasonEdit"
-                />
-                <div style="color: red" v-if="checkInputReason.show">
-                  {{ checkInputReason.message }}
-                </div>
-              </a-form-model-item>
-              <span style="color: red">*</span> Số tiền/người:
-              <a-form-model-item>
-                <a-input-number
-                  v-model="dataEdit.money"
-                  :min="100000"
-                  @change="inputMoneyEdit"
-                  style="width: 100%"
-                />
-                <div style="color: red" v-if="checkInputMoney.show">
-                  {{ checkInputMoney.message }}
-                </div>
-              </a-form-model-item>
-              <span style="color: red">*</span> Trạng thái:
-              <a-form-model-item>
-                <a-radio-group name="radioGroup" v-model="dataEdit.status">
-                  <a-radio :value="false"> Nháp </a-radio>
-                  <a-radio :value="true"> Hiệu lực </a-radio>
-                </a-radio-group>
-              </a-form-model-item>
-              <span style="color: red">*</span> Ngày hiệu lực:
-              <a-form-model-item>
-                <a-date-picker
-                  v-model="dataEdit.effectiveDate"
-                  :disabled-date="disableDateStart"
-                  format="DD/MM/YYYY"
-                  valueFormat="YYYY-MM-DD"
-                  @change="inputEffectiveDateEdit"
-                  placeholder="Ngày hiệu lực"
-                />
-                <div style="color: red" v-if="checkInputEffectiveDate.show">
-                  {{ checkInputEffectiveDate.message }}
-                </div>
-              </a-form-model-item>
+                    <a-select-option
+                      v-for="(employee, index) in dataEmployees"
+                      :value="employee.id"
+                      :key="index"
+                    >
+                      {{ employee.fullName }}
+                    </a-select-option>
+                  </a-select>
+                  <div style="color: red" v-if="checkInputListIdEmployee.show">
+                    {{ checkInputListIdEmployee.message }}
+                  </div>
+                </a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="120px">
+                  <span style="color: red">*</span>
+                  <strong style="color: black">Lý do:</strong>
+                </a-col>
+                <a-col flex="auto">
+                  <a-textarea
+                    placeholder="Lý do"
+                    :rows="4"
+                    v-model="dataEdit.reason"
+                    @change="inputReasonEdit"
+                  />
+                  <div style="color: red" v-if="checkInputReason.show">
+                    {{ checkInputReason.message }}
+                  </div>
+                </a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="120px">
+                  <span style="color: red">*</span>
+                  <strong style="color: black">Số tiền/người:</strong>
+                </a-col>
+                <a-col flex="auto">
+                  <a-input-number
+                    v-model="dataEdit.money"
+                    :min="100000"
+                    @change="inputMoneyEdit"
+                    style="width: 100%"
+                  />
+                  <div style="color: red" v-if="checkInputMoney.show">
+                    {{ checkInputMoney.message }}
+                  </div>
+                </a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="120px">
+                  <span style="color: red">*</span>
+                  <strong style="color: black">Trạng thái:</strong>
+                </a-col>
+                <a-col flex="auto">
+                  <a-radio-group name="radioGroup" v-model="dataEdit.status">
+                    <a-radio :value="false"> Nháp </a-radio>
+                    <a-radio :value="true"> Hiệu lực </a-radio>
+                  </a-radio-group>
+                </a-col>
+              </a-row>
+              <br />
+              <a-row type="flex">
+                <a-col flex="120px">
+                  <span style="color: red">*</span>
+                  <strong style="color: black">Ngày hiệu lực:</strong>
+                </a-col>
+                <a-col flex="auto">
+                  <a-date-picker
+                    v-model="dataEdit.effectiveDate"
+                    :disabled-date="disableDateStart"
+                    format="DD/MM/YYYY"
+                    valueFormat="YYYY-MM-DD"
+                    @change="inputEffectiveDateEdit"
+                    placeholder="Ngày hiệu lực"
+                  />
+                  <div style="color: red" v-if="checkInputEffectiveDate.show">
+                    {{ checkInputEffectiveDate.message }}
+                  </div>
+                </a-col>
+              </a-row>
             </a-form-model>
           </a-modal>
           <!-- popup edit-->
@@ -712,7 +753,8 @@ export default {
             let type = "error";
             let message = "Thêm quyết định kỷ luật";
             let description =
-              "Thêm quyết định kỷ luật mới không thành công vì " + response.data.message;
+              "Thêm quyết định kỷ luật mới không thành công vì " +
+              response.data.message;
             this.notifi(type, message, description);
           }
           this.loadingAdd = false;
@@ -835,7 +877,8 @@ export default {
       money,
       reason,
       status,
-      title ) {
+      title
+    ) {
       this.dataEdit.id = id;
       this.dataEdit.effectiveDate = "";
       this.dataEdit.listIdEmployee = [];
@@ -902,7 +945,9 @@ export default {
             let type = "error";
             let message = "Xóa quyết định kỷ luật";
             let description =
-              "Xóa quyết định kỷ luật " + this.dataAdd.title + " không thành công";
+              "Xóa quyết định kỷ luật " +
+              this.dataAdd.title +
+              " không thành công";
             this.notifi(type, message, description);
             this.submitSearch();
           }
