@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -59,6 +60,28 @@ public class ProductServiceImpl implements ProductService {
                 }
                 checkUpdate = true;
             }
+
+            Contact contact = contactRepository.getContactByID(addProductForm.getIdContact());
+            if(contact.getStatusDone() == 0 ){
+                contact.setStatusDone(-2);
+            }
+
+            String[] number = contact.getNumberFinish().split("/");
+            Integer numberDone = Integer.parseInt(number[0]);
+            Integer numberTotal = Integer.parseInt(number[1])+1;
+            contact.setNumberFinish(numberDone+"/"+numberTotal);
+            if(addProductForm.getIdProduct() != null){
+                BigDecimal bigDecimal = new BigDecimal(contact.getTotalMoney());
+                BigDecimal bigDecimal2 = new BigDecimal(addProductForm.getPriceProduct());
+                BigDecimal bigDecimal3 = new BigDecimal(product.getPriceInContact());
+                contact.setTotalMoney(bigDecimal.subtract(bigDecimal3).add(bigDecimal2).toString());
+            }else{
+                BigDecimal bigDecimal = new BigDecimal(contact.getTotalMoney());
+                BigDecimal bigDecimal2 = new BigDecimal(addProductForm.getPriceProduct());
+                contact.setTotalMoney(bigDecimal.add(bigDecimal2).toString());
+            }
+            contact = contactRepository.saveAndFlush(contact);
+
             product.setCreated_by(accountSercurity.getUserName());
             product.setModified_by(accountSercurity.getUserName());
             product.setName(addProductForm.getNameProduct());
@@ -69,16 +92,7 @@ public class ProductServiceImpl implements ProductService {
             product.setNote(addProductForm.getNoteProduct());
             product.setPrice(addProductForm.getPriceProduct());
             product.setPriceInContact(addProductForm.getPriceProduct());
-            Contact contact = contactRepository.getContactByID(addProductForm.getIdContact());
-            if(contact.getStatusDone() == 0 ){
-                contact.setStatusDone(-2);
-            }
 
-            String[] number = contact.getNumberFinish().split("/");
-            Integer numberDone = Integer.parseInt(number[0]);
-            Integer numberTotal = Integer.parseInt(number[1])+1;
-            contact.setNumberFinish(numberDone+"/"+numberTotal);
-            contact = contactRepository.saveAndFlush(contact);
             product.setContact(contact);
             List<ProductMaterial> productMaterials = new ArrayList<>();
             for(AddMaterialInProductForm addMaterialInProductForm : addProductForm.getMaterials()){
@@ -180,6 +194,10 @@ public class ProductServiceImpl implements ProductService {
                 contact.setNumberFinish(numberDone+"/"+numberTotal);
                 contact.setModified_by(accountSercurity.getUserName());
                 contact.setModified_date(LocalDate.now());
+
+                BigDecimal bigDecimal = new BigDecimal(contact.getTotalMoney());
+                BigDecimal bigDecimal3 = new BigDecimal(product.getPriceInContact());
+                contact.setTotalMoney(bigDecimal.subtract(bigDecimal3).toString());
                 contact = contactRepository.saveAndFlush(contact);
                 productMaterialRepository.deleteByIdProduct(id);
                 productionOrderRepository.deleteProductionOrderByIdProduct(id);

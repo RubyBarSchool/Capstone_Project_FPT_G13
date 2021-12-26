@@ -1035,6 +1035,7 @@ export default {
         this.checkMaterialInProduct.show = false;
         this.checkMaterialInProduct.message = "";
         this.showAddMaterialDetail = false;
+        this.showAddMaterialDetailEdit = false;
       }
     },
     checkBeforeAdd() {

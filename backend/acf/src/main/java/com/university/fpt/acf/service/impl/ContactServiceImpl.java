@@ -140,7 +140,7 @@ public class ContactServiceImpl implements ContactService {
                     productMaterials.add(productMaterial);
                 }
                 product.setProductMaterials(productMaterials);
-                product.setPrice(valuePriceMaterial * fileProductVO.getCountProduct() + "");
+                product.setPrice(valuePriceMaterial+"");
                 products.add(product);
             }
             contact.setProducts(products);
