@@ -598,7 +598,7 @@
                     <div class="col-sm-6">
                       <p class="m-b-10 f-w-600">Lương</p>
                       <h6 class="text-muted f-w-400">
-                        {{ dataUserDetail.salary }}
+                        {{ formatMoney(dataUserDetail.salary) }}
                       </h6>
                     </div>
                   </div>
@@ -788,6 +788,10 @@ export default {
     this.getAllPosition();
   },
   methods: {
+    formatMoney(value) {
+      value=value+"";
+      return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
     importFileEdit(event1) {
       if (event1.target.files[0]) {
         this.dataEdit.image = event1.target.files[0];
