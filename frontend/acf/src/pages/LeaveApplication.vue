@@ -176,7 +176,8 @@
             </template>
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Tiêu đề :</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black"> Tiêu đề</strong></a-col
               >
               <a-col flex="auto">
                 <a-input @change="inputTitle" v-model="dataAdd.title" />
@@ -188,7 +189,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Ngày :</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black"> Ngày</strong></a-col
               >
               <a-col flex="auto">
                 <a-range-picker
@@ -207,7 +209,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Nội dung :</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black"> Nội dung</strong></a-col
               >
               <a-col flex="auto">
                 <a-textarea
@@ -239,7 +242,8 @@
             </template>
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Tiêu đề :</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black"> Tiêu đề</strong></a-col
               >
               <a-col flex="auto">
                 <a-input @change="inputEditTitle" v-model="dataEdit.title" />
@@ -251,7 +255,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Ngày :</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black"> Ngày</strong></a-col
               >
               <a-col flex="auto">
                 <a-range-picker
@@ -270,7 +275,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Nội dung :</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black"> Nội dung</strong></a-col
               >
               <a-col flex="auto">
                 <a-textarea
@@ -293,7 +299,7 @@
               <a-button key="submit" @click="handleCancel">Đóng</a-button>
             </template>
             <a-row type="flex">
-              <a-col flex="100px"> Tiêu đề</a-col>
+              <a-col flex="100px"><strong> Tiêu đề</strong></a-col>
               <a-col flex="auto">
                 <a-input
                   v-model="dataPersonalLeaveEmployeeDetail.title"
@@ -303,7 +309,7 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"> Ngày bắt đầu</a-col>
+              <a-col flex="100px"><strong> Ngày bắt đầu</strong></a-col>
               <a-col flex="auto">
                 <a-date-picker
                   disabled
@@ -316,7 +322,7 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"> Ngày kết thúc</a-col>
+              <a-col flex="100px"><strong> Ngày kết thúc</strong></a-col>
               <a-col flex="auto">
                 <a-date-picker
                   disabled
