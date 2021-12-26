@@ -693,7 +693,7 @@ export default {
           title: "Số lượng",
           dataIndex: "count",
           key: "count",
-          width: 120,
+          width: 100,
         },
         {
           title: "Ghi chú",
@@ -736,7 +736,7 @@ export default {
           title: "Mã vật tư",
           dataIndex: "nameMaterial",
           key: "nameMaterial",
-          width: 150,
+          width: 120,
         },
         {
           title: "Thông số",
@@ -748,7 +748,7 @@ export default {
           title: "Đơn vị",
           dataIndex: "unitMaterial",
           key: "unitMaterial",
-          width: 150,
+          width: 100,
         },
         {
           title: "Nhóm vật tư",
@@ -772,14 +772,14 @@ export default {
           title: "Số lượng",
           dataIndex: "count",
           key: "count",
-          width: 150,
+          width: 200,
           scopedSlots: { customRender: "count" },
         },
         {
           title: "Ghi chú",
           dataIndex: "note",
           key: "note",
-          width: 150,
+          width: 200,
           scopedSlots: { customRender: "note" },
         },
       ],

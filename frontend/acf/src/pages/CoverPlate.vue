@@ -872,7 +872,7 @@ export default {
           scopedSlots: { customRender: "company" },
         },
         {
-          title: "Giá thành",
+          title: "Giá thành(VND)",
           dataIndex: "price",
           key: "price",
           width: 150,
