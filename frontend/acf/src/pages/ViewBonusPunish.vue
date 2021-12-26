@@ -144,7 +144,7 @@
                   v-model="dataDetail.effectiveDate"
                   format="DD/MM/YYYY"
                   valueFormat="YYYY-MM-DD"
-                  style="width:100%"
+                  style="width: 100%"
                   disabled
                 >
                 </a-date-picker>
@@ -229,6 +229,12 @@ export default {
           key: "status",
           width: 150,
           scopedSlots: { customRender: "status" },
+        },
+        {
+          title: "Người tạo quyết định",
+          dataIndex: "userCreate",
+          key: "userCreate",
+          width: 150,
         },
         {
           title: "",

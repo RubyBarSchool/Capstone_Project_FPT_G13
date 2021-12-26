@@ -17,4 +17,5 @@ public class SearchBonusAndPunishVO {
     private Boolean status;
     private LocalDate effectiveDate;
     private Boolean bonus;
+    private String userCreate;
 }

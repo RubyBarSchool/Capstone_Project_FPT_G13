@@ -73,7 +73,7 @@ public class BonusCustomRepositoryImpl extends CommonRepository implements Bonus
     public List<SearchBonusAndPunishVO> searchBonusAndPunish(String userName,SearchBonusAndPunishForm searchBonusAndPunishForm) {
         StringBuilder sql = new StringBuilder("");
         Map<String, Object> params = new HashMap<>();
-        sql.append("select  new com.university.fpt.acf.vo.SearchBonusAndPunishVO(b.id,b.title,b.reason,b.money,b.status,b.effectiveDate,b.bonus) from Account a inner  join  a.employee e inner  join  e.bonusPenalties b where b.deleted=false and b.status =true");
+        sql.append("select  new com.university.fpt.acf.vo.SearchBonusAndPunishVO(b.id,b.title,b.reason,b.money,b.status,b.effectiveDate,b.bonus,b.created_by) from Account a inner  join  a.employee e inner  join  e.bonusPenalties b where b.deleted=false and b.status =true");
         sql.append(" and a.username =: username");
         params.put("username", userName);
         if (searchBonusAndPunishForm.getTitle() != null && !searchBonusAndPunishForm.getTitle().isEmpty()) {
