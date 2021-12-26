@@ -177,7 +177,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span>
-                <strong style="color: black"> Tiêu đề</strong></a-col
+                <strong> Tiêu đề</strong></a-col
               >
               <a-col flex="auto">
                 <a-input @change="inputTitle" v-model="dataAdd.title" />
@@ -190,7 +190,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span>
-                <strong style="color: black"> Ngày</strong></a-col
+                <strong> Ngày</strong></a-col
               >
               <a-col flex="auto">
                 <a-range-picker
@@ -210,7 +210,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span>
-                <strong style="color: black"> Nội dung</strong></a-col
+                <strong> Nội dung</strong></a-col
               >
               <a-col flex="auto">
                 <a-textarea
@@ -243,7 +243,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span>
-                <strong style="color: black"> Tiêu đề</strong></a-col
+                <strong> Tiêu đề</strong></a-col
               >
               <a-col flex="auto">
                 <a-input @change="inputEditTitle" v-model="dataEdit.title" />
@@ -256,7 +256,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span>
-                <strong style="color: black"> Ngày</strong></a-col
+                <strong> Ngày</strong></a-col
               >
               <a-col flex="auto">
                 <a-range-picker
@@ -276,7 +276,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span>
-                <strong style="color: black"> Nội dung</strong></a-col
+                <strong> Nội dung</strong></a-col
               >
               <a-col flex="auto">
                 <a-textarea
@@ -335,7 +335,7 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"> Nội dung</a-col>
+              <a-col flex="100px"><strong> Nội dung</strong></a-col>
               <a-col flex="auto">
                 <a-textarea
                   v-model="dataPersonalLeaveEmployeeDetail.content"
@@ -346,7 +346,7 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"> Trạng thái</a-col>
+              <a-col flex="100px"><strong> Trạng thái</strong></a-col>
               <a-col flex="auto">
                 <a-tag
                   :color="
@@ -369,7 +369,7 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"> Ngày tạo</a-col>
+              <a-col flex="100px"><strong> Ngày tạo</strong></a-col>
               <a-col flex="auto">
                 <a-date-picker
                   disabled
@@ -382,7 +382,7 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"> Quản lý xác nhận</a-col>
+              <a-col flex="100px"><strong> Quản lý xác nhận</strong></a-col>
               <a-col flex="auto">
                 <a-input
                   v-model="dataPersonalLeaveEmployeeDetail.nameEmployeeAccess"
@@ -392,7 +392,7 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"> Ngày xác nhận</a-col>
+              <a-col flex="100px"><strong> Ngày xác nhận</strong></a-col>
               <a-col flex="auto">
                 <a-date-picker
                   disabled
@@ -406,7 +406,7 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"> Ghi chú của quản lý</a-col>
+              <a-col flex="100px"><strong> Ghi chú của quản lý</strong></a-col>
               <a-col flex="auto">
                 <a-textarea
                   v-model="dataPersonalLeaveEmployeeDetail.comment"

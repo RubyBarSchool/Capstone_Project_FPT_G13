@@ -171,7 +171,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span>
-                <strong style="color: black"> Tiêu đề</strong></a-col
+                <strong> Tiêu đề</strong></a-col
               >
               <a-col flex="auto">
                 <a-input v-model="dataAdd.title" @change="inputTitleAdd" />
@@ -184,7 +184,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span
-                ><strong style="color: black"> Số tiền</strong></a-col
+                ><strong> Số tiền</strong></a-col
               >
               <a-col flex="auto">
                 <a-input-number
@@ -202,7 +202,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span
-                ><strong style="color: black"> Nội dung</strong>
+                ><strong> Nội dung</strong>
               </a-col>
               <a-col flex="auto">
                 <a-textarea
@@ -235,7 +235,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span>
-                <strong style="color: black"> Tiêu đề</strong></a-col
+                <strong> Tiêu đề</strong></a-col
               >
               <a-col flex="auto">
                 <a-input v-model="dataEdit.title" @change="inputTitleEdit" />
@@ -248,7 +248,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span
-                ><strong style="color: black"> Số tiền</strong></a-col
+                ><strong> Số tiền</strong></a-col
               >
               <a-col flex="auto">
                 <a-input-number
@@ -266,7 +266,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span
-                ><strong style="color: black"> Nội dung</strong>
+                ><strong> Nội dung</strong>
               </a-col>
               <a-col flex="auto">
                 <a-textarea
@@ -293,28 +293,28 @@
               <a-button key="submit" @click="handleCancel">Đóng</a-button>
             </template>
             <a-row type="flex">
-              <a-col flex="100px"> Tiêu đề:</a-col>
+              <a-col flex="100px"><strong> Tiêu đề</strong></a-col>
               <a-col flex="auto">
                 <a-input v-model="dataDetail.title" disabled />
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"> Số tiền:</a-col>
+              <a-col flex="100px"><strong> Số tiền</strong></a-col>
               <a-col flex="auto">
                 <a-input v-model="dataDetail.advanceSalary" disabled />
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"> Nội dung:</a-col>
+              <a-col flex="100px"><strong> Nội dung</strong></a-col>
               <a-col flex="auto">
                 <a-textarea v-model="dataDetail.content" :row="4" disabled />
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"> Trạng thái:</a-col>
+              <a-col flex="100px"><strong> Trạng thái</strong></a-col>
               <a-col flex="auto">
                 <a-tag
                   :color="
@@ -337,7 +337,7 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"> Ngày tạo:</a-col>
+              <a-col flex="100px"><strong> Ngày tạo</strong></a-col>
               <a-col flex="auto">
                 <a-date-picker
                   disabled
@@ -349,14 +349,14 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"> Quản lý xác nhận:</a-col>
+              <a-col flex="100px"><strong> Quản lý xác nhận</strong></a-col>
               <a-col flex="auto">
                 <a-input v-model="dataDetail.employeeAccept" disabled />
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"> Ngày xác nhận:</a-col>
+              <a-col flex="100px"><strong> Ngày xác nhận</strong></a-col>
               <a-col flex="auto">
                 <a-date-picker
                   disabled
@@ -368,7 +368,7 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"> Ghi chú của quản lý:</a-col>
+              <a-col flex="100px"><strong> Ghi chú của quản lý</strong></a-col>
               <a-col flex="auto">
                 <a-textarea v-model="dataDetail.comment" :row="4" disabled />
               </a-col>

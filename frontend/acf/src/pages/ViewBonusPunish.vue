@@ -108,28 +108,28 @@
               <a-button @click="handelCancel">Đóng</a-button>
             </template>
             <a-row type="flex">
-              <a-col flex="100px"> Tiêu đề</a-col>
+              <a-col flex="100px"><strong> Tiêu đề</strong></a-col>
               <a-col flex="auto">
                 <a-input v-model="dataDetail.title" disabled />
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"> Lý do</a-col>
+              <a-col flex="100px"><strong> Lý do</strong></a-col>
               <a-col flex="auto">
                 <a-textarea v-model="dataDetail.reason" disabled :row="4" />
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"> Số tiền</a-col>
+              <a-col flex="100px"><strong> Số tiền</strong></a-col>
               <a-col flex="auto">
                 <a-input v-model="dataDetail.money" disabled />
               </a-col>
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"> Trạng thái</a-col>
+              <a-col flex="100px"><strong> Trạng thái</strong></a-col>
               <a-col flex="auto">
                 <a-tag :color="dataDetail.status ? 'green' : 'orange'">
                   {{ dataDetail.status ? "Đã duyệt" : "Chờ duyệt" }}
@@ -138,7 +138,7 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="100px"> Ngày hiệu lực</a-col>
+              <a-col flex="100px"><strong> Ngày hiệu lực</strong></a-col>
               <a-col flex="auto">
                 <a-date-picker
                   v-model="dataDetail.effectiveDate"
