@@ -116,7 +116,6 @@
                     <a-button
                       id="view"
                       @click="showModalView(record)"
-                      :style="{ width: '44.25px', 'margin-right': '100px' }"
                     >
                       <font-awesome-icon :icon="['fas', 'eye']" />
                     </a-button>
@@ -132,7 +131,6 @@
                           record.advanceSalary
                         )
                       "
-                      :style="{ width: '44.25px' }"
                     >
                       <font-awesome-icon :icon="['fas', 'edit']" />
                     </a-button>
@@ -485,7 +483,7 @@ export default {
           dataIndex: "action",
           key: "action",
           fixed: "right",
-          width: 180,
+          width: 200,
           scopedSlots: { customRender: "action" },
         },
       ],

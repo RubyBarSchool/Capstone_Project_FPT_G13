@@ -260,7 +260,6 @@ import companyService from "@/service/companyService";
 
 export default {
   name: "Company",
-  components: {},
   data() {
     return {
       loading: false,

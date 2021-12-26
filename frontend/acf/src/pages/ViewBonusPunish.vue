@@ -93,7 +93,7 @@
                 <a-button
                   id="view"
                   @click="checkType(record)"
-                  :style="{ width: '44.25px', 'margin-right': '100px' }"
+                  :style="{'margin-right': '100px' }"
                 >
                   <font-awesome-icon :icon="['fas', 'eye']" />
                 </a-button>

@@ -2,7 +2,7 @@
   <div class="viewluong">
     <a-layout :style="{ background: 'white' }">
       <a-layout-content :style="{ margin: '24px 16px 0' }">
-         <a-back-top :style="{ width: '5vh', height: '15vh' }" />
+        <a-back-top :style="{ width: '5vh', height: '15vh' }" />
         <a-tabs default-active-key="1" @change="changeTab">
           <!-- Hiện tại -->
           <a-tab-pane key="1">
@@ -34,6 +34,7 @@
                 }}
               </template>
             </a-table>
+            <br />
             <div class="container-fluid">
               <div class="row">
                 <div class="col-6">
@@ -71,6 +72,7 @@
                     </template>
                   </a-table>
                 </div>
+                <br />
                 <div class="col-6">
                   <h6>Phạt</h6>
                   <a-table
@@ -119,6 +121,8 @@
               @change="changeDate"
               placeholder="Chọn ngày"
             />
+            <br />
+            <br />
             <a-table
               :columns="columnsSalaryNotNow"
               :data-source="dataSalaryNotNow"
