@@ -298,6 +298,11 @@
                       <a-input-number
                         style="width: 100%"
                         @change="inputSalaryAdd"
+                        :formatter="
+                          (value) =>
+                            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                        "
+                        :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
                         v-model="dataAdd.salary"
                       />
                       <div style="color: red" v-if="checkDataInputSalary.show">
@@ -465,6 +470,11 @@
                     <a-form-model-item>
                       <a-input-number
                         v-model="dataEdit.salary"
+                        :formatter="
+                          (value) =>
+                            `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                        "
+                        :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
                         @change="inputSalaryEdit"
                       />
                       <div style="color: red" v-if="checkDataInputSalary.show">
