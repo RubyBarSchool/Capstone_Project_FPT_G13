@@ -152,6 +152,9 @@
                 }
               "
             >
+              <template slot="price" slot-scope="text, record">
+                {{ formatMoney(record.price) }}
+              </template>
             </a-table>
           </a-modal>
           <!-- view detail -->
@@ -374,6 +377,9 @@
                 onChange: onSelectChange,
               }"
             >
+              <template slot="price" slot-scope="text, record">
+                {{ formatMoney(record.price) }}
+              </template>
               <template slot="count" slot-scope="text, record">
                 <editable-cell
                   :text="text"
@@ -530,7 +536,7 @@
                 <a-col flex="auto">
                   <a-input
                     style="width: 100%"
-                    v-model="addProductForm.priceProduct"
+                    :value="formatMoney(addProductForm.priceProduct)"
                     disabled
                   />
                   <div style="color: red" v-if="checkMoneyProduct.show">
@@ -613,6 +619,9 @@
                 onChange: onSelectChange,
               }"
             >
+              <template slot="price" slot-scope="text, record">
+                {{ formatMoney(record.price) }}
+              </template>
               <template slot="count" slot-scope="text, record">
                 <editable-cell
                   :text="text"
@@ -767,6 +776,7 @@ export default {
           dataIndex: "price",
           key: "price",
           width: 150,
+          scopedSlots: { customRender: "price" },
         },
         {
           title: "Số lượng",
@@ -862,6 +872,7 @@ export default {
   },
   methods: {
     formatMoney(value) {
+      value = value+"";
       return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     changeNameCOntact() {

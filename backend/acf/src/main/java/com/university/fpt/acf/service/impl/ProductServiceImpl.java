@@ -53,8 +53,8 @@ public class ProductServiceImpl implements ProductService {
         try{
             Product product = new Product();
             if(addProductForm.getIdProduct() != null){
-                productMaterialRepository.deleteByIdProduct(product.getId());
                 product = productRepository.getProductByID(addProductForm.getIdProduct());
+                productMaterialRepository.deleteByIdProduct(product.getId());
                 if(product.getProductionOrder() != null ){
                     listUsername = productionOrderRepository.getUsernameByID(product.getProductionOrder().getId());
                 }
