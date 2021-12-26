@@ -54,9 +54,9 @@ public class ContactController {
         } catch (Exception e) {
             message = e.getMessage();
             responseCommon.setData(false);
-            responseCommon.setStatus(HttpStatus.BAD_REQUEST.value());
+            responseCommon.setStatus(HttpStatus.OK.value());
             responseCommon.setMessage(message);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseCommon);
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
         }
     }
     //************************************
