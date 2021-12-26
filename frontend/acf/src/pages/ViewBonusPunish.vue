@@ -23,8 +23,8 @@
             :style="{ width: '150px', 'margin-right': '5px' }"
           >
             <a-select-option value=""> Tất cả </a-select-option>
-            <a-select-option value="false"> Phạt </a-select-option>
-            <a-select-option value="true"> Thưởng </a-select-option>
+            <a-select-option value="false"> Kỷ Luật </a-select-option>
+            <a-select-option value="true"> Khen Thưởng </a-select-option>
           </a-select>
           Trạng thái:
           <a-select
@@ -89,7 +89,7 @@
               </template>
               <template slot="bonus" slot-scope="text, record">
                 <a-tag :color="record.bonus ? 'green ' : 'red '">
-                  {{ record.bonus ? "THƯỞNG" : "PHẠT" }}
+                  {{ record.bonus ? "KHEN THƯỞNG" : "KỶ LUẬT" }}
                 </a-tag>
               </template>
               <template slot="action" slot-scope="text, record">
@@ -154,6 +154,12 @@
               </a-col>
             </a-row>
             <br />
+            <a-row type="flex">
+              <a-col flex="100px"><strong> Người tạo quyết định</strong></a-col>
+              <a-col flex="auto">
+                <a-input v-model="dataDetail.userCreate" disabled />
+              </a-col>
+            </a-row>
           </a-modal>
           <!-- popup view -->
         </div>
@@ -188,6 +194,7 @@ export default {
         title: "",
         reason: "",
         money: "",
+        userCreate: "",
         status: false,
         effectiveDate: "",
       },
@@ -214,7 +221,7 @@ export default {
           scopedSlots: { customRender: "money" },
         },
         {
-          title: "Loại đơn",
+          title: "Loại quyết định",
           dataIndex: "bonus",
           key: "bonus",
           width: 150,
@@ -304,14 +311,15 @@ export default {
 
     checkType(record) {
       if (record.bonus == true) {
-        this.titleView = "Đơn Thưởng";
+        this.titleView = "Quyết Định Khen Thưởng";
       } else {
-        this.titleView = "Đơn Phạt";
+        this.titleView = "Quyết Định Kỷ Luật";
       }
       this.dataDetail.title = record.title;
       this.dataDetail.reason = record.reason;
       this.dataDetail.money = record.money;
       this.dataDetail.status = record.status;
+      this.dataDetail.userCreate = record.userCreate;
       this.dataDetail.effectiveDate = record.effectiveDate;
       this.visibleView = true;
     },
