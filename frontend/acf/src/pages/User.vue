@@ -480,10 +480,23 @@
               <div class="col-md-4 bg-c-lite-green user-profile">
                 <div class="card-block text-center text-white">
                   <div class="m-b-25">
-                    <img
-                      src="https://img.icons8.com/bubbles/100/000000/user.png"
-                      class="img-radius"
-                    />
+                    <div class="row" v-if="showImage">
+                      <img
+                        alt="example"
+                        style="
+                          width: 50%;
+                          margin-left: auto;
+                          margin-right: auto;
+                        "
+                        :src="url"
+                      />
+                    </div>
+                    <div class="row" v-else>
+                      <img
+                        src="https://img.icons8.com/bubbles/100/000000/user.png"
+                        class="img-radius"
+                      />
+                    </div>
                   </div>
                   <h6 class="text-white f-w-400">
                     {{ dataUserDetail.fullName }}
@@ -1142,7 +1155,7 @@ export default {
         .then((response) => {
           this.dataEdit.id = record.id;
           this.dataEdit.fullName = record.fullName;
-          this.dataEdit.dob = record.dob;
+          this.dataEdit.dob = moment(record.dob);
           this.dataEdit.idPosition = record.idPosition;
           this.dataEdit.gender = record.gender;
           this.dataEdit.email = record.email;
@@ -1396,7 +1409,6 @@ export default {
       }
     },
     showDetail(id) {
-      this.visibleProfile = true;
       this.getUserByID(id);
     },
     getUserByID(id) {
@@ -1404,6 +1416,31 @@ export default {
         .getUserByID(id)
         .then((response) => {
           this.dataUserDetail = response.data.data;
+          if (this.dataUserDetail.image !== null) {
+            userService
+              .preview(this.dataUserDetail.image)
+              .then((response) => {
+                this.url = window.URL.createObjectURL(response.data);
+                if (this.url != null) {
+                  this.showImage = true;
+                } else {
+                  this.showImage = false;
+                }
+                this.visibleProfile = true;
+              })
+              .catch((e) => {
+                console.log(e);
+                this.visibleProfile = true;
+              });
+          } else {
+            this.url = null;
+            if (this.url != null) {
+              this.showImage = true;
+            } else {
+              this.showImage = false;
+            }
+            this.visibleProfile = true;
+          }
         })
         .catch((e) => {
           console.log(e);
