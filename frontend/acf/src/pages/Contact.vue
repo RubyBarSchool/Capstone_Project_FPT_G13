@@ -134,6 +134,9 @@
                   })
                 }}
               </template>
+              <template slot="totalMoney" slot-scope="text, record">
+                {{ formatMoney(record.totalMoney) }}
+              </template>
               <template slot="action" slot-scope="text, record">
                 <a-button
                   v-if="record.statusDone == -2"
@@ -484,10 +487,11 @@ export default {
           width: 140,
         },
         {
-          title: "Tổng giá trị",
+          title: "Tổng giá trị (VND)",
           dataIndex: "totalMoney",
           key: "totalMoney",
-          width: 140,
+          width: 150,
+          scopedSlots: { customRender: "totalMoney" },
         },
         {
           title: "Định mức hoàn thành",
@@ -553,6 +557,9 @@ export default {
     },
   },
   methods: {
+    formatMoney(value) {
+      return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
     downloadTemplate() {
       contactService
         .templateContact()
@@ -956,6 +963,9 @@ export default {
 </script>
 
 <style scoped>
+::v-deep .anticon svg {
+  margin-bottom: 5px;
+}
 /* button icon */
 #delete {
   background-color: rgb(255, 0, 0);

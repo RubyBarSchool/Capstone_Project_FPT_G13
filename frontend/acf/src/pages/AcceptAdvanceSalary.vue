@@ -83,7 +83,7 @@
                 {{ record.title }}
               </template>
               <template slot="money" slot-scope="text, record">
-                {{ record.advanceSalary }}
+                {{formatMoney(record.advanceSalary)}}
               </template>
               <template slot="status" slot-scope="text, record">
                 <a-tag
@@ -273,7 +273,7 @@ export default {
           scopedSlots: { customRender: "titlee" },
         },
         {
-          title: "Số tiền",
+          title: "Số tiền (VND)",
           dataIndex: "money",
           key: "money",
           width: 150,
@@ -322,6 +322,9 @@ export default {
     },
   },
   methods: {
+    formatMoney(value) {
+      return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;
@@ -487,6 +490,9 @@ export default {
 </script>
 
 <style scoped>
+::v-deep .anticon svg {
+  margin-bottom: 5px;
+}
 /* button icon */
 #view {
   background-color: rgb(76, 238, 12);

@@ -80,7 +80,7 @@
                 {{ record.dateAccept }}
               </template>
               <template slot="advanceSalary" slot-scope="text, record">
-                {{ record.advanceSalary }}
+                {{ formatMoney(record.advanceSalary) }}
               </template>
               <template slot="status" slot-scope="text, record">
                 <a-tag
@@ -113,10 +113,7 @@
               <template slot="action" slot-scope="text, record">
                 <a-row>
                   <a-col :span="8">
-                    <a-button
-                      id="view"
-                      @click="showModalView(record)"
-                    >
+                    <a-button id="view" @click="showModalView(record)">
                       <font-awesome-icon :icon="['fas', 'eye']" />
                     </a-button>
                   </a-col>
@@ -189,6 +186,10 @@
                   style="width: 100%"
                   v-model="dataAdd.advanceSalary"
                   :min="0"
+                  :formatter="
+                    (value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  "
+                  :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
                   @change="inputAdvanceSalaryAdd"
                 />
                 <div style="color: red" v-if="checkInputSalary.show">
@@ -199,8 +200,7 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span
-                ><strong> Nội dung</strong>
+                <span style="color: red">*</span><strong> Nội dung</strong>
               </a-col>
               <a-col flex="auto">
                 <a-textarea
@@ -253,6 +253,10 @@
                   style="width: 100%"
                   v-model="dataEdit.advanceSalary"
                   :min="0"
+                  :formatter="
+                    (value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  "
+                  :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
                   @change="inputAdvanceSalaryEdit"
                 />
                 <div style="color: red" v-if="checkInputSalary.show">
@@ -263,8 +267,7 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span
-                ><strong> Nội dung</strong>
+                <span style="color: red">*</span><strong> Nội dung</strong>
               </a-col>
               <a-col flex="auto">
                 <a-textarea
@@ -465,7 +468,7 @@ export default {
           scopedSlots: { customRender: "dateAccept" },
         },
         {
-          title: "Số tiền",
+          title: "Số tiền (VND)",
           dataIndex: "advanceSalary",
           key: "advanceSalary",
           width: 150,
@@ -510,6 +513,9 @@ export default {
     },
   },
   methods: {
+    formatMoney(value) {
+      return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;
@@ -805,6 +811,9 @@ export default {
 </script>
 
 <style scoped>
+::v-deep .anticon svg {
+  margin-bottom: 5px;
+}
 /* button icon */
 #delete {
   background-color: rgb(255, 0, 0);

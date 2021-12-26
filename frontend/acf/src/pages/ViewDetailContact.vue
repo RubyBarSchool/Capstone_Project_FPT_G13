@@ -92,6 +92,9 @@
                   }}
                 </a-tag>
               </template>
+              <template slot="price" slot-scope="text, record">
+                {{ formatMoney(record.price) }}
+              </template>
               <template slot="action" slot-scope="text, record">
                 <a-row :gutter="[16, 16]">
                   <a-col :span="8">
@@ -508,9 +511,7 @@
               <br />
 
               <a-row type="flex">
-                <a-col flex="150px">
-                  <strong> Ghi chú: </strong></a-col
-                >
+                <a-col flex="150px"> <strong> Ghi chú: </strong></a-col>
                 <a-col flex="auto">
                   <a-textarea
                     style="width: 100%"
@@ -701,16 +702,17 @@ export default {
           width: 150,
         },
         {
-          title: "Giá tiền",
+          title: "Giá tiền (VND)",
           dataIndex: "price",
           key: "price",
           width: 150,
+          scopedSlots: { customRender: "price" },
         },
         {
           title: "Trạng thái thực hiện",
           dataIndex: "status",
           key: "status",
-          width: 150,
+          width: 180,
           scopedSlots: { customRender: "status" },
         },
         {
@@ -859,6 +861,9 @@ export default {
     this.getContactInForm();
   },
   methods: {
+    formatMoney(value) {
+      return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
     changeNameCOntact() {
       if (
         this.addProductForm.idContact != null &&
@@ -1356,6 +1361,9 @@ export default {
 </script>
 
 <style scoped>
+::v-deep .anticon svg {
+  margin-bottom: 5px;
+}
 #delete {
   background-color: rgb(255, 0, 0);
   color: white;

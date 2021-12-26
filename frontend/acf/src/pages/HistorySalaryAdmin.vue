@@ -75,19 +75,19 @@
               {{ record.countWork }}
             </template>
             <template slot="salary" slot-scope="text, record">
-              {{ record.salary }}
+              {{ formatMoney(record.salary) }}
             </template>
             <template slot="bonus" slot-scope="text, record">
-              {{ record.bonus }}
+              {{ formatMoney(record.bonus) }}
             </template>
             <template slot="penalty" slot-scope="text, record">
-              {{ record.penalty }}
+              {{ formatMoney(record.penalty) }}
             </template>
             <template slot="advanceSalary" slot-scope="text, record">
-              {{ record.advanceSalary }}
+              {{ formatMoney(record.advanceSalary) }}
             </template>
             <template slot="totalMoney" slot-scope="text, record">
-              {{ record.totalMoney }}
+              {{ formatMoney(record.totalMoney) }}
             </template>
             <template slot="status" slot-scope="text, record">
               <a-tag :color="record.status ? 'green' : 'blue'">
@@ -168,39 +168,39 @@ export default {
           scopedSlots: { customRender: "countWork" },
         },
         {
-          title: "Lương",
+          title: "Tiền lương (VND)",
           dataIndex: "salary",
           key: "salary",
-          width: 150,
+          width: 180,
           scopedSlots: { customRender: "salary" },
         },
         {
-          title: "Thưởng",
+          title: "Tiền thưởng (VND)",
           dataIndex: "bonus",
           key: "bonus",
-          width: 150,
+          width: 180,
           scopedSlots: { customRender: "bonus" },
         },
         {
-          title: "Phạt",
+          title: "Tiền phạt (VND)",
           dataIndex: "penalty",
           key: "penalty",
-          width: 150,
+          width: 180,
           scopedSlots: { customRender: "penalty" },
         },
         {
-          title: "Tạm ứng",
+          title: "Tiền tạm ứng (VND)",
           dataIndex: "advanceSalary",
           key: "advanceSalary",
-          width: 150,
+          width: 180,
           scopedSlots: { customRender: "advanceSalary" },
         },
         {
-          title: "Tổng nhận",
+          title: "Tổng nhận (VND)",
           dataIndex: "totalMoney",
           key: "totalMoney",
-          width: 150,
-          scopedSlots: { customRender: "total" },
+          width: 180,
+          scopedSlots: { customRender: "totalMoney" },
         },
         {
           title: "Trạng thái",
@@ -217,6 +217,9 @@ export default {
     this.getAllPosition();
   },
   methods: {
+    formatMoney(value) {
+      return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;
@@ -271,4 +274,7 @@ export default {
 </script>
 
 <style>
+::v-deep .anticon svg {
+  margin-bottom: 5px;
+}
 </style>

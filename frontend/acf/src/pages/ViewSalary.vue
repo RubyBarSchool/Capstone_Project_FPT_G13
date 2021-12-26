@@ -33,6 +33,21 @@
                   })
                 }}
               </template>
+              <template slot="salary" slot-scope="text, record">
+                {{ formatMoney(record.salary) }}
+              </template>
+              <template slot="bonus" slot-scope="text, record">
+                {{ formatMoney(record.bonus) }}
+              </template>
+              <template slot="penalty" slot-scope="text, record">
+                {{ formatMoney(record.penalty) }}
+              </template>
+              <template slot="advanceSalary" slot-scope="text, record">
+                {{ formatMoney(record.advanceSalary) }}
+              </template>
+              <template slot="totalMoney" slot-scope="text, record">
+                {{ formatMoney(record.totalMoney) }}
+              </template>
             </a-table>
             <br />
             <div class="container-fluid">
@@ -70,6 +85,9 @@
                         )
                       }}
                     </template>
+                    <template slot="money" slot-scope="text, record">
+                      {{ formatMoney(record.money) }}
+                    </template>
                   </a-table>
                 </div>
                 <br />
@@ -105,6 +123,9 @@
                           }
                         )
                       }}
+                    </template>
+                    <template slot="money" slot-scope="text, record">
+                      {{ formatMoney(record.money) }}
                     </template>
                   </a-table>
                 </div>
@@ -148,6 +169,21 @@
                     day: "2-digit",
                   })
                 }}
+              </template>
+              <template slot="salary" slot-scope="text, record">
+                {{ formatMoney(record.salary) }}
+              </template>
+              <template slot="bonus" slot-scope="text, record">
+                {{ formatMoney(record.bonus) }}
+              </template>
+              <template slot="penalty" slot-scope="text, record">
+                {{ formatMoney(record.penalty) }}
+              </template>
+              <template slot="advanceSalary" slot-scope="text, record">
+                {{ formatMoney(record.advanceSalary) }}
+              </template>
+              <template slot="totalMoney" slot-scope="text, record">
+                {{ formatMoney(record.totalMoney) }}
               </template>
             </a-table>
             <div class="container-fluid">
@@ -273,34 +309,39 @@ export default {
           width: 150,
         },
         {
-          title: "Lương / 1 Công",
+          title: "Lương/ 1 Công (VND)",
           dataIndex: "salary",
           key: "salary",
-          width: 150,
+          width: 180,
+          scopedSlots: { customRender: "salary" },
         },
         {
-          title: "Thưởng",
+          title: "Tiền thưởng (VND)",
           dataIndex: "bonus",
           key: "bonus",
-          width: 150,
+          width: 180,
+          scopedSlots: { customRender: "bonus" },
         },
         {
-          title: "Phạt",
+          title: "Tiền phạt (VND)",
           dataIndex: "penalty",
           key: "penalty",
-          width: 150,
+          width: 180,
+          scopedSlots: { customRender: "penalty" },
         },
         {
-          title: "Tạm ứng",
+          title: "Tiền tạm ứng (VND)",
           dataIndex: "advanceSalary",
           key: "advanceSalary",
-          width: 150,
+          width: 180,
+          scopedSlots: { customRender: "advanceSalary" },
         },
         {
-          title: "Tổng nhận",
+          title: "Tổng nhận (VND)",
           dataIndex: "totalMoney",
           key: "totalMoney",
-          width: 150,
+          width: 180,
+          scopedSlots: { customRender: "totalMoney" },
         },
         {
           title: "Trạng thái",
@@ -345,40 +386,45 @@ export default {
           width: 150,
         },
         {
-          title: "Lương / 1 Công",
+          title: "Lương/ 1 Công (VND)",
           dataIndex: "salary",
           key: "salary",
           width: 150,
+          scopedSlots: { customRender: "salary" },
         },
         {
-          title: "Thưởng",
+          title: "Tiền thưởng (VND)",
           dataIndex: "bonus",
           key: "bonus",
           width: 150,
+          scopedSlots: { customRender: "bonus" },
         },
         {
-          title: "Phạt",
+          title: "Tiền phạt (VND)",
           dataIndex: "penalty",
           key: "penalty",
-          width: 150,
+          width: 130,
+          scopedSlots: { customRender: "penalty" },
         },
         {
-          title: "Tạm ứng",
+          title: "Tiền tạm ứng (VND)",
           dataIndex: "advanceSalary",
           key: "advanceSalary",
           width: 150,
+          scopedSlots: { customRender: "advanceSalary" },
         },
         {
-          title: "Tổng nhận",
+          title: "Tổng nhận (VND)",
           dataIndex: "totalMoney",
           key: "totalMoney",
-          width: 150,
+          width: 140,
+          scopedSlots: { customRender: "totalMoney" },
         },
         {
           title: "Tài khoản thanh toán",
           dataIndex: "accountAccept",
           key: "accountAccept",
-          width: 150,
+          width: 180,
         },
         {
           title: "Ngày thanh toán",
@@ -417,10 +463,11 @@ export default {
           width: 150,
         },
         {
-          title: "Số tiền",
+          title: "Số tiền (VND)",
           dataIndex: "money",
           key: "money",
           width: 150,
+          scopedSlots: { customRender: "money" },
         },
         {
           title: "Trạng thái",
@@ -532,6 +579,9 @@ export default {
     },
   },
   methods: {
+    formatMoney(value) {
+      return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
     disabledDate(current) {
       let date = moment();
       if (date.date() >= 10) {
@@ -671,4 +721,7 @@ export default {
 </script>
 
 <style>
+::v-deep .anticon svg {
+  margin-bottom: 5px;
+}
 </style>
