@@ -13,7 +13,7 @@
           <a-select
             v-model="dataSearch.status"
             @change="changeSearch"
-            style="width: 10%"
+            style="width: 12%"
           >
             <a-select-option key=""> Tất Cả </a-select-option>
             <a-select-option key="-2"> Chờ duyệt </a-select-option>

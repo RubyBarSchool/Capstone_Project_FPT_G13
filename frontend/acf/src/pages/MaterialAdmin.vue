@@ -80,7 +80,11 @@
             />
             Tìm kiếm
           </a-button>
-          <a-button type="primary" @click="showModalAdd" :style="{ 'margin-left': '5px' }">
+          <a-button
+            type="primary"
+            @click="showModalAdd"
+            :style="{ 'margin-left': '5px' }"
+          >
             <font-awesome-icon
               :icon="['fas', 'plus-square']"
               :style="{ 'margin-right': '5px' }"
@@ -216,6 +220,7 @@
                     :key="tag"
                     :closable="true"
                     @close="() => handleClose(tag)"
+                    color="purple"
                   >
                     {{ tag }}
                   </a-tag>
@@ -2158,6 +2163,9 @@ export default {
 </script>
 
 <style scoped>
+::v-deep .anticon svg {
+  margin-bottom: 5px;
+}
 /* button icon */
 #delete {
   background-color: rgb(255, 0, 0);

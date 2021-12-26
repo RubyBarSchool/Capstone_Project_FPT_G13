@@ -1052,6 +1052,9 @@ export default {
 </script>
 
 <style scoped>
+::v-deep .anticon svg {
+  margin-bottom: 5px;
+}
 /* button icon */
 #delete {
   background-color: rgb(255, 0, 0);

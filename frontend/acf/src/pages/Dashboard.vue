@@ -1,10 +1,10 @@
 <template>
   <div class="Dashboard">
-    <a-back-top :style="{ width: '5vh', height: '15vh' }" />
+    <a-back-top :style="{ width: '5vh', height: '5vh' }" />
     <div v-if="checkshow('SP_ADMIN')" class="grid grid-responsive">
       SP_ADMIN
       <div class="card info-1">
-        Số người đang hoạt động {{ this.listUserOnline.length }}
+        Số người đang hoạt động: {{ this.listUserOnline.length }}
         <img
           src="../assets/graph-messages.svg"
           alt="sapphire"
@@ -12,7 +12,7 @@
         />
       </div>
       <div class="card info-2">
-        Số người chưa có tài khoản {{ countEmployeeHaveNotAccount }}
+        Số người chưa có tài khoản: {{ countEmployeeHaveNotAccount }}
         <img
           src="../assets/graph-checkins.svg"
           alt="sapphire"
@@ -99,7 +99,6 @@
           class="summary-box-graph"
         />
       </div>
-      <!-- <div class="card header">header</div> -->
       <div class="card list">
         <a-table
           :columns="columns"
@@ -122,8 +121,9 @@
         ></apexchart>
       </div>
     </div>
+
+    <!-- dashboard cho employee -->
     <div v-if="checkshow('EMPLOYEE')" class="grid grid-responsive">
-      Employee
       <div class="card info-1">
         {{
           dashboardEmployee.timeKeep != 0
@@ -151,7 +151,7 @@
       <div class="card info-3">
         {{
           dashboardEmployee.workDone != 0
-            ? "Số công việc đã hoàn thành thong tháng qua: " +
+            ? "Số công việc đã hoàn thành trong tháng qua: " +
               dashboardEmployee.workDone
             : "Không có công việc nào được hoàn thành trong tháng qua"
         }}
@@ -458,7 +458,7 @@ html {
 }
 .card {
   padding: 4rem;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: bold;
   box-shadow: 0 2px 10px 0 rgb(0 0 0 / 16%), 0 2px 5px 0 rgb(0 0 0 / 26%);
 }
@@ -475,17 +475,30 @@ html {
 .info-1 {
   border-top: 4px solid #0097a7;
   background-color: #2cbccf;
+  color: black;
   grid-area: i1;
 }
 .info-2 {
-  border-top: 4px solid #ad1457;
-  background-color: #ee2b6c;
+  border-top: 4px solid rgb(187, 7, 85);
+  background-color: #ff4d6d;
+  color: black;
   grid-area: i2;
 }
 .info-3 {
-  border-top: 4px solid #f47b08;
-  background-color: #fab412;
+  border-top: 4px solid #ff9100;
+  background-color: #ffaa00;
+  color: black;
   grid-area: i3;
+}
+.info-4 {
+  background-color: #fec5bb;
+  border-top: 4px solid #c77b6e;
+  color: black;
+}
+.info-5 {
+  background-color: #a4ac86;
+  border-top: 4px solid #6b744d;
+  color: black;
 }
 .list {
   grid-area: l;
