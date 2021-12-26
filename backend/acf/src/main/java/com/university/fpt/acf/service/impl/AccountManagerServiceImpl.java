@@ -172,34 +172,164 @@ public class AccountManagerServiceImpl implements AccountManagerService {
     //************************************
     // build template mail reset pass
     //************************************
+//    private String buildEmailReset(String username, String password, String name, String link) {
+//        StringBuilder sql = new StringBuilder("");
+//        sql.append("<div style=\" width:80%; margin: 0 auto;\">\n" +
+//                "        <img src=\"\">\n" +
+//                "        <table style=\"width:100%;\">\n" +
+//                "            <tr>\n" +
+//                "                <td colspan=\" 2 \">Xin chào " + name + ", </td>\n" +
+//                "            </tr>\n" +
+//                "            <tr>\n" +
+//                "                <td>Chúc mừng bạn đã cài lại mật khẩu thành công</td>\n" +
+//                "            </tr>\n" +
+//                "            <tr>\n" +
+//                "                <td style=\"padding-left: 30px;\">- Tài khoản: " + username + "</td>\n" +
+//                "            </tr>\n" +
+//                "            <tr>\n" +
+//                "                <td style=\"padding-left: 30px;\">- Mật Khẩu mới: " + password + "</td>\n" +
+//                "            </tr>\n" +
+//                "        </table>\n" +
+//                "        <br>\n" +
+//                "        <p>vui lòng mời bạn nhấn vào đường dẫn bên dưới để đến với trang mạng của công ty. </p>\n" +
+//                "        <button style=\"display: block; margin-left: auto; margin-right: auto; background-color: #40A9FF; color: white;\">" +
+//                "      <a href=\"" + link + "\">Đăng nhập!</a></button>\n" +
+//                "        <p>Trân trọng,</p>\n" +
+//                "        <h3 style=\"font-family: 'Courier New', Courier, monospace \">Anh Chung Furniture</h3>\n" +
+//                "    </div>");
+//        return sql.toString();
+//    }
+
     private String buildEmailReset(String username, String password, String name, String link) {
         StringBuilder sql = new StringBuilder("");
-        sql.append("<div style=\" width:80%; margin: 0 auto;\">\n" +
-                "        <img src=\"\">\n" +
-                "        <table style=\"width:100%;\">\n" +
-                "            <tr>\n" +
-                "                <td colspan=\" 2 \">Xin chào " + name + ", </td>\n" +
-                "            </tr>\n" +
-                "            <tr>\n" +
-                "                <td>Chúc mừng bạn đã cài lại mật khẩu thành công</td>\n" +
-                "            </tr>\n" +
-                "            <tr>\n" +
-                "                <td style=\"padding-left: 30px;\">- Tài khoản: " + username + "</td>\n" +
-                "            </tr>\n" +
-                "            <tr>\n" +
-                "                <td style=\"padding-left: 30px;\">- Mật Khẩu mới: " + password + "</td>\n" +
-                "            </tr>\n" +
-                "        </table>\n" +
-                "        <br>\n" +
-                "        <p>vui lòng mời bạn nhấn vào đường dẫn bên dưới để đến với trang mạng của công ty. </p>\n" +
-                "        <button style=\"display: block; margin-left: auto; margin-right: auto; background-color: #40A9FF; color: white;\">" +
-                "      <a href=\"" + link + "\">Đăng nhập!</a></button>\n" +
-                "        <p>Trân trọng,</p>\n" +
-                "        <h3 style=\"font-family: 'Courier New', Courier, monospace \">Anh Chung Furniture</h3>\n" +
+        sql.append("<div style=\"margin: 0px; background-color: #F2F2F2; padding: 0px !important;\">\n" +
+                "        <div style=\"display: none; font-size: 1px; line-height: 1px; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden; font-family: sans-serif;\">\n" +
+                "            &nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;\n" +
+                "        </div>\n" +
+                "        <div style=\"max-width: 680px; margin: 0 auto;\" class=\"email-container\">\n" +
+                "            <table role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\" style=\"margin: auto;\">\n" +
+                "                <tr>\n" +
+                "                    <td style=\"font-size:0; line-height: 0;background-color:#e2eaf2;\">\n" +
+                "                        <table role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n" +
+                "                            <tr>\n" +
+                "                                <td>\n" +
+                "                                    <div class=\"custom-shape-divider\">\n" +
+                "                                        <svg data-name=\"Layer 1\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1200 120\" preserveAspectRatio=\"none\" style=\"width:100%;height:150px\">\n" +
+                "                                            <path\n" +
+                "                                                d=\"M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z\"\n" +
+                "                                                class=\"shape-fill\" fill=\"aliceblue\"></path>\n" +
+                "                                        </svg>\n" +
+                "                                    </div>\n" +
+                "                                </td>\n" +
+                "                            </tr>\n" +
+                "                        </table>\n" +
+                "                    </td>\n" +
+                "                </tr>\n" +
+                "                <tr>\n" +
+                "                    <td style=\"background-color:#e2eaf2;padding:0 10px 10px;text-align:left\">\n" +
+                "                        <table role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n" +
+                "                            <tr>\n" +
+                "                                <td style=\"padding: 10px;font-family: 'Arial', sans-serif;font-size:14px; line-height: 21px;color:#000000;\">\n" +
+                "                                    <p style=\"margin:0;\">\n" +
+                "                                        <strong>\n" +
+                "                                            Xin chào "+name+",\n" +
+                "                                            <p style=\"color:#000000\">Chúc mừng bạn đã cài lại mật khẩu thành công</p>\n" +
+                "                                            <p style=\"text-align:center; color:#000000\">Tài khoản:"+ username+" </p>\n" +
+                "                                            <p style=\"text-align:center; color:#000000\">Mật khẩu: "+password+" </p>\n" +
+                "                                        </strong>\n" +
+                "                                    </p>\n" +
+                "                                </td>\n" +
+                "                            </tr>\n" +
+                "                        </table>\n" +
+                "                    </td>\n" +
+                "                </tr>\n" +
+                "                <tr>\n" +
+                "                    <td style=\"padding: 10px;background-color:#e2eaf2;\">\n" +
+                "                        <table cellspacing=\"0\" cellpadding=\"0\" style=\"margin: auto;\">\n" +
+                "                            <tr>\n" +
+                "                                <p style=\"text-align:center;\">\n" +
+                "                                    <strong>\n" +
+                "                                        <p style=\"color:#3c8491\">\n" +
+                "                                            Vui lòng mời bạn nhấn vào nút \"Đăng nhập\" bên dưới để đến với phần mềm của\n" +
+                "                                            công ty:\n" +
+                "                                        </p>\n" +
+                "                                    </strong>\n" +
+                "                                </p>\n" +
+                "                                <td class=\"btn-td btn-td-primary\" style=\"border-radius: 30px; background: #00B5AD;text-align:center\">\n" +
+                "                                    <a class=\"btn-a btn-a-primary\" href=\""+link+"\" style=\"border: 1px solid #00B5AD; font-family: Arial,sans-serif; font-size:14px;line-height: 14px; text-decoration: none; padding: 10px 31px; color: #ffffff; font-weight:bold;display: block; border-radius: 30px;\"><strong>\n" +
+                "                                            Đăng nhập</strong></a>\n" +
+                "                                </td>\n" +
+                "                            </tr>\n" +
+                "                        </table>\n" +
+                "                    </td>\n" +
+                "                </tr>\n" +
+                "\n" +
+                "                <tr>\n" +
+                "                    <td>\n" +
+                "                        <div style=\"background-color:#e2eaf2;margin: 0 -1px; width:100%; max-width:680px; vertical-align:top;\" class=\"cc-column\">\n" +
+                "                            <table cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n" +
+                "                                <tr>\n" +
+                "                                    <td style=\"padding-top:0; padding-left: 10px; font-family: Arial, sans-serif; font-size:14px;color: #0C2340;\">\n" +
+                "                                        Trân trọng,\n" +
+                "                                        <h4> Công Ty Nội Thất Anh Chung</h4>\n" +
+                "                                    </td>\n" +
+                "                                </tr>\n" +
+                "                                <tr>\n" +
+                "                                    <td height=\"1\" style=\"line-height:2px; font-size:2px; background-color: #0C2340;\">\n" +
+                "                                        &nbsp;\n" +
+                "                                    </td>\n" +
+                "                                </tr>\n" +
+                "                            </table>\n" +
+                "                        </div>\n" +
+                "                    </td>\n" +
+                "                </tr>\n" +
+                "                <tr>\n" +
+                "                    <td style=\"padding: 10px; font-family: Arial, sans-serif; font-size:14px; color: #0C2340;background-color:#e2eaf2;\">\n" +
+                "                        <table style=\" font-family: 'Oxygen', sans-serif; font-size: 14px;\">\n" +
+                "                            <tr>\n" +
+                "                                <td style=\"width: 50vh\">\n" +
+                "                                    <img src=\"https://i.postimg.cc/m25nfzcj/logo.jpg\" alt=\"\" style=\"width:250px;\">\n" +
+                "                                </td>\n" +
+                "                                <td style=\"width: 50vh\">\n" +
+                "                                    <h3>Công Ty Nội Thất Anh Chung </h3>\n" +
+                "                                    <p>\n" +
+                "                                        Địa chỉ: Thôn 10, Kim Quan, Thạch Thất, Hà Nội\n" +
+                "                                    </p>\n" +
+                "                                    <p>\n" +
+                "                                        Số điện thoại: 0975 446 588\n" +
+                "                                    </p>\n" +
+                "                                    <p>\n" +
+                "                                        Email: levanchung1312@gmail.com\n" +
+                "                                    </p>\n" +
+                "                                </td>\n" +
+                "\n" +
+                "                            </tr>\n" +
+                "\n" +
+                "                        </table>\n" +
+                "                    </td>\n" +
+                "                </tr>\n" +
+                "                <tr>\n" +
+                "                    <td style=\"font-size:0; line-height: 0;background-color:#e2eaf2;\">\n" +
+                "                        <table role=\"presentation\" cellspacing=\"0\" cellpadding=\"0\" width=\"100%\">\n" +
+                "                            <tr>\n" +
+                "                                <td>\n" +
+                "                                    <div class=\"custom-shape-divider\">\n" +
+                "                                        <svg data-name=\"Layer 2\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1200 120\" preserveAspectRatio=\"none\" style=\"width:100%;height:120px\">\n" +
+                "                                            <path\n" +
+                "                                                d=\"M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z\"\n" +
+                "                                                class=\"shape-fill\" fill=\"aliceblue\"></path>\n" +
+                "                                        </svg>\n" +
+                "                                    </div>\n" +
+                "                                </td>\n" +
+                "                            </tr>\n" +
+                "                        </table>\n" +
+                "                    </td>\n" +
+                "                </tr>\n" +
+                "            </table>\n" +
+                "        </div>\n" +
                 "    </div>");
         return sql.toString();
     }
-
     //************************************
     // build template mail create account
     //************************************

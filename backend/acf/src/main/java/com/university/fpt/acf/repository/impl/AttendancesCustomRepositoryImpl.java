@@ -48,9 +48,9 @@ public class AttendancesCustomRepositoryImpl extends CommonRepository implements
     public List<AttendanceVO> priviewDetailExcel(ExportExcelForm exportExcelForm) {
         StringBuilder sqlAcc = new StringBuilder("");
         Map<String, Object> paramsAcc = new HashMap<>();
-        sqlAcc.append(" select new com.university.fpt.acf.vo.AttendanceVO(t.id,t.date,e.id,e.fullName,t.type,t.note) from TimeKeep t inner join t.employee e where 1=1");
+        sqlAcc.append(" select new com.university.fpt.acf.vo.AttendanceVO(t.id,t.date,e.id,e.fullName,t.type,t.note) from Account a inner  join a.employee e inner  join e.timeKeeps t where 1=1");
         if (exportExcelForm.getDataSearch().getName() != null && !exportExcelForm.getDataSearch().getName().isEmpty()) {
-            sqlAcc.append(" and LOWER(e.fullName) like :name ");
+            sqlAcc.append(" and LOWER(a.username) like :name ");
             paramsAcc.put("name", "%" + exportExcelForm.getDataSearch().getName().toLowerCase() + "%");
         }
         if (exportExcelForm.getDataSearch().getDate() != null && !exportExcelForm.getDataSearch().getDate().isEmpty()) {

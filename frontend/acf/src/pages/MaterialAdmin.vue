@@ -149,6 +149,12 @@
               <template slot="nameGroup" slot-scope="text, record">
                 {{ record.nameGroup }}
               </template>
+              <template slot="unit" slot-scope="text, record">
+                {{ record.idUnit }}-{{ record.unit }}
+              </template>
+              <template slot="company" slot-scope="text, record">
+                {{ record.idCompany }}-{{ record.company }}
+              </template>
               <template slot="listIdCompany" slot-scope="text, record">
                 {{ record.listIdCompany }}
               </template>
@@ -889,18 +895,18 @@ export default {
           scopedSlots: { customRender: "parameter" },
         },
         {
-          title: "Đơn vị",
-          dataIndex: "unit",
-          key: "unit",
-          width: 150,
-          scopedSlots: { customRender: "unit" },
-        },
-        {
           title: "Nhóm vật liệu",
           dataIndex: "nameGroup",
           key: "nameGroup",
           width: 150,
           scopedSlots: { customRender: "nameGroup" },
+        },
+        {
+          title: "Đơn vị",
+          dataIndex: "unit",
+          key: "unit",
+          width: 150,
+          scopedSlots: { customRender: "unit" },
         },
         {
           title: "Công ty",

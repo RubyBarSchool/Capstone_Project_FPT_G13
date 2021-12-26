@@ -141,10 +141,10 @@
                 {{ record.parameter }}
               </template>
               <template slot="unit" slot-scope="text, record">
-                {{ record.unit }}
+                {{record.idUnit}}-{{ record.unit }}
               </template>
               <template slot="company" slot-scope="text, record">
-                {{ record.company }}
+                {{record.idCompany}}-{{record.company }}
               </template>
               <template slot="price" slot-scope="text, record">
                 {{ formatMoney(record.price) }}
@@ -856,7 +856,13 @@ export default {
           width: 150,
           scopedSlots: { customRender: "specifications" },
         },
-
+        {
+          title: "Nhóm tấm phủ",
+          dataIndex: "nameGroup",
+          key: "nameGroup",
+          width: 150,
+          scopedSlots: { customRender: "nameGroup" },
+        },
         {
           title: "Đơn vị",
           dataIndex: "unit",

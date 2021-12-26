@@ -27,6 +27,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Disabled
 class AcfApplicationTests {
 
 	@Autowired

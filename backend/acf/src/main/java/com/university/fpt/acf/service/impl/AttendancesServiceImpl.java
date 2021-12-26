@@ -214,7 +214,10 @@ public class AttendancesServiceImpl implements AttendancesService {
             if (!timeKeep.getType().equals(updateAttendanceForm.getType())) {
                 checkUpdate = true;
             }
-            if (!timeKeep.getNote().equals(updateAttendanceForm.getNote())) {
+            if(timeKeep.getNote() == null && updateAttendanceForm.getNote() != null){
+                checkUpdate = true;
+            }
+            if (timeKeep.getNote() != null && !timeKeep.getNote().equals(updateAttendanceForm.getNote())) {
                 checkUpdate = true;
             }
 
@@ -454,7 +457,7 @@ public class AttendancesServiceImpl implements AttendancesService {
                 for (LinkedHashMap<String, String> o : row) {
                     if (o.get("SỐ THỨ TỰ").equals(attendanceVO.getIdEmpl().toString())) {
                         if (exportExcelForm.getNote().equals("true")) {
-                            if (!attendanceVO.getNote().isBlank()) {
+                            if (attendanceVO.getNote() !=  null && !attendanceVO.getNote().isBlank()) {
                                 o.put("NOTE", (o.get("NOTE").isBlank() ? "" : o.get("NOTE"))
                                         + attendanceVO.getDate().format(dateFormatter) + ": " + attendanceVO.getNote()
                                         + "\n");
@@ -472,7 +475,7 @@ public class AttendancesServiceImpl implements AttendancesService {
                     dataAttendance.put("HỌ VÀ TÊN", attendanceVO.getNameEmpl());
                     dataAttendance.put("TỔNG SỐ CÔNG", attendanceVO.getType());
                     if (exportExcelForm.getNote().equals("true")) {
-                        if (!attendanceVO.getNote().isBlank()) {
+                        if (attendanceVO.getNote() != null && !attendanceVO.getNote().isBlank()) {
                             dataAttendance.put("NOTE", attendanceVO.getDate().format(dateFormatter)
                                     + ": " + attendanceVO.getNote() + "\n");
                         } else {
