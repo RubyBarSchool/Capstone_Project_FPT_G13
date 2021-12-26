@@ -133,7 +133,7 @@
         </div>
 
         <!-- Thêm ứng tiền hợp đồng -->
-        <a-modal v-model="showModalAdd" title="Thêm lịch sử tạm ứng">
+        <a-modal v-model="showModalAdd" title="Thêm tiền tạm ứng">
           <template slot="footer">
             <a-button key="back" @click="handleCancelAdd"> Đóng </a-button>
             <a-button
@@ -147,8 +147,9 @@
           </template>
           <a-row type="flex">
             <a-col flex="150px">
-              <span style="color: red">*</span> Tên hợp đồng</a-col
-            >
+              <span style="color: red">*</span>
+              <strong style="color: black">Tên hợp đồng </strong>
+            </a-col>
             <a-col flex="auto">
               <a-select
                 v-model="dataSubmit.contact"
@@ -172,7 +173,8 @@
           <br />
           <a-row type="flex">
             <a-col flex="150px">
-              <span style="color: red">*</span> Số tiền tạm ứng</a-col
+              <span style="color: red">*</span>
+              <strong style="color: black">Số tiền tạm ứng </strong></a-col
             >
             <a-col flex="auto">
               <a-input-number
@@ -193,7 +195,7 @@
         <a-modal
           v-model="showModalView"
           width="80%"
-          title="Thêm lịch sử tạm ứng"
+          title="Chi tiết tiền tạm ứng"
         >
           <template slot="footer">
             <a-button key="back" @click="handleCancelView"> Đóng </a-button>
@@ -243,7 +245,7 @@
         </a-modal>
 
         <!-- Chỉnh sửa số tiền tạm ứng -->
-        <a-modal v-model="showModalEdit" title="Sửa tiền tạm ứng">
+        <a-modal v-model="showModalEdit" title="Chỉnh sửa tiền tạm ứng">
           <template slot="footer">
             <a-button key="back" @click="handleCancelEdit"> Đóng </a-button>
             <a-button
@@ -256,7 +258,8 @@
             </a-button>
           </template>
           <a-form-model>
-            <span style="color: red">*</span> Số tiền tạm ứng
+            <span style="color: red">*</span>
+            <strong style="color: black">Số tiền tạm ứng </strong>
             <a-input-number
               v-model="dataSubmit.money"
               placeholder="Nhập số tiền tạm ứng"
@@ -488,13 +491,13 @@ export default {
           this.beforeSearch();
           if (!response.data.data) {
             let type = "success";
-            let message = "Xóa";
-            let description = "Xóa lịch sử tạm ứng thành công";
+            let message = "Xóa tạm ứng";
+            let description = "Xóa tạm ứng thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Thêm mới";
-            let description = "Xóa lịch sử tạm ứng không thành công";
+            let message = "Xóa tạm ứng";
+            let description = "Xóa tạm ứng không thành công";
             this.notifi(type, message, description);
           }
         })
@@ -544,12 +547,12 @@ export default {
           this.beforeSearch();
           if (!response.data.data) {
             let type = "success";
-            let message = "Thêm mới";
+            let message = "Thêm tạm ứng";
             let description = "Thêm tạm ứng tiền hợp đồng mới thành công";
             this.notifi(type, message, description);
           } else {
             let type = "error";
-            let message = "Thêm mới";
+            let message = "Thêm tạm ứng";
             let description = "Thêm tạm ứng tiền hợp đồng mới không thành công";
             this.notifi(type, message, description);
           }
@@ -559,7 +562,7 @@ export default {
         .catch((e) => {
           console.log(e);
           let type = "error";
-          let message = "Thêm tạm ứng tiền hợp đồng mới";
+          let message = "Thêm tạm ứng";
           let description = "Thêm tạm ứng tiền hợp đồng mới không thành công";
           this.notifi(type, message, description);
           this.showModalAdd = false;

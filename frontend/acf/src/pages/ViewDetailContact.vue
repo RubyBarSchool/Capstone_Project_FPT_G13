@@ -173,7 +173,8 @@
             <a-form-model>
               <a-row type="flex">
                 <a-col flex="150px">
-                  <span style="color: red">*</span>Tên hợp đồng:
+                  <span style="color: red">*</span>
+                  <strong style="black">Tên hợp đồng: </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-select
@@ -198,7 +199,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="150px">
-                  <span style="color: red">*</span>Tên sản phẩm:</a-col
+                  <span style="color: red">*</span>
+                  <strong style="black">Tên sản phẩm: </strong></a-col
                 >
                 <a-col flex="auto">
                   <a-input
@@ -215,7 +217,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="150px"
-                  ><span style="color: red">*</span>Số lượng:
+                  ><span style="color: red">*</span>
+                  <strong style="black">Số lượng: </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input-number
@@ -233,7 +236,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="150px">
-                  <span style="color: red">*</span>Thông số:
+                  <span style="color: red">*</span>
+                  <strong style="black">Thông số: </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input-number
@@ -268,7 +272,9 @@
               </a-row>
               <br />
               <a-row type="flex">
-                <a-col flex="150px">Ghi chú: </a-col>
+                <a-col flex="150px">
+                  <strong style="black">Ghi chú: </strong>
+                </a-col>
                 <a-col flex="auto">
                   <a-textarea
                     v-model="addProductForm.noteProduct"
@@ -279,7 +285,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="150px">
-                  <span style="color: red">*</span>Giá tiền:
+                  <span style="color: red">*</span>
+                  <strong style="black">Giá tiền: </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input v-model="addProductForm.priceProduct" disabled />
@@ -291,7 +298,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="150px">
-                  <span style="color: red">*</span>Bảng giá chi tiết:
+                  <span style="color: red">*</span>
+                  <strong style="black">Bảng giá chi tiết: </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-button type="primary" @click="handleAddMaterialDetail">
@@ -306,7 +314,7 @@
           </a-modal>
           <!-- form add -->
 
-         <!-- hiển thị bảng mã vật tư theo sản phẩm -->
+          <!-- hiển thị bảng mã vật tư theo sản phẩm -->
           <a-modal
             v-model="showAddMaterialDetail"
             height="100%"
@@ -399,7 +407,8 @@
             <a-form-model>
               <a-row type="flex">
                 <a-col flex="150px">
-                  <span style="color: red">*</span>Tên hợp đồng:
+                  <span style="color: red">*</span
+                  ><strong style="black">Tên hợp đồng: </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-select
@@ -425,7 +434,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="150px">
-                  <span style="color: red">*</span>Tên sản phẩm:
+                  <span style="color: red">*</span>
+                  <strong style="black">Tên sản phẩm: </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input
@@ -442,7 +452,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="150px">
-                  <span style="color: red">*</span>Số lượng:</a-col
+                  <span style="color: red">*</span>
+                  <strong style="black">Số lượng: </strong></a-col
                 >
                 <a-col flex="auto">
                   <a-input-number
@@ -460,7 +471,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="150px">
-                  <span style="color: red">*</span>Thông số:</a-col
+                  <span style="color: red">*</span>
+                  <strong style="black">Thông số: </strong></a-col
                 >
                 <a-col flex="auto">
                   <a-input-number
@@ -496,7 +508,9 @@
               <br />
 
               <a-row type="flex">
-                <a-col flex="150px">Ghi chú:</a-col>
+                <a-col flex="150px">
+                  <strong style="black">Ghi chú: </strong></a-col
+                >
                 <a-col flex="auto">
                   <a-textarea
                     style="width: 100%"
@@ -509,7 +523,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="150px">
-                  <span style="color: red">*</span>Giá tiền:</a-col
+                  <span style="color: red">*</span
+                  ><strong style="black">Giá tiền: </strong></a-col
                 >
                 <a-col flex="auto">
                   <a-input
@@ -525,7 +540,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="150px"
-                  ><span style="color: red">*</span>Bảng giá chi tiết:
+                  ><span style="color: red">*</span>
+                  <strong style="black">Bảng giá chi tiết: </strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-button type="primary" @click="handleEditMaterialDetail">
@@ -539,8 +555,7 @@
             </a-form-model>
           </a-modal>
 
-
-                    <!-- hiển thị bảng mã vật tư theo sản phẩm -->
+          <!-- hiển thị bảng mã vật tư theo sản phẩm -->
           <a-modal
             v-model="showAddMaterialDetailEdit"
             height="100%"
@@ -784,7 +799,7 @@ export default {
       },
       dataContactInAdd: [],
       showAddMaterialDetail: false,
-      showAddMaterialDetailEdit:false,
+      showAddMaterialDetailEdit: false,
       dataAddMaterialDetail: [],
       dataSearchAddMaterialDetail: {
         codeMaterial: "",
@@ -1113,9 +1128,7 @@ export default {
           this.loadingAdd = false;
           this.handleCancelAddProductDetail();
           let task = response.data.data ? "success" : "error";
-          let text = response.data.data
-            ? "Thành công"
-            : "Không thành công";
+          let text = response.data.data ? "Thành công" : "Không thành công";
           let description = response.data.message;
           this.notifi(task, text, description);
         })
@@ -1126,7 +1139,7 @@ export default {
     },
     handleCancelAddMaterialDetail() {
       this.showAddMaterialDetail = false;
-      this.showAddMaterialDetailEdit=false;
+      this.showAddMaterialDetailEdit = false;
     },
     handleAddMaterialDetail() {
       viewDetailContactService
@@ -1185,7 +1198,7 @@ export default {
         });
     },
     handleCancelAddProductDetail() {
-      this.showAddMaterialDetailEdit=false;
+      this.showAddMaterialDetailEdit = false;
       this.showAddProductDetail = false;
       this.showEditProductDetail = false;
       this.addProductForm.idProduct = "";

@@ -191,7 +191,8 @@
             <a-form-model>
               <a-row type="flex">
                 <a-col flex="150px">
-                  <span style="color: red">*</span>Tên hợp đồng:
+                  <span style="color: red">*</span>
+                  <strong style="color: black">Tên hợp đồng:</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input @change="inputNameContact" v-model="dataAdd.name" />
@@ -203,7 +204,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="150px"
-                  ><span style="color: red">*</span>Khách hàng:
+                  ><span style="color: red">*</span>
+                  <strong style="color: black">Khách hàng:</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-select
@@ -227,7 +229,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="150px">
-                  <span style="color: red">*</span>Hạn hoàn thành:
+                  <span style="color: red">*</span>
+                  <strong style="color: black">Hạn hoàn thành:</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-date-picker
@@ -246,7 +249,8 @@
               <br />
               <a-row type="flex">
                 <a-col flex="150px"
-                  ><span style="color: red">*</span>Tổng giá trị:
+                  ><span style="color: red">*</span>
+                  <strong style="color: black">Tổng giá trị:</strong>
                 </a-col>
                 <a-col flex="auto">
                   <a-input
@@ -261,7 +265,7 @@
               </a-row>
               <br />
               <a-row type="flex">
-                <a-col flex="150px"> Ghi chú: </a-col>
+                <a-col flex="150px"> <strong style="color: black">Ghi chú:</strong> </a-col>
                 <a-col flex="auto">
                   <a-textarea
                     :auto-size="{
@@ -275,8 +279,9 @@
               <br />
               <a-row type="flex">
                 <a-col flex="150px">
-                  <span style="color: red">*</span>Bảng chi tiết:</a-col
-                >
+                  <span style="color: red">*</span>
+                  <strong style="color: black">Bảng chi tiết:</strong>
+                </a-col>
                 <a-col flex="auto">
                   <input
                     type="file"
@@ -320,7 +325,7 @@
             <a-form-model>
               <a-row type="flex">
                 <a-col flex="150px"
-                  ><span style="color: red">*</span>Tên hợp đồng:
+                  ><span style="color: red">*</span> <strong style="color: black">Tên hợp đồng:</strong> 
                 </a-col>
                 <a-col flex="auto">
                   <a-input
@@ -335,7 +340,7 @@
               <br />
               <a-row type="flex">
                 <a-col flex="150px">
-                  <span style="color: red">*</span>Khách hàng:
+                  <span style="color: red">*</span> <strong style="color: black"> Khách hàng:</strong> 
                 </a-col>
                 <a-col flex="auto">
                   <a-select
@@ -359,7 +364,7 @@
               <br />
               <a-row type="flex">
                 <a-col flex="150px"
-                  ><span style="color: red">*</span>Hạn hoàn thành:
+                  ><span style="color: red">*</span> <strong style="color: black"> Hạn hoàn thành: </strong> 
                 </a-col>
                 <a-col flex="auto">
                   <a-date-picker

@@ -119,9 +119,7 @@
                       ok-text="Đồng ý"
                       cancel-text="Hủy"
                     >
-                      <a-button
-                        id="reset"
-                      >
+                      <a-button id="reset">
                         <font-awesome-icon :icon="['fas', 'retweet']" />
                       </a-button>
                     </a-popconfirm>
@@ -175,7 +173,8 @@
             </template>
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span>Nhân viên :</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black"> Nhân viên :</strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -203,7 +202,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Tài khoản :</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black">Tài khoản :</strong></a-col
               >
               <a-col flex="auto">
                 <a-input
@@ -219,7 +219,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Chức vụ :</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black">Chức vụ :</strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -262,7 +263,8 @@
             </template>
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Tài khoản :</a-col
+                <span style="color: red">*</span
+                ><strong style="color: black"> Tài khoản :</strong></a-col
               >
               <a-col flex="auto">
                 <a-input v-model="dataEdit.username" disabled />
@@ -274,7 +276,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Chức vụ :</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black">Chức vụ :</strong></a-col
               >
               <a-col flex="auto">
                 <a-select
@@ -302,7 +305,8 @@
             <br />
             <a-row type="flex">
               <a-col flex="100px">
-                <span style="color: red">*</span> Trạng thái :</a-col
+                <span style="color: red">*</span>
+                <strong style="color: black">Trạng thái :</strong></a-col
               >
               <a-col flex="auto">
                 <a-radio-group name="radioGroup" v-model="dataEdit.status">
@@ -857,7 +861,7 @@ export default {
   margin-right: 1vh;
 }
 #reset:hover {
-  background-color: #FF6600;
+  background-color: #ff6600;
   color: white;
 }
 /* profile */

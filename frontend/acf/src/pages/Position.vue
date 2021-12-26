@@ -100,7 +100,8 @@
               </a-button>
             </template>
             <a-form-model>
-              <span style="color: red">*</span> Tên chức vụ:
+              <span style="color: red">*</span>
+              <strong style="color: black">Tên chức vụ: </strong>
               <a-form-model-item>
                 <a-input @change="inputNameAdd" v-model="dataAdd.name" />
                 <div style="color: red" v-if="checkDataInputName.show">
@@ -124,7 +125,8 @@
               </a-button>
             </template>
             <a-form-model>
-              <span style="color: red">*</span> Tên chức vụ:
+              <span style="color: red">*</span>
+              <strong style="color: black">Tên chức vụ: </strong>
               <a-form-model-item>
                 <a-input @change="inputNameEdit" v-model="dataEdit.name" />
                 <div style="color: red" v-if="checkDataInputName.show">

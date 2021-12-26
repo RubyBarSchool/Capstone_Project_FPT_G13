@@ -13,28 +13,28 @@
           <a-input
             placeholder="Nhân viên"
             v-model="dataSearch.employeeName"
-            :style="{'margin-right': '5px', 'width': '12%'}"
+            :style="{ 'margin-right': '5px', width: '12%' }"
             @pressEnter="submitSearch"
           />
           <a-input
             placeholder="Tiêu đề"
             v-model="dataSearch.title"
-            :style="{'margin-right': '10px', 'width': '12%'}"
+            :style="{ 'margin-right': '10px', width: '12%' }"
             @pressEnter="submitSearch"
           />
-          Trạng thái: 
+          Trạng thái:
           <a-select
             placeholder="Trạng thái"
             @change="submitSearch"
             v-model="dataSearch.accept"
-            :style="{'margin-right': '10px', 'width':'8%'}"
+            :style="{ 'margin-right': '10px', width: '8%' }"
           >
             <a-select-option value=""> Tất cả </a-select-option>
             <a-select-option value="-1"> Chờ duyệt </a-select-option>
             <a-select-option value="1"> Đã duyệt </a-select-option>
             <a-select-option value="0"> Từ chối </a-select-option>
           </a-select>
-          Ngày tạo: 
+          Ngày tạo:
           <a-range-picker
             v-model="dataSearch.date"
             @change="submitSearch"
@@ -139,25 +139,47 @@
                 Chấp nhận
               </a-button>
             </template>
-            <a-form-model>
-              <span style="color: red">*</span> Nhân viên:
-              <a-form-model-item>
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Nhân viên:
+              </a-col>
+              <a-col flex="auto">
                 <a-input v-model="dataDetail.nameEmployee" disabled />
-              </a-form-model-item>
-              <span style="color: red">*</span> Tiêu đề:
-              <a-form-model-item>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Tiêu đề:
+              </a-col>
+              <a-col flex="auto">
                 <a-input v-model="dataDetail.title" disabled />
-              </a-form-model-item>
-              <span style="color: red">*</span> Số tiền:
-              <a-form-model-item>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Số tiền:
+              </a-col>
+              <a-col flex="auto">
                 <a-input v-model="dataDetail.advanceSalary" disabled />
-              </a-form-model-item>
-              <span style="color: red">*</span> Nội dung:
-              <a-form-model-item>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Nội dung:
+              </a-col>
+              <a-col flex="auto">
                 <a-textarea v-model="dataDetail.content" :rows="4" disabled />
-              </a-form-model-item>
-              <span style="color: red">*</span> Ghi chú:
-              <a-form-model-item>
+              </a-col>
+            </a-row>
+            <br />
+            <a-row type="flex">
+              <a-col flex="100px">
+                <span style="color: red">*</span> Ghi chú:
+              </a-col>
+              <a-col flex="auto">
                 <a-textarea
                   v-model="dataDetail.comment"
                   :disabled="dataDetail.status != -1"
@@ -168,8 +190,8 @@
                 <div style="color: red" v-if="checkDataInputComment.show">
                   {{ checkDataInputComment.message }}
                 </div>
-              </a-form-model-item>
-            </a-form-model>
+              </a-col>
+            </a-row>
           </a-modal>
           <!-- popup view-->
         </div>
@@ -311,7 +333,7 @@ export default {
     },
     submitSearch() {
       this.dataSearch.total = 0;
-      this.dataSearch.employeeName =  this.dataSearch.employeeName.trim();
+      this.dataSearch.employeeName = this.dataSearch.employeeName.trim();
       this.dataSearch.title = this.dataSearch.title.trim();
       this.dataSearch.pageIndex = 1;
       this.visibleView = false;
