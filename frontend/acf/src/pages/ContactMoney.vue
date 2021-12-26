@@ -106,6 +106,16 @@
                   })
                 }}
               </template>
+               <!-- <template slot="moneyAdvance" slot-scope="text, record">
+                {{
+                  
+                }}
+              </template>
+                 <template slot="moneyContact" slot-scope="text, record">
+                {{
+                  
+                }}
+              </template> -->
               <template slot="action" slot-scope="text, record">
                 <a-row>
                   <a-col :span="8">
@@ -183,6 +193,11 @@
                 placeholder="Nhập số tiền tạm ứng"
                 style="width: 80%"
                 :min="100000"
+                :formatter="
+                  (value) =>
+                    `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                "
+                :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
               />
               <div style="color: red" v-if="checkDataInputMoney.show">
                 {{ checkDataInputMoney.message }}
@@ -265,6 +280,10 @@
               placeholder="Nhập số tiền tạm ứng"
               style="width: 80%"
               :min="100000"
+              :formatter="
+                (value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+              "
+              :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
               @change="inputEditMoney"
             />
             <div style="color: red" v-if="checkDataInputEditMoney.show">
@@ -331,12 +350,14 @@ export default {
           dataIndex: "moneyAdvance",
           key: "moneyAdvance",
           width: 150,
+          scopedSlots: {customRender: 'moneyAdvance'},
         },
         {
           title: "Tổng giá trị",
           dataIndex: "moneyContact",
           key: "moneyContact",
           width: 150,
+           scopedSlots: {customRender: 'moneyContact'},
         },
         {
           title: "Định mức hoàn thành",

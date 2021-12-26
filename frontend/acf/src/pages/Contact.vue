@@ -12,11 +12,11 @@
           <!-- menu trên -->
           <a-input
             placeholder="Tên hợp đồng"
-            :style="{ width: '150px', 'margin-right': '5px' }"
+            :style="{ width: '150px', 'margin-right': '8px' }"
             v-model="dataSearch.name"
             @pressEnter="submitSearch"
           />
-          Ngày bàn giao
+          Ngày bàn giao: 
           <a-range-picker
             @change="onChange"
             :placeholder="['Ngày bắt đầu', 'Ngày kết thúc']"
