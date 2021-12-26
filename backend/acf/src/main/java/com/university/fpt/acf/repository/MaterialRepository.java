@@ -17,6 +17,9 @@ public interface MaterialRepository extends JpaRepository<Material, Long> {
     @Query("select  m from Material m left join  m.image img where m.checkMaterial=true and m.deleted= false  and m.id=:id")
     Material getMaterialById(@Param("id") Long id);
 
+    @Query("select  m from Material m  where  m.deleted= false  and m.name  in :names")
+    List<Material> getMaterialByNameS(@Param("names") List<String> name);
+
     @Query("select  m from Material m left join  m.image img where m.checkMaterial=false and m.deleted= false  and m.id=:id")
     Material getCoverSheetById(@Param("id") Long id);
 

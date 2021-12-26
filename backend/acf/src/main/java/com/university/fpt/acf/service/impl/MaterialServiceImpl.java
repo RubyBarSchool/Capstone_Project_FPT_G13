@@ -129,6 +129,12 @@ public class MaterialServiceImpl implements MaterialService {
         Boolean check = false;
         try {
             List<String> list = addForm.getListName();
+            if(list.size() != 0){
+                List<Material> materials = materialRepository.getMaterialByNameS(list);
+                if(materials.size()!=0){
+                    return check;
+                }
+            }
             for (int i = 0; i < list.size(); i++) {
                 GroupMaterial groupMaterial = groupMaterialRepository.getGroupMaterialByID(addForm.getIdGroup());
                 if (groupMaterial == null) {
@@ -265,6 +271,12 @@ public class MaterialServiceImpl implements MaterialService {
         Boolean check = false;
         try {
             List<String> list = addForm.getListName();
+            if(list.size() != 0){
+                List<Material> materials = materialRepository.getMaterialByNameS(list);
+                if(materials.size()!=0){
+                    return check;
+                }
+            }
             for (int i = 0; i < list.size(); i++) {
                 GroupMaterial groupCoverSheet = groupMaterialRepository.getGroupCoverPlateByID(addForm.getIdGroup());
                 if (groupCoverSheet == null) {
