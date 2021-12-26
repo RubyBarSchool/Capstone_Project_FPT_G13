@@ -421,7 +421,7 @@ public class MaterialServiceImpl implements MaterialService {
             for (int i = 0; i < list.size(); i++) {
                 PriceMaterial pm = list.get(i);
                 pm.setId(null);
-                pm.setPrice("");
+                pm.setPrice("0");
                 UnitMeasure unit = new UnitMeasure();
                 unit.setId(addForm.getIdUnit());
                 pm.setUnitMeasure(unit);
