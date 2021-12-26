@@ -69,7 +69,7 @@
             </template>
             <a-form-model>
               <span style="color: red">*</span>
-              <strong style="color: black"> Tên nhóm vật liệu: </strong>
+              <strong> Tên nhóm vật liệu</strong>
               <a-input @change="inputGroup" v-model="name" />
               <div style="color: red" v-if="checkDataInputGroup.show">
                 {{ checkDataInputGroup.message }}

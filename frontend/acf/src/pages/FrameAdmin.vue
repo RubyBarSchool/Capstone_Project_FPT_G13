@@ -101,7 +101,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span>
-                <strong style="color: black"> Chiều dài : </strong></a-col
+                <strong> Chiều dài</strong></a-col
               >
               <a-col flex="auto">
                 <a-input-number
@@ -119,7 +119,7 @@
             <a-row type="flex">
               <a-col flex="100px">
                 <span style="color: red">*</span
-                ><strong style="color: black">Chiều rộng : </strong></a-col
+                ><strong> Chiều rộng</strong></a-col
               >
               <a-col flex="auto">
                 <a-input-number
