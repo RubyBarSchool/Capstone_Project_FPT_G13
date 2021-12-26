@@ -70,6 +70,9 @@
               "
               @change="handleTableChange"
             >
+              <template slot="money" slot-scope="text, record">
+                {{ formatMoney(record.money) }}
+              </template>
               <template slot="effectiveDate" slot-scope="text, record">
                 {{
                   new Date(record.effectiveDate).toLocaleDateString("en-GB", {
@@ -93,7 +96,7 @@
                 <a-button
                   id="view"
                   @click="checkType(record)"
-                  :style="{'margin-right': '100px' }"
+                  :style="{ 'margin-right': '100px' }"
                 >
                   <font-awesome-icon :icon="['fas', 'eye']" />
                 </a-button>
@@ -208,6 +211,7 @@ export default {
           dataIndex: "money",
           key: "money",
           width: 150,
+          scopedSlots: { customRender: "money" },
         },
         {
           title: "Loại đơn",
@@ -265,6 +269,9 @@ export default {
     },
   },
   methods: {
+    formatMoney(value) {
+      return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
     handleTableChange(pagination) {
       this.dataSearch.pageIndex = pagination.current;
       this.pagination = pagination;

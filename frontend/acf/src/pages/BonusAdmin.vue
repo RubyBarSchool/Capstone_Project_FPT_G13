@@ -70,6 +70,9 @@
               "
               @change="handleTableChange"
             >
+              <template slot="money" slot-scope="text, record">
+                {{ formatMoney(record.money) }}
+              </template>
               <template slot="status" slot-scope="text, record">
                 <a-tag :color="record.status ? 'green' : 'blue'">
                   {{ record.status ? "Công khai" : "Nháp" }}
@@ -89,7 +92,6 @@
                   :key="index"
                   v-for="(data, index) in record.listIdEmployee"
                 >
-                  <!-- <div v-if="index != 0">,</div> -->
                   <div>{{ data.name }}</div>
                 </div>
               </template>
@@ -218,6 +220,10 @@
                   @change="inputMoney"
                   :min="100000"
                   style="width: 100%"
+                  :formatter="
+                    (value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  "
+                  :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
                 />
                 <div style="color: red" v-if="checkDataInputMoney.show">
                   {{ checkDataInputMoney.message }}
@@ -355,6 +361,10 @@
                   @change="inputEditMoney"
                   :min="100000"
                   style="width: 100%"
+                  :formatter="
+                    (value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  "
+                  :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
                 />
                 <div style="color: red" v-if="checkDataInputMoney.show">
                   {{ checkDataInputMoney.message }}
@@ -502,6 +512,7 @@ export default {
           dataIndex: "money",
           key: "money",
           width: 150,
+          scopedSlots: { customRender: "money" },
         },
         {
           title: "Lý do",
@@ -547,6 +558,9 @@ export default {
     this.submitSearch();
   },
   methods: {
+    formatMoney(value) {
+      return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
     checkEditOrDelete(record) {
       let date = record.effectiveDate.split("-")[2];
       if (parseInt(date) > 10) {

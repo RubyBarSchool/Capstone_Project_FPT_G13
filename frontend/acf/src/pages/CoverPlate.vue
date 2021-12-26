@@ -42,7 +42,7 @@
             mode="multiple"
             v-model="dataSearch.listUnitId"
             @change="submitSearch"
-            :style="{ width: '250px', 'margin-right': '5px' }"
+            :style="{ width: '200px', 'margin-right': '5px' }"
           >
             <a-select-option
               v-for="(unit, index) in listUnits"
@@ -147,7 +147,7 @@
                 {{ record.company }}
               </template>
               <template slot="price" slot-scope="text, record">
-                {{ record.price }}
+                {{ formatMoney(record.price) }}
               </template>
               <template slot="action" slot-scope="text, record">
                 <a-row>
@@ -393,6 +393,10 @@
                   :min="0"
                   @change="inputPrice"
                   v-model="dataAdd.price"
+                  :formatter="
+                    (value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                  "
+                  :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
                 />
                 <div style="color: red" v-if="checkDataInputPrice.show">
                   {{ checkDataInputPrice.message }}
@@ -401,9 +405,7 @@
             </a-row>
             <br />
             <a-row type="flex">
-              <a-col flex="120px"
-                ><strong> Ảnh</strong></a-col
-              >
+              <a-col flex="120px"><strong> Ảnh</strong></a-col>
               <a-col flex="auto">
                 <input
                   type="file"
@@ -521,6 +523,11 @@
                     :min="0"
                     v-model="dataEdit.price"
                     @change="inputEditPrice"
+                    :formatter="
+                      (value) =>
+                        `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                    "
+                    :parser="(value) => value.replace(/\$\s?|(,*)/g, '')"
                 /></a-col>
               </a-row>
               <div style="color: red" v-if="checkDataInputPrice.show">
@@ -529,9 +536,7 @@
               <br />
             </a-form-model>
             <a-row type="flex">
-              <a-col flex="120px">
-                <strong> Ảnh</strong></a-col
-              >
+              <a-col flex="120px"> <strong> Ảnh</strong></a-col>
               <a-col flex="auto">
                 <a-form-model-item>
                   <input
@@ -951,6 +956,9 @@ export default {
     this.getAllCompany();
   },
   methods: {
+    formatMoney(value) {
+      return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
     importFileEdit(event1) {
       if (event1.target.files[0]) {
         this.dataEdit.image = event1.target.files[0];
