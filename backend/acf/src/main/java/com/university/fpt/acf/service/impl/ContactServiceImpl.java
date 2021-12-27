@@ -26,6 +26,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -317,7 +318,8 @@ public class ContactServiceImpl implements ContactService {
                             if (value.indexOf(".") == value.length() - 2 && value.charAt(value.length() - 1) == '0') {
                                 value = value.substring(0, value.length() - 2);
                             }
-                            fileContactVO.setPriceContact(value);
+                            BigDecimal bigDecimal2 = new BigDecimal(value);
+                            fileContactVO.setPriceContact(bigDecimal2.toBigInteger().toString());
                         }
                         checkLastRow = true;
                         break;
