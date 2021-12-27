@@ -231,7 +231,7 @@
               }}
             </template>
             <template slot="money" slot-scope="text, record">
-              {{formatMoney(record.money)}}
+              {{ formatMoney(record.money) }}
             </template>
             <template slot="action" slot-scope="text, record">
               <a-row :gutter="[16, 16]">
@@ -457,11 +457,22 @@ export default {
       this.loadingEdit = true;
       contactMoneyService
         .updateContactMoney(this.dataSubmit)
-        .then(() => {
+        .then((response) => {
           this.showModalView = false;
           this.showModalEdit = false;
           this.beforeSearch();
           this.loadingEdit = false;
+          if (response.data.data) {
+            let type = "success";
+            let message = "Sửa tạm ứng";
+            let description = "Sửa tạm ứng tiền hợp đồng thành công";
+            this.notifi(type, message, description);
+          } else {
+            let type = "error";
+            let message = "Sửa tạm ứng";
+            let description = "Sửa tạm ứng tiền hợp đồng không thành công";
+            this.notifi(type, message, description);
+          }
         })
         .catch((e) => {
           console.log(e);
@@ -512,7 +523,7 @@ export default {
         .then((response) => {
           this.showModalView = false;
           this.beforeSearch();
-          if (!response.data.data) {
+          if (response.data.data) {
             let type = "success";
             let message = "Xóa tạm ứng";
             let description = "Xóa tạm ứng thành công";
@@ -568,7 +579,7 @@ export default {
         .addContactMoney(this.dataSubmit)
         .then((response) => {
           this.beforeSearch();
-          if (!response.data.data) {
+          if (response.data.data) {
             let type = "success";
             let message = "Thêm tạm ứng";
             let description = "Thêm tạm ứng tiền hợp đồng mới thành công";

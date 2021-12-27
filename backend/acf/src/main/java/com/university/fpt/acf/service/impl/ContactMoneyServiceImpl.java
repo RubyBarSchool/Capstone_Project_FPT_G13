@@ -151,6 +151,7 @@ public class ContactMoneyServiceImpl implements ContactMoneyService {
             contactMoney.setMoney(addContactMoneyForm.getMoney()+"");
 
             contactMoneyRepository.save(contactMoney);
+            check = true;
         }catch (Exception ex){
             throw new RuntimeException("không thể sửa tạm ứng hợp đồng");
         }
@@ -171,6 +172,7 @@ public class ContactMoneyServiceImpl implements ContactMoneyService {
             contactMoney.setDeleted(true);
 
             contactMoneyRepository.save(contactMoney);
+            check = true;
         }catch (Exception ex){
             throw new RuntimeException("không thể sửa tạm ứng hợp đồng");
         }
