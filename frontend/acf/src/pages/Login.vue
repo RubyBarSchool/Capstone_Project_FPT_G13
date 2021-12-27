@@ -143,9 +143,9 @@ export default {
               let users = JSON.parse(localStorage.getItem("user"));
               this.connectWebsoket(users.username);
               if (users.roles.includes("SP_ADMIN")) {
-                this.$router.push("/admin");
+                this.$router.push("/dashboard");
               } else {
-                this.$router.push("/");
+                this.$router.push("/dashboard");
               }
             },
             () => {
