@@ -28,6 +28,10 @@ public interface EmployeeRepository extends JpaRepository<Employee,Long> {
             "FROM Employee e left join  e.image img left join e.position p where e.id =:id")
     EmployeeDetailVO getEmployeeById(@Param("id") Long id);
 
+    @Query("SELECT new com.university.fpt.acf.vo.EmployeeDetailVO(img.name,e.fullName,e.gender,e.dob,e.email,e.phone,e.address,e.nation,e.salary,p.id,p.name)  " +
+            "FROM Account a inner  join  a.employee e left join  e.image img left join e.position p where a.username =:username")
+    EmployeeDetailVO getEmployeeVOByUsername(@Param("username") String username);
+
     @Query("SELECT e.phone FROM Employee e where e.phone=:phone and e.deleted=false")
     String checkExitPhone(@Param("phone") String phone);
 

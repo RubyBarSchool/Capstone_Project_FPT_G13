@@ -133,9 +133,16 @@
               <a-dropdown :trigger="['click']" class="menuAva">
                 <a class="ant-dropdown-link">
                   <a-avatar
+                    v-if="!showImage"
                     :size="60"
                     :style="{ 'margin-left': '10px', 'margin-bottom': '10px' }"
                     src="https://img.icons8.com/bubbles/100/000000/user.png"
+                  />
+                  <a-avatar
+                    v-if="showImage"
+                    :size="60"
+                    :style="{ 'margin-left': '10px', 'margin-bottom': '10px' }"
+                    :src="url"
                   />
                   <font-awesome-icon
                     :style="{ 'font-size': '16px', color: '#495057' }"
@@ -148,9 +155,11 @@
                       <a-row type="flex">
                         <a-col :flex="3">
                           <a-avatar
+                            v-if="!showImage"
                             :size="50"
                             src="https://img.icons8.com/bubbles/100/000000/user.png"
                           />
+                          <a-avatar v-if="showImage" :size="50" :src="url" />
                         </a-col>
                         <a-col :flex="2">
                           <span style="color: black">
@@ -194,6 +203,7 @@
 <script>
 import SockJS from "sockjs-client";
 import Stomp from "webstomp-client";
+import userService from "../service/userService";
 
 export default {
   name: "Slider",
@@ -374,11 +384,14 @@ export default {
         },
       ],
       dataNotification: [],
+      showImage: false,
+      url: "",
     };
   },
   created() {
     this.reloadPath();
     this.connectWebsoket();
+    this.loadImage();
   },
   destroyed() {
     this.disconnect();
@@ -389,6 +402,40 @@ export default {
     },
   },
   methods: {
+    loadImage() {
+      let username = JSON.parse(localStorage.getItem("user")).username;
+      userService
+        .getUserByUsername(username)
+        .then((response) => {
+          if (response.data.data.image !== null) {
+            userService
+              .preview(response.data.data.image)
+              .then((response) => {
+                this.url = window.URL.createObjectURL(response.data);
+                if (this.url != null) {
+                  this.showImage = true;
+                } else {
+                  this.showImage = false;
+                }
+                console.log("data image", this.url);
+                console.log("check image", this.showImage);
+              })
+              .catch((e) => {
+                console.log(e);
+              });
+          } else {
+            this.url = null;
+            if (this.url != null) {
+              this.showImage = true;
+            } else {
+              this.showImage = false;
+            }
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    },
     deleteNotification(data) {
       let notification = {
         username: data.username,

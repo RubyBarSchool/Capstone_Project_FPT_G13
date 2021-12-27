@@ -16,6 +16,7 @@ public interface EmployeeService  {
     List<GetAllEmployeeVO> getAllEmployeeNotAttendance(EmployeeNotAttendanceForm employeeNotAttendanceForm);
     int getTotalEmployeeNotAttendance(EmployeeNotAttendanceForm employeeNotAttendanceForm);
     EmployeeDetailVO getEmployeeDetailById(Long id);
+    EmployeeDetailVO getEmployeeDetailByUsername(String username);
     Boolean AddEmployee(AddEmployeeForm addEmployeeForm);
     Boolean UpdateEmployee(UpdateEmployeeForm updateEmployeeForm);
     Boolean DeleteEmployee(Long id);

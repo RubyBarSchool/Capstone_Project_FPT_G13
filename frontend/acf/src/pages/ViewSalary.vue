@@ -92,7 +92,7 @@
                 </div>
                 <br />
                 <div class="col-6">
-                  <h6>Phạt</h6>
+                  <h6>Kỷ Luật</h6>
                   <a-table
                     :columns="columnsBonusPunish"
                     :data-source="dataPunishNow"

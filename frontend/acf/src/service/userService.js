@@ -16,6 +16,9 @@ class userService {
     getUserByID(id) {
         return http.get(`/admin/employee/getEmployee?id=${id}`);
     }
+    getUserByUsername(username) {
+        return http.get(`/employee/getEmployeeUsername?username=${username}`);
+    }
     deleteUser(id) {
         return http.delete(`/admin/employee/delete?id=${id}`);
     }

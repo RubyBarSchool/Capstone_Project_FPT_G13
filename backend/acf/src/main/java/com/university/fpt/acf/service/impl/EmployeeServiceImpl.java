@@ -133,6 +133,18 @@ public class EmployeeServiceImpl implements EmployeeService {
         return em;
     }
 
+    @Override
+    public EmployeeDetailVO getEmployeeDetailByUsername(String username) {
+        EmployeeDetailVO em = new EmployeeDetailVO();
+        try {
+            em = employeeRepository.getEmployeeVOByUsername(username);
+
+        } catch (Exception e) {
+            e.getMessage();
+        }
+        return em;
+    }
+
     //************************************
     // Add employee
     //************************************

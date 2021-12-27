@@ -5,6 +5,7 @@ import com.university.fpt.acf.form.ChangePasswordAccountForm;
 import com.university.fpt.acf.service.AccountManagerService;
 import com.university.fpt.acf.service.EmployeeService;
 import com.university.fpt.acf.vo.DetailEmployeeVO;
+import com.university.fpt.acf.vo.EmployeeDetailVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,34 @@ public class ProfileController {
 
     @Autowired
     private AccountManagerService accountService;
+
+    //************************************
+    // Get detail employee of information by username employee
+    //************************************
+    @GetMapping("/getEmployeeUsername")
+    public ResponseEntity<ResponseCommon> GetEmployeeDetailByUsername(@RequestParam String username){
+        ResponseCommon responseCommon = new ResponseCommon();
+        String message="";
+        EmployeeDetailVO em = new EmployeeDetailVO();
+        try{
+            em = employeeService.getEmployeeDetailByUsername(username);
+            if(em==null){
+                message ="Không tồn tại";
+            }
+            message ="Thành công";
+            responseCommon.setMessage(message);
+            responseCommon.setData(em);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+
+        }catch (Exception e){
+            message=e.getMessage();
+            responseCommon.setMessage(message);
+            responseCommon.setData(em);
+            responseCommon.setStatus(HttpStatus.OK.value());
+            return ResponseEntity.status(HttpStatus.OK).body(responseCommon);
+        }
+    }
 
     //************************************
     // Get profile
